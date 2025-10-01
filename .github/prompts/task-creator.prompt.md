@@ -1,0 +1,13 @@
+
+- You will be provided with text for the intention of the task. Your job is to create a new task file in the `docs/tasks` folder that describes the task to be done.
+- When you create a task, follow the format `T-YYYYMMDD-HHMM-short-description.task.md`, where `YYYYMMDD` is the date and `HHMM` is the time in 24-hour format. The date should reflect the day you create the task, and the time should be the current time in hours and minutes. The `short-description` should be a brief summary of the task's purpose, using hyphens to separate words.
+- The task file should include:
+  - A clear and concise title.
+  - A detailed description of what needs to be done.
+  - Any specific requirements or constraints.
+  - Acceptance criteria to define when the task is considered complete.
+- Ensure that the task is actionable and can be completed independently.
+- After creating the task file, update the `docs/tasks-catalog.md` file to include the new task with a status of `not-started`.
+- Make sure to follow the existing format and style used in the `docs/tasks-catalog.md` file.
+- Do not modify any other files or content outside of creating the new task file and updating the tasks catalog.
+- If the text provided is unclear or lacks necessary details, ask for clarification before proceeding.
