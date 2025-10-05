@@ -437,7 +437,7 @@ This file tracks all project tasks, their current status, and provides links to 
 
 ## 4. Create `README.md` file
 
-- Create file: `README.md` 
+- Create file: `README.md`. If the README.md file already exists, rename it to `README-SCATED.md` before creating the new one.
 
 ```markdown
 # GitHub Copilot Template Project
