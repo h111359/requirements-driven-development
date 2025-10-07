@@ -693,9 +693,9 @@ This is a template task file. Replace this content with your actual task details
 This file tracks all project tasks, their current status, and provides links to detailed task documentation.
 
 ## Active Tasks
-| Task ID | Title | Status | Assigned | Due Date |
-|---------|-------|--------|----------|----------|
-| [Example] | [Task description] | [not-started/in-progress/completed] | [Developer] | [Date] |
+| Task ID | Title | Status | 
+|---------|-------|--------|
+| [Example] | [Task description] | [not-started/in-progress/completed] | 
 
 ## Completed Tasks
 | Task ID | Title | Completed Date | Notes |
