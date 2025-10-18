@@ -7,15 +7,17 @@
 - `.rdd-docs/`: All project documentation
 - `.vscode/` : Specific setpu for Visual Studio Code
 
+
+
 ## .rdd-docs/
 Project documentation and planning
 - `requirements.md`: Requirements specification file which represents the current state of the product
 - `technical-specification.md`: Technical information like architecture, design, setup, etc.
 - `folder-structure.md`: The current document describing the files and folders organization
 - `change-requests` : Folder with individual change requests documentation (*.cr.md files)
-- `change-requests/cr-catalog.md` : Overview of all change requests
-- `tasks/`: Folder for individual task documentation (*.task.md files)
-- `tasks/tasks-catalog.md`: Overview of all project tasks
+- `templates/` : Documentation templates for requirements, technical specification, CRs, etc. (may be moved here from `.rdd-copilot/templates` during setup)
+- For every CR, a dedicated log file (`cr-<cr id>-<cr-name>-log.md`) is created in the same folder as the CR file to record all rdd-copilot.* prompts and replies related to that CR.
+
 
 ## Customization
 - Modify this structure based on your project's specific needs

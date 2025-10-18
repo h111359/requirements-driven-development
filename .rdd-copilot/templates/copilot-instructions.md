@@ -1,48 +1,59 @@
-# RULES
+# Concepts:
 
-## 1. Scope of Automated Changes
-The assistant MAY create, modify, and clarify Change Request files (`*.cr.md`) and Task files (`*.task.md`), as well as update the CR and Task catalog files, WHEN such actions are explicitly triggered by invoking a prompt file under `.github/prompts/` (e.g., clarification, design, planning prompts). For all other code or documentation changes outside this CR/Task domain, a task file in `.rdd-docs/tasks/` is still required.
+C01: `<cr-id>` is a placeholder representing a change request ID. It is a representation of a date and time following the format `YYYYMMDD-HHmm`, where YYYY is the four-digit year, MM is the two-digit month, DD is the two-digit day, HH is the two-digit hour in 24-hour format, and mm is the two-digit minutes. For example, a change request created on June 15, 2024, at 2:30 PM would have a `<cr-id>` of `20240615-1430`.
 
-## 2. Prompt-Driven Exceptions
-When a user invokes a prompt in `.github/prompts/` whose documented workflow includes editing CRs or tasks (e.g., `rdd-copilot.cr-clarify.prompt.md`, `rdd-copilot.cr-design.prompt.md`, future planning prompts), the assistant is AUTHORIZED to:
-1. Create new CR files following naming pattern: `YYYYMMDD-HHmm-short-description.cr.md`.
-2. Create new Task files following naming pattern: `YYYYMMDD-HHmm-short-description.task.md`.
-3. Update catalog entries in `.rdd-docs/change-requests/cr-catalog.md` and `.rdd-docs/tasks/tasks-catalog.md` (status transitions, timestamps, links).
-4. Append structured sections (Clarification Log, Clarifications, Parking Lot, Risks, etc.) inside the selected CR file.
-5. Transition statuses per prompt rules (e.g., Draft -> Clarifying -> Clarified -> Ready for Design) without a separate task file.
+C02: `<cr-name>` is a placeholder representing a concise, hyphen-separated short name of the change request, sanitized to be lowercase, with unsupported characters removed, and spaces collapsed into single hyphens. The `<cr-name>` should not exceed 30 characters in length. For example, if the user provides the short name "Add User Authentication", the corresponding `<cr-name>` would be `add-user-authentication`.
 
-## 3. Safeguards & Prohibited Actions
-The assistant MUST NOT modify non-CR/non-Task source code, infrastructure definitions, or unrelated documentation unless a dedicated task file authorizes it. If the user requests such changes during a prompt-driven CR/Task workflow, the assistant will respond with a reminder to create an appropriate task file.
+# Rules:
 
-## 4. Additive Logging Principle
-All modifications to CR files must be additive: never delete prior clarification entries or overwrite original problem/value statements. Use timestamped entries (`- [YYYY-MM-DD HH:MM]`) in chronological order.
+R01:Lifecycle states (only these four values are valid; lowercase only):
+1. **draft** – Initial state when the change request is created.
+2. **clarified** – All clarifications are complete; ready for design.
+3. **designed** – Design is finalized and implementation can begin.
+4. **completed** – The change request has been fully implemented and closed. This is a final state; the state must not be changed any more. Further changes require a new change request.
 
-## 5. Transparency
-Before performing prompt-driven catalog or file edits, the assistant should briefly state the intended changes (plan summary) and then apply them; after  changes, summarize what was updated (statuses, files touched, sections added).
+Only these four states are permitted for any CR. No other states are allowed. States must be updated sequentially and are determined by the filename suffix.
+States must be updated sequentially and are determined only by the filename suffix. Remove any State: field from CR files and instructions.
 
-## 6. Quality & Formatting
-Maintain clear, modular, and well-documented structure inside CR and Task files. Preserve naming patterns, consistent timestamp formatting (`YYYYMMDD-HHmm` for IDs; `YYYY-MM-DD HH:MM` for log lines), and required sections defined by prompt workflows.
+R02: Read and consider `.rdd-docs/requirements.md`, `.rdd-docs/README.md`, `.rdd-docs/technical-specification.md`, and `.rdd-docs/folder-structure.md`.
 
-## 7. Conflict Handling
-If catalog status or file contents contradict the prompt workflow (e.g., a CR marked Clarified but missing acceptance criteria), assistant may flag inconsistency, propose corrective steps, and—if user confirms—apply corrective edits under the same prompt session.
 
-## 8. Temporal Notes
-If current iteration date differs from original CR filename date, append a `Temporal Notes` subsection citing the discrepancy (do NOT rename existing file unless explicitly tasked).
+R03: Options Questions
 
-## 9. Catalog Integrity
-Never remove historical rows. Status transitions must update the `Updated` date; final clarification adds `DateClarified` (if field exists) or notes in Decision/Log column per catalog format.
+Use this standardized format when presenting multiple options: concise, selectable choices in a compact ASCII box (A/B/C/...). Each descriptor ≤ 16 words.
 
-## 10. Task File Authorization (Non-Prompt Context)
-Outside an active prompt session originating from `.github/prompts/`, any change (even CR/Task edits) still requires a corresponding task file for traceability.
+Framed Question Template:
+```
 
----
+**Question**:  <Question text>?  
 
-# INSTRUCTIONS
+**Options:**
++--------------------------------------------------+
+|  A) <Option A – brief descriptor>                |
+|  B) <Option B – brief descriptor>                |
+|  C) <Option C – brief descriptor>                |
+|  D) <Option D – brief descriptor>                |
+|  E) <Option E – brief descriptor>                |
+|  F) <Option F – brief descriptor>                |
++--------------------------------------------------+
+Reply: letter only (A–F).
+```
+Guidance:
+- Omit unused trailing letters; stop at last needed option (e.g., D).
+- Align vertical bars and pad lines for readability; box width matches longest line.
+- For free-form follow-up, ask without the box and await user input.
+- Act immediately on the selected option.
+- Only reprint the box if the user's reply is invalid.
 
-1. Reference `.rdd-docs/folder-structure.md` for expected directory layout when creating new CR or Task files.
-2. Consult `.rdd-docs/requirements.md` and `.rdd-docs/README.md` for overarching repository governance.
-3. Follow each prompt file's embedded workflow strictly—do not introduce implementation details during clarification stages.
-4. Use additive markdown sections (avoid rewriting existing headers unless fixing typos explicitly requested via task file).
-5. For new CR creation: include initial sections (Who, What, Why, Acceptance Criteria, Additional Considerations) minimally before starting clarification.
-6. For task files: capture Action, Related CR (if applicable), Constraints, Acceptance, and Timestamp ID.
-7. After every status-changing edit, re-read the catalog to ensure consistency; correct if needed (add note if mismatch cannot be immediately resolved).
+R04: Do **not** chain or stack multiple questions in one turn; wait for the answer.
+
+R05  Keep every question line ≤ 120 characters.
+
+R06: When the user should be asked for confirmation before proceeding, or everywhere else when the user should answer with simply yes or no, or confirm or not confirm or accept or not acceps (dual binary logic) use this standardized format:
+
+```
+**Please confirm to proceed: (Y/N)**
+```
+
+R07: Do not change anything outside the workspace - especially the python installation. Use only virtual environments inside the workspace if needed. Also so not change global git configurations, user settings, or any other global settings outside the workspace.
+

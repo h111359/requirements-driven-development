@@ -1,70 +1,88 @@
-# Project Setup Instructions
 
-> Use these instructions with GitHub Copilot to automatically recreate the full project template from only the `.rdd-copilot` folder. This will restore all folders and files as described below, with exact content for each file.
+# Role: 
 
-## 1. Create `.vscode` folder and its contents
+You are here to deploy rdd-copilot product in a new workspace..
 
-- Create folder: `.vscode`
-- Create file: `.vscode/settings.json` with three color values for:
-  - `titleBar.activeBackground`
-  - `titleBar.inactiveBackground`
-    (use template content from `.rdd-copilot/templates/vscode-settings.json`)
+# Context:
 
-## 2. Setup `.github` folder and its contents
+C01: This prompt should leverage GitHub Copilot to automatically build full requirements driven development tool from `.rdd-copilot` folder. 
 
-- If `.github/` folder does not exist, create it. If it already exists, leave it unchanged.
+C02: In order the prompt to be execute manually, the user should copy-paste the following instruction at the chat area and run it.: 
+```
+Use and follow instructions in #file:.rdd-copilot/prompts/setup-project.prompt.md exactly.
+```
 
-- Create file: `.github/prompts/rdd-copilot.cr-create-tasks.prompt.md` (use template content from `.rdd-copilot/templates/rdd-copilot.task-creator.prompt.md`)
+# Rules:
 
-- Create file: `.github/prompts/rdd-copilot.task-execute.prompt.md` (use template content from `.rdd-copilot/templates/rdd-copilot.task-executor.prompt.md`)
+There are **mandatory** rules you must follow when executing the steps.
 
-- Create file: `.github/prompts/rdd-copilot.cr-create.prompt.md` (use template content from `.rdd-copilot/templates/cr-create.prompt.md`)
+R01: Do NOT delete any extra user-added files or folders that are not listed; simply ensure the minimum structure exists.
 
-- Create file: `.github/prompts/rdd-copilot.cr-clarify.prompt.md` (use template content from `.rdd-copilot/templates/cr-clarify.prompt.md`)
+R02: Write before executing each step "Executing <step_number>"
 
-- Create file: `.github/prompts/rdd-copilot.cr-design.prompt.md` (use template content from `.rdd-copilot/templates/cr-design.prompt.md`)
+R03: Write after executing each step "Completed <step_number>"
 
-- Create file: `.github/prompts/rdd-copilot.cr-complete.prompt.md` (use template content from `.rdd-copilot/templates/cr-complete.prompt.md`)
+R04: The steps in Steps section must be followed in order.
 
-- Create file: `.github/instructions/rdd-copilot.python.instructions.md` (use template content from `.rdd-copilot/templates/rdd-copilot.python.instructions.md`)
+# Steps:
 
-- Create file: `.github/instructions/rdd-copilot.devops-core-principles.instructions.md` (use template content from `.rdd-copilot/templates/rdd-copilot.devops-core-principles.instructions.md`)
+S01: Display the following banner to the user:
 
-- Create file: `.github/instructions/rdd-copilot.sql-sp-generation.instructions.md` (use template content from `.rdd-copilot/templates/rdd-copilot.sql-sp-generation.instructions.md`)
+```
+───── RDD-COPILOT ─────
+ Prompt: Project Setup                                    
+ Description:                                             
+ > Recreate full project structure from                   
+ > .rdd-copilot assets: restore folders, move templates,  
+ > seed documentation, and prepare prompts/instructions.  
+ ──────────────────────
 
-- Create file: `.github/instructions/rdd-copilot.technologies.instructions.md` (use template content from `.rdd-copilot/templates/rdd-copilot.technologies.instructions.md`)
+```
 
-- Create file: `.github/chatmodes/rdd-copilot.Agent.chatmode.md` (use template content from `.rdd-copilot/templates/rdd-copilot.Agent.chatmode.md`)
+S02: Setup `.github` folder and its contents following the steps below
 
-- Create file: `.github/copilot-instructions.md` (use template content from `.rdd-copilot/templates/rdd-copilot.copilot-instructions.md`)
+S02.01: If `.github/` folder does not exist, create it. If it already exists, leave it unchanged and skip all S02.* steps.
 
-## 3. Create `.rdd-docs` folder
+S02.02: If `.github/prompts` folder does not exist, create it. If it already exists, leave it unchanged.
 
-- If `.rdd-docs/` folder does not exist, create it. If it already exists, leave it unchanged.
+S02.03: If `.github/instructions` folder does not exist, create it. If it already exists, leave it unchanged.
 
-Apply the following rules:
+S02.04: If `.github/chatmodes` folder does not exist, create it. If it already exists, leave it unchanged.
 
-1. For every folder and file listed below in this section:
-  - If it does NOT exist: CREATE it with the exact template content provided here.
-  - If it already exists: LEAVE IT UNCHANGED (do not overwrite, merge, or append) to preserve user edits.
-2. Do NOT delete any extra user-added files or folders that are not listed; simply ensure the minimum structure exists.
-3. The files in `.rdd-docs/change-requests/`, `.rdd-docs/tasks/`, and top-level `.rdd-docs/*.md` act as seed documents; once present they are considered live documentation and must not be reset automatically.
+S02.05: If the file `.rdd-copilot/templates/rdd-copilot.cr-create.prompt.md` exists and `.github/prompts/rdd-copilot.cr-create.prompt.md` does not exist, move it to `.github/prompts/`. If destination file exists, leave both unchanged.
 
-Provide a summary indicating for each file/folder whether it was "created" or "already-present".
+S02.06: If the file `.rdd-copilot/templates/rdd-copilot.cr-clarify.prompt.md` exists and `.github/prompts/rdd-copilot.cr-clarify.prompt.md` does not exist, move it to `.github/prompts/`. If destination file exists, leave both unchanged.
 
----
+S02.07: If the file `.rdd-copilot/templates/rdd-copilot.cr-design.prompt.md` exists and `.github/prompts/rdd-copilot.cr-design.prompt.md` does not exist, move it to `.github/prompts/`. If destination file exists, leave both unchanged.
 
-- Create file: `.rdd-docs/requirements.md` (use template content from `.rdd-copilot/templates/requirements.template.md`)
+S02.08: If the file `.rdd-copilot/templates/rdd-copilot.cr-implement.prompt.md` exists and `.github/prompts/rdd-copilot.cr-implement.prompt.md` does not exist, move it to `.github/prompts/`. If destination file exists, leave both unchanged.
 
- - Create file: `.rdd-docs/folder-structure.md` (use template content from `.rdd-copilot/templates/docs-folder-structure.md`)
+S02.09: If the file `.rdd-copilot/templates/rdd-copilot.python.instructions.md` exists and `.github/instructions/rdd-copilot.python.instructions.md` does not exist, move it to `.github/instructions/`. If destination file exists, leave both unchanged.
 
- - Create file: `.rdd-docs/technical-specification.md` (use template content from `.rdd-copilot/templates/docs-technical-specification.md`)
+S02.10: If the file `.rdd-copilot/templates/rdd-copilot.devops-core-principles.instructions.md` exists and `.github/instructions/rdd-copilot.devops-core-principles.instructions.md` does not exist, move it to `.github/instructions/`. If destination file exists, leave both unchanged.
 
- - Create file: `.rdd-docs/change-requests/cr-catalog.md` (use template content from `.rdd-copilot/templates/docs-cr-catalog.md`)
+S02.11: If the file `.rdd-copilot/templates/rdd-copilot.sql-sp-generation.instructions.md` exists and `.github/instructions/rdd-copilot.sql-sp-generation.instructions.md` does not exist, move it to `.github/instructions/`. If destination file exists, leave both unchanged.
 
- - Create file: `.rdd-docs/tasks/tasks-catalog.md` (use template content from `.rdd-copilot/templates/docs-tasks-catalog.md`)
+S02.12: If the file `.rdd-copilot/templates/rdd-copilot.technologies.instructions.md` exists and `.github/instructions/rdd-copilot.technologies.instructions.md` does not exist, move it to `.github/instructions/`. If destination file exists, leave both unchanged.
+
+S02.13: If the file `.rdd-copilot/templates/rdd-copilot.Agent.chatmode.md` exists and `.github/chatmodes/rdd-copilot.Agent.chatmode.md` does not exist, move it to `.github/chatmodes/`. If destination file exists, leave both unchanged.
+
+S02.14: If the file `.rdd-copilot/templates/copilot-instructions.md` exists and `.github/copilot-instructions.md` does not exist, move it to `.github/`. If destination file exists, leave both unchanged.
+
+S03 Setup `.rdd-docs` folder and its contents following the steps below
+
+S03.01: If `.rdd-docs/` folder does not exist, create it. If it already exists, leave it unchanged and skipp all S03.* steps.
+
+S03.02: If the file `.rdd-docs/requirements.md` does not exist, move the file `.rdd-copilot/templates/requirements.md` to `.rdd-docs/requirements.md`. If destination file exists, leave both unchanged.
+
+S03.03: If the file `.rdd-docs/folder-structure.md` does not exist, move the file `.rdd-copilot/templates/folder-structure.md` to `.rdd-docs/folder-structure.md`. If destination file exists, leave both unchanged.
+
+S03.04: If the file `.rdd-docs/technical-specification.md` does not exist, move the file `.rdd-copilot/templates/technical-specification.md` to `.rdd-docs/technical-specification.md`. If destination file exists, leave both unchanged.
+
+S03.05: Move the folder `.rdd-copilot/templates` to `.rdd-docs/`. If destination folder exists, leave both unchanged.
+
+S03.06: Create folder `.rdd-docs/change-requests`
+
+S04: Provide a summary indicating for each file/folder whether it was "created" or "already-present".
 
 
----
-
-**After running this prompt, your project will be fully restored to the template structure and contents.**

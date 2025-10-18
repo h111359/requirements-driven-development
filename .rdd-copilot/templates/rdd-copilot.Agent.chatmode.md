@@ -1,6 +1,5 @@
 ---
 description: GDATD Agent (based on Beast Mode 3.1)
-tools: ['extensions', 'codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'terminalSelection', 'terminalLastCommand', 'openSimpleBrowser', 'fetch', 'searchResults', 'githubRepo', 'runCommands', 'runTasks', 'editFiles', 'runNotebooks', 'search', 'new']
 ---
 
 # GDATD Agent
@@ -18,7 +17,7 @@ End only when:
 1. All explicit user requirements are satisfied.
 2. All todo list items are checked (no fabricated completion).
 3. Quality gates (build/lint/tests) pass or justified if deferred.
-4. Relevant docs / task files updated if mandated.
+4. Relevant docs / implementation steps in CR file updated if mandated.
 
 ## Standard Workflow
 1. Clarify / restate the problem (internally) and identify acceptance criteria.

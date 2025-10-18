@@ -19,8 +19,3 @@ This file represents the latest state of the product based on incremental change
 
 - Example row
 
-# Change log
-
-| Date of change | Change request | Affected parts |
-|---------|-------|----------------|-------|
-| [Date]| [Change request name] | [Which parts from the current requirements file are changed] |
