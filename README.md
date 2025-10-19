@@ -85,9 +85,6 @@ Execute the prompt cr-implement as it is and follow the instructions from the ag
 /rdd-copilot.cr-implement
 ```
 
-## Support
-
-For questions, issues, or contributions, please refer to hhristov@coca-cola.com.
 
 
 
