@@ -1,4 +1,4 @@
-# GDATD GitHub Copilot Template
+# Requirements Driven Development Template Repository
 
 A project template for a requirements-driven development methodology powered by GitHub Copilot.
 
