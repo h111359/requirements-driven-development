@@ -44,5 +44,6 @@
 
 ## Infrastructure
 - [Define hosting and deployment requirements]
+- [Describe project folder structure and organization]
 - [Specify database and storage requirements]
 - [List third-party service dependencies]

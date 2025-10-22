@@ -8,6 +8,7 @@ This templates provide a  project scaffolding system that automatically generate
 
 ## Prerequisites
 
+- **Python**
 - **Visual Studio Code** with GitHub Copilot extension enabled
 - **GitHub Copilot** subscription (required for template functionality)
 
@@ -19,26 +20,21 @@ This templates provide a  project scaffolding system that automatically generate
 
 ### 2. Initialize Project Structure
 
-1. Open the project folder in **Visual Studio Code**
-2. Open **GitHub Copilot Chat** (Ctrl+Shift+I / Cmd+Shift+I)
-3. Change to Agent mode 
-4. Execute as prompt the file:.rdd-copilot/prompts/setup-project.prompt.md (in it is added exact instructions)
+1. Execute as script:.rdd-copilot/scripts/install-rdd-copilot.py
 
 ### 3. Project Ready
 
-Once the setup completes, your project will contain:
-- Complete folder structure with documentation templates
-- Configured GitHub Copilot instructions and prompts
-- Task management system
-- Development guidelines and architecture documentation
-
+Once the setup completes, in your project will be added:
+- .github folder (if not exists already)
+- .rdd-docs folder (if not exists already)
+- 
 ## Concepts
 
 rdd-copilot tool consists of several prompts, instructions and chatmodes in .github folder. For more clarity about .github folder - see https://code.visualstudio.com/docs/copilot/overview 
 
-In addition is set a folder .rdd-docs, where the requirements, the technical specification and the folder structure will be documented and maintained.
+In addition is set a folder .rdd-docs, where the folder specs contain file with the requirements and the desigh.
 
-Here also will be created files for each new change request and it will be populated with all details needed to be understood the business requirement, the technical aspects that should be obliged. In it will be created also a list of steps in form of prompts, which after being executed in sequence, should produce the expected from the change request result.
+Here also will be created files for each new change request in changes folder/
 
 All the changes to a change request file and its results should be done in a separate git branch. Still the documents requirements.md, technical-specification.md and file-structure.md are common for all change requests, so their maintenance should happen in a separate branch. This functionality is planned to be developed in the future.
 
