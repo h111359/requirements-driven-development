@@ -1,1 +1,0 @@
-Minimal README for user guides docs folder: Contains end-user and analyst guides.
