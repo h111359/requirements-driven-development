@@ -1,131 +1,112 @@
 # Kolko Ni Struva Product Data Model
 
-## Key Entities
+## Entities
 
-### 1. DataFile
-- **Attributes (as implemented):**
-  - `raw_path`: Path to raw file in `data/raw/` (filename encodes date and chain)
-  - `date`: Inferred from filename (e.g., `kolko_struva_2025-10-10_account_1.csv` → `2025-10-10`)
-  - `chain_id`: Inferred from filename (e.g., `kolko_struva_2025-10-10_account_1.csv` → `1`)
-  - **Fields in file:**
-    - "Населено място" (Settlement code, e.g. EKATTE)
-    - "Търговски обект" (Store name and address)
-    - "Наименование на продукта" (Product name)
-    - "Код на продукта" (Product code)
-    - "Категория" (Category code)
-    - "Цена на дребно" (Retail price)
-    - "Цена в промоция" (Promotional price, may be empty)
-  - No explicit `source`, `completeness`, or interim/processed path attributes are tracked in code or files.
+### <ENTITY-NAME>
 
-### 2. SiteBuild
-- **Attributes (as implemented):**
-  - `included_dates`: List of dates included in the build (tracked in script logic, not as a file)
-  - `output_folder`: Path to build output (e.g., `build/web/`)
-  - `status`/`warnings`: Not explicitly tracked or output as a file; warnings are logged to console.
+#### Description:
 
-### 3. DimensionTable
-- **Attributes (as implemented):**
-  - `name`: category, city, or chain
-  - `json_path`: Path to JSON file in `data/` and/or `build/web/`
-  - **Format:** JSON dictionary mapping string IDs to names, e.g. `{ "1": "Хляб бял", ... }`
-  - No explicit array of objects with `id` and `name` fields.
+<ENTITY-DESCRIPTION>
 
-### 4. FactTable
-- **Attributes (as implemented):**
-  - `name`: prices
-  - `csv_path`: `build/web/data.csv`
-  - **Fields:**
-    - `date` (from filename)
-    - `chain_id` (from filename)
-    - "Населено място"
-    - "Търговски обект"
-    - "Наименование на продукта"
-    - "Код на продукта"
-    - "Категория"
-    - "Цена на дребно"
-    - "Цена в промоция"
-  - No explicit `product_id`, `category_id`, `city_id`, or `unit` columns in the output.
+#### Attributes:
+
+  - <ATTRIBUTE-NAME>: 
+    - Description: <ATTRIBUTE-DESCRIPTION>
+    - Mandatory: [Yes|No]    
+    - Data Type: <DATA-TYPE>
+    - Format: <DATA-FORMAT>
+    - Data validation rules:
+       - should contain `@`
+    - Example: <DATA-EXAMPLE>
+
+  - <ATTRIBUTE-NAME>: <ATTRIBUTE-DESCRIPTION>  
+
+#### Constraints
+
+  - Primary-Key: 
+      - <ATTRIBUTE-NAME>
+      - <ATTRIBUTE-NAME>
+      - <ATTRIBUTE-NAME>
+
+  - Unique-Key
+      - <ATTRIBUTE-NAME>
+      - <ATTRIBUTE-NAME>
+      - <ATTRIBUTE-NAME>
 
 ## Relationships
-- Each `SiteBuild` references multiple `DataFile` objects (for the last 2 days, inferred from filenames)
-- Each `SiteBuild` includes a merged fact table CSV and copies of the nomenclature JSON files as dimension tables.
+
+### REL-<ENTITY-NAME>-<ENTITY-NAME>
+
+- Cardinality: [1:1|M:1|1:M|M:M]
+- Statement: [e.g "Each `Team` could have one or more `Employee`" or "Each `Employee` must belong to one and only one `Location`" ]
+- Left Entity Attributes: 
+      - <ATTRIBUTE-NAME>
+      - <ATTRIBUTE-NAME>
+- Right Entity Attributes: 
+      - <ATTRIBUTE-NAME>
+      - <ATTRIBUTE-NAME>
+
 
 ## Validation Rules
-- Only the last 2 days of data are included in each build (enforced by script logic)
-- If data for a day is missing, script skips and logs a warning
-- Output files are written to `build/web/` (fact table as `data.csv`, dimension tables as JSON dictionaries)
-- No explicit completeness checks or validation files are produced.
 
-## State Transitions
-- DataFile: raw → merged (no explicit interim or processed file tracked)
-- SiteBuild: not materialized as a file; status/warnings are logged only.
+Examples:
+- <ENTITY-NAME>: If data for a day is missing, script skips and logs a warning
+- If entity reaches 10M rows - log a warning
 
-## Historical Analytics Support
-- Processed (merged) data is retained in `build/web/data.csv` (overwritten on each build)
-- Nomenclature files are retained in `data/` and copied to `build/web/`
-- Date fields in the fact table support time-series queries and trend analysis
 
-## Folder Structure Reference
+## Physical Implementation
+
+Description how the entities are realised - as tables in a database, files or other. Also here should be provided paths, connection strings or other which identifies the place of entity residence.
+
+### Folder Structure Reference
 
 ## Data File Formats
 
-### 1. Source Data File Format (Raw)
-**Location:** `data/raw/`
-**Format:** CSV (comma-separated values, UTF-8, quoted fields)
-**Fields (Bulgarian, as in real file):**
-  - "Населено място" (Settlement code, e.g. EKATTE)
-  - "Търговски обект" (Store name and address)
-  - "Наименование на продукта" (Product name)
-  - "Код на продукта" (Product code)
-  - "Категория" (Category code)
-  - "Цена на дребно" (Retail price)
-  - "Цена в промоция" (Promotional price, may be empty)
+### File <FILE-NAME>
+- Location: `data/raw/`
+- Format: [e.g. CSV (comma-separated values, UTF-8, quoted fields)]
+- Header Row: [Yes|no]
+- Fields:
+    - <FIELD-NAME>
+    - <FIELD-NAME>
 
-**Example header:**
+- Example header:
 ```
 "Населено място","Търговски обект","Наименование на продукта","Код на продукта","Категория","Цена на дребно","Цена в промоция"
 ```
 
-**Example row:**
+- Example row:
 ```
 "68134","МАГАЗИН МЛАДОСТ - СОФИЯ, ЖК МЛАДОСТ 2, БУЛ. АЛЕКСАНДЪР МАЛИНОВ 75","КРАВЕ МАСЛО 125 ГР ДИМИТЪР МАДЖАРОВ","040001","11","4.98",""
 ```
 
-### 2. Interim Data File Format
-- **Not implemented in current code or data files.**
+## Database Tables
 
-### 3. Final Data File Format (Processed)
-**Location:** `build/web/`
-**Format:**
-  - **Dimension Tables:** JSON files in `data/` and copied to `build/web/` (e.g., `category-nomenclature.json`, `cities-ekatte-nomenclature.json`, `trade-chains-nomenclature.json`)
-    - **Format:** Dictionary mapping string IDs to names, e.g. `{ "1": "Хляб бял", ... }`
-  - **Fact Table:** CSV file as `build/web/data.csv`
-    - **Fields:**
-      - `date`, `chain_id`, "Населено място", "Търговски обект", "Наименование на продукта", "Код на продукта", "Категория", "Цена на дребно", "Цена в промоция"
-    - No explicit `product_id`, `category_id`, `city_id`, or `unit` columns.
-
-## Example File Layouts
-
-### Raw CSV Example
-```csv
-"Населено място","Търговски обект","Наименование на продукта","Код на продукта","Категория","Цена на дребно","Цена в промоция"
-"68134","МАГАЗИН МЛАДОСТ - СОФИЯ, ЖК МЛАДОСТ 2, БУЛ. АЛЕКСАНДЪР МАЛИНОВ 75","КРАВЕ МАСЛО 125 ГР ДИМИТЪР МАДЖАРОВ","040001","11","4.98",""
+### Table <TABLE-NAME>
+- Schema: `<SCHEMA-NAME>`
+- Storage Engine: [e.g. Azure SQL Database | PostgreSQL | Snowflake]
+- Description: <TABLE-DESCRIPTION>
+- Primary Key Columns:
+  - <COLUMN-NAME>
+  - <COLUMN-NAME>
+- Foreign Keys:
+  - `<FK-NAME>` → `<TARGET-SCHEMA>.<TARGET-TABLE>(<TARGET-COLUMN>)`
+- Columns:
+  - <COLUMN-NAME> (`<DATA-TYPE>`): <COLUMN-DESCRIPTION>
+  - <COLUMN-NAME> (`<DATA-TYPE>`): <COLUMN-DESCRIPTION>
+- Indexes:
+  - `<INDEX-NAME>`: <COLUMN-LIST> [clustered|nonclustered|btree]
+- Partitioning Strategy: [None | <COLUMN-NAME> | <RANGE>]
+- Retention Policy: [e.g. Keep 36 months | Purge daily snapshots after 14 days]
+- Example DDL:
+```sql
+CREATE TABLE <SCHEMA-NAME>.<TABLE-NAME> (
+  <COLUMN-NAME> <DATA-TYPE> NOT NULL,
+  <COLUMN-NAME> <DATA-TYPE>,
+  CONSTRAINT <PK-NAME> PRIMARY KEY (<COLUMN-NAME>)
+);
 ```
-
-### Dimension JSON Example
-```json
-{
-  "1": "Хляб бял",
-  "2": "Хляб тъмен"
-}
+- Example row:
 ```
-
-### Fact CSV Example
-```csv
-date,chain_id,Населено място,Търговски обект,Наименование на продукта,Код на продукта,Категория,Цена на дребно,Цена в промоция
-2025-10-25,1,68134,МАГАЗИН МЛАДОСТ - СОФИЯ, ЖК МЛАДОСТ 2, БУЛ. АЛЕКСАНДЪР МАЛИНОВ 75,КРАВЕ МАСЛО 125 ГР ДИМИТЪР МАДЖАРОВ,040001,11,4.98,
+<VALUE-1>|<VALUE-2>|<VALUE-3>
 ```
-
----
-
-This data model now covers metadata, source, interim, and final data formats for the Kolko Ni Struva product.
