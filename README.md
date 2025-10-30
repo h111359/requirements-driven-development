@@ -16,71 +16,15 @@ This templates provide a  project scaffolding system that automatically generate
 
 ### 1. Download the code
 
-- From `https://github.com/The-Coca-Cola-Company/gdatd-github-copilot-template` should be copied the folder `.rdd-copilot` in the root of your project folder. The current README.md file is optional - it is needed for initial instructions for the deploy and knowledge about rdd-copilot. 
+- From the current repo copy all the folders in your project. The current README.md file is optional - it is needed for initial instructions for the deploy and knowledge about rdd-copilot. 
 
-### 2. Initialize Project Structure
-
-1. Execute as script:.rdd-copilot/scripts/install-rdd-copilot.py
-
-### 3. Project Ready
-
-Once the setup completes, in your project will be added:
-- .github folder (if not exists already)
-- .rdd-docs folder (if not exists already)
-- 
 ## Concepts
 
 rdd-copilot tool consists of several prompts, instructions and chatmodes in .github folder. For more clarity about .github folder - see https://code.visualstudio.com/docs/copilot/overview 
 
-In addition is set a folder .rdd-docs, where the folder specs contain file with the requirements and the desigh.
 
-Here also will be created files for each new change request in changes folder/
-
-All the changes to a change request file and its results should be done in a separate git branch. Still the documents requirements.md, technical-specification.md and file-structure.md are common for all change requests, so their maintenance should happen in a separate branch. This functionality is planned to be developed in the future.
-
+All the changes to a change request file and its results should be done in a separate git branch. 
 
 ## 4. How to use
 
-- Follow this sequence
-
-### Step 01: 
-
-Execute the prompt cr-create as it is and follow the instructions
-
-```
-/rdd-copilot.cr-create
-```
-
-### Step 02:
-
-The `cr-clarify` prompt guides users through an iterative process to eliminate ambiguity in Change Requests (CRs). It helps clarify business and functional requirements by asking targeted questions, ensuring all goals, scope, constraints, dependencies, stakeholders, and success metrics are well-defined. The process starts by listing available CRs, then focuses on clarifying one selected CR until it is ready for technical design, without making implementation decisions.
-
-Execute the prompt cr-clarify as it is and follow the instructions from the agent.
-
-```
-/rdd-copilot.cr-cclarify
-```
-
-### Step 03:
-
-The `.github/prompts/rdd-copilot.cr-design.prompt.md` file provides a structured prompt for guiding users through the technical design phase of a Change Request (CR), helping to define architecture, implementation steps, dependencies, and acceptance criteria before development begins.
-
-Execute the prompt cr-design as it is and follow the instructions
-
-```
-/rdd-copilot.cr-design
-```
-
-### Step 04:
-
-The `.github/prompts/rdd-copilot.cr-implement.prompt.md` file provides a structured prompt to guide users through the implementation phase of a Change Request (CR), detailing development tasks, coding standards, and steps to ensure requirements are met.
-
-Execute the prompt cr-implement as it is and follow the instructions from the agent.
-
-```
-/rdd-copilot.cr-implement
-```
-
-
-
-
+TBD
