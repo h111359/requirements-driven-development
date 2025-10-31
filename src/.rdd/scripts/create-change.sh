@@ -38,7 +38,7 @@ fi
 REQUIRED_FILES=(requirements.md tech-spec.md data-model.md folder-structure.md version-control.md)
 for FILE in "${REQUIRED_FILES[@]}"; do
     if [ ! -f "docs/$FILE" ]; then
-        cp ".rdd/scripts/templates/$FILE" "docs/$FILE"
+        cp ".rdd/templates/$FILE" "docs/$FILE"
         echo "Copied template for missing $FILE to docs/$FILE"
     fi
 done
