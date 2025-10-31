@@ -398,7 +398,7 @@ push() {
         exit 1
     fi
     
-    print_warning "Pushing branch to remote..."
+    print_step "Pushing branch to remote..."
     git push -u origin "$current_branch"
     print_success "Branch pushed to remote with upstream tracking"
 }
