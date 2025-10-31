@@ -181,9 +181,12 @@ S01: Display the following banner to the user:
 ───────────────────
 ```
 
-S02: Ask the user to verify they are in the correct git branch according to the CR they want to design. 
+S02: Ask the user to verify they are in the correct git branch and CR file format for the CR they want to design. 
+     The branch must be named as `cr/<cr-id>-<cr-name>`, and the CR file must be named as `cr-<cr-id>-<cr-name>-clarified.cr.md` in the root directory.
+     Warn the user that branches with `feat/` or `fix/` prefixes, or change files named `change.md` in `docs/changes/`, are incompatible and will prevent the tech-design workflow from executing.
 
-S03: Check which is the current git branch. If the branch is with format `cr/<cr-id>-<cr-name>`. Recognize the corresponding CR file name as `cr-<cr-id>-<cr-name>-clarified.cr.md`. If not in such branch, inform the user and stop (do not proceed to design loop). 
+S03: Check which is the current git branch. If the branch is in the format `cr/<cr-id>-<cr-name>`, recognize the corresponding CR file name as `cr-<cr-id>-<cr-name>-clarified.cr.md`. 
+     If not in such branch, or if the CR file does not exist in the required format, inform the user of the incompatibility and stop (do not proceed to design loop). 
 
 S04: Open and read the corresponding CR file. Read also the file `.rdd-docs/technical-specification.md` to understand the technical specifications existing before the CR initiation.
 
