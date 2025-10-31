@@ -4,11 +4,20 @@
 # Check if change name parameter is provided
 if [ -z "$1" ]; then
     echo "Error: Change name is required as parameter"
-    echo "Usage: ./create-change.sh <change-name>"
+    echo "Usage: ./create-change.sh <change-name> [type]"
+    echo "  type: feat (default) or fix"
     exit 1
 fi
 
 CHANGE_NAME="$1"
+CHANGE_TYPE="${2:-feat}"  # Default to 'feat' if not provided
+
+# Validate change type
+if [[ "$CHANGE_TYPE" != "feat" && "$CHANGE_TYPE" != "fix" ]]; then
+    echo "Error: Invalid change type '$CHANGE_TYPE'"
+    echo "Valid types: feat, fix"
+    exit 1
+fi
 
 # Get current date and time in YYYYMMDD-HHmm format
 DATE_TIME=$(date +"%Y%m%d-%H%M")
@@ -26,10 +35,10 @@ if [ ! -d "docs/changes" ]; then
 fi
 
 # Compose new folder name
-NEW_FOLDER="docs/changes/${DATE_TIME}-${CHANGE_NAME}"
 
-# Create git branch from main
-BRANCH_NAME="cng/${CHANGE_NAME}"
+# Compose new folder and branch name
+NEW_FOLDER="docs/changes/${DATE_TIME}-${CHANGE_NAME}"
+BRANCH_NAME="${CHANGE_TYPE}/${DATE_TIME}-${CHANGE_NAME}"
 git checkout main
 git pull
 git checkout -b "$BRANCH_NAME"
