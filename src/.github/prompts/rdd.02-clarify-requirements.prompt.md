@@ -103,7 +103,7 @@ S01: Display the following banner to the user:
 
 S02: Ask the user to verify they are in the correct git branch according to the CR they want to clarify. 
 
-S03: Check which is the current git branch. If the branch is with format `cr/<cr-id>-<cr-name>`. Recognize the corresponding CR file name as `cr-<cr-id>-<cr-name>-draft.cr.md` or `cr-<cr-id>-<cr-name>-clarified.cr.md`. If not in such branch, inform the user and stop (do not proceed to clarification loop). 
+S03: Check which is the current git branch. If the branch is with format `feat/<cr-id>-<cr-name>` or `fix/<cr-id>-<cr-name>`, recognize the corresponding CR file name as `change.md`. If not in such branch, inform the user and stop (do not proceed to clarification loop).
 
 S04: Open and read the corresponding CR file. 
 
