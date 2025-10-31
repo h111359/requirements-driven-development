@@ -44,7 +44,7 @@ S01: Display the banner:
 
 S02: Ask the user to verify they are in the correct git branch according to the CR they want to design. 
 
-S03: Check which is the current git branch. If the branch is with format `cr/<cr-id>-<cr-name>`. Recognize the corresponding CR file name as `cr-<cr-id>-<cr-name>-clarified.cr.md`. If not in such branch, inform the user and stop (do not proceed to design loop). 
+S03: Check which is the current git branch. If the branch is with format `cr/<cr-id>-<cr-name>`. Recognize the corresponding CR file name as `cr-<cr-id>-<cr-name>-designed.cr.md`. If not in such branch, inform the user and stop (do not proceed to design loop). 
 
 S04: Open and read the corresponding CR file. Read also the file `.rdd-docs/technical-specification.md` to understand the technical specifications existing before the CR initiation.
 
