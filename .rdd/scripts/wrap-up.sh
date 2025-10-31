@@ -297,7 +297,7 @@ action_merge_requirements() {
         if [ -f ".rdd/templates/requirements.md" ]; then
             cp ".rdd/templates/requirements.md" "$REQUIREMENTS_FILE"
         else
-            # Create minimal template
+            # Create minimal template with proper case-sensitive section names
             cat > "$REQUIREMENTS_FILE" << 'EOFREQ'
 # Overview
 
@@ -305,11 +305,11 @@ action_merge_requirements() {
 
 # General Functionalities
 
-# Functional requirements
+# Functional Requirements
 
-# Non-functional requirements
+# Non-Functional Requirements
 
-# Technical requirements
+# Technical Requirements
 
 EOFREQ
         fi
@@ -333,8 +333,9 @@ EOFREQ
         fi
     }
     
-    # Process each section: General Functionalities, Functional requirements, Non-functional requirements, Technical requirements
-    local sections=("General Functionalities" "Functional requirements" "Non-functional requirements" "Technical requirements")
+    # Process each section: General Functionalities, Functional Requirements, Non-Functional Requirements, Technical Requirements
+    # Note: Section names must match exactly with requirements-changes.md (case-sensitive)
+    local sections=("General Functionalities" "Functional Requirements" "Non-Functional Requirements" "Technical Requirements")
     local prefixes=("GF" "FR" "NFR" "TR")
     
     for i in "${!sections[@]}"; do
@@ -348,9 +349,18 @@ EOFREQ
         local section_changes=$(mktemp)
         
         # Find section in requirements-changes.md and extract items
+        # This handles both direct items under ## Section and items under ### Subsections
         awk -v section="$section" '
-            /^## / { current_section = substr($0, 4); next }
-            current_section == section && /^- \*\*\[/ { print }
+            /^## / { 
+                # Extract section name (everything after "## ")
+                current_section = substr($0, 4)
+                # Trim leading/trailing whitespace
+                gsub(/^[[:space:]]+|[[:space:]]+$/, "", current_section)
+                in_section = (current_section == section)
+                next 
+            }
+            /^## / && in_section { in_section = 0; next }
+            in_section && /^- \*\*\[/ { print }
         ' "$WORKSPACE_DIR/requirements-changes.md" > "$section_changes"
         
         if [ -s "$section_changes" ]; then
@@ -378,21 +388,29 @@ EOFREQ
                     fi
                     
                     # Add to appropriate section in temp file
+                    # Insert before the next section header (to maintain ascending order)
                     awk -v section="$section" -v req="$req_text" '
-                        /^# '"$section"'/ { 
-                            print
-                            getline
-                            print
-                            if ($0 !~ /^$/) {
-                                # Section has content, add after first line
+                        /^# / {
+                            if (in_section && !req_added) {
+                                # Found next section header, insert requirement before it
                                 print req
-                            } else {
-                                # Empty section, just add
-                                print req
+                                req_added = 1
+                                in_section = 0
                             }
-                            next 
+                            if ($0 ~ "^# " section "$") {
+                                # Found our target section
+                                in_section = 1
+                            }
+                            print
+                            next
                         }
                         { print }
+                        END {
+                            # If we reached EOF while still in section, add requirement at end
+                            if (in_section && !req_added) {
+                                print req
+                            }
+                        }
                     ' "$temp_file" > "${temp_file}.new"
                     mv "${temp_file}.new" "$temp_file"
                     

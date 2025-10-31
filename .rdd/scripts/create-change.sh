@@ -109,6 +109,8 @@ cat > ".rdd-docs/workspace/requirements-changes.md" << 'EOFREQ'
 
 > This file documents changes to be made to the main requirements.md file.
 > Each statement is prefixed with [ADDED|MODIFIED|DELETED] to indicate the type of change.
+>
+> **For detailed formatting guidelines, see:** `.rdd/templates/requirements-format.md`
 
 ## Format Guidelines
 

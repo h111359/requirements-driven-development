@@ -275,6 +275,8 @@ When user provides an answer:
 
 4. **Update requirements-changes.md:**
    Add entries in appropriate sections (GF, FR, NFR, TR) with proper prefixes
+   
+   **Note:** Refer to `.rdd/templates/requirements-format.md` for detailed formatting guidelines.
 
 Example for ADDED:
 ```markdown
