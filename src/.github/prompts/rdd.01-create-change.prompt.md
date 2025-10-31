@@ -16,7 +16,7 @@ R01: Never make technological or implementation decisions in this stage.
 
 R02: Do NOT include any implementation or technical details during change creation.
 
-R03: The script will create a git branch with format `cng/<change-name>`.
+R03: The script will create a git branch with format `feat/YYYYMMDD-HHmm-<change-name>` or `fix/YYYYMMDD-HHmm-<change-name>`, depending on the type of change.
 
 R04: Follow the Steps section sequentially without skipping any part.
 
