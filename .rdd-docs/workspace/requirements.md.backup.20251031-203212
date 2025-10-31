@@ -9,9 +9,6 @@
 - **[GF-05] Change Tracking**: The framework shall track the current active change/feature/fix being worked on
 - **[GF-06] Requirements Merging**: The framework shall support merging clarified requirements from workspace into the main requirements.md file
 - **[GF-07] Workspace Archiving**: The framework shall archive completed workspace content for historical reference
-- **[GF-08] Fix Branch Workflow**: The framework shall provide a guided workflow for creating and documenting fix branches, including naming, description, and initialization.
-- **[GF-09] Fix Branch Wrap-Up**: The framework shall provide a workflow for wrapping up fix branches, archiving documentation, and preparing for merge review.
-- **[GF-10] Requirements Change Detection**: The framework shall provide a workflow for detecting and documenting requirements changes by comparing code with the main branch.
 # Functional Requirements
 
 - **[FR-03] Flat Workspace Structure**: The system shall store all active workspace files directly in .rdd-docs/workspace/ without feature-specific subfolders
@@ -70,7 +67,6 @@
 - **[NFR-15] Multi-Developer Support**: The framework shall support multiple developers working on different features simultaneously
 - **[NFR-16] Conflict Prevention**: The workspace structure shall minimize merge conflicts between developers
 - **[NFR-17] Audit Trail**: The clarification-log.jsonl shall provide complete audit trail of decision-making
-- **[NFR-18] Fix Documentation Template**: The framework shall provide a template for documenting fixes, including What, Why, and Acceptance Criteria sections, to ensure consistency and traceability.
 # Technical Requirements
 
 - **[TR-03] JSON Configuration**: The .current-change file shall use JSON format for machine and human readability
@@ -94,6 +90,3 @@
 - **[TR-21] Context Section**: Prompts shall include comprehensive context section describing workspace structure and available tools
 - **[TR-22] Rules Section**: Prompts shall define clear rules for behavior and constraints
 - **[TR-23] Error Handling Section**: Prompts shall include specific error handling guidance with examples
-- **[TR-24] Fix Branch Management Script**: The framework shall provide a Bash script to automate fix branch creation, documentation, validation, wrap-up, and cleanup.
-- **[TR-25] Requirements Analysis Script**: The framework shall provide a Bash script to automate requirements analysis, file comparison, and impact detection.
-- **[TR-26] Merged Branch Deletion Tool**: The framework shall provide an interactive Bash script for cleaning up merged git branches, supporting both local and remote deletion.
