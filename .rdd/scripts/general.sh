@@ -503,42 +503,7 @@ EOFREQ
     print_info "Review .rdd-docs/requirements.md for MODIFIED/DELETED items"
 }
 
-# Action: Comprehensive comparison with main
-action_compare_with_main() {
-    fetch_main
-    
-    local default_branch=$(get_default_branch)
-    local current_branch=$(git branch --show-current)
-    
-    echo ""
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "  COMPARISON: ${current_branch} vs ${default_branch}"
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo ""
-    
-    # Show commit differences
-    print_step "Commit differences:"
-    local commit_count=$(git rev-list --count "origin/${default_branch}..HEAD")
-    echo "  This branch is $commit_count commit(s) ahead of ${default_branch}"
-    echo ""
-    
-    if [ "$commit_count" -gt 0 ]; then
-        git log --oneline --graph --max-count=10 "origin/${default_branch}..HEAD"
-        echo ""
-    fi
-    
-    # Show file changes
-    print_step "File changes:"
-    action_get_modified_files
-    echo ""
-    
-    # Show requirements impact
-    print_step "Requirements impact:"
-    action_analyze_requirements_impact
-    echo ""
-    
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-}
+# (Lines 201-236 removed: duplicate definition of action_compare_with_main)
 
 # Main script logic
 main() {
