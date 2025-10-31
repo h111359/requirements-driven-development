@@ -1,0 +1,53 @@
+
+- [ ] Problem Statement Clarity
+- [ ] Business Value Articulation
+- [ ] Acceptance Criteria (testable, measurable)
+- [ ] In-Scope Items Enumeration
+- [ ] Out-of-Scope Items Enumeration
+- [ ] Stakeholders / User Roles / Personas
+- [ ] Assumptions (environmental, organizational, data, temporal)
+- [ ] Constraints (business, technical, regulatory)
+- [ ] Dependencies (internal services, external APIs, sequencing)
+- [ ] Non-Functional: Performance (latency, throughput)
+- [ ] Non-Functional: Scalability (growth projections)
+- [ ] Non-Functional: Reliability & Availability (uptime, recovery)
+- [ ] Non-Functional: Maintainability & Supportability
+- [ ] Non-Functional: Observability (logging, metrics, tracing, alerting)
+- [ ] Non-Functional: Security (authentication, authorization, confidentiality, integrity)
+- [ ] Non-Functional: Privacy & Data Protection
+- [ ] Non-Functional: Compliance / Regulatory (industry standards, legal)
+- [ ] Non-Functional: Localization / Internationalization
+- [ ] Non-Functional: Accessibility (WCAG, assistive tech)
+- [ ] Data: Sources
+- [ ] Data: Inputs / Outputs
+- [ ] Data: Structures / Formats
+- [ ] Data: Retention / Archival
+- [ ] Data: Quality / Validation
+- [ ] Data: Migration Needs
+- [ ] User Interaction: Primary User Journeys
+- [ ] User Interaction: Alternate / Edge Flows
+- [ ] User Interaction: Navigation / Information Architecture
+- [ ] User Interaction: Error / Empty / Loading States
+- [ ] User Interaction: Feedback & Notifications
+- [ ] User Interaction: Form & Validation Rules
+- [ ] Edge Cases & Failure Handling
+- [ ] Concurrency & Conflict Resolution
+- [ ] Rate Limiting / Throttling
+- [ ] Operational: Deployment Constraints
+- [ ] Operational: Configuration Parameters
+- [ ] Operational: Feature Flags / Toggles
+- [ ] Operational: Rollback / Recovery
+- [ ] Terminology & Glossary Consistency
+- [ ] Metrics & KPIs (success measures)
+- [ ] Definition of Done Indicators
+- [ ] Open Questions / TODOs / Placeholders
+- [ ] Ambiguous Terms Requiring Quantification
+- [ ] Versioning & Backward Compatibility
+- [ ] Interoperability / Integration Points
+- [ ] Temporal Considerations (time zones, scheduling)
+- [ ] Legal / Licensing Constraints
+- [ ] Cost / Budget Sensitivities
+- [ ] Risks & Mitigations
+- [ ] Decommissioning / Sunset Considerations
+- [ ] Environmental / Platform Assumptions
+- [ ] Support & Training Needs
