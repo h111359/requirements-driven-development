@@ -1,0 +1,95 @@
+# RDD Framework .gitignore
+# This file excludes temporary files, backups, and build artifacts
+# while preserving the framework structure (.github, .vscode, .rdd, .rdd-docs)
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Editor and IDE temporary files
+*~
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+*.temp
+.#*
+\#*\#
+
+# Temporary and backup files (excluding specific tracked files)
+*.old
+*-old
+*.tmp.*
+
+# Python (if used in future)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+ENV/
+env/
+
+# Node.js (if used in future)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+
+# Build artifacts and output directories
+/build/
+/dist/
+/out/
+/target/
+
+# Logs directory and log files
+/logs/
+*.log
+
+# Data directories (commonly excluded for large datasets)
+/data/raw/
+/data/interim/
+/data/processed/
+
+# Test temporary files
+/tests/tmp/
+/test/tmp/
+
+# Environment files (keep .env.example but ignore actual .env)
+.env
+.env.local
+.env.*.local
+
+# Coverage reports
+coverage/
+*.lcov
+
+# Workspace temporary backup files
+# Note: Timestamped backup files in workspace are temporary and regenerated
+.rdd-docs/workspace/*.backup.*
+
+# Archive temporary files
+.rdd-docs/archive/**/*.tmp
+
+# Keep these directories tracked (explicitly NOT excluded):
+# .github/ - GitHub workflows and Copilot instructions
+# .vscode/ - VS Code settings
+# .rdd/ - RDD framework scripts and templates
+# .rdd-docs/ - RDD documentation and workspace
