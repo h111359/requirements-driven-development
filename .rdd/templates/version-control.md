@@ -42,6 +42,22 @@ This document defines the Git and GitHub version control strategy for this proje
 
 ## Workflow
 
+### Quick Workflow Overview
+
+The typical development cycle follows these steps:
+
+1. **Start**: Branch from `main` → Create `feat/` or `fix/` branch
+2. **Develop**: Make commits → Push regularly
+3. **Review**: Open Pull Request → Address feedback
+4. **Merge**: Squash and merge to `main` → Delete branch
+5. **Deploy**: Changes automatically deploy from `main`
+
+```
+main ──┬─→ feat/20251031-1430-add-auth ─→ commits ─→ PR ─→ merge ─→ main
+       │                                                              │
+       └─→ fix/20251031-1500-login-bug ──→ commits ─→ PR ─→ merge ──┘
+```
+
 ### Standard Change Workflow (GitHub Flow + RDD)
 
 1. **Create Change**
@@ -69,6 +85,11 @@ This document defines the Git and GitHub version control strategy for this proje
     - Example: `feat: add user authentication module`
 
 4. **Create Pull Request**
+   ```bash
+   # After pushing your commits, create PR via:
+   # 1. GitHub web interface (recommended)
+   # 2. GitHub CLI: gh pr create --title "Your title" --body "Description"
+   ```
    - Title: Clear description of the change
    - Description: Reference the change.md document
    - Link related issues
@@ -204,6 +225,40 @@ git config push.default simple
 ```
 
 ## Troubleshooting
+
+### Creating a Pull Request
+
+**Method 1: GitHub Web Interface (Recommended)**
+```bash
+# 1. Push your branch to GitHub
+git push origin feat/your-branch-name
+
+# 2. Visit your repository on GitHub
+# 3. Click "Compare & pull request" button (appears after push)
+# 4. Fill in:
+#    - Title: Brief description of changes
+#    - Description: Link to change.md, explain what/why
+#    - Reviewers: Select team members
+#    - Labels: Add appropriate labels
+# 5. Click "Create pull request"
+```
+
+**Method 2: GitHub CLI**
+```bash
+# Install GitHub CLI if not already: https://cli.github.com/
+gh pr create --title "feat: add user authentication" \
+             --body "Implements user auth as per docs/changes/20251031-1430-add-auth/change.md" \
+             --reviewer username1,username2 \
+             --label enhancement
+```
+
+**Method 3: VS Code GitHub Pull Requests Extension**
+```bash
+# 1. Install "GitHub Pull Requests and Issues" extension
+# 2. Push your branch: git push origin feat/your-branch-name
+# 3. Click "Create Pull Request" in the GitHub panel
+# 4. Fill in details and submit
+```
 
 ### Sync Branch with Main
 ```bash
