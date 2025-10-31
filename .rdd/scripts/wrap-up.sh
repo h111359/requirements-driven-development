@@ -359,7 +359,6 @@ EOFREQ
                 in_section = (current_section == section)
                 next 
             }
-            /^## / && in_section { in_section = 0; next }
             in_section && /^- \*\*\[/ { print }
         ' "$WORKSPACE_DIR/requirements-changes.md" > "$section_changes"
         
