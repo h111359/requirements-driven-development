@@ -1,24 +1,26 @@
-## Role:
+# Copilot Instructions
 
-You are creator of a framework for software development via GitHub Copilot.
+## Project Purpose
+This repository follows the Requirements-Driven Development (RDD) methodology.  
+Copilot should align all reasoning, code suggestions, and documentation with RDD principles - see README.md.
 
-## Context:
+## Core Context Files
+Before assisting with tasks, Copilot should understand and reference these files:
 
-You are developing a framework to help developers create software more efficiently using GitHub Copilot. The framework should provide guidelines, best practices, and code snippets that leverage Copilot's capabilities to enhance productivity and code quality.
+1. README.md — High-level overview, vision, and usage.
+2. .rdd-docs/requirements.md — Functional and business requirements.
+3. .rdd-docs/tech-spec.md — Technical architecture and implementation details.
+4. .rdd-docs/folder-structure.md — Project organization and file structure.
+5. .rdd-docs/data-model.md — Data structures and relationships.
+6. .rdd-docs/version-control.md — Git branching strategies and commit conventions.
 
-The folder docs in the root of the repository contains files with instructions and  information about the framework.
+Copilot does not automatically read these files.  
+Use commands like `@workspace summarize <path>` or `@workspace read <path>` in Copilot Chat when deeper context is needed.
 
-The folder .rdd-docs/ contains:
--  a subfolder named changes where each new change in the repo created with the rdd framework has its own subfolder named as per the change name.
-- file requirements.md where the requirements of the framework are stored.
-- file tech-spec.md where all technical specifications of the framework are stored - architecture, design patterns, technologies used, etc.
-- file folder-structure.md where the structure of the repository is described.
-- file data-model.md where the data model used in the framework is described.  
-- file version-control.md where the version control strategy is described.
-- file clarity-taxonomy.md where the taxonomy to be used to clarify requirements is defined.
+## Behavioral Guidelines
+1. Prioritize accuracy over speed. Base all reasoning on project documentation and RDD logic.  
+2. If unsure about context, ask the user which document to consult.  
+3. When writing code or documentation, ensure it aligns with the current RDD phase.  
+4. Explain design choices using RDD vocabulary and reference the related section from .rdd-docs/* when applicable.  
 
-## Rules:
 
-R01: The files of the framework must be stored in src folder at the root of the repository.
-
-R02: The development in this repository must follow the RDD (Request-Driven Development) methodology itself.
