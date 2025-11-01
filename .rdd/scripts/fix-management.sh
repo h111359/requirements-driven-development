@@ -507,10 +507,18 @@ log_prompt_execution() {
         print_success "Created log file: $log_file"
     fi
     
-    # Escape special characters for JSON
-    # Replace double quotes with escaped quotes
-    # Replace newlines with \n for proper JSON formatting
-    local details_escaped=$(echo "$execution_details" | sed 's/"/\\"/g' | awk '{printf "%s\\n", $0}' | sed 's/\\n$//')
+    # Robustly escape execution_details for JSON using jq if available.
+    # If jq is not available, fallback to basic escaping (double quotes and newlines only).
+    # WARNING: The fallback does NOT handle all JSON edge cases (e.g., backslashes, tabs, carriage returns, control characters).
+    if command -v jq >/dev/null 2>&1; then
+        # Use jq to encode as a JSON string, then strip the surrounding quotes
+        details_escaped=$(jq -R <<<"$execution_details")
+        # Remove the surrounding quotes for embedding in the larger JSON object
+        details_escaped="${details_escaped:1:-1}"
+    else
+        # Fallback: basic escaping (limited, see warning above)
+        details_escaped=$(echo "$execution_details" | sed 's/\\/\\\\/g; s/"/\\"/g; s/\t/\\t/g; s/\r/\\r/g' | awk '{printf "%s\\n", $0}' | sed 's/\\n$//')
+    fi
     
     # Create JSON line entry with all relevant information
     # Format: JSONL (JSON Lines) - one JSON object per line
