@@ -72,6 +72,11 @@ check_uncommitted_changes() {
 check_if_merged() {
     local branch_name="$1"
     local base_branch="${2:-main}"
+    local current_branch=$(git branch --show-current)
+    
+    # Fetch latest from remote to ensure we have up-to-date info
+    print_info "Fetching latest changes from remote..."
+    git fetch origin >/dev/null 2>&1
     
     # Check if base branch exists, try master if main doesn't exist
     if ! git show-ref --verify --quiet "refs/heads/$base_branch"; then
@@ -83,8 +88,16 @@ check_if_merged() {
         fi
     fi
     
-    # Check if branch is merged
-    if git merge-base --is-ancestor "$branch_name" "$base_branch" 2>/dev/null; then
+    # Update local base branch to match remote
+    print_info "Updating local '$base_branch' branch..."
+    git checkout "$base_branch" >/dev/null 2>&1
+    git pull origin "$base_branch" >/dev/null 2>&1
+    git checkout "$current_branch" >/dev/null 2>&1
+    print_success "Local '$base_branch' updated from remote"
+    
+    # Check if branch is merged using git branch --merged
+    # Now that local main is up-to-date, this check will be accurate
+    if git branch --merged "$base_branch" | grep -q "^\*\? *${branch_name}$"; then
         print_success "Branch '$branch_name' is merged into '$base_branch'"
         return 0
     else
