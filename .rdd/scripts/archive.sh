@@ -235,11 +235,8 @@ main() {
     
     # Auto-commit the archive changes
     print_info "Committing archive changes..."
-    git add "$ARCHIVE_BASE_DIR"
-    if [ "$keep_workspace" = false ]; then
-        # Use git add -A to stage the deletion of workspace directory
-        git add -A "$WORKSPACE_DIR"
-    fi
+    # Stage the archive and the deletion of workspace (if removed)
+    git add "$REPO_ROOT/.rdd-docs"
     git commit -m "archiving workspace folder for $branch_name"
     print_success "Changes committed successfully"
     echo ""
