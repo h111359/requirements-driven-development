@@ -91,10 +91,17 @@ check_if_merged() {
     # Update local base branch to match remote
     print_info "Updating local '$base_branch' branch..."
     git checkout "$base_branch" >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        print_error "Failed to checkout '$base_branch'."
+        return 3
+    fi
     git pull origin "$base_branch" >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        print_error "Failed to pull latest changes for '$base_branch'."
+        return 4
+    fi
     git checkout "$current_branch" >/dev/null 2>&1
     print_success "Local '$base_branch' updated from remote"
-    
     # Check if branch is merged using git branch --merged
     # Now that local main is up-to-date, this check will be accurate
     if git branch --merged "$base_branch" | grep -q "^\*\? *${branch_name}$"; then
