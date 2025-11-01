@@ -5,7 +5,8 @@
     "rdd.06-wrap-up": true
   },
   "chat.tools.terminal.autoApprove": {
-    ".rdd/scripts/": true
+    ".rdd/scripts/": true,
+    "./.rdd/scripts/": true,    
   },
   "files.associations": {
     "*.jsonl": "jsonlines"
