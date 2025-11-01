@@ -237,7 +237,8 @@ main() {
     print_info "Committing archive changes..."
     git add "$ARCHIVE_BASE_DIR"
     if [ "$keep_workspace" = false ]; then
-        git add "$WORKSPACE_DIR"
+        # Use git add -A to stage the deletion of workspace directory
+        git add -A "$WORKSPACE_DIR"
     fi
     git commit -m "archiving workspace folder for $branch_name"
     print_success "Changes committed successfully"
