@@ -17,7 +17,7 @@ NC='\033[0m' # No Color
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 WORKSPACE_DIR="$REPO_ROOT/.rdd-docs/workspace"
 TEMPLATE_DIR="$REPO_ROOT/.rdd/templates"
-CHANGE_TEMPLATE="$TEMPLATE_DIR/change.md"
+CHANGE_TEMPLATE="$TEMPLATE_DIR/journal.md"
 ARCHIVE_DIR="$REPO_ROOT/.rdd-docs/archive"
 
 # Function to print colored messages
@@ -92,13 +92,13 @@ init_fix() {
     mkdir -p "$WORKSPACE_DIR"
     print_success "Workspace directory ready: $WORKSPACE_DIR"
     
-    # Copy change.md template
+    # Copy journal.md template
     if [ ! -f "$CHANGE_TEMPLATE" ]; then
         print_error "Template not found: $CHANGE_TEMPLATE"
         exit 1
     fi
     
-    cp "$CHANGE_TEMPLATE" "$WORKSPACE_DIR/change.md"
+    cp "$CHANGE_TEMPLATE" "$WORKSPACE_DIR/journal.md"
     print_success "Template copied to workspace"
     
     # Create and checkout new branch
@@ -107,98 +107,6 @@ init_fix() {
     
     echo ""
     print_success "Fix branch initialized successfully!"
-}
-
-# Function to update the What section
-update_what() {
-    local content="$1"
-    local change_file="$WORKSPACE_DIR/change.md"
-    
-    if [ -z "$content" ]; then
-        print_error "Content is required"
-        exit 1
-    fi
-    
-    if [ ! -f "$change_file" ]; then
-        print_error "change.md not found in workspace"
-        exit 1
-    fi
-    
-    # Use sed to replace the What section
-    # This works with the template format where What section is between "## What" and "## Why"
-    sed -i "/^## What$/,/^## Why$/ {
-        /^## What$/!{
-            /^## Why$/!d
-        }
-    }" "$change_file"
-    
-    # Insert new content after "## What"
-    sed -i "/^## What$/a\\
-\\
-$content\\
-" "$change_file"
-    
-    print_success "Updated What section"
-}
-
-# Function to update the Why section
-update_why() {
-    local content="$1"
-    local change_file="$WORKSPACE_DIR/change.md"
-    
-    if [ -z "$content" ]; then
-        print_error "Content is required"
-        exit 1
-    fi
-    
-    if [ ! -f "$change_file" ]; then
-        print_error "change.md not found in workspace"
-        exit 1
-    fi
-    
-    # Use sed to replace the Why section
-    # This works with the template format where Why section is between "## Why" and "## Acceptance Criteria"
-    sed -i "/^## Why$/,/^## Acceptance Criteria:$/ {
-        /^## Why$/!{
-            /^## Acceptance Criteria:$/!d
-        }
-    }" "$change_file"
-    
-    # Insert new content after "## Why"
-    sed -i "/^## Why$/a\\
-\\
-$content\\
-" "$change_file"
-    
-    print_success "Updated Why section"
-}
-
-# Function to update Acceptance Criteria
-update_acceptance_criteria() {
-    local content="$1"
-    local change_file="$WORKSPACE_DIR/change.md"
-    
-    if [ -z "$content" ]; then
-        print_error "Content is required"
-        exit 1
-    fi
-    
-    if [ ! -f "$change_file" ]; then
-        print_error "change.md not found in workspace"
-        exit 1
-    fi
-    
-    # Delete everything after "## Acceptance Criteria:" line
-    sed -i "/^## Acceptance Criteria:$/,$ {
-        /^## Acceptance Criteria:$/!d
-    }" "$change_file"
-    
-    # Add content after the header
-    sed -i "/^## Acceptance Criteria:$/a\\
-\\
-$content" "$change_file"
-    
-    print_success "Updated Acceptance Criteria section"
 }
 
 # Function to archive the workspace for a fix branch
@@ -320,11 +228,6 @@ wrap_up_fix() {
         exit 1
     fi
 
-    if ! validate; then
-        print_error "Wrap-up aborted - fill in change.md sections first"
-        exit 1
-    fi
-
     print_info "Archiving workspace contents..."
     local archive_relative
     if ! archive_relative=$(archive_fix_workspace "$current_branch"); then
@@ -352,43 +255,6 @@ wrap_up_fix() {
     print_success "Fix wrap-up completed"
 }
 
-# Function to validate that all sections are filled
-validate() {
-    local change_file="$WORKSPACE_DIR/change.md"
-    
-    if [ ! -f "$change_file" ]; then
-        print_error "change.md not found in workspace"
-        exit 1
-    fi
-    
-    local has_errors=0
-    
-    # Check if What section has content (not just TBD)
-    if grep -A 2 "^## What$" "$change_file" | grep -q "<TBD"; then
-        print_error "What section is not filled"
-        has_errors=1
-    fi
-    
-    # Check if Why section has content (not just TBD)
-    if grep -A 2 "^## Why$" "$change_file" | grep -q "<TBD"; then
-        print_error "Why section is not filled"
-        has_errors=1
-    fi
-    
-    # Check if Acceptance Criteria has content (not just TBD)
-    if grep -A 2 "^## Acceptance Criteria:$" "$change_file" | grep -q "<TBD"; then
-        print_error "Acceptance Criteria section is not filled"
-        has_errors=1
-    fi
-    
-    if [ $has_errors -eq 0 ]; then
-        print_success "All sections are properly filled"
-        return 0
-    else
-        return 1
-    fi
-}
-
 # Function to push branch to remote
 push() {
     local current_branch=$(git branch --show-current)
@@ -398,7 +264,7 @@ push() {
         exit 1
     fi
     
-    print_step "Pushing branch to remote..."
+    print_info "Pushing branch to remote..."
     git push -u origin "$current_branch"
     print_success "Branch pushed to remote with upstream tracking"
 }
@@ -534,10 +400,6 @@ usage() {
     echo ""
     echo "Actions:"
     echo "  init <fix-name>              - Initialize fix branch and workspace"
-    echo "  update-what \"<text>\"         - Update What section in change.md"
-    echo "  update-why \"<text>\"          - Update Why section in change.md"
-    echo "  update-acceptance-criteria \"<text>\" - Update Acceptance Criteria section"
-    echo "  validate                     - Validate that all sections are filled"
     echo "  wrap-up                      - Archive workspace, commit, push, and create PR"
     echo "  push                         - Push branch to remote"
     echo "  cleanup                      - Delete branch and workspace"
@@ -546,8 +408,6 @@ usage() {
     echo ""
     echo "Examples:"
     echo "  $0 init fix-login-button"
-    echo "  $0 update-what \"Fix the login button not responding on mobile devices\""
-    echo "  $0 update-why \"Users cannot log in from mobile, blocking access to the app\""
     echo "  $0 mark-prompt-completed P001"
     echo "  $0 log-prompt-execution P001 \"Execution details here\" \"session-123\""
     echo "  $0 push"
@@ -563,18 +423,6 @@ main() {
     case "$action" in
         init)
             init_fix "$@"
-            ;;
-        update-what)
-            update_what "$@"
-            ;;
-        update-why)
-            update_why "$@"
-            ;;
-        update-acceptance-criteria)
-            update_acceptance_criteria "$@"
-            ;;
-        validate)
-            validate
             ;;
         push)
             push

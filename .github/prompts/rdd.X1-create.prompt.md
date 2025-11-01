@@ -28,10 +28,6 @@ R06: Always propose 3 variations of the fix name for user selection.
 
 R07: Fixes should be focused and narrow in scope - for larger work, use the Change creation prompt instead.
 
-R08: The file `.rdd-docs/workspace/change.md` will be populated iteratively with user responses.
-
-R09: Acceptance Criteria should be set to "N/A" for fixes.
-
 # Steps:
 
 S01: Display the following banner to the user:
@@ -97,7 +93,7 @@ S07: Execute the script to initialize the fix branch and workspace:
 This will:
 - Create branch `fix/<selected-fix-name>`
 - Create `.rdd-docs/workspace/` folder if needed
-- Copy `change.md` template to workspace
+- Copy `journal.md` template to workspace
 - Checkout the new branch
 
 S08: Display confirmation message:
@@ -107,111 +103,37 @@ S08: Display confirmation message:
 
 - **Branch:** fix/<fix-name>
 - **Workspace:** `.rdd-docs/workspace/`
-- **Template:** change.md copied
+- **Template:** journal.md copied
 
-**Now let's document the fix details...**
+**You're ready to start working on the fix!**
 
 ---
 ```
 
-S09: Ask for the **What** section iteratively:
+S09: Display completion summary:
 
-```markdown
-**Q: What needs to be fixed?**
-
-**ℹ️ Be specific about:**
-- What is broken or incorrect?
-- Where does the issue occur?
-- What is the observable symptom?
-
-Your answer:
-```
-
-S10: When user provides the **What** answer:
-1. Execute the script to update the What section:
-   ```bash
-   ./.rdd/scripts/fix-management.sh update-what "<user-answer>"
-   ```
-
-2. Display confirmation:
-   ```markdown
-   **✓ Captured:**
-   ```
-   **What:** [user's answer]
-   
-   Is this correct? (Yes/No/Refine)
-   ```
-
-3. If "No" or "Refine", go back to S09
-4. If "Yes", proceed to S11
-
-S11: Ask for the **Why** section iteratively:
-
-```markdown
-**Q: Why does this need to be fixed?**
-
-**ℹ️ Consider:**
-- What is the impact on users?
-- What business problem does this cause?
-- Is this blocking any workflows?
-- What is the urgency level?
-
-Your answer:
-```
-
-S12: When user provides the **Why** answer:
-1. Execute the script to update the Why section:
-   ```bash
-   ./.rdd/scripts/fix-management.sh update-why "<user-answer>"
-   ```
-
-2. Display confirmation:
-   ```markdown
-   **✓ Captured:**
-   
-   **Why:** [user's answer]
-   
-   Is this correct? (Yes/No/Refine)
-   ```
-
-3. If "No" or "Refine", go back to S11
-4. If "Yes", proceed to S13
-
-S13: Set Acceptance Criteria to "N/A":
-
-Execute:
-```bash
-./.rdd/scripts/fix-management.sh update-acceptance-criteria "N/A"
-```
-
-S14: Display completion summary:
+S09: Display completion summary:
 
 ```markdown
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    ✓ FIX BRANCH READY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## 📋 Fix Documentation
+## 📋 Fix Branch Created
 
 **Branch:** fix/<fix-name>
-
-**What:** [captured what]
-
-**Why:** [captured why]
-
-**Acceptance Criteria:** N/A
 
 ---
 
 ## 📁 Files Created
 
-- `.rdd-docs/workspace/change.md` - Fix documentation
+- `.rdd-docs/workspace/journal.md` - Fix journal for tracking work
 
 ---
 
 ## 🎯 Next Steps
 
-1. **Review** `.rdd-docs/workspace/change.md`
+1. **Document your work** in `.rdd-docs/workspace/journal.md`
 2. **Make your changes** to the codebase
 3. **Commit** your work with descriptive messages
 4. **Push** the branch when ready:
@@ -223,24 +145,25 @@ S14: Display completion summary:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-S15: Offer final options:
+S10: Offer final options:
+```
+
+S10: Offer final options:
 
 ```markdown
 **Q: What would you like to do next?**
 
-- **A)** Review the change.md file
+- **A)** Review the journal.md file
 - **B)** Start making code changes (exit this prompt)
 - **C)** Push branch to remote now
-- **D)** Cancel and delete this fix branch
 
 Your choice:
 ```
 
 Handle based on choice:
-- A → Open and display `.rdd-docs/workspace/change.md`
+- A → Open and display `.rdd-docs/workspace/journal.md`
 - B → Exit gracefully with success message
 - C → Execute push command and confirm
-- D → Execute cleanup script and return to previous branch
 
 ---
 
@@ -249,67 +172,9 @@ Handle based on choice:
 The prompt uses `.rdd/scripts/fix-management.sh` with these actions:
 
 - `init <fix-name>` - Create branch and initialize workspace
-- `update-what "<text>"` - Update What section in change.md
-- `update-why "<text>"` - Update Why section in change.md
-- `update-acceptance-criteria "<text>"` - Update Acceptance Criteria section
-- `validate` - Check if all required sections are filled
 - `push` - Push branch to remote with upstream tracking
-- `cleanup` - Delete branch and workspace (used for cancellation)
-
----
-
-# Error Handling
-
-**If script execution fails:**
-```markdown
-⚠️ Script execution failed: [error message]
-
-**Possible causes:**
-- Script not executable (run: `chmod +x .rdd/scripts/fix-management.sh`)
-- Git repository issues
-- Permission problems
-
-**What to do:**
-- Check the error message above
-- Verify you're in the repository root
-- Ensure git is properly configured
-```
-
-**If branch already exists:**
-```markdown
-⚠️ Branch fix/<fix-name> already exists
-
-**Q: How would you like to proceed?**
-
-- **A)** Switch to existing branch (discard current changes)
-- **B)** Choose a different name
-- **C)** Delete existing branch and create new one
-- **D)** Cancel operation
-
-Your choice:
-```
-
-**If no uncommitted changes detected:**
-```markdown
-ℹ️ No uncommitted changes detected in working directory
-
-**Q: Do you still want to create a fix branch?**
-
-- **A)** Yes, proceed anyway
-- **B)** No, cancel operation
-
-Your choice:
-```
-
-**If invalid input:**
-```markdown
-⚠️ Invalid input: "[user input]"
-
-**Please:**
-- Choose one of the provided options (A, B, C, D)
-- Or enter a number (1, 2, 3)
-- Or provide a valid kebab-case name
-```
+- `mark-prompt-completed <id>` - Mark a stand-alone prompt as completed in journal.md
+- `log-prompt-execution <id> "<details>" [session-id]` - Log prompt execution details to log.jsonl
 
 ---
 
