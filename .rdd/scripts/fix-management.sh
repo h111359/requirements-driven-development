@@ -435,6 +435,99 @@ cleanup() {
     fi
 }
 
+# Function to mark a stand-alone prompt as completed
+mark_prompt_completed() {
+    local prompt_id="$1"
+    local fix_journal="$WORKSPACE_DIR/journal.md"
+    
+    if [ -z "$prompt_id" ]; then
+        print_error "Prompt ID is required"
+        echo "Usage: $0 mark-prompt-completed <prompt-id>"
+        exit 1
+    fi
+    
+    if [ ! -f "$fix_journal" ]; then
+        print_error "journal.md not found at: $fix_journal"
+        exit 1
+    fi
+    
+    # Check if the prompt exists and is not already completed
+    if ! grep -q "^\s*-\s*\[\s*\]\s*\[$prompt_id\]" "$fix_journal"; then
+        if grep -q "^\s*-\s*\[x\]\s*\[$prompt_id\]" "$fix_journal"; then
+            print_warning "Prompt $prompt_id is already marked as completed"
+            return 0
+        else
+            print_error "Prompt $prompt_id not found in journal.md"
+            exit 1
+        fi
+    fi
+    
+    # Mark the prompt as completed using sed
+    # This will change "- [ ] [PROMPT_ID]" to "- [x] [PROMPT_ID]"
+    # Handle various spacing variations
+    if sed -i "s/^\(\s*-\s*\)\[\s*\]\(\s*\[\s*$prompt_id\s*\]\)/\1[x]\2/" "$fix_journal"; then
+        print_success "Marked prompt $prompt_id as completed"
+    else
+        print_error "Failed to mark prompt $prompt_id as completed"
+        exit 1
+    fi
+}
+
+# Function to log prompt execution details to log.jsonl
+# This function creates a structured log entry containing:
+# - timestamp: ISO 8601 format timestamp when the log entry was created
+# - promptId: The ID of the executed prompt (e.g., P001, P002)
+# - executionDetails: The full content of the execution including agent responses
+# - sessionId: Optional session identifier for grouping related executions
+log_prompt_execution() {
+    local prompt_id="$1"
+    local execution_details="$2"
+    local session_id="${3:-exec-$(date +%Y%m%d-%H%M)}"
+    local log_file="$WORKSPACE_DIR/log.jsonl"
+    
+    # Validate required parameters
+    if [ -z "$prompt_id" ]; then
+        print_error "Prompt ID is required for logging"
+        echo "Usage: $0 log-prompt-execution <prompt-id> <execution-details> [session-id]"
+        exit 1
+    fi
+    
+    if [ -z "$execution_details" ]; then
+        print_error "Execution details are required for logging"
+        echo "Usage: $0 log-prompt-execution <prompt-id> <execution-details> [session-id]"
+        exit 1
+    fi
+    
+    # Ensure workspace directory exists
+    mkdir -p "$WORKSPACE_DIR"
+    
+    # Create log file if it doesn't exist
+    if [ ! -f "$log_file" ]; then
+        touch "$log_file"
+        print_success "Created log file: $log_file"
+    fi
+    
+    # Robustly escape execution_details for JSON using jq if available.
+    # If jq is not available, fallback to basic escaping (double quotes and newlines only).
+    # WARNING: The fallback does NOT handle all JSON edge cases (e.g., backslashes, tabs, carriage returns, control characters).
+    if command -v jq >/dev/null 2>&1; then
+        # Use jq to encode as a JSON string, then strip the surrounding quotes
+        details_escaped=$(jq -R <<<"$execution_details")
+        # Remove the surrounding quotes for embedding in the larger JSON object
+        details_escaped="${details_escaped:1:-1}"
+    else
+        # Fallback: basic escaping (limited, see warning above)
+        details_escaped=$(echo "$execution_details" | sed 's/\\/\\\\/g; s/"/\\"/g; s/\t/\\t/g; s/\r/\\r/g' | awk '{printf "%s\\n", $0}' | sed 's/\\n$//')
+    fi
+    
+    # Create JSON line entry with all relevant information
+    # Format: JSONL (JSON Lines) - one JSON object per line
+    local timestamp=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+    echo "{\"timestamp\":\"$timestamp\",\"promptId\":\"$prompt_id\",\"executionDetails\":\"$details_escaped\",\"sessionId\":\"$session_id\"}" >> "$log_file"
+    
+    print_success "Logged execution details for prompt $prompt_id to $log_file"
+}
+
 # Function to display usage
 usage() {
     echo "Usage: $0 <action> [parameters]"
@@ -448,11 +541,15 @@ usage() {
     echo "  wrap-up                      - Archive workspace, commit, push, and create PR"
     echo "  push                         - Push branch to remote"
     echo "  cleanup                      - Delete branch and workspace"
+    echo "  mark-prompt-completed <id>   - Mark a stand-alone prompt as completed in journal.md"
+    echo "  log-prompt-execution <id> \"<details>\" [session-id] - Log prompt execution details to log.jsonl"
     echo ""
     echo "Examples:"
     echo "  $0 init fix-login-button"
     echo "  $0 update-what \"Fix the login button not responding on mobile devices\""
     echo "  $0 update-why \"Users cannot log in from mobile, blocking access to the app\""
+    echo "  $0 mark-prompt-completed P001"
+    echo "  $0 log-prompt-execution P001 \"Execution details here\" \"session-123\""
     echo "  $0 push"
 }
 
@@ -487,6 +584,12 @@ main() {
             ;;
         cleanup)
             cleanup
+            ;;
+        mark-prompt-completed)
+            mark_prompt_completed "$@"
+            ;;
+        log-prompt-execution)
+            log_prompt_execution "$@"
             ;;
         *)
             print_error "Unknown action: $action"

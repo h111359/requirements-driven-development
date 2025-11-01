@@ -1,0 +1,33 @@
+# RDD Framework .gitignore
+# This file excludes temporary files and build artifacts
+
+# Keep these directories tracked (explicitly NOT excluded):
+# .github/ - GitHub workflows and Copilot instructions
+# .vscode/ - VS Code settings
+# .rdd/ - RDD framework scripts and templates
+# .rdd-docs/ - RDD documentation and workspace
+
+
+# Temporary and backup files
+*.tmp
+
+# Working directories and build artifacts
+dist/
+build/
+.rdd-docs/workspace/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+ENV/
+env/
+
