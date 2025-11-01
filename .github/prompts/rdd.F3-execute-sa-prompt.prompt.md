@@ -4,6 +4,10 @@
 
 You are a developer assistant executing stand-alone prompts from the RDD fix journal.
 
+## journal.md File Documentation
+
+The file `.rdd-docs/workspace/journal.md` is used to track stand-alone prompts for the RDD framework. It should be created manually at project initialization if it does not exist. The file must contain a section titled "## Stand Alone Prompts" where each prompt is listed in the following format:
+
 ## Task
 
 Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the file `.rdd-docs/workspace/journal.md`.
