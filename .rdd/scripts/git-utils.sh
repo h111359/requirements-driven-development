@@ -288,60 +288,6 @@ auto_commit() {
 # ============================================================================
 # MERGE STATUS CHECKS
 # ============================================================================
-
-# Check if a branch is merged into the base branch
-# Usage: check_merge_status "branch_name" ["base_branch"]
-# Returns: 0 if merged, 1 if not merged, 2+ for errors
-check_merge_status() {
-    local branch_name="$1"
-    local base_branch="${2:-$(get_default_branch)}"
-    local current_branch=$(git branch --show-current)
-    
-    if [ -z "$branch_name" ]; then
-        print_error "Branch name is required"
-        echo "Usage: check_merge_status <branch_name> [base_branch]"
-        return 2
-    fi
-    
-    # Fetch latest from remote to ensure we have up-to-date info
-    print_info "Fetching latest changes from remote..."
-    git fetch origin >/dev/null 2>&1
-    
-    # Check if base branch exists
-    if ! git show-ref --verify --quiet "refs/heads/$base_branch"; then
-        print_error "Base branch '$base_branch' not found"
-        return 3
-    fi
-    
-    # Update local base branch to match remote
-    print_info "Updating local '$base_branch' branch..."
-    git checkout "$base_branch" >/dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        print_error "Failed to checkout '$base_branch'"
-        return 4
-    fi
-    
-    git pull origin "$base_branch" >/dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        print_error "Failed to pull latest changes for '$base_branch'"
-        return 5
-    fi
-    
-    # Return to original branch
-    git checkout "$current_branch" >/dev/null 2>&1
-    print_success "Local '$base_branch' updated from remote"
-    
-    # Check if branch is merged using git branch --merged
-    if git branch --merged "$base_branch" | grep -q "^\*\? *${branch_name}$"; then
-        print_success "Branch '$branch_name' is merged into '$base_branch'"
-        return 0
-    else
-        print_warning "Branch '$branch_name' is NOT merged into '$base_branch'"
-        return 1
-    fi
-}
-
-# ============================================================================
 # UTILITY FUNCTIONS
 # ============================================================================
 
@@ -389,7 +335,6 @@ export -f get_modified_files
 export -f get_file_diff
 export -f push_to_remote
 export -f auto_commit
-export -f check_merge_status
 export -f get_current_branch
 export -f get_git_user
 export -f get_last_commit_sha

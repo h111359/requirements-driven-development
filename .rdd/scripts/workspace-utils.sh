@@ -376,40 +376,6 @@ copy_template() {
     return 0
 }
 
-# Create open-questions.md template in workspace
-# Usage: create_open_questions_template
-# Returns: 0 on success
-create_open_questions_template() {
-    local dest_file="$WORKSPACE_DIR/open-questions.md"
-    
-    if [ -f "$dest_file" ]; then
-        debug_print "open-questions.md already exists"
-        return 0
-    fi
-    
-    cat > "$dest_file" << 'EOFQ'
-# Open Questions - Requirements Clarification
-
-> This file tracks open questions and clarifications needed for the current change.
-> Questions are inspired by the clarity-taxonomy.md but can include any critical questions for execution.
-
-## Status Legend
-- [ ] Open / Not answered
-- [?] Partially answered / Needs more detail
-- [x] Answered / Resolved
-
----
-
-## Questions
-
-<!-- Add questions below. Use the taxonomy as inspiration but feel free to add custom questions -->
-
-EOFQ
-    
-    print_success "Created open-questions.md template"
-    return 0
-}
-
 # Create requirements-changes.md template in workspace
 # Usage: create_requirements_changes_template
 # Returns: 0 on success
@@ -581,7 +547,6 @@ export -f restore_workspace
 export -f clear_workspace
 export -f clear_workspace_forced
 export -f copy_template
-export -f create_open_questions_template
 export -f create_requirements_changes_template
 export -f check_workspace_exists
 export -f list_workspace_files
