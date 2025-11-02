@@ -16,7 +16,7 @@
 
 - **[FR-03] Flat Workspace Structure**: The system shall store all active workspace files directly in .rdd-docs/workspace/ without feature-specific subfolders
 - **[FR-04] Current Change Detection**: The system shall use a .current-change JSON configuration file in workspace to track the active change with fields: changeName, changeId, branchName, changeType, startedAt, phase, status
-- **[FR-05] Workspace Initialization**: The create-change.sh script shall initialize workspace with: change.md, clarity-taxonomy.md, open-questions.md, requirements-changes.md, clarification-log.jsonl, and .current-change
+- **[FR-05] Workspace Initialization**: A script shall initialize workspace with: change.md, clarity-taxonomy.md, open-questions.md, requirements-changes.md, clarification-log.jsonl, and .current-change
 - **[FR-06] Clean Main Branch Workspace**: When on main branch, workspace shall be empty or contain only standard template content to clearly indicate no active development
 - **[FR-07] Clarity Taxonomy Usage**: The clarification prompt shall use .rdd-docs/workspace/clarity-taxonomy.md as a checklist to identify unclear requirements
 - **[FR-08] Structured Questioning**: The prompt shall ask questions with predefined answer options (A, B, C, D) while allowing custom "Other" responses
