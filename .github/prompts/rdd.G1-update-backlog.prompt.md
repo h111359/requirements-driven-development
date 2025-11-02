@@ -1,0 +1,1 @@
+Fulfill or update the file `.rdd-docs/backlog.md` with the issues in the github remote repository. Follow the template in `.rdd/templates/backlog.md`. Do not include the example issue in the final output. Include only issues labelled as enhancement. Do not change the content of existing issues, only add new ones if any.
