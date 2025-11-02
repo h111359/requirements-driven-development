@@ -1,6 +1,6 @@
 ## Stand Alone Prompts
 
-Prompts that the agent execute - follow the instructions which promts to be executed. If nothing provided - execute only one prompt - the first not executed and stop. When a given prompt is executed, the checkbox infront of it should be marked. Changing the checkbox to `- [x]` is **the only change you are allowed to do**. Never change anything else than marking a checkbox! 
+Prompts that the agent execute - follow the instructions which prompts to be executed. If nothing provided - execute only one prompt - the first not executed and stop. When a given prompt is executed, the checkbox in front of it should be marked. Changing the checkbox to `- [x]` is **the only change you are allowed to do**. Never change anything else than marking a checkbox! 
 
  - [ ] [P01] <PROMPT-PLACEHOLDER>
   
