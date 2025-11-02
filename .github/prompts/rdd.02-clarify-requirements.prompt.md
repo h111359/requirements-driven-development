@@ -31,7 +31,7 @@ You should ask clarification questions capturing ONLY business/functional requir
 
 - Requirements changes documented in `.rdd-docs/workspace/requirements-changes.md`
 
-- Clarity taxonomy checklist in `.rdd-docs/workspace/clarity-taxonomy.md`R02: Do not generate tasks or design details.
+- Clarity checklist in `.rdd-docs/workspace/clarity-checklist.md`R02: Do not generate tasks or design details.
 
 
 
@@ -137,7 +137,7 @@ S01: Display the following banner to the user:
 Execute: `.rdd/scripts/clarify-changes.sh init`
 
 This will:
-- Copy clarity-taxonomy.md to workspace
+- Copy clarity-checklist.md to workspace
 - Create open-questions.md template
 - Create requirements-changes.md template
 - Initialize clarification-log.jsonl if needed
@@ -187,7 +187,7 @@ Display summary:
 
 ## S05: Load Clarity Taxonomy
 
-Read `.rdd-docs/workspace/clarity-taxonomy.md` and parse the checklist items.
+Read `.rdd-docs/workspace/clarity-checklist.md` and parse the checklist items.
 
 Group items by category:
 - Problem & Value (Problem Statement, Business Value)

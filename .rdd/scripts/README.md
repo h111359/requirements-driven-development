@@ -309,7 +309,7 @@ Change workflow orchestration (enhancements and fixes).
   - Creates clarification-log.jsonl
   - Creates open-questions.md
   - Creates requirements-changes.md
-  - Copies clarity-taxonomy.md
+  - Copies clarity-checklist.md
 
 #### Change Configuration
 - `create_change_config <name> <id> <branch> <type>` - Create .current-change config
@@ -361,7 +361,7 @@ Clarification phase management.
 
 #### Template Management
 - `create_open_questions_template` - Create open-questions.md template
-- `copy_taxonomy` - Copy clarity-taxonomy.md to workspace
+- `copy_taxonomy` - Copy clarity-checklist.md to workspace
 
 #### Clarification Inspection
 - `show_clarifications [sessionId]` - Display clarification log entries

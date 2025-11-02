@@ -24,9 +24,9 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 
 - **[FR-03] Flat Workspace Structure**: The system shall store all active workspace files directly in .rdd-docs/workspace/ without enhancement-specific subfolders
 - **[FR-04] Current Change Detection**: The system shall use a .current-change JSON configuration file in workspace to track the active change with fields: changeName, changeId, branchName, changeType, startedAt, phase, status
-- **[FR-05] Workspace Initialization**: A script shall initialize workspace with: change.md, clarity-taxonomy.md, open-questions.md, requirements-changes.md, clarification-log.jsonl, and .current-change
+- **[FR-05] Workspace Initialization**: A script shall initialize workspace with: change.md, clarity-checklist.md, open-questions.md, requirements-changes.md, clarification-log.jsonl, and .current-change
 - **[FR-06] Clean Main Branch Workspace**: When on main branch, workspace shall be empty or contain only standard template content to clearly indicate no active development
-- **[FR-07] Clarity Taxonomy Usage**: The clarification prompt shall use .rdd-docs/workspace/clarity-taxonomy.md as a checklist to identify unclear requirements
+- **[FR-07] Clarity Checklist Usage**: The clarification prompt shall use .rdd-docs/workspace/clarity-checklist.md as a checklist to identify unclear requirements
 - **[FR-08] Structured Questioning**: The prompt shall ask questions with predefined answer options (A, B, C, D) while allowing custom "Other" responses
 - **[FR-09] Question Formatting Standards**: All prompts shall follow guidelines from .rdd/templates/questions-formatting.md for user-friendly questioning
 - **[FR-10] Open Questions Tracking**: The system shall maintain open-questions.md with status markers: [ ] open, [?] partial, [x] answered
@@ -55,7 +55,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-33] User Notification on Conflicts**: The system shall notify the user if merge conflicts are detected and instruct them to resolve conflicts manually before proceeding
 - **[FR-34] Sync Validation**: The system shall validate that the merge from main completed successfully before proceeding with requirements merge
 - **[FR-35] Archive Directory Structure**: The system shall create .rdd-docs/archive/<change-id>/ directories for each completed change
-- **[FR-36] Complete Workspace Archive**: The system shall archive all workspace files: change.md, open-questions.md, requirements-changes.md, clarification-log.jsonl, clarity-taxonomy.md, .id-mapping.txt
+- **[FR-36] Complete Workspace Archive**: The system shall archive all workspace files: change.md, open-questions.md, requirements-changes.md, clarification-log.jsonl, clarity-checklist.md, .id-mapping.txt
 - **[FR-37] Archive Metadata**: The system shall create .archive-info file with archivedAt timestamp, changeId, and archivedBy fields
 - **[FR-38] Workspace Preservation**: The system shall preserve workspace content during archiving (copy, not move) until explicitly cleared
 - **[FR-39] Branch-Workspace Alignment**: The system shall align workspace content with the current git branch
