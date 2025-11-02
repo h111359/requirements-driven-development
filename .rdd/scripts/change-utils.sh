@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # change-utils.sh
-# Utility script for enhancement workflow management in the RDD framework
-# Orchestrates complete enhancement creation and wrap-up workflows
+# Utility script for change workflow management in the RDD framework
+# Orchestrates complete change creation and wrap-up workflows
 
 # Prevent multiple sourcing
 [[ -n "${CHANGE_UTILS_SOURCED:-}" ]] && return
