@@ -72,7 +72,7 @@ This file defines user stories, features, and tasks for GitHub Copilot to use as
 
 > ## What:
 >
-> Rename journal.md to copilot-prompts.md
+> Rename copilot-prompts.md to copilot-prompts.md
 >
 > ## Why:
 >
@@ -80,7 +80,7 @@ This file defines user stories, features, and tasks for GitHub Copilot to use as
 >
 > ## Acceptance Criteria
 >
-> - The template journal.md to be renamed to copilot-prompts.md
-> - All the references to journal.md in the files in .github/prompts/, .rdd/scripts/, .rdd/templates, .rdd-docs/ to be changed to copilot-prompts.md
+> - The template copilot-prompts.md to be renamed to copilot-prompts.md
+> - All the references to copilot-prompts.md in the files in .github/prompts/, .rdd/scripts/, .rdd/templates, .rdd-docs/ to be changed to copilot-prompts.md
 
 

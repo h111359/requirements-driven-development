@@ -311,7 +311,7 @@ clear_workspace_forced() {
         "clarification-log.jsonl"
         "clarity-taxonomy.md"
         ".current-change"
-        "journal.md"
+        "copilot-prompts.md"
         "log.jsonl"
     )
     

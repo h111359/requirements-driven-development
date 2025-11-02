@@ -17,7 +17,7 @@ NC='\033[0m' # No Color
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 WORKSPACE_DIR="$REPO_ROOT/.rdd-docs/workspace"
 TEMPLATE_DIR="$REPO_ROOT/.rdd/templates"
-CHANGE_TEMPLATE="$TEMPLATE_DIR/journal.md"
+CHANGE_TEMPLATE="$TEMPLATE_DIR/copilot-prompts.md"
 ARCHIVE_DIR="$REPO_ROOT/.rdd-docs/archive"
 
 # Function to print colored messages
@@ -92,13 +92,13 @@ init_fix() {
     mkdir -p "$WORKSPACE_DIR"
     print_success "Workspace directory ready: $WORKSPACE_DIR"
     
-    # Copy journal.md template
+    # Copy copilot-prompts.md template
     if [ ! -f "$CHANGE_TEMPLATE" ]; then
         print_error "Template not found: $CHANGE_TEMPLATE"
         exit 1
     fi
     
-    cp "$CHANGE_TEMPLATE" "$WORKSPACE_DIR/journal.md"
+    cp "$CHANGE_TEMPLATE" "$WORKSPACE_DIR/copilot-prompts.md"
     print_success "Template copied to workspace"
     
     # Create and checkout new branch
@@ -304,7 +304,7 @@ cleanup() {
 # Function to mark a stand-alone prompt as completed
 mark_prompt_completed() {
     local prompt_id="$1"
-    local fix_journal="$WORKSPACE_DIR/journal.md"
+    local fix_journal="$WORKSPACE_DIR/copilot-prompts.md"
     
     if [ -z "$prompt_id" ]; then
         print_error "Prompt ID is required"
@@ -313,7 +313,7 @@ mark_prompt_completed() {
     fi
     
     if [ ! -f "$fix_journal" ]; then
-        print_error "journal.md not found at: $fix_journal"
+        print_error "copilot-prompts.md not found at: $fix_journal"
         exit 1
     fi
     
@@ -323,7 +323,7 @@ mark_prompt_completed() {
             print_warning "Prompt $prompt_id is already marked as completed"
             return 0
         else
-            print_error "Prompt $prompt_id not found in journal.md"
+            print_error "Prompt $prompt_id not found in copilot-prompts.md"
             exit 1
         fi
     fi
@@ -403,7 +403,7 @@ usage() {
     echo "  wrap-up                      - Archive workspace, commit, push, and create PR"
     echo "  push                         - Push branch to remote"
     echo "  cleanup                      - Delete branch and workspace"
-    echo "  mark-prompt-completed <id>   - Mark a stand-alone prompt as completed in journal.md"
+    echo "  mark-prompt-completed <id>   - Mark a stand-alone prompt as completed in copilot-prompts.md"
     echo "  log-prompt-execution <id> \"<details>\" [session-id] - Log prompt execution details to log.jsonl"
     echo ""
     echo "Examples:"

@@ -669,7 +669,7 @@ route_prompt() {
                 echo "Usage: rdd.sh prompt mark-completed <id>"
                 return 1
             fi
-            local journal_file=".rdd-docs/workspace/journal.md"
+            local journal_file=".rdd-docs/workspace/copilot-prompts.md"
             mark_prompt_completed "$1" "$journal_file"
             ;;
         log-execution)
@@ -688,7 +688,7 @@ route_prompt() {
             elif [ "$1" = "--status=checked" ]; then
                 status="checked"
             fi
-            local journal_file=".rdd-docs/workspace/journal.md"
+            local journal_file=".rdd-docs/workspace/copilot-prompts.md"
             list_prompts "$status" "$journal_file"
             ;;
         --help|-h)
