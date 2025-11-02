@@ -254,16 +254,16 @@ export -f request_review
 # PULL REQUEST WORKFLOW AUTOMATION
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# Automated PR workflow for change/fix wrap-up
+# Automated PR workflow for enhancement/fix wrap-up
 # Creates a standardized PR with consistent format
 # Arguments:
-#   $1 - branch_name: The branch to create PR for (must be feat/* or fix/*)
+#   $1 - branch_name: The branch to create PR for (must be enh/* or fix/*)
 #   $2 - archive_path: Path to archived workspace (relative to repo root)
 # Returns:
 #   0 on success
 #   1 on error
 # PR Format:
-#   Title: "feat/fix: {name} wrap-up"
+#   Title: "enh/fix: {name} wrap-up"
 #   Body: Summary with branch name and archive location
 pr_workflow() {
     local branch_name="$1"
@@ -282,10 +282,10 @@ pr_workflow() {
         return 1
     fi
     
-    # Validate branch name format (feat/* or fix/*)
-    if [[ ! "$branch_name" =~ ^(feat|fix)/ ]]; then
+    # Validate branch name format (enh/* or fix/*)
+    if [[ ! "$branch_name" =~ ^(enh|fix)/ ]]; then
         print_error "Invalid branch name: $branch_name"
-        print_error "Branch must start with 'feat/' or 'fix/'"
+        print_error "Branch must start with 'enh/' or 'fix/'"
         return 1
     fi
     

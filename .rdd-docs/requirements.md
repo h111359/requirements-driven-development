@@ -2,11 +2,19 @@
 
 <OVERVIEW-PLACEHOLDER>
 
+## Terminology
+
+In the RDD framework, **"change"** is an umbrella term that encompasses two types of work:
+- **Enhancement** (abbreviated as "enh"): New functionality, features, or improvements to existing functionality
+- **Fix**: Bug fixes, corrections, or patches to resolve issues
+
+When we refer to a "change", we mean either an enhancement or a fix. This terminology is used consistently across the framework in branch names, workflows, and documentation.
+
 # General Functionalities
 
 - **[GF-03] Requirements Clarification Workflow**: The RDD framework shall provide a structured workflow for clarifying requirements through iterative questioning based on a clarity taxonomy
-- **[GF-04] Workspace Management**: The framework shall maintain a workspace directory (.rdd-docs/workspace/) for active development work on features and fixes
-- **[GF-05] Change Tracking**: The framework shall track the current active change/feature/fix being worked on
+- **[GF-04] Workspace Management**: The framework shall maintain a workspace directory (.rdd-docs/workspace/) for active development work on enhancements and fixes
+- **[GF-05] Change Tracking**: The framework shall track the current active change (enhancement or fix) being worked on
 - **[GF-06] Requirements Merging**: The framework shall support merging clarified requirements from workspace into the main requirements.md file
 - **[GF-07] Workspace Archiving**: The framework shall archive completed workspace content for historical reference
 - **[GF-08] Fix Branch Workflow**: The framework shall provide a guided workflow for creating and documenting fix branches, including naming, description, and initialization.

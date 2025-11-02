@@ -91,7 +91,7 @@ print_banner() {
 # ============================================================================
 
 # Validate name is in kebab-case format with max 5 words
-# Usage: validate_name "my-feature-name"
+# Usage: validate_name "my-enhancement-name"
 # Returns: 0 if valid, 1 if invalid
 validate_name() {
     local name="$1"
@@ -106,7 +106,7 @@ validate_name() {
     if [[ ! "$name" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
         print_error "Invalid name: '$name'"
         print_error "Must be kebab-case (lowercase, hyphens only, no spaces)"
-        print_error "Examples: my-feature, bug-fix, user-authentication"
+        print_error "Examples: my-enhancement, bug-fix, user-authentication"
         return 1
     fi
     
@@ -122,7 +122,7 @@ validate_name() {
 }
 
 # Validate branch name format
-# Usage: validate_branch_name "feat/20231101-1234-my-feature"
+# Usage: validate_branch_name "enh/20231101-1234-my-enhancement"
 # Returns: 0 if valid, 1 if invalid
 validate_branch_name() {
     local branch_name="$1"
@@ -134,11 +134,11 @@ validate_branch_name() {
     fi
     
     # Check format: {type}/{timestamp}-{name}
-    # Where type is feat or fix
-    if [[ ! "$branch_name" =~ ^(feat|fix)/[0-9]{8}-[0-9]{4}-.+$ ]]; then
+    # Where type is enh or fix
+    if [[ ! "$branch_name" =~ ^(enh|fix)/[0-9]{8}-[0-9]{4}-.+$ ]]; then
         print_error "Invalid branch name format: '$branch_name'"
-        print_error "Expected format: {feat|fix}/{YYYYMMDD-HHmm}-{name}"
-        print_error "Example: feat/20231101-1234-my-feature"
+        print_error "Expected format: {enh|fix}/{YYYYMMDD-HHmm}-{name}"
+        print_error "Example: enh/20231101-1234-my-enhancement"
         return 1
     fi
     

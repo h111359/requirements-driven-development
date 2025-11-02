@@ -45,7 +45,7 @@ This prompt is typically used during development when you want to integrate requ
   - Clear workspace files
 - Use this when:
   - You want to integrate requirements quickly
-  - You're still working on the feature/fix
+  - You're still working on the enhancement/fix
   - You want to update requirements.md without completing the change
 - Use full wrap-up (rdd.06-wrap-up.prompt.md) when:
   - Change is complete
@@ -303,7 +303,7 @@ Display:
 
 3. **Continue Development**
    → Workspace is preserved
-   → You can continue working on the feature/fix
+   → You can continue working on the enhancement/fix
    → Requirements are now up-to-date
 
 4. **When Complete**

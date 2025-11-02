@@ -1,7 +1,7 @@
 # RDD: Initiate New Change
 
 ## Purpose
-Start a new feature or fix in the RDD framework.
+Start a new enhancement or fix in the RDD framework.
 
 ## Instructions
 
@@ -9,18 +9,18 @@ Start a new feature or fix in the RDD framework.
 
 Ask the user:
 > "What type of change would you like to create?
-> - **feature** - New functionality or enhancement
+> - **enhancement** - New functionality or enhancement
 > - **fix** - Bug fix or correction
 > 
-> Please respond with either 'feature' or 'fix'."
+> Please respond with either 'enhancement' or 'fix'."
 
 **S02: Execute Command**
 
 Based on the user's response, execute the appropriate command:
 
-- If user chose **feature**:
+- If user chose **enhancement**:
   ```bash
-  ./.rdd/scripts/rdd.sh change create feat
+  ./.rdd/scripts/rdd.sh change create enh
   ```
 
 - If user chose **fix**:

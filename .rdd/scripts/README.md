@@ -47,7 +47,7 @@ The main wrapper script that provides domain-based routing to all utility script
 - `branch` - Branch management operations
 - `workspace` - Workspace initialization and management  
 - `requirements` - Requirements validation and merging
-- `change` - Change workflow management (features)
+- `change` - Change workflow management (enhancements)
 - `fix` - Fix workflow management (bug fixes)
 - `clarify` - Clarification phase operations
 - `prompt` - Stand-alone prompt management
@@ -114,7 +114,7 @@ print_error "Something went wrong"
 print_warning "This is a warning"
 
 # Validate names
-validate_name "my-feature-name"  # Returns 0 (valid)
+validate_name "my-enhancement-name"  # Returns 0 (valid)
 validate_name "Invalid Name!"    # Returns 1 (invalid)
 
 # Normalize names
@@ -178,7 +178,7 @@ get_modified_files
 get_file_diff "src/main.py"
 
 # Commit and push
-auto_commit "feat: add new feature"
+auto_commit "enh: add new enhancement"
 push_to_remote
 ```
 
@@ -191,7 +191,7 @@ Branch management operations.
 **Key Functions:**
 
 #### Branch Creation
-- `create_branch <type> <name>` - Create new branch (type: feat|fix)
+- `create_branch <type> <name>` - Create new branch (type: enh|fix)
   - Auto-generates timestamp ID
   - Validates name format (kebab-case, max 5 words)
   - Format: `{type}/{YYYYMMDD-HHmm}-{name}`
@@ -212,18 +212,18 @@ Branch management operations.
 ```bash
 source .rdd/scripts/branch-utils.sh
 
-# Create new feature branch
-create_branch "feat" "user-authentication"
-# Creates: feat/20251102-1430-user-authentication
+# Create new enhancement branch
+create_branch "enh" "user-authentication"
+# Creates: enh/20251102-1430-user-authentication
 
 # Delete a branch
-delete_branch "feat/20251101-1200-old-feature"
+delete_branch "enh/20251101-1200-old-enhancement"
 
 # Delete all merged branches
 delete_merged_branches
 
 # Check merge status
-check_merge_status "feat/20251102-1430-user-authentication"
+check_merge_status "enh/20251102-1430-user-authentication"
 
 # List branches
 list_branches "merged"
@@ -271,11 +271,11 @@ Workspace initialization, archiving, and management.
 ```bash
 source .rdd/scripts/workspace-utils.sh
 
-# Initialize workspace for a feature
+# Initialize workspace for an enhancement
 init_workspace "change"
 
 # Archive workspace
-archive_workspace "feat/20251102-1430-my-feature" false
+archive_workspace "enh/20251102-1430-my-enhancement" false
 
 # Backup and restore
 backup_workspace
@@ -292,14 +292,14 @@ get_workspace_status
 
 ### `change-utils.sh`
 
-Change workflow orchestration (features and fixes).
+Change workflow orchestration (enhancements and fixes).
 
 **Key Functions:**
 
 #### Change Creation
 - `create_change <name> <type>` - Create new change with complete workflow
   - `name`: kebab-case name (automatically normalized)
-  - `type`: "feat" (default) or "fix"
+  - `type`: "enh" (default) or "fix"
   - Creates branch with timestamp ID
   - Initializes workspace
   - Sets up tracking files
@@ -327,8 +327,8 @@ Change workflow orchestration (features and fixes).
 ```bash
 source .rdd/scripts/change-utils.sh
 
-# Create new feature
-create_change "user-authentication" "feat"
+# Create new enhancement
+create_change "user-authentication" "enh"
 
 # Create new fix
 create_change "login-bug" "fix"
@@ -517,14 +517,14 @@ if check_gh_cli; then
 fi
 
 # Create PR
-create_pr "feat/20251102-1430-my-feature" \
-          "feat: Add user authentication" \
+create_pr "enh/20251102-1430-my-enhancement" \
+          "enh: Add user authentication" \
           "This PR implements OAuth2 login functionality" \
           false
 
 # Create draft PR
-create_pr "feat/20251102-1430-my-feature" \
-          "feat: WIP user authentication" \
+create_pr "enh/20251102-1430-my-enhancement" \
+          "enh: WIP user authentication" \
           "Work in progress" \
           true
 
@@ -564,8 +564,8 @@ Standalone general operations script (can be called directly or via rdd.sh).
 ### Complete Change Workflow
 
 ```bash
-# 1. Create a new feature
-./rdd.sh change create feat
+# 1. Create a new enhancement
+./rdd.sh change create enh
 # Interactive prompts will guide you through:
 # - Providing description
 # - Entering name (auto-normalized to kebab-case)
@@ -608,10 +608,10 @@ Standalone general operations script (can be called directly or via rdd.sh).
 ./rdd.sh branch list unmerged
 
 # Check if branch is merged
-./rdd.sh branch status feat/20251101-1200-old-feature
+./rdd.sh branch status enh/20251101-1200-old-enhancement
 
 # Delete a specific branch
-./rdd.sh branch delete feat/20251101-1200-old-feature
+./rdd.sh branch delete enh/20251101-1200-old-enhancement
 
 # Delete all merged branches
 ./rdd.sh branch delete-merged
@@ -717,7 +717,7 @@ set -e
 ```bash
 # Enable debug output
 export DEBUG=1
-./rdd.sh branch create feat my-feature
+./rdd.sh branch create enh my-enhancement
 
 # Debug messages will show:
 # [DEBUG] Git repository verified
