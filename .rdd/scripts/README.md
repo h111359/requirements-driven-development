@@ -451,7 +451,7 @@ Stand-alone prompt management.
 
 #### Prompt Completion
 - `mark_prompt_completed <id> [journal_file]` - Mark prompt as completed
-  - Changes `- [ ]` to `- [x]` in journal.md
+  - Changes `- [ ]` to `- [x]` in copilot-prompts.md
   - Validates prompt exists before marking
 
 #### Prompt Execution Logging
