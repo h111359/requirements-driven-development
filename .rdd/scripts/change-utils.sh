@@ -332,26 +332,24 @@ wrap_up_change() {
         return 1
     fi
     
-    # Create pull request (using pr-utils if available)
-    print_step "4. Creating pull request"
-    if declare -f pr_workflow >/dev/null 2>&1; then
-        # pr-utils.sh is sourced, use pr_workflow
-        if pr_workflow "$current_branch" "$archive_relative"; then
-            print_success "Pull request workflow completed"
-        else
-            print_warning "Pull request creation completed with warnings"
-        fi
-    else
-        # Fallback: provide manual instructions
-        print_warning "pr-utils.sh not available"
-        local default_branch=$(get_default_branch)
-        local pr_title="${change_type}: ${change_info} wrap-up"
-        echo ""
-        print_info "Create pull request manually:"
-        echo "  gh pr create --base $default_branch --head $current_branch --title \"$pr_title\" --body \"Wrap-up for $current_branch. Archive: $archive_relative\""
-    fi
-    
+    # Provide manual PR creation instructions
     echo ""
+    print_banner "NEXT STEPS"
+    local default_branch=$(get_default_branch)
+    local pr_title="${change_type}: ${change_info} wrap-up"
+    echo ""
+    print_info "Changes have been archived and pushed to remote."
+    print_info "Create a pull request manually using one of these methods:"
+    echo ""
+    echo "  Option 1 - GitHub CLI:"
+    echo "    gh pr create --base $default_branch --head $current_branch \\"
+    echo "                 --title \"$pr_title\" \\"
+    echo "                 --body \"Wrap-up for $current_branch. Archive: $archive_relative\""
+    echo ""
+    echo "  Option 2 - GitHub Web UI:"
+    echo "    Visit: https://github.com/[owner]/[repo]/compare/$current_branch"
+    echo ""
+    
     print_success "Change wrap-up completed!"
     
     return 0

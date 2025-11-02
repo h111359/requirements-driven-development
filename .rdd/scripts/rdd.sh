@@ -273,6 +273,20 @@ route_workspace() {
     
     case "$action" in
         init)
+            # Check for --help flag before executing
+            if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+                echo "Usage: rdd.sh workspace init <type>"
+                echo ""
+                echo "Initialize workspace with templates."
+                echo ""
+                echo "Arguments:"
+                echo "  type    Workspace type: 'change' or 'fix'"
+                echo ""
+                echo "Examples:"
+                echo "  rdd.sh workspace init change"
+                echo "  rdd.sh workspace init fix"
+                return 0
+            fi
             if [ -z "$1" ]; then
                 print_error "Workspace type required (change|fix)"
                 echo "Usage: rdd.sh workspace init <type>"
@@ -281,6 +295,20 @@ route_workspace() {
             init_workspace "$1"
             ;;
         archive)
+            # Check for --help flag before executing
+            if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+                echo "Usage: rdd.sh workspace archive [--keep]"
+                echo ""
+                echo "Archive current workspace to .rdd-docs/archive/"
+                echo ""
+                echo "Options:"
+                echo "  --keep    Keep workspace after archiving (don't clear)"
+                echo ""
+                echo "Examples:"
+                echo "  rdd.sh workspace archive"
+                echo "  rdd.sh workspace archive --keep"
+                return 0
+            fi
             local keep="false"
             if [ "$1" = "--keep" ]; then
                 keep="true"
@@ -289,12 +317,35 @@ route_workspace() {
             archive_workspace "$branch_name" "$keep"
             ;;
         backup)
+            # Check for --help flag before executing
+            if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+                echo "Usage: rdd.sh workspace backup"
+                echo ""
+                echo "Create a backup of the current workspace."
+                return 0
+            fi
             backup_workspace
             ;;
         restore)
+            # Check for --help flag before executing
+            if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+                echo "Usage: rdd.sh workspace restore"
+                echo ""
+                echo "Restore workspace from the latest backup."
+                return 0
+            fi
             restore_workspace
             ;;
         clear)
+            # Check for --help flag before executing
+            if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+                echo "Usage: rdd.sh workspace clear"
+                echo ""
+                echo "Clear the workspace directory with confirmation."
+                echo ""
+                echo "WARNING: This will delete all workspace files!"
+                return 0
+            fi
             clear_workspace
             ;;
         --help|-h)
@@ -470,6 +521,19 @@ route_change() {
             create_change "$normalized_name" "$change_type"
             ;;
         wrap-up)
+            # Check for --help flag before executing
+            if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+                echo "Usage: rdd.sh change wrap-up"
+                echo ""
+                echo "Complete the current change workflow by:"
+                echo "  1. Archiving workspace to .rdd-docs/archive/"
+                echo "  2. Committing changes with automated message"
+                echo "  3. Pushing branch to remote"
+                echo ""
+                echo "Note: This command does NOT create a pull request."
+                echo "      You should manually create the PR on GitHub."
+                return 0
+            fi
             wrap_up_change
             ;;
         --help|-h)
@@ -531,6 +595,19 @@ route_fix() {
             create_change "$1" "fix"
             ;;
         wrap-up)
+            # Check for --help flag before executing
+            if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+                echo "Usage: rdd.sh fix wrap-up"
+                echo ""
+                echo "Complete the current fix workflow by:"
+                echo "  1. Archiving workspace to .rdd-docs/archive/"
+                echo "  2. Committing changes with automated message"
+                echo "  3. Pushing branch to remote"
+                echo ""
+                echo "Note: This command does NOT create a pull request."
+                echo "      You should manually create the PR on GitHub."
+                return 0
+            fi
             wrap_up_change
             ;;
         --help|-h)
