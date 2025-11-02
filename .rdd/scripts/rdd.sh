@@ -351,6 +351,39 @@ route_change() {
     
     case "$action" in
         create)
+            # Safety checks before creating a change
+            # 1. Check if we're on the main/master branch
+            local current_branch=$(get_current_branch)
+            local default_branch=$(get_default_branch)
+            
+            if [ "$current_branch" != "$default_branch" ]; then
+                print_error "Cannot create change: not on default branch"
+                print_warning "Current branch: $current_branch"
+                print_warning "Expected branch: $default_branch"
+                echo ""
+                echo "Please switch to the $default_branch branch before creating a new change:"
+                echo "  git checkout $default_branch"
+                echo ""
+                return 1
+            fi
+            
+            # 2. Check if workspace folder is empty
+            local workspace_dir=".rdd-docs/workspace"
+            if [ -d "$workspace_dir" ] && [ -n "$(ls -A "$workspace_dir" 2>/dev/null)" ]; then
+                print_error "Cannot create change: workspace directory is not empty"
+                print_warning "Workspace path: $workspace_dir"
+                echo ""
+                echo "The workspace directory must be empty before creating a new change."
+                echo "This prevents corruption of work in progress from another branch."
+                echo ""
+                echo "Options:"
+                echo "  1. Complete current change: rdd.sh change wrap-up"
+                echo "  2. Archive current workspace: rdd.sh workspace archive"
+                echo "  3. Clear workspace (WARNING: data loss): rdd.sh workspace clear"
+                echo ""
+                return 1
+            fi
+            
             # Display banner
             echo ""
             echo "─── RDD-COPILOT ───"
@@ -461,6 +494,40 @@ route_fix() {
                 echo "Usage: rdd.sh fix init <name>"
                 return 1
             fi
+            
+            # Safety checks before creating a fix (same as change create)
+            # 1. Check if we're on the main/master branch
+            local current_branch=$(get_current_branch)
+            local default_branch=$(get_default_branch)
+            
+            if [ "$current_branch" != "$default_branch" ]; then
+                print_error "Cannot create fix: not on default branch"
+                print_warning "Current branch: $current_branch"
+                print_warning "Expected branch: $default_branch"
+                echo ""
+                echo "Please switch to the $default_branch branch before creating a new fix:"
+                echo "  git checkout $default_branch"
+                echo ""
+                return 1
+            fi
+            
+            # 2. Check if workspace folder is empty
+            local workspace_dir=".rdd-docs/workspace"
+            if [ -d "$workspace_dir" ] && [ -n "$(ls -A "$workspace_dir" 2>/dev/null)" ]; then
+                print_error "Cannot create fix: workspace directory is not empty"
+                print_warning "Workspace path: $workspace_dir"
+                echo ""
+                echo "The workspace directory must be empty before creating a new fix."
+                echo "This prevents corruption of work in progress from another branch."
+                echo ""
+                echo "Options:"
+                echo "  1. Complete current change: rdd.sh change wrap-up"
+                echo "  2. Archive current workspace: rdd.sh workspace archive"
+                echo "  3. Clear workspace (WARNING: data loss): rdd.sh workspace clear"
+                echo ""
+                return 1
+            fi
+            
             create_change "$1" "fix"
             ;;
         wrap-up)
