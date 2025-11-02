@@ -14,7 +14,7 @@ Requirements-Driven Development (RDD) is a methodology that combines traditional
 
 - **Structured Documentation**: Organized approach to maintain requirements, technical specifications, and architectural decisions
 - **Change Management**: Systematic tracking of changes from inception to archive
-- **Clarity Taxonomy**: Standardized framework for requirement clarification and refinement
+- **Clarity Checklist**: Standardized framework for requirement clarification and refinement
 - **Version Control Integration**: Git-based workflow aligned with development processes
 - **AI-Assisted Development**: Optimized for use with GitHub Copilot and similar AI tools
 
@@ -43,7 +43,7 @@ The RDD methodology organizes project documentation in the `.rdd-docs/` director
 ├── folder-structure.md     # Repository structure documentation
 ├── data-model.md           # Data model documentation
 ├── version-control.md      # Version control strategy
-├── clarity-taxonomy.md     # Requirements clarification taxonomy
+├── clarity-checklist.md     # Requirements clarification checklist
 ├── workspace/              # Current active work
 │   └── change.md          # Active change documentation
 └── archive/               # Historical changes

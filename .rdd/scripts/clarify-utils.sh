@@ -35,8 +35,8 @@ CLARIFY_UTILS_LOADED=1
 
 WORKSPACE_DIR=".rdd-docs/workspace"
 CLARIFICATION_LOG="$WORKSPACE_DIR/clarification-log.jsonl"
-CLARITY_TAXONOMY_SOURCE=".rdd-docs/clarity-taxonomy.md"
-CLARITY_TAXONOMY_WORKSPACE="$WORKSPACE_DIR/clarity-taxonomy.md"
+CLARITY_TAXONOMY_SOURCE=".rdd-docs/clarity-checklist.md"
+CLARITY_TAXONOMY_WORKSPACE="$WORKSPACE_DIR/clarity-checklist.md"
 
 # ============================================================================
 # CLARIFICATION INITIALIZATION
@@ -52,9 +52,9 @@ init_clarification() {
     # Ensure workspace directory exists
     ensure_dir "$WORKSPACE_DIR"
     
-    # Copy clarity-taxonomy.md
+    # Copy clarity-checklist.md
     if ! copy_taxonomy; then
-        print_warning "Failed to copy taxonomy, continuing anyway..."
+        print_warning "Failed to copy checklist, continuing anyway..."
     fi
     echo ""
     
@@ -95,7 +95,7 @@ init_clarification() {
     print_success "Clarification phase initialized successfully"
     echo ""
     print_info "Next steps:"
-    echo "  1. Review clarity-taxonomy.md for question categories"
+    echo "  1. Review clarity-checklist.md for question categories"
     echo "  2. Add questions to open-questions.md"
     echo "  3. Log clarifications using log_clarification()"
     
@@ -174,7 +174,7 @@ create_open_questions_template() {
 # Open Questions - Requirements Clarification
 
 > This file tracks open questions and clarifications needed for the current change.
-> Questions are inspired by the clarity-taxonomy.md but can include any critical questions for execution.
+> Questions are inspired by the clarity-checklist.md but can include any critical questions for execution.
 
 ## Status Legend
 - [ ] Open / Not answered
@@ -197,12 +197,12 @@ EOFQ
 # TAXONOMY MANAGEMENT
 # ============================================================================
 
-# Copy clarity-taxonomy.md from .rdd-docs to workspace
+# Copy clarity-checklist.md from .rdd-docs to workspace
 # Usage: copy_taxonomy
 # Returns: 0 on success, 1 on failure
 copy_taxonomy() {
     if [ ! -f "$CLARITY_TAXONOMY_SOURCE" ]; then
-        print_error "clarity-taxonomy.md not found: $CLARITY_TAXONOMY_SOURCE"
+        print_error "clarity-checklist.md not found: $CLARITY_TAXONOMY_SOURCE"
         print_info "Please ensure the taxonomy file exists in .rdd-docs/"
         return 1
     fi
@@ -211,7 +211,7 @@ copy_taxonomy() {
     
     # Check if already exists
     if [ -f "$CLARITY_TAXONOMY_WORKSPACE" ]; then
-        print_warning "clarity-taxonomy.md already exists in workspace"
+        print_warning "clarity-checklist.md already exists in workspace"
         if ! confirm_action "Overwrite existing taxonomy?"; then
             print_info "Copy cancelled"
             return 0
@@ -219,7 +219,7 @@ copy_taxonomy() {
     fi
     
     cp "$CLARITY_TAXONOMY_SOURCE" "$CLARITY_TAXONOMY_WORKSPACE"
-    print_success "Copied clarity-taxonomy.md to workspace"
+    print_success "Copied clarity-checklist.md to workspace"
     
     return 0
 }
@@ -337,9 +337,9 @@ get_clarification_status() {
     
     # Check if taxonomy exists
     if [ -f "$CLARITY_TAXONOMY_WORKSPACE" ]; then
-        print_success "clarity-taxonomy.md available in workspace"
+        print_success "clarity-checklist.md available in workspace"
     else
-        print_warning "clarity-taxonomy.md not found in workspace"
+        print_warning "clarity-checklist.md not found in workspace"
     fi
     
     echo ""

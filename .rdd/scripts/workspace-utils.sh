@@ -66,12 +66,12 @@ init_workspace() {
         copy_template "fix.md" "$WORKSPACE_DIR/fix.md"
     fi
     
-    # Copy clarity-taxonomy.md to workspace
-    if [ -f ".rdd-docs/clarity-taxonomy.md" ]; then
-        cp ".rdd-docs/clarity-taxonomy.md" "$WORKSPACE_DIR/clarity-taxonomy.md"
-        print_success "Copied clarity-taxonomy.md to workspace"
+    # Copy clarity-checklist.md to workspace
+    if [ -f ".rdd-docs/clarity-checklist.md" ]; then
+        cp ".rdd-docs/clarity-checklist.md" "$WORKSPACE_DIR/clarity-checklist.md"
+        print_success "Copied clarity-checklist.md to workspace"
     else
-        print_warning "clarity-taxonomy.md not found in .rdd-docs/"
+        print_warning "clarity-checklist.md not found in .rdd-docs/"
     fi
     
     # Create open-questions.md template
@@ -194,7 +194,7 @@ backup_workspace() {
         "open-questions.md"
         "requirements-changes.md"
         "clarification-log.jsonl"
-        "clarity-taxonomy.md"
+        "clarity-checklist.md"
         ".current-change"
     )
     
@@ -309,7 +309,7 @@ clear_workspace_forced() {
         "open-questions.md"
         "requirements-changes.md"
         "clarification-log.jsonl"
-        "clarity-taxonomy.md"
+        "clarity-checklist.md"
         ".current-change"
         "copilot-prompts.md"
         "log.jsonl"

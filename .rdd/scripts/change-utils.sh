@@ -79,7 +79,7 @@ create_change() {
     fi
     
     # Check for required files in .rdd-docs/ and copy templates if missing
-    local required_files=(requirements.md tech-spec.md data-model.md folder-structure.md version-control.md clarity-taxonomy.md)
+    local required_files=(requirements.md tech-spec.md data-model.md folder-structure.md version-control.md clarity-checklist.md)
     for file in "${required_files[@]}"; do
         if [ ! -f "$REPO_ROOT/.rdd-docs/$file" ]; then
             if [ -f "$TEMPLATE_DIR/$file" ]; then
@@ -209,10 +209,10 @@ EOF
 EOFREQ
     print_success "Created requirements-changes.md template"
     
-    # Copy clarity-taxonomy.md to workspace if available
-    if [ -f "$REPO_ROOT/.rdd-docs/clarity-taxonomy.md" ]; then
-        cp "$REPO_ROOT/.rdd-docs/clarity-taxonomy.md" "$WORKSPACE_DIR/clarity-taxonomy.md"
-        print_success "Copied clarity-taxonomy.md to workspace"
+    # Copy clarity-checklist.md to workspace if available
+    if [ -f "$REPO_ROOT/.rdd-docs/clarity-checklist.md" ]; then
+        cp "$REPO_ROOT/.rdd-docs/clarity-checklist.md" "$WORKSPACE_DIR/clarity-checklist.md"
+        print_success "Copied clarity-checklist.md to workspace"
     fi
     
     return 0
