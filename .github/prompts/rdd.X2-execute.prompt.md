@@ -56,6 +56,7 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
 - **Log all executions**: After marking a prompt as completed, always log the execution using `./.rdd/scripts/fix-management.sh log-prompt-execution <PROMPT_ID> "<EXECUTION_DETAILS>"`.
 - **Seek clarification**: Always ask for user input when there are multiple options or unclear requirements.
 - **Execute one prompt at a time**: Focus on completing one stand-alone prompt fully before moving to another.
+- **Keep short**: Do not make detailed summaries when finishing the task. Just write "I am done."
 
 ## Example Workflow
 
