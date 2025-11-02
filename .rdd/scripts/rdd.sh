@@ -117,12 +117,23 @@ show_change_help() {
     echo "Usage: rdd.sh change <action> [options]"
     echo ""
     echo "Actions:"
-    echo "  create <name> <type>  Create new change (type: feat|fix)"
+    echo "  create [type]         Create new change (interactive)"
+    echo "                        Optional type: feat (default) | fix"
     echo "  wrap-up               Complete change workflow"
     echo ""
+    echo "Interactive Workflow:"
+    echo "  The 'create' command will:"
+    echo "  1. Display banner and instructions"
+    echo "  2. Prompt for change description"
+    echo "  3. Prompt for change name (any format)"
+    echo "  4. Normalize name to kebab-case automatically"
+    echo "  5. Validate and confirm name with user"
+    echo "  6. Create branch and initialize workspace"
+    echo ""
     echo "Examples:"
-    echo "  rdd.sh change create my-feature feat"
-    echo "  rdd.sh change wrap-up"
+    echo "  rdd.sh change create          # Interactive, creates feat"
+    echo "  rdd.sh change create fix      # Interactive, creates fix"
+    echo "  rdd.sh change wrap-up         # Complete workflow"
 }
 
 show_fix_help() {
@@ -340,12 +351,90 @@ route_change() {
     
     case "$action" in
         create)
-            if [ $# -lt 2 ]; then
-                print_error "Change name and type required"
-                echo "Usage: rdd.sh change create <name> <type>"
+            # Display banner
+            echo ""
+            echo "─── RDD-COPILOT ───"
+            echo " Prompt: Create Change"
+            echo " Description:"
+            echo " > Create a new Change folder with timestamped naming,"
+            echo " > branch setup, and template initialization."
+            echo ""
+            echo " User Action:"
+            echo " > Provide a short description and name for the change."
+            echo "───────────────"
+            echo ""
+            
+            # 1. Prompt for description
+            echo "Please provide a short description of the change:"
+            echo "(e.g., 'Add user authentication feature', 'Fix login page bug')"
+            read -p "> " change_description
+            
+            # Validate description was provided
+            if [ -z "$change_description" ]; then
+                print_error "Change description cannot be empty"
                 return 1
             fi
-            create_change "$1" "$2"
+            
+            print_info "Description: $change_description"
+            echo ""
+            
+            # 2. Prompt for name with normalization loop
+            local change_name=""
+            local normalized_name=""
+            
+            while true; do
+                echo "Please provide a name for the change (will be normalized to kebab-case):"
+                echo "(e.g., 'add user auth', 'Fix Login Bug', 'update-readme')"
+                read -p "> " change_name
+                
+                # Check if name was provided
+                if [ -z "$change_name" ]; then
+                    print_error "Change name cannot be empty"
+                    continue
+                fi
+                
+                # Normalize the name to kebab-case
+                normalized_name=$(normalize_to_kebab_case "$change_name")
+                
+                # Check if normalization was successful
+                if [ $? -ne 0 ]; then
+                    print_error "Unable to normalize name: $change_name"
+                    echo "Please try a different name (use only letters, numbers, spaces, hyphens)"
+                    continue
+                fi
+                
+                # Validate normalized name
+                if ! validate_name "$normalized_name"; then
+                    print_warning "Normalized name '$normalized_name' doesn't meet requirements"
+                    echo "Requirements: kebab-case, max 5 words, lowercase, hyphens only"
+                    echo ""
+                    continue
+                fi
+                
+                # Show normalized name and confirm
+                print_success "Normalized name: $normalized_name"
+                read -p "Use this name? (y/n): " confirm
+                
+                if [[ "$confirm" =~ ^[Yy] ]]; then
+                    break
+                fi
+                
+                echo "Let's try again..."
+                echo ""
+            done
+            
+            # Store description in temp file (for reference/logging)
+            local desc_file="/tmp/rdd-change-description-$$.txt"
+            echo "$change_description" > "$desc_file"
+            
+            print_info "Description saved to: $desc_file"
+            echo ""
+            
+            # Get change type or use default
+            local change_type="${1:-feat}"
+            
+            # Create the change with normalized name
+            create_change "$normalized_name" "$change_type"
             ;;
         wrap-up)
             wrap_up_change

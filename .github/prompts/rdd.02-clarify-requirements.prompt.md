@@ -129,9 +129,6 @@ S01: Display the following banner to the user:
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    RDD FRAMEWORK - Clarify Phase
-   
-   → Iteratively eliminate ambiguity
-   → Transform requirements into clarity
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 

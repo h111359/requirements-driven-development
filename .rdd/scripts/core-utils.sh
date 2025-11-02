@@ -369,6 +369,43 @@ get_timestamp_filename() {
     date +%Y%m%d-%H%M
 }
 
+# Normalize text to kebab-case format
+# Handles various inputs: "Add User Auth", "fix_login_bug", "update-README"
+# Returns: kebab-case string or exits with error code 1
+# Usage: normalized=$(normalize_to_kebab_case "Add User Auth")
+normalize_to_kebab_case() {
+    local input="$1"
+    
+    # Check if input is empty
+    if [ -z "$input" ]; then
+        return 1
+    fi
+    
+    # Normalization steps:
+    # 1. Convert to lowercase
+    # 2. Replace underscores and spaces with hyphens
+    # 3. Remove any characters that aren't lowercase letters, numbers, or hyphens
+    # 4. Replace multiple consecutive hyphens with single hyphen
+    # 5. Remove leading and trailing hyphens
+    
+    local normalized
+    normalized=$(echo "$input" | \
+        tr '[:upper:]' '[:lower:]' | \
+        tr '_' '-' | \
+        tr ' ' '-' | \
+        sed 's/[^a-z0-9-]//g' | \
+        sed 's/-\+/-/g' | \
+        sed 's/^-//; s/-$//')
+    
+    # Check if result is empty (all characters were invalid)
+    if [ -z "$normalized" ]; then
+        return 1
+    fi
+    
+    echo "$normalized"
+    return 0
+}
+
 # ============================================================================
 # EXPORT ALL FUNCTIONS
 # ============================================================================
@@ -398,6 +435,7 @@ export -f debug_print
 export -f ensure_dir
 export -f get_timestamp
 export -f get_timestamp_filename
+export -f normalize_to_kebab_case
 
 # Export color codes
 export RED GREEN YELLOW BLUE CYAN BOLD NC
