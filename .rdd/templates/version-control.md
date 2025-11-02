@@ -63,7 +63,7 @@ main ──┬─→ feat/20251031-1430-add-auth ─→ commits ─→ PR ─→
 1. **Create Change**
    ```bash
    # Use RDD script to create change folder and branch
-   ./.rdd/scripts/create-change.sh <change-name> [feat|fix]
+   ./.rdd/scripts/rdd.sh change create [feat|fix]
    ```
    - Creates branch: `feat/YYYYMMDD-HHmm-<change-name>` or `fix/YYYYMMDD-HHmm-<change-name>`
    - Creates change folder: `docs/changes/YYYYMMDD-HHmm-<change-name>/`
