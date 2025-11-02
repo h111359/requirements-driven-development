@@ -169,7 +169,7 @@ main ──┬─→ enh/20251031-1430-add-auth ─→ commits ─→ PR ─→ 
 #### Recommended: Squash and Merge
 - Combines all commits into one
 - Keeps main history clean and linear
-- Best for feature branches with many small commits
+- Best for enhancement branches with many small commits
 
 #### Alternative: Merge Commit
 - Preserves full commit history
@@ -231,7 +231,7 @@ git config push.default simple
 **Method 1: GitHub Web Interface (Recommended)**
 ```bash
 # 1. Push your branch to GitHub
-git push origin feat/your-branch-name
+git push origin enh/your-branch-name
 
 # 2. Visit your repository on GitHub
 # 3. Click "Compare & pull request" button (appears after push)

@@ -424,7 +424,7 @@ Run: `grep -oP '\[(?:GF|FR|NFR|TR)-\K[0-9]+' .rdd-docs/requirements.md | sort | 
 - `rdd.02-clarify-requirements.prompt.md` - Clarification workflow
 
 **Next Steps:**
-- Continue development on feature/fix
+- Continue development on enhancement/fix
 - When complete, use full wrap-up prompt
 - Or commit changes and create PR
 

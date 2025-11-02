@@ -22,7 +22,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[GF-10] Requirements Change Detection**: The framework shall provide a workflow for detecting and documenting requirements changes by comparing code with the main branch.
 # Functional Requirements
 
-- **[FR-03] Flat Workspace Structure**: The system shall store all active workspace files directly in .rdd-docs/workspace/ without feature-specific subfolders
+- **[FR-03] Flat Workspace Structure**: The system shall store all active workspace files directly in .rdd-docs/workspace/ without enhancement-specific subfolders
 - **[FR-04] Current Change Detection**: The system shall use a .current-change JSON configuration file in workspace to track the active change with fields: changeName, changeId, branchName, changeType, startedAt, phase, status
 - **[FR-05] Workspace Initialization**: A script shall initialize workspace with: change.md, clarity-taxonomy.md, open-questions.md, requirements-changes.md, clarification-log.jsonl, and .current-change
 - **[FR-06] Clean Main Branch Workspace**: When on main branch, workspace shall be empty or contain only standard template content to clearly indicate no active development
@@ -50,7 +50,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-28] Backup Before Merge**: The system shall create timestamped backup of requirements.md before merging changes
 - **[FR-29] Auto-Commit Before Sync**: The wrap-up process shall automatically commit all uncommitted changes before syncing with main branch to prevent merge errors
 - **[FR-30] Smart Commit Message**: The auto-commit message shall include the change type and name from .current-change file in format: "[change-type]: [change-name] - pre-wrap-up commit"
-- **[FR-31] Main Branch Sync Before Wrap-Up**: The wrap-up process shall fetch and merge the latest state from main branch into the current feature branch before merging requirements
+- **[FR-31] Main Branch Sync Before Wrap-Up**: The wrap-up process shall fetch and merge the latest state from main branch into the current enhancement branch before merging requirements
 - **[FR-32] Conflict Detection on Sync**: The system shall detect merge conflicts during pre-wrap-up sync and halt the wrap-up process if conflicts exist
 - **[FR-33] User Notification on Conflicts**: The system shall notify the user if merge conflicts are detected and instruct them to resolve conflicts manually before proceeding
 - **[FR-34] Sync Validation**: The system shall validate that the merge from main completed successfully before proceeding with requirements merge
