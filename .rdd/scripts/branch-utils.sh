@@ -34,7 +34,7 @@ BRANCH_UTILS_LOADED=1
 # ============================================================================
 
 # Create a new branch with format validation
-# Usage: create_branch "feat|fix" "branch-name"
+# Usage: create_branch "enh|fix" "branch-name"
 # Returns: 0 on success, 1 on failure
 create_branch() {
     local branch_type="$1"
@@ -42,14 +42,14 @@ create_branch() {
     
     if [ -z "$branch_type" ] || [ -z "$branch_name" ]; then
         print_error "Branch type and name are required"
-        echo "Usage: create_branch <feat|fix> <branch_name>"
+        echo "Usage: create_branch <enh|fix> <branch_name>"
         return 1
     fi
     
     # Validate branch type
-    if [[ ! "$branch_type" =~ ^(feat|fix)$ ]]; then
+    if [[ ! "$branch_type" =~ ^(enh|fix)$ ]]; then
         print_error "Invalid branch type: $branch_type"
-        print_info "Valid types: feat, fix"
+        print_info "Valid types: enh, fix"
         return 1
     fi
     

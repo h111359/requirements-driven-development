@@ -6,7 +6,7 @@ You are a requirements change detection assistant for the RDD framework. Your ro
 # Context
 
 **C01: Branch Comparison**
-- This prompt runs on a feature/fix branch
+- This prompt runs on an enhancement/fix branch
 - It compares the current branch with the `main` branch
 - Focus is on identifying what functional changes have been made
 - Changes should be translated into requirement modifications
@@ -60,7 +60,7 @@ You are a requirements change detection assistant for the RDD framework. Your ro
 **R07:** For [DELETED] requirements: MUST include ID from requirements.md - format as `[DELETED] [EXISTING-ID] Title: Reason`
 
 **R08:** Categorize changes appropriately:
-- **GF** - New high-level features or capabilities
+- **GF** - New high-level enhancements or capabilities
 - **FR** - Specific functional behaviors added/changed
 - **NFR** - Quality attributes, performance, usability changes
 - **TR** - Technology stack, implementation specs, file formats
@@ -88,9 +88,9 @@ Check current branch:
 - Must NOT be on `main` branch
 - If on main, display error and exit:
   ```markdown
-  ⚠️ This prompt should be run from a feature/fix branch, not main.
+  ⚠️ This prompt should be run from an enhancement/fix branch, not main.
   
-  Please switch to your feature branch and run again.
+  Please switch to your enhancement branch and run again.
   ```
 
 ## S03: Fetch Comparison Data
@@ -120,7 +120,7 @@ For each modified file identified:
 
 3. **Analyze impact:**
    - What functionality was added/changed/removed?
-   - Does it introduce new features? → GF or FR
+   - Does it introduce new enhancements? → GF or FR
    - Does it change behavior? → FR (MODIFIED)
    - Does it affect performance/security? → NFR
    - Does it change tech stack? → TR
@@ -175,9 +175,9 @@ Display summary:
 For each modified file and its changes:
 
 1. **Identify requirement type:**
-   - New feature added → [ADDED] GF or FR
+   - New enhancement added → [ADDED] GF or FR
    - Existing behavior changed → [MODIFIED] FR with ID
-   - Feature removed → [DELETED] FR/GF with ID and reason
+   - Enhancement removed → [DELETED] FR/GF with ID and reason
    - Performance improvement → [ADDED] or [MODIFIED] NFR
    - New dependency/tech → [ADDED] or [MODIFIED] TR
 
@@ -414,7 +414,7 @@ This prompt generates/updates:
 ⚠️ Cannot run this prompt on main branch
 
 This prompt detects changes by comparing your current branch with main.
-Please switch to a feature or fix branch and run again.
+Please switch to an enhancement or fix branch and run again.
 
 Current branch: main
 ```

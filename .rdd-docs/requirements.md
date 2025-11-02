@@ -2,11 +2,19 @@
 
 <OVERVIEW-PLACEHOLDER>
 
+## Terminology
+
+In the RDD framework, **"change"** is an umbrella term that encompasses two types of work:
+- **Enhancement** (abbreviated as "enh"): New functionality, features, or improvements to existing functionality
+- **Fix**: Bug fixes, corrections, or patches to resolve issues
+
+When we refer to a "change", we mean either an enhancement or a fix. This terminology is used consistently across the framework in branch names, workflows, and documentation.
+
 # General Functionalities
 
 - **[GF-03] Requirements Clarification Workflow**: The RDD framework shall provide a structured workflow for clarifying requirements through iterative questioning based on a clarity taxonomy
-- **[GF-04] Workspace Management**: The framework shall maintain a workspace directory (.rdd-docs/workspace/) for active development work on features and fixes
-- **[GF-05] Change Tracking**: The framework shall track the current active change/feature/fix being worked on
+- **[GF-04] Workspace Management**: The framework shall maintain a workspace directory (.rdd-docs/workspace/) for active development work on enhancements and fixes
+- **[GF-05] Change Tracking**: The framework shall track the current active change (enhancement or fix) being worked on
 - **[GF-06] Requirements Merging**: The framework shall support merging clarified requirements from workspace into the main requirements.md file
 - **[GF-07] Workspace Archiving**: The framework shall archive completed workspace content for historical reference
 - **[GF-08] Fix Branch Workflow**: The framework shall provide a guided workflow for creating and documenting fix branches, including naming, description, and initialization.
@@ -14,7 +22,7 @@
 - **[GF-10] Requirements Change Detection**: The framework shall provide a workflow for detecting and documenting requirements changes by comparing code with the main branch.
 # Functional Requirements
 
-- **[FR-03] Flat Workspace Structure**: The system shall store all active workspace files directly in .rdd-docs/workspace/ without feature-specific subfolders
+- **[FR-03] Flat Workspace Structure**: The system shall store all active workspace files directly in .rdd-docs/workspace/ without enhancement-specific subfolders
 - **[FR-04] Current Change Detection**: The system shall use a .current-change JSON configuration file in workspace to track the active change with fields: changeName, changeId, branchName, changeType, startedAt, phase, status
 - **[FR-05] Workspace Initialization**: A script shall initialize workspace with: change.md, clarity-taxonomy.md, open-questions.md, requirements-changes.md, clarification-log.jsonl, and .current-change
 - **[FR-06] Clean Main Branch Workspace**: When on main branch, workspace shall be empty or contain only standard template content to clearly indicate no active development
@@ -42,7 +50,7 @@
 - **[FR-28] Backup Before Merge**: The system shall create timestamped backup of requirements.md before merging changes
 - **[FR-29] Auto-Commit Before Sync**: The wrap-up process shall automatically commit all uncommitted changes before syncing with main branch to prevent merge errors
 - **[FR-30] Smart Commit Message**: The auto-commit message shall include the change type and name from .current-change file in format: "[change-type]: [change-name] - pre-wrap-up commit"
-- **[FR-31] Main Branch Sync Before Wrap-Up**: The wrap-up process shall fetch and merge the latest state from main branch into the current feature branch before merging requirements
+- **[FR-31] Main Branch Sync Before Wrap-Up**: The wrap-up process shall fetch and merge the latest state from main branch into the current enhancement branch before merging requirements
 - **[FR-32] Conflict Detection on Sync**: The system shall detect merge conflicts during pre-wrap-up sync and halt the wrap-up process if conflicts exist
 - **[FR-33] User Notification on Conflicts**: The system shall notify the user if merge conflicts are detected and instruct them to resolve conflicts manually before proceeding
 - **[FR-34] Sync Validation**: The system shall validate that the merge from main completed successfully before proceeding with requirements merge

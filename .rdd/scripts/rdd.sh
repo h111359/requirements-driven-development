@@ -52,7 +52,7 @@ show_main_help() {
     echo "For domain-specific help, use: rdd.sh <domain> --help"
     echo ""
     echo "Examples:"
-    echo "  rdd.sh change create my-feature feat"
+    echo "  rdd.sh change create my-enhancement enh"
     echo "  rdd.sh branch delete my-branch"
     echo "  rdd.sh requirements merge --dry-run"
 }
@@ -63,17 +63,17 @@ show_branch_help() {
     echo "Usage: rdd.sh branch <action> [options]"
     echo ""
     echo "Actions:"
-    echo "  create <type> <name>    Create new branch (type: feat|fix)"
+    echo "  create <type> <name>    Create new branch (type: enh|fix)"
     echo "  delete [name] [--force] Delete branch (current if name omitted)"
     echo "  delete-merged           Delete all merged branches"
     echo "  status <name>           Check merge status of branch"
     echo "  list [filter]           List branches (optional filter)"
     echo ""
     echo "Examples:"
-    echo "  rdd.sh branch create feat my-feature"
+    echo "  rdd.sh branch create enh my-enhancement"
     echo "  rdd.sh branch delete my-old-branch"
     echo "  rdd.sh branch delete-merged"
-    echo "  rdd.sh branch status feat/20241101-1234-my-feature"
+    echo "  rdd.sh branch status enh/20241101-1234-my-enhancement"
 }
 
 show_workspace_help() {
@@ -118,7 +118,7 @@ show_change_help() {
     echo ""
     echo "Actions:"
     echo "  create [type]         Create new change (interactive)"
-    echo "                        Optional type: feat (default) | fix"
+    echo "                        Optional type: enh (default) | fix"
     echo "  wrap-up               Complete change workflow"
     echo ""
     echo "Interactive Workflow:"
@@ -131,7 +131,7 @@ show_change_help() {
     echo "  6. Create branch and initialize workspace"
     echo ""
     echo "Examples:"
-    echo "  rdd.sh change create          # Interactive, creates feat"
+    echo "  rdd.sh change create          # Interactive, creates enh"
     echo "  rdd.sh change create fix      # Interactive, creates fix"
     echo "  rdd.sh change wrap-up         # Complete workflow"
 }
@@ -178,7 +178,7 @@ show_prompt_help() {
     echo ""
     echo "Examples:"
     echo "  rdd.sh prompt mark-completed P01"
-    echo "  rdd.sh prompt log-execution P01 \"Created feature\""
+    echo "  rdd.sh prompt log-execution P01 \"Created enhancement\""
     echo "  rdd.sh prompt list --status=unchecked"
 }
 
@@ -450,7 +450,7 @@ route_change() {
             
             # 1. Prompt for description
             echo "Please provide a short description of the change:"
-            echo "(e.g., 'Add user authentication feature', 'Fix login page bug')"
+            echo "(e.g., 'Add user authentication enhancement', 'Fix login page bug')"
             read -p "> " change_description
             
             # Validate description was provided
@@ -515,7 +515,7 @@ route_change() {
             echo ""
             
             # Get change type or use default
-            local change_type="${1:-feat}"
+            local change_type="${1:-enh}"
             
             # Create the change with normalized name
             create_change "$normalized_name" "$change_type"

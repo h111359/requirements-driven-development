@@ -1,6 +1,6 @@
 ## What
 
-<TBD - enter here what needs to be changed>
+<TBD - enter here what needs to be enhanced or changed>
 
 ## Why
 
@@ -8,4 +8,4 @@
 
 ## Acceptance Criteria:
 
-<TBD - list what is mandatory to exists after the change is ready>
+<TBD - list what is mandatory to exist after the enhancement is ready>

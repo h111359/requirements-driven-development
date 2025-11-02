@@ -29,7 +29,7 @@ TEMPLATE_DIR="$REPO_ROOT/.rdd/templates"
 # Orchestrates: validation, ID generation, branch creation, workspace initialization
 # Arguments:
 #   $1 - change_name: The name of the change (kebab-case)
-#   $2 - change_type: Type of change ('feat' or 'fix', default: 'feat')
+#   $2 - change_type: Type of change ('enh' or 'fix', default: 'enh')
 # Returns:
 #   0 on success
 #   1 on error (invalid name/type, branch exists, etc.)
@@ -37,20 +37,20 @@ TEMPLATE_DIR="$REPO_ROOT/.rdd/templates"
 #   Success messages and next steps
 create_change() {
     local change_name="$1"
-    local change_type="${2:-feat}"
+    local change_type="${2:-enh}"
     
     # Validate required parameters
     if [ -z "$change_name" ]; then
         print_error "Change name is required"
         echo "Usage: create_change <change-name> [type]"
-        echo "  type: feat (default) or fix"
+        echo "  type: enh (default) or fix"
         return 1
     fi
     
     # Validate change type
-    if [[ "$change_type" != "feat" && "$change_type" != "fix" ]]; then
+    if [[ "$change_type" != "enh" && "$change_type" != "fix" ]]; then
         print_error "Invalid change type '$change_type'"
-        echo "Valid types: feat, fix"
+        echo "Valid types: enh, fix"
         return 1
     fi
     
@@ -139,8 +139,8 @@ export -f create_change
 # Creates: clarification-log.jsonl, open-questions.md, requirements-changes.md
 # Arguments:
 #   $1 - change_id: The change ID (YYYYMMDD-HHmm-name format)
-#   $2 - branch_name: The branch name (feat/fix/change-id)
-#   $3 - change_type: Type of change ('feat' or 'fix')
+#   $2 - branch_name: The branch name (enh/fix/change-id)
+#   $3 - change_type: Type of change ('enh' or 'fix')
 # Returns:
 #   0 on success
 #   1 on error
@@ -230,8 +230,8 @@ export -f init_change_tracking
 # Arguments:
 #   $1 - change_name: The name of the change
 #   $2 - change_id: The change ID (YYYYMMDD-HHmm-name format)
-#   $3 - branch_name: The branch name (feat/fix/change-id)
-#   $4 - change_type: Type of change ('feat' or 'fix')
+#   $3 - branch_name: The branch name (enh/fix/change-id)
+#   $4 - change_type: Type of change ('enh' or 'fix')
 # Returns:
 #   0 on success
 #   1 on error
@@ -285,9 +285,9 @@ export -f create_change_config
 wrap_up_change() {
     local current_branch=$(git branch --show-current)
     
-    # Validate we're on a feat/fix branch
-    if [[ ! "$current_branch" =~ ^(feat|fix)/ ]]; then
-        print_error "Wrap-up can only be executed from a feat or fix branch"
+    # Validate we're on an enh/fix branch
+    if [[ ! "$current_branch" =~ ^(enh|fix)/ ]]; then
+        print_error "Wrap-up can only be executed from an enh or fix branch"
         print_error "Current branch: $current_branch"
         return 1
     fi

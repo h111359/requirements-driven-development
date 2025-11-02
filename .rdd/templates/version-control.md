@@ -19,10 +19,10 @@ This document defines the Git and GitHub version control strategy for this proje
 - **Purpose**: Production-ready code, always deployable
 - **Protection**: Protected branch with required reviews and status checks
 
-### Feature Branches
-- **Prefix**: `feat/`
-- **Format**: `feat/YYYYMMDD-HHmm-<feature-name>`
-- **Example**: `feat/20251031-1430-add-user-authentication`
+### Enhancement Branches
+- **Prefix**: `enh/`
+- **Format**: `enh/YYYYMMDD-HHmm-<enhancement-name>`
+- **Example**: `enh/20251031-1430-add-user-authentication`
 - **Purpose**: Implement new features or enhancements
 - **Lifespan**: Short-lived (1-3 days ideally)
 
@@ -46,14 +46,14 @@ This document defines the Git and GitHub version control strategy for this proje
 
 The typical development cycle follows these steps:
 
-1. **Start**: Branch from `main` → Create `feat/` or `fix/` branch
+1. **Start**: Branch from `main` → Create `enh/` or `fix/` branch
 2. **Develop**: Make commits → Push regularly
 3. **Review**: Open Pull Request → Address feedback
 4. **Merge**: Squash and merge to `main` → Delete branch
 5. **Deploy**: Changes automatically deploy from `main`
 
 ```
-main ──┬─→ feat/20251031-1430-add-auth ─→ commits ─→ PR ─→ merge ─→ main
+main ──┬─→ enh/20251031-1430-add-auth ─→ commits ─→ PR ─→ merge ─→ main
        │                                                              │
        └─→ fix/20251031-1500-login-bug ──→ commits ─→ PR ─→ merge ──┘
 ```
@@ -63,12 +63,12 @@ main ──┬─→ feat/20251031-1430-add-auth ─→ commits ─→ PR ─→
 1. **Create Change**
    ```bash
    # Use RDD script to create change folder and branch
-   ./.rdd/scripts/rdd.sh change create [feat|fix]
+   ./.rdd/scripts/rdd.sh change create [enh|fix]
    ```
-   - Creates branch: `feat/YYYYMMDD-HHmm-<change-name>` or `fix/YYYYMMDD-HHmm-<change-name>`
+   - Creates branch: `enh/YYYYMMDD-HHmm-<change-name>` or `fix/YYYYMMDD-HHmm-<change-name>`
    - Creates change folder: `docs/changes/YYYYMMDD-HHmm-<change-name>/`
    - Branches from: `main`
-   - Default type: `feat` (if not specified)
+   - Default type: `enh` (if not specified)
 
 2. **Develop**
    - Make small, focused commits with descriptive messages
@@ -80,9 +80,9 @@ main ──┬─→ feat/20251031-1430-add-auth ─→ commits ─→ PR ─→
     ```
     <type>: <short description>
     ```
-    - Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `style`
+    - Types: `enh`, `fix`, `docs`, `refactor`, `test`, `chore`, `style`
     - Keep it concise and under 50 characters
-    - Example: `feat: add user authentication module`
+    - Example: `enh: add user authentication module`
 
 4. **Create Pull Request**
    ```bash
@@ -169,7 +169,7 @@ main ──┬─→ feat/20251031-1430-add-auth ─→ commits ─→ PR ─→
 #### Recommended: Squash and Merge
 - Combines all commits into one
 - Keeps main history clean and linear
-- Best for feature branches with many small commits
+- Best for enhancement branches with many small commits
 
 #### Alternative: Merge Commit
 - Preserves full commit history
@@ -231,7 +231,7 @@ git config push.default simple
 **Method 1: GitHub Web Interface (Recommended)**
 ```bash
 # 1. Push your branch to GitHub
-git push origin feat/your-branch-name
+git push origin enh/your-branch-name
 
 # 2. Visit your repository on GitHub
 # 3. Click "Compare & pull request" button (appears after push)
@@ -246,7 +246,7 @@ git push origin feat/your-branch-name
 **Method 2: GitHub CLI**
 ```bash
 # Install GitHub CLI if not already: https://cli.github.com/
-gh pr create --title "feat: add user authentication" \
+gh pr create --title "enh: add user authentication" \
              --body "Implements user auth as per docs/changes/20251031-1430-add-auth/change.md" \
              --reviewer username1,username2 \
              --label enhancement
@@ -255,7 +255,7 @@ gh pr create --title "feat: add user authentication" \
 **Method 3: VS Code GitHub Pull Requests Extension**
 ```bash
 # 1. Install "GitHub Pull Requests and Issues" extension
-# 2. Push your branch: git push origin feat/your-branch-name
+# 2. Push your branch: git push origin enh/your-branch-name
 # 3. Click "Create Pull Request" in the GitHub panel
 # 4. Fill in details and submit
 ```
@@ -266,8 +266,8 @@ gh pr create --title "feat: add user authentication" \
 git checkout main
 git pull origin main
 
-# Update feature branch
-git checkout feat/your-branch
+# Update enhancement branch
+git checkout enh/your-branch
 # Or for fix branch: git checkout fix/your-branch
 git merge main
 # Or: git rebase main
