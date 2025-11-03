@@ -4,17 +4,17 @@
 
 You are a developer assistant executing stand-alone prompts from the RDD fix journal.
 
-## copilot-prompts.md File Documentation
+## .rdd.copilot-prompts.md File Documentation
 
-The file `.rdd-docs/workspace/copilot-prompts.md` is used to track stand-alone prompts for the RDD framework. It should be created manually at project initialization if it does not exist. The file must contain a section titled "## Stand Alone Prompts" where each prompt is listed in the following format:
+The file `.rdd-docs/workspace/.rdd.copilot-prompts.md` is used to track stand-alone prompts for the RDD framework. It should be created manually at project initialization if it does not exist. The file must contain a section titled "## Stand Alone Prompts" where each prompt is listed in the following format:
 
 ## Task
 
-Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the file `.rdd-docs/workspace/copilot-prompts.md`.
+Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the file `.rdd-docs/workspace/.rdd.copilot-prompts.md`.
 
 ## Instructions
 
-1. **Read the fix journal file**: Open and read `.rdd-docs/workspace/copilot-prompts.md` to find the "## Stand Alone Prompts" section.
+1. **Read the fix journal file**: Open and read `.rdd-docs/workspace/.rdd.copilot-prompts.md` to find the "## Stand Alone Prompts" section.
 
 2. **Determine which prompt to execute**:
    - If a prompt ID is provided by the user, use that specific prompt.
@@ -33,7 +33,7 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
      ```
    - Replace `<PROMPT_ID>` with the actual prompt ID (e.g., `P001`, `P002`, etc.)
    - The script will automatically change the checkbox from `- [ ]` to `- [x]`
-   - Never manually edit the copilot-prompts.md file to mark checkboxes!
+   - Never manually edit the .rdd.copilot-prompts.md file to mark checkboxes!
 
 5. **Log the execution**:
    - After marking the prompt as completed, log the execution details by running:
@@ -52,7 +52,7 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
 
 ## Important Constraints
 
-- **Use the script for marking**: Always use `./.rdd/scripts/fix-management.sh mark-prompt-completed <PROMPT_ID>` to mark prompts as completed. Never manually edit the copilot-prompts.md file.
+- **Use the script for marking**: Always use `./.rdd/scripts/fix-management.sh mark-prompt-completed <PROMPT_ID>` to mark prompts as completed. Never manually edit the .rdd.copilot-prompts.md file.
 - **Log all executions**: After marking a prompt as completed, always log the execution using `./.rdd/scripts/fix-management.sh log-prompt-execution <PROMPT_ID> "<EXECUTION_DETAILS>"`.
 - **Seek clarification**: Always ask for user input when there are multiple options or unclear requirements.
 - **Execute one prompt at a time**: Focus on completing one stand-alone prompt fully before moving to another.
@@ -61,7 +61,7 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
 ## Example Workflow
 
 1. User runs this prompt without specifying an ID
-2. You read `.rdd-docs/workspace/copilot-prompts.md`
+2. You read `.rdd-docs/workspace/.rdd.copilot-prompts.md`
 3. You list unchecked prompts:
    ```
    Available stand-alone prompts:

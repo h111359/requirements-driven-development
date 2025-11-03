@@ -4,50 +4,116 @@ This document describes the organized structure of the project.
 
 ## 🧩 Root Layout
 
+````markdown
+# 📁 RDD Project Folder Structure
+
+This document describes the organized structure of the Requirements-Driven Development framework.
+
+## 🧩 Root Layout
+
 ```
 repo-root/
 ├── .github/                      # GitHub workflows, prompts, Copilot instructions
-│   ├── prompts/                  # Prompt templates for Copilot and automation
-│   └── copilot-instructions.md   # Copilot agent instructions
-├── .venv/                        # Python virtual environment (local, ignored)
+│   ├── prompts/                  # Prompt templates for Copilot and RDD workflow
+│   │   ├── rdd.01-initiate.prompt.md
+│   │   ├── rdd.02-clarify-requirements.prompt.md
+│   │   ├── rdd.06-execute.prompt.md
+│   │   ├── rdd.07-update-docs.prompt.md
+│   │   └── rdd.08-wrap-up.prompt.md
+│   └── copilot-instructions.md   # Copilot agent behavioral guidelines
+├── .rdd/                         # RDD framework internals
+│   ├── scripts/                  # Automation scripts for RDD workflows
+│   │   ├── rdd.sh                # Main entry point for RDD commands
+│   │   ├── change-utils.sh       # Change/fix creation and management
+│   │   ├── workspace-utils.sh    # Workspace initialization and archiving
+│   │   ├── fix-management.sh     # Fix-specific operations
+│   │   ├── prompt-utils.sh       # Prompt execution helpers
+│   │   ├── git-utils.sh          # Git operations
+│   │   ├── core-utils.sh         # Common utility functions
+│   │   └── ...                   # Other utility scripts
+│   └── templates/                # File templates for initialization
+│       ├── change.md             # Enhancement template
+│       ├── fix.md                # Fix template
+│       ├── copilot-prompts.md    # Stand-alone prompts template
+│       ├── requirements.md       # Requirements document template
+│       ├── tech-spec.md          # Technical specification template
+│       ├── data-model.md         # Data model template
+│       ├── folder-structure.md   # Folder structure template
+│       └── ...                   # Other templates
+├── .rdd-docs/                    # RDD documentation and workspace
+│   ├── workspace/                # Active development workspace
+│   │   ├── .rdd.[fix|enh].[branch-name]  # Change config file (one per workspace)
+│   │   ├── .rdd.copilot-prompts.md       # Stand-alone prompts checklist
+│   │   ├── log.jsonl                      # Execution log
+│   │   ├── change.md or fix.md            # Work description (based on type)
+│   │   └── ...                            # Other workflow files
+│   ├── archive/                  # Archived completed changes
+│   │   └── [sanitized-branch-name]/      # One directory per archived change
+│   │       ├── .archive-metadata          # Archive metadata (JSON)
+│   │       └── ...                        # Archived workspace files
+│   ├── requirements.md           # Main requirements document
+│   ├── tech-spec.md              # Technical specifications
+│   ├── data-model.md             # Data model and structures
+│   ├── folder-structure.md       # This file
+│   └── ...                       # Other project documentation
 ├── .vscode/                      # VS Code workspace settings
-│   └── settings.json             # Editor config
+│   └── settings.json             # Editor config, auto-approvals, associations
 ├── build/                        # Generated build artifacts (ignored by Git)
-├── data/                         # All data files (not committed)
-├── docs/                         # Documentation
-│   ├── changes/                  # Change logs and templates
-│   │   └── template/             # Change log templates
-│   ├── specifications/           # Technical specs
-│   ├── user-guides/              # User documentation
-│   ├── data-model.md             # Data model description
-│   ├── file-structure.md         # This file
-│   └── requirements.md           # Requirements document
-├── logs/                         # ETL and audit logs
-├── scripts/                      # Automation scripts (shell, PowerShell)
-├── specs/                        # Implementation specs and plans
-├── src/                          # Source code
-│   ├── py/                       # Python code
-│   │   ├── data/                 # Python data helpers
-│   │   ├── kolko-ni-struva/      # Main Python package
-│   │   │   ├── etl/              # ETL modules
-│   │   │   ├── schemas/          # Schema definitions
-│   │   └── logs/                 # Python log helpers
-│   └── web/                      # Web app source
-│       ├── assets/               # CSS, images, icons
-│       ├── js/                   # JavaScript files
-│       ├── templates/            # HTML templates
-│       └── index.html            # Main HTML page
-├── tests/                        # Automated tests
-│   ├── fixtures/                 # Test fixtures/sample data
-│   ├── tmp/                      # Temporary test outputs
-├── input.md                      # Input/scratch file for prompts
-├── netlify.toml                  # Netlify deployment config
-├── pyproject.toml                # Python project metadata
-├── README.md                     # Project overview
-├── requirements.txt              # Python dependencies
-├── .env.example                  # Example environment variables
-├── .gitignore                    # Git ignore rules
+├── scripts/                      # Project-specific automation scripts
+├── README.md                     # Project overview and quick start
+├── LICENSE                       # Project license
+└── .gitignore                    # Git ignore rules
 ```
+
+## ⚙️ Key Principles
+
+### 1. Workspace Lifecycle
+- **Initialization**: Workspace created when starting new enhancement/fix
+- **Active Work**: Files added/modified during development
+- **Archiving**: Complete workspace copied to archive directory
+- **Cleanup**: All files removed from workspace after archiving
+
+### 2. Config File Naming
+- **Pattern**: `.rdd.[type].[branch-name]`
+- **Type**: `fix` or `enh` 
+- **Purpose**: Embeds change metadata directly in filename
+- **Example**: `.rdd.fix.20251103-1257-prompt-08-bug-workspace-unclean`
+
+### 3. No Auto-Creation Policy
+- Documentation files (`clarity-checklist.md`, `version-control.md`) are NOT automatically copied to workspace
+- Template files are only copied when explicitly needed by workflow
+- Workspace remains minimal with only essential working files
+
+### 4. Complete Workspace Clearing
+- After archiving, ALL files are removed from workspace (not just a hardcoded list)
+- Uses `find -mindepth 1 -delete` to ensure complete cleanup
+- Prevents leftover files from interfering with next change
+
+### 5. Archive Preservation
+- Archives preserve complete workspace state at time of completion
+- Named using sanitized branch name (slashes → hyphens)
+- Include metadata file with timestamp, author, and commit info
+
+## 📝 RDD Workflow File Locations
+
+### Prompts
+All workflow prompts in: `.github/prompts/rdd.*.prompt.md`
+
+### Scripts
+All automation in: `.rdd/scripts/*.sh`
+
+### Templates
+All file templates in: `.rdd/templates/*.md`
+
+### Active Work
+Current workspace: `.rdd-docs/workspace/`
+
+### Historical Record
+Completed work: `.rdd-docs/archive/[branch-name]/`
+
+### Main Documentation
+Project docs: `.rdd-docs/*.md`
+````
 
 
 ## ⚙️ Key Principles

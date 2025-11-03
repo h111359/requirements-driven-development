@@ -66,19 +66,8 @@ init_workspace() {
         copy_template "fix.md" "$WORKSPACE_DIR/fix.md"
     fi
     
-    # Copy clarity-checklist.md to workspace
-    if [ -f ".rdd-docs/clarity-checklist.md" ]; then
-        cp ".rdd-docs/clarity-checklist.md" "$WORKSPACE_DIR/clarity-checklist.md"
-        print_success "Copied clarity-checklist.md to workspace"
-    else
-        print_warning "clarity-checklist.md not found in .rdd-docs/"
-    fi
-    
-    # Copy copilot-prompts.md template to workspace
-    copy_template "copilot-prompts.md" "$WORKSPACE_DIR/copilot-prompts.md"
-    
-    # Create requirements-changes.md template
-    create_requirements_changes_template
+    # Copy copilot-prompts.md template to workspace with new name
+    copy_template "copilot-prompts.md" "$WORKSPACE_DIR/.rdd.copilot-prompts.md"
     
     print_success "Workspace initialized successfully for $workspace_type"
     return 0
@@ -188,10 +177,14 @@ backup_workspace() {
         "change.md"
         "fix.md"
         "open-questions.md"
-        "requirements-changes.md"
         "clarity-checklist.md"
-        ".current-change"
     )
+    
+    # Add config files (.rdd.fix.* or .rdd.enh.*)
+    local config_file=$(find_change_config "$WORKSPACE_DIR")
+    if [ -n "$config_file" ]; then
+        files_to_backup+=("$(basename "$config_file")")
+    fi
     
     local backed_up_count=0
     for file in "${files_to_backup[@]}"; do
@@ -297,26 +290,12 @@ clear_workspace_forced() {
         return 0
     fi
     
-    # Remove workspace files but keep directory structure
-    local files_to_remove=(
-        "change.md"
-        "fix.md"
-        "open-questions.md"
-        "requirements-changes.md"
-        "clarity-checklist.md"
-        ".current-change"
-        "copilot-prompts.md"
-        "log.jsonl"
-    )
+    # Remove all files and subdirectories in workspace, but keep the workspace directory itself
+    # This ensures everything is cleaned up, not just a hardcoded list
+    find "$WORKSPACE_DIR" -mindepth 1 -delete
+    debug_print "Removed all contents from $WORKSPACE_DIR"
     
-    for file in "${files_to_remove[@]}"; do
-        if [ -f "$WORKSPACE_DIR/$file" ]; then
-            rm "$WORKSPACE_DIR/$file"
-            debug_print "Removed $file"
-        fi
-    done
-    
-    # Remove backup directory
+    # Remove backup directory if it exists
     if [ -d "$BACKUP_DIR" ]; then
         rm -rf "$BACKUP_DIR"
         debug_print "Removed backup directory"
@@ -355,7 +334,7 @@ copy_template() {
     local dest_dir=$(dirname "$destination")
     ensure_dir "$dest_dir"
     
-    # Check if destination already exists
+        # Check if destination already exists
     if [ -f "$destination" ]; then
         print_warning "Destination file already exists: $destination"
         if ! confirm_action "Overwrite existing file?"; then
@@ -370,72 +349,9 @@ copy_template() {
     return 0
 }
 
-# Create requirements-changes.md template in workspace
-# Usage: create_requirements_changes_template
-# Returns: 0 on success
-create_requirements_changes_template() {
-    local dest_file="$WORKSPACE_DIR/requirements-changes.md"
-    
-    if [ -f "$dest_file" ]; then
-        debug_print "requirements-changes.md already exists"
-        return 0
-    fi
-    
-    cat > "$dest_file" << 'EOFREQ'
-# Requirements Changes
-
-> This file documents changes to be made to the main requirements.md file.
-> Each statement is prefixed with [ADDED|MODIFIED|DELETED] to indicate the type of change.
-
-## Format Guidelines
-
-- **[ADDED]**: New requirement not present in current requirements.md
-  - **Format**: `[ADDED] Title: Description` (NO ID - will be auto-assigned during wrap-up)
-  - IDs are auto-assigned from highest existing ID per section during wrap-up
-  - Example: `- **[ADDED] User Authentication**: System shall require OAuth2 login`
-  - **Do NOT specify IDs for ADDED requirements** - prevents conflicts with parallel development
-
-- **[MODIFIED]**: Change to an existing requirement from requirements.md
-  - **Format**: `[MODIFIED] [EXISTING-ID] Title: New description`
-  - MUST include the existing requirement ID from requirements.md (e.g., [FR-05])
-  - Example: `- **[MODIFIED] [FR-05] Data Export**: Change from "CSV only" to "CSV, JSON, and XML formats"`
-
-- **[DELETED]**: Requirement to be removed from requirements.md
-  - **Format**: `[DELETED] [EXISTING-ID] Title: Reason for deletion`
-  - MUST include the existing requirement ID from requirements.md
-  - Example: `- **[DELETED] [NFR-03] Legacy Support**: No longer needed after v2.0 migration`
-
-**Important**: During wrap-up, an ID mapping file (.id-mapping.txt) will be created documenting final assigned IDs
-
----
-
-## General Functionalities
-
-<!-- Add general functionality changes here -->
-
----
-
-## Functional Requirements
-
-<!-- Add functional requirement changes here -->
-
----
-
-## Non-Functional Requirements
-
-<!-- Add non-functional requirement changes here -->
-
----
-
-## Technical Requirements
-
-<!-- Add technical requirement changes here -->
-
-EOFREQ
-    
-    print_success "Created requirements-changes.md template"
-    return 0
-}
+# ============================================================================
+# WORKSPACE STATUS AND INFORMATION
+# ============================================================================
 
 # ============================================================================
 # WORKSPACE INSPECTION
@@ -499,13 +415,14 @@ get_workspace_status() {
         fi
         
         # Check for current change config
-        if [ -f "$WORKSPACE_DIR/.current-change" ]; then
+        local config_file=$(find_change_config "$WORKSPACE_DIR")
+        if [ -n "$config_file" ] && [ -f "$config_file" ]; then
             echo ""
             print_info "Current change configuration:"
             if command -v jq &> /dev/null; then
-                cat "$WORKSPACE_DIR/.current-change" | jq .
+                cat "$config_file" | jq .
             else
-                cat "$WORKSPACE_DIR/.current-change"
+                cat "$config_file"
             fi
         fi
     else
@@ -541,7 +458,6 @@ export -f restore_workspace
 export -f clear_workspace
 export -f clear_workspace_forced
 export -f copy_template
-export -f create_requirements_changes_template
 export -f check_workspace_exists
 export -f list_workspace_files
 export -f get_workspace_status

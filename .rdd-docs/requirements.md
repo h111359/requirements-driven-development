@@ -23,15 +23,15 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 # Functional Requirements
 
 - **[FR-03] Flat Workspace Structure**: The system shall store all active workspace files directly in .rdd-docs/workspace/ without enhancement-specific subfolders
-- **[FR-04] Current Change Detection**: The system shall use a .current-change JSON configuration file in workspace to track the active change with fields: changeName, changeId, branchName, changeType, startedAt, phase, status
-- **[FR-05] Workspace Initialization**: A script shall initialize workspace with: change.md, clarity-checklist.md, open-questions.md, requirements-changes.md, and .current-change
+- **[FR-04] Current Change Detection**: The system shall use a configuration file named .rdd.[fix|enh].<branch-name> in workspace to mark visually the current working branch
+- **[FR-05] Workspace Initialization**: A script shall initialize workspace with:  .rdd.copilot-prompts.md
 - **[FR-06] Clean Main Branch Workspace**: When on main branch, workspace shall be empty or contain only standard template content to clearly indicate no active development
 - **[FR-07] Clarity Checklist Usage**: The clarification prompt shall use .rdd-docs/workspace/clarity-checklist.md as a checklist to identify unclear requirements
 - **[FR-08] Structured Questioning**: The prompt shall ask questions with predefined answer options (A, B, C, D) while allowing custom "Other" responses
 - **[FR-09] Question Formatting Standards**: All prompts shall follow guidelines from .rdd/templates/questions-formatting.md for user-friendly questioning
 - **[FR-10] Open Questions Tracking**: The system shall maintain open-questions.md with status markers: [ ] open, [?] partial, [x] answered
 - **[FR-11] [DELETED]
-- **[FR-12] Requirements Changes Documentation**: The system shall document requirement changes in requirements-changes.md with [ADDED|MODIFIED|DELETED] prefixes
+- **[FR-12] [DELETED]
 - **[FR-13] Clarification Script Actions**: The clarify-changes.sh script shall support actions: init, log-clarification, copy-taxonomy, backup, restore, get-current, clear, validate
 - **[FR-14] Wrap-Up Script Actions**: The wrap-up.sh script shall support actions: merge-requirements, archive-workspace, full-wrap-up, validate-merge, preview-merge, get-change-id, sync-main
 - **[FR-15] Script Parameter Execution**: Scripts shall accept parameters for predictable execution from prompts without user interaction
@@ -55,12 +55,15 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-33] User Notification on Conflicts**: The system shall notify the user if merge conflicts are detected and instruct them to resolve conflicts manually before proceeding
 - **[FR-34] Sync Validation**: The system shall validate that the merge from main completed successfully before proceeding with requirements merge
 - **[FR-35] Archive Directory Structure**: The system shall create .rdd-docs/archive/<change-id>/ directories for each completed change
-- **[FR-36] Complete Workspace Archive**: The system shall archive all workspace files: change.md, open-questions.md, requirements-changes.md, clarity-checklist.md, .id-mapping.txt
-- **[FR-37] Archive Metadata**: The system shall create .archive-info file with archivedAt timestamp, changeId, and archivedBy fields
+- **[FR-36] Complete Workspace Archive**: The system shall archive all workspace files from .rdd-docs/workspace/ preserving the complete state at time of archiving
+- **[FR-37] Archive Metadata**: The system shall create .archive-metadata file with archivedAt timestamp, branch name, archivedBy, lastCommit, and lastCommitMessage fields
 - **[FR-38] Workspace Preservation**: The system shall preserve workspace content during archiving (copy, not move) until explicitly cleared
 - **[FR-39] Branch-Workspace Alignment**: The system shall align workspace content with the current git branch
 - **[FR-40] Main Branch Fetch**: The wrap-up process shall fetch the latest changes from origin/main before synchronization
 - **[FR-41] Latest Requirements Maintenance**: The .rdd-docs/requirements.md shall always reflect the latest committed state from main branch after wrap-up synchronization
+- **[FR-42] Complete Workspace Clearing**: The system shall remove all files and subdirectories from .rdd-docs/workspace/ when clearing workspace after archiving, ensuring no files remain from previous work
+- **[FR-43] Config File Naming Convention**: The system shall name workspace config files using the pattern .rdd.[type].[branch-name] where type is either 'fix' or 'enh' and branch-name matches the git branch name
+
 # Non-Functional Requirements
 
 - **[NFR-03] Developer Experience**: The framework shall provide smooth developer experience, minimizing technical overhead for requirement clarification

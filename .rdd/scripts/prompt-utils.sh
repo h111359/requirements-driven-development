@@ -20,17 +20,17 @@ WORKSPACE_DIR="$REPO_ROOT/.rdd-docs/workspace"
 # PROMPT COMPLETION FUNCTIONS
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# Mark a stand-alone prompt as completed in copilot-prompts.md
+# Mark a stand-alone prompt as completed in .rdd.copilot-prompts.md
 # Changes checkbox from "- [ ]" to "- [x]" using sed
 # Arguments:
 #   $1 - prompt_id: The ID of the prompt (e.g., P001, P002)
-#   $2 - journal_file: Path to copilot-prompts.md (optional, defaults to workspace copilot-prompts.md)
+#   $2 - journal_file: Path to .rdd.copilot-prompts.md (optional, defaults to workspace .rdd.copilot-prompts.md)
 # Returns:
 #   0 on success
 #   1 on error (missing prompt ID, file not found, prompt not found)
 mark_prompt_completed() {
     local prompt_id="$1"
-    local journal_file="${2:-$WORKSPACE_DIR/copilot-prompts.md}"
+    local journal_file="${2:-$WORKSPACE_DIR/.rdd.copilot-prompts.md}"
     
     # Validate prompt ID is provided
     if [ -z "$prompt_id" ]; then
@@ -41,7 +41,7 @@ mark_prompt_completed() {
     
     # Check if journal file exists
     if [ ! -f "$journal_file" ]; then
-        print_error "copilot-prompts.md not found at: $journal_file"
+        print_error ".rdd.copilot-prompts.md not found at: $journal_file"
         return 1
     fi
     
@@ -51,7 +51,7 @@ mark_prompt_completed() {
             print_warning "Prompt $prompt_id is already marked as completed"
             return 0
         else
-            print_error "Prompt $prompt_id not found in copilot-prompts.md"
+            print_error "Prompt $prompt_id not found in .rdd.copilot-prompts.md"
             return 1
         fi
     fi
@@ -143,10 +143,10 @@ export -f log_prompt_execution
 # PROMPT LISTING AND FILTERING
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# List prompts from copilot-prompts.md filtered by status
+# List prompts from .rdd.copilot-prompts.md filtered by status
 # Arguments:
 #   $1 - status: Filter by status ('unchecked', 'checked', 'all')
-#   $2 - journal_file: Path to copilot-prompts.md (optional, defaults to workspace copilot-prompts.md)
+#   $2 - journal_file: Path to .rdd.copilot-prompts.md (optional, defaults to workspace .rdd.copilot-prompts.md)
 # Returns:
 #   0 on success
 #   1 on error (invalid status, file not found)
@@ -154,7 +154,7 @@ export -f log_prompt_execution
 #   Lists prompt IDs and titles matching the filter
 list_prompts() {
     local status="${1:-all}"
-    local journal_file="${2:-$WORKSPACE_DIR/copilot-prompts.md}"
+    local journal_file="${2:-$WORKSPACE_DIR/.rdd.copilot-prompts.md}"
     
     # Validate status parameter
     if [[ ! "$status" =~ ^(unchecked|checked|all)$ ]]; then
@@ -165,7 +165,7 @@ list_prompts() {
     
     # Check if journal file exists
     if [ ! -f "$journal_file" ]; then
-        print_error "copilot-prompts.md not found at: $journal_file"
+        print_error ".rdd.copilot-prompts.md not found at: $journal_file"
         return 1
     fi
     

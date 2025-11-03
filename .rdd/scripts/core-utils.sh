@@ -189,12 +189,40 @@ validate_dir_exists() {
 # CONFIGURATION FUNCTIONS
 # ============================================================================
 
+# ============================================================================
+# CONFIGURATION FILE HELPERS
+# ============================================================================
+
+# Find the change config file in workspace
+# Returns: path to config file or empty string if not found
+find_change_config() {
+    local workspace_dir="${1:-.rdd-docs/workspace}"
+    
+    # Look for .rdd.fix.* or .rdd.enh.* files
+    local config_file=$(find "$workspace_dir" -maxdepth 1 -name ".rdd.fix.*" -o -name ".rdd.enh.*" 2>/dev/null | head -n 1)
+    
+    if [ -n "$config_file" ] && [ -f "$config_file" ]; then
+        echo "$config_file"
+        return 0
+    fi
+    
+    return 1
+}
+
 # Get configuration value from config file
 # Usage: get_config "key" "/path/to/config.json"
 # Returns: configuration value or empty string if not found
 get_config() {
     local key="$1"
-    local config_file="${2:-.rdd-docs/workspace/.current-change}"
+    local config_file="$2"
+    
+    # If no config file specified, try to find it
+    if [ -z "$config_file" ]; then
+        config_file=$(find_change_config ".rdd-docs/workspace")
+        if [ -z "$config_file" ]; then
+            return 1
+        fi
+    fi
     
     if [ ! -f "$config_file" ]; then
         return 1
@@ -215,11 +243,20 @@ get_config() {
 set_config() {
     local key="$1"
     local value="$2"
-    local config_file="${3:-.rdd-docs/workspace/.current-change}"
+    local config_file="$3"
     
     if [ -z "$key" ] || [ -z "$value" ]; then
         print_error "Key and value are required for set_config"
         return 1
+    fi
+    
+    # If no config file specified, try to find it
+    if [ -z "$config_file" ]; then
+        config_file=$(find_change_config ".rdd-docs/workspace")
+        if [ -z "$config_file" ]; then
+            print_error "No change config file found"
+            return 1
+        fi
     fi
     
     # Create config file if it doesn't exist
@@ -421,6 +458,7 @@ export -f validate_name
 export -f validate_branch_name
 export -f validate_file_exists
 export -f validate_dir_exists
+export -f find_change_config
 export -f get_config
 export -f set_config
 export -f exit_with_error
