@@ -423,7 +423,7 @@ merge_main_into_current() {
             print_error "Merge conflicts detected!"
             echo ""
             print_warning "Conflicts found in:"
-            git diff --name-only --diff-filter=U | while read -r file; do
+            git ls-files -u | cut -f2 | sort -u | while read -r file; do
                 echo "  - $file"
             done
             echo ""
@@ -470,7 +470,10 @@ update_from_main() {
     if ! pull_main; then
         print_error "Failed to pull latest ${default_branch}. Aborting."
         # Try to restore stash
-        restore_stashed_changes
+        if ! restore_stashed_changes; then
+            print_error "Also failed to restore stashed changes"
+            print_warning "Your changes are safely in the stash. Run 'git stash list' to see them."
+        fi
         return 1
     fi
     
