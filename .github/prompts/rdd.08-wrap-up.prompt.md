@@ -164,6 +164,14 @@ There is nothing to archive. This may indicate:
 Do you want to continue anyway? (Y/N)
 ```
 
+If user responds "Y":
+- Skip archive step (S05) and proceed to S06 with no files to commit
+- The commit may be empty or skip entirely
+
+If user responds "N":
+- Display: "Wrap-up cancelled."
+- Exit gracefully
+
 **If archive directory already exists:**
 ```
 ⚠️ Archive directory already exists: .rdd-docs/archive/[sanitized-branch-name]
