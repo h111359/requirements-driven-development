@@ -45,7 +45,6 @@ The RDD methodology organizes project documentation in the `.rdd-docs/` director
 ├── version-control.md      # Version control strategy
 ├── clarity-checklist.md     # Requirements clarification checklist
 ├── workspace/              # Current active work
-│   └── change.md          # Active change documentation
 └── archive/               # Historical changes
     ├── <change-name>/     # Archived change directories
     └── fixes/            # Bug fixes archive
@@ -55,9 +54,8 @@ The RDD methodology organizes project documentation in the `.rdd-docs/` director
 
 1. **Document Requirements**: Define clear requirements in `requirements.md`
 2. **Technical Design**: Document architecture and design in `tech-spec.md`
-3. **Work on Changes**: Track current work in `workspace/change.md`
-4. **Archive Completed Work**: Move completed changes to `archive/`
-5. **Maintain Documentation**: Keep all documentation synchronized with code changes
+3. **Archive Completed Work**: Move completed changes to `archive/`
+4. **Maintain Documentation**: Keep all documentation synchronized with code changes
 
 ## Contributing
 

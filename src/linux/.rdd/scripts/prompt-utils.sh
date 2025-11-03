@@ -245,7 +245,7 @@ validate_prompt_status() {
     
     # Check if journal file exists
     if [ ! -f "$journal_file" ]; then
-        print_error ".rdd.copilot-prompts.md not found at: $journal_file"
+        print_error "copilot-prompts.md not found at: $journal_file"
         return 3
     fi
     
