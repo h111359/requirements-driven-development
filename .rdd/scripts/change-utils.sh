@@ -284,22 +284,46 @@ wrap_up_change() {
     
     print_banner "CHANGE WRAP-UP WORKFLOW"
     
+    # Check for uncommitted changes
+    print_step "1. Checking for uncommitted changes"
+    if ! check_uncommitted_changes; then
+        return 1
+    fi
+    print_success "No uncommitted changes found"
+    echo ""
+    
     # Extract change type and name from branch
     local change_type="${current_branch%%/*}"
     local change_info="${current_branch#*/}"
     
+    # Display wrap-up plan
+    print_info "This will perform the following actions:"
+    echo ""
+    echo "  1. Move workspace content to .rdd-docs/archive/${current_branch//\//-}"
+    echo "  2. Create commit with message: 'archive: moved workspace to archive'"
+    echo "  3. Push changes to remote branch"
+    echo ""
+    
+    # Ask for user confirmation
+    if ! confirm_action "Proceed with wrap-up?"; then
+        print_info "Wrap-up cancelled by user"
+        return 0
+    fi
+    echo ""
+    
     # Archive workspace
-    print_step "1. Archiving workspace contents"
+    print_step "2. Archiving workspace contents"
     local archive_relative
     if ! archive_relative=$(archive_workspace "$current_branch" false); then
         print_error "Failed to archive workspace"
         return 1
     fi
     print_success "Workspace archived to $archive_relative"
+    echo ""
     
     # Create wrap-up commit
-    print_step "2. Creating wrap-up commit"
-    local commit_message="${change_type}: ${change_info} wrap-up"
+    print_step "3. Creating wrap-up commit"
+    local commit_message="archive: moved workspace to archive"
     
     git add -A
     if git diff --cached --quiet; then
@@ -312,9 +336,10 @@ wrap_up_change() {
             return 1
         fi
     fi
+    echo ""
     
     # Push to remote
-    print_step "3. Pushing branch to remote"
+    print_step "4. Pushing branch to remote"
     if push_to_remote "$current_branch"; then
         print_success "Branch pushed to remote"
     else
@@ -322,25 +347,19 @@ wrap_up_change() {
         return 1
     fi
     
-    # Provide manual PR creation instructions
+    # Display completion summary
     echo ""
-    print_banner "NEXT STEPS"
-    local default_branch=$(get_default_branch)
-    local pr_title="${change_type}: ${change_info} wrap-up"
+    print_banner "WRAP-UP COMPLETE"
     echo ""
-    print_info "Changes have been archived and pushed to remote."
-    print_info "Create a pull request manually using one of these methods:"
+    print_success "Workspace archived to: $archive_relative"
+    print_success "Commit created with message: '$commit_message'"
+    print_success "Changes pushed to remote branch: $current_branch"
     echo ""
-    echo "  Option 1 - GitHub CLI:"
-    echo "    gh pr create --base $default_branch --head $current_branch \\"
-    echo "                 --title \"$pr_title\" \\"
-    echo "                 --body \"Wrap-up for $current_branch. Archive: $archive_relative\""
+    print_info "Next Steps:"
+    echo "  1. Create a Pull Request on GitHub to merge your changes"
+    echo "  2. Review and complete the PR process"
+    echo "  3. After merge, you can delete the local and remote branches"
     echo ""
-    echo "  Option 2 - GitHub Web UI:"
-    echo "    Visit: https://github.com/[owner]/[repo]/compare/$current_branch"
-    echo ""
-    
-    print_success "Change wrap-up completed!"
     
     return 0
 }

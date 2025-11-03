@@ -66,6 +66,7 @@ show_branch_help() {
     echo "  create <type> <name>    Create new branch (type: enh|fix)"
     echo "  delete [name] [--force] Delete branch (current if name omitted)"
     echo "  delete-merged           Delete all merged branches"
+    echo "  cleanup [name]          Post-merge cleanup: fetch main, pull, delete branch"
     echo "  status <name>           Check merge status of branch"
     echo "  list [filter]           List branches (optional filter)"
     echo ""
@@ -73,6 +74,7 @@ show_branch_help() {
     echo "  rdd.sh branch create enh my-enhancement"
     echo "  rdd.sh branch delete my-old-branch"
     echo "  rdd.sh branch delete-merged"
+    echo "  rdd.sh branch cleanup enh/20241101-1234-my-enhancement"
     echo "  rdd.sh branch status enh/20241101-1234-my-enhancement"
 }
 
@@ -207,11 +209,17 @@ show_git_help() {
     echo "  modified-files    List modified files"
     echo "  file-diff <file>  Show diff for specific file"
     echo "  push              Push current branch to remote"
+    echo "  update-from-main  Update current branch from main"
+    echo "  stash             Stash uncommitted changes"
+    echo "  restore-stash     Restore stashed changes"
+    echo "  pull-main         Pull latest main branch"
+    echo "  merge-main        Merge main into current branch"
     echo ""
     echo "Examples:"
     echo "  rdd.sh git compare"
     echo "  rdd.sh git modified-files"
     echo "  rdd.sh git file-diff README.md"
+    echo "  rdd.sh git update-from-main"
 }
 
 # ============================================================================
@@ -244,6 +252,9 @@ route_branch() {
             ;;
         delete-merged)
             delete_merged_branches
+            ;;
+        cleanup)
+            cleanup_after_merge "$1"
             ;;
         status)
             if [ -z "$1" ]; then
@@ -765,6 +776,21 @@ route_git() {
         push)
             local branch_name=$(get_current_branch)
             push_to_remote "$branch_name"
+            ;;
+        update-from-main)
+            update_from_main
+            ;;
+        stash)
+            stash_changes
+            ;;
+        restore-stash)
+            restore_stashed_changes
+            ;;
+        pull-main)
+            pull_main
+            ;;
+        merge-main)
+            merge_main_into_current
             ;;
         --help|-h)
             show_git_help
