@@ -778,13 +778,215 @@ route_git() {
 }
 
 # ============================================================================
+# INTERACTIVE MENU
+# ============================================================================
+
+show_interactive_menu() {
+    clear
+    print_banner "RDD Framework - Interactive Menu"
+    echo ""
+    echo "Select an action to perform:"
+    echo ""
+    
+    # Define menu options with domain and action
+    local -a menu_options=(
+        "Create a new change (enhancement)"
+        "Create a new fix"
+        "Wrap up current change/fix"
+        "Initialize workspace"
+        "Archive workspace"
+        "Create a new branch"
+        "List branches"
+        "Delete branch"
+        "Validate requirements"
+        "Merge requirements"
+        "Compare with main branch"
+        "Show version"
+        "View help"
+        "Exit"
+    )
+    
+    # Define corresponding commands for each menu option
+    local -a menu_commands=(
+        "change create"
+        "fix init"
+        "change wrap-up"
+        "workspace init"
+        "workspace archive"
+        "branch create"
+        "branch list"
+        "branch delete"
+        "requirements validate"
+        "requirements merge"
+        "git compare"
+        "--version"
+        "--help"
+        "exit"
+    )
+    
+    PS3=$'\n\033[0;36m▶\033[0m Enter your choice (1-'"${#menu_options[@]}): "
+    
+    select opt in "${menu_options[@]}"; do
+        if [ -n "$opt" ]; then
+            echo ""
+            print_info "Selected: $opt"
+            echo ""
+            
+            # Get the index of the selected option (REPLY is 1-based)
+            local idx=$((REPLY - 1))
+            local cmd="${menu_commands[$idx]}"
+            
+            # Handle special cases
+            case "$cmd" in
+                "exit")
+                    print_success "Exiting RDD Framework"
+                    return 0
+                    ;;
+                "--version")
+                    show_version
+                    echo ""
+                    read -p "Press Enter to continue..."
+                    show_interactive_menu
+                    return 0
+                    ;;
+                "--help")
+                    show_main_help
+                    echo ""
+                    read -p "Press Enter to continue..."
+                    show_interactive_menu
+                    return 0
+                    ;;
+                "change create")
+                    # Interactive change creation
+                    route_change "create"
+                    echo ""
+                    read -p "Press Enter to return to menu..."
+                    show_interactive_menu
+                    return 0
+                    ;;
+                "fix init")
+                    # Prompt for fix name
+                    echo "Enter fix name:"
+                    read -p "> " fix_name
+                    if [ -n "$fix_name" ]; then
+                        route_fix "init" "$fix_name"
+                    else
+                        print_error "Fix name cannot be empty"
+                    fi
+                    echo ""
+                    read -p "Press Enter to return to menu..."
+                    show_interactive_menu
+                    return 0
+                    ;;
+                "workspace init")
+                    # Prompt for workspace type
+                    echo "Select workspace type:"
+                    select ws_type in "change" "fix"; do
+                        if [ -n "$ws_type" ]; then
+                            route_workspace "init" "$ws_type"
+                            break
+                        fi
+                    done
+                    echo ""
+                    read -p "Press Enter to return to menu..."
+                    show_interactive_menu
+                    return 0
+                    ;;
+                "branch create")
+                    # Prompt for branch details
+                    echo "Select branch type:"
+                    select br_type in "enh" "fix"; do
+                        if [ -n "$br_type" ]; then
+                            echo "Enter branch name:"
+                            read -p "> " br_name
+                            if [ -n "$br_name" ]; then
+                                route_branch "create" "$br_type" "$br_name"
+                            else
+                                print_error "Branch name cannot be empty"
+                            fi
+                            break
+                        fi
+                    done
+                    echo ""
+                    read -p "Press Enter to return to menu..."
+                    show_interactive_menu
+                    return 0
+                    ;;
+                "branch delete")
+                    # Prompt for branch name
+                    echo "Enter branch name to delete (leave empty for current):"
+                    read -p "> " br_name
+                    route_branch "delete" "$br_name"
+                    echo ""
+                    read -p "Press Enter to return to menu..."
+                    show_interactive_menu
+                    return 0
+                    ;;
+                "requirements merge")
+                    # Ask for dry-run option
+                    echo "Perform dry-run? (y/n)"
+                    read -p "> " dry_run_choice
+                    if [[ "$dry_run_choice" =~ ^[Yy] ]]; then
+                        route_requirements "merge" "--dry-run"
+                    else
+                        route_requirements "merge"
+                    fi
+                    echo ""
+                    read -p "Press Enter to return to menu..."
+                    show_interactive_menu
+                    return 0
+                    ;;
+                *)
+                    # Execute the command directly
+                    local domain="${cmd%% *}"
+                    local action="${cmd#* }"
+                    if [ "$domain" = "$action" ]; then
+                        # Single word command
+                        case "$domain" in
+                            "change"|"workspace"|"branch"|"requirements"|"git")
+                                route_${domain} "${action}"
+                                ;;
+                        esac
+                    else
+                        # Domain action command
+                        case "$domain" in
+                            "change")
+                                route_change "$action"
+                                ;;
+                            "workspace")
+                                route_workspace "$action"
+                                ;;
+                            "branch")
+                                route_branch "$action"
+                                ;;
+                            "requirements")
+                                route_requirements "$action"
+                                ;;
+                            "git")
+                                route_git "$action"
+                                ;;
+                        esac
+                    fi
+                    echo ""
+                    read -p "Press Enter to return to menu..."
+                    show_interactive_menu
+                    return 0
+                    ;;
+            esac
+        else
+            print_error "Invalid selection. Please try again."
+        fi
+    done
+}
+
+# ============================================================================
 # MAIN ENTRY POINT
 # ============================================================================
 
 main() {
-    # Handle no arguments
+    # Handle no arguments - show interactive menu
     if [ $# -eq 0 ]; then
-        show_main_help
+        show_interactive_menu
         return 0
     fi
     
