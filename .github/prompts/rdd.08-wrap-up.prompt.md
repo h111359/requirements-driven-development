@@ -5,191 +5,41 @@ Complete and finalize a development task by archiving the workspace, committing 
 
 ## Instructions
 
-**S01: Display Banner**
+**S01: Execute Wrap-Up**
 
-Display:
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   RDD FRAMEWORK - Branch Wrap-Up
-   
-   → Archive workspace content
-   → Commit and push changes
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
+Determine the current branch type and execute the appropriate wrap-up command:
 
-**S02: Check for Uncommitted Changes**
-
-Check git status:
+For enhancement branches (starting with `enh/`):
 ```bash
-git status --short
+./.rdd/scripts/rdd.sh change wrap-up
 ```
 
-If there are uncommitted changes (output is not empty):
-- Display error message: "⚠️ There are uncommitted changes in the repository."
-- Display: "Please commit or stash your changes before proceeding with wrap-up."
-- Show the uncommitted changes using `git status`
-- **STOP** - Do not proceed further
-
-If no uncommitted changes (output is empty), continue to S03.
-
-**S03: Display Wrap-Up Plan**
-
-Display:
-```markdown
-## 📋 Wrap-Up Plan
-
-This will perform the following actions:
-
-1. ✓ Move workspace content to `.rdd-docs/archive/[sanitized-branch-name]` (slashes replaced with hyphens)
-2. ✓ Create commit with message: "archive: moved workspace to archive"
-3. ✓ Push changes to remote branch
-
-Current branch: [display current branch name]
-Archive destination: .rdd-docs/archive/[sanitized-branch-name] (e.g., "fix-20231103-issue-123")
-```
-
-**S04: Request User Confirmation**
-
-Ask:
-```
-**Please confirm to proceed: (Y/N)**
-```
-
-If user responds with "N" or "n" or "no":
-- Display: "Wrap-up cancelled by user."
-- Exit gracefully
-
-If user responds with "Y" or "y" or "yes":
-- Continue to S05
-
-**S05: Execute Archive Workspace**
-
-Get current branch name:
+For fix branches (starting with `fix/`):
 ```bash
-git branch --show-current
+./.rdd/scripts/rdd.sh fix wrap-up
 ```
 
-Execute:
-```bash
-rdd.sh workspace archive
-```
+The script will:
+1. Check for uncommitted changes (stops if any exist)
+2. Display wrap-up plan
+3. Ask for user confirmation
+4. Archive workspace to `.rdd-docs/archive/[sanitized-branch-name]`
+5. Create commit with message: "archive: moved workspace to archive"
+6. Push changes to remote branch
+7. Display completion summary with next steps
 
-This will:
-- Move all workspace content to `.rdd-docs/archive/[sanitized-branch-name]` (slashes replaced with hyphens)
-- Clear the workspace directory
-- Display progress and feedback
+**S02: Follow Next Steps**
 
-Display result:
-```
-✓ Workspace archived to: .rdd-docs/archive/[sanitized-branch-name]
-```
-
-**S06: Create Commit**
-
-Execute:
-```bash
-git add -A
-git commit -m "archive: moved workspace to archive"
-```
-
-Display:
-```
-✓ Commit created: "archive: moved workspace to archive"
-```
-
-If commit fails (no changes to commit):
-- Display: "ℹ️ No changes to commit (archive may already be up to date)"
-- Continue to S07
-
-**S07: Push to Remote**
-
-Execute:
-```bash
-rdd.sh git push
-```
-
-Display result:
-```
-✓ Changes pushed to remote branch
-```
-
-If push fails:
-- Display error: "✗ Failed to push to remote"
-- Display: "Please check your network connection and permissions"
-- Display: "You can manually push later with: git push"
-
-**S08: Display Completion Summary**
-
-Display:
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   ✓ WRAP-UP COMPLETE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-## Summary
-
-✓ Workspace archived to: .rdd-docs/archive/[sanitized-branch-name]
-✓ Commit created with message: "archive: moved workspace to archive"
-✓ Changes pushed to remote branch: [current-branch]
-
-## Next Steps
-
+After the wrap-up completes, follow the displayed instructions to:
 1. Create a Pull Request on GitHub to merge your changes
 2. Review and complete the PR process
-3. After merge, you can delete the local and remote branches
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-## Error Handling
-
-**If not on a feature/fix branch:**
-```
-⚠️ Wrap-up must be executed from a feature or fix branch
-Current branch: [current-branch]
-
-Please switch to a feature or fix branch before running wrap-up.
-```
-
-**If workspace directory is empty:**
-```
-⚠️ Workspace directory is empty or does not exist
-Location: .rdd-docs/workspace
-
-There is nothing to archive. This may indicate:
-- The workspace was already archived
-- No work was done in the workspace
-- Wrong branch or directory
-
-Do you want to continue anyway? (Y/N)
-```
-
-If user responds "Y":
-- Skip archive step (S05) and proceed to S06 with no files to commit
-- The commit may be empty or skip entirely
-
-If user responds "N":
-- Display: "Wrap-up cancelled."
-- Exit gracefully
-
-**If archive directory already exists:**
-```
-⚠️ Archive directory already exists: .rdd-docs/archive/[sanitized-branch-name]
-
-This may indicate the workspace was already archived.
-
-Options:
-- (O) Overwrite existing archive
-- (C) Cancel wrap-up
-
-Your choice:
-```
+3. After merge, delete the local and remote branches if desired
 
 ## Notes
 
-- This prompt ensures all workspace content is properly archived before finalizing
-- The commit message "archive: moved workspace to archive" is standardized for consistency
-- User confirmation prevents accidental wrap-up execution
+- The script validates you're on an enhancement or fix branch
+- User confirmation prevents accidental execution
+- All workspace content is properly archived with branch-specific naming
+- The commit message is standardized for consistency across the project
 - Clear feedback is provided at each step
-- Wrap-up can be safely re-run if it fails partway through
 
