@@ -32,7 +32,6 @@ repo-root/
 │   │   ├── core-utils.sh         # Common utility functions
 │   │   └── ...                   # Other utility scripts
 │   └── templates/                # File templates for initialization
-│       ├── change.md             # Enhancement template
 │       ├── fix.md                # Fix template
 │       ├── copilot-prompts.md    # Stand-alone prompts template
 │       ├── requirements.md       # Requirements document template
@@ -45,7 +44,6 @@ repo-root/
 │   │   ├── .rdd.[fix|enh].[branch-name]  # Change config file (one per workspace)
 │   │   ├── .rdd.copilot-prompts.md       # Stand-alone prompts checklist
 │   │   ├── log.jsonl                      # Execution log
-│   │   ├── change.md or fix.md            # Work description (based on type)
 │   │   └── ...                            # Other workflow files
 │   ├── archive/                  # Archived completed changes
 │   │   └── [sanitized-branch-name]/      # One directory per archived change

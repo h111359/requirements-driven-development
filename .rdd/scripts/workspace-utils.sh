@@ -60,9 +60,7 @@ init_workspace() {
     ensure_dir "$WORKSPACE_DIR"
     
     # Copy main template based on type
-    if [ "$workspace_type" = "change" ]; then
-        copy_template "change.md" "$WORKSPACE_DIR/change.md"
-    else
+    if [ "$workspace_type" = "fix" ]; then
         copy_template "fix.md" "$WORKSPACE_DIR/fix.md"
     fi
     
@@ -174,7 +172,6 @@ backup_workspace() {
     
     # Backup key files
     local files_to_backup=(
-        "change.md"
         "fix.md"
         "open-questions.md"
         "clarity-checklist.md"

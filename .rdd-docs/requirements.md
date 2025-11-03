@@ -70,7 +70,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[NFR-04] Visual Clarity**: Scripts shall use color-coded output (info: blue, success: green, warning: yellow, error: red) for clarity
 - **[NFR-05] Progress Indication**: Multi-step processes shall display progress indicators (e.g., "Step 2/3", "Clarification [1/N]")
 - **[NFR-06] Clear Error Messages**: Error messages shall include specific problem description and suggested remediation steps
-- **[NFR-07] Immutable Change File**: The original change.md file shall never be modified by prompts or scripts
+- **[NFR-07] DELETED
 - **[NFR-08] Separate Concerns**: Questions tracking (open-questions.md) and requirements changes (requirements-changes.md) shall be in separate files
 - **[NFR-09] Template-Based Files**: New files shall be generated from templates in .rdd/templates/ for consistency
 - **[NFR-10] Version Documentation**: All prompts shall include version number and last updated date
@@ -86,7 +86,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 
 - **[TR-03] JSON Configuration**: The .current-change file shall use JSON format for machine and human readability
 - **[TR-04] DELETED
-- **[TR-05] Markdown Documentation**: All documentation files (change.md, open-questions.md, requirements-changes.md) shall use Markdown format
+- **[TR-05] DELETED
 - **[TR-06] Bash Scripts**: All automation scripts shall be implemented in Bash for cross-platform Linux/Mac compatibility
 - **[TR-07] Exit on Error**: Scripts shall use `set -e` to exit immediately on command failure
 - **[TR-08] JQ Dependency**: Scripts may use jq for JSON parsing with fallback to basic text processing if unavailable

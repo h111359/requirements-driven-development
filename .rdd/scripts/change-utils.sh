@@ -114,8 +114,7 @@ create_change() {
     echo "  - Workspace: .rdd-docs/workspace/"
     echo ""
     print_info "Next steps:"
-    echo "  1. Edit .rdd-docs/workspace/change.md with your change details"
-    echo "  2. Run clarification prompt: Use .github/prompts/rdd.02-clarify-requirements.prompt.md"
+    echo "  1. Run clarification prompt: Use .github/prompts/rdd.02-clarify-requirements.prompt.md"
     
     return 0
 }
