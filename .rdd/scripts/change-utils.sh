@@ -92,7 +92,12 @@ create_change() {
     
     # Initialize workspace
     print_info "Initializing workspace..."
-    init_workspace "$change_type" || return 1
+    # Map 'enh' to 'change' for workspace initialization
+    local workspace_type="$change_type"
+    if [ "$change_type" = "enh" ]; then
+        workspace_type="change"
+    fi
+    init_workspace "$workspace_type" || return 1
     
     # Initialize change tracking files
     print_info "Initializing change tracking..."
