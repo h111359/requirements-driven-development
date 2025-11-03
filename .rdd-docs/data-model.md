@@ -225,7 +225,30 @@ JSONL (JSON Lines) - one JSON object per line
 
 ### Config File Discovery
 
-Scripts use the `find_change_config()` helper function to locate the active config file:
+Scripts use the `find_change_config()` (Bash) or `Find-ChangeConfig` (PowerShell) helper function to locate the active config file:
 - Searches for files matching `.rdd.fix.*` or `.rdd.enh.*` pattern
 - Returns the first matching file found
 - Used throughout the RDD framework for change tracking
+
+## Platform-Specific Implementations
+
+### Script Locations
+
+- **Linux/macOS**: `src/linux/.rdd/scripts/*.sh` (Bash)
+- **Windows**: `src/windows/.rdd/scripts/*.ps1` (PowerShell)
+- **Legacy**: `.rdd/scripts/*.sh` (this repo scripts)
+
+### Script Files
+
+Both platforms include identical functionality across these scripts:
+
+1. **rdd.{sh|ps1}** - Main entry point with domain routing
+2. **core-utils.{sh|ps1}** - Common utility functions
+3. **git-utils.{sh|ps1}** - Git operations
+4. **branch-utils.{sh|ps1}** - Branch management
+5. **workspace-utils.{sh|ps1}** - Workspace operations
+6. **requirements-utils.{sh|ps1}** - Requirements handling
+7. **change-utils.{sh|ps1}** - Change workflow
+8. **clarify-utils.{sh|ps1}** - Clarification phase
+9. **prompt-utils.{sh|ps1}** - Prompt management
+

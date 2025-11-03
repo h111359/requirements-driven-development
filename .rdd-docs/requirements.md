@@ -24,7 +24,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 
 - **[FR-03] Flat Workspace Structure**: The system shall store all active workspace files directly in .rdd-docs/workspace/ without enhancement-specific subfolders
 - **[FR-04] Current Change Detection**: The system shall use a configuration file named .rdd.[fix|enh].<branch-name> in workspace to mark visually the current working branch
-- **[FR-05] Workspace Initialization**: A script shall initialize workspace with:  .rdd.copilot-prompts.md
+- **[FR-05] Workspace Initialization**: A script shall initialize workspace with: .rdd.copilot-prompts.md
 - **[FR-06] Clean Main Branch Workspace**: When on main branch, workspace shall be empty or contain only standard template content to clearly indicate no active development
 - **[FR-07] Clarity Checklist Usage**: The clarification prompt shall use .rdd-docs/workspace/clarity-checklist.md as a checklist to identify unclear requirements
 - **[FR-08] Structured Questioning**: The prompt shall ask questions with predefined answer options (A, B, C, D) while allowing custom "Other" responses
@@ -63,6 +63,8 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-41] Latest Requirements Maintenance**: The .rdd-docs/requirements.md shall always reflect the latest committed state from main branch after wrap-up synchronization
 - **[FR-42] Complete Workspace Clearing**: The system shall remove all files and subdirectories from .rdd-docs/workspace/ when clearing workspace after archiving, ensuring no files remain from previous work
 - **[FR-43] Config File Naming Convention**: The system shall name workspace config files using the pattern .rdd.[type].[branch-name] where type is either 'fix' or 'enh' and branch-name matches the git branch name
+- **[FR-44] Unified Script Entry Point**: All RDD operations shall be accessible through the main rdd.sh (Linux) or rdd.ps1 (Windows) script with domain-based command routing, replacing standalone fix-management.sh functionality
+- **[FR-45] No change.md in Workspace**: The workspace initialization shall NOT create a change.md file, as this template has been removed from the framework
 
 # Non-Functional Requirements
 
@@ -108,3 +110,5 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[TR-24] Fix Branch Management Script**: The framework shall provide a Bash script to automate fix branch creation, documentation, validation, wrap-up, and cleanup.
 - **[TR-25] Requirements Analysis Script**: The framework shall provide a Bash script to automate requirements analysis, file comparison, and impact detection.
 - **[TR-26] Merged Branch Deletion Tool**: The framework shall provide an interactive Bash script for cleaning up merged git branches, supporting both local and remote deletion.
+- **[TR-27] PowerShell Script Support**: The framework shall provide PowerShell (.ps1) equivalents of all Bash scripts for Windows compatibility, maintaining identical functionality and structure.
+- **[TR-28] Cross-Platform Script Organization**: Linux/Bash scripts shall be stored in `src/linux/.rdd/scripts/` and Windows/PowerShell scripts in `src/windows/.rdd/scripts/`, with parallel folder structures for templates and prompts.

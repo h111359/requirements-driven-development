@@ -21,8 +21,8 @@ repo-root/
 │   │   ├── rdd.07-update-docs.prompt.md
 │   │   └── rdd.08-wrap-up.prompt.md
 │   └── copilot-instructions.md   # Copilot agent behavioral guidelines
-├── .rdd/                         # RDD framework internals
-│   ├── scripts/                  # Automation scripts for RDD workflows
+├── .rdd/                         # RDD framework internals (legacy location)
+│   ├── scripts/                  # Automation scripts (being migrated to src/)
 │   │   ├── rdd.sh                # Main entry point for RDD commands
 │   │   ├── change-utils.sh       # Change/fix creation and management
 │   │   ├── workspace-utils.sh    # Workspace initialization and archiving
@@ -31,19 +31,51 @@ repo-root/
 │   │   ├── core-utils.sh         # Common utility functions
 │   │   └── ...                   # Other utility scripts
 │   └── templates/                # File templates for initialization
-│       ├── fix.md                # Fix template
 │       ├── copilot-prompts.md    # Stand-alone prompts template
 │       ├── requirements.md       # Requirements document template
 │       ├── tech-spec.md          # Technical specification template
 │       ├── data-model.md         # Data model template
 │       ├── folder-structure.md   # Folder structure template
-│       └── ...                   # Other templates
+│       └── ...                   # Other templates (change.md removed)
+├── src/                          # Platform-specific script implementations
+│   ├── linux/                    # Linux/macOS implementation
+│   │   ├── .rdd/
+│   │   │   ├── scripts/          # Bash scripts (.sh)
+│   │   │   │   ├── rdd.sh        # Main entry point
+│   │   │   │   ├── core-utils.sh
+│   │   │   │   ├── git-utils.sh
+│   │   │   │   ├── branch-utils.sh
+│   │   │   │   ├── workspace-utils.sh
+│   │   │   │   ├── requirements-utils.sh
+│   │   │   │   ├── change-utils.sh
+│   │   │   │   ├── clarify-utils.sh
+│   │   │   │   └── prompt-utils.sh
+│   │   │   ├── templates/        # Linux-specific templates
+│   │   ├── .prompts/
+│   │   │   └── prompts/          # Linux-specific prompts
+│   │   └── ...
+│   └── windows/                  # Windows implementation
+│       ├── .rdd/
+│       │   ├── scripts/          # PowerShell scripts (.ps1)
+│       │   │   ├── rdd.ps1       # Main entry point
+│       │   │   ├── core-utils.ps1
+│       │   │   ├── git-utils.ps1
+│       │   │   ├── branch-utils.ps1
+│       │   │   ├── workspace-utils.ps1
+│       │   │   ├── requirements-utils.ps1
+│       │   │   ├── change-utils.ps1
+│       │   │   ├── clarify-utils.ps1
+│       │   │   └── prompt-utils.ps1
+│       │   ├── templates/        # Windows-specific templates
+│   │   ├── .prompts/
+│       │   └── prompts/          # Windows-specific prompts
+│       └── ...
 ├── .rdd-docs/                    # RDD documentation and workspace
 │   ├── workspace/                # Active development workspace
 │   │   ├── .rdd.[fix|enh].[branch-name]  # Change config file (one per workspace)
 │   │   ├── .rdd.copilot-prompts.md       # Stand-alone prompts checklist
 │   │   ├── log.jsonl                      # Execution log
-│   │   └── ...                            # Other workflow files
+│   │   └── ...                            # Other workflow files (NOT change.md)
 │   ├── archive/                  # Archived completed changes
 │   │   └── [sanitized-branch-name]/      # One directory per archived change
 │   │       ├── .archive-metadata          # Archive metadata (JSON)
@@ -80,6 +112,7 @@ repo-root/
 - Documentation files (`clarity-checklist.md`, `version-control.md`) are NOT automatically copied to workspace
 - Template files are only copied when explicitly needed by workflow
 - Workspace remains minimal with only essential working files
+- **change.md template removed**: The `change.md` file is no longer created during workspace initialization
 
 ### 4. Complete Workspace Clearing
 - After archiving, ALL files are removed from workspace (not just a hardcoded list)
@@ -91,13 +124,25 @@ repo-root/
 - Named using sanitized branch name (slashes → hyphens)
 - Include metadata file with timestamp, author, and commit info
 
+### 6. Cross-Platform Script Support
+- **Linux/macOS**: Bash scripts (`.sh`) in `src/linux/.rdd/scripts/`
+- **Windows**: PowerShell scripts (`.ps1`) in `src/windows/.rdd/scripts/`
+- Identical functionality across platforms
+- Parallel folder structures for templates and prompts
+
+### 7. Unified Command Interface
+- All RDD operations accessible through `rdd.sh` (Linux) or `rdd.ps1` (Windows)
+- Domain-based routing: `rdd.{sh|ps1} <domain> <action> [options]`
+- Replaces standalone scripts like ~~`fix-management.sh`~~ (deprecated)
+
 ## 📝 RDD Workflow File Locations
 
 ### Prompts
 All workflow prompts in: `.github/prompts/rdd.*.prompt.md`
 
 ### Scripts
-All automation in: `.rdd/scripts/*.sh`
+All automation in: `.rdd/scripts/*.sh` (legacy)  
+Platform-specific: `src/linux/.rdd/scripts/*.sh` or `src/windows/.rdd/scripts/*.ps1`
 
 ### Templates
 All file templates in: `.rdd/templates/*.md`
