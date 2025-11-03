@@ -320,19 +320,24 @@ stash_changes() {
 restore_stashed_changes() {
     print_step "Restoring stashed changes..."
     
-    # Check if there are any stashes
-    if ! git stash list | grep -q "RDD auto-stash"; then
+    # Check if there are any RDD auto-stashes
+    local stash_index=$(git stash list | grep -n "RDD auto-stash" | head -n 1 | cut -d: -f1)
+    
+    if [ -z "$stash_index" ]; then
         print_warning "No RDD auto-stash found"
         return 2
     fi
     
-    # Pop the most recent RDD auto-stash
-    if git stash pop 2>&1; then
+    # Calculate the actual stash index (0-based)
+    local actual_index=$((stash_index - 1))
+    
+    # Pop the specific RDD auto-stash
+    if git stash pop "stash@{${actual_index}}" 2>&1; then
         print_success "Stashed changes restored successfully"
         return 0
     else
         print_error "Failed to restore stashed changes"
-        print_warning "Changes are still in stash. Use 'git stash pop' manually."
+        print_warning "Changes are still in stash. Use 'git stash list' to see stashes and 'git stash pop' manually."
         return 1
     fi
 }
@@ -349,29 +354,48 @@ pull_main() {
     
     print_step "Pulling latest changes from origin/${default_branch}..."
     
-    # First fetch
+    # First fetch from origin
     if ! git fetch origin "$default_branch" --quiet 2>/dev/null; then
         print_error "Failed to fetch from origin/${default_branch}"
         return 1
     fi
     
-    # Update local main branch reference
-    if ! git fetch origin "${default_branch}:${default_branch}" 2>/dev/null; then
-        # If that fails, try updating if we're on main
-        local current_branch=$(get_current_branch)
-        if [ "$current_branch" = "$default_branch" ]; then
-            if git pull origin "$default_branch" 2>&1; then
-                print_success "Successfully pulled latest ${default_branch}"
-                return 0
-            else
-                print_error "Failed to pull from origin/${default_branch}"
-                return 1
-            fi
+    # Check if local default branch exists
+    if ! git show-ref --verify --quiet "refs/heads/${default_branch}" 2>/dev/null; then
+        # Local branch doesn't exist, create it from origin
+        if git branch "${default_branch}" "origin/${default_branch}" 2>/dev/null; then
+            print_success "Created local ${default_branch} branch from origin"
+            return 0
+        else
+            print_error "Failed to create local ${default_branch} branch"
+            return 1
         fi
     fi
     
-    print_success "Fetched and updated ${default_branch} branch"
-    return 0
+    # Try to update local main branch reference (fast-forward only)
+    local current_branch=$(get_current_branch)
+    if [ "$current_branch" != "$default_branch" ]; then
+        # We're not on main, try to fast-forward the local main branch
+        if git fetch origin "${default_branch}:${default_branch}" 2>/dev/null; then
+            print_success "Updated local ${default_branch} branch"
+            return 0
+        else
+            # Fast-forward failed, probably because of local commits or conflicts
+            # Just ensure we have the latest from origin
+            print_success "Fetched latest from origin/${default_branch}"
+            debug_print "Could not fast-forward local ${default_branch} (may have local commits)"
+            return 0
+        fi
+    else
+        # We're on main, do a regular pull
+        if git pull origin "$default_branch" 2>&1; then
+            print_success "Successfully pulled latest ${default_branch}"
+            return 0
+        else
+            print_error "Failed to pull from origin/${default_branch}"
+            return 1
+        fi
+    fi
 }
 
 # Merge main into current branch
@@ -394,8 +418,8 @@ merge_main_into_current() {
         print_success "Successfully merged ${default_branch} into ${current_branch}"
         return 0
     else
-        # Check if it's a conflict
-        if git status | grep -q "Unmerged paths\|both modified\|both added"; then
+        # Check if it's a conflict using reliable programmatic output
+        if [ -n "$(git ls-files -u)" ]; then
             print_error "Merge conflicts detected!"
             echo ""
             print_warning "Conflicts found in:"
