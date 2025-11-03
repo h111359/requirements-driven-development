@@ -74,6 +74,9 @@ init_workspace() {
         print_warning "clarity-checklist.md not found in .rdd-docs/"
     fi
     
+    # Copy copilot-prompts.md template to workspace
+    copy_template "copilot-prompts.md" "$WORKSPACE_DIR/copilot-prompts.md"
+    
     # Create open-questions.md template
     create_open_questions_template
     
