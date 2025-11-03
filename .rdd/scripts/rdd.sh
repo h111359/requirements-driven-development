@@ -940,33 +940,26 @@ show_interactive_menu() {
                     # Execute the command directly
                     local domain="${cmd%% *}"
                     local action="${cmd#* }"
-                    if [ "$domain" = "$action" ]; then
-                        # Single word command
-                        case "$domain" in
-                            "change"|"workspace"|"branch"|"requirements"|"git")
-                                route_${domain} "${action}"
-                                ;;
-                        esac
-                    else
-                        # Domain action command
-                        case "$domain" in
-                            "change")
-                                route_change "$action"
-                                ;;
-                            "workspace")
-                                route_workspace "$action"
-                                ;;
-                            "branch")
-                                route_branch "$action"
-                                ;;
-                            "requirements")
-                                route_requirements "$action"
-                                ;;
-                            "git")
-                                route_git "$action"
-                                ;;
-                        esac
-                    fi
+                    
+                    # Domain action command
+                    case "$domain" in
+                        "change")
+                            route_change "$action"
+                            ;;
+                        "workspace")
+                            route_workspace "$action"
+                            ;;
+                        "branch")
+                            route_branch "$action"
+                            ;;
+                        "requirements")
+                            route_requirements "$action"
+                            ;;
+                        "git")
+                            route_git "$action"
+                            ;;
+                    esac
+                    
                     echo ""
                     read -p "Press Enter to return to menu..."
                     show_interactive_menu
