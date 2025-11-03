@@ -40,8 +40,20 @@ The main wrapper script that provides domain-based routing to all utility script
 
 **Usage:**
 ```bash
+# Interactive menu (no parameters)
+./rdd.sh
+
+# Command-line mode
 ./rdd.sh <domain> <action> [options]
 ```
+
+**Interactive Menu:**
+When run without parameters, `rdd.sh` displays an interactive ASCII menu with keyboard navigation:
+- 14 menu options covering all major RDD operations
+- Number-based selection (1-14)
+- Visual banner and formatted layout
+- Automatic return to menu after operations
+- Exit option (14)
 
 **Available Domains:**
 - `branch` - Branch management operations
@@ -60,12 +72,19 @@ The main wrapper script that provides domain-based routing to all utility script
 
 **Examples:**
 ```bash
+# Show interactive menu
+./rdd.sh
+
 # Get help for any domain
 ./rdd.sh branch --help
 ./rdd.sh change --help
 
 # Show main help
 ./rdd.sh --help
+
+# Use specific commands directly
+./rdd.sh change create
+./rdd.sh branch list
 ```
 
 ---
@@ -553,6 +572,86 @@ Standalone general operations script (can be called directly or via rdd.sh).
 ./general.sh preview-requirements-merge
 ./general.sh merge-requirements-changes --dry-run
 ```
+
+---
+
+## Interactive Menu
+
+### Overview
+
+Running `rdd.sh` without parameters launches an interactive terminal menu that provides easy access to all RDD operations.
+
+### Features
+
+- **Keyboard Navigation**: Select options using numbers (1-14) and press Enter
+- **Visual Layout**: Formatted ASCII banner and organized menu options
+- **Interactive Prompts**: Some options will prompt for additional input when needed
+- **Return to Menu**: After each operation, press Enter to return to the menu
+- **Exit Option**: Choose option 14 to exit the menu
+
+### Menu Options
+
+The interactive menu provides access to:
+
+1. **Create a new change (enhancement)** - Interactive change creation workflow
+2. **Create a new fix** - Create a bug fix with prompts for details
+3. **Wrap up current change/fix** - Complete and archive the current work
+4. **Initialize workspace** - Set up workspace for change or fix
+5. **Archive workspace** - Archive current workspace with options
+6. **Create a new branch** - Create enhancement or fix branch
+7. **List branches** - Display all local branches
+8. **Delete branch** - Remove a branch with optional force flag
+9. **Validate requirements** - Check requirements-changes.md format
+10. **Merge requirements** - Merge changes with optional dry-run
+11. **Compare with main branch** - Show detailed comparison
+12. **Show version** - Display RDD Framework version
+13. **View help** - Show main help documentation
+14. **Exit** - Exit the interactive menu
+
+### Usage Example
+
+```bash
+# Launch interactive menu
+./rdd.sh
+
+# You'll see:
+# ╔════════════════════════════════════════════════════════════╗
+# ║              RDD Framework - Interactive Menu              ║
+# ╚════════════════════════════════════════════════════════════╝
+#
+# Select an action to perform:
+#
+# 1) Create a new change (enhancement)    8) Delete branch
+# 2) Create a new fix                     9) Validate requirements
+# 3) Wrap up current change/fix          10) Merge requirements
+# 4) Initialize workspace                11) Compare with main branch
+# 5) Archive workspace                   12) Show version
+# 6) Create a new branch                 13) View help
+# 7) List branches                       14) Exit
+#
+# ▶ Enter your choice (1-14):
+
+# Enter a number (e.g., 12 for version)
+# The corresponding action will execute
+# Press Enter to return to the menu
+```
+
+### Interactive Options
+
+Some menu options will prompt for additional information:
+
+- **Option 2 (Create a new fix)**: Prompts for fix name
+- **Option 4 (Initialize workspace)**: Prompts to select "change" or "fix"
+- **Option 6 (Create a new branch)**: Prompts for branch type and name
+- **Option 8 (Delete branch)**: Prompts for branch name (optional)
+- **Option 10 (Merge requirements)**: Asks if dry-run should be performed
+
+### Compatibility
+
+The interactive menu is compatible with:
+- **Bash 4.0+**
+- **Zsh** (common terminal emulators)
+- **Linux**, **macOS**, and **WSL** environments
 
 ---
 
