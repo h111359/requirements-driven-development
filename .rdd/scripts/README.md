@@ -306,7 +306,6 @@ Change workflow orchestration (enhancements and fixes).
 
 #### Change Tracking
 - `init_change_tracking <id> <branch> <type>` - Initialize tracking files
-  - Creates clarification-log.jsonl
   - Creates open-questions.md
   - Creates requirements-changes.md
   - Copies clarity-checklist.md
@@ -349,7 +348,6 @@ Clarification phase management.
 - `init_clarification` - Initialize clarification phase
   - Copies taxonomy to workspace
   - Creates open-questions.md
-  - Initializes clarification-log.jsonl
   - Updates phase in .current-change
 
 #### Clarification Logging
@@ -360,7 +358,6 @@ Clarification phase management.
   - Default sessionId: "clarify-YYYYMMDD-HHmm"
 
 #### Template Management
-- `create_open_questions_template` - Create open-questions.md template
 - `copy_taxonomy` - Copy clarity-checklist.md to workspace
 
 #### Clarification Inspection

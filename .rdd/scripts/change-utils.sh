@@ -136,7 +136,7 @@ export -f create_change
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # Initialize change tracking files
-# Creates: clarification-log.jsonl, open-questions.md, requirements-changes.md
+# Creates: open-questions.md, requirements-changes.md
 # Arguments:
 #   $1 - change_id: The change ID (YYYYMMDD-HHmm-name format)
 #   $2 - branch_name: The branch name (enh/fix/change-id)
@@ -156,16 +156,6 @@ init_change_tracking() {
         echo "Usage: init_change_tracking <change-id> <branch-name> <change-type>"
         return 1
     fi
-    
-    # Initialize clarification-log.jsonl
-    local timestamp=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-    cat > "$WORKSPACE_DIR/clarification-log.jsonl" << EOF
-{"timestamp":"$timestamp","question":"Change created","answer":"New change '${change_name}' (${change_type}) initialized in workspace","answeredBy":"system","sessionId":"init-${change_id}"}
-EOF
-    print_success "Initialized clarification-log.jsonl"
-    
-    # Initialize open-questions.md using clarify-utils
-    create_open_questions_template || return 1
     
     # Initialize requirements-changes.md
     cat > "$WORKSPACE_DIR/requirements-changes.md" << 'EOFREQ'
