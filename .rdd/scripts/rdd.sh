@@ -18,7 +18,6 @@ source "$SCRIPT_DIR/branch-utils.sh"
 source "$SCRIPT_DIR/requirements-utils.sh"
 source "$SCRIPT_DIR/clarify-utils.sh"
 source "$SCRIPT_DIR/prompt-utils.sh"
-source "$SCRIPT_DIR/pr-utils.sh"
 source "$SCRIPT_DIR/change-utils.sh"
 
 # ============================================================================

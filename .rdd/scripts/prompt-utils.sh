@@ -234,7 +234,7 @@ export -f list_prompts
 #   Prints prompt status message
 validate_prompt_status() {
     local prompt_id="$1"
-    local journal_file="${2:-$WORKSPACE_DIR/copilot-prompts.md}"
+    local journal_file="${2:-$WORKSPACE_DIR/.rdd.copilot-prompts.md}"
     
     # Validate prompt ID is provided
     if [ -z "$prompt_id" ]; then

@@ -500,54 +500,6 @@ list_prompts "all"
 
 ---
 
-### `pr-utils.sh`
-
-Pull request management (requires GitHub CLI).
-
-**Key Functions:**
-
-#### GitHub CLI Check
-- `check_gh_cli` - Check if GitHub CLI is available and authenticated
-
-#### PR Creation
-- `create_pr <branch> <title> <body> [draft]` - Create pull request
-  - `draft`: "true" to create as draft (default: false)
-  - Requires GitHub CLI (gh)
-  - Returns manual command if gh not available
-
-#### PR Updates
-- `update_pr <number> <updates_json>` - Update existing PR
-  - Updates JSON format: `{"title":"...","body":"..."}`
-  - Example: `update_pr 123 '{"title":"New Title"}'`
-
-#### PR Workflow
-- `pr_workflow <branch> <archive_path>` - Complete PR workflow automation
-
-**Examples:**
-```bash
-source .rdd/scripts/pr-utils.sh
-
-# Check if gh CLI is available
-if check_gh_cli; then
-    echo "GitHub CLI is available"
-fi
-
-# Create PR
-create_pr "enh/20251102-1430-my-enhancement" \
-          "enh: Add user authentication" \
-          "This PR implements OAuth2 login functionality" \
-          false
-
-# Create draft PR
-create_pr "enh/20251102-1430-my-enhancement" \
-          "enh: WIP user authentication" \
-          "Work in progress" \
-          true
-
-# Update PR
-update_pr 123 '{"title":"Updated Title","body":"Updated description"}'
-```
-
 
 ## Interactive Menu
 
@@ -741,7 +693,6 @@ rdd.sh (main entry point)
   ├── change-utils.sh (depends on: core-utils.sh, git-utils.sh, branch-utils.sh, workspace-utils.sh, clarify-utils.sh)
   ├── requirements-utils.sh (depends on: core-utils.sh, git-utils.sh)
   ├── prompt-utils.sh (depends on: core-utils.sh)
-  └── pr-utils.sh (depends on: core-utils.sh, git-utils.sh)
 ```
 
 ### Design Principles
