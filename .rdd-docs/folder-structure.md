@@ -26,7 +26,6 @@ repo-root/
 │   │   ├── rdd.sh                # Main entry point for RDD commands
 │   │   ├── change-utils.sh       # Change/fix creation and management
 │   │   ├── workspace-utils.sh    # Workspace initialization and archiving
-│   │   ├── fix-management.sh     # Fix-specific operations
 │   │   ├── prompt-utils.sh       # Prompt execution helpers
 │   │   ├── git-utils.sh          # Git operations
 │   │   ├── core-utils.sh         # Common utility functions

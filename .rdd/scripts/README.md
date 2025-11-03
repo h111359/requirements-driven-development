@@ -548,32 +548,6 @@ create_pr "enh/20251102-1430-my-enhancement" \
 update_pr 123 '{"title":"Updated Title","body":"Updated description"}'
 ```
 
----
-
-### `general.sh`
-
-Standalone general operations script (can be called directly or via rdd.sh).
-
-**Key Actions:**
-
-- `get-modified-files` - Get list of modified files compared to main
-- `get-file-changes <file>` - Get diff of specific file compared to main
-- `analyze-requirements-impact` - Analyze how changes affect requirements
-- `compare-with-main` - Show comprehensive comparison with main branch
-- `merge-requirements-changes [--dry-run] [--backup]` - Merge requirements
-- `preview-requirements-merge` - Preview merge (no changes)
-
-**Examples:**
-```bash
-# Call directly
-./general.sh get-modified-files
-./general.sh get-file-changes src/main.py
-./general.sh compare-with-main
-./general.sh preview-requirements-merge
-./general.sh merge-requirements-changes --dry-run
-```
-
----
 
 ## Interactive Menu
 
