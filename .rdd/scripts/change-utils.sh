@@ -78,19 +78,6 @@ create_change() {
         print_success "Created .rdd-docs folder"
     fi
     
-    # Check for required files in .rdd-docs/ and copy templates if missing
-    local required_files=(requirements.md tech-spec.md data-model.md folder-structure.md version-control.md clarity-checklist.md)
-    for file in "${required_files[@]}"; do
-        if [ ! -f "$REPO_ROOT/.rdd-docs/$file" ]; then
-            if [ -f "$TEMPLATE_DIR/$file" ]; then
-                cp "$TEMPLATE_DIR/$file" "$REPO_ROOT/.rdd-docs/$file"
-                print_success "Copied template for missing $file to .rdd-docs/$file"
-            else
-                print_warning "Template not found: $TEMPLATE_DIR/$file"
-            fi
-        fi
-    done
-    
     # Switch to main, pull latest, create new branch
     print_info "Switching to main branch..."
     local default_branch=$(get_default_branch)
@@ -154,12 +141,6 @@ init_change_tracking() {
         print_error "Missing required parameters for change tracking initialization"
         echo "Usage: init_change_tracking <change-id> <branch-name> <change-type>"
         return 1
-    fi
-    
-    # Copy clarity-checklist.md to workspace if available
-    if [ -f "$REPO_ROOT/.rdd-docs/clarity-checklist.md" ]; then
-        cp "$REPO_ROOT/.rdd-docs/clarity-checklist.md" "$WORKSPACE_DIR/clarity-checklist.md"
-        print_success "Copied clarity-checklist.md to workspace"
     fi
     
     return 0

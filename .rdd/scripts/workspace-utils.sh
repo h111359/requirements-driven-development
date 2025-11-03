@@ -66,14 +66,6 @@ init_workspace() {
         copy_template "fix.md" "$WORKSPACE_DIR/fix.md"
     fi
     
-    # Copy clarity-checklist.md to workspace
-    if [ -f ".rdd-docs/clarity-checklist.md" ]; then
-        cp ".rdd-docs/clarity-checklist.md" "$WORKSPACE_DIR/clarity-checklist.md"
-        print_success "Copied clarity-checklist.md to workspace"
-    else
-        print_warning "clarity-checklist.md not found in .rdd-docs/"
-    fi
-    
     # Copy copilot-prompts.md template to workspace with new name
     copy_template "copilot-prompts.md" "$WORKSPACE_DIR/.rdd.copilot-prompts.md"
     
