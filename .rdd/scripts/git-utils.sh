@@ -355,20 +355,23 @@ pull_main() {
         return 1
     fi
     
-    # Check if we're already on main
-    local current_branch=$(get_current_branch)
-    if [ "$current_branch" = "$default_branch" ]; then
-        if git pull origin "$default_branch" 2>&1; then
-            print_success "Successfully pulled latest ${default_branch}"
-            return 0
-        else
-            print_error "Failed to pull from origin/${default_branch}"
-            return 1
+    # Update local main branch reference
+    if ! git fetch origin "${default_branch}:${default_branch}" 2>/dev/null; then
+        # If that fails, try updating if we're on main
+        local current_branch=$(get_current_branch)
+        if [ "$current_branch" = "$default_branch" ]; then
+            if git pull origin "$default_branch" 2>&1; then
+                print_success "Successfully pulled latest ${default_branch}"
+                return 0
+            else
+                print_error "Failed to pull from origin/${default_branch}"
+                return 1
+            fi
         fi
-    else
-        print_success "Fetched latest ${default_branch} (not on ${default_branch} branch)"
-        return 0
     fi
+    
+    print_success "Fetched and updated ${default_branch} branch"
+    return 0
 }
 
 # Merge main into current branch
@@ -384,11 +387,11 @@ merge_main_into_current() {
         return 1
     fi
     
-    print_step "Merging origin/${default_branch} into ${current_branch}..."
+    print_step "Merging ${default_branch} into ${current_branch}..."
     
     # Attempt merge
-    if git merge "origin/${default_branch}" --no-edit 2>&1; then
-        print_success "Successfully merged origin/${default_branch} into ${current_branch}"
+    if git merge "${default_branch}" --no-edit 2>&1; then
+        print_success "Successfully merged ${default_branch} into ${current_branch}"
         return 0
     else
         # Check if it's a conflict
