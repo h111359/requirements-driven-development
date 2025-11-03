@@ -40,12 +40,12 @@ Display:
 
 This will perform the following actions:
 
-1. ✓ Move workspace content to `.rdd-docs/archive/{branch-name}`
+1. ✓ Move workspace content to `.rdd-docs/archive/[sanitized-branch-name]` (slashes replaced with hyphens)
 2. ✓ Create commit with message: "archive: moved workspace to archive"
 3. ✓ Push changes to remote branch
 
 Current branch: [display current branch name]
-Archive destination: .rdd-docs/archive/[sanitized-branch-name]
+Archive destination: .rdd-docs/archive/[sanitized-branch-name] (e.g., "fix-20231103-issue-123")
 ```
 
 **S04: Request User Confirmation**
@@ -71,17 +71,17 @@ git branch --show-current
 
 Execute:
 ```bash
-./.rdd/scripts/rdd.sh workspace archive
+rdd.sh workspace archive
 ```
 
 This will:
-- Move all workspace content to `.rdd-docs/archive/{branch-name}`
+- Move all workspace content to `.rdd-docs/archive/[sanitized-branch-name]` (slashes replaced with hyphens)
 - Clear the workspace directory
 - Display progress and feedback
 
 Display result:
 ```
-✓ Workspace archived to: .rdd-docs/archive/[branch-name]
+✓ Workspace archived to: .rdd-docs/archive/[sanitized-branch-name]
 ```
 
 **S06: Create Commit**
@@ -105,7 +105,7 @@ If commit fails (no changes to commit):
 
 Execute:
 ```bash
-./.rdd/scripts/rdd.sh git push
+rdd.sh git push
 ```
 
 Display result:
@@ -128,7 +128,7 @@ Display:
 
 ## Summary
 
-✓ Workspace archived to: .rdd-docs/archive/[branch-name]
+✓ Workspace archived to: .rdd-docs/archive/[sanitized-branch-name]
 ✓ Commit created with message: "archive: moved workspace to archive"
 ✓ Changes pushed to remote branch: [current-branch]
 
@@ -166,7 +166,7 @@ Do you want to continue anyway? (Y/N)
 
 **If archive directory already exists:**
 ```
-⚠️ Archive directory already exists: .rdd-docs/archive/[branch-name]
+⚠️ Archive directory already exists: .rdd-docs/archive/[sanitized-branch-name]
 
 This may indicate the workspace was already archived.
 
