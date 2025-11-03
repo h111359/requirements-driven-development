@@ -209,11 +209,17 @@ show_git_help() {
     echo "  modified-files    List modified files"
     echo "  file-diff <file>  Show diff for specific file"
     echo "  push              Push current branch to remote"
+    echo "  update-from-main  Update current branch from main"
+    echo "  stash             Stash uncommitted changes"
+    echo "  restore-stash     Restore stashed changes"
+    echo "  pull-main         Pull latest main branch"
+    echo "  merge-main        Merge main into current branch"
     echo ""
     echo "Examples:"
     echo "  rdd.sh git compare"
     echo "  rdd.sh git modified-files"
     echo "  rdd.sh git file-diff README.md"
+    echo "  rdd.sh git update-from-main"
 }
 
 # ============================================================================
@@ -770,6 +776,21 @@ route_git() {
         push)
             local branch_name=$(get_current_branch)
             push_to_remote "$branch_name"
+            ;;
+        update-from-main)
+            update_from_main
+            ;;
+        stash)
+            stash_changes
+            ;;
+        restore-stash)
+            restore_stashed_changes
+            ;;
+        pull-main)
+            pull_main
+            ;;
+        merge-main)
+            merge_main_into_current
             ;;
         --help|-h)
             show_git_help
