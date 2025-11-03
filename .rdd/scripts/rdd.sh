@@ -66,6 +66,7 @@ show_branch_help() {
     echo "  create <type> <name>    Create new branch (type: enh|fix)"
     echo "  delete [name] [--force] Delete branch (current if name omitted)"
     echo "  delete-merged           Delete all merged branches"
+    echo "  cleanup [name]          Post-merge cleanup: fetch main, pull, delete branch"
     echo "  status <name>           Check merge status of branch"
     echo "  list [filter]           List branches (optional filter)"
     echo ""
@@ -73,6 +74,7 @@ show_branch_help() {
     echo "  rdd.sh branch create enh my-enhancement"
     echo "  rdd.sh branch delete my-old-branch"
     echo "  rdd.sh branch delete-merged"
+    echo "  rdd.sh branch cleanup enh/20241101-1234-my-enhancement"
     echo "  rdd.sh branch status enh/20241101-1234-my-enhancement"
 }
 
@@ -244,6 +246,9 @@ route_branch() {
             ;;
         delete-merged)
             delete_merged_branches
+            ;;
+        cleanup)
+            cleanup_after_merge "$1"
             ;;
         status)
             if [ -z "$1" ]; then

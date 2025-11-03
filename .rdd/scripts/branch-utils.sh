@@ -324,6 +324,131 @@ delete_merged_branches() {
 }
 
 # ============================================================================
+# POST-MERGE CLEANUP
+# ============================================================================
+
+# Clean up after a branch has been merged
+# Switches to default branch, fetches and pulls latest, deletes the specified merged branch
+# Usage: cleanup_after_merge [branch_name]
+# If branch_name not provided, prompts user to enter it
+# Returns: 0 on success, 1 on failure
+cleanup_after_merge() {
+    local branch_name="$1"
+    
+    check_git_repo
+    
+    print_banner "POST-MERGE CLEANUP"
+    echo ""
+    
+    # Get default branch
+    local default_branch=$(get_default_branch)
+    local current_branch=$(get_current_branch)
+    
+    # If no branch name provided, prompt for it or use current branch
+    if [ -z "$branch_name" ]; then
+        # If we're not on the default branch, offer to delete current branch
+        if [ "$current_branch" != "$default_branch" ]; then
+            print_info "Current branch: $current_branch"
+            if confirm_action "Delete current branch after cleanup?"; then
+                branch_name="$current_branch"
+            else
+                read -p "Enter branch name to delete (or press Enter to skip): " branch_name
+                if [ -z "$branch_name" ]; then
+                    print_info "No branch specified for deletion"
+                    branch_name=""
+                fi
+            fi
+        else
+            read -p "Enter branch name to delete (or press Enter to skip): " branch_name
+            if [ -z "$branch_name" ]; then
+                print_info "No branch specified for deletion"
+            fi
+        fi
+    fi
+    
+    # Switch to default branch
+    print_step "1. Switching to '$default_branch' branch"
+    if [ "$current_branch" != "$default_branch" ]; then
+        git checkout "$default_branch" >/dev/null 2>&1
+        if [ $? -ne 0 ]; then
+            print_error "Failed to checkout '$default_branch'"
+            return 1
+        fi
+        print_success "Switched to '$default_branch'"
+    else
+        print_info "Already on '$default_branch'"
+    fi
+    echo ""
+    
+    # Fetch latest changes
+    print_step "2. Fetching latest changes from remote"
+    git fetch origin >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        print_warning "Failed to fetch from remote"
+    else
+        print_success "Fetched latest changes"
+    fi
+    echo ""
+    
+    # Pull latest changes for default branch
+    print_step "3. Pulling latest changes for '$default_branch'"
+    git pull origin "$default_branch" >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        print_warning "Failed to pull latest changes"
+    else
+        print_success "Pulled latest changes"
+    fi
+    echo ""
+    
+    # Delete the branch if specified
+    if [ -n "$branch_name" ]; then
+        print_step "4. Deleting branch '$branch_name'"
+        
+        # Check if branch exists locally
+        if git show-ref --verify --quiet "refs/heads/$branch_name"; then
+            # Delete local branch
+            if git branch -d "$branch_name" 2>&1; then
+                print_success "Local branch deleted"
+            else
+                print_warning "Branch not fully merged, use --force if needed"
+                if confirm_action "Force delete local branch?"; then
+                    if git branch -D "$branch_name" 2>&1; then
+                        print_success "Local branch force-deleted"
+                    else
+                        print_error "Failed to delete local branch"
+                    fi
+                fi
+            fi
+        else
+            print_info "Local branch does not exist (already deleted)"
+        fi
+        
+        # Check and delete remote branch
+        if git ls-remote --heads origin "$branch_name" 2>/dev/null | grep -q "$branch_name"; then
+            print_info "Deleting remote branch 'origin/$branch_name'..."
+            if git push origin --delete "$branch_name" 2>&1; then
+                print_success "Remote branch deleted"
+            else
+                print_warning "Failed to delete remote branch (may require permissions)"
+            fi
+        else
+            print_info "Remote branch does not exist (already deleted)"
+        fi
+        echo ""
+    fi
+    
+    print_banner "CLEANUP COMPLETE"
+    echo ""
+    print_success "You are now on '$default_branch' with latest changes"
+    if [ -n "$branch_name" ]; then
+        print_success "Branch '$branch_name' has been cleaned up"
+    fi
+    echo ""
+    
+    return 0
+}
+
+# ============================================================================
 # MERGE STATUS CHECKING
 # ============================================================================
 
@@ -553,6 +678,7 @@ branch_exists() {
 export -f create_branch
 export -f delete_branch
 export -f delete_merged_branches
+export -f cleanup_after_merge
 export -f check_merge_status
 export -f list_branches
 export -f get_branch_info

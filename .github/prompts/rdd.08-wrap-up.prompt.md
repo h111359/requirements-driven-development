@@ -33,7 +33,22 @@ The script will:
 After the wrap-up completes, follow the displayed instructions to:
 1. Create a Pull Request on GitHub to merge your changes
 2. Review and complete the PR process
-3. After merge, delete the local and remote branches if desired
+3. After the PR is merged, clean up your local environment:
+
+```bash
+./.rdd/scripts/rdd.sh branch cleanup
+```
+
+This command will:
+- Switch to the main branch
+- Fetch and pull the latest changes from remote
+- Delete the merged feature/fix branch (both local and remote)
+- Display completion summary
+
+Alternatively, if you want to specify the branch name explicitly:
+```bash
+./.rdd/scripts/rdd.sh branch cleanup <branch-name>
+```
 
 ## Notes
 
