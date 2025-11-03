@@ -286,7 +286,202 @@ auto_commit() {
 }
 
 # ============================================================================
-# MERGE STATUS CHECKS
+# STASH OPERATIONS
+# ============================================================================
+
+# Stash uncommitted changes
+# Usage: stash_changes
+# Returns: 0 on success, 1 on failure
+stash_changes() {
+    print_step "Stashing uncommitted changes..."
+    
+    # Check if there are any changes to stash
+    if git diff-index --quiet HEAD -- 2>/dev/null && [ -z "$(git ls-files --others --exclude-standard)" ]; then
+        print_info "No uncommitted changes to stash"
+        return 0
+    fi
+    
+    # Create stash with timestamp
+    local stash_message="RDD auto-stash $(date '+%Y-%m-%d %H:%M:%S')"
+    
+    if git stash push -u -m "$stash_message" 2>&1; then
+        print_success "Changes stashed successfully"
+        debug_print "Stash message: $stash_message"
+        return 0
+    else
+        print_error "Failed to stash changes"
+        return 1
+    fi
+}
+
+# Restore stashed changes
+# Usage: restore_stashed_changes
+# Returns: 0 on success, 1 on failure, 2 if no stash found
+restore_stashed_changes() {
+    print_step "Restoring stashed changes..."
+    
+    # Check if there are any stashes
+    if ! git stash list | grep -q "RDD auto-stash"; then
+        print_warning "No RDD auto-stash found"
+        return 2
+    fi
+    
+    # Pop the most recent RDD auto-stash
+    if git stash pop 2>&1; then
+        print_success "Stashed changes restored successfully"
+        return 0
+    else
+        print_error "Failed to restore stashed changes"
+        print_warning "Changes are still in stash. Use 'git stash pop' manually."
+        return 1
+    fi
+}
+
+# ============================================================================
+# MERGE AND SYNC OPERATIONS
+# ============================================================================
+
+# Pull latest changes from main branch
+# Usage: pull_main
+# Returns: 0 on success, 1 on failure
+pull_main() {
+    local default_branch=$(get_default_branch)
+    
+    print_step "Pulling latest changes from origin/${default_branch}..."
+    
+    # First fetch
+    if ! git fetch origin "$default_branch" --quiet 2>/dev/null; then
+        print_error "Failed to fetch from origin/${default_branch}"
+        return 1
+    fi
+    
+    # Check if we're already on main
+    local current_branch=$(get_current_branch)
+    if [ "$current_branch" = "$default_branch" ]; then
+        if git pull origin "$default_branch" 2>&1; then
+            print_success "Successfully pulled latest ${default_branch}"
+            return 0
+        else
+            print_error "Failed to pull from origin/${default_branch}"
+            return 1
+        fi
+    else
+        print_success "Fetched latest ${default_branch} (not on ${default_branch} branch)"
+        return 0
+    fi
+}
+
+# Merge main into current branch
+# Usage: merge_main_into_current
+# Returns: 0 on success, 1 on failure (including conflicts)
+merge_main_into_current() {
+    local default_branch=$(get_default_branch)
+    local current_branch=$(get_current_branch)
+    
+    # Safety check: don't merge if we're on main
+    if [ "$current_branch" = "$default_branch" ]; then
+        print_error "Cannot merge ${default_branch} into itself"
+        return 1
+    fi
+    
+    print_step "Merging origin/${default_branch} into ${current_branch}..."
+    
+    # Attempt merge
+    if git merge "origin/${default_branch}" --no-edit 2>&1; then
+        print_success "Successfully merged origin/${default_branch} into ${current_branch}"
+        return 0
+    else
+        # Check if it's a conflict
+        if git status | grep -q "Unmerged paths\|both modified\|both added"; then
+            print_error "Merge conflicts detected!"
+            echo ""
+            print_warning "Conflicts found in:"
+            git diff --name-only --diff-filter=U | while read -r file; do
+                echo "  - $file"
+            done
+            echo ""
+            print_info "Please resolve conflicts manually:"
+            echo "  1. Edit conflicted files"
+            echo "  2. Stage resolved files: git add <file>"
+            echo "  3. Complete merge: git commit"
+            echo ""
+            return 1
+        else
+            print_error "Merge failed for unknown reason"
+            return 1
+        fi
+    fi
+}
+
+# Update current branch from main (full workflow)
+# Usage: update_from_main
+# Returns: 0 on success, 1 on failure
+update_from_main() {
+    local default_branch=$(get_default_branch)
+    local current_branch=$(get_current_branch)
+    
+    print_banner "Update Branch from ${default_branch}"
+    echo ""
+    print_info "Current branch: ${current_branch}"
+    print_info "Target: ${default_branch}"
+    echo ""
+    
+    # Safety check: don't run on main
+    if [ "$current_branch" = "$default_branch" ]; then
+        print_error "Cannot update ${default_branch} from itself"
+        print_info "This command is meant to update feature branches with latest ${default_branch}"
+        return 1
+    fi
+    
+    # Step 1: Stash changes
+    if ! stash_changes; then
+        print_error "Failed to stash changes. Aborting."
+        return 1
+    fi
+    
+    # Step 2: Pull latest main
+    if ! pull_main; then
+        print_error "Failed to pull latest ${default_branch}. Aborting."
+        # Try to restore stash
+        restore_stashed_changes
+        return 1
+    fi
+    
+    # Step 3: Merge main into current branch
+    if ! merge_main_into_current; then
+        print_error "Merge failed. Please resolve conflicts manually."
+        print_warning "Your changes are still stashed. After resolving conflicts:"
+        echo "  1. Complete the merge: git commit"
+        echo "  2. Restore your changes: git stash pop"
+        return 1
+    fi
+    
+    # Step 4: Restore stashed changes
+    local restore_result
+    restore_stashed_changes
+    restore_result=$?
+    
+    if [ $restore_result -eq 0 ]; then
+        echo ""
+        print_banner "Update Complete"
+        print_success "Branch updated from ${default_branch}"
+        print_success "Local changes restored (uncommitted)"
+        return 0
+    elif [ $restore_result -eq 2 ]; then
+        echo ""
+        print_banner "Update Complete"
+        print_success "Branch updated from ${default_branch}"
+        print_info "No stashed changes to restore"
+        return 0
+    else
+        echo ""
+        print_warning "Update complete but failed to restore stash"
+        print_info "Your changes are still in stash. Restore manually with:"
+        echo "  git stash pop"
+        return 1
+    fi
+}
+
 # ============================================================================
 # UTILITY FUNCTIONS
 # ============================================================================
@@ -335,6 +530,11 @@ export -f get_modified_files
 export -f get_file_diff
 export -f push_to_remote
 export -f auto_commit
+export -f stash_changes
+export -f restore_stashed_changes
+export -f pull_main
+export -f merge_main_into_current
+export -f update_from_main
 export -f get_current_branch
 export -f get_git_user
 export -f get_last_commit_sha
