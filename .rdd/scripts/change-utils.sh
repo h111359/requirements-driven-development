@@ -136,7 +136,6 @@ export -f create_change
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # Initialize change tracking files
-# Creates: open-questions.md, requirements-changes.md
 # Arguments:
 #   $1 - change_id: The change ID (YYYYMMDD-HHmm-name format)
 #   $2 - branch_name: The branch name (enh/fix/change-id)
@@ -156,48 +155,6 @@ init_change_tracking() {
         echo "Usage: init_change_tracking <change-id> <branch-name> <change-type>"
         return 1
     fi
-    
-    # Initialize requirements-changes.md
-    cat > "$WORKSPACE_DIR/requirements-changes.md" << 'EOFREQ'
-# Requirements Changes
-
-> This file documents changes to be made to the main requirements.md file.
-> Each statement is prefixed with [ADDED|MODIFIED|DELETED] to indicate the type of change.
->
-> **For detailed formatting guidelines, see:** `.rdd/templates/requirements-format.md`
-
-## Format Guidelines
-
-- **[ADDED]**: New requirement not present in current requirements.md
-- **[MODIFIED]**: Change to an existing requirement (include the old requirement ID/text for reference)
-- **[DELETED]**: Requirement to be removed from requirements.md
-
----
-
-## General Functionalities
-
-<!-- Add general functionality changes here -->
-
----
-
-## Functional Requirements
-
-<!-- Add functional requirement changes here -->
-
----
-
-## Non-Functional Requirements
-
-<!-- Add non-functional requirement changes here -->
-
----
-
-## Technical Requirements
-
-<!-- Add technical requirement changes here -->
-
-EOFREQ
-    print_success "Created requirements-changes.md template"
     
     # Copy clarity-checklist.md to workspace if available
     if [ -f "$REPO_ROOT/.rdd-docs/clarity-checklist.md" ]; then
@@ -240,9 +197,10 @@ create_change_config() {
         return 1
     fi
     
-    # Create config file
+    # Create config file with new naming convention
     local timestamp=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-    cat > "$WORKSPACE_DIR/.current-change" << EOF
+    local config_filename=".rdd.${change_type}.${branch_name//\//-}"
+    cat > "$WORKSPACE_DIR/$config_filename" << EOF
 {
   "changeName": "${change_name}",
   "changeId": "${change_id}",
@@ -254,7 +212,7 @@ create_change_config() {
 }
 EOF
     
-    print_success "Created .current-change config file"
+    print_success "Created $config_filename config file"
     return 0
 }
 

@@ -98,7 +98,7 @@ init_fix() {
         exit 1
     fi
     
-    cp "$CHANGE_TEMPLATE" "$WORKSPACE_DIR/copilot-prompts.md"
+    cp "$CHANGE_TEMPLATE" "$WORKSPACE_DIR/.rdd.copilot-prompts.md"
     print_success "Template copied to workspace"
     
     # Create and checkout new branch
@@ -138,7 +138,9 @@ archive_fix_workspace() {
 
     # Copy workspace contents
     cp -R "$WORKSPACE_DIR"/. "$archive_path"/
-    rm -f "$archive_path/.current-change"
+    
+    # Remove any config files from archive (they're branch-specific)
+    rm -f "$archive_path"/.rdd.fix.* "$archive_path"/.rdd.enh.*
 
     cat > "$archive_path/.archive-info" << EOF
 {
@@ -304,7 +306,7 @@ cleanup() {
 # Function to mark a stand-alone prompt as completed
 mark_prompt_completed() {
     local prompt_id="$1"
-    local fix_journal="$WORKSPACE_DIR/copilot-prompts.md"
+    local fix_journal="$WORKSPACE_DIR/.rdd.copilot-prompts.md"
     
     if [ -z "$prompt_id" ]; then
         print_error "Prompt ID is required"
@@ -313,7 +315,7 @@ mark_prompt_completed() {
     fi
     
     if [ ! -f "$fix_journal" ]; then
-        print_error "copilot-prompts.md not found at: $fix_journal"
+        print_error ".rdd.copilot-prompts.md not found at: $fix_journal"
         exit 1
     fi
     
@@ -323,7 +325,7 @@ mark_prompt_completed() {
             print_warning "Prompt $prompt_id is already marked as completed"
             return 0
         else
-            print_error "Prompt $prompt_id not found in copilot-prompts.md"
+            print_error "Prompt $prompt_id not found in .rdd.copilot-prompts.md"
             exit 1
         fi
     fi
@@ -403,7 +405,7 @@ usage() {
     echo "  wrap-up                      - Archive workspace, commit, push, and create PR"
     echo "  push                         - Push branch to remote"
     echo "  cleanup                      - Delete branch and workspace"
-    echo "  mark-prompt-completed <id>   - Mark a stand-alone prompt as completed in copilot-prompts.md"
+    echo "  mark-prompt-completed <id>   - Mark a stand-alone prompt as completed in .rdd.copilot-prompts.md"
     echo "  log-prompt-execution <id> \"<details>\" [session-id] - Log prompt execution details to log.jsonl"
     echo ""
     echo "Examples:"

@@ -57,14 +57,14 @@ init_clarification() {
     fi
     echo ""
      
-    # Update phase in .current-change if it exists
-    local current_change_file="$WORKSPACE_DIR/.current-change"
-    if [ -f "$current_change_file" ]; then
+    # Update phase in change config file if it exists
+    local current_change_file=$(find_change_config "$WORKSPACE_DIR")
+    if [ -n "$current_change_file" ] && [ -f "$current_change_file" ]; then
         if command -v jq &> /dev/null; then
             local tmp=$(mktemp)
             jq '.phase = "clarify"' "$current_change_file" > "$tmp"
             mv "$tmp" "$current_change_file"
-            print_success "Updated phase to 'clarify' in .current-change"
+            print_success "Updated phase to 'clarify' in change config"
         else
             debug_print "jq not available, skipping phase update"
         fi
