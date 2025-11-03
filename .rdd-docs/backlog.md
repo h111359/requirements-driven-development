@@ -8,7 +8,7 @@ This file defines user stories, features, and tasks for GitHub Copilot to use as
 
 #### Overview:
 
-**Status:** OPEN
+**Status:** CLOSED
 **Created by:** h111359
 **Created at:** 2025-10-31
 
@@ -36,7 +36,7 @@ This file defines user stories, features, and tasks for GitHub Copilot to use as
 
 #### Overview:
 
-**Status:** OPEN
+**Status:** CLOSED
 **Created by:** h111359
 **Created at:** 2025-11-02
 
@@ -82,5 +82,32 @@ This file defines user stories, features, and tasks for GitHub Copilot to use as
 >
 > - The template journal.md to be renamed to copilot-prompts.md
 > - All the references to journal.md in the files in .github/prompts/, .rdd/scripts/, .rdd/templates, .rdd-docs/ to be changed to copilot-prompts.md
+
+
+### Issue 18: clarification taxonomy to checklist
+
+#### Overview:
+
+**Status:** OPEN
+**Created by:** h111359
+**Created at:** 2025-11-02
+
+#### Description (first comment):
+
+> ## What:
+>
+> Rename `clarity-taxonomy.md` to `clarity-checklist.md`.
+>
+> ## Why:
+>
+> The new name better represents the purpose and content of the file.
+>
+> ## Acceptance Criteria:
+>
+> - The file `.rdd/templates/clarity-taxonomy.md` is renamed to `.rdd/templates/clarity-checklist.md`.
+> - All scripts in `.rdd/scripts` are revised, and all references to `clarity-taxonomy.md` are changed to `clarity-checklist.md`.
+> - All files in `.rdd/templates` are revised, and all references to `clarity-taxonomy.md` are changed to `clarity-checklist.md`.
+> - All files in `.rdd-docs` or its subfolders (excluding `archive`) are revised, and all references to `clarity-taxonomy.md` are changed to `clarity-checklist.md`.
+> - All files in `.github` or its subfolders are revised, and all references to `clarity-taxonomy.md` are changed to `clarity-checklist.md`.
 
 

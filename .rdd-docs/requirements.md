@@ -24,13 +24,13 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 
 - **[FR-03] Flat Workspace Structure**: The system shall store all active workspace files directly in .rdd-docs/workspace/ without enhancement-specific subfolders
 - **[FR-04] Current Change Detection**: The system shall use a .current-change JSON configuration file in workspace to track the active change with fields: changeName, changeId, branchName, changeType, startedAt, phase, status
-- **[FR-05] Workspace Initialization**: A script shall initialize workspace with: change.md, clarity-checklist.md, open-questions.md, requirements-changes.md, clarification-log.jsonl, and .current-change
+- **[FR-05] Workspace Initialization**: A script shall initialize workspace with: change.md, clarity-checklist.md, open-questions.md, requirements-changes.md, and .current-change
 - **[FR-06] Clean Main Branch Workspace**: When on main branch, workspace shall be empty or contain only standard template content to clearly indicate no active development
 - **[FR-07] Clarity Checklist Usage**: The clarification prompt shall use .rdd-docs/workspace/clarity-checklist.md as a checklist to identify unclear requirements
 - **[FR-08] Structured Questioning**: The prompt shall ask questions with predefined answer options (A, B, C, D) while allowing custom "Other" responses
 - **[FR-09] Question Formatting Standards**: All prompts shall follow guidelines from .rdd/templates/questions-formatting.md for user-friendly questioning
 - **[FR-10] Open Questions Tracking**: The system shall maintain open-questions.md with status markers: [ ] open, [?] partial, [x] answered
-- **[FR-11] Clarification Logging**: The system shall log all Q&A interactions in clarification-log.jsonl with timestamp, question, answer, answeredBy, and sessionId
+- **[FR-11] [DELETED]
 - **[FR-12] Requirements Changes Documentation**: The system shall document requirement changes in requirements-changes.md with [ADDED|MODIFIED|DELETED] prefixes
 - **[FR-13] Clarification Script Actions**: The clarify-changes.sh script shall support actions: init, log-clarification, copy-taxonomy, backup, restore, get-current, clear, validate
 - **[FR-14] Wrap-Up Script Actions**: The wrap-up.sh script shall support actions: merge-requirements, archive-workspace, full-wrap-up, validate-merge, preview-merge, get-change-id, sync-main
@@ -55,7 +55,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-33] User Notification on Conflicts**: The system shall notify the user if merge conflicts are detected and instruct them to resolve conflicts manually before proceeding
 - **[FR-34] Sync Validation**: The system shall validate that the merge from main completed successfully before proceeding with requirements merge
 - **[FR-35] Archive Directory Structure**: The system shall create .rdd-docs/archive/<change-id>/ directories for each completed change
-- **[FR-36] Complete Workspace Archive**: The system shall archive all workspace files: change.md, open-questions.md, requirements-changes.md, clarification-log.jsonl, clarity-checklist.md, .id-mapping.txt
+- **[FR-36] Complete Workspace Archive**: The system shall archive all workspace files: change.md, open-questions.md, requirements-changes.md, clarity-checklist.md, .id-mapping.txt
 - **[FR-37] Archive Metadata**: The system shall create .archive-info file with archivedAt timestamp, changeId, and archivedBy fields
 - **[FR-38] Workspace Preservation**: The system shall preserve workspace content during archiving (copy, not move) until explicitly cleared
 - **[FR-39] Branch-Workspace Alignment**: The system shall align workspace content with the current git branch
@@ -77,12 +77,12 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[NFR-14] Graceful Failure**: Scripts shall handle errors gracefully and provide recovery guidance
 - **[NFR-15] Multi-Developer Support**: The framework shall support multiple developers working on different features simultaneously
 - **[NFR-16] Conflict Prevention**: The workspace structure shall minimize merge conflicts between developers
-- **[NFR-17] Audit Trail**: The clarification-log.jsonl shall provide complete audit trail of decision-making
+- **[NFR-17] DELETED
 - **[NFR-18] Fix Documentation Template**: The framework shall provide a template for documenting fixes, including What, Why, and Acceptance Criteria sections, to ensure consistency and traceability.
 # Technical Requirements
 
 - **[TR-03] JSON Configuration**: The .current-change file shall use JSON format for machine and human readability
-- **[TR-04] JSONL Logging**: The clarification-log.jsonl shall use JSON Lines format (one JSON object per line) for append-only logging
+- **[TR-04] DELETED
 - **[TR-05] Markdown Documentation**: All documentation files (change.md, open-questions.md, requirements-changes.md) shall use Markdown format
 - **[TR-06] Bash Scripts**: All automation scripts shall be implemented in Bash for cross-platform Linux/Mac compatibility
 - **[TR-07] Exit on Error**: Scripts shall use `set -e` to exit immediately on command failure

@@ -25,8 +25,6 @@ You should ask clarification questions capturing ONLY business/functional requir
 
 - Current change tracked in `.rdd-docs/workspace/.current-change` (JSON config)# Rules:
 
-- Clarifications logged in `.rdd-docs/workspace/clarification-log.jsonl`
-
 - Questions tracked in `.rdd-docs/workspace/open-questions.md`R01: Ask one question per loop.
 
 - Requirements changes documented in `.rdd-docs/workspace/requirements-changes.md`
@@ -98,7 +96,7 @@ S01: Display the following banner to the user:
 
 **R03:** Use the clarity taxonomy checklist to guide questions
 
-**R04:** Maintain chronological clarity history in clarification-log.jsonl
+**R04:** DELETED
 
 **R05:** Update open-questions.md with status ([x] answered, [ ] open, [?] partial)
 
@@ -140,7 +138,6 @@ This will:
 - Copy clarity-checklist.md to workspace
 - Create open-questions.md template
 - Create requirements-changes.md template
-- Initialize clarification-log.jsonl if needed
 - Update phase to "clarify" in .current-change
 
 ## S03: Check for Re-execution
@@ -148,7 +145,6 @@ This will:
 Check if this is a re-run by looking for existing content in:
 - `open-questions.md` - Has answered questions?
 - `requirements-changes.md` - Has documented changes?
-- `clarification-log.jsonl` - Has previous entries?
 
 If re-execution detected:
 1. Display message: "**ℹ️ Previous clarification session detected**"
@@ -350,7 +346,7 @@ If validation passes, display:
   - [A] Added
   - [M] Modified
   - [D] Deleted
-- **clarification-log.jsonl** - [Z] entries logged
+
 
 ---
 
@@ -401,10 +397,7 @@ This prompt generates/updates:
    - Organized by category (GF, FR, NFR, TR)
    - Ready for merge into main requirements.md
 
-3. **`.rdd-docs/workspace/clarification-log.jsonl`**
-   - Complete Q&A history
-   - Timestamps and session IDs
-   - Machine-readable for analysis
+3. DELETED
 
 4. **`.rdd-docs/workspace/.current-change`**
    - Phase updated to "clarify"

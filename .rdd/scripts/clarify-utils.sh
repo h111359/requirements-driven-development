@@ -34,7 +34,6 @@ CLARIFY_UTILS_LOADED=1
 # ============================================================================
 
 WORKSPACE_DIR=".rdd-docs/workspace"
-CLARIFICATION_LOG="$WORKSPACE_DIR/clarification-log.jsonl"
 CLARITY_TAXONOMY_SOURCE=".rdd-docs/clarity-checklist.md"
 CLARITY_TAXONOMY_WORKSPACE="$WORKSPACE_DIR/clarity-checklist.md"
 
@@ -57,27 +56,7 @@ init_clarification() {
         print_warning "Failed to copy checklist, continuing anyway..."
     fi
     echo ""
-    
-    # Create open-questions.md template
-    if ! create_open_questions_template; then
-        print_error "Failed to create open-questions template"
-        return 1
-    fi
-    echo ""
-    
-    # Initialize clarification-log.jsonl
-    if [ ! -f "$CLARIFICATION_LOG" ]; then
-        touch "$CLARIFICATION_LOG"
-        print_success "Initialized clarification-log.jsonl"
-        
-        # Add initial system entry
-        local timestamp=$(get_timestamp)
-        echo "{\"timestamp\":\"$timestamp\",\"question\":\"Clarification phase started\",\"answer\":\"Workspace initialized for requirements clarification\",\"answeredBy\":\"system\",\"sessionId\":\"init-$(date +%Y%m%d-%H%M)\"}" >> "$CLARIFICATION_LOG"
-    else
-        print_info "clarification-log.jsonl already exists"
-    fi
-    echo ""
-    
+     
     # Update phase in .current-change if it exists
     local current_change_file="$WORKSPACE_DIR/.current-change"
     if [ -f "$current_change_file" ]; then
@@ -157,17 +136,7 @@ log_clarification() {
 # TEMPLATE CREATION
 # ============================================================================
 
-# Create open-questions.md template in workspace
-# Usage: create_open_questions_template
-# Returns: 0 on success, 1 if already exists
-create_open_questions_template() {
-    local dest_file="$WORKSPACE_DIR/open-questions.md"
-    
-    if [ -f "$dest_file" ]; then
-        print_info "open-questions.md already exists"
-        return 0
-    fi
-    
+  
     ensure_dir "$WORKSPACE_DIR"
     
     cat > "$dest_file" << 'EOFQ'
@@ -355,7 +324,6 @@ get_clarification_status() {
 # Export all functions
 export -f init_clarification
 export -f log_clarification
-export -f create_open_questions_template
 export -f copy_taxonomy
 export -f show_clarifications
 export -f count_clarifications

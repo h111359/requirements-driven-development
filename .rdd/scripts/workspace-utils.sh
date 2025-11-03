@@ -74,15 +74,11 @@ init_workspace() {
         print_warning "clarity-checklist.md not found in .rdd-docs/"
     fi
     
-    # Create open-questions.md template
-    create_open_questions_template
+    # Copy copilot-prompts.md template to workspace
+    copy_template "copilot-prompts.md" "$WORKSPACE_DIR/copilot-prompts.md"
     
     # Create requirements-changes.md template
     create_requirements_changes_template
-    
-    # Initialize clarification-log.jsonl
-    touch "$WORKSPACE_DIR/clarification-log.jsonl"
-    print_success "Initialized clarification-log.jsonl"
     
     print_success "Workspace initialized successfully for $workspace_type"
     return 0
@@ -193,7 +189,6 @@ backup_workspace() {
         "fix.md"
         "open-questions.md"
         "requirements-changes.md"
-        "clarification-log.jsonl"
         "clarity-checklist.md"
         ".current-change"
     )
@@ -308,7 +303,6 @@ clear_workspace_forced() {
         "fix.md"
         "open-questions.md"
         "requirements-changes.md"
-        "clarification-log.jsonl"
         "clarity-checklist.md"
         ".current-change"
         "copilot-prompts.md"
