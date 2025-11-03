@@ -94,6 +94,18 @@ if [ -d ".rdd/scripts" ]; then
     # Copy non-script files (README, etc.)
     find .rdd/scripts -type f ! -name "*.sh" -exec cp {} "$WINDOWS_BUILD/.rdd/scripts/" \;
     
+    # Check if python3 is available
+    if ! command -v python3 &> /dev/null; then
+        echo "  - Error: python3 is required for script conversion but not found in PATH"
+        exit 1
+    fi
+    
+    # Check if converter script exists
+    if [ ! -f "$SCRIPT_DIR/bash-to-powershell.py" ]; then
+        echo "  - Error: bash-to-powershell.py not found at $SCRIPT_DIR/bash-to-powershell.py"
+        exit 1
+    fi
+    
     # Convert shell scripts to PowerShell for Windows build
     echo "  - Converting shell scripts to PowerShell..."
     SCRIPT_COUNT=0

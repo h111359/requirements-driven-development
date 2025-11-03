@@ -76,12 +76,10 @@ def convert_bash_to_powershell(bash_content):
             ps_lines.append(f'Set-Location "{match.group(1)}"')
             continue
         
-        match = re.match(r'^\s*cd\s+([^\s]+)', line)
+        match = re.match(r'^\s*cd\s+(\$[A-Z_][A-Z0-9_]*)', line)
         if match:
-            path = match.group(1)
-            # Handle variable references
-            path = path.replace('$', '$')
-            ps_lines.append(f'Set-Location {path}')
+            # Variable reference in cd command
+            ps_lines.append(f'Set-Location {match.group(1)}')
             continue
         
         # echo commands with -e flag (color codes)
@@ -214,8 +212,13 @@ def convert_bash_to_powershell(bash_content):
             ps_lines.append(f'    exit {match.group(1)}')
             continue
         
-        # Default: keep line with basic variable conversion
-        converted = line.replace('${', '$').replace('}', '')
+        # Default: keep line with more careful variable conversion
+        converted = line
+        # Only convert bash-style variable references ${VAR} to PowerShell $VAR
+        # This is more conservative to avoid corrupting non-bash content
+        if '${' in converted and '}' in converted:
+            # Only convert if it looks like a bash variable pattern
+            converted = re.sub(r'\$\{([A-Z_][A-Z0-9_]*)\}', r'$\1', converted)
         ps_lines.append(converted)
     
     return '\n'.join(ps_lines)
