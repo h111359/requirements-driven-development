@@ -10,6 +10,7 @@ import sys
 import os
 import subprocess
 import shutil
+import json
 from pathlib import Path
 from typing import List, Optional
 
@@ -17,7 +18,7 @@ from typing import List, Optional
 SCRIPT_DIR = Path(__file__).parent.absolute()
 sys.path.insert(0, str(SCRIPT_DIR))
 
-# Import all functions from rdd-utils
+# Import all functions from rdd_utils
 from rdd_utils import (
     # Output functions
     print_success, print_error, print_warning, print_info, print_step, print_banner,
@@ -541,7 +542,6 @@ def archive_workspace(branch_name: str, keep_workspace: bool = False) -> bool:
         "lastCommitMessage": last_message
     }
     
-    import json
     with open(os.path.join(archive_dir, ".archive-metadata"), 'w') as f:
         json.dump(metadata, f, indent=2)
     

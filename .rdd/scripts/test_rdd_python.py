@@ -6,13 +6,22 @@ Tests core functionality and compares with expected behavior
 
 import sys
 import os
+import tempfile
 from pathlib import Path
 
 # Add script dir to path
 SCRIPT_DIR = Path(__file__).parent.absolute()
 sys.path.insert(0, str(SCRIPT_DIR))
 
-from rdd_utils import *
+from rdd_utils import (
+    print_success, print_error, print_warning, print_info, print_step, print_banner,
+    validate_name, validate_branch_name,
+    normalize_to_kebab_case,
+    get_timestamp, get_timestamp_filename,
+    check_git_repo, get_current_branch, get_default_branch, get_git_user,
+    ensure_dir,
+    get_config, set_config
+)
 
 def test_color_output():
     """Test colored output functions"""
@@ -106,42 +115,41 @@ def test_directory_functions():
     """Test directory utility functions"""
     print("\n=== Testing Directory Functions ===")
     
-    # Test ensure_dir
-    test_dir = "/tmp/rdd-test-dir"
-    if os.path.exists(test_dir):
-        os.rmdir(test_dir)
+    # Test ensure_dir with temporary directory
+    with tempfile.TemporaryDirectory() as tmpdir:
+        test_dir = os.path.join(tmpdir, "rdd-test-dir")
+        
+        ensure_dir(test_dir)
+        assert os.path.exists(test_dir)
+        assert os.path.isdir(test_dir)
     
-    ensure_dir(test_dir)
-    assert os.path.exists(test_dir)
-    assert os.path.isdir(test_dir)
-    
-    # Cleanup
-    os.rmdir(test_dir)
     print_success("Directory function tests passed")
-    
     return True
 
 def test_config_functions():
     """Test configuration functions"""
     print("\n=== Testing Config Functions ===")
     
-    # Create a test config file
-    test_config = "/tmp/test-config.json"
+    # Create a test config file in temporary directory
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        test_config = f.name
     
-    # Test set_config
-    result = set_config("testKey", "testValue", test_config)
-    assert result == True
-    assert os.path.exists(test_config)
+    try:
+        # Test set_config
+        result = set_config("testKey", "testValue", test_config)
+        assert result == True
+        assert os.path.exists(test_config)
+        
+        # Test get_config
+        value = get_config("testKey", test_config)
+        assert value == "testValue"
+        
+        print_success("Config function tests passed")
+    finally:
+        # Cleanup
+        if os.path.exists(test_config):
+            os.remove(test_config)
     
-    # Test get_config
-    value = get_config("testKey", test_config)
-    assert value == "testValue"
-    
-    # Cleanup
-    if os.path.exists(test_config):
-        os.remove(test_config)
-    
-    print_success("Config function tests passed")
     return True
 
 def main():

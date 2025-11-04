@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-rdd-utils.py
+rdd_utils.py
 Shared utility functions for RDD framework Python scripts
 Provides common utilities used across all RDD Python scripts
 """
@@ -486,8 +486,12 @@ def set_config(key: str, value: str, config_file: Optional[str] = None) -> bool:
     
     try:
         if config_file.endswith('.json'):
-            with open(config_file, 'r') as f:
-                data = json.load(f)
+            # Read existing data or create empty dict
+            if os.path.isfile(config_file) and os.path.getsize(config_file) > 0:
+                with open(config_file, 'r') as f:
+                    data = json.load(f)
+            else:
+                data = {}
             
             data[key] = value
             

@@ -23,9 +23,12 @@ The RDD framework now supports both Bash and Python implementations that can be 
 | `workspace-utils.sh` | `rdd.py` | ✅ Complete | Workspace management (integrated) |
 | `branch-utils.sh` | `rdd.py` | ✅ Complete | Branch operations (integrated) |
 | `change-utils.sh` | `rdd.py` | ✅ Complete | Change workflow (integrated) |
-| `requirements-utils.sh` | `rdd.py` | ⚠️ Partial | Requirements operations (basic support) |
-| `clarify-utils.sh` | `rdd.py` | ⚠️ Partial | Clarification operations (basic support) |
-| `prompt-utils.sh` | `rdd.py` | ⚠️ Partial | Prompt management (basic support) |
+| `requirements-utils.sh` | Future | ⚠️ Not Yet | Requirements merging/validation - planned for v1.1 |
+| `clarify-utils.sh` | Future | ⚠️ Not Yet | Clarification operations - planned for v1.1 |
+| `prompt-utils.sh` | Future | ⚠️ Not Yet | Prompt management - planned for v1.1 |
+
+**Note on Partial Implementation:**
+The initial Python implementation (v1.0.0) focuses on the most commonly used workflows: branch management, workspace operations, and change/fix workflows. Advanced features like requirements validation, clarification tracking, and prompt management are planned for v1.1 and can be added incrementally without breaking existing functionality.
 
 ### Implementation Strategy
 
