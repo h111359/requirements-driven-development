@@ -12,22 +12,20 @@ The RDD (Requirements-Driven Development) framework is a structured workflow aut
 ## Technology Stack
 
 ### Programming Languages & Scripts
-- **Bash**: Primary scripting language for Linux/macOS automation (`.sh` files)
-- **PowerShell**: Windows-compatible scripting language with identical functionality to Bash scripts (`.ps1` files)
+- **Python**: Primary scripting language for cross-platform automation (`.py` files)
+- **Bash**: Legacy scripting language for Linux/macOS (archived, replaced by Python)
+- **PowerShell**: Legacy Windows-compatible scripting language (in `src/windows/`)
 - **Markdown**: Documentation format for prompts, requirements, and guides
 - **JSON/JSONL**: Configuration and logging data format
 
 ### Development Tools
 - **Git**: Version control and branch management
-- **jq**: JSON parsing and manipulation in Bash scripts (with fallback to basic text processing)
 - **VS Code**: Recommended IDE with GitHub Copilot integration
 - **GitHub Copilot**: AI assistant configured for RDD workflow execution
 
 ### Dependencies
+- Python 3.8+
 - Git 2.x+
-- Bash 4.x+ (for Linux scripts)
-- PowerShell 5.1+ or PowerShell Core 7.x+ (for Windows scripts)
-- jq (optional, improves JSON handling)
 
 ## Architecture Patterns
 
@@ -44,16 +42,16 @@ The framework uses a domain-based architecture where functionality is organized 
 - **Prompt utilities**: Prompt execution tracking
 
 ### Command Routing Pattern
-The main entry point (`rdd.sh` or `rdd.ps1`) uses a domain-based routing pattern:
+The main entry point (`rdd.py`) uses a domain-based routing pattern:
 ```
-rdd.sh <domain> <action> [options]
+python3 .rdd/scripts/rdd.py <domain> <action> [options]
 ```
 Examples:
-- `rdd.sh branch create enh my-feature`
-- `rdd.sh workspace init change`
-- `rdd.sh requirements merge`
+- `python3 .rdd/scripts/rdd.py branch create enh my-feature`
+- `python3 .rdd/scripts/rdd.py workspace init change`
+- `python3 .rdd/scripts/rdd.py requirements merge`
 
-This replaces the previous standalone script approach (e.g., `fix-management.sh`) with a unified command interface.
+This Python implementation replaced the previous bash scripts (`rdd.sh`) which are now archived.
 
 ### Template-Based File Generation
 All workspace files are generated from templates stored in `.rdd/templates/` or `src/{platform}/.rdd/templates/`, ensuring consistency across projects and changes.
@@ -72,94 +70,78 @@ The framework follows a sequential phase workflow:
 ### Script Components
 
 #### Main Entry Point
-- **File**: `src/{linux|windows}/.rdd/scripts/rdd.{sh|ps1}`
+- **File**: `.rdd/scripts/rdd.py`
 - **Purpose**: Unified command interface with domain routing
 - **Responsibilities**:
   - Parse command-line arguments
   - Route commands to appropriate domain handlers
   - Display help and version information
-  - Source utility scripts
+  - Execute workflow operations
+
+**Note**: Legacy bash implementation (rdd.sh and utility scripts) archived in workspace during migration to Python.
 
 #### Utility Scripts (Domain-Specific)
-Each utility script exports functions for a specific domain:
+The Python implementation (`rdd_utils.py`) provides utility functions organized by domain:
 
-1. **core-utils**: Foundation functions
-   - Color output (Print-Success, Print-Error, Print-Info, Print-Warning)
-   - Validation (Validate-Name, Normalize-ToKebabCase)
-   - Configuration management (Get-Config, Set-Config)
+1. **Core utilities**: Foundation functions
+   - Color output (print_success, print_error, print_info, print_warning)
+   - Validation (validate_name, normalize_to_kebab_case)
+   - Configuration management (get_config, set_config)
    - Timestamp generation
 
-2. **git-utils**: Git operations
+2. **Git utilities**: Git operations
    - Repository validation
    - Branch operations
    - Stashing and merging
    - Diff and comparison
 
-3. **branch-utils**: Branch lifecycle
+3. **Branch utilities**: Branch lifecycle
    - Branch creation with naming conventions
    - Branch deletion (single and bulk)
    - Merge status checking
    - Post-merge cleanup
 
-4. **workspace-utils**: Workspace management
+4. **Workspace utilities**: Workspace management
    - Workspace initialization
    - Archiving with metadata
    - Backup and restore
    - Complete workspace clearing
 
-5. **requirements-utils**: Requirements handling
+5. **Requirements utilities**: Requirements handling
    - Format validation
    - Requirements merging
    - ID assignment for new requirements
    - Impact analysis
 
-6. **change-utils**: Change workflow
+6. **Change utilities**: Change workflow
    - Change creation
    - Change tracking
    - Workflow orchestration
    - Completion and wrap-up
 
-7. **clarify-utils**: Clarification phase
+7. **Clarify utilities**: Clarification phase
    - Clarification initialization
    - Question logging
    - Clarification status tracking
 
-8. **prompt-utils**: Prompt management
+8. **Prompt utilities**: Prompt management
    - Prompt completion marking
    - Execution logging
    - Status checking
 
+**Legacy Note**: Previous bash implementation (branch-utils.sh, change-utils.sh, etc.) has been archived.
+
 ### Cross-Platform Implementation
 
-#### File Structure
-```
-src/
-├── linux/
-│   ├── .rdd/
-│   │   ├── scripts/         # Bash scripts (.sh)
-│   │   ├── templates/       # Template files
-│   ├── .github/
-│   │   └── prompts/         # Linux-specific prompts
-│   └── ...
-└── windows/
-    ├── .rdd/
-    │   ├── scripts/         # PowerShell scripts (.ps1)
-    │   ├── templates/       # Template files
-│   ├── .github/    
-    │   └── prompts/         # Windows-specific prompts
-    └── ...
-```
+**Current Implementation**: Python-based (`rdd.py` and `rdd_utils.py`)
+- Cross-platform compatible (Windows, Linux, macOS)
+- Single codebase for all platforms
+- Native Python libraries for file operations, JSON handling, and subprocess management
 
-#### Script Equivalence
-Each Bash script has a PowerShell equivalent with:
-- Identical function names and signatures
-- Same command-line interface
-- Equivalent functionality
-- Platform-appropriate syntax
-
-Example mapping:
-- `src/linux/.rdd/scripts/rdd.sh` ↔ `src/windows/.rdd/scripts/rdd.ps1`
-- `src/linux/.rdd/scripts/core-utils.sh` ↔ `src/windows/.rdd/scripts/core-utils.ps1`
+**Legacy Implementation**: Bash and PowerShell scripts (archived)
+- Previously maintained separate implementations for Linux (bash) and Windows (PowerShell)
+- Located in `src/linux/.rdd/scripts/` and `src/windows/.rdd/scripts/`
+- Bash scripts from `.rdd/scripts/` archived to workspace during Python migration
 
 ## Data Architecture
 
@@ -186,13 +168,13 @@ Note: The `change.md` template has been **removed** from the framework and is no
 ### Installation
 The RDD framework is installed by:
 1. Cloning the repository
-2. Ensuring script execution permissions (`chmod +x src/{platform}/.rdd/scripts/*.{sh|ps1}`)
-3. Configuring VS Code settings for auto-approval and prompt recommendations
+2. Ensuring Python 3.8+ is installed
+3. Making scripts executable: `chmod +x .rdd/scripts/rdd.py`
+4. Configuring VS Code settings for auto-approval and prompt recommendations
 
-### Platform Selection
-Users select the appropriate script platform:
-- **Linux/macOS**: Use scripts in `src/linux/.rdd/scripts/*.sh`
-- **Windows**: Use scripts in `src/windows/.rdd/scripts/*.ps1`
+### Platform Compatibility
+- **Python-based**: Single implementation works on all platforms (Windows, Linux, macOS)
+- **No platform-specific scripts needed**: Python provides cross-platform compatibility
 
 ### VS Code Integration
 The framework integrates with VS Code through:
@@ -259,15 +241,19 @@ repo-root/
 ### Third-Party Dependencies
 - **GitHub Copilot**: AI assistant for executing prompts (optional but recommended)
 - **Git**: Required for version control operations
-- **jq**: Optional JSON processor (improves script functionality)
+- **Python 3.8+**: Required for running RDD scripts
 
 ## Migration Notes
 
 ### Recent Changes
-1. **fix-management.sh removal**: All fix management functionality consolidated into `rdd.sh` with domain routing
-2. **change.md template removal**: The `change.md` template file removed from `.rdd/templates/`; workspace no longer includes this file during initialization
-3. **PowerShell script addition**: Complete PowerShell implementation added for Windows compatibility in `src/windows/.rdd/scripts/`
+1. **Python migration**: All bash scripts migrated to Python for true cross-platform compatibility
+2. **Bash scripts archived**: Legacy bash implementation (9 scripts) moved to workspace archive
+3. **Unified codebase**: Single Python implementation replaces separate bash/PowerShell codebases
+4. **fix-management.sh removal**: All fix management functionality consolidated into `rdd.py` with domain routing
+5. **change.md template removal**: The `change.md` template file removed from `.rdd/templates/`; workspace no longer includes this file during initialization
 
 ### Deprecated Components
-- ~~`fix-management.sh`~~ - Replaced by `rdd.sh fix` commands
+- ~~All bash scripts (.sh)~~ - Replaced by Python implementation (`rdd.py` and `rdd_utils.py`); archived in workspace
+- ~~`fix-management.sh`~~ - Replaced by `rdd.py` commands
 - ~~`.rdd/templates/change.md`~~ - Template removed; no longer used in workspace
+- ~~PowerShell scripts (.ps1) in `src/windows/`~~ - No longer needed with Python implementation

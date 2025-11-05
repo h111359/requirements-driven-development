@@ -25,23 +25,22 @@ repo-root/
 │   │   ├── rdd.G2-detect-docs-changes.prompt.md
 │   │   └── rdd.G4-update-from-main.prompt.md
 │   └── copilot-instructions.md   # Copilot agent behavioral guidelines
-├── .rdd/                         # RDD framework internals (legacy location)
-│   ├── scripts/                  # Automation scripts (being migrated to src/)
-│   │   ├── rdd.sh                # Main entry point for RDD commands
-│   │   ├── change-utils.sh       # Change/fix creation and management
-│   │   ├── workspace-utils.sh    # Workspace initialization and archiving
-│   │   ├── prompt-utils.sh       # Prompt execution helpers
-│   │   ├── git-utils.sh          # Git operations
-│   │   ├── core-utils.sh         # Common utility functions
-│   │   └── ...                   # Other utility scripts
+├── .rdd/                         # RDD framework internals
+│   ├── scripts/                  # Python automation scripts
+│   │   ├── rdd.py                # Main entry point for RDD commands
+│   │   ├── rdd_utils.py          # Utility functions for all operations
+│   │   ├── test_rdd_python.py    # Unit tests for Python implementation
+│   │   ├── IMPLEMENTATION-SUMMARY.md  # Migration documentation
+│   │   ├── README-PYTHON.md      # Python implementation guide
+│   │   └── shell-to-python-mapping.md # Legacy bash to Python mapping
 │   └── templates/                # File templates for initialization
 │       ├── copilot-prompts.md    # Stand-alone prompts template
 │       ├── requirements.md       # Requirements document template
 │       ├── tech-spec.md          # Technical specification template
 │       ├── data-model.md         # Data model template
 │       ├── folder-structure.md   # Folder structure template
-│       └── ...                   # Other templates (change.md removed)
-├── src/                          # Platform-specific script implementations
+│       └── ...                   # Other templates
+├── src/                          # Legacy platform-specific implementations (archived)
 │   ├── linux/                    # Linux/macOS implementation
 │   │   ├── .rdd/
 │   │   │   ├── scripts/          # Bash scripts (.sh)
@@ -128,16 +127,16 @@ repo-root/
 - Named using sanitized branch name (slashes → hyphens)
 - Include metadata file with timestamp, author, and commit info
 
-### 6. Cross-Platform Script Support
-- **Linux/macOS**: Bash scripts (`.sh`) in `src/linux/.rdd/scripts/`
-- **Windows**: PowerShell scripts (`.ps1`) in `src/windows/.rdd/scripts/`
-- Identical functionality across platforms
-- Parallel folder structures for templates and prompts
+### 6. Python-Based Implementation
+- **Cross-platform**: Single Python codebase works on Windows, Linux, and macOS
+- **Main script**: `rdd.py` with utilities in `rdd_utils.py`
+- **Legacy archived**: Previous bash scripts moved to workspace archive during migration
+- **No platform-specific scripts needed**: Python provides native cross-platform compatibility
 
 ### 7. Unified Command Interface
-- All RDD operations accessible through `rdd.sh` (Linux) or `rdd.ps1` (Windows)
-- Domain-based routing: `rdd.{sh|ps1} <domain> <action> [options]`
-- Replaces standalone scripts like ~~`fix-management.sh`~~ (deprecated)
+- All RDD operations accessible through `python3 .rdd/scripts/rdd.py`
+- Domain-based routing: `python3 .rdd/scripts/rdd.py <domain> <action> [options]`
+- Replaces standalone scripts like ~~`fix-management.sh`~~ and ~~`rdd.sh`~~ (deprecated)
 
 ## 📝 RDD Workflow File Locations
 
@@ -145,8 +144,8 @@ repo-root/
 All workflow prompts in: `.github/prompts/rdd.*.prompt.md`
 
 ### Scripts
-All automation in: `.rdd/scripts/*.sh` (legacy)  
-Platform-specific: `src/linux/.rdd/scripts/*.sh` or `src/windows/.rdd/scripts/*.ps1`
+Current implementation: `.rdd/scripts/rdd.py` and `.rdd/scripts/rdd_utils.py`  
+Legacy bash scripts: Archived in workspace during Python migration
 
 ### Templates
 All file templates in: `.rdd/templates/*.md`

@@ -1,0 +1,7 @@
+{
+  "archivedAt": "2025-11-05T04:56:45Z",
+  "branch": "fix/20251105-0640-clean-bash-2",
+  "archivedBy": "Hristo Hristov <hmhristov@outlook.com>",
+  "lastCommit": "57a62899a7e4172edabd551aeebd3ffacccdf6d3",
+  "lastCommitMessage": "Merge pull request #38 from h111359/fix/20251105-0616-clean-up-the-bash-scripts"
+}
