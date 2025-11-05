@@ -603,6 +603,72 @@ def cleanup_after_merge(branch_name: str = None) -> bool:
 # WORKSPACE OPERATIONS
 # ============================================================================
 
+def init_rdd_docs() -> bool:
+    """Initialize .rdd-docs directory with core template files if it doesn't exist."""
+    rdd_docs_dir = ".rdd-docs"
+    
+    # List of core templates that should always exist in .rdd-docs
+    core_templates = [
+        "backlog.md",
+        "requirements.md",
+        "tech-spec.md",
+        "folder-structure.md",
+        "data-model.md"
+    ]
+    
+    # Check if .rdd-docs directory exists
+    if not os.path.isdir(rdd_docs_dir):
+        print_step("Initializing .rdd-docs directory with core templates...")
+        ensure_dir(rdd_docs_dir)
+    else:
+        # Check if all core templates exist
+        missing_templates = []
+        for template_name in core_templates:
+            dest_path = os.path.join(rdd_docs_dir, template_name)
+            if not os.path.isfile(dest_path):
+                missing_templates.append(template_name)
+        
+        # If no templates are missing, skip initialization
+        if not missing_templates:
+            debug_print(".rdd-docs already initialized with all core templates")
+            return True
+        
+        print_step(f"Initializing missing templates in .rdd-docs ({len(missing_templates)} templates)...")
+    
+    # Copy core template files to .rdd-docs
+    success_count = 0
+    for template_name in core_templates:
+        dest_path = os.path.join(rdd_docs_dir, template_name)
+        
+        # Skip if file already exists (don't overwrite existing work)
+        if os.path.isfile(dest_path):
+            debug_print(f"Skipping {template_name} (already exists)")
+            success_count += 1
+            continue
+        
+        # Copy template from .rdd/templates/
+        template_path = os.path.join(TEMPLATES_DIR, template_name)
+        
+        if not os.path.isfile(template_path):
+            print_warning(f"Template not found: {template_path}")
+            continue
+        
+        try:
+            shutil.copy2(template_path, dest_path)
+            debug_print(f"Copied {template_name} to .rdd-docs/")
+            success_count += 1
+        except Exception as e:
+            print_error(f"Failed to copy {template_name}: {e}")
+            return False
+    
+    if success_count == len(core_templates):
+        print_success(f".rdd-docs initialized with {len(core_templates)} core templates")
+        return True
+    else:
+        print_error(f"Failed to initialize all templates ({success_count}/{len(core_templates)} succeeded)")
+        return False
+
+
 def init_workspace(workspace_type: str = "change") -> bool:
     """Initialize workspace with templates based on type (change or fix)."""
     if workspace_type not in ['change', 'fix']:
@@ -774,6 +840,13 @@ def create_change(normalized_name: str, change_type: str = "enh") -> bool:
     """Create a new change with branch and workspace setup."""
     # Create the branch
     if not create_branch(change_type, normalized_name):
+        return False
+    
+    print()
+    
+    # Initialize .rdd-docs directory with core templates if needed
+    if not init_rdd_docs():
+        print_error("Failed to initialize .rdd-docs directory")
         return False
     
     print()

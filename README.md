@@ -18,6 +18,46 @@ Requirements-Driven Development (RDD) is a methodology that combines traditional
 - **Version Control Integration**: Git-based workflow aligned with development processes
 - **AI-Assisted Development**: Optimized for use with GitHub Copilot and similar AI tools
 
+## Requirements
+
+- **Python 3.7 or higher**: Required for running RDD framework scripts
+- **Git 2.23 or higher**: For version control operations
+
+### Python Command Setup
+
+The RDD framework uses the `python` command to ensure cross-platform compatibility (Linux, macOS, and Windows).
+
+**Windows & macOS**: The `python` command is available by default with modern Python installations.
+
+**Linux**: Most modern distributions have `python` pointing to Python 3, but some older systems may not. If the `python` command is not available on your Linux system, install it:
+
+```bash
+# Debian/Ubuntu
+sudo apt update
+sudo apt install python-is-python3
+
+# Fedora/RHEL/CentOS
+sudo dnf install python-unversioned-command
+
+# Arch Linux
+sudo pacman -S python
+```
+
+**Alternative for older systems**: If you cannot install the package, create an alias or symlink:
+```bash
+# Temporary alias (add to ~/.bashrc or ~/.zshrc for persistence)
+alias python=python3
+
+# Or create a permanent symlink
+sudo ln -s /usr/bin/python3 /usr/local/bin/python
+```
+
+**Verify installation**:
+```bash
+python --version
+# Should output: Python 3.x.x
+```
+
 ## Installation
 
 ```bash

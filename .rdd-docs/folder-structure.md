@@ -134,9 +134,10 @@ repo-root/
 - **No platform-specific scripts needed**: Python provides native cross-platform compatibility
 
 ### 7. Unified Command Interface
-- All RDD operations accessible through `python3 .rdd/scripts/rdd.py`
-- Domain-based routing: `python3 .rdd/scripts/rdd.py <domain> <action> [options]`
+- All RDD operations accessible through `python .rdd/scripts/rdd.py`
+- Domain-based routing: `python .rdd/scripts/rdd.py <domain> <action> [options]`
 - Replaces standalone scripts like ~~`fix-management.sh`~~ and ~~`rdd.sh`~~ (deprecated)
+- Uses `python` (not `python3`) for cross-platform compatibility (Windows, Linux, macOS)
 
 ## 📝 RDD Workflow File Locations
 

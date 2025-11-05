@@ -1,5 +1,10 @@
 ````prompt
-# RDD: Update Documentation
+`````prompt
+````prompt
+# RDD: Update Documentation [DEPRECATED]
+
+> **⚠️ DEPRECATED**: This prompt has been merged into `rdd.08-wrap-up.prompt.md`.  
+> Use the wrap-up prompt instead, which now includes documentation updates as part of the workflow.
 
 ## Purpose
 Update project documentation to reflect changes made during the current fix/enhancement work.

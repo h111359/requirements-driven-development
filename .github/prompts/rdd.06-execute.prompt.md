@@ -31,7 +31,7 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
 4. **Mark the prompt as completed**:
    - After successfully executing the prompt, mark it as completed by running the script:
      ```python
-     python3 .rdd/scripts/rdd.py prompt mark-completed <PROMPT_ID>
+     python .rdd/scripts/rdd.py prompt mark-completed <PROMPT_ID>
      ```
    - Replace `<PROMPT_ID>` with the actual prompt ID (e.g., `P001`, `P002`, etc.)
    - The script will automatically change the checkbox from `- [ ]` to `- [x]`
@@ -40,7 +40,7 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
 5. **Log the execution**:
    - After marking the prompt as completed, log the execution details by running:
      ```python
-     python3 .rdd/scripts/rdd.py prompt log-execution <PROMPT_ID> "<EXECUTION_DETAILS>"
+     python .rdd/scripts/rdd.py prompt log-execution <PROMPT_ID> "<EXECUTION_DETAILS>"
      ```
    - Replace `<PROMPT_ID>` with the actual prompt ID (e.g., `P001`, `P002`, etc.)
    - Replace `<EXECUTION_DETAILS>` with a summary of what was done during the execution
@@ -54,8 +54,8 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
 
 ## Important Constraints
 
-- **Use the script for marking**: Always use `python3 .rdd/scripts/rdd.py prompt mark-completed <PROMPT_ID>` to mark prompts as completed. Never manually edit the .rdd.copilot-prompts.md file.
-- **Log all executions**: After marking a prompt as completed, always log the execution using `python3 .rdd/scripts/rdd.py prompt log-execution <PROMPT_ID> "<EXECUTION_DETAILS>"`.
+- **Use the script for marking**: Always use `python .rdd/scripts/rdd.py prompt mark-completed <PROMPT_ID>` to mark prompts as completed. Never manually edit the .rdd.copilot-prompts.md file.
+- **Log all executions**: After marking a prompt as completed, always log the execution using `python .rdd/scripts/rdd.py prompt log-execution <PROMPT_ID> "<EXECUTION_DETAILS>"`.
 - **Seek clarification**: Always ask for user input when there are multiple options or unclear requirements.
 - **Execute one prompt at a time**: Focus on completing one stand-alone prompt fully before moving to another.
 - **Keep short**: Do not make detailed summaries when finishing the task. Just write "I am done."
@@ -74,5 +74,5 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
    ```
 4. User responds: "P001"
 5. You execute the instructions from prompt P001
-6. You mark P001 as completed by running: `python3 .rdd/scripts/rdd.py prompt mark-completed P001`
-7. You log the execution by running: `python3 .rdd/scripts/rdd.py prompt log-execution P001 "Created prompt file with instructions for executing stand-alone prompts"`
+6. You mark P001 as completed by running: `python .rdd/scripts/rdd.py prompt mark-completed P001`
+7. You log the execution by running: `python .rdd/scripts/rdd.py prompt log-execution P001 "Created prompt file with instructions for executing stand-alone prompts"`
