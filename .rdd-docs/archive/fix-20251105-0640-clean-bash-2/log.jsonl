@@ -1,0 +1,1 @@
+{"timestamp": "2025-11-05T04:48:08Z", "promptId": "P01", "executionDetails": "Moved all 9 bash scripts from .rdd/scripts/ to .rdd-docs/workspace/legacy-bash-scripts/. Scripts were legacy implementation replaced by Python (rdd.py). Only Python files remain in .rdd/scripts/.", "sessionId": "exec-20251105-0648"}

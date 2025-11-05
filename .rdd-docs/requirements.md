@@ -33,8 +33,8 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-10] Open Questions Tracking**: The system shall maintain open-questions.md with status markers: [ ] open, [?] partial, [x] answered
 - **[FR-11] [DELETED]
 - **[FR-12] [DELETED]
-- **[FR-13] Clarification Script Actions**: The clarify-changes.sh script shall support actions: init, log-clarification, copy-taxonomy, backup, restore, get-current, clear, validate
-- **[FR-14] Wrap-Up Script Actions**: The wrap-up.sh script shall support actions: merge-requirements, archive-workspace, full-wrap-up, validate-merge, preview-merge, get-change-id, sync-main
+- **[FR-13] [DELETED]
+- **[FR-14] [DELETED]
 - **[FR-15] Script Parameter Execution**: Scripts shall accept parameters for predictable execution from prompts without user interaction
 - **[FR-16] Auto-Approval Configuration**: The .vscode/settings.json shall configure auto-approval for .rdd/scripts/ execution
 - **[FR-17] Multiple Execution Support**: The clarification prompt shall support re-execution, building on previous work without data loss
@@ -64,9 +64,10 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-41] Latest Requirements Maintenance**: The .rdd-docs/requirements.md shall always reflect the latest committed state from main branch after wrap-up synchronization
 - **[FR-42] Complete Workspace Clearing**: The system shall remove all files and subdirectories from .rdd-docs/workspace/ when clearing workspace after archiving, ensuring no files remain from previous work
 - **[FR-43] Config File Naming Convention**: The system shall name workspace config files using the pattern .rdd.[type].[branch-name] where type is either 'fix' or 'enh' and branch-name matches the git branch name
-- **[FR-44] Unified Script Entry Point**: All RDD operations shall be accessible through the main rdd.sh (Linux) or rdd.ps1 (Windows) script with domain-based command routing, replacing standalone fix-management.sh functionality
+- **[FR-44] [DELETED]
 - **[FR-45] No change.md in Workspace**: The workspace initialization shall NOT create a change.md file, as this template has been removed from the framework
 - **[FR-46] Post-Merge Cleanup Workflow**: The framework shall provide a guided cleanup prompt (rdd.09-clean-up.prompt.md) for removing local and remote branches after PR merge, automating the cleanup command execution
+- **[FR-47] Python-Based Script Implementation**: All RDD operations shall be implemented in Python (rdd.py) with domain-based command routing, replacing legacy bash scripts which are archived
 
 # Non-Functional Requirements
 
@@ -91,9 +92,9 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[TR-03] JSON Configuration**: The .current-change file shall use JSON format for machine and human readability
 - **[TR-04] DELETED
 - **[TR-05] DELETED
-- **[TR-06] Bash Scripts**: All automation scripts shall be implemented in Bash for cross-platform Linux/Mac compatibility
-- **[TR-07] Exit on Error**: Scripts shall use `set -e` to exit immediately on command failure
-- **[TR-08] JQ Dependency**: Scripts may use jq for JSON parsing with fallback to basic text processing if unavailable
+- **[TR-06] Python Scripts**: All automation scripts shall be implemented in Python for cross-platform compatibility (legacy bash scripts archived)
+- **[TR-07] Exit on Error**: Scripts shall use proper error handling to exit immediately on command failure
+- **[TR-08] JQ Dependency**: Legacy bash scripts used jq for JSON parsing; Python implementation uses native json module
 - **[TR-09] Executable Permissions**: All script files shall have executable permissions (chmod +x)
 - **[TR-10] Templates Location**: All file templates shall be stored in .rdd/templates/
 - **[TR-11] Scripts Location**: All automation scripts shall be stored in .rdd/scripts/
