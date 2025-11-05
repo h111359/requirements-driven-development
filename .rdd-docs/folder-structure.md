@@ -19,7 +19,11 @@ repo-root/
 │   │   ├── rdd.02-clarify-requirements.prompt.md
 │   │   ├── rdd.06-execute.prompt.md
 │   │   ├── rdd.07-update-docs.prompt.md
-│   │   └── rdd.08-wrap-up.prompt.md
+│   │   ├── rdd.08-wrap-up.prompt.md
+│   │   ├── rdd.09-clean-up.prompt.md
+│   │   ├── rdd.G1-update-backlog.prompt.md
+│   │   ├── rdd.G2-detect-docs-changes.prompt.md
+│   │   └── rdd.G4-update-from-main.prompt.md
 │   └── copilot-instructions.md   # Copilot agent behavioral guidelines
 ├── .rdd/                         # RDD framework internals (legacy location)
 │   ├── scripts/                  # Automation scripts (being migrated to src/)

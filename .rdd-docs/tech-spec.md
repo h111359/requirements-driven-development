@@ -65,6 +65,7 @@ The framework follows a sequential phase workflow:
 3. **Execute**: Implement changes following clarified requirements
 4. **Update Docs**: Synchronize documentation with implementation
 5. **Wrap-Up**: Archive workspace, merge requirements, prepare for PR
+6. **Clean-Up**: After PR merge, clean up local environment and remove merged branches
 
 ## Component Architecture
 
