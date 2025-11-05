@@ -13,7 +13,7 @@ Keep the current branch synchronized with `main` after others merge changes — 
 Run the automated update process:
 
 ```bash
-./.rdd/scripts/rdd.sh git update-from-main
+python3 ./.rdd/scripts/rdd.py git update-from-main
 ```
 
 This command will:

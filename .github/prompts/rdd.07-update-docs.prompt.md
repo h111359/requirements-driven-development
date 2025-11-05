@@ -1,3 +1,4 @@
+````prompt
 # RDD: Update Documentation
 
 ## Purpose
@@ -20,7 +21,7 @@ Changes have been documented in `.rdd-docs/workspace/.rdd.copilot-prompts.md`. T
 
 Read the following to understand current implementation:
 - All files in `.github/prompts/` - understand workflow prompts
-- All files in `.rdd/scripts/` - understand script implementation
+- All files in `.rdd/scripts/` - understand Python script implementation (`rdd.py` and `rdd_utils.py`)
 - All files in `.rdd/templates/` - understand template structure
 
 **S03: Identify Documentation Updates**

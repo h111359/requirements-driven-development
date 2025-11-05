@@ -1,0 +1,7 @@
+{
+  "archivedAt": "2025-11-05T04:11:49Z",
+  "branch": "fix/20251104-2156-python-prompts",
+  "archivedBy": "Hristo Hristov <hmhristov@outlook.com>",
+  "lastCommit": "06f2f6e324d2e62eec2ef370edca46eda65a9c12",
+  "lastCommitMessage": "Add cross-platform Python equivalents for RDD Bash scripts (#36)"
+}

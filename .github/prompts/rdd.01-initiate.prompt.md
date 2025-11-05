@@ -9,23 +9,24 @@ Start a new enhancement or fix in the RDD framework.
 
 Ask the user:
 > "What type of change would you like to create?
-> - **enhancement** - New functionality or enhancement
-> - **fix** - Bug fix or correction
-> 
-> Please respond with either 'enhancement' or 'fix'."
+> - E:) **enhancement** - New functionality or enhancement
+> - F:) **fix** - Bug fix or correction
+>
+> Please respond with either 'e' or 'f'
 
 **S02: Execute Command**
 
 Based on the user's response, execute the appropriate command:
 
 - If user chose **enhancement**:
-  ```bash
-  ./.rdd/scripts/rdd.sh change create enh
+  ```python
+  python3 .rdd/scripts/rdd.py change create enh
   ```
 
 - If user chose **fix**:
-  ```bash
-  ./.rdd/scripts/rdd.sh change create fix
+  ```python
+  python3 .rdd/scripts/rdd.py change create fix
   ```
 
 
+  
