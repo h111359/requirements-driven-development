@@ -20,6 +20,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[GF-08] Fix Branch Workflow**: The framework shall provide a guided workflow for creating and documenting fix branches, including naming, description, and initialization.
 - **[GF-09] Fix Branch Wrap-Up**: The framework shall provide a workflow for wrapping up fix branches, archiving documentation, and preparing for merge review.
 - **[GF-10] Requirements Change Detection**: The framework shall provide a workflow for detecting and documenting requirements changes by comparing code with the main branch.
+- **[GF-11] Post-Merge Branch Cleanup**: The framework shall provide a workflow for cleaning up local and remote branches after PR merge, ensuring workspace synchronization with main.
 # Functional Requirements
 
 - **[FR-03] Flat Workspace Structure**: The system shall store all active workspace files directly in .rdd-docs/workspace/ without enhancement-specific subfolders
@@ -65,6 +66,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-43] Config File Naming Convention**: The system shall name workspace config files using the pattern .rdd.[type].[branch-name] where type is either 'fix' or 'enh' and branch-name matches the git branch name
 - **[FR-44] Unified Script Entry Point**: All RDD operations shall be accessible through the main rdd.sh (Linux) or rdd.ps1 (Windows) script with domain-based command routing, replacing standalone fix-management.sh functionality
 - **[FR-45] No change.md in Workspace**: The workspace initialization shall NOT create a change.md file, as this template has been removed from the framework
+- **[FR-46] Post-Merge Cleanup Workflow**: The framework shall provide a guided cleanup prompt (rdd.09-clean-up.prompt.md) for removing local and remote branches after PR merge, automating the cleanup command execution
 
 # Non-Functional Requirements
 
