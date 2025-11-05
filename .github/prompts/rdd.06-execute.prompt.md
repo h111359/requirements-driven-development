@@ -23,13 +23,15 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
 
 3. **Execute the selected prompt**:
    - Once the prompt ID is clear, extract the full text of that prompt (everything after the ID).
+   - Create a file `.rdd-docs/workspace/<put-prompt-ID-here>-implementation.md` for the analysis and the result of your operations, the changes, etc.
    - Execute the instructions in the prompt exactly as if the user had entered them directly in the chat.
    - Follow all instructions in the prompt carefully.
+   - Add information for the implementation details in the file `.rdd-docs/workspace/<put-prompt-ID-here>-implementation.md` on each step. 
 
 4. **Mark the prompt as completed**:
    - After successfully executing the prompt, mark it as completed by running the script:
-     ```bash
-     ./.rdd/scripts/rdd.sh prompt mark-completed <PROMPT_ID>
+     ```python
+     python3 .rdd/scripts/rdd.py prompt mark-completed <PROMPT_ID>
      ```
    - Replace `<PROMPT_ID>` with the actual prompt ID (e.g., `P001`, `P002`, etc.)
    - The script will automatically change the checkbox from `- [ ]` to `- [x]`
@@ -37,8 +39,8 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
 
 5. **Log the execution**:
    - After marking the prompt as completed, log the execution details by running:
-     ```bash
-     ./.rdd/scripts/rdd.sh prompt log-execution <PROMPT_ID> "<EXECUTION_DETAILS>"
+     ```python
+     python3 .rdd/scripts/rdd.py prompt log-execution <PROMPT_ID> "<EXECUTION_DETAILS>"
      ```
    - Replace `<PROMPT_ID>` with the actual prompt ID (e.g., `P001`, `P002`, etc.)
    - Replace `<EXECUTION_DETAILS>` with a summary of what was done during the execution
@@ -52,8 +54,8 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
 
 ## Important Constraints
 
-- **Use the script for marking**: Always use `./.rdd/scripts/rdd.sh prompt mark-completed <PROMPT_ID>` to mark prompts as completed. Never manually edit the .rdd.copilot-prompts.md file.
-- **Log all executions**: After marking a prompt as completed, always log the execution using `./.rdd/scripts/rdd.sh prompt log-execution <PROMPT_ID> "<EXECUTION_DETAILS>"`.
+- **Use the script for marking**: Always use `python3 .rdd/scripts/rdd.py prompt mark-completed <PROMPT_ID>` to mark prompts as completed. Never manually edit the .rdd.copilot-prompts.md file.
+- **Log all executions**: After marking a prompt as completed, always log the execution using `python3 .rdd/scripts/rdd.py prompt log-execution <PROMPT_ID> "<EXECUTION_DETAILS>"`.
 - **Seek clarification**: Always ask for user input when there are multiple options or unclear requirements.
 - **Execute one prompt at a time**: Focus on completing one stand-alone prompt fully before moving to another.
 - **Keep short**: Do not make detailed summaries when finishing the task. Just write "I am done."
@@ -72,5 +74,5 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
    ```
 4. User responds: "P001"
 5. You execute the instructions from prompt P001
-6. You mark P001 as completed by running: `./.rdd/scripts/rdd.sh prompt mark-completed P001`
-7. You log the execution by running: `./.rdd/scripts/rdd.sh prompt log-execution P001 "Created prompt file with instructions for executing stand-alone prompts"`
+6. You mark P001 as completed by running: `python3 .rdd/scripts/rdd.py prompt mark-completed P001`
+7. You log the execution by running: `python3 .rdd/scripts/rdd.py prompt log-execution P001 "Created prompt file with instructions for executing stand-alone prompts"`

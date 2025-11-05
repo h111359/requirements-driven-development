@@ -324,6 +324,36 @@ def get_default_branch() -> str:
     return "main"  # Default to main
 
 
+def get_branch_type(branch_name: str = None) -> str:
+    """
+    Get the type of the branch (enh or fix).
+    If branch_name is not provided, uses current branch.
+    Returns 'enh', 'fix', or empty string if not a valid type.
+    """
+    if not branch_name:
+        branch_name = get_current_branch()
+    
+    if not branch_name:
+        return ""
+    
+    if branch_name.startswith('enh/'):
+        return 'enh'
+    elif branch_name.startswith('fix/'):
+        return 'fix'
+    
+    return ""
+
+
+def is_enh_or_fix_branch(branch_name: str = None) -> bool:
+    """
+    Check if the branch is an enhancement or fix branch.
+    If branch_name is not provided, uses current branch.
+    Returns True if branch starts with 'enh/' or 'fix/', False otherwise.
+    """
+    branch_type = get_branch_type(branch_name)
+    return branch_type in ['enh', 'fix']
+
+
 def get_git_user() -> str:
     """Get git user information. Returns 'Name <email>'."""
     name_result = subprocess.run(
@@ -375,6 +405,317 @@ def check_uncommitted_changes() -> bool:
     
     debug_print("No uncommitted changes found")
     return True
+
+
+def stash_changes() -> bool:
+    """
+    Stash uncommitted changes with timestamp.
+    Returns True on success, False on failure.
+    """
+    from datetime import datetime
+    
+    print_step("Stashing uncommitted changes...")
+    
+    # Check if there are any changes to stash
+    result = subprocess.run(
+        ['git', 'diff-index', '--quiet', 'HEAD', '--'],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+    has_modified = result.returncode != 0
+    
+    # Check for untracked files
+    result = subprocess.run(
+        ['git', 'ls-files', '--others', '--exclude-standard'],
+        capture_output=True,
+        text=True
+    )
+    has_untracked = bool(result.stdout.strip())
+    
+    if not has_modified and not has_untracked:
+        print_info("No uncommitted changes to stash")
+        return True
+    
+    # Create stash with timestamp
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    stash_message = f"RDD auto-stash {timestamp}"
+    
+    result = subprocess.run(
+        ['git', 'stash', 'push', '-u', '-m', stash_message],
+        capture_output=True,
+        text=True
+    )
+    
+    if result.returncode == 0:
+        print_success("Changes stashed successfully")
+        debug_print(f"Stash message: {stash_message}")
+        return True
+    else:
+        print_error("Failed to stash changes")
+        if result.stderr:
+            print(result.stderr)
+        return False
+
+
+def restore_stashed_changes() -> int:
+    """
+    Restore stashed changes (most recent RDD auto-stash).
+    Returns: 0 on success, 1 on failure, 2 if no stash found.
+    """
+    print_step("Restoring stashed changes...")
+    
+    # Get stash list
+    result = subprocess.run(
+        ['git', 'stash', 'list'],
+        capture_output=True,
+        text=True
+    )
+    
+    if result.returncode != 0:
+        print_warning("Failed to list stashes")
+        return 1
+    
+    # Find the first RDD auto-stash
+    stash_lines = result.stdout.strip().split('\n') if result.stdout.strip() else []
+    stash_index = None
+    
+    for i, line in enumerate(stash_lines):
+        if 'RDD auto-stash' in line:
+            # Extract stash reference (e.g., "stash@{0}")
+            stash_ref = line.split(':')[0].strip()
+            stash_index = stash_ref
+            break
+    
+    if not stash_index:
+        print_warning("No RDD auto-stash found")
+        return 2
+    
+    # Pop the specific RDD auto-stash
+    result = subprocess.run(
+        ['git', 'stash', 'pop', stash_index],
+        capture_output=True,
+        text=True
+    )
+    
+    if result.returncode == 0:
+        print_success("Stashed changes restored successfully")
+        return 0
+    else:
+        print_error("Failed to restore stashed changes")
+        print_warning("Changes are still in stash. Use 'git stash list' to see stashes and 'git stash pop' manually.")
+        if result.stderr:
+            print(result.stderr)
+        return 1
+
+
+def pull_main() -> bool:
+    """
+    Pull latest changes from default branch.
+    Returns True on success, False on failure.
+    """
+    default_branch = get_default_branch()
+    
+    print_step(f"Pulling latest changes from origin/{default_branch}...")
+    
+    # First fetch from origin
+    result = subprocess.run(
+        ['git', 'fetch', 'origin', default_branch, '--quiet'],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+    
+    if result.returncode != 0:
+        print_error(f"Failed to fetch from origin/{default_branch}")
+        return False
+    
+    # Check if local default branch exists
+    result = subprocess.run(
+        ['git', 'show-ref', '--verify', '--quiet', f'refs/heads/{default_branch}'],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+    
+    if result.returncode != 0:
+        # Local branch doesn't exist, create it from origin
+        result = subprocess.run(
+            ['git', 'branch', default_branch, f'origin/{default_branch}'],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+        
+        if result.returncode == 0:
+            print_success(f"Created local {default_branch} branch from origin")
+            return True
+        else:
+            print_error(f"Failed to create local {default_branch} branch")
+            return False
+    
+    # Try to update local main branch reference (fast-forward only)
+    current_branch = get_current_branch()
+    if current_branch != default_branch:
+        # We're not on main, try to fast-forward the local main branch
+        result = subprocess.run(
+            ['git', 'fetch', 'origin', f'{default_branch}:{default_branch}'],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+        
+        if result.returncode == 0:
+            print_success(f"Updated local {default_branch} branch")
+            return True
+        else:
+            # Fast-forward failed, probably because of local commits or conflicts
+            # Just ensure we have the latest from origin
+            print_success(f"Fetched latest from origin/{default_branch}")
+            debug_print(f"Could not fast-forward local {default_branch} (may have local commits)")
+            return True
+    else:
+        # We're on main, do a regular pull
+        result = subprocess.run(
+            ['git', 'pull', 'origin', default_branch],
+            capture_output=True,
+            text=True
+        )
+        
+        if result.returncode == 0:
+            print_success(f"Successfully pulled latest {default_branch}")
+            return True
+        else:
+            print_error(f"Failed to pull from origin/{default_branch}")
+            if result.stderr:
+                print(result.stderr)
+            return False
+
+
+def merge_main_into_current() -> bool:
+    """
+    Merge default branch into current branch.
+    Returns True on success, False on failure (including conflicts).
+    """
+    default_branch = get_default_branch()
+    current_branch = get_current_branch()
+    
+    # Safety check: don't merge if we're on main
+    if current_branch == default_branch:
+        print_error(f"Cannot merge {default_branch} into itself")
+        return False
+    
+    print_step(f"Merging {default_branch} into {current_branch}...")
+    
+    # Attempt merge
+    result = subprocess.run(
+        ['git', 'merge', default_branch, '--no-edit'],
+        capture_output=True,
+        text=True
+    )
+    
+    if result.returncode == 0:
+        print_success(f"Successfully merged {default_branch} into {current_branch}")
+        return True
+    else:
+        # Check if it's a conflict using reliable programmatic output
+        result = subprocess.run(
+            ['git', 'ls-files', '-u'],
+            capture_output=True,
+            text=True
+        )
+        
+        if result.stdout.strip():
+            print_error("Merge conflicts detected!")
+            print("")
+            print_warning("Conflicts found in:")
+            
+            # Get unique file paths from unmerged files
+            conflict_files = set()
+            for line in result.stdout.strip().split('\n'):
+                if line:
+                    # Format: <mode> <hash> <stage> <file>
+                    parts = line.split('\t')
+                    if len(parts) >= 2:
+                        conflict_files.add(parts[1])
+            
+            for file in sorted(conflict_files):
+                print(f"  - {file}")
+            
+            print("")
+            print_info("Please resolve conflicts manually:")
+            print("  1. Edit conflicted files")
+            print("  2. Stage resolved files: git add <file>")
+            print("  3. Complete merge: git commit")
+            print("")
+            return False
+        else:
+            print_error("Merge failed for unknown reason")
+            if result.stderr:
+                print(result.stderr)
+            return False
+
+
+def update_from_main() -> bool:
+    """
+    Update current branch from main (full workflow).
+    Stashes changes, pulls main, merges, and restores stash.
+    Returns True on success, False on failure.
+    """
+    default_branch = get_default_branch()
+    current_branch = get_current_branch()
+    
+    print_banner(f"Update Branch from {default_branch}")
+    print("")
+    print_info(f"Current branch: {current_branch}")
+    print_info(f"Target: {default_branch}")
+    print("")
+    
+    # Safety check: don't run on main
+    if current_branch == default_branch:
+        print_error(f"Cannot update {default_branch} from itself")
+        print_info(f"This command is meant to update feature branches with latest {default_branch}")
+        return False
+    
+    # Step 1: Stash changes
+    if not stash_changes():
+        print_error("Failed to stash changes. Aborting.")
+        return False
+    
+    # Step 2: Pull latest main
+    if not pull_main():
+        print_error(f"Failed to pull latest {default_branch}. Aborting.")
+        # Try to restore stash
+        restore_result = restore_stashed_changes()
+        if restore_result != 0:
+            print_error("Also failed to restore stashed changes")
+            print_warning("Your changes are safely in the stash. Run 'git stash list' to see them.")
+        return False
+    
+    # Step 3: Merge main into current branch
+    if not merge_main_into_current():
+        print_error("Merge failed. Please resolve conflicts manually.")
+        print_warning("Your changes are still stashed. After resolving conflicts:")
+        print("  1. Complete the merge: git commit")
+        print("  2. Restore your changes: git stash pop")
+        return False
+    
+    # Step 4: Restore stashed changes
+    restore_result = restore_stashed_changes()
+    
+    if restore_result == 0:
+        print("")
+        print_banner("Update Complete")
+        print_success(f"Branch updated from {default_branch}")
+        print_success("Local changes restored (uncommitted)")
+        return True
+    elif restore_result == 2:
+        print("")
+        print_banner("Update Complete")
+        print_success(f"Branch updated from {default_branch}")
+        print_info("No stashed changes to restore")
+        return True
+    else:
+        print("")
+        print_warning("Update complete but failed to restore stash")
+        print_info("Your changes are still in stash. Restore manually with:")
+        print("  git stash pop")
+        return False
 
 
 # ============================================================================
@@ -533,6 +874,267 @@ def help_option(option: str, description: str) -> None:
     print(f"  {Colors.YELLOW}{option}{Colors.NC}")
     print(f"      {description}")
     print()
+
+
+# ============================================================================
+# PROMPT MANAGEMENT FUNCTIONS
+# ============================================================================
+
+def mark_prompt_completed(prompt_id: str, journal_file: str = None) -> bool:
+    """
+    Mark a stand-alone prompt as completed in .rdd.copilot-prompts.md.
+    Changes checkbox from "- [ ]" to "- [x]".
+    
+    Args:
+        prompt_id: The ID of the prompt (e.g., P01, P02, P001)
+        journal_file: Path to .rdd.copilot-prompts.md (optional, defaults to workspace file)
+    
+    Returns:
+        True on success, False on error
+    """
+    import re
+    
+    if not journal_file:
+        journal_file = os.path.join(".rdd-docs/workspace", ".rdd.copilot-prompts.md")
+    
+    # Validate prompt ID is provided
+    if not prompt_id:
+        print_error("Prompt ID is required")
+        return False
+    
+    # Check if journal file exists
+    if not os.path.isfile(journal_file):
+        print_error(f".rdd.copilot-prompts.md not found at: {journal_file}")
+        return False
+    
+    # Read the file
+    try:
+        with open(journal_file, 'r', encoding='utf-8') as f:
+            content = f.read()
+    except Exception as e:
+        print_error(f"Failed to read file: {e}")
+        return False
+    
+    # Check if the prompt exists and is not already completed
+    unchecked_pattern = rf'^\s*-\s*\[\s*\]\s*\[{re.escape(prompt_id)}\]'
+    checked_pattern = rf'^\s*-\s*\[x\]\s*\[{re.escape(prompt_id)}\]'
+    
+    if not re.search(unchecked_pattern, content, re.MULTILINE):
+        if re.search(checked_pattern, content, re.MULTILINE):
+            print_warning(f"Prompt {prompt_id} is already marked as completed")
+            return True
+        else:
+            print_error(f"Prompt {prompt_id} not found in .rdd.copilot-prompts.md")
+            return False
+    
+    # Mark the prompt as completed
+    # This will change "- [ ] [PROMPT_ID]" to "- [x] [PROMPT_ID]"
+    new_content = re.sub(
+        rf'(^\s*-\s*)\[\s*\](\s*\[{re.escape(prompt_id)}\])',
+        r'\1[x]\2',
+        content,
+        flags=re.MULTILINE
+    )
+    
+    # Write back to file
+    try:
+        with open(journal_file, 'w', encoding='utf-8') as f:
+            f.write(new_content)
+        print_success(f"Marked prompt {prompt_id} as completed")
+        return True
+    except Exception as e:
+        print_error(f"Failed to mark prompt {prompt_id} as completed: {e}")
+        return False
+
+
+def log_prompt_execution(prompt_id: str, execution_details: str, session_id: str = None) -> bool:
+    """
+    Log prompt execution details to log.jsonl.
+    Creates a structured JSONL entry with timestamp, promptId, executionDetails, sessionId.
+    
+    Args:
+        prompt_id: The ID of the executed prompt (e.g., P01, P02)
+        execution_details: Full content describing what was executed
+        session_id: Optional session identifier (defaults to exec-YYYYMMDD-HHmm)
+    
+    Returns:
+        True on success, False on error
+    
+    Format:
+        {"timestamp":"2025-11-05T10:30:00Z","promptId":"P01","executionDetails":"...","sessionId":"exec-20251105-1030"}
+    """
+    from datetime import datetime
+    
+    workspace_dir = ".rdd-docs/workspace"
+    log_file = os.path.join(workspace_dir, "log.jsonl")
+    
+    # Validate required parameters
+    if not prompt_id:
+        print_error("Prompt ID is required for logging")
+        return False
+    
+    if not execution_details:
+        print_error("Execution details are required for logging")
+        return False
+    
+    # Default session ID if not provided
+    if not session_id:
+        session_id = f"exec-{datetime.now().strftime('%Y%m%d-%H%M')}"
+    
+    # Ensure workspace directory exists
+    os.makedirs(workspace_dir, exist_ok=True)
+    
+    # Create log file if it doesn't exist
+    if not os.path.isfile(log_file):
+        open(log_file, 'a').close()
+        debug_print(f"Created log file: {log_file}")
+    
+    # Create JSON line entry
+    timestamp = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+    log_entry = {
+        "timestamp": timestamp,
+        "promptId": prompt_id,
+        "executionDetails": execution_details,
+        "sessionId": session_id
+    }
+    
+    # Write to log file
+    try:
+        with open(log_file, 'a', encoding='utf-8') as f:
+            f.write(json.dumps(log_entry) + '\n')
+        print_success(f"Logged execution details for prompt {prompt_id} to {log_file}")
+        return True
+    except Exception as e:
+        print_error(f"Failed to log execution: {e}")
+        return False
+
+
+def list_prompts(status: str = "all", journal_file: str = None) -> bool:
+    """
+    List prompts from .rdd.copilot-prompts.md filtered by status.
+    
+    Args:
+        status: Filter by status ('unchecked', 'checked', 'all')
+        journal_file: Path to .rdd.copilot-prompts.md (optional, defaults to workspace file)
+    
+    Returns:
+        True on success, False on error
+    """
+    import re
+    
+    if not journal_file:
+        journal_file = os.path.join(".rdd-docs/workspace", ".rdd.copilot-prompts.md")
+    
+    # Validate status parameter
+    if status not in ['unchecked', 'checked', 'all']:
+        print_error(f"Invalid status filter: '{status}'")
+        print("Valid options: unchecked, checked, all")
+        return False
+    
+    # Check if journal file exists
+    if not os.path.isfile(journal_file):
+        print_error(f".rdd.copilot-prompts.md not found at: {journal_file}")
+        return False
+    
+    # Print header
+    print_banner(f"PROMPTS LIST ({status})")
+    
+    # Read file and filter
+    try:
+        with open(journal_file, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+    except Exception as e:
+        print_error(f"Failed to read file: {e}")
+        return False
+    
+    # Patterns for matching prompts
+    unchecked_pattern = re.compile(r'^\s*-\s*\[\s*\]\s*\[([P][0-9]+)\]\s*(.*)$')
+    checked_pattern = re.compile(r'^\s*-\s*\[x\]\s*\[([P][0-9]+)\]\s*(.*)$')
+    
+    total_count = 0
+    checked_count = 0
+    unchecked_count = 0
+    
+    for line in lines:
+        # Try unchecked pattern
+        match = unchecked_pattern.match(line)
+        if match:
+            total_count += 1
+            unchecked_count += 1
+            if status in ['unchecked', 'all']:
+                prompt_id = match.group(1)
+                prompt_title = match.group(2).strip()[:80]
+                print(f"  ☐ [{prompt_id}] {prompt_title}")
+            continue
+        
+        # Try checked pattern
+        match = checked_pattern.match(line)
+        if match:
+            total_count += 1
+            checked_count += 1
+            if status in ['checked', 'all']:
+                prompt_id = match.group(1)
+                prompt_title = match.group(2).strip()[:80]
+                print(f"  ☑ [{prompt_id}] {prompt_title}")
+    
+    # Print summary
+    print()
+    print_info(f"Summary: {checked_count} completed, {unchecked_count} pending, {total_count} total")
+    
+    return True
+
+
+def validate_prompt_status(prompt_id: str, journal_file: str = None) -> int:
+    """
+    Validate prompt status in copilot-prompts.md.
+    Checks if a prompt exists and returns its status.
+    
+    Args:
+        prompt_id: The ID of the prompt to check (e.g., P01, P02)
+        journal_file: Path to copilot-prompts.md (optional, defaults to workspace file)
+    
+    Returns:
+        0 if prompt exists and is unchecked
+        1 if prompt exists and is checked
+        2 if prompt does not exist
+        3 if journal file not found
+    """
+    import re
+    
+    if not journal_file:
+        journal_file = os.path.join(".rdd-docs/workspace", ".rdd.copilot-prompts.md")
+    
+    # Validate prompt ID is provided
+    if not prompt_id:
+        print_error("Prompt ID is required")
+        return 3
+    
+    # Check if journal file exists
+    if not os.path.isfile(journal_file):
+        print_error(f".rdd.copilot-prompts.md not found at: {journal_file}")
+        return 3
+    
+    # Read file
+    try:
+        with open(journal_file, 'r', encoding='utf-8') as f:
+            content = f.read()
+    except Exception as e:
+        print_error(f"Failed to read file: {e}")
+        return 3
+    
+    # Check if prompt exists and get its status
+    unchecked_pattern = rf'^\s*-\s*\[\s*\]\s*\[{re.escape(prompt_id)}\]'
+    checked_pattern = rf'^\s*-\s*\[x\]\s*\[{re.escape(prompt_id)}\]'
+    
+    if re.search(unchecked_pattern, content, re.MULTILINE):
+        print_info(f"Prompt {prompt_id} exists and is unchecked (pending)")
+        return 0
+    elif re.search(checked_pattern, content, re.MULTILINE):
+        print_info(f"Prompt {prompt_id} exists and is checked (completed)")
+        return 1
+    else:
+        print_warning(f"Prompt {prompt_id} not found in copilot-prompts.md")
+        return 2
 
 
 if __name__ == '__main__':

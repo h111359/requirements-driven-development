@@ -25,8 +25,11 @@ from rdd_utils import (
     # Validation functions
     validate_name, validate_branch_name, validate_file_exists, validate_dir_exists,
     # Git functions
-    check_git_repo, get_current_branch, get_default_branch, get_git_user,
+    check_git_repo, get_current_branch, get_default_branch, get_branch_type, 
+    is_enh_or_fix_branch, get_git_user,
     check_uncommitted_changes, get_repo_root,
+    stash_changes, restore_stashed_changes, pull_main, merge_main_into_current,
+    update_from_main,
     # String functions
     normalize_to_kebab_case,
     # Utility functions
@@ -34,6 +37,8 @@ from rdd_utils import (
     exit_with_error, debug_print,
     # Config functions
     find_change_config, get_config, set_config,
+    # Prompt functions
+    mark_prompt_completed, log_prompt_execution, list_prompts, validate_prompt_status,
     # Help functions
     help_section, help_command, help_option,
     Colors
@@ -426,6 +431,174 @@ def list_branches(filter_str: Optional[str] = None) -> bool:
     return True
 
 
+def cleanup_after_merge(branch_name: str = None) -> bool:
+    """
+    Clean up after a branch has been merged.
+    Switches to default branch, fetches and pulls latest, deletes the specified merged branch.
+    
+    Args:
+        branch_name: Branch to delete (optional, will prompt if not provided)
+    
+    Returns:
+        True on success, False on failure
+    """
+    check_git_repo()
+    
+    print_banner("POST-MERGE CLEANUP")
+    print()
+    
+    # Get default branch and current branch
+    default_branch = get_default_branch()
+    current_branch = get_current_branch()
+    
+    # If no branch name provided, prompt for it or use current branch
+    if not branch_name:
+        # If we're not on the default branch, offer to delete current branch
+        if current_branch != default_branch:
+            print_info(f"Current branch: {current_branch}")
+            if confirm_action("Delete current branch after cleanup?"):
+                branch_name = current_branch
+            else:
+                try:
+                    branch_name = input("Enter branch name to delete (or press Enter to skip): ").strip()
+                except (KeyboardInterrupt, EOFError):
+                    print()
+                    print_info("Operation cancelled")
+                    return False
+                
+                if not branch_name:
+                    print_info("No branch specified for deletion")
+        else:
+            try:
+                branch_name = input("Enter branch name to delete (or press Enter to skip): ").strip()
+            except (KeyboardInterrupt, EOFError):
+                print()
+                print_info("Operation cancelled")
+                return False
+            
+            if not branch_name:
+                print_info("No branch specified for deletion")
+    
+    # Switch to default branch
+    print_step(f"1. Switching to '{default_branch}' branch")
+    if current_branch != default_branch:
+        result = subprocess.run(
+            ['git', 'checkout', default_branch],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+        
+        if result.returncode != 0:
+            print_error(f"Failed to checkout '{default_branch}'")
+            return False
+        print_success(f"Switched to '{default_branch}'")
+    else:
+        print_info(f"Already on '{default_branch}'")
+    print()
+    
+    # Fetch latest changes
+    print_step("2. Fetching latest changes from remote")
+    result = subprocess.run(
+        ['git', 'fetch', 'origin'],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+    
+    if result.returncode != 0:
+        print_warning("Failed to fetch from remote")
+    else:
+        print_success("Fetched latest changes")
+    print()
+    
+    # Pull latest changes for default branch
+    print_step(f"3. Pulling latest changes for '{default_branch}'")
+    result = subprocess.run(
+        ['git', 'pull', 'origin', default_branch],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+    
+    if result.returncode != 0:
+        print_warning("Failed to pull latest changes")
+    else:
+        print_success("Pulled latest changes")
+    print()
+    
+    # Delete the branch if specified
+    if branch_name:
+        print_step(f"4. Deleting branch '{branch_name}'")
+        
+        # Check if branch exists locally
+        result = subprocess.run(
+            ['git', 'show-ref', '--verify', '--quiet', f'refs/heads/{branch_name}'],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+        
+        if result.returncode == 0:
+            # Try to delete local branch
+            result = subprocess.run(
+                ['git', 'branch', '-d', branch_name],
+                capture_output=True,
+                text=True
+            )
+            
+            if result.returncode == 0:
+                print_success("Local branch deleted")
+            else:
+                print_warning("Branch not fully merged, use --force if needed")
+                if confirm_action("Force delete local branch?"):
+                    result = subprocess.run(
+                        ['git', 'branch', '-D', branch_name],
+                        capture_output=True,
+                        text=True
+                    )
+                    
+                    if result.returncode == 0:
+                        print_success("Local branch force-deleted")
+                    else:
+                        print_error("Failed to delete local branch")
+        else:
+            print_info("Local branch does not exist (already deleted)")
+        
+        # Check and delete remote branch
+        result = subprocess.run(
+            ['git', 'ls-remote', '--heads', 'origin', branch_name],
+            capture_output=True,
+            text=True
+        )
+        
+        if result.stdout.strip():
+            print_info(f"Deleting remote branch 'origin/{branch_name}'...")
+            result = subprocess.run(
+                ['git', 'push', 'origin', '--delete', branch_name],
+                capture_output=True,
+                text=True
+            )
+            
+            if result.returncode == 0:
+                print_success("Remote branch deleted")
+            else:
+                print_error("Failed to delete remote branch")
+        else:
+            print_info("Remote branch does not exist (already deleted)")
+        
+        print()
+    
+    # Display completion summary
+    print_banner("CLEANUP COMPLETE")
+    print_success("Post-merge cleanup completed successfully!")
+    print()
+    print_info("Summary:")
+    print(f"  • Switched to '{default_branch}' branch")
+    print("  • Fetched and pulled latest changes")
+    if branch_name:
+        print(f"  • Deleted branch '{branch_name}' (local and remote)")
+    print()
+    
+    return True
+
+
 # ============================================================================
 # WORKSPACE OPERATIONS
 # ============================================================================
@@ -627,6 +800,18 @@ def wrap_up_change() -> bool:
         print_error("Could not determine current branch")
         return False
     
+    # Validate that we're on an enh or fix branch
+    if not is_enh_or_fix_branch(current_branch):
+        print_error(f"Cannot wrap up: not on an enhancement or fix branch")
+        print_warning(f"Current branch: {current_branch}")
+        print()
+        print_info("Wrap-up can only be performed on branches starting with 'enh/' or 'fix/'")
+        print()
+        print("Valid branch format examples:")
+        print("  • enh/20241101-1234-my-enhancement")
+        print("  • fix/20241101-1234-my-bugfix")
+        return False
+    
     print_banner("Wrap Up Change")
     print()
     
@@ -638,9 +823,9 @@ def wrap_up_change() -> bool:
     
     print()
     
-    # Commit changes
+    # Commit changes (including any uncommitted changes)
     print_step("Committing changes...")
-    commit_msg = f"Wrap up: {current_branch}"
+    commit_msg = f"wrap up {current_branch}"
     result = auto_commit(commit_msg)
     
     if result == 2:
@@ -690,6 +875,7 @@ def show_main_help() -> None:
     print("  change        Change workflow management")
     print("  fix           Fix workflow management")
     print("  git           Git operations and comparisons")
+    print("  prompt        Stand-alone prompt management")
     print()
     print("Options:")
     print("  --help, -h    Show this help message")
@@ -701,6 +887,7 @@ def show_main_help() -> None:
     print("  rdd.py change create")
     print("  rdd.py branch delete my-branch")
     print("  rdd.py git compare")
+    print("  rdd.py prompt mark-completed P01")
 
 
 def show_branch_help() -> None:
@@ -712,11 +899,13 @@ def show_branch_help() -> None:
     print("Actions:")
     print("  create <type> <name>    Create new branch (type: enh|fix)")
     print("  delete [name] [--force] Delete branch (current if name omitted)")
+    print("  cleanup [name]          Post-merge cleanup: fetch main, pull, delete branch")
     print("  list [filter]           List branches (optional filter)")
     print()
     print("Examples:")
     print("  rdd.py branch create enh my-enhancement")
     print("  rdd.py branch delete my-old-branch")
+    print("  rdd.py branch cleanup enh/20241101-1234-my-enhancement")
     print("  rdd.py branch list")
 
 
@@ -764,11 +953,30 @@ def show_git_help() -> None:
     print("  compare           Compare current branch with main")
     print("  modified-files    List modified files")
     print("  push              Push current branch to remote")
+    print("  update-from-main  Update current branch from main")
     print()
     print("Examples:")
     print("  rdd.py git compare")
     print("  rdd.py git modified-files")
     print("  rdd.py git push")
+    print("  rdd.py git update-from-main")
+
+
+def show_prompt_help() -> None:
+    """Show prompt management help."""
+    print_banner("Prompt Management")
+    print()
+    print("Usage: rdd.py prompt <action> [options]")
+    print()
+    print("Actions:")
+    print("  mark-completed <id>          Mark prompt as completed")
+    print("  log-execution <id> <details> Log prompt execution")
+    print("  list [--status=unchecked]    List prompts")
+    print()
+    print("Examples:")
+    print("  rdd.py prompt mark-completed P01")
+    print("  rdd.py prompt log-execution P01 \"Created enhancement\"")
+    print("  rdd.py prompt list --status=unchecked")
 
 
 # ============================================================================
@@ -797,6 +1005,10 @@ def route_branch(args: List[str]) -> int:
             return 0 if delete_branch(branch_name, force) else 1
         else:
             return 0 if delete_branch(get_current_branch(), force) else 1
+    
+    elif action == 'cleanup':
+        branch_name = args[1] if len(args) > 1 else None
+        return 0 if cleanup_after_merge(branch_name) else 1
     
     elif action == 'list':
         filter_str = args[1] if len(args) > 1 else None
@@ -1026,9 +1238,52 @@ def route_git(args: List[str]) -> int:
     elif action == 'push':
         return 0 if push_to_remote() else 1
     
+    elif action == 'update-from-main':
+        return 0 if update_from_main() else 1
+    
     else:
         print_error(f"Unknown git action: {action}")
         print("Use 'rdd.py git --help' for usage information")
+        return 1
+
+
+def route_prompt(args: List[str]) -> int:
+    """Route prompt domain commands."""
+    if not args or args[0] in ['--help', '-h']:
+        show_prompt_help()
+        return 0
+    
+    action = args[0]
+    
+    if action == 'mark-completed':
+        if len(args) < 2:
+            print_error("Prompt ID required")
+            print("Usage: rdd.py prompt mark-completed <id>")
+            return 1
+        journal_file = os.path.join(WORKSPACE_DIR, ".rdd.copilot-prompts.md")
+        return 0 if mark_prompt_completed(args[1], journal_file) else 1
+    
+    elif action == 'log-execution':
+        if len(args) < 3:
+            print_error("Prompt ID and details required")
+            print("Usage: rdd.py prompt log-execution <id> <details>")
+            return 1
+        session_id = f"exec-{get_timestamp_filename()}"
+        return 0 if log_prompt_execution(args[1], args[2], session_id) else 1
+    
+    elif action == 'list':
+        status = "all"
+        if len(args) > 1:
+            if args[1] == "--status=unchecked":
+                status = "unchecked"
+            elif args[1] == "--status=checked":
+                status = "checked"
+        journal_file = os.path.join(WORKSPACE_DIR, ".rdd.copilot-prompts.md")
+        return 0 if list_prompts(status, journal_file) else 1
+    
+    else:
+        print_error(f"Unknown prompt action: {action}")
+        print("Use 'rdd.py prompt --help' for usage information")
         return 1
 
 
@@ -1068,10 +1323,12 @@ def main() -> int:
         return route_fix(domain_args)
     elif domain == 'git':
         return route_git(domain_args)
+    elif domain == 'prompt':
+        return route_prompt(domain_args)
     else:
         print_error(f"Unknown domain: {domain}")
         print()
-        print("Available domains: branch, workspace, change, fix, git")
+        print("Available domains: branch, workspace, change, fix, git, prompt")
         print()
         print("Use 'rdd.py --help' for more information")
         return 1
