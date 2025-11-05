@@ -20,12 +20,12 @@ Based on the user's response, execute the appropriate command:
 
 - If user chose **enhancement**:
   ```python
-  python3 .rdd/scripts/rdd.py change create enh
+  python .rdd/scripts/rdd.py change create enh
   ```
 
 - If user chose **fix**:
   ```python
-  python3 .rdd/scripts/rdd.py change create fix
+  python .rdd/scripts/rdd.py change create fix
   ```
 
 

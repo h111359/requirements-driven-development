@@ -1,263 +1,112 @@
-# RDD Framework Data Model
+# Kolko Ni Struva Product Data Model
 
-## Configuration Files
+## Entities
 
-### Change Configuration File
+### <ENTITY-NAME>
 
 #### Description:
 
-The change configuration file tracks the current active change (enhancement or fix) being worked on in the workspace. This file uses a naming convention that embeds the change type and branch name directly in the filename.
-
-#### File Naming Convention:
-
-- **Pattern**: `.rdd.[type].[branch-name]`
-- **Type**: Either `fix` or `enh`
-- **Branch Name**: The full git branch name (e.g., `20251103-1257-prompt-08-bug-workspace-unclean`)
-- **Examples**:
-  - `.rdd.fix.20251103-1257-prompt-08-bug-workspace-unclean`
-  - `.rdd.enh.20251102-1515-add-user-authentication`
-
-#### Location:
-
-- Path: `.rdd-docs/workspace/.rdd.[type].[branch-name]`
-- Created during: Change/fix initialization
-- Removed during: Workspace archiving and cleanup
+<ENTITY-DESCRIPTION>
 
 #### Attributes:
 
-- **changeName**: 
-  - Description: Human-readable name of the change (kebab-case, max 5 words)
-  - Mandatory: Yes
-  - Data Type: String
-  - Format: kebab-case (lowercase with hyphens)
-  - Example: `prompt-08-bug-workspace-unclean`
+  - <ATTRIBUTE-NAME>: 
+    - Description: <ATTRIBUTE-DESCRIPTION>
+    - Mandatory: [Yes|No]    
+    - Data Type: <DATA-TYPE>
+    - Format: <DATA-FORMAT>
+    - Data validation rules:
+       - should contain `@`
+    - Example: <DATA-EXAMPLE>
 
-- **changeId**: 
-  - Description: Unique identifier combining timestamp and change name
-  - Mandatory: Yes
-  - Data Type: String
-  - Format: `YYYYMMDD-HHmm-[change-name]`
-  - Example: `20251103-1257-prompt-08-bug-workspace-unclean`
+  - <ATTRIBUTE-NAME>: <ATTRIBUTE-DESCRIPTION>  
 
-- **branchName**: 
-  - Description: Full git branch name including type prefix
-  - Mandatory: Yes
-  - Data Type: String
-  - Format: `[fix|enh]/[changeId]`
-  - Example: `fix/20251103-1257-prompt-08-bug-workspace-unclean`
+#### Constraints
 
-- **changeType**: 
-  - Description: Type of change being made
-  - Mandatory: Yes
-  - Data Type: String
-  - Format: Enum ["fix", "enh"]
-  - Example: `fix`
+  - Primary-Key: 
+      - <ATTRIBUTE-NAME>
+      - <ATTRIBUTE-NAME>
+      - <ATTRIBUTE-NAME>
 
-- **startedAt**: 
-  - Description: ISO 8601 timestamp when the change was initiated
-  - Mandatory: Yes
-  - Data Type: String (ISO 8601 DateTime)
-  - Format: `YYYY-MM-DDTHH:MM:SSZ`
-  - Example: `2025-11-03T12:57:00Z`
+  - Unique-Key
+      - <ATTRIBUTE-NAME>
+      - <ATTRIBUTE-NAME>
+      - <ATTRIBUTE-NAME>
 
-- **phase**: 
-  - Description: Current phase of the change workflow
-  - Mandatory: No
-  - Data Type: String
-  - Example: `clarification`, `implementation`, `testing`
+## Relationships
 
-- **status**: 
-  - Description: Current status of the change
-  - Mandatory: No
-  - Data Type: String
-  - Example: `in-progress`, `ready-for-review`
+### REL-<ENTITY-NAME>-<ENTITY-NAME>
 
-#### File Format:
+- Cardinality: [1:1|M:1|1:M|M:M]
+- Statement: [e.g "Each `Team` could have one or more `Employee`" or "Each `Employee` must belong to one and only one `Location`" ]
+- Left Entity Attributes: 
+      - <ATTRIBUTE-NAME>
+      - <ATTRIBUTE-NAME>
+- Right Entity Attributes: 
+      - <ATTRIBUTE-NAME>
+      - <ATTRIBUTE-NAME>
 
-JSON format for machine and human readability
-
-#### Example File Content:
-
-```json
-{
-  "changeName": "prompt-08-bug-workspace-unclean",
-  "changeId": "20251103-1257-prompt-08-bug-workspace-unclean",
-  "branchName": "fix/20251103-1257-prompt-08-bug-workspace-unclean",
-  "changeType": "fix",
-  "startedAt": "2025-11-03T12:57:00Z",
-  "phase": "implementation",
-  "status": "in-progress"
-}
-```
-
-### Archive Metadata File
-
-#### Description:
-
-The archive metadata file documents when and by whom a workspace was archived, along with the last commit information at the time of archiving.
-
-#### File Name:
-
-- Fixed name: `.archive-metadata`
-
-#### Location:
-
-- Path: `.rdd-docs/archive/[sanitized-branch-name]/.archive-metadata`
-- Created during: Workspace archiving
-
-#### Attributes:
-
-- **archivedAt**: 
-  - Description: ISO 8601 timestamp when the workspace was archived
-  - Mandatory: Yes
-  - Data Type: String (ISO 8601 DateTime)
-  - Format: `YYYY-MM-DDTHH:MM:SSZ`
-  - Example: `2025-11-03T13:45:22Z`
-
-- **branch**: 
-  - Description: Original git branch name that was archived
-  - Mandatory: Yes
-  - Data Type: String
-  - Example: `fix/20251103-1257-prompt-08-bug-workspace-unclean`
-
-- **archivedBy**: 
-  - Description: Git user who performed the archiving
-  - Mandatory: Yes
-  - Data Type: String
-  - Format: `Name <email>`
-  - Example: `John Doe <john.doe@example.com>`
-
-- **lastCommit**: 
-  - Description: SHA hash of the last commit before archiving
-  - Mandatory: Yes
-  - Data Type: String (Git SHA)
-  - Example: `a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0`
-
-- **lastCommitMessage**: 
-  - Description: Commit message of the last commit before archiving
-  - Mandatory: Yes
-  - Data Type: String
-  - Example: `fix: resolved workspace clearing issue`
-
-#### File Format:
-
-JSON format for machine and human readability
-
-#### Example File Content:
-
-```json
-{
-  "archivedAt": "2025-11-03T13:45:22Z",
-  "branch": "fix/20251103-1257-prompt-08-bug-workspace-unclean",
-  "archivedBy": "John Doe <john.doe@example.com>",
-  "lastCommit": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0",
-  "lastCommitMessage": "fix: resolved workspace clearing issue"
-}
-```
-
-## Workspace Files
-
-### Stand-Alone Prompts File
-
-#### Description:
-
-Tracks stand-alone prompts that need to be executed during fix/enhancement work. Used to manage a checklist of tasks.
-
-#### File Name:
-
-- Fixed name: `.rdd.copilot-prompts.md`
-
-#### Location:
-
-- Path: `.rdd-docs/workspace/.rdd.copilot-prompts.md`
-- Created during: Workspace initialization (copied from template)
-
-#### Format:
-
-Markdown with checkbox list structure
-
-### Execution Log File
-
-#### Description:
-
-JSON Lines format log of prompt executions with timestamps and details.
-
-#### File Name:
-
-- Fixed name: `log.jsonl`
-
-#### Location:
-
-- Path: `.rdd-docs/workspace/log.jsonl`
-
-#### Format:
-
-JSONL (JSON Lines) - one JSON object per line
-
-#### Example Entry:
-
-```json
-{"timestamp":"2025-11-03T11:14:46Z","promptId":"P01","executionDetails":"Modified RDD scripts...","sessionId":"exec-20251103-1314"}
-```
 
 ## Validation Rules
 
-- **Config File Existence**: Only one `.rdd.[fix|enh].*` file should exist in workspace at a time
-- **Branch Name Match**: The branch name in the config file must match the current git branch
-- **Change Type Consistency**: The type in the filename must match the changeType field in the JSON content
-- **Workspace Clearing**: All files must be removed from workspace directory during cleanup, not just specific files
+Examples:
+- <ENTITY-NAME>: If data for a day is missing, script skips and logs a warning
+- If entity reaches 10M rows - log a warning
+
 
 ## Physical Implementation
 
-### Workspace Directory
+Description how the entities are realised - as tables in a database, files or other. Also here should be provided paths, connection strings or other which identifies the place of entity residence.
 
-- **Location**: `.rdd-docs/workspace/`
-- **Purpose**: Active development workspace for current change/fix
-- **Lifecycle**: Created during change initialization, cleared after archiving
-- **Contents**: Dynamic based on workflow phase
+### Folder Structure Reference
 
-### Archive Directory
+## Data File Formats
 
-- **Location**: `.rdd-docs/archive/[sanitized-branch-name]/`
-- **Purpose**: Historical record of completed changes
-- **Naming**: Branch name with slashes replaced by hyphens (e.g., `fix-20251103-1257-bug-name`)
-- **Contents**: Complete snapshot of workspace at archiving time
+### File <FILE-NAME>
+- Location: `data/raw/`
+- Format: [e.g. CSV (comma-separated values, UTF-8, quoted fields)]
+- Header Row: [Yes|no]
+- Fields:
+    - <FIELD-NAME>
+    - <FIELD-NAME>
 
-### Config File Discovery
+- Example header:
+```
+"Населено място","Търговски обект","Наименование на продукта","Код на продукта","Категория","Цена на дребно","Цена в промоция"
+```
 
-Scripts use the `find_change_config()` (Bash) or `Find-ChangeConfig` (PowerShell) helper function to locate the active config file:
-- Searches for files matching `.rdd.fix.*` or `.rdd.enh.*` pattern
-- Returns the first matching file found
-- Used throughout the RDD framework for change tracking
+- Example row:
+```
+"68134","МАГАЗИН МЛАДОСТ - СОФИЯ, ЖК МЛАДОСТ 2, БУЛ. АЛЕКСАНДЪР МАЛИНОВ 75","КРАВЕ МАСЛО 125 ГР ДИМИТЪР МАДЖАРОВ","040001","11","4.98",""
+```
 
-## Implementation
+## Database Tables
 
-### Current Implementation: Python
-
-**Script Location**: `.rdd/scripts/`
-
-**Main Files**:
-1. **rdd.py** - Main entry point with domain routing
-2. **rdd_utils.py** - All utility functions (core, git, branch, workspace, requirements, change, clarify, prompt)
-3. **test_rdd_python.py** - Unit tests
-
-**Platform Compatibility**: Cross-platform (Windows, Linux, macOS)
-
-### Legacy Implementation: Bash Scripts (Archived)
-
-**Previous Location**: `.rdd/scripts/*.sh`  
-**Current Location**: Archived in workspace during Python migration
-
-**Archived Scripts** (9 files):
-1. rdd.sh - Main entry point
-2. core-utils.sh - Common utility functions
-3. git-utils.sh - Git operations
-4. branch-utils.sh - Branch management
-5. workspace-utils.sh - Workspace operations
-6. requirements-utils.sh - Requirements handling
-7. change-utils.sh - Change workflow
-8. clarify-utils.sh - Clarification phase
-9. prompt-utils.sh - Prompt management
-
-**Note**: PowerShell equivalents in `src/windows/.rdd/scripts/` also deprecated with Python migration.
-
+### Table <TABLE-NAME>
+- Schema: `<SCHEMA-NAME>`
+- Storage Engine: [e.g. Azure SQL Database | PostgreSQL | Snowflake]
+- Description: <TABLE-DESCRIPTION>
+- Primary Key Columns:
+  - <COLUMN-NAME>
+  - <COLUMN-NAME>
+- Foreign Keys:
+  - `<FK-NAME>` → `<TARGET-SCHEMA>.<TARGET-TABLE>(<TARGET-COLUMN>)`
+- Columns:
+  - <COLUMN-NAME> (`<DATA-TYPE>`): <COLUMN-DESCRIPTION>
+  - <COLUMN-NAME> (`<DATA-TYPE>`): <COLUMN-DESCRIPTION>
+- Indexes:
+  - `<INDEX-NAME>`: <COLUMN-LIST> [clustered|nonclustered|btree]
+- Partitioning Strategy: [None | <COLUMN-NAME> | <RANGE>]
+- Retention Policy: [e.g. Keep 36 months | Purge daily snapshots after 14 days]
+- Example DDL:
+```sql
+CREATE TABLE <SCHEMA-NAME>.<TABLE-NAME> (
+  <COLUMN-NAME> <DATA-TYPE> NOT NULL,
+  <COLUMN-NAME> <DATA-TYPE>,
+  CONSTRAINT <PK-NAME> PRIMARY KEY (<COLUMN-NAME>)
+);
+```
+- Example row:
+```
+<VALUE-1>|<VALUE-2>|<VALUE-3>
+```

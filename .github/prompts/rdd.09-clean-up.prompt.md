@@ -13,7 +13,7 @@ After your enhancement or fix branch is merged via PR, this prompt removes the l
 Run the cleanup command:
 
 ```bash
-python3 .rdd/scripts/rdd.py branch cleanup
+python .rdd/scripts/rdd.py branch cleanup
 ```
 
 The script will:
@@ -27,7 +27,7 @@ The script will:
 If you want to clean up a specific branch explicitly:
 
 ```bash
-python3 .rdd/scripts/rdd.py branch cleanup <branch-name>
+python .rdd/scripts/rdd.py branch cleanup <branch-name>
 ```
 
 ## Notes

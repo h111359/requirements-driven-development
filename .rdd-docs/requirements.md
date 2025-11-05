@@ -68,6 +68,8 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-45] No change.md in Workspace**: The workspace initialization shall NOT create a change.md file, as this template has been removed from the framework
 - **[FR-46] Post-Merge Cleanup Workflow**: The framework shall provide a guided cleanup prompt (rdd.09-clean-up.prompt.md) for removing local and remote branches after PR merge, automating the cleanup command execution
 - **[FR-47] Python-Based Script Implementation**: All RDD operations shall be implemented in Python (rdd.py) with domain-based command routing, replacing legacy bash scripts which are archived
+- **[FR-48] Cross-Platform Python Command**: All prompt files shall use the `python` command (not `python3`) to execute RDD scripts for cross-platform compatibility with Windows, Linux, and macOS
+- **[FR-49] Python Command Installation Guidance**: The README shall provide clear installation instructions for setting up the `python` command on Linux systems using `python-is-python3` package or equivalent
 
 # Non-Functional Requirements
 
@@ -115,3 +117,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[TR-26] Merged Branch Deletion Tool**: The framework shall provide an interactive Bash script for cleaning up merged git branches, supporting both local and remote deletion.
 - **[TR-27] PowerShell Script Support**: The framework shall provide PowerShell (.ps1) equivalents of all Bash scripts for Windows compatibility, maintaining identical functionality and structure.
 - **[TR-28] Cross-Platform Script Organization**: Linux/Bash scripts shall be stored in `src/linux/.rdd/scripts/` and Windows/PowerShell scripts in `src/windows/.rdd/scripts/`, with parallel folder structures for templates and prompts.
+- **[TR-29] Python 3.7+ Requirement**: The RDD framework shall require Python 3.7 or higher for running all automation scripts
+- **[TR-30] Platform-Agnostic Python Command**: All prompt files and documentation shall use `python` (not `python3`) as the command to invoke Python scripts, ensuring compatibility across Windows, Linux, and macOS platforms
+
+```

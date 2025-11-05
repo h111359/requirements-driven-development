@@ -24,8 +24,9 @@ The RDD (Requirements-Driven Development) framework is a structured workflow aut
 - **GitHub Copilot**: AI assistant configured for RDD workflow execution
 
 ### Dependencies
-- Python 3.8+
-- Git 2.x+
+- **Python 3.7+**: Required for running all RDD scripts
+- **Git 2.23+**: Required for version control operations
+- **python-is-python3** (Linux only): Optional package to make `python` command available on older Linux systems
 
 ## Architecture Patterns
 
@@ -44,12 +45,14 @@ The framework uses a domain-based architecture where functionality is organized 
 ### Command Routing Pattern
 The main entry point (`rdd.py`) uses a domain-based routing pattern:
 ```
-python3 .rdd/scripts/rdd.py <domain> <action> [options]
+python .rdd/scripts/rdd.py <domain> <action> [options]
 ```
 Examples:
-- `python3 .rdd/scripts/rdd.py branch create enh my-feature`
-- `python3 .rdd/scripts/rdd.py workspace init change`
-- `python3 .rdd/scripts/rdd.py requirements merge`
+- `python .rdd/scripts/rdd.py branch create enh my-feature`
+- `python .rdd/scripts/rdd.py workspace init change`
+- `python .rdd/scripts/rdd.py requirements merge`
+
+**Cross-Platform Compatibility**: The framework uses the `python` command (not `python3`) to ensure compatibility across Windows, Linux, and macOS. On older Linux systems where the `python` command is not available, users can install the `python-is-python3` package or create an alias/symlink.
 
 This Python implementation replaced the previous bash scripts (`rdd.sh`) which are now archived.
 
@@ -168,13 +171,17 @@ Note: The `change.md` template has been **removed** from the framework and is no
 ### Installation
 The RDD framework is installed by:
 1. Cloning the repository
-2. Ensuring Python 3.8+ is installed
-3. Making scripts executable: `chmod +x .rdd/scripts/rdd.py`
-4. Configuring VS Code settings for auto-approval and prompt recommendations
+2. Ensuring Python 3.7+ is installed
+3. Setting up the `python` command:
+   - **Windows & macOS**: Available by default with modern Python installations
+   - **Linux**: Install `python-is-python3` package or create alias/symlink
+4. Making scripts executable: `chmod +x .rdd/scripts/rdd.py` (Linux/macOS)
+5. Configuring VS Code settings for auto-approval and prompt recommendations
 
 ### Platform Compatibility
 - **Python-based**: Single implementation works on all platforms (Windows, Linux, macOS)
 - **No platform-specific scripts needed**: Python provides cross-platform compatibility
+- **Python command**: Uses `python` (not `python3`) for universal compatibility
 
 ### VS Code Integration
 The framework integrates with VS Code through:
@@ -251,6 +258,8 @@ repo-root/
 3. **Unified codebase**: Single Python implementation replaces separate bash/PowerShell codebases
 4. **fix-management.sh removal**: All fix management functionality consolidated into `rdd.py` with domain routing
 5. **change.md template removal**: The `change.md` template file removed from `.rdd/templates/`; workspace no longer includes this file during initialization
+6. **Cross-platform command standardization**: All prompt files updated to use `python` command instead of `python3` for Windows/Linux/macOS compatibility
+7. **Python setup documentation**: README.md updated with clear instructions for installing `python` command on Linux systems using `python-is-python3` package
 
 ### Deprecated Components
 - ~~All bash scripts (.sh)~~ - Replaced by Python implementation (`rdd.py` and `rdd_utils.py`); archived in workspace
