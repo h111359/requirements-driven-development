@@ -39,6 +39,7 @@ repo-root/
 │       ├── tech-spec.md          # Technical specification template
 │       ├── data-model.md         # Data model template
 │       ├── folder-structure.md   # Folder structure template
+│       ├── config.json           # Configuration file template
 │       └── ...                   # Other templates
 ├── src/                          # Legacy platform-specific implementations (archived)
 │   ├── linux/                    # Linux/macOS implementation
@@ -74,6 +75,7 @@ repo-root/
 │       │   └── prompts/          # Windows-specific prompts
 │       └── ...
 ├── .rdd-docs/                    # RDD documentation and workspace
+│   ├── config.json               # Framework configuration (defaultBranch, version)
 │   ├── workspace/                # Active development workspace
 │   │   ├── .rdd.[fix|enh].[branch-name]  # Change config file (one per workspace)
 │   │   ├── .rdd.copilot-prompts.md       # Stand-alone prompts checklist
@@ -139,10 +141,19 @@ repo-root/
 ### 7. Unified Command Interface
 - All RDD operations accessible through `python .rdd/scripts/rdd.py`
 - Domain-based routing: `python .rdd/scripts/rdd.py <domain> <action> [options]`
+- Domains include: change, branch, workspace, requirements, config
 - Replaces standalone scripts like ~~`fix-management.sh`~~ and ~~`rdd.sh`~~ (deprecated)
 - Uses `python` (not `python3`) for cross-platform compatibility (Windows, Linux, macOS)
 
-### 8. Build and Release System
+### 8. Configuration Management
+- **Configuration file**: `.rdd-docs/config.json` stores framework settings
+- **Template location**: `.rdd/templates/config.json` (copied during initialization)
+- **Version controlled**: Config shared across team in repository
+- **CLI access**: `python .rdd/scripts/rdd.py config [show|get|set]`
+- **Key settings**: defaultBranch, version, timestamps
+- **Interactive setup**: Branch selection menu during initialization populates config
+
+### 9. Build and Release System
 - **Build script**: `scripts/build.py` creates release archives
 - **Build artifacts**: Generated in `build/` directory (Git-ignored)
 - **Release format**: Single cross-platform `rdd-v{version}.zip` archive
