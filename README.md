@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/github/v/release/h111359/requirements-driven-development)](https://github.com/h111359/requirements-driven-development/releases)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/h111359/requirements-driven-development/ci.yml?branch=main)](https://github.com/h111359/requirements-driven-development/actions)
+
 
 A structured methodology and framework for software development with GitHub Copilot, emphasizing clear requirements documentation, systematic change management, and maintainable codebases.
 

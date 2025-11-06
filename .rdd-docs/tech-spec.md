@@ -168,20 +168,99 @@ Note: The `change.md` template has been **removed** from the framework and is no
 
 ## Deployment Architecture
 
-### Installation
-The RDD framework is installed by:
-1. Cloning the repository
-2. Ensuring Python 3.7+ is installed
-3. Setting up the `python` command:
-   - **Windows & macOS**: Available by default with modern Python installations
-   - **Linux**: Install `python-is-python3` package or create alias/symlink
-4. Making scripts executable: `chmod +x .rdd/scripts/rdd.py` (Linux/macOS)
-5. Configuring VS Code settings for auto-approval and prompt recommendations
+### Build System
+The RDD framework uses a Python-based build system to create release packages:
+
+#### Build Script (scripts/build.py)
+- **Purpose**: Creates cross-platform release archives with all necessary files
+- **Version Management**: Extracts version from `RDD_VERSION` constant in rdd.py
+- **Archive Creation**: Generates single `rdd-v{version}.zip` file containing:
+  - Framework files (.rdd/scripts/, .rdd/templates/)
+  - Prompt files (.github/prompts/)
+  - Installation scripts (install.py, install.sh, install.ps1)
+  - Documentation (README.md, LICENSE)
+  - VS Code settings template (.vscode/settings.json)
+- **Verification**: Generates SHA256 checksum file for archive integrity verification
+- **Cleanup**: Removes temporary build directories, keeping only archive and checksum
+
+#### Build Process Steps
+1. Extract version from rdd.py and validate SemVer format
+2. Create build directory structure
+3. Copy framework files (prompts, scripts, templates, LICENSE, settings)
+4. Generate README.md with platform-specific installation instructions
+5. Generate install.py (cross-platform Python installer)
+6. Generate install.sh (interactive Bash installer for Linux/macOS)
+7. Generate install.ps1 (interactive PowerShell installer for Windows)
+8. Create ZIP archive with nested directory structure
+9. Generate SHA256 checksum file
+10. Clean up temporary staging directories
+
+### Installation System
+The RDD framework provides three installation methods to accommodate different user preferences:
+
+#### Option 1: Interactive Shell Installers (Recommended)
+Platform-specific interactive installers with visual folder navigation:
+
+**Linux/macOS (install.sh)**:
+- Visual folder navigation using arrow keys
+- Current directory display with parent/subfolder navigation
+- Git repository validation before installation
+- Confirmation prompts for existing installations
+- Calls Python installer with selected directory
+
+**Windows (install.ps1)**:
+- Identical functionality to Bash installer
+- PowerShell-native key handling and UI
+- Cross-platform consistent user experience
+
+**Navigation Features**:
+- Arrow keys (↑↓) for menu navigation
+- Enter to select directory or enter subfolder
+- [..] option for parent directory navigation
+- [SELECT THIS DIRECTORY] option to install in current location
+- Q key to quit installation
+- Real-time path display
+
+#### Option 2: Direct Python Installation
+**Python Installer (install.py)**:
+- Cross-platform installer using Python standard library only
+- Pre-flight checks:
+  - Python version verification (≥ 3.7)
+  - Git installation check
+  - Target directory validation (must be Git repository)
+- Existing installation detection with upgrade warnings
+- Interactive prompts for target directory
+- Automated file operations:
+  - Copy prompts to `.github/prompts/`
+  - Copy framework to `.rdd/`
+  - Intelligent VS Code settings merge
+  - .gitignore update with workspace exclusion
+- Post-installation verification:
+  - File existence checks
+  - RDD command test (`python .rdd/scripts/rdd.py --version`)
+- Clear success/error messages with next steps
+
+**Settings Merge Logic**:
+- **Array settings** (chat.promptFilesRecommendations, chat.tools.terminal.autoApprove):
+  - Handles both object and array formats
+  - Appends unique values without duplicates
+- **Object settings** (files.associations):
+  - Merges keys, RDD values overwrite existing
+- **Editor settings** (editor.rulers):
+  - Replaces with RDD requirements (80, 120 character columns)
+
+#### Option 3: Manual Installation
+For users who prefer manual control:
+- Step-by-step file copying instructions
+- Platform-specific commands (PowerShell/Bash)
+- Manual VS Code settings merge guidance
+- Manual .gitignore update steps
 
 ### Platform Compatibility
 - **Python-based**: Single implementation works on all platforms (Windows, Linux, macOS)
 - **No platform-specific scripts needed**: Python provides cross-platform compatibility
 - **Python command**: Uses `python` (not `python3`) for universal compatibility
+- **Interactive installers**: Platform-specific scripts provide optimal user experience
 
 ### VS Code Integration
 The framework integrates with VS Code through:

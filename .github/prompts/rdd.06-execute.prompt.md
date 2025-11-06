@@ -24,9 +24,16 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
 3. **Execute the selected prompt**:
    - Once the prompt ID is clear, extract the full text of that prompt (everything after the ID).
    - Create a file `.rdd-docs/workspace/<put-prompt-ID-here>-implementation.md` for the analysis and the result of your operations, the changes, etc.
+   - Read the following files for building a context before executing the prompt:
+     - `.rdd-docs/requirements.md`
+     - `.rdd-docs/tech-spec.md`
+     - `.rdd-docs/folder-structure.md`
+     - `.rdd-docs/data-model.md`
+     - Any other relevant files mentioned in the prompt
    - Execute the instructions in the prompt exactly as if the user had entered them directly in the chat.
-   - Follow all instructions in the prompt carefully.
-   - Add information for the implementation details in the file `.rdd-docs/workspace/<put-prompt-ID-here>-implementation.md` on each step. 
+   - Follow all instructions in the prompt carefully. The instructions in the prompt take precedence over the context.
+   - In case of unclarity or unambiguity which leads to multiple possible choices of implementation - ask the user for guidance or chosing an option, following instructions in `.rdd/templates/questions-formatting.md`.
+   - Along with execution add continuously information for the implementation details in the file `.rdd-docs/workspace/<put-prompt-ID-here>-implementation.md` on each step
 
 4. **Mark the prompt as completed**:
    - After successfully executing the prompt, mark it as completed by running the script:

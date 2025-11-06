@@ -19,7 +19,7 @@ This prompt combines documentation updates and branch finalization into a single
 
 Before wrapping up, ensure project documentation reflects your changes:
 
-1. **Analyze changes**: Review `.rdd-docs/workspace/.rdd.copilot-prompts.md` to identify completed prompts (marked with `[x]`)
+1. **Analyze changes**: Review `.rdd-docs/workspace/.rdd.copilot-prompts.md` to identify completed prompts (marked with `[x]`). For each completed prompt, search for implementation files named `<PROMPT_ID>-implementation.md` in `.rdd-docs/workspace/`. Read and extract relevant changes from these files.
 
 2. **Update affected documentation files**:
    - **Requirements changes** → `.rdd-docs/requirements.md`
@@ -36,6 +36,7 @@ Before wrapping up, ensure project documentation reflects your changes:
    - When adding requirements, continue from highest existing ID in that section
    - Maintain existing structure and formatting
    - Validate that all ID sequences remain continuous
+   - When updating `.rdd-docs/requirements.md`, ensure it aligns with `.rdd/templates/requirements-format.md`
 
 **S02: Execute Wrap-Up**
 
