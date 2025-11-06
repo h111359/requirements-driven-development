@@ -64,7 +64,7 @@ SHOW_ENH_IN_MENU_DEFAULT = False
 
 def _curses_menu(stdscr, title: str, items: list) -> int:
     """
-    Basic arrow-key menu using curses. Returns selected index.
+    Beautiful arrow-key menu using curses. Returns selected index.
     Controls: Up/Down to move, Enter/Space to select, 'q' or ESC to cancel (returns -1).
     """
     curses = None
@@ -84,25 +84,58 @@ def _curses_menu(stdscr, title: str, items: list) -> int:
         stdscr.clear()
         h, w = stdscr.getmaxyx()
 
-        # Title
-        title_lines = [title, "", "Use ↑/↓ to move, Enter/Space to select."]
-        for i, line in enumerate(title_lines):
-            stdscr.addstr(i, 0, line[: max(0, w - 1)])
-
+        # Calculate box width (use most of terminal width, but cap at 80)
+        box_width = min(w - 4, 80)
+        
+        # Title box
+        row = 0
+        stdscr.addstr(row, 0, "╔" + "═" * (box_width - 2) + "╗")
+        row += 1
+        
+        # Center title in box
+        padding = (box_width - 2 - len(title)) // 2
+        title_line = "║" + " " * padding + title + " " * (box_width - 2 - padding - len(title)) + "║"
+        stdscr.addstr(row, 0, title_line)
+        row += 1
+        
+        stdscr.addstr(row, 0, "╠" + "═" * (box_width - 2) + "╣")
+        row += 1
+        
+        # Help text
+        help_text = "Use ↑/↓ arrows to navigate, Enter to select, ESC/q to cancel"
+        help_padding = (box_width - 2 - len(help_text)) // 2
+        help_line = "║" + " " * help_padding + help_text + " " * (box_width - 2 - help_padding - len(help_text)) + "║"
+        stdscr.addstr(row, 0, help_line)
+        row += 1
+        
+        stdscr.addstr(row, 0, "╠" + "═" * (box_width - 2) + "╣")
+        row += 1
+        
         # Items
-        base_row = len(title_lines) + 1
         for idx, label in enumerate(items):
-            prefix = "> " if idx == current else "  "
-            line = f"{prefix}{label}"
             if idx == current:
+                # Highlighted item with arrow
+                prefix = "→ "
+                item_text = prefix + label
+                item_padding = box_width - 2 - len(item_text)
+                line = "║" + item_text + " " * item_padding + "║"
                 try:
-                    stdscr.attron(curses.A_REVERSE)
-                    stdscr.addstr(base_row + idx, 0, line[: max(0, w - 1)])
-                    stdscr.attroff(curses.A_REVERSE)
+                    stdscr.attron(curses.A_REVERSE | curses.A_BOLD)
+                    stdscr.addstr(row, 0, line)
+                    stdscr.attroff(curses.A_REVERSE | curses.A_BOLD)
                 except Exception:
-                    stdscr.addstr(base_row + idx, 0, line[: max(0, w - 1)])
+                    stdscr.addstr(row, 0, line)
             else:
-                stdscr.addstr(base_row + idx, 0, line[: max(0, w - 1)])
+                # Regular item
+                prefix = "  "
+                item_text = prefix + label
+                item_padding = box_width - 2 - len(item_text)
+                line = "║" + item_text + " " * item_padding + "║"
+                stdscr.addstr(row, 0, line)
+            row += 1
+        
+        # Bottom border
+        stdscr.addstr(row, 0, "╚" + "═" * (box_width - 2) + "╝")
 
         stdscr.refresh()
 
@@ -1399,32 +1432,19 @@ def route_change(args: List[str]) -> int:
         
         # Display banner
         print()
-        print("─── RDD-COPILOT ───")
-        print(" Prompt: Create Change")
-        print(" Description:")
-        print(" > Create a new Change folder with timestamped naming,")
-        print(" > branch setup, and template initialization.")
-        print()
-        print(" User Action:")
-        print(" > Provide a short description and name for the change.")
-        print("───────────────")
-        print()
-        
-        # Prompt for description
-        print("Please provide a short description of the change:")
-        print("(e.g., 'Add user authentication enhancement', 'Fix login page bug')")
-        try:
-            change_description = input("> ").strip()
-        except (KeyboardInterrupt, EOFError):
-            print()
-            print_error("Operation cancelled")
-            return 1
-        
-        if not change_description:
-            print_error("Change description cannot be empty")
-            return 1
-        
-        print_info(f"Description: {change_description}")
+        print("╔══════════════════════════════════════════════════════════════╗")
+        print("║                      RDD-COPILOT                             ║")
+        print("╠══════════════════════════════════════════════════════════════╣")
+        print("║  Prompt: Create Change                                       ║")
+        print("║                                                              ║")
+        print("║  Description:                                                ║")
+        print("║    • Create a new Change with timestamped branch naming      ║")
+        print("║    • Initialize workspace with necessary files               ║")
+        print("║    • Set up branch for development                           ║")
+        print("║                                                              ║")
+        print("║  User Action:                                                ║")
+        print("║    → Provide a name for the change                           ║")
+        print("╚══════════════════════════════════════════════════════════════╝")
         print()
         
         # Prompt for name with normalization loop

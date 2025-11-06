@@ -81,6 +81,8 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-58] Interactive Branch Selection During Installation**: The initialization process shall prompt users to select their default branch through an interactive menu with options for main, dev, or custom entry
 - **[FR-59] Config Management Commands**: The framework shall provide CLI commands for managing configuration (show, get, set) accessible via the config domain
 - **[FR-60] Config-First Default Branch Detection**: The get_default_branch() function shall prioritize reading from config.json before falling back to branch detection logic
+- **[FR-61] Simplified Change Creation Input**: The change creation workflow shall only prompt for change name, not description, streamlining the user input process and eliminating redundant data collection
+- **[FR-62] Implementation File Documentation**: Stand-alone prompt execution shall create implementation markdown files (<PROMPT_ID>-implementation.md) in workspace to document execution details, replacing the need for separate log.jsonl logging
 
 # Non-Functional Requirements
 
@@ -100,7 +102,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[NFR-16] Conflict Prevention**: The workspace structure shall minimize merge conflicts between developers
 - **[NFR-17] DELETED
 - **[NFR-18] Fix Documentation Template**: The framework shall provide a template for documenting fixes, including What, Why, and Acceptance Criteria sections, to ensure consistency and traceability.
-- **[NFR-19] Interactive Menu User Experience**: Interactive menus shall provide visual feedback with arrow key navigation, clear selection indicators, and support for both curses-based and numeric fallback input methods
+- **[NFR-19] Interactive Menu User Experience**: Interactive menus shall provide visual feedback with arrow key navigation, clear selection indicators using Unicode box drawing characters (╔═╗╚╝║╠╣), bold and reverse video for highlighted items, and support for both curses-based and numeric fallback input methods
 
 # Technical Requirements
 
