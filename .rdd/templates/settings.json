@@ -1,10 +1,15 @@
 {
   "chat.promptFilesRecommendations": {
-    "rdd.01-create-change": true,
-    "rdd.02-clarify-requirements": true,
-    "rdd.06-wrap-up": true
+    "rdd.01-initiate": true,
+    "rdd.06-execute": true,
+    "rdd.08-wrap-up": true,
+    "rdd.09-clean-up": true
   },
   "chat.tools.terminal.autoApprove": {
-    ".rdd/scripts/": true
-  }
+    "python .rdd/scripts/rdd.py": true
+  },
+  "files.associations": {
+    "*.jsonl": "jsonlines"
+  },
+  "editor.rulers": [80, 120]
 }

@@ -91,7 +91,10 @@ repo-root/
 ├── .vscode/                      # VS Code workspace settings
 │   └── settings.json             # Editor config, auto-approvals, associations
 ├── build/                        # Generated build artifacts (ignored by Git)
-├── scripts/                      # Project-specific automation scripts
+│   ├── rdd-v{version}.zip        # Release archive (created by build.py)
+│   └── rdd-v{version}.zip.sha256 # Checksum file for archive verification
+├── scripts/                      # Build and release automation scripts
+│   └── build.py                  # Build script for creating releases
 ├── README.md                     # Project overview and quick start
 ├── LICENSE                       # Project license
 └── .gitignore                    # Git ignore rules
@@ -138,6 +141,18 @@ repo-root/
 - Domain-based routing: `python .rdd/scripts/rdd.py <domain> <action> [options]`
 - Replaces standalone scripts like ~~`fix-management.sh`~~ and ~~`rdd.sh`~~ (deprecated)
 - Uses `python` (not `python3`) for cross-platform compatibility (Windows, Linux, macOS)
+
+### 8. Build and Release System
+- **Build script**: `scripts/build.py` creates release archives
+- **Build artifacts**: Generated in `build/` directory (Git-ignored)
+- **Release format**: Single cross-platform `rdd-v{version}.zip` archive
+- **Archive contents**:
+  - Framework files (.rdd/, .github/prompts/)
+  - Installation scripts (install.py, install.sh, install.ps1)
+  - Documentation (README.md with installation instructions, LICENSE)
+  - VS Code settings template (.vscode/settings.json)
+- **Verification**: SHA256 checksum file generated for each archive
+- **Version source**: Extracted from `RDD_VERSION` constant in rdd.py
 
 ## 📝 RDD Workflow File Locations
 

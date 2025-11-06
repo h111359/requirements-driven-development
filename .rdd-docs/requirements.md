@@ -70,6 +70,11 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-47] Python-Based Script Implementation**: All RDD operations shall be implemented in Python (rdd.py) with domain-based command routing, replacing legacy bash scripts which are archived
 - **[FR-48] Cross-Platform Python Command**: All prompt files shall use the `python` command (not `python3`) to execute RDD scripts for cross-platform compatibility with Windows, Linux, and macOS
 - **[FR-49] Python Command Installation Guidance**: The README shall provide clear installation instructions for setting up the `python` command on Linux systems using `python-is-python3` package or equivalent
+- **[FR-50] Build System**: The framework shall provide a Python-based build script (build.py) that creates cross-platform release archives containing all necessary framework files, documentation, and installation scripts
+- **[FR-51] Release Archive Contents**: Release archives shall include framework files (.rdd/, .github/prompts/), VS Code settings template, README.md with installation instructions, LICENSE, and multiple installer options (install.py, install.sh, install.ps1)
+- **[FR-52] Interactive Installation Scripts**: The framework shall provide platform-specific interactive installation scripts with visual folder navigation for Windows (install.ps1) and Linux/macOS (install.sh)
+- **[FR-53] Python-Based Installer**: The framework shall provide a cross-platform Python installer (install.py) that automates installation, settings merging, and .gitignore updates
+- **[FR-54] Installation Verification**: Installers shall verify prerequisites (Python version, Git availability), validate target is a Git repository, and test successful installation by running the RDD version command
 
 # Non-Functional Requirements
 
@@ -119,5 +124,10 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[TR-28] Cross-Platform Script Organization**: Linux/Bash scripts shall be stored in `src/linux/.rdd/scripts/` and Windows/PowerShell scripts in `src/windows/.rdd/scripts/`, with parallel folder structures for templates and prompts.
 - **[TR-29] Python 3.7+ Requirement**: The RDD framework shall require Python 3.7 or higher for running all automation scripts
 - **[TR-30] Platform-Agnostic Python Command**: All prompt files and documentation shall use `python` (not `python3`) as the command to invoke Python scripts, ensuring compatibility across Windows, Linux, and macOS platforms
+- **[TR-31] Build Artifact Structure**: Build archives shall follow naming convention `rdd-v{version}.zip` with single cross-platform archive containing nested directory structure preserving original file organization
+- **[TR-32] Checksum Generation**: Build process shall generate SHA256 checksum files (.sha256) for all release archives using format compatible with standard sha256sum verification tools
+- **[TR-33] Version Extraction**: Build system shall extract version information from RDD_VERSION constant in rdd.py and validate it matches semantic versioning format (MAJOR.MINOR.PATCH)
+- **[TR-34] Archive Cleanup**: Build process shall remove temporary staging directories after archive creation, keeping only final zip archive and checksum file in build/ directory
+- **[TR-35] Settings Merge Logic**: Installer shall intelligently merge VS Code settings by appending unique array values, merging object keys, and replacing editor-specific settings that require exact RDD configuration
 
 ```
