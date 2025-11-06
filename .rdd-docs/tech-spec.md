@@ -77,14 +77,29 @@ The framework provides interactive menus for user input using Python's curses li
 - Visual navigation with arrow keys (↑/↓)
 - Selection with Enter or Space
 - Automatic fallback to numeric input when curses unavailable
-- Clear visual indicators (→ for current selection)
+- Beautiful Unicode box drawing (╔═╗╚╝║╠╣) for professional appearance
+- Clear visual indicators (→ for current selection with bold + reverse video)
 - Support for custom text input options
+- Dynamic box width (adapts to terminal, max 80 chars)
+- Centered title and help text
 
 **Implementation**:
 - `_curses_menu()` function in rdd.py provides core menu functionality
 - Used for change type selection (Fix/Enhancement)
 - Used for default branch selection during initialization
 - Handles terminal compatibility issues gracefully
+
+**Example Visual**:
+```
+╔═══════════════════════════════════════════════════════════╗
+║                  Select change type                        ║
+╠═══════════════════════════════════════════════════════════╣
+║  Use ↑/↓ arrows to navigate, Enter to select, ESC/q...   ║
+╠═══════════════════════════════════════════════════════════╣
+║ → Fix                                                      ║  (highlighted)
+║   Enhancement                                              ║
+╚═══════════════════════════════════════════════════════════╝
+```
 
 **Example Usage**:
 ```python
