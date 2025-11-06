@@ -51,6 +51,8 @@ Examples:
 - `python .rdd/scripts/rdd.py branch create enh my-feature`
 - `python .rdd/scripts/rdd.py workspace init change`
 - `python .rdd/scripts/rdd.py requirements merge`
+- `python .rdd/scripts/rdd.py config show`
+- `python .rdd/scripts/rdd.py config set defaultBranch dev`
 
 **Cross-Platform Compatibility**: The framework uses the `python` command (not `python3`) to ensure compatibility across Windows, Linux, and macOS. On older Linux systems where the `python` command is not available, users can install the `python-is-python3` package or create an alias/symlink.
 
@@ -67,6 +69,59 @@ The framework follows a sequential phase workflow:
 4. **Update Docs**: Synchronize documentation with implementation
 5. **Wrap-Up**: Archive workspace, merge requirements, prepare for PR
 6. **Clean-Up**: After PR merge, clean up local environment and remove merged branches
+
+### Interactive Menu System
+The framework provides interactive menus for user input using Python's curses library:
+
+**Features**:
+- Visual navigation with arrow keys (↑/↓)
+- Selection with Enter or Space
+- Automatic fallback to numeric input when curses unavailable
+- Clear visual indicators (→ for current selection)
+- Support for custom text input options
+
+**Implementation**:
+- `_curses_menu()` function in rdd.py provides core menu functionality
+- Used for change type selection (Fix/Enhancement)
+- Used for default branch selection during initialization
+- Handles terminal compatibility issues gracefully
+
+**Example Usage**:
+```python
+python .rdd/scripts/rdd.py change create
+# Displays interactive menu:
+# → Fix
+#   Enhancement (hidden by default)
+```
+
+### Configuration Management
+The framework uses a configuration file system for repository-wide settings:
+
+**Configuration Storage**:
+- **Location**: `.rdd-docs/config.json`
+- **Format**: JSON with version, defaultBranch, timestamps
+- **Version Control**: File is tracked in repository and shared across team
+
+**Configuration Access**:
+- **CLI Commands**:
+  - `python .rdd/scripts/rdd.py config show` - Display all configuration
+  - `python .rdd/scripts/rdd.py config get <key>` - Get specific value
+  - `python .rdd/scripts/rdd.py config set <key> <value>` - Update value
+- **Programmatic Access**:
+  - `get_rdd_config(key, default)` - Read configuration value
+  - `set_rdd_config(key, value)` - Write configuration value
+  - `get_rdd_config_path()` - Get path to config file
+
+**Default Branch Configuration**:
+- Config file allows custom default branch (not just main/master)
+- `get_default_branch()` function prioritizes config over auto-detection
+- Interactive selection during initialization populates config.json
+- Supports any branch name (main, dev, develop, master, etc.)
+
+**Configuration Priority**:
+1. Read from `.rdd-docs/config.json` if exists
+2. Fall back to branch detection (main → master)
+3. Default to "main"
 
 ## Component Architecture
 
@@ -132,6 +187,12 @@ The Python implementation (`rdd_utils.py`) provides utility functions organized 
    - Execution logging
    - Status checking
 
+9. **Config utilities**: Configuration management
+   - Configuration file reading (get_rdd_config)
+   - Configuration file writing (set_rdd_config)
+   - Configuration path resolution (get_rdd_config_path)
+   - Default branch detection with config priority
+
 **Legacy Note**: Previous bash implementation (branch-utils.sh, change-utils.sh, etc.) has been archived.
 
 ### Cross-Platform Implementation
@@ -152,6 +213,26 @@ The Python implementation (`rdd_utils.py`) provides utility functions organized 
 - **Change config**: `.rdd.[fix|enh].<branch-name>` - JSON file tracking current change
 - **Archive metadata**: `.archive-metadata` - JSON file documenting archived changes
 - **Execution log**: `log.jsonl` - JSONL file logging prompt executions
+- **RDD config**: `.rdd-docs/config.json` - JSON file storing framework configuration (defaultBranch, version, timestamps)
+
+### Configuration File Schema
+
+#### config.json
+Located in `.rdd-docs/config.json`, version-controlled with repository:
+```json
+{
+  "version": "1.0.0",
+  "defaultBranch": "main",
+  "created": "2025-11-06T08:00:00Z",
+  "lastModified": "2025-11-06T08:00:00Z"
+}
+```
+
+Fields:
+- **version**: Framework version (semantic versioning)
+- **defaultBranch**: Name of the repository's default branch (e.g., "main", "dev", "master")
+- **created**: ISO 8601 timestamp of initial configuration creation
+- **lastModified**: ISO 8601 timestamp of last configuration update
 
 ### Documentation Files
 - **Requirements**: `.rdd-docs/requirements.md` - Structured requirements with IDs

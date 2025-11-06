@@ -37,6 +37,7 @@ from rdd_utils import (
     exit_with_error, debug_print,
     # Config functions
     find_change_config, get_config, set_config,
+    get_rdd_config_path, get_rdd_config, set_rdd_config,
     # Prompt functions
     mark_prompt_completed, log_prompt_execution, list_prompts, validate_prompt_status,
     # Help functions
@@ -51,6 +52,203 @@ RDD_VERSION = "1.0.0"
 WORKSPACE_DIR = ".rdd-docs/workspace"
 ARCHIVE_BASE_DIR = ".rdd-docs/archive"
 TEMPLATES_DIR = ".rdd/templates"
+
+# Feature flags / hidden options
+# Enhancement selection exists but is hidden from the interactive menu by default.
+SHOW_ENH_IN_MENU_DEFAULT = False
+
+
+# ============================================================================
+# INTERACTIVE UI HELPERS
+# ============================================================================
+
+def _curses_menu(stdscr, title: str, items: list) -> int:
+    """
+    Basic arrow-key menu using curses. Returns selected index.
+    Controls: Up/Down to move, Enter/Space to select, 'q' or ESC to cancel (returns -1).
+    """
+    curses = None
+    try:
+        import curses  # type: ignore
+    except Exception:
+        # Should never get here because this function is only called after import succeeded
+        return -1
+
+    curses.curs_set(0)
+    stdscr.nodelay(False)
+    stdscr.keypad(True)
+
+    current = 0
+
+    while True:
+        stdscr.clear()
+        h, w = stdscr.getmaxyx()
+
+        # Title
+        title_lines = [title, "", "Use ↑/↓ to move, Enter/Space to select."]
+        for i, line in enumerate(title_lines):
+            stdscr.addstr(i, 0, line[: max(0, w - 1)])
+
+        # Items
+        base_row = len(title_lines) + 1
+        for idx, label in enumerate(items):
+            prefix = "> " if idx == current else "  "
+            line = f"{prefix}{label}"
+            if idx == current:
+                try:
+                    stdscr.attron(curses.A_REVERSE)
+                    stdscr.addstr(base_row + idx, 0, line[: max(0, w - 1)])
+                    stdscr.attroff(curses.A_REVERSE)
+                except Exception:
+                    stdscr.addstr(base_row + idx, 0, line[: max(0, w - 1)])
+            else:
+                stdscr.addstr(base_row + idx, 0, line[: max(0, w - 1)])
+
+        stdscr.refresh()
+
+        key = stdscr.getch()
+        if key in (ord('q'), 27):  # q or ESC
+            return -1
+        if key in (curses.KEY_UP, ord('k')):
+            current = (current - 1) % len(items)
+        elif key in (curses.KEY_DOWN, ord('j')):
+            current = (current + 1) % len(items)
+        elif key in (curses.KEY_ENTER, 10, 13, ord(' ')):
+            return current
+
+
+def select_change_type_interactive(reveal_enh: bool = SHOW_ENH_IN_MENU_DEFAULT) -> Optional[str]:
+    """
+    Show an interactive menu to select change type.
+    By default, only 'Fix' is shown. 'Enhancement' can be revealed via flag/env.
+    Returns: 'fix' or 'enh' or None if cancelled.
+    """
+    # Build visible options
+    visible_options = [("Fix", "fix")]
+    if reveal_enh:
+        visible_options.append(("Enhancement", "enh"))
+
+    labels = [label for (label, _code) in visible_options]
+
+    # Try curses-based UI first
+    try:
+        import curses  # noqa: F401
+
+        def _run(stdscr):
+            return _curses_menu(stdscr, "Select change type", labels)
+
+        selected_idx = __import__('curses').wrapper(_run)
+        if selected_idx is None or selected_idx < 0:
+            return None
+        return visible_options[selected_idx][1]
+    except Exception:
+        # Fallback to simple numeric input
+        print_info("Interactive menu unavailable; falling back to numeric selection.")
+        for i, (label, _code) in enumerate(visible_options, start=1):
+            print(f"  {i}. {label}")
+        try:
+            raw = input("Choose an option [1..{0}] (Enter for 1): ".format(len(visible_options))).strip()
+        except (KeyboardInterrupt, EOFError):
+            print()
+            return None
+        if not raw:
+            return visible_options[0][1]
+        try:
+            idx = int(raw)
+            if 1 <= idx <= len(visible_options):
+                return visible_options[idx - 1][1]
+        except ValueError:
+            pass
+        print_warning("Invalid selection. Defaulting to 'fix'.")
+        return 'fix'
+
+
+def select_default_branch_interactive() -> Optional[str]:
+    """
+    Show an interactive menu to select the default branch.
+    Options: main, dev, or custom entry
+    Returns: selected branch name or None if cancelled.
+    """
+    # Build menu options
+    menu_options = [
+        ("main", "main"),
+        ("dev", "dev"),
+        ("Enter custom branch name", "custom")
+    ]
+    
+    labels = [label for (label, _code) in menu_options]
+    
+    # Try curses-based UI first
+    try:
+        import curses  # noqa: F401
+        
+        def _run(stdscr):
+            return _curses_menu(stdscr, "Select default branch for RDD framework", labels)
+        
+        selected_idx = __import__('curses').wrapper(_run)
+        if selected_idx is None or selected_idx < 0:
+            return None
+        
+        code = menu_options[selected_idx][1]
+        
+        # If custom, prompt for input
+        if code == "custom":
+            try:
+                branch_name = input("Enter branch name: ").strip()
+                if not branch_name:
+                    print_warning("No branch name entered. Defaulting to 'main'.")
+                    return "main"
+                # Validate branch name format
+                if not validate_branch_name(branch_name):
+                    print_error(f"Invalid branch name: {branch_name}")
+                    return None
+                return branch_name
+            except (KeyboardInterrupt, EOFError):
+                print()
+                return None
+        
+        return code
+        
+    except Exception:
+        # Fallback to simple numeric input
+        print_info("Interactive menu unavailable; falling back to numeric selection.")
+        for i, (label, _code) in enumerate(menu_options, start=1):
+            print(f"  {i}. {label}")
+        try:
+            raw = input("Choose an option [1..3] (Enter for 1): ").strip()
+        except (KeyboardInterrupt, EOFError):
+            print()
+            return None
+        
+        if not raw:
+            return "main"
+        
+        try:
+            idx = int(raw)
+            if 1 <= idx <= len(menu_options):
+                code = menu_options[idx - 1][1]
+                
+                # If custom, prompt for input
+                if code == "custom":
+                    try:
+                        branch_name = input("Enter branch name: ").strip()
+                        if not branch_name:
+                            print_warning("No branch name entered. Defaulting to 'main'.")
+                            return "main"
+                        if not validate_branch_name(branch_name):
+                            print_error(f"Invalid branch name: {branch_name}")
+                            return None
+                        return branch_name
+                    except (KeyboardInterrupt, EOFError):
+                        print()
+                        return None
+                
+                return code
+        except ValueError:
+            pass
+        
+        print_warning("Invalid selection. Defaulting to 'main'.")
+        return 'main'
 
 
 # ============================================================================
@@ -613,7 +811,8 @@ def init_rdd_docs() -> bool:
         "requirements.md",
         "tech-spec.md",
         "folder-structure.md",
-        "data-model.md"
+        "data-model.md",
+        "config.json"
     ]
     
     # Check if .rdd-docs directory exists
@@ -637,6 +836,8 @@ def init_rdd_docs() -> bool:
     
     # Copy core template files to .rdd-docs
     success_count = 0
+    config_needs_population = False
+    
     for template_name in core_templates:
         dest_path = os.path.join(rdd_docs_dir, template_name)
         
@@ -657,8 +858,45 @@ def init_rdd_docs() -> bool:
             shutil.copy2(template_path, dest_path)
             debug_print(f"Copied {template_name} to .rdd-docs/")
             success_count += 1
+            
+            # Mark that config.json needs to be populated
+            if template_name == "config.json":
+                config_needs_population = True
+                
         except Exception as e:
             print_error(f"Failed to copy {template_name}: {e}")
+            return False
+    
+    # Populate config.json if it was just created
+    if config_needs_population:
+        print_step("Configuring default branch...")
+        
+        # Prompt user to select default branch
+        selected_branch = select_default_branch_interactive()
+        
+        if not selected_branch:
+            print_warning("No branch selected. Using 'main' as default.")
+            selected_branch = "main"
+        
+        # Update config.json with selected branch and timestamps
+        from datetime import datetime, timezone
+        config_path = os.path.join(rdd_docs_dir, "config.json")
+        
+        try:
+            with open(config_path, 'r') as f:
+                config_data = json.load(f)
+            
+            config_data["defaultBranch"] = selected_branch
+            config_data["created"] = datetime.now(timezone.utc).isoformat()
+            config_data["lastModified"] = datetime.now(timezone.utc).isoformat()
+            
+            with open(config_path, 'w') as f:
+                json.dump(config_data, f, indent=2)
+            
+            print_success(f"Default branch configured: {selected_branch}")
+            
+        except Exception as e:
+            print_error(f"Failed to populate config.json: {e}")
             return False
     
     if success_count == len(core_templates):
@@ -949,6 +1187,7 @@ def show_main_help() -> None:
     print("  fix           Fix workflow management")
     print("  git           Git operations and comparisons")
     print("  prompt        Stand-alone prompt management")
+    print("  config        Configuration management")
     print()
     print("Options:")
     print("  --help, -h    Show this help message")
@@ -961,6 +1200,7 @@ def show_main_help() -> None:
     print("  rdd.py branch delete my-branch")
     print("  rdd.py git compare")
     print("  rdd.py prompt mark-completed P01")
+    print("  rdd.py config show")
 
 
 def show_branch_help() -> None:
@@ -1233,8 +1473,29 @@ def route_change(args: List[str]) -> int:
                 print()
                 normalized_name = None
         
-        # Get change type or use default
-        change_type = args[1] if len(args) > 1 else "enh"
+        # Determine change type
+        # Hidden reveal flag for enhancement option in the interactive menu
+        reveal_enh = False
+        # Allow env override to reveal enhancement in menu
+        if os.environ.get("RDD_REVEAL_ENH", "0") in ("1", "true", "True"):
+            reveal_enh = True
+        # Allow hidden CLI flag (will be ignored by help) and strip it from args
+        if "--reveal-enh" in args:
+            reveal_enh = True
+            args = [a for a in args if a != "--reveal-enh"]
+
+        # If user passed type explicitly, honor it (keeps non-interactive, script-param capability)
+        if len(args) > 1 and args[1] in ("enh", "fix"):
+            change_type = args[1]
+        else:
+            # Interactive selection (menu shows only Fix by default)
+            print()
+            print_step("Select change type")
+            selected = select_change_type_interactive(reveal_enh=reveal_enh)
+            if not selected:
+                print_info("Operation cancelled")
+                return 1
+            change_type = selected
         
         # Create the change
         return 0 if create_change(normalized_name, change_type) else 1
@@ -1360,6 +1621,87 @@ def route_prompt(args: List[str]) -> int:
         return 1
 
 
+def route_config(args: List[str]) -> int:
+    """Route config domain commands."""
+    if not args or args[0] in ['--help', '-h']:
+        show_config_help()
+        return 0
+    
+    action = args[0]
+    
+    if action == 'show':
+        config_path = get_rdd_config_path()
+        if not os.path.isfile(config_path):
+            print_warning("No RDD config file found at .rdd-docs/config.json")
+            print_info("Run 'rdd.py change create' to initialize the configuration")
+            return 1
+        try:
+            with open(config_path, 'r') as f:
+                content = f.read()
+            print(content)
+            return 0
+        except Exception as e:
+            print_error(f"Failed to read config: {e}")
+            return 1
+    
+    elif action == 'get':
+        if len(args) < 2:
+            print_error("Config key required")
+            print_info("Usage: rdd.py config get <key>")
+            return 1
+        key = args[1]
+        value = get_rdd_config(key)
+        if value is not None:
+            print(f"{key}: {value}")
+            return 0
+        else:
+            print_warning(f"Config key '{key}' not found")
+            return 1
+    
+    elif action == 'set':
+        if len(args) < 3:
+            print_error("Config key and value required")
+            print_info("Usage: rdd.py config set <key> <value>")
+            return 1
+        key = args[1]
+        value = args[2]
+        
+        if set_rdd_config(key, value):
+            print_success(f"Configuration updated: {key} = {value}")
+            return 0
+        else:
+            return 1
+    
+    else:
+        print_error(f"Unknown config action: {action}")
+        print()
+        show_config_help()
+        return 1
+
+
+def show_config_help() -> None:
+    """Show config management help."""
+    print_banner("Configuration Management")
+    print()
+    print("Usage: rdd.py config <action> [options]")
+    print()
+    print("Actions:")
+    print("  show              Display entire configuration file")
+    print("  get <key>         Get specific configuration value")
+    print("  set <key> <val>   Set configuration value")
+    print()
+    print("Configuration file location: .rdd-docs/config.json")
+    print()
+    print("Available keys:")
+    print("  defaultBranch     The default branch for creating changes")
+    print()
+    print("Examples:")
+    print("  rdd.py config show")
+    print("  rdd.py config get defaultBranch")
+    print("  rdd.py config set defaultBranch dev")
+    print()
+
+
 # ============================================================================
 # MAIN ENTRY POINT
 # ============================================================================
@@ -1398,10 +1740,12 @@ def main() -> int:
         return route_git(domain_args)
     elif domain == 'prompt':
         return route_prompt(domain_args)
+    elif domain == 'config':
+        return route_config(domain_args)
     else:
         print_error(f"Unknown domain: {domain}")
         print()
-        print("Available domains: branch, workspace, change, fix, git, prompt")
+        print("Available domains: branch, workspace, change, fix, git, prompt, config")
         print()
         print("Use 'rdd.py --help' for more information")
         return 1

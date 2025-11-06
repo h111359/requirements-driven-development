@@ -1,4 +1,73 @@
-# Kolko Ni Struva Product Data Model
+# RDD Framework Data Model
+
+## Configuration Files
+
+### config.json
+
+#### Description:
+Framework-wide configuration file storing repository and workflow settings. Located in `.rdd-docs/config.json` and version-controlled with the repository.
+
+#### Attributes:
+
+  - version: 
+    - Description: RDD framework version using semantic versioning
+    - Mandatory: Yes
+    - Data Type: String
+    - Format: Semantic versioning (MAJOR.MINOR.PATCH)
+    - Example: "1.0.0"
+
+  - defaultBranch: 
+    - Description: Name of the repository's default branch for change management
+    - Mandatory: Yes
+    - Data Type: String
+    - Format: Valid git branch name
+    - Data validation rules:
+       - Must be a valid git branch name
+       - Should exist in the repository
+    - Example: "main", "dev", "master", "develop"
+
+  - created:
+    - Description: ISO 8601 timestamp of when the configuration was first created
+    - Mandatory: Yes
+    - Data Type: String
+    - Format: ISO 8601 datetime with timezone (UTC)
+    - Example: "2025-11-06T08:00:00Z"
+
+  - lastModified:
+    - Description: ISO 8601 timestamp of when the configuration was last updated
+    - Mandatory: Yes
+    - Data Type: String
+    - Format: ISO 8601 datetime with timezone (UTC)
+    - Example: "2025-11-06T10:30:00Z"
+
+#### Constraints
+
+  - Primary-Key: N/A (single instance file)
+  - Unique-Key: N/A
+
+#### Example File:
+```json
+{
+  "version": "1.0.0",
+  "defaultBranch": "dev",
+  "created": "2025-11-06T08:00:00Z",
+  "lastModified": "2025-11-06T10:30:00Z"
+}
+```
+
+#### Location:
+- **File path**: `.rdd-docs/config.json`
+- **Template**: `.rdd/templates/config.json`
+- **Access functions**: 
+  - `get_rdd_config(key, default)` - Read value
+  - `set_rdd_config(key, value)` - Write value
+  - `get_rdd_config_path()` - Get file path
+
+#### Usage:
+- Created during workspace initialization via interactive branch selection
+- Updated via `python .rdd/scripts/rdd.py config set <key> <value>`
+- Read by `get_default_branch()` function for branch management
+- Displayed via `python .rdd/scripts/rdd.py config show`
 
 ## Entities
 
