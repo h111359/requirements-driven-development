@@ -298,10 +298,27 @@ def get_current_branch() -> str:
 
 def get_default_branch() -> str:
     """
-    Get the default branch name (main or master).
-    Returns "main" or "master" depending on what exists.
+    Get the default branch name with intelligent detection.
+    Priority:
+    1. User config file (.rdd-docs/config.json)
+    2. Local branch detection (main, then master)
+    3. Fallback to "main"
     """
-    # Check if main branch exists
+    # 1. Check config file first (user configuration)
+    config_branch = get_rdd_config("defaultBranch")
+    if config_branch:
+        # Verify branch actually exists
+        result = subprocess.run(
+            ['git', 'show-ref', '--verify', '--quiet', f'refs/heads/{config_branch}'],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+        if result.returncode == 0:
+            return config_branch
+        else:
+            debug_print(f"Configured default branch '{config_branch}' not found, using auto-detection")
+    
+    # 2. Check if main branch exists
     result = subprocess.run(
         ['git', 'show-ref', '--verify', '--quiet', 'refs/heads/main'],
         stdout=subprocess.DEVNULL,
@@ -311,7 +328,7 @@ def get_default_branch() -> str:
     if result.returncode == 0:
         return "main"
     
-    # Check if master branch exists
+    # 3. Check if master branch exists
     result = subprocess.run(
         ['git', 'show-ref', '--verify', '--quiet', 'refs/heads/master'],
         stdout=subprocess.DEVNULL,
@@ -321,6 +338,7 @@ def get_default_branch() -> str:
     if result.returncode == 0:
         return "master"
     
+    # 4. Final fallback
     return "main"  # Default to main
 
 
@@ -845,6 +863,78 @@ def set_config(key: str, value: str, config_file: Optional[str] = None) -> bool:
             return False
     except Exception as e:
         print_error(f"Failed to set config: {e}")
+        return False
+
+
+def get_rdd_config_path() -> str:
+    """
+    Get the path to the RDD configuration file.
+    Returns: Path to .rdd-docs/config.json
+    """
+    return os.path.join(get_repo_root(), ".rdd-docs", "config.json")
+
+
+def get_rdd_config(key: str, default: Optional[str] = None) -> Optional[str]:
+    """
+    Get value from global RDD config file (.rdd-docs/config.json).
+    Returns value or default if not found.
+    """
+    config_path = get_rdd_config_path()
+    
+    if not os.path.isfile(config_path):
+        return default
+    
+    try:
+        with open(config_path, 'r') as f:
+            data = json.load(f)
+            return data.get(key, default)
+    except Exception:
+        return default
+
+
+def set_rdd_config(key: str, value: str) -> bool:
+    """
+    Set value in global RDD config file (.rdd-docs/config.json).
+    Creates file if it doesn't exist.
+    Returns True if successful, False otherwise.
+    """
+    config_path = get_rdd_config_path()
+    
+    # Create .rdd-docs directory if needed
+    rdd_docs_dir = os.path.dirname(config_path)
+    if not os.path.isdir(rdd_docs_dir):
+        try:
+            os.makedirs(rdd_docs_dir, exist_ok=True)
+        except Exception as e:
+            print_error(f"Failed to create .rdd-docs directory: {e}")
+            return False
+    
+    # Load existing config or create new
+    if os.path.isfile(config_path):
+        try:
+            with open(config_path, 'r') as f:
+                data = json.load(f)
+        except Exception:
+            data = {}
+    else:
+        from datetime import datetime, timezone
+        data = {
+            "version": "1.0.0",
+            "created": datetime.now(timezone.utc).isoformat()
+        }
+    
+    # Update value and timestamp
+    from datetime import datetime, timezone
+    data[key] = value
+    data["lastModified"] = datetime.now(timezone.utc).isoformat()
+    
+    # Write back
+    try:
+        with open(config_path, 'w') as f:
+            json.dump(data, f, indent=2)
+        return True
+    except Exception as e:
+        print_error(f"Failed to write config: {e}")
         return False
 
 

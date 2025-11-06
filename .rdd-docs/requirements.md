@@ -75,6 +75,14 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-52] Interactive Installation Scripts**: The framework shall provide platform-specific interactive installation scripts with visual folder navigation for Windows (install.ps1) and Linux/macOS (install.sh)
 - **[FR-53] Python-Based Installer**: The framework shall provide a cross-platform Python installer (install.py) that automates installation, settings merging, and .gitignore updates
 - **[FR-54] Installation Verification**: Installers shall verify prerequisites (Python version, Git availability), validate target is a Git repository, and test successful installation by running the RDD version command
+- **[FR-55] Interactive Change Type Selection**: The change creation workflow shall provide an interactive menu for selecting change type (fix/enhancement) with arrow key navigation, while maintaining parameter-based execution support for scripting
+- **[FR-56] Configurable Default Branch**: The framework shall support configuration of the default branch through a config.json file in .rdd-docs/ directory, allowing users to specify custom default branch names beyond main/master
+- **[FR-57] Default Branch Template**: The framework shall provide a config.json template in .rdd/templates/ that is copied to .rdd-docs/ during initialization
+- **[FR-58] Interactive Branch Selection During Installation**: The initialization process shall prompt users to select their default branch through an interactive menu with options for main, dev, or custom entry
+- **[FR-59] Config Management Commands**: The framework shall provide CLI commands for managing configuration (show, get, set) accessible via the config domain
+- **[FR-60] Config-First Default Branch Detection**: The get_default_branch() function shall prioritize reading from config.json before falling back to branch detection logic
+- **[FR-61] Simplified Change Creation Input**: The change creation workflow shall only prompt for change name, not description, streamlining the user input process and eliminating redundant data collection
+- **[FR-62] Implementation File Documentation**: Stand-alone prompt execution shall create implementation markdown files (<PROMPT_ID>-implementation.md) in workspace to document execution details, replacing the need for separate log.jsonl logging
 
 # Non-Functional Requirements
 
@@ -94,6 +102,8 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[NFR-16] Conflict Prevention**: The workspace structure shall minimize merge conflicts between developers
 - **[NFR-17] DELETED
 - **[NFR-18] Fix Documentation Template**: The framework shall provide a template for documenting fixes, including What, Why, and Acceptance Criteria sections, to ensure consistency and traceability.
+- **[NFR-19] Interactive Menu User Experience**: Interactive menus shall provide visual feedback with arrow key navigation, clear selection indicators using Unicode box drawing characters (╔═╗╚╝║╠╣), bold and reverse video for highlighted items, and support for both curses-based and numeric fallback input methods
+
 # Technical Requirements
 
 - **[TR-03] JSON Configuration**: The .current-change file shall use JSON format for machine and human readability
@@ -129,5 +139,10 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[TR-33] Version Extraction**: Build system shall extract version information from RDD_VERSION constant in rdd.py and validate it matches semantic versioning format (MAJOR.MINOR.PATCH)
 - **[TR-34] Archive Cleanup**: Build process shall remove temporary staging directories after archive creation, keeping only final zip archive and checksum file in build/ directory
 - **[TR-35] Settings Merge Logic**: Installer shall intelligently merge VS Code settings by appending unique array values, merging object keys, and replacing editor-specific settings that require exact RDD configuration
+- **[TR-36] Configuration File Format**: The framework shall use JSON format for configuration files (config.json) containing version, defaultBranch, created, and lastModified fields
+- **[TR-37] Configuration File Location**: The config.json file shall be stored in .rdd-docs/ directory as part of project documentation and version-controlled with the repository
+- **[TR-38] Curses-Based Interactive Menus**: Interactive menus shall use Python's curses library for visual navigation with fallback to numeric input when curses is unavailable
+- **[TR-39] Config Helper Functions**: The framework shall provide utility functions (get_rdd_config, set_rdd_config, get_rdd_config_path) for reading and writing configuration values
 
 ```
+

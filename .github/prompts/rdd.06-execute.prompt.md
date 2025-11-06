@@ -31,9 +31,10 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
      - `.rdd-docs/data-model.md`
      - Any other relevant files mentioned in the prompt
    - Execute the instructions in the prompt exactly as if the user had entered them directly in the chat.
+   - Think if the prompt instructions are clear and unambiguous. In case of unclarity or unambiguity which leads to multiple possible choices for implementation - ask the user for guidance or chosing an option, following instructions for question formatting in `.rdd/templates/questions-formatting.md`.
    - Follow all instructions in the prompt carefully. The instructions in the prompt take precedence over the context.
-   - In case of unclarity or unambiguity which leads to multiple possible choices of implementation - ask the user for guidance or chosing an option, following instructions in `.rdd/templates/questions-formatting.md`.
    - Along with execution add continuously information for the implementation details in the file `.rdd-docs/workspace/<put-prompt-ID-here>-implementation.md` on each step
+   - If you are asked to make an analysis, create a plan, plan, research, advice, recommendation, best-practice review or similar - make the analysis in the file `.rdd-docs/workspace/<put-prompt-ID-here>-implementation.md`.
 
 4. **Mark the prompt as completed**:
    - After successfully executing the prompt, mark it as completed by running the script:
@@ -44,17 +45,7 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
    - The script will automatically change the checkbox from `- [ ]` to `- [x]`
    - Never manually edit the .rdd.copilot-prompts.md file to mark checkboxes!
 
-5. **Log the execution**:
-   - After marking the prompt as completed, log the execution details by running:
-     ```python
-     python .rdd/scripts/rdd.py prompt log-execution <PROMPT_ID> "<EXECUTION_DETAILS>"
-     ```
-   - Replace `<PROMPT_ID>` with the actual prompt ID (e.g., `P001`, `P002`, etc.)
-   - Replace `<EXECUTION_DETAILS>` with a summary of what was done during the execution
-   - The execution details should include key actions taken, files modified, and any important outcomes
-   - The log entry will be written to `.rdd-docs/workspace/log.jsonl` in JSONL format
-
-6. **Handle uncertainties**:
+5. **Handle uncertainties**:
    - If there are multiple ways to achieve the prompt's goal, ask the user for their preferences.
    - **Never anticipate or assume you know the user's preference**.
    - Always seek clarification when needed.
@@ -62,7 +53,6 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
 ## Important Constraints
 
 - **Use the script for marking**: Always use `python .rdd/scripts/rdd.py prompt mark-completed <PROMPT_ID>` to mark prompts as completed. Never manually edit the .rdd.copilot-prompts.md file.
-- **Log all executions**: After marking a prompt as completed, always log the execution using `python .rdd/scripts/rdd.py prompt log-execution <PROMPT_ID> "<EXECUTION_DETAILS>"`.
 - **Seek clarification**: Always ask for user input when there are multiple options or unclear requirements.
 - **Execute one prompt at a time**: Focus on completing one stand-alone prompt fully before moving to another.
 - **Keep short**: Do not make detailed summaries when finishing the task. Just write "I am done."
@@ -74,12 +64,11 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
 3. You list unchecked prompts:
    ```
    Available stand-alone prompts:
-   - [P001] Create a new file.github/prompts/rdd.F3-execute-sa-prompt.prompt.md...
-   - [P002] Update the README.md with installation instructions...
+   - [P01] Create a new file.github/prompts/rdd.F3-execute-sa-prompt.prompt.md...
+   - [P02] Update the README.md with installation instructions...
    
    Which prompt would you like me to execute?
    ```
 4. User responds: "P001"
 5. You execute the instructions from prompt P001
 6. You mark P001 as completed by running: `python .rdd/scripts/rdd.py prompt mark-completed P001`
-7. You log the execution by running: `python .rdd/scripts/rdd.py prompt log-execution P001 "Created prompt file with instructions for executing stand-alone prompts"`
