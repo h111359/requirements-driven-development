@@ -1,7 +1,0 @@
-{
-  "archivedAt": "2025-11-07T10:55:27Z",
-  "branch": "fix/20251107-0839-fix-version-and-build",
-  "archivedBy": "Hristo Hristov <hmhristov@outlook.com>",
-  "lastCommit": "ad751367b0c9a6c17544dd7edb9b3fb764dac4a9",
-  "lastCommitMessage": "wrap up fix/20251107-0541-install-scripts-outside"
-}
