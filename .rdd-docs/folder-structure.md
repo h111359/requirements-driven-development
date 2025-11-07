@@ -16,8 +16,14 @@ repo-root/
 ├── .github/                      # GitHub workflows, prompts, Copilot instructions
 │   ├── prompts/                  # Prompt templates for Copilot and RDD workflow
 │   │   ├── rdd.01-initiate.prompt.md
+│   │   ├── rdd.02-clarify-requirements.prompt.md
 │   │   ├── rdd.06-execute.prompt.md
+│   │   ├── rdd.07-update-docs.prompt.md
 │   │   ├── rdd.08-wrap-up.prompt.md
+│   │   ├── rdd.09-clean-up.prompt.md
+│   │   ├── rdd.G1-update-backlog.prompt.md
+│   │   ├── rdd.G2-detect-docs-changes.prompt.md
+│   │   └── rdd.G4-update-from-main.prompt.md
 │   └── copilot-instructions.md   # Copilot agent behavioral guidelines
 ├── .rdd/                         # RDD framework internals
 │   ├── scripts/                  # Python automation scripts
@@ -29,13 +35,12 @@ repo-root/
 │   │   └── shell-to-python-mapping.md # Legacy bash to Python mapping
 │   └── templates/                # File templates for initialization
 │       ├── copilot-prompts.md    # Stand-alone prompts template
-│       ├── backlog.md            # Backlog template
-│       ├── clarity-checklist.md  # Clarity checklist template
-│       ├── design-checklist.md   # Design checklist template
+│       ├── requirements.md       # Requirements document template
+│       ├── tech-spec.md          # Technical specification template
+│       ├── data-model.md         # Data model template
 │       ├── folder-structure.md   # Folder structure template
-│       ├── questions-formatting.md  # Question formatting guidelines
-│       ├── requirements-format.md   # Requirements format guidelines
-│       └── version-control.md    # Version control guidelines
+│       ├── config.json           # Configuration file template
+│       └── ...                   # Other templates
 ├── src/                          # Legacy platform-specific implementations (archived)
 │   ├── linux/                    # Linux/macOS implementation
 │   │   ├── .rdd/
@@ -91,17 +96,7 @@ repo-root/
 │   ├── rdd-v{version}.zip        # Release archive (created by build.py)
 │   └── rdd-v{version}.zip.sha256 # Checksum file for archive verification
 ├── scripts/                      # Build and release automation scripts
-│   ├── build.py                  # Build script for creating releases
-│   ├── install.py                # Python installer template
-│   ├── install.sh                # Bash installer template
-│   └── install.ps1               # PowerShell installer template
-├── templates/                    # One-time seed templates (installed to .rdd-docs/)
-│   ├── README.md                 # README template for build
-│   ├── config.json               # Configuration seed template
-│   ├── data-model.md             # Data model seed template
-│   ├── requirements.md           # Requirements seed template
-│   ├── tech-spec.md              # Technical spec seed template
-│   └── settings.json             # VS Code settings template
+│   └── build.py                  # Build script for creating releases
 ├── README.md                     # Project overview and quick start
 ├── LICENSE                       # Project license
 └── .gitignore                    # Git ignore rules
@@ -152,7 +147,7 @@ repo-root/
 
 ### 8. Configuration Management
 - **Configuration file**: `.rdd-docs/config.json` stores framework settings
-- **Template location**: `templates/config.json` (seed template installed during build)
+- **Template location**: `.rdd/templates/config.json` (copied during initialization)
 - **Version controlled**: Config shared across team in repository
 - **CLI access**: `python .rdd/scripts/rdd.py config [show|get|set]`
 - **Key settings**: defaultBranch, version, timestamps
@@ -164,13 +159,11 @@ repo-root/
 - **Release format**: Single cross-platform `rdd-v{version}.zip` archive
 - **Archive contents**:
   - Framework files (.rdd/, .github/prompts/)
-  - Installation scripts (install.py, install.sh, install.ps1) - from templates/ directory
-  - Documentation (README.md from templates/README.md, LICENSE)
-  - VS Code settings template (.vscode/settings.json from templates/settings.json)
-  - Seed templates (.rdd-docs/ with config.json, data-model.md, requirements.md, tech-spec.md from templates/)
+  - Installation scripts (install.py, install.sh, install.ps1)
+  - Documentation (README.md with installation instructions, LICENSE)
+  - VS Code settings template (.vscode/settings.json)
 - **Verification**: SHA256 checksum file generated for each archive
 - **Version source**: Extracted from `RDD_VERSION` constant in rdd.py
-- **Template processing**: Reads templates from templates/ directory with {{VERSION}} placeholder substitution
 
 ## 📝 RDD Workflow File Locations
 
@@ -182,8 +175,7 @@ Current implementation: `.rdd/scripts/rdd.py` and `.rdd/scripts/rdd_utils.py`
 Legacy bash scripts: Archived in workspace during Python migration
 
 ### Templates
-All file templates in: `.rdd/templates/*.md` (ongoing-use templates)
-One-time seed templates in: `templates/` (installed once to `.rdd-docs/`)
+All file templates in: `.rdd/templates/*.md`
 
 ### Active Work
 Current workspace: `.rdd-docs/workspace/`

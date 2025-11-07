@@ -839,19 +839,13 @@ def init_rdd_docs() -> bool:
     rdd_docs_dir = ".rdd-docs"
     
     # List of core templates that should always exist in .rdd-docs
-    # These are copied from .rdd/templates during workspace operations
     core_templates = [
         "backlog.md",
-        "folder-structure.md"
-    ]
-    
-    # List of seed templates that should be installed during project setup
-    # These should exist after installation but are NOT seeded by this function
-    seed_templates = [
-        "config.json",
-        "data-model.md",
         "requirements.md",
-        "tech-spec.md"
+        "tech-spec.md",
+        "folder-structure.md",
+        "data-model.md",
+        "config.json"
     ]
     
     # Check if .rdd-docs directory exists
@@ -869,19 +863,6 @@ def init_rdd_docs() -> bool:
         # If no templates are missing, skip initialization
         if not missing_templates:
             debug_print(".rdd-docs already initialized with all core templates")
-            # Check if seed templates exist (they should have been installed)
-            missing_seeds = []
-            for seed_name in seed_templates:
-                seed_path = os.path.join(rdd_docs_dir, seed_name)
-                if not os.path.isfile(seed_path):
-                    missing_seeds.append(seed_name)
-            
-            if missing_seeds:
-                print_error(f"Missing seed templates in .rdd-docs: {', '.join(missing_seeds)}")
-                print_info("These files should have been installed during RDD framework installation.")
-                print_info("Please reinstall the RDD framework or manually copy them from templates/ directory.")
-                return False
-            
             return True
         
         print_step(f"Initializing missing templates in .rdd-docs ({len(missing_templates)} templates)...")
@@ -910,23 +891,46 @@ def init_rdd_docs() -> bool:
             shutil.copy2(template_path, dest_path)
             debug_print(f"Copied {template_name} to .rdd-docs/")
             success_count += 1
+            
+            # Mark that config.json needs to be populated
+            if template_name == "config.json":
+                config_needs_population = True
                 
         except Exception as e:
             print_error(f"Failed to copy {template_name}: {e}")
             return False
     
-    # Check if seed templates exist (they should have been installed)
-    missing_seeds = []
-    for seed_name in seed_templates:
-        seed_path = os.path.join(rdd_docs_dir, seed_name)
-        if not os.path.isfile(seed_path):
-            missing_seeds.append(seed_name)
-    
-    if missing_seeds:
-        print_error(f"Missing seed templates in .rdd-docs: {', '.join(missing_seeds)}")
-        print_info("These files should have been installed during RDD framework installation.")
-        print_info("Please reinstall the RDD framework or manually copy them from templates/ directory.")
-        return False
+    # Populate config.json if it was just created
+    if config_needs_population:
+        print_step("Configuring default branch...")
+        
+        # Prompt user to select default branch
+        selected_branch = select_default_branch_interactive()
+        
+        if not selected_branch:
+            print_warning("No branch selected. Using 'main' as default.")
+            selected_branch = "main"
+        
+        # Update config.json with selected branch and timestamps
+        from datetime import datetime, timezone
+        config_path = os.path.join(rdd_docs_dir, "config.json")
+        
+        try:
+            with open(config_path, 'r') as f:
+                config_data = json.load(f)
+            
+            config_data["defaultBranch"] = selected_branch
+            config_data["created"] = datetime.now(timezone.utc).isoformat()
+            config_data["lastModified"] = datetime.now(timezone.utc).isoformat()
+            
+            with open(config_path, 'w') as f:
+                json.dump(config_data, f, indent=2)
+            
+            print_success(f"Default branch configured: {selected_branch}")
+            
+        except Exception as e:
+            print_error(f"Failed to populate config.json: {e}")
+            return False
     
     if success_count == len(core_templates):
         print_success(f".rdd-docs initialized with {len(core_templates)} core templates")
