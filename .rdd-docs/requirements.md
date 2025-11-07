@@ -66,7 +66,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-43] Config File Naming Convention**: The system shall name workspace config files using the pattern .rdd.[type].[branch-name] where type is either 'fix' or 'enh' and branch-name matches the git branch name
 - **[FR-44] [DELETED]
 - **[FR-45] No change.md in Workspace**: The workspace initialization shall NOT create a change.md file, as this template has been removed from the framework
-- **[FR-46] [DELETED]
+- **[FR-46] Post-Merge Cleanup Workflow**: The framework shall provide a guided cleanup prompt (rdd.09-clean-up.prompt.md) for removing local and remote branches after PR merge, automating the cleanup command execution
 - **[FR-47] Python-Based Script Implementation**: All RDD operations shall be implemented in Python (rdd.py) with domain-based command routing, replacing legacy bash scripts which are archived
 - **[FR-48] Cross-Platform Python Command**: All prompt files shall use the `python` command (not `python3`) to execute RDD scripts for cross-platform compatibility with Windows, Linux, and macOS
 - **[FR-49] Python Command Installation Guidance**: The README shall provide clear installation instructions for setting up the `python` command on Linux systems using `python-is-python3` package or equivalent
@@ -83,9 +83,6 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-60] Config-First Default Branch Detection**: The get_default_branch() function shall prioritize reading from config.json before falling back to branch detection logic
 - **[FR-61] Simplified Change Creation Input**: The change creation workflow shall only prompt for change name, not description, streamlining the user input process and eliminating redundant data collection
 - **[FR-62] Implementation File Documentation**: Stand-alone prompt execution shall create implementation markdown files (<PROMPT_ID>-implementation.md) in workspace to document execution details, replacing the need for separate log.jsonl logging
-- **[FR-63] Seed Template Installation**: The build process shall copy one-time seed templates (config.json, data-model.md, requirements.md, tech-spec.md) to .rdd-docs/ directory during installation, not during change creation
-- **[FR-64] Seed Template Validation**: The change creation process shall validate existence of seed templates in .rdd-docs/ and notify user if missing, indicating installation issue
-- **[FR-65] Template File Organization**: One-time seed templates shall be stored in templates/ directory (not .rdd/templates/) and included in build archives under .rdd-docs/ for direct installation
 
 # Non-Functional Requirements
 
@@ -146,9 +143,6 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[TR-37] Configuration File Location**: The config.json file shall be stored in .rdd-docs/ directory as part of project documentation and version-controlled with the repository
 - **[TR-38] Curses-Based Interactive Menus**: Interactive menus shall use Python's curses library for visual navigation with fallback to numeric input when curses is unavailable
 - **[TR-39] Config Helper Functions**: The framework shall provide utility functions (get_rdd_config, set_rdd_config, get_rdd_config_path) for reading and writing configuration values
-- **[TR-40] Build Template Management**: Build scripts shall read installer scripts (install.py, install.sh, install.ps1) and README.md from templates/ directory with version placeholder substitution
-- **[TR-41] Template Placeholder Format**: Template files in templates/ directory shall use {{VERSION}} as placeholder for version substitution during build process
-- **[TR-42] Seed Templates Directory Structure**: Build archives shall include .rdd-docs/ directory with pre-seeded template files for direct installation to project .rdd-docs/ directory
 
 ```
 

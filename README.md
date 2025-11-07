@@ -254,7 +254,7 @@ python .rdd/scripts/rdd.py git update-from-main
 
 The RDD framework guides you through six phases:
 
-1. **🎬 Initiate** - Clean merged branches and create branch and workspace
+1. **🎬 Initiate** - Create branch and workspace
    - Use: `python .rdd/scripts/rdd.py change create`
    - Prompt: `/rdd.01-initiate`
 
@@ -275,6 +275,10 @@ The RDD framework guides you through six phases:
    - Prompt: `/rdd.08-wrap-up`
    - Archives workspace, commits changes, pushes to remote
 
+6. **🧹 Clean-Up** - Remove merged branches
+   - Use: `python .rdd/scripts/rdd.py branch cleanup`
+   - Prompt: `/rdd.09-clean-up`
+   - Cleans up local and remote branches
 
 ## 📁 Project Structure
 

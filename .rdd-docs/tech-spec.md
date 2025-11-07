@@ -270,30 +270,26 @@ The RDD framework uses a Python-based build system to create release packages:
 #### Build Script (scripts/build.py)
 - **Purpose**: Creates cross-platform release archives with all necessary files
 - **Version Management**: Extracts version from `RDD_VERSION` constant in rdd.py
-- **Template Processing**: Reads README.md and installer scripts from templates/ directory with {{VERSION}} placeholder substitution
 - **Archive Creation**: Generates single `rdd-v{version}.zip` file containing:
   - Framework files (.rdd/scripts/, .rdd/templates/)
   - Prompt files (.github/prompts/)
-  - Installation scripts (install.py, install.sh, install.ps1) - generated from templates
-  - Documentation (README.md) - generated from template
+  - Installation scripts (install.py, install.sh, install.ps1)
+  - Documentation (README.md, LICENSE)
   - VS Code settings template (.vscode/settings.json)
-  - Seed templates (.rdd-docs/ with config.json, data-model.md, requirements.md, tech-spec.md)
 - **Verification**: Generates SHA256 checksum file for archive integrity verification
 - **Cleanup**: Removes temporary build directories, keeping only archive and checksum
 
 #### Build Process Steps
 1. Extract version from rdd.py and validate SemVer format
-2. Create build directory structure (including .rdd-docs/)
-3. Copy framework files (prompts, scripts, templates, LICENSE)
-4. Copy VS Code settings template to .vscode/settings.json
-5. Copy seed templates to .rdd-docs/ (config.json, data-model.md, requirements.md, tech-spec.md)
-6. Generate README.md from templates/README.md with version substitution
-7. Generate install.py from scripts/install.py template with version substitution
-8. Generate install.sh from scripts/install.sh template with version substitution
-9. Generate install.ps1 from scripts/install.ps1 template with version substitution
-10. Create ZIP archive with nested directory structure
-11. Generate SHA256 checksum file
-12. Clean up temporary staging directories
+2. Create build directory structure
+3. Copy framework files (prompts, scripts, templates, LICENSE, settings)
+4. Generate README.md with platform-specific installation instructions
+5. Generate install.py (cross-platform Python installer)
+6. Generate install.sh (interactive Bash installer for Linux/macOS)
+7. Generate install.ps1 (interactive PowerShell installer for Windows)
+8. Create ZIP archive with nested directory structure
+9. Generate SHA256 checksum file
+10. Clean up temporary staging directories
 
 ### Installation System
 The RDD framework provides three installation methods to accommodate different user preferences:
