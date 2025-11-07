@@ -49,26 +49,29 @@ When activated, your prompt will show `(.venv)`.
 
 ### 3. Run Tests
 
+Option A: Use the cross-platform Python test runner
+
 ```bash
-# Make sure virtual environment is activated!
-pytest tests/python/
+python scripts/run-tests.py
+```
+
+Option B: Run pytest directly
 
 ```bash
 # Make sure virtual environment is activated!
 pytest tests/python/
 
-# Run with coverage
+# With coverage
 pytest tests/python/ --cov=.rdd/scripts --cov=scripts --cov-report=html
 
-# Run specific test file
+# Specific file
 pytest tests/python/test_rdd_utils.py -v
 ```
 
 ## Directory Structure
 
 - **`python/`** - Tests for Python scripts (`.rdd/scripts/` and `scripts/`)
-- **`shell/`** - Tests for Bash scripts (`install.sh`)
-- **`powershell/`** - Tests for PowerShell scripts (`install.ps1`)
+- (removed) `shell/` and `powershell/` directories — tests now cover only the Python installer and framework scripts
 - **`fixtures/`** - Shared test data and mock repositories
 
 ## Running Tests in Detail
@@ -84,21 +87,6 @@ pytest tests/python/
 
 # Run with coverage
 pytest tests/python/ --cov=.rdd/scripts --cov=scripts --cov-report=html
-# Ubuntu/Debian: sudo apt-get install bats
-# macOS: brew install bats-core
-
-# Run shell tests
-bats tests/shell/test_install_sh.bats
-```
-
-### PowerShell Tests (Windows)
-
-```powershell
-# Install Pester
-Install-Module -Name Pester -Force -SkipPublisherCheck
-
-# Run PowerShell tests
-Invoke-Pester tests/powershell/Install.Tests.ps1
 ```
 
 ## CI/CD

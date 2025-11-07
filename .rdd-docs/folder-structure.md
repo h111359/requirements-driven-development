@@ -29,7 +29,6 @@ repo-root/
 │   │   └── shell-to-python-mapping.md # Legacy bash to Python mapping
 │   └── templates/                # File templates for initialization
 │       ├── copilot-prompts.md    # Stand-alone prompts template
-│       ├── backlog.md            # Backlog template
 │       ├── clarity-checklist.md  # Clarity checklist template
 │       ├── design-checklist.md   # Design checklist template
 │       ├── folder-structure.md   # Folder structure template

@@ -71,8 +71,8 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-48] Cross-Platform Python Command**: All prompt files shall use the `python` command (not `python3`) to execute RDD scripts for cross-platform compatibility with Windows, Linux, and macOS
 - **[FR-49] Python Command Installation Guidance**: The README shall provide clear installation instructions for setting up the `python` command on Linux systems using `python-is-python3` package or equivalent
 - **[FR-50] Build System**: The framework shall provide a Python-based build script (build.py) that creates cross-platform release archives containing all necessary framework files, documentation, and installation scripts
-- **[FR-51] Release Archive Contents**: Release archives shall include framework files (.rdd/, .github/prompts/), VS Code settings template, README.md with installation instructions, LICENSE, and multiple installer options (install.py, install.sh, install.ps1)
-- **[FR-52] Interactive Installation Scripts**: The framework shall provide platform-specific interactive installation scripts with visual folder navigation for Windows (install.ps1) and Linux/macOS (install.sh)
+- **[FR-51] Release Archive Contents**: Release archives shall include framework files (.rdd/, .github/prompts/), VS Code settings template, README.md with installation instructions, LICENSE, and Python installer (install.py)
+- **[FR-52] [DELETED]
 - **[FR-53] Python-Based Installer**: The framework shall provide a cross-platform Python installer (install.py) that automates installation, settings merging, and .gitignore updates
 - **[FR-54] Installation Verification**: Installers shall verify prerequisites (Python version, Git availability), validate target is a Git repository, and test successful installation by running the RDD version command
 - **[FR-55] Interactive Change Type Selection**: The change creation workflow shall provide an interactive menu for selecting change type (fix/enhancement) with arrow key navigation, while maintaining parameter-based execution support for scripting
@@ -89,6 +89,8 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-66] User-Controlled Branch Naming**: The change creation workflow shall accept complete branch names from users without automatically adding type prefixes (fix/ or enh/), allowing users full control over branch naming conventions
 - **[FR-67] Flexible Branch Name Validation**: Branch name validation shall only enforce kebab-case format with support for forward slashes, allowing users to include custom prefixes, timestamps, or any naming convention they prefer
 - **[FR-68] Branch Type for Workspace Context**: The fix/enhancement type selection shall be preserved for determining workspace initialization content, but shall not affect the branch name provided by users
+- **[FR-69] Python-Only Installation**: The framework shall provide only Python-based installation (install.py) without shell or PowerShell wrapper scripts, simplifying the installation process and reducing maintenance overhead
+- **[FR-70] Python Test Runner**: The framework shall provide a Python-based test runner (run-tests.py) that executes all test types (pytest, build tests, install tests) in a unified cross-platform manner
 
 # Non-Functional Requirements
 
@@ -109,6 +111,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[NFR-17] DELETED
 - **[NFR-18] Fix Documentation Template**: The framework shall provide a template for documenting fixes, including What, Why, and Acceptance Criteria sections, to ensure consistency and traceability.
 - **[NFR-19] Interactive Menu User Experience**: Interactive menus shall provide visual feedback with arrow key navigation, clear selection indicators using Unicode box drawing characters (╔═╗╚╝║╠╣), bold and reverse video for highlighted items, and support for both curses-based and numeric fallback input methods
+- **[NFR-20] Simplified Installation Process**: The installation process shall be straightforward and consistent across platforms, using only Python (install.py) with clear documentation on running the installer from the command line
 
 # Technical Requirements
 
@@ -158,11 +161,12 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[TR-46] PowerShell Testing**: The framework shall use Pester framework for testing PowerShell scripts on Windows platforms
 - **[TR-47] Test Isolation**: All tests shall use temporary directories and mock objects to prevent modification of actual project files and ensure test independence
 - **[TR-48] Test Dependencies**: Test dependencies shall be specified in tests/requirements.txt and installed in an isolated virtual environment
-- **[TR-49] Virtual Environment for Tests**: The framework shall provide a setup-test-env.py script to create and maintain a .venv virtual environment specifically for test execution
-- **[TR-50] Test Runner Scripts**: The framework shall provide platform-specific test runner scripts (run-tests.sh for Linux/macOS, run-tests.ps1 for Windows) that execute all appropriate tests for each platform
-- **[TR-51] CI/CD Testing**: The framework shall use GitHub Actions to run tests on both Linux and Windows platforms automatically on push and pull request events
+- **[TR-49] Virtual Environment for Tests**: The framework shall provide a scripts/setup-test-env.py script to create and maintain a .venv virtual environment specifically for test execution
+- **[TR-50] [DELETED]
+- **[TR-51] CI/CD Testing**: The framework shall use GitHub Actions to run tests automatically on push and pull request events, executing only the Python test runner
 - **[TR-52] Test Coverage Reporting**: The test framework shall generate code coverage reports for Python code and report coverage metrics in CI/CD pipelines
 - **[TR-53] Colored Test Output**: Test runner scripts shall provide colored output (green for success, red for failure, yellow for warnings) to improve readability
+- **[TR-54] Flexible Branch Validation for Wrap-Up**: The wrap-up process shall reject only protected branches (default branch from config, "main", or "master") and accept all other branch names regardless of prefix or format
 
 ```
 
