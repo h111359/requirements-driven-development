@@ -90,7 +90,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-67] Flexible Branch Name Validation**: Branch name validation shall only enforce kebab-case format with support for forward slashes, allowing users to include custom prefixes, timestamps, or any naming convention they prefer
 - **[FR-68] Branch Type for Workspace Context**: The fix/enhancement type selection shall be preserved for determining workspace initialization content, but shall not affect the branch name provided by users
 - **[FR-69] Python-Only Installation**: The framework shall provide only Python-based installation (install.py) without shell or PowerShell wrapper scripts, simplifying the installation process and reducing maintenance overhead
-- **[FR-70] Python Test Runner**: The framework shall provide a Python-based test runner (run-tests.py) that executes all test types (pytest, build tests, install tests) in a unified cross-platform manner
+- **[FR-70] Python Test Runner**: The framework shall provide a Python-based test runner (run-tests.py) that executes all test types (pytest, build tests, install tests) in a unified cross-platform manner without requiring BATS or Pester frameworks
 
 # Non-Functional Requirements
 
@@ -162,7 +162,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[TR-47] Test Isolation**: All tests shall use temporary directories and mock objects to prevent modification of actual project files and ensure test independence
 - **[TR-48] Test Dependencies**: Test dependencies shall be specified in tests/requirements.txt and installed in an isolated virtual environment
 - **[TR-49] Virtual Environment for Tests**: The framework shall provide a scripts/setup-test-env.py script to create and maintain a .venv virtual environment specifically for test execution
-- **[TR-50] [DELETED]
+- **[TR-50] Test Fixture Completeness**: Test fixtures shall include all required template files (config.json, data-model.md, requirements.md, tech-spec.md, folder-structure.md) to match production build requirements
 - **[TR-51] CI/CD Testing**: The framework shall use GitHub Actions to run tests automatically on push and pull request events, executing only the Python test runner
 - **[TR-52] Test Coverage Reporting**: The test framework shall generate code coverage reports for Python code and report coverage metrics in CI/CD pipelines
 - **[TR-53] Colored Test Output**: Test runner scripts shall provide colored output (green for success, red for failure, yellow for warnings) to improve readability

@@ -8,9 +8,7 @@ Runs all tests appropriate for the current platform
 import sys
 import os
 import subprocess
-import shutil
 from pathlib import Path
-from typing import List, Tuple
 
 # Color codes for output
 class Colors:
@@ -126,76 +124,6 @@ def run_pytest_suite(test_dir: str, description: str) -> bool:
         print_error(f"Failed to run tests: {e}")
         return False
 
-def run_bats_tests() -> Tuple[bool, bool]:
-    """Run BATS shell tests (Linux/macOS only)
-    
-    Returns:
-        (tests_ran, tests_passed)
-    """
-    if is_windows():
-        return (False, True)  # Not applicable on Windows
-    
-    # Check if bats is installed
-    if shutil.which("bats") is None:
-        print_warning("BATS not found - skipping shell tests")
-        print_info("Install: sudo apt-get install bats (Ubuntu/Debian)")
-        print_info("Install: brew install bats-core (macOS)")
-        return (False, True)  # Not an error, just skipped
-    
-    # Run BATS tests
-    try:
-        result = subprocess.run(
-            ["bats", "tests/shell/*.bats"],
-            shell=True,
-            check=False
-        )
-        return (True, result.returncode == 0)
-    except Exception as e:
-        print_error(f"Failed to run BATS tests: {e}")
-        return (True, False)
-
-def run_pester_tests() -> Tuple[bool, bool]:
-    """Run Pester PowerShell tests (Windows only)
-    
-    Returns:
-        (tests_ran, tests_passed)
-    """
-    if not is_windows():
-        return (False, True)  # Not applicable on Linux/macOS
-    
-    # Check if Pester is installed
-    try:
-        check_pester = subprocess.run(
-            ["powershell", "-Command", "Get-Module -ListAvailable -Name Pester"],
-            capture_output=True,
-            text=True,
-            check=False
-        )
-        
-        if not check_pester.stdout.strip():
-            print_warning("Pester not found - skipping PowerShell tests")
-            print_info("Install: Install-Module -Name Pester -Force -SkipPublisherCheck")
-            return (False, True)  # Not an error, just skipped
-        
-        # Run Pester tests
-        result = subprocess.run(
-            [
-                "powershell",
-                "-Command",
-                "Invoke-Pester tests/powershell/*.Tests.ps1 -PassThru | Select-Object -ExpandProperty FailedCount"
-            ],
-            capture_output=True,
-            text=True,
-            check=False
-        )
-        
-        failed_count = int(result.stdout.strip() or "0")
-        return (True, failed_count == 0)
-        
-    except Exception as e:
-        print_warning(f"PowerShell tests skipped due to error: {e}")
-        return (False, True)  # Not an error, just skipped
-
 def main():
     """Main test execution"""
     # Get repository root
@@ -220,7 +148,7 @@ def main():
     print_header("Running Tests")
     
     # Step 1: Python Unit Tests
-    print_step(1, 4, "Running Python unit tests")
+    print_step(1, 3, "Running Python unit tests")
     total_tests += 1
     if run_pytest_suite("tests/python/", "Python unit tests"):
         print_success("Python unit tests passed")
@@ -231,7 +159,7 @@ def main():
     print()
     
     # Step 2: Build Tests
-    print_step(2, 4, "Running build tests")
+    print_step(2, 3, "Running build tests")
     total_tests += 1
     if run_pytest_suite("tests/build/", "Build tests"):
         print_success("Build tests passed")
@@ -242,7 +170,7 @@ def main():
     print()
     
     # Step 3: Install Tests
-    print_step(3, 4, "Running install tests")
+    print_step(3, 3, "Running install tests")
     total_tests += 1
     if run_pytest_suite("tests/install/", "Install tests"):
         print_success("Install tests passed")
@@ -250,31 +178,6 @@ def main():
     else:
         print_error("Install tests failed")
         failed_tests += 1
-    print()
-    
-    # Step 4: Platform-specific tests
-    if is_windows():
-        print_step(4, 4, "Running PowerShell tests (Pester)")
-        ran, passed = run_pester_tests()
-        if ran:
-            total_tests += 1
-            if passed:
-                print_success("PowerShell tests passed")
-                passed_tests += 1
-            else:
-                print_error("PowerShell tests failed")
-                failed_tests += 1
-    else:
-        print_step(4, 4, "Running shell tests (BATS)")
-        ran, passed = run_bats_tests()
-        if ran:
-            total_tests += 1
-            if passed:
-                print_success("Shell tests passed")
-                passed_tests += 1
-            else:
-                print_error("Shell tests failed")
-                failed_tests += 1
     print()
     
     # Summary

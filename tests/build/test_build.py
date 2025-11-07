@@ -96,6 +96,7 @@ class TestFileCopying:
         assert (rdd_docs / "data-model.md").exists()
         assert (rdd_docs / "requirements.md").exists()
         assert (rdd_docs / "tech-spec.md").exists()
+        assert (rdd_docs / "folder-structure.md").exists()
 
 
 class TestTemplateGeneration:

@@ -386,12 +386,6 @@ tests/
 ├── install/             # Installation tests
 │   ├── test_install.py        # Installer tests
 │   └── conftest.py            # Install fixtures
-├── shell/               # Shell script tests (BATS)
-│   ├── test_install_sh.bats   # Bash installer tests
-│   └── README.md              # Shell testing guide
-├── powershell/          # PowerShell tests (Pester)
-│   ├── Install.Tests.ps1      # PowerShell installer tests
-│   └── README.md              # PowerShell testing guide
 ├── fixtures/            # Shared test fixtures
 │   └── README.md              # Fixtures documentation
 ├── requirements.txt     # Test dependencies
@@ -401,10 +395,8 @@ tests/
 ### Test Frameworks
 
 - **Python Tests**: pytest with pytest-cov for coverage reporting
-- **Shell Tests**: BATS (Bash Automated Testing System) for Linux/macOS
-- **PowerShell Tests**: Pester framework for Windows
-- **Test Coverage**: 160+ tests covering all framework scripts
-- **Pass Rate**: 100% (49/49 Python tests passing)
+- **Test Coverage**: 80+ tests covering all framework scripts
+- **Pass Rate**: 100% (all Python tests passing)
 
 ### Test Isolation
 
@@ -461,10 +453,10 @@ Automated testing on push and pull requests:
 - **run-tests.py**: Test runner, virtual environment activation, cross-platform execution
 
 **Coverage Metrics**:
-- 160+ tests total
+- 80+ tests total
 - 49 Python unit tests (100% passing)
-- 25+ build tests
-- 30+ install tests
+- 13 build tests (100% passing)
+- 21 install tests (100% passing)
 
 ## Performance
 

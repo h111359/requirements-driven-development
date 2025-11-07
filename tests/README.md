@@ -71,7 +71,8 @@ pytest tests/python/test_rdd_utils.py -v
 ## Directory Structure
 
 - **`python/`** - Tests for Python scripts (`.rdd/scripts/` and `scripts/`)
-- (removed) `shell/` and `powershell/` directories — tests now cover only the Python installer and framework scripts
+- **`build/`** - Tests for build process (`scripts/build.py`)
+- **`install/`** - Tests for installation process (`scripts/install.py`)
 - **`fixtures/`** - Shared test data and mock repositories
 
 ## Running Tests in Detail
@@ -87,6 +88,20 @@ pytest tests/python/
 
 # Run with coverage
 pytest tests/python/ --cov=.rdd/scripts --cov=scripts --cov-report=html
+```
+
+### Build Tests
+
+```bash
+# Run build tests
+pytest tests/build/
+```
+
+### Install Tests
+
+```bash
+# Run install tests
+pytest tests/install/
 ```
 
 ## CI/CD
@@ -114,18 +129,4 @@ Follow pytest conventions:
 - Use fixtures from `conftest.py`
 - Mock external dependencies (git, filesystem)
 
-### Shell Tests
-
-Follow BATS conventions:
-- Test files: `*.bats`
-- Test functions: `@test "description" { ... }`
-- Use setup/teardown functions
-- Mock commands when needed
-
-### PowerShell Tests
-
-Follow Pester conventions:
-- Test files: `*.Tests.ps1`
-- Describe/Context/It blocks
-- Use BeforeAll/AfterAll
-- Mock cmdlets when needed
+````
