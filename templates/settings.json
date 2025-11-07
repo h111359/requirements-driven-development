@@ -6,9 +6,5 @@
   },
   "chat.tools.terminal.autoApprove": {
     "python .rdd/scripts/rdd.py": true
-  },
-  "files.associations": {
-    "*.jsonl": "jsonlines"
-  },
-  "editor.rulers": [80, 120]
+  }
 }

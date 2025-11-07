@@ -43,8 +43,7 @@ Requirements-Driven Development (RDD) is a comprehensive framework that transfor
 
 ### 🌍 Cross-Platform Support
 - **Single codebase** - Python implementation works everywhere
-- **Interactive installers** - Visual folder navigation (Bash for Linux/macOS, PowerShell for Windows)
-- **Python installer** - Cross-platform installation with intelligent settings merge
+- **Python installer only** - Cross-platform installation with intelligent settings merge
 - **Consistent experience** - Same commands and workflows on all platforms
 
 ## 📋 System Requirements
@@ -105,30 +104,34 @@ python --version  # Should show Python 3.7+
    Expand-Archive rdd-v1.0.0.zip -DestinationPath C:\Downloads\rdd
    ```
 
-3. **Run the interactive installer**
-   
-   **Linux/macOS:**
+3. **Navigate to your target project**
    ```bash
-   cd ~/downloads/rdd/rdd-v1.0.0
-   chmod +x install.sh
-   ./install.sh
+   # Linux/macOS
+   cd /path/to/your/project
+   
+   # Windows
+   cd C:\path\to\your\project
+   ```
+
+4. **Run the Python installer**
+   ```bash
+   python ~/downloads/rdd/rdd-v1.0.0/install.py
    ```
    
-   **Windows:**
+   Or on Windows:
    ```powershell
-   cd C:\Downloads\rdd\rdd-v1.0.0
-   .\install.ps1
+   python C:\Downloads\rdd\rdd-v1.0.0\install.py
    ```
    
    The installer provides:
-   - ✅ Visual folder navigation with arrow keys
+   - ✅ Prerequisites checking (Python 3.7+, Git)
    - ✅ Git repository validation
    - ✅ Automatic VS Code settings merge
+   - ✅ .gitignore update
    - ✅ Installation verification
 
-4. **Navigate to your project and verify**
+5. **Verify installation**
    ```bash
-   cd /path/to/your/project
    python .rdd/scripts/rdd.py --version
    # Output: RDD Framework v1.0.0
    ```
@@ -353,7 +356,7 @@ The build script:
 2. ✅ Creates build directory structure
 3. ✅ Copies framework files (prompts, scripts, templates)
 4. ✅ Generates README with installation instructions
-5. ✅ Creates installers (install.py, install.sh, install.ps1)
+5. ✅ Creates Python installer (install.py)
 6. ✅ Packages into `rdd-v{version}.zip`
 7. ✅ Generates SHA256 checksum
 8. ✅ Cleans up temporary files
@@ -362,21 +365,31 @@ The build script:
 
 ### Testing the Build
 
-**Linux/macOS:**
+Extract the build archive and run the installer:
+
 ```bash
+# Extract
 cd build
 unzip rdd-v1.0.0.zip -d /tmp/rdd-test
-cd /tmp/rdd-test/rdd-v1.0.0
-chmod +x install.sh
-./install.sh
+
+# Navigate to your test project
+cd /path/to/test/project
+
+# Run installer
+python /tmp/rdd-test/rdd-v1.0.0/install.py
 ```
 
-**Windows:**
+On Windows:
 ```powershell
+# Extract
 cd build
 Expand-Archive rdd-v1.0.0.zip -DestinationPath C:\Temp\rdd-test
-cd C:\Temp\rdd-test\rdd-v1.0.0
-.\install.ps1
+
+# Navigate to your test project
+cd C:\path\to\test\project
+
+# Run installer
+python C:\Temp\rdd-test\rdd-v1.0.0\install.py
 ```
 
 ## 🤝 Contributing

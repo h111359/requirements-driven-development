@@ -162,8 +162,12 @@ def copy_vscode_settings(repo_root: Path, build_dir: Path):
     if not settings_src.exists():
         exit_with_error(f"Settings template not found: {settings_src}")
     
-    shutil.copy2(settings_src, settings_dst)
-    print_success("Copied VS Code settings template")
+    if not settings_dst.exists():
+        shutil.copy2(settings_src, settings_dst)
+        print_success("Copied VS Code settings template")
+    else:
+        print_info(f"VS Code settings already exists at {settings_dst}, skipping copy.")
+        
 
 def copy_rdd_docs_seeds(repo_root: Path, build_dir: Path):
     """Copy seed template files to .rdd-docs directory in build"""
@@ -177,7 +181,8 @@ def copy_rdd_docs_seeds(repo_root: Path, build_dir: Path):
         "config.json",
         "data-model.md",
         "requirements.md",
-        "tech-spec.md"
+        "tech-spec.md",
+        "folder-structure.md"
     ]
     
     if not templates_src.exists():
@@ -333,7 +338,7 @@ def main():
     # Build process
     try:
         # Step 1: Extract version from .rdd-docs/config.json
-        print_step(1, 11, "Extracting version from .rdd-docs/config.json")
+        print_step(1, 8, "Extracting version from .rdd-docs/config.json")
         config_path = repo_root / ".rdd-docs" / "config.json"
         if not config_path.exists():
             exit_with_error(f"Config file not found: {config_path}")
@@ -344,16 +349,16 @@ def main():
             exit_with_error(f"Invalid or missing version in config.json: {version}")
         print_success(f"Found version: {version}")
         print()
-        
+
         # Step 2: Create build directory
-        print_step(2, 11, "Creating build directory")
+        print_step(2, 8, "Creating build directory")
         build_root = repo_root / "build"
         build_root.mkdir(exist_ok=True)
         build_dir = create_build_dir(version, build_root)
         print()
-        
+
         # Step 3: Copy files
-        print_step(3, 11, "Copying files")
+        print_step(3, 8, "Copying files")
         copy_prompts(repo_root, build_dir)
         copy_scripts(repo_root, build_dir)
         copy_templates(repo_root, build_dir)
@@ -361,42 +366,32 @@ def main():
         copy_vscode_settings(repo_root, build_dir)
         copy_rdd_docs_seeds(repo_root, build_dir)
         print()
-        
+
         # Step 4: Generate README
-        print_step(4, 11, "Generating README.md")
+        print_step(4, 8, "Generating README.md")
         generate_readme(build_dir, version, repo_root)
         print()
-        
+
         # Step 5: Generate Python installer
-        print_step(5, 11, "Generating install.py")
+        print_step(5, 8, "Generating install.py")
         generate_installer(build_dir, version, repo_root)
         print()
-        
-        # Step 6: Generate Bash installer
-        print_step(6, 11, "Generating install.sh")
-        generate_bash_installer(build_dir, version, repo_root)
-        print()
-        
-        # Step 7: Generate PowerShell installer
-        print_step(7, 11, "Generating install.ps1")
-        generate_powershell_installer(build_dir, version, repo_root)
-        print()
-        
-        # Step 8: Create archive
-        print_step(8, 11, "Creating archive")
+
+        # Step 6: Create archive
+        print_step(6, 8, "Creating archive")
         archive_path = create_archive(build_dir, build_root, version)
         print()
-        
-        # Step 9: Generate checksum
-        print_step(9, 11, "Generating checksum")
+
+        # Step 7: Generate checksum
+        print_step(7, 8, "Generating checksum")
         generate_checksum(archive_path)
         print()
-        
-        # Step 10: Cleanup
-        print_step(10, 11, "Cleaning up")
+
+        # Step 8: Cleanup
+        print_step(8, 8, "Cleaning up")
         cleanup_staging(build_dir)
         print()
-        
+
         # Success summary
         print("=" * 60)
         print_success(f"Build completed successfully!")
@@ -407,31 +402,19 @@ def main():
         print(f"Checksum:    {archive_path}.sha256")
         print()
         print("Contents:")
-        print("  - README.md (Windows & Linux instructions)")
+        print("  - README.md (Python-only installation instructions)")
         print("  - install.py (Python installer)")
-        print("  - install.sh (Interactive Bash installer)")
-        print("  - install.ps1 (Interactive PowerShell installer)")
         print()
         print("Next steps:")
-        print("  1. Test the interactive installers:")
-        print()
-        print("     Linux/macOS:")
-        print(f"       unzip {archive_path} -d /tmp/rdd-test")
-        print(f"       cd /tmp/rdd-test/rdd-v{version}")
-        print(f"       chmod +x install.sh")
-        print(f"       ./install.sh")
-        print()
-        print("     Windows:")
-        print(f"       Expand-Archive {archive_path} -DestinationPath C:\\Temp\\rdd-test")
-        print(f"       cd C:\\Temp\\rdd-test\\rdd-v{version}")
-        print(f"       .\\install.ps1")
+        print("  1. Test installer:")
+        print(f"     unzip {archive_path} -d /tmp/rdd-test && cd /tmp/rdd-test/rdd-v{version} && python install.py")
         print()
         print("  2. Create GitHub release:")
         print(f"     - Tag: v{version}")
         print(f"     - Attach: {archive_path}")
         print(f"     - Attach: {archive_path}.sha256")
         print()
-        
+
     except KeyboardInterrupt:
         print()
         print_warning("Build cancelled by user")

@@ -377,12 +377,40 @@ def get_branch_type(branch_name: str = None) -> str:
 
 def is_enh_or_fix_branch(branch_name: str = None) -> bool:
     """
+    DEPRECATED: Use is_valid_work_branch() instead.
     Check if the branch is an enhancement or fix branch.
     If branch_name is not provided, uses current branch.
     Returns True if branch starts with 'enh/' or 'fix/', False otherwise.
     """
     branch_type = get_branch_type(branch_name)
     return branch_type in ['enh', 'fix']
+
+
+def is_valid_work_branch(branch_name: str = None) -> bool:
+    """
+    Check if the branch is valid for work (not a protected branch).
+    If branch_name is not provided, uses current branch.
+    
+    A valid work branch is any branch EXCEPT:
+    - The default branch (detected via get_default_branch())
+    - "main"
+    - "master"
+    
+    Returns True if valid work branch, False otherwise.
+    """
+    if not branch_name:
+        branch_name = get_current_branch()
+    
+    if not branch_name:
+        return False
+    
+    # Get the default branch
+    default_branch = get_default_branch()
+    
+    # Check if current branch is one of the protected branches
+    protected_branches = {default_branch, 'main', 'master'}
+    
+    return branch_name not in protected_branches
 
 
 def get_git_user() -> str:

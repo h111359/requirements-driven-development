@@ -187,14 +187,14 @@ def copy_rdd_docs_seeds(source_dir: Path, target_dir: Path):
     """Copy seed template files from .rdd-docs in source to target"""
     print_info("Installing .rdd-docs seed templates...")
     
-    src_rdd_docs = source_dir / ".rdd-docs"
+    src_rdd_docs = source_dir / ".rdd-docs" 
     dst_rdd_docs = target_dir / ".rdd-docs"
     
     # Create .rdd-docs directory if it doesn't exist
     dst_rdd_docs.mkdir(parents=True, exist_ok=True)
     
     # List of seed files to copy
-    seed_files = ["config.json", "data-model.md", "requirements.md", "tech-spec.md"]
+    seed_files = ["config.json", "data-model.md", "requirements.md", "tech-spec.md", "folder-structure.md"]
     
     copied = 0
     for seed_file in seed_files:
