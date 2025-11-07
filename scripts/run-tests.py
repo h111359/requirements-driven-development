@@ -10,6 +10,12 @@ import os
 import subprocess
 from pathlib import Path
 
+# Ensure UTF-8 encoding on Windows
+if sys.platform == 'win32':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
 # Color codes for output
 class Colors:
     RED = '\033[0;31m'
