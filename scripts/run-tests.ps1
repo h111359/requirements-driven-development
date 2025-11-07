@@ -3,11 +3,8 @@
 # Run all tests appropriate for Windows
 #
 
-# Error handling
-$ErrorActionPreference = "Stop"
-
-# Print functions
-function Print-Header {
+# Print functions must be defined before ErrorActionPreference to ensure they're available
+function Global:Print-Header {
     param([string]$Message)
     Write-Host ""
     Write-Host "============================================================" -ForegroundColor White
@@ -16,27 +13,27 @@ function Print-Header {
     Write-Host ""
 }
 
-function Print-Success {
+function Global:Print-Success {
     param([string]$Message)
     Write-Host "✓ $Message" -ForegroundColor Green
 }
 
-function Print-Error {
+function Global:Print-Error {
     param([string]$Message)
     Write-Host "✗ $Message" -ForegroundColor Red
 }
 
-function Print-Info {
+function Global:Print-Info {
     param([string]$Message)
     Write-Host "ℹ $Message" -ForegroundColor Blue
 }
 
-function Print-Warning {
+function Global:Print-Warning {
     param([string]$Message)
     Write-Host "⚠ $Message" -ForegroundColor Yellow
 }
 
-function Print-Step {
+function Global:Print-Step {
     param(
         [int]$Current,
         [int]$Total,
@@ -44,6 +41,9 @@ function Print-Step {
     )
     Write-Host "[$Current/$Total] $Message" -ForegroundColor Blue
 }
+
+# Error handling - set AFTER functions are defined
+$ErrorActionPreference = "Stop"
 
 # Get script directory and repository root
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
