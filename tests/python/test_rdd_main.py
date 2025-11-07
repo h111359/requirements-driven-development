@@ -75,6 +75,7 @@ class TestChangeCommands:
 class TestMenuInteraction:
     """Test interactive menu functionality"""
     
+    @pytest.mark.skipif(sys.platform == "win32", reason="curses not available on Windows")
     @patch('curses.wrapper')
     def test_curses_menu_selection(self, mock_wrapper):
         # Mock curses menu to return first option (index 0 = fix)

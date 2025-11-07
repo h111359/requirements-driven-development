@@ -175,7 +175,8 @@ class TestConfigFunctions:
         os.chdir(rdd_workspace)
         config_path = rdd_utils.get_rdd_config_path()
         expected = rdd_workspace / ".rdd-docs" / "config.json"
-        assert Path(config_path) == expected
+        # Use resolve() to normalize paths on Windows (handles shortnames like RUNNER~1)
+        assert Path(config_path).resolve() == expected.resolve()
 
 
 class TestWorkspaceUtilities:
