@@ -3,8 +3,18 @@
 # Run all tests appropriate for Windows
 #
 
-# Print functions must be defined before ErrorActionPreference to ensure they're available
-function Global:Print-Header {
+# Error handling
+$ErrorActionPreference = "Stop"
+
+# Get script directory and repository root first
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$RepoRoot = Split-Path -Parent $ScriptDir
+
+# Change to repository root
+Set-Location $RepoRoot
+
+# Define helper functions AFTER setting location and error preference
+function Print-Header {
     param([string]$Message)
     Write-Host ""
     Write-Host "============================================================" -ForegroundColor White
@@ -13,27 +23,27 @@ function Global:Print-Header {
     Write-Host ""
 }
 
-function Global:Print-Success {
+function Print-Success {
     param([string]$Message)
     Write-Host "✓ $Message" -ForegroundColor Green
 }
 
-function Global:Print-Error {
+function Print-Error {
     param([string]$Message)
     Write-Host "✗ $Message" -ForegroundColor Red
 }
 
-function Global:Print-Info {
+function Print-Info {
     param([string]$Message)
     Write-Host "ℹ $Message" -ForegroundColor Blue
 }
 
-function Global:Print-Warning {
+function Print-Warning {
     param([string]$Message)
     Write-Host "⚠ $Message" -ForegroundColor Yellow
 }
 
-function Global:Print-Step {
+function Print-Step {
     param(
         [int]$Current,
         [int]$Total,
@@ -41,16 +51,6 @@ function Global:Print-Step {
     )
     Write-Host "[$Current/$Total] $Message" -ForegroundColor Blue
 }
-
-# Error handling - set AFTER functions are defined
-$ErrorActionPreference = "Stop"
-
-# Get script directory and repository root
-$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$RepoRoot = Split-Path -Parent $ScriptDir
-
-# Change to repository root
-Set-Location $RepoRoot
 
 # Print banner
 Print-Header "RDD Framework Test Runner (Windows)"
