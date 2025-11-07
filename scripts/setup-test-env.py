@@ -162,7 +162,8 @@ def main():
         return 1
     
     # Get paths
-    repo_root = Path(__file__).parent
+    # Script is in scripts/ directory, go up one level to get repo root
+    repo_root = Path(__file__).parent.parent
     venv_path = repo_root / ".venv"
     requirements_file = repo_root / "tests" / "requirements.txt"
     
