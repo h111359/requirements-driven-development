@@ -26,10 +26,10 @@ jobs:
         sudo apt-get install -y bats
     
     - name: Setup test environment
-      run: python setup-test-env.py
+      run: python scripts/setup-test-env.py
     
     - name: Run all tests
-      run: bash scripts/run-tests.sh
+      run: python scripts/run-tests.py
     
     - name: Generate coverage report
       run: |
@@ -62,11 +62,10 @@ jobs:
         Install-Module -Name Pester -Force -SkipPublisherCheck
     
     - name: Setup test environment
-      run: python setup-test-env.py
+      run: python scripts/setup-test-env.py
     
     - name: Run all tests
-      shell: powershell
-      run: .\scripts\run-tests.ps1
+      run: python scripts/run-tests.py
   
   test-summary:
     name: Test Summary

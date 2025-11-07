@@ -10,6 +10,7 @@ After completing enhancement or fix work, the wrap-up process ensures that:
 - Workspace is properly archived for historical reference
 - All changes are committed and pushed to remote
 - The branch is ready for Pull Request creation
+- Runs build script to create release files accordingly `.rdd-docs/config.json` version
 
 This prompt combines documentation updates and branch finalization into a single workflow.
 
@@ -55,24 +56,15 @@ The script will:
 6. Push changes to remote branch
 7. Display completion summary with next steps
 
-**S03: Create Pull Request**
-
-After wrap-up completes:
-1. Create a Pull Request on GitHub to merge your changes
-2. Review and complete the PR process
-3. After the PR is merged, run cleanup:
+**S03: Create Release Files**
 
 ```bash
-python .rdd/scripts/rdd.py branch cleanup
+python /scripts/build.py
 ```
 
-**Alternative: Specify Branch Name**
+**S04: Create Release Notes**
 
-If you want to specify the branch name explicitly during cleanup:
-
-```bash
-python .rdd/scripts/rdd.py branch cleanup <branch-name>
-```
+Create or update release notes as needed based on the changes made in a file named `RELEASE_NOTES-<version>.md` in `build` folder. The file should be short and concise, summarizing the key changes, enhancements, and fixes included in the release.
 
 ## Notes
 

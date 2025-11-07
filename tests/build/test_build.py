@@ -96,6 +96,7 @@ class TestFileCopying:
         assert (rdd_docs / "data-model.md").exists()
         assert (rdd_docs / "requirements.md").exists()
         assert (rdd_docs / "tech-spec.md").exists()
+        assert (rdd_docs / "folder-structure.md").exists()
 
 
 class TestTemplateGeneration:
@@ -118,28 +119,6 @@ class TestTemplateGeneration:
         build.generate_installer(build_dir, "1.0.0", mock_rdd_project)
         
         installer = build_dir / "install.py"
-        assert installer.exists()
-        content = installer.read_text()
-        assert "{{VERSION}}" not in content
-        assert "1.0.0" in content
-    
-    def test_generate_bash_installer(self, mock_rdd_project):
-        """Test install.sh generation"""
-        build_dir = build.create_build_dir("1.0.0", mock_rdd_project / "build")
-        build.generate_bash_installer(build_dir, "1.0.0", mock_rdd_project)
-        
-        installer = build_dir / "install.sh"
-        assert installer.exists()
-        content = installer.read_text()
-        assert "{{VERSION}}" not in content
-        assert "1.0.0" in content
-    
-    def test_generate_powershell_installer(self, mock_rdd_project):
-        """Test install.ps1 generation"""
-        build_dir = build.create_build_dir("1.0.0", mock_rdd_project / "build")
-        build.generate_powershell_installer(build_dir, "1.0.0", mock_rdd_project)
-        
-        installer = build_dir / "install.ps1"
         assert installer.exists()
         content = installer.read_text()
         assert "{{VERSION}}" not in content

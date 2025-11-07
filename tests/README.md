@@ -49,26 +49,30 @@ When activated, your prompt will show `(.venv)`.
 
 ### 3. Run Tests
 
+Option A: Use the cross-platform Python test runner
+
 ```bash
-# Make sure virtual environment is activated!
-pytest tests/python/
+python scripts/run-tests.py
+```
+
+Option B: Run pytest directly
 
 ```bash
 # Make sure virtual environment is activated!
 pytest tests/python/
 
-# Run with coverage
+# With coverage
 pytest tests/python/ --cov=.rdd/scripts --cov=scripts --cov-report=html
 
-# Run specific test file
+# Specific file
 pytest tests/python/test_rdd_utils.py -v
 ```
 
 ## Directory Structure
 
 - **`python/`** - Tests for Python scripts (`.rdd/scripts/` and `scripts/`)
-- **`shell/`** - Tests for Bash scripts (`install.sh`)
-- **`powershell/`** - Tests for PowerShell scripts (`install.ps1`)
+- **`build/`** - Tests for build process (`scripts/build.py`)
+- **`install/`** - Tests for installation process (`scripts/install.py`)
 - **`fixtures/`** - Shared test data and mock repositories
 
 ## Running Tests in Detail
@@ -84,21 +88,20 @@ pytest tests/python/
 
 # Run with coverage
 pytest tests/python/ --cov=.rdd/scripts --cov=scripts --cov-report=html
-# Ubuntu/Debian: sudo apt-get install bats
-# macOS: brew install bats-core
-
-# Run shell tests
-bats tests/shell/test_install_sh.bats
 ```
 
-### PowerShell Tests (Windows)
+### Build Tests
 
-```powershell
-# Install Pester
-Install-Module -Name Pester -Force -SkipPublisherCheck
+```bash
+# Run build tests
+pytest tests/build/
+```
 
-# Run PowerShell tests
-Invoke-Pester tests/powershell/Install.Tests.ps1
+### Install Tests
+
+```bash
+# Run install tests
+pytest tests/install/
 ```
 
 ## CI/CD
@@ -126,18 +129,4 @@ Follow pytest conventions:
 - Use fixtures from `conftest.py`
 - Mock external dependencies (git, filesystem)
 
-### Shell Tests
-
-Follow BATS conventions:
-- Test files: `*.bats`
-- Test functions: `@test "description" { ... }`
-- Use setup/teardown functions
-- Mock commands when needed
-
-### PowerShell Tests
-
-Follow Pester conventions:
-- Test files: `*.Tests.ps1`
-- Describe/Context/It blocks
-- Use BeforeAll/AfterAll
-- Mock cmdlets when needed
+````

@@ -26,7 +26,7 @@ from rdd_utils import (
     validate_name, validate_branch_name, validate_file_exists, validate_dir_exists,
     # Git functions
     check_git_repo, get_current_branch, get_default_branch, get_branch_type, 
-    is_enh_or_fix_branch, get_git_user,
+    is_enh_or_fix_branch, is_valid_work_branch, get_git_user,
     check_uncommitted_changes, get_repo_root,
     stash_changes, restore_stashed_changes, pull_main, merge_main_into_current,
     update_from_main,
@@ -154,7 +154,7 @@ def select_change_type_interactive(reveal_enh: bool = SHOW_ENH_IN_MENU_DEFAULT) 
     Returns: 'fix' or 'enh' or None if cancelled.
     """
     # Build visible options
-    visible_options = [("Fix", "fix")]
+    visible_options = [("Stand Alone Prompts", "fix")]
     if reveal_enh:
         visible_options.append(("Enhancement", "enh"))
 
@@ -480,7 +480,7 @@ def create_branch(branch_type: str, branch_name: str) -> bool:
         return False
     
     # Validate branch name format (kebab-case only, no prefix added)
-    if not validate_name(branch_name):
+    if not validate_branch_name(branch_name):
         return False
     
     # Use the branch_name as-is (no automatic prefix or timestamp)
@@ -827,107 +827,6 @@ def cleanup_after_merge(branch_name: str = None) -> bool:
 # WORKSPACE OPERATIONS
 # ============================================================================
 
-def init_rdd_docs() -> bool:
-    """Initialize .rdd-docs directory with core template files if it doesn't exist."""
-    rdd_docs_dir = ".rdd-docs"
-    
-    # List of core templates that should always exist in .rdd-docs
-    # These are copied from .rdd/templates during workspace operations
-    core_templates = [
-        "backlog.md",
-        "folder-structure.md"
-    ]
-    
-    # List of seed templates that should be installed during project setup
-    # These should exist after installation but are NOT seeded by this function
-    seed_templates = [
-        "config.json",
-        "data-model.md",
-        "requirements.md",
-        "tech-spec.md"
-    ]
-    
-    # Check if .rdd-docs directory exists
-    if not os.path.isdir(rdd_docs_dir):
-        print_step("Initializing .rdd-docs directory with core templates...")
-        ensure_dir(rdd_docs_dir)
-    else:
-        # Check if all core templates exist
-        missing_templates = []
-        for template_name in core_templates:
-            dest_path = os.path.join(rdd_docs_dir, template_name)
-            if not os.path.isfile(dest_path):
-                missing_templates.append(template_name)
-        
-        # If no templates are missing, skip initialization
-        if not missing_templates:
-            debug_print(".rdd-docs already initialized with all core templates")
-            # Check if seed templates exist (they should have been installed)
-            missing_seeds = []
-            for seed_name in seed_templates:
-                seed_path = os.path.join(rdd_docs_dir, seed_name)
-                if not os.path.isfile(seed_path):
-                    missing_seeds.append(seed_name)
-            
-            if missing_seeds:
-                print_error(f"Missing seed templates in .rdd-docs: {', '.join(missing_seeds)}")
-                print_info("These files should have been installed during RDD framework installation.")
-                print_info("Please reinstall the RDD framework or manually copy them from templates/ directory.")
-                return False
-            
-            return True
-        
-        print_step(f"Initializing missing templates in .rdd-docs ({len(missing_templates)} templates)...")
-    
-    # Copy core template files to .rdd-docs
-    success_count = 0
-    config_needs_population = False
-    
-    for template_name in core_templates:
-        dest_path = os.path.join(rdd_docs_dir, template_name)
-        
-        # Skip if file already exists (don't overwrite existing work)
-        if os.path.isfile(dest_path):
-            debug_print(f"Skipping {template_name} (already exists)")
-            success_count += 1
-            continue
-        
-        # Copy template from .rdd/templates/
-        template_path = os.path.join(TEMPLATES_DIR, template_name)
-        
-        if not os.path.isfile(template_path):
-            print_warning(f"Template not found: {template_path}")
-            continue
-        
-        try:
-            shutil.copy2(template_path, dest_path)
-            debug_print(f"Copied {template_name} to .rdd-docs/")
-            success_count += 1
-                
-        except Exception as e:
-            print_error(f"Failed to copy {template_name}: {e}")
-            return False
-    
-    # Check if seed templates exist (they should have been installed)
-    missing_seeds = []
-    for seed_name in seed_templates:
-        seed_path = os.path.join(rdd_docs_dir, seed_name)
-        if not os.path.isfile(seed_path):
-            missing_seeds.append(seed_name)
-    
-    if missing_seeds:
-        print_error(f"Missing seed templates in .rdd-docs: {', '.join(missing_seeds)}")
-        print_info("These files should have been installed during RDD framework installation.")
-        print_info("Please reinstall the RDD framework or manually copy them from templates/ directory.")
-        return False
-    
-    if success_count == len(core_templates):
-        print_success(f".rdd-docs initialized with {len(core_templates)} core templates")
-        return True
-    else:
-        print_error(f"Failed to initialize all templates ({success_count}/{len(core_templates)} succeeded)")
-        return False
-
 
 def init_workspace(workspace_type: str = "change") -> bool:
     """Initialize workspace with templates based on type (change or fix)."""
@@ -1104,13 +1003,6 @@ def create_change(normalized_name: str, change_type: str = "enh") -> bool:
     
     print()
     
-    # Initialize .rdd-docs directory with core templates if needed
-    if not init_rdd_docs():
-        print_error("Failed to initialize .rdd-docs directory")
-        return False
-    
-    print()
-    
     # Initialize the workspace
     workspace_type = "fix" if change_type == "fix" else "change"
     if not init_workspace(workspace_type):
@@ -1133,13 +1025,18 @@ def wrap_up_change() -> bool:
         print_error("Could not determine current branch")
         return False
     
-    # Validate that we're on an enh or fix branch
-    if not is_enh_or_fix_branch(current_branch):
-        print_error(f"Cannot wrap up: not on an enhancement or fix branch")
+    # Validate that we're not on a protected branch
+    if not is_valid_work_branch(current_branch):
+        default_branch = get_default_branch()
+        print_error(f"Cannot wrap up: currently on a protected branch")
         print_warning(f"Current branch: {current_branch}")
         print()
-        print_info("Wrap-up can only be performed on branches identified as fix or enhancement")
+        print_info("Wrap-up cannot be performed on protected branches:")
+        print(f"  • {default_branch} (default branch)")
+        print("  • main")
+        print("  • master")
         print()
+        print_info("Please switch to a feature/fix branch first")
         print("Valid branch examples:")
         print("  • my-enhancement")
         print("  • fix/my-bugfix")
@@ -1477,9 +1374,9 @@ def route_change(args: List[str]) -> int:
                 continue
             
             # Validate normalized name
-            if not validate_name(normalized_name):
+            if not validate_branch_name(normalized_name):
                 print_warning(f"Normalized name '{normalized_name}' doesn't meet requirements")
-                print("Requirements: kebab-case, max 5 words, lowercase, hyphens/slashes only")
+                print("Requirements: kebab-case, lowercase, hyphens/slashes only")
                 print()
                 normalized_name = None
                 continue

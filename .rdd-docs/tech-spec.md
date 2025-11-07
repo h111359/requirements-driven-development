@@ -76,6 +76,12 @@ The framework provides flexible branch naming while preserving workspace initial
 - Pattern: `^[a-z0-9]+([/-][a-z0-9]+)*$`
 - Examples: `my-branch`, `fix/bug-123`, `20251107-feature-name`, `team/user/feature`
 
+**Wrap-Up Validation**: The wrap-up process validates that the current branch is not a protected branch:
+- Protected branches: default branch (from config.json), "main", "master"
+- All other branch names are accepted regardless of prefix or naming convention
+- Provides clear error messages indicating which branches are protected
+- Allows flexible branch naming while protecting critical branches
+
 ### Template-Based File Generation
 All workspace files are generated from templates stored in `.rdd/templates/` or `src/{platform}/.rdd/templates/`, ensuring consistency across projects and changes.
 
@@ -293,7 +299,7 @@ The RDD framework uses a Python-based build system to create release packages:
 - **Archive Creation**: Generates single `rdd-v{version}.zip` file containing:
   - Framework files (.rdd/scripts/, .rdd/templates/)
   - Prompt files (.github/prompts/)
-  - Installation scripts (install.py, install.sh, install.ps1) - generated from templates
+  - Installation script (install.py) - generated from scripts/install.py
   - Documentation (README.md) - generated from template
   - VS Code settings template (.vscode/settings.json)
   - Seed templates (.rdd-docs/ with config.json, data-model.md, requirements.md, tech-spec.md)
@@ -308,39 +314,14 @@ The RDD framework uses a Python-based build system to create release packages:
 5. Copy seed templates to .rdd-docs/ (config.json, data-model.md, requirements.md, tech-spec.md)
 6. Generate README.md from templates/README.md with version substitution
 7. Generate install.py from scripts/install.py template with version substitution
-8. Generate install.sh from scripts/install.sh template with version substitution
-9. Generate install.ps1 from scripts/install.ps1 template with version substitution
-10. Create ZIP archive with nested directory structure
-11. Generate SHA256 checksum file
-12. Clean up temporary staging directories
+8. Create ZIP archive with nested directory structure
+9. Generate SHA256 checksum file
+10. Clean up temporary staging directories
 
 ### Installation System
-The RDD framework provides three installation methods to accommodate different user preferences:
+The RDD framework provides Python-based cross-platform installation:
 
-#### Option 1: Interactive Shell Installers (Recommended)
-Platform-specific interactive installers with visual folder navigation:
-
-**Linux/macOS (install.sh)**:
-- Visual folder navigation using arrow keys
-- Current directory display with parent/subfolder navigation
-- Git repository validation before installation
-- Confirmation prompts for existing installations
-- Calls Python installer with selected directory
-
-**Windows (install.ps1)**:
-- Identical functionality to Bash installer
-- PowerShell-native key handling and UI
-- Cross-platform consistent user experience
-
-**Navigation Features**:
-- Arrow keys (↑↓) for menu navigation
-- Enter to select directory or enter subfolder
-- [..] option for parent directory navigation
-- [SELECT THIS DIRECTORY] option to install in current location
-- Q key to quit installation
-- Real-time path display
-
-#### Option 2: Direct Python Installation
+#### Python Installation (install.py)
 **Python Installer (install.py)**:
 - Cross-platform installer using Python standard library only
 - Pre-flight checks:
@@ -368,7 +349,7 @@ Platform-specific interactive installers with visual folder navigation:
 - **Editor settings** (editor.rulers):
   - Replaces with RDD requirements (80, 120 character columns)
 
-#### Option 3: Manual Installation
+#### Manual Installation
 For users who prefer manual control:
 - Step-by-step file copying instructions
 - Platform-specific commands (PowerShell/Bash)
@@ -379,7 +360,6 @@ For users who prefer manual control:
 - **Python-based**: Single implementation works on all platforms (Windows, Linux, macOS)
 - **No platform-specific scripts needed**: Python provides cross-platform compatibility
 - **Python command**: Uses `python` (not `python3`) for universal compatibility
-- **Interactive installers**: Platform-specific scripts provide optimal user experience
 
 ### VS Code Integration
 The framework integrates with VS Code through:
@@ -406,12 +386,6 @@ tests/
 ├── install/             # Installation tests
 │   ├── test_install.py        # Installer tests
 │   └── conftest.py            # Install fixtures
-├── shell/               # Shell script tests (BATS)
-│   ├── test_install_sh.bats   # Bash installer tests
-│   └── README.md              # Shell testing guide
-├── powershell/          # PowerShell tests (Pester)
-│   ├── Install.Tests.ps1      # PowerShell installer tests
-│   └── README.md              # PowerShell testing guide
 ├── fixtures/            # Shared test fixtures
 │   └── README.md              # Fixtures documentation
 ├── requirements.txt     # Test dependencies
@@ -421,10 +395,8 @@ tests/
 ### Test Frameworks
 
 - **Python Tests**: pytest with pytest-cov for coverage reporting
-- **Shell Tests**: BATS (Bash Automated Testing System) for Linux/macOS
-- **PowerShell Tests**: Pester framework for Windows
-- **Test Coverage**: 160+ tests covering all framework scripts
-- **Pass Rate**: 100% (49/49 Python tests passing)
+- **Test Coverage**: 80+ tests covering all framework scripts
+- **Pass Rate**: 100% (all Python tests passing)
 
 ### Test Isolation
 
@@ -438,7 +410,7 @@ All tests use isolation mechanisms to prevent corruption of existing code:
 ### Virtual Environment
 
 The framework provides automated virtual environment setup for test execution:
-- **Script**: `setup-test-env.py` creates `.venv/` directory
+- **Script**: `scripts/setup-test-env.py` creates `.venv/` directory
 - **Smart handling**: Preserves existing environment, only updates packages
 - **Test dependencies**: pytest, pytest-cov, pytest-mock, pytest-timeout, pytest-xdist
 - **Build exclusion**: .venv/ excluded from release archives
@@ -446,41 +418,30 @@ The framework provides automated virtual environment setup for test execution:
 
 ### Test Runner Scripts
 
-Platform-specific test runners execute all appropriate tests:
+The framework provides a unified Python-based test runner:
 
-**Linux/macOS (scripts/run-tests.sh)**:
-- Colored output with progress tracking
-- Automatic virtual environment activation
-- Sequential test suite execution (Python, build, install, shell)
-- Exit codes for CI/CD integration
-- Test result summary
-
-**Windows (scripts/run-tests.ps1)**:
-- PowerShell-native colored output
-- Automatic virtual environment activation
-- Sequential test suite execution (Python, build, install, PowerShell)
-- Pester framework integration
-- Test result summary
+**Python Test Runner (scripts/run-tests.py)**:
+- Cross-platform test execution (Windows, Linux, macOS)
+- Color-coded output for readability
+- Progress indicators
+- Prerequisites checking
+- Virtual environment activation
+- Runs pytest for Python, build, and install tests
+- Clear test summary with pass/fail counts
+- Exit code reflects test success/failure
 
 **Usage**:
 ```bash
-# Linux/macOS
-bash scripts/run-tests.sh
-
-# Windows
-powershell .\scripts\run-tests.ps1
+python scripts/run-tests.py
 ```
 
 ### GitHub Actions CI/CD
 
 Automated testing on push and pull requests:
-- **Matrix testing**: Linux (Ubuntu latest) and Windows (Windows latest)
 - **Python version**: Python 3.9+ (expandable to matrix)
-- **Test jobs**:
-  - all-tests-linux: Runs `bash scripts/run-tests.sh`
-  - all-tests-windows: Runs `powershell .\scripts\run-tests.ps1`
-- **Code coverage**: Coverage report generated on Linux job
-- **Test summary**: Aggregated results across platforms
+- **Test execution**: Uses `python scripts/run-tests.py` for unified cross-platform testing
+- **Code coverage**: Coverage report generated during test run
+- **Test summary**: Aggregated results with pass/fail status
 
 ### Test Coverage
 
@@ -489,16 +450,13 @@ Automated testing on push and pull requests:
 - **rdd_utils.py**: All utility functions (git, branch, workspace, config)
 - **build.py**: Version extraction, archive creation, checksums
 - **install.py**: Pre-flight checks, file operations, settings merge
-- **install.sh**: Interactive navigation, git validation
-- **install.ps1**: PowerShell UI, directory selection
+- **run-tests.py**: Test runner, virtual environment activation, cross-platform execution
 
 **Coverage Metrics**:
-- 160+ tests total
+- 80+ tests total
 - 49 Python unit tests (100% passing)
-- 25+ build tests
-- 30+ install tests
-- 12+ shell tests
-- 25+ PowerShell tests
+- 13 build tests (100% passing)
+- 21 install tests (100% passing)
 
 ## Performance
 
