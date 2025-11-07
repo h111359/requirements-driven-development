@@ -73,8 +73,7 @@ class TestFileOperations:
     
     def test_copy_prompts(self, mock_rdd_archive, mock_git_repo_for_install):
         """Test copying prompt files"""
-        os.chdir(mock_rdd_archive)
-        install.copy_prompts(mock_git_repo_for_install)
+        install.copy_prompts(mock_rdd_archive, mock_git_repo_for_install)
         
         prompts_dir = mock_git_repo_for_install / ".github" / "prompts"
         assert prompts_dir.exists()
@@ -82,8 +81,7 @@ class TestFileOperations:
     
     def test_copy_framework(self, mock_rdd_archive, mock_git_repo_for_install):
         """Test copying framework files"""
-        os.chdir(mock_rdd_archive)
-        install.copy_framework(mock_git_repo_for_install)
+        install.copy_rdd_framework(mock_rdd_archive, mock_git_repo_for_install)
         
         rdd_dir = mock_git_repo_for_install / ".rdd"
         assert rdd_dir.exists()
@@ -93,8 +91,7 @@ class TestFileOperations:
     
     def test_copy_seed_templates(self, mock_rdd_archive, mock_git_repo_for_install):
         """Test copying seed templates to .rdd-docs"""
-        os.chdir(mock_rdd_archive)
-        install.copy_seed_templates(mock_git_repo_for_install)
+        install.copy_rdd_docs_seeds(mock_rdd_archive, mock_git_repo_for_install)
         
         rdd_docs = mock_git_repo_for_install / ".rdd-docs"
         assert rdd_docs.exists()
@@ -207,11 +204,9 @@ class TestVerification:
     
     def test_verify_installation_success(self, mock_git_repo_for_install, mock_rdd_archive):
         """Test verification succeeds for complete installation"""
-        os.chdir(mock_rdd_archive)
-        
         # Install all components
-        install.copy_framework(mock_git_repo_for_install)
-        install.copy_prompts(mock_git_repo_for_install)
+        install.copy_rdd_framework(mock_rdd_archive, mock_git_repo_for_install)
+        install.copy_prompts(mock_rdd_archive, mock_git_repo_for_install)
         
         # Verify should pass
         assert install.verify_installation(mock_git_repo_for_install) == True
