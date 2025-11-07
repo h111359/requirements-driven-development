@@ -1427,7 +1427,7 @@ function Invoke-PythonInstaller {
 # Main execution
 function Main {
     # Get source directory (where this script is located)
-    $sourceDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+    $sourceDir = $PSScriptRoot
     
     # Prerequisites check
     Test-Prerequisites
