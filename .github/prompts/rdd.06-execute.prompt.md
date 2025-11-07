@@ -18,8 +18,8 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
 
 2. **Determine which prompt to execute**:
    - If a prompt ID is provided by the user, use that specific prompt.
-   - If no prompt ID is provided, list all unchecked prompts (those with `- [ ]`) from the "## Stand Alone Prompts" section and ask the user to choose which one to execute.
-   - Display each prompt with its ID (e.g., [P001]) and a brief description.
+   - If no prompt ID is provided, list all unchecked prompts (those with `- [ ]`) from the "## Stand Alone Prompts" section and take the lowest numbered one for execution. Skip any prompts that are already marked as completed (`- [x]`). Skip any prompts that are placeholders (e.g., `<PROMPT-PLACEHOLDER>`).
+   - Display each prompt with its ID (e.g., [P01]) and a brief description.
 
 3. **Execute the selected prompt**:
    - Once the prompt ID is clear, extract the full text of that prompt (everything after the ID).

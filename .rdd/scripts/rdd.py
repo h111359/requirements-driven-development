@@ -154,7 +154,7 @@ def select_change_type_interactive(reveal_enh: bool = SHOW_ENH_IN_MENU_DEFAULT) 
     Returns: 'fix' or 'enh' or None if cancelled.
     """
     # Build visible options
-    visible_options = [("Fix", "fix")]
+    visible_options = [("Stand Alone Prompts", "fix")]
     if reveal_enh:
         visible_options.append(("Enhancement", "enh"))
 
@@ -480,7 +480,7 @@ def create_branch(branch_type: str, branch_name: str) -> bool:
         return False
     
     # Validate branch name format (kebab-case only, no prefix added)
-    if not validate_name(branch_name):
+    if not validate_branch_name(branch_name):
         return False
     
     # Use the branch_name as-is (no automatic prefix or timestamp)
@@ -1374,9 +1374,9 @@ def route_change(args: List[str]) -> int:
                 continue
             
             # Validate normalized name
-            if not validate_name(normalized_name):
+            if not validate_branch_name(normalized_name):
                 print_warning(f"Normalized name '{normalized_name}' doesn't meet requirements")
-                print("Requirements: kebab-case, max 5 words, lowercase, hyphens/slashes only")
+                print("Requirements: kebab-case, lowercase, hyphens/slashes only")
                 print()
                 normalized_name = None
                 continue
