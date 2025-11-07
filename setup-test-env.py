@@ -97,9 +97,10 @@ def get_venv_pip(venv_path: Path) -> Path:
 def upgrade_pip(venv_path: Path):
     """Upgrade pip in virtual environment"""
     print_info("Upgrading pip...")
-    pip_exe = get_venv_pip(venv_path)
+    python_exe = get_venv_python(venv_path)
     
-    success, output = run_command([str(pip_exe), "install", "--upgrade", "pip"])
+    # Use python -m pip to avoid Windows file locking issues
+    success, output = run_command([str(python_exe), "-m", "pip", "install", "--upgrade", "pip"])
     
     if not success:
         print_error(f"Failed to upgrade pip:\n{output}")
@@ -115,11 +116,11 @@ def install_requirements(venv_path: Path, requirements_file: Path):
         return False
     
     print_info("Installing/updating test dependencies...")
-    pip_exe = get_venv_pip(venv_path)
+    python_exe = get_venv_python(venv_path)
     
-    # Use --upgrade to update existing packages without disrupting others
+    # Use python -m pip to avoid Windows file locking issues
     success, output = run_command([
-        str(pip_exe), "install", "--upgrade", "-r", str(requirements_file)
+        str(python_exe), "-m", "pip", "install", "--upgrade", "-r", str(requirements_file)
     ])
     
     if not success:
