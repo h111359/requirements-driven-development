@@ -21,37 +21,37 @@ Write-Host "============================================================" -Foreg
 Write-Host ""
 
 # Check prerequisites
-Write-Host "ℹ Checking prerequisites..." -ForegroundColor Blue
+Write-Host "[INFO] Checking prerequisites..." -ForegroundColor Blue
 
 # Check Python
 try {
     $pythonVersion = python --version 2>&1
-    Write-Host "✓ Python found: $pythonVersion" -ForegroundColor Green
+    Write-Host "[OK] Python found: $pythonVersion" -ForegroundColor Green
 } catch {
-    Write-Host "✗ Python is not installed or not in PATH" -ForegroundColor Red
+    Write-Host "[ERROR] Python is not installed or not in PATH" -ForegroundColor Red
     exit 1
 }
 
 # Check virtual environment
 if (-not (Test-Path ".venv")) {
-    Write-Host "⚠ Virtual environment not found at .venv/" -ForegroundColor Yellow
-    Write-Host "ℹ Run: python setup-test-env.py" -ForegroundColor Blue
+    Write-Host "[WARN] Virtual environment not found at .venv/" -ForegroundColor Yellow
+    Write-Host "[INFO] Run: python setup-test-env.py" -ForegroundColor Blue
     exit 1
 }
-Write-Host "✓ Virtual environment found" -ForegroundColor Green
+Write-Host "[OK] Virtual environment found" -ForegroundColor Green
 
 # Activate virtual environment
-Write-Host "ℹ Activating virtual environment..." -ForegroundColor Blue
+Write-Host "[INFO] Activating virtual environment..." -ForegroundColor Blue
 & ".venv\Scripts\Activate.ps1"
-Write-Host "✓ Virtual environment activated" -ForegroundColor Green
+Write-Host "[OK] Virtual environment activated" -ForegroundColor Green
 
 # Check pytest
 try {
     $pytestVersion = pytest --version 2>&1 | Select-Object -First 1
-    Write-Host "✓ pytest found: $pytestVersion" -ForegroundColor Green
+    Write-Host "[OK] pytest found: $pytestVersion" -ForegroundColor Green
 } catch {
-    Write-Host "✗ pytest not found in virtual environment" -ForegroundColor Red
-    Write-Host "ℹ Run: python setup-test-env.py" -ForegroundColor Blue
+    Write-Host "[ERROR] pytest not found in virtual environment" -ForegroundColor Red
+    Write-Host "[INFO] Run: python setup-test-env.py" -ForegroundColor Blue
     exit 1
 }
 
@@ -71,14 +71,14 @@ Write-Host "[1/4] Running Python unit tests" -ForegroundColor Blue
 try {
     pytest tests/python/ -v --tb=short
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "✓ Python unit tests passed" -ForegroundColor Green
+        Write-Host "[OK] Python unit tests passed" -ForegroundColor Green
         $PassedTests++
     } else {
-        Write-Host "✗ Python unit tests failed" -ForegroundColor Red
+        Write-Host "[ERROR] Python unit tests failed" -ForegroundColor Red
         $FailedTests++
     }
 } catch {
-    Write-Host "✗ Python unit tests failed with exception" -ForegroundColor Red
+    Write-Host "[ERROR] Python unit tests failed with exception" -ForegroundColor Red
     $FailedTests++
 }
 $TotalTests++
@@ -89,14 +89,14 @@ Write-Host "[2/4] Running build tests" -ForegroundColor Blue
 try {
     pytest tests/build/ -v --tb=short
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "✓ Build tests passed" -ForegroundColor Green
+        Write-Host "[OK] Build tests passed" -ForegroundColor Green
         $PassedTests++
     } else {
-        Write-Host "✗ Build tests failed" -ForegroundColor Red
+        Write-Host "[ERROR] Build tests failed" -ForegroundColor Red
         $FailedTests++
     }
 } catch {
-    Write-Host "✗ Build tests failed with exception" -ForegroundColor Red
+    Write-Host "[ERROR] Build tests failed with exception" -ForegroundColor Red
     $FailedTests++
 }
 $TotalTests++
@@ -107,14 +107,14 @@ Write-Host "[3/4] Running install tests" -ForegroundColor Blue
 try {
     pytest tests/install/ -v --tb=short
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "✓ Install tests passed" -ForegroundColor Green
+        Write-Host "[OK] Install tests passed" -ForegroundColor Green
         $PassedTests++
     } else {
-        Write-Host "✗ Install tests failed" -ForegroundColor Red
+        Write-Host "[ERROR] Install tests failed" -ForegroundColor Red
         $FailedTests++
     }
 } catch {
-    Write-Host "✗ Install tests failed with exception" -ForegroundColor Red
+    Write-Host "[ERROR] Install tests failed with exception" -ForegroundColor Red
     $FailedTests++
 }
 $TotalTests++
@@ -128,19 +128,19 @@ try {
     if ($pesterModule) {
         $result = Invoke-Pester tests/powershell/*.Tests.ps1 -PassThru
         if ($result.FailedCount -eq 0) {
-            Write-Host "✓ PowerShell tests passed" -ForegroundColor Green
+            Write-Host "[OK] PowerShell tests passed" -ForegroundColor Green
             $PassedTests++
         } else {
-            Write-Host "✗ PowerShell tests failed" -ForegroundColor Red
+            Write-Host "[ERROR] PowerShell tests failed" -ForegroundColor Red
             $FailedTests++
         }
         $TotalTests++
     } else {
-        Write-Host "⚠ Pester not found - skipping PowerShell tests" -ForegroundColor Yellow
-        Write-Host "ℹ Install: Install-Module -Name Pester -Force -SkipPublisherCheck" -ForegroundColor Blue
+        Write-Host "[WARN] Pester not found - skipping PowerShell tests" -ForegroundColor Yellow
+        Write-Host "[INFO] Install: Install-Module -Name Pester -Force -SkipPublisherCheck" -ForegroundColor Blue
     }
 } catch {
-    Write-Host "⚠ PowerShell tests skipped due to error" -ForegroundColor Yellow
+    Write-Host "[WARN] PowerShell tests skipped due to error" -ForegroundColor Yellow
 }
 Write-Host ""
 
@@ -160,9 +160,9 @@ Write-Host ""
 
 # Exit with appropriate code
 if ($FailedTests -gt 0) {
-    Write-Host "✗ Some tests failed" -ForegroundColor Red
+    Write-Host "[ERROR] Some tests failed" -ForegroundColor Red
     exit 1
 } else {
-    Write-Host "✓ All tests passed!" -ForegroundColor Green
+    Write-Host "[OK] All tests passed!" -ForegroundColor Green
     exit 0
 }
