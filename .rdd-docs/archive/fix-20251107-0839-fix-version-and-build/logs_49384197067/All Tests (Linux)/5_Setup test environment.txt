@@ -1,0 +1,42 @@
+﻿2025-11-07T12:30:55.7363810Z ##[group]Run python setup-test-env.py
+2025-11-07T12:30:55.7364158Z [36;1mpython setup-test-env.py[0m
+2025-11-07T12:30:55.7398511Z shell: /usr/bin/bash -e {0}
+2025-11-07T12:30:55.7398749Z env:
+2025-11-07T12:30:55.7398995Z   pythonLocation: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:30:55.7399393Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.9.24/x64/lib/pkgconfig
+2025-11-07T12:30:55.7399776Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:30:55.7400121Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:30:55.7400462Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:30:55.7400803Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.9.24/x64/lib
+2025-11-07T12:30:55.7401084Z ##[endgroup]
+2025-11-07T12:31:08.8614436Z 
+2025-11-07T12:31:08.8614903Z ============================================================
+2025-11-07T12:31:08.8615403Z   RDD Test Environment Setup
+2025-11-07T12:31:08.8615755Z ============================================================
+2025-11-07T12:31:08.8616175Z 
+2025-11-07T12:31:08.8616587Z ✓ Python 3.9.24 detected
+2025-11-07T12:31:08.8616829Z 
+2025-11-07T12:31:08.8617322Z Repository root: /home/runner/work/requirements-driven-development/requirements-driven-development
+2025-11-07T12:31:08.8618513Z Virtual environment: /home/runner/work/requirements-driven-development/requirements-driven-development/.venv
+2025-11-07T12:31:08.8619863Z Requirements file: /home/runner/work/requirements-driven-development/requirements-driven-development/tests/requirements.txt
+2025-11-07T12:31:08.8620711Z 
+2025-11-07T12:31:08.8621586Z ℹ Creating virtual environment at /home/runner/work/requirements-driven-development/requirements-driven-development/.venv...
+2025-11-07T12:31:08.8622799Z ✓ Virtual environment created
+2025-11-07T12:31:08.8623251Z ℹ Upgrading pip...
+2025-11-07T12:31:08.8623638Z ✓ pip upgraded
+2025-11-07T12:31:08.8624109Z ℹ Installing/updating test dependencies...
+2025-11-07T12:31:08.8624716Z ✓ Test dependencies installed/updated
+2025-11-07T12:31:08.8625051Z 
+2025-11-07T12:31:08.8625218Z ============================================================
+2025-11-07T12:31:08.8625701Z Setup completed successfully!
+2025-11-07T12:31:08.8626105Z ============================================================
+2025-11-07T12:31:08.8626387Z 
+2025-11-07T12:31:08.8626550Z To activate the virtual environment:
+2025-11-07T12:31:08.8627406Z   source /home/runner/work/requirements-driven-development/requirements-driven-development/.venv/bin/activate
+2025-11-07T12:31:08.8628647Z 
+2025-11-07T12:31:08.8628781Z To run tests:
+2025-11-07T12:31:08.8629080Z   pytest tests/python/
+2025-11-07T12:31:08.8629309Z 
+2025-11-07T12:31:08.8629435Z To deactivate:
+2025-11-07T12:31:08.8629744Z   deactivate
+2025-11-07T12:31:08.8629932Z 

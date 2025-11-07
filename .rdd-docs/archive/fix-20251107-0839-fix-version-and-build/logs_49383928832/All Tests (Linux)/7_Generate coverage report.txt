@@ -1,0 +1,35 @@
+﻿2025-11-07T12:26:58.4857082Z ##[group]Run source .venv/bin/activate
+2025-11-07T12:26:58.4857404Z [36;1msource .venv/bin/activate[0m
+2025-11-07T12:26:58.4857853Z [36;1mpytest tests/python/ --cov=.rdd/scripts --cov=scripts --cov-report=xml --cov-report=term[0m
+2025-11-07T12:26:58.4891436Z shell: /usr/bin/bash -e {0}
+2025-11-07T12:26:58.4891660Z env:
+2025-11-07T12:26:58.4891895Z   pythonLocation: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:26:58.4892295Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.9.24/x64/lib/pkgconfig
+2025-11-07T12:26:58.4892711Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:26:58.4893044Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:26:58.4893378Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:26:58.4893725Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.9.24/x64/lib
+2025-11-07T12:26:58.4894006Z ##[endgroup]
+2025-11-07T12:26:59.1430793Z ============================= test session starts ==============================
+2025-11-07T12:26:59.1431588Z platform linux -- Python 3.9.24, pytest-8.4.2, pluggy-1.6.0
+2025-11-07T12:26:59.1432478Z rootdir: /home/runner/work/requirements-driven-development/requirements-driven-development
+2025-11-07T12:26:59.1433359Z plugins: timeout-2.4.0, cov-7.0.0, xdist-3.8.0, mock-3.15.1
+2025-11-07T12:26:59.1433822Z collected 49 items
+2025-11-07T12:26:59.1433953Z 
+2025-11-07T12:26:59.3538198Z tests/python/test_integration.py .......                                 [ 14%]
+2025-11-07T12:26:59.3819777Z tests/python/test_rdd_main.py ..........                                 [ 34%]
+2025-11-07T12:27:00.0237901Z tests/python/test_rdd_utils.py ................................          [100%]
+2025-11-07T12:27:00.0238455Z 
+2025-11-07T12:27:00.0238641Z ================================ tests coverage ================================
+2025-11-07T12:27:00.0239252Z _______________ coverage: platform linux, python 3.9.24-final-0 ________________
+2025-11-07T12:27:00.0239787Z 
+2025-11-07T12:27:00.0239940Z Name                        Stmts   Miss  Cover
+2025-11-07T12:27:00.0240618Z -----------------------------------------------
+2025-11-07T12:27:00.0241089Z .rdd/scripts/rdd.py          1099    966    12%
+2025-11-07T12:27:00.0241574Z .rdd/scripts/rdd_utils.py     605    405    33%
+2025-11-07T12:27:00.0241989Z scripts/build.py              281    281     0%
+2025-11-07T12:27:00.0242402Z scripts/install.py            244    244     0%
+2025-11-07T12:27:00.0242810Z -----------------------------------------------
+2025-11-07T12:27:00.0243201Z TOTAL                        2229   1896    15%
+2025-11-07T12:27:00.0243646Z Coverage XML written to file coverage.xml
+2025-11-07T12:27:00.0244138Z ============================== 49 passed in 0.89s ==============================

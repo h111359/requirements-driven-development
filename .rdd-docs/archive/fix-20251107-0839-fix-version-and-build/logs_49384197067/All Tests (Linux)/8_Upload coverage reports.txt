@@ -1,0 +1,68 @@
+﻿2025-11-07T12:31:13.2468605Z ##[group]Run codecov/codecov-action@v4
+2025-11-07T12:31:13.2468881Z with:
+2025-11-07T12:31:13.2469055Z   file: ./coverage.xml
+2025-11-07T12:31:13.2469246Z   flags: python
+2025-11-07T12:31:13.2469437Z   name: python-coverage
+2025-11-07T12:31:13.2469632Z env:
+2025-11-07T12:31:13.2469861Z   pythonLocation: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:31:13.2470244Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.9.24/x64/lib/pkgconfig
+2025-11-07T12:31:13.2470623Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:31:13.2470961Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:31:13.2471289Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:31:13.2471627Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.9.24/x64/lib
+2025-11-07T12:31:13.2472074Z ##[endgroup]
+2025-11-07T12:31:13.3334596Z eventName: pull_request
+2025-11-07T12:31:13.3336408Z baseRef: h111359:dev | headRef: h111359:fix/20251107-0839-fix-version-and-build
+2025-11-07T12:31:13.3344319Z ==> linux OS detected
+2025-11-07T12:31:13.6302001Z https://cli.codecov.io/latest/linux/codecov.SHA256SUM
+2025-11-07T12:31:13.7916972Z gpg: directory '/home/runner/.gnupg' created
+2025-11-07T12:31:13.7951362Z gpg: keybox '/home/runner/.gnupg/pubring.kbx' created
+2025-11-07T12:31:13.8091116Z gpg: /home/runner/.gnupg/trustdb.gpg: trustdb created
+2025-11-07T12:31:13.8092042Z gpg: key 806BB28AED779869: public key "Codecov Uploader (Codecov Uploader Verification Key) <security@codecov.io>" imported
+2025-11-07T12:31:13.8486139Z gpg: Total number processed: 1
+2025-11-07T12:31:13.8486593Z gpg:               imported: 1
+2025-11-07T12:31:13.8541672Z gpg: Signature made Thu Oct 23 15:06:21 2025 UTC
+2025-11-07T12:31:13.8542286Z gpg:                using RSA key 27034E7FDB850E0BBC2C62FF806BB28AED779869
+2025-11-07T12:31:13.8545608Z gpg: Good signature from "Codecov Uploader (Codecov Uploader Verification Key) <security@codecov.io>" [unknown]
+2025-11-07T12:31:13.8546585Z gpg: WARNING: This key is not certified with a trusted signature!
+2025-11-07T12:31:13.8547283Z gpg:          There is no indication that the signature belongs to the owner.
+2025-11-07T12:31:13.8548000Z Primary key fingerprint: 2703 4E7F DB85 0E0B BC2C  62FF 806B B28A ED77 9869
+2025-11-07T12:31:13.8770719Z ==> Uploader SHASUM verified (3e4d282fe243aa7283b17016ff65ab2806c262f16abb41125f0caeea380dfe77  codecov)
+2025-11-07T12:31:13.8771998Z ==> Running version latest
+2025-11-07T12:31:13.9601259Z Could not pull latest version information: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2025-11-07T12:31:13.9603635Z ==> Running git config --global --add safe.directory /home/runner/work/requirements-driven-development/requirements-driven-development
+2025-11-07T12:31:13.9693443Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/requirements-driven-development/requirements-driven-development
+2025-11-07T12:31:13.9743644Z ==> Running command '/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-commit'
+2025-11-07T12:31:13.9746367Z [command]/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-commit --git-service github -C c8a1ce35785768ef04e3f10a3e27e56a3bfa0dd0
+2025-11-07T12:31:14.3283678Z info - 2025-11-07 12:31:14,327 -- ci service found: github-actions
+2025-11-07T12:31:14.3375193Z warning - 2025-11-07 12:31:14,337 -- No config file could be found. Ignoring config.
+2025-11-07T12:31:14.3678051Z warning - 2025-11-07 12:31:14,367 -- Branch `fix/20251107-0839-fix-version-and-build` is protected but no token was provided
+2025-11-07T12:31:14.3679240Z warning - 2025-11-07 12:31:14,367 -- For information on Codecov upload tokens, see https://docs.codecov.com/docs/codecov-tokens
+2025-11-07T12:31:14.5656411Z info - 2025-11-07 12:31:14,565 -- Process Commit creating complete
+2025-11-07T12:31:14.5657666Z error - 2025-11-07 12:31:14,565 -- Commit creating failed: {"message":"Token required - not valid tokenless upload"}
+2025-11-07T12:31:14.6716557Z Sentry is attempting to send 3 pending events
+2025-11-07T12:31:14.6717685Z Waiting up to 2 seconds
+2025-11-07T12:31:14.6718073Z Press Ctrl-C to quit
+2025-11-07T12:31:14.9283574Z ==> Running command '/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-report'
+2025-11-07T12:31:14.9285670Z [command]/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-report --git-service github -C c8a1ce35785768ef04e3f10a3e27e56a3bfa0dd0
+2025-11-07T12:31:15.2757400Z info - 2025-11-07 12:31:15,275 -- ci service found: github-actions
+2025-11-07T12:31:15.2847994Z warning - 2025-11-07 12:31:15,284 -- No config file could be found. Ignoring config.
+2025-11-07T12:31:15.7264655Z info - 2025-11-07 12:31:15,726 -- Process Report creating complete
+2025-11-07T12:31:15.7269924Z error - 2025-11-07 12:31:15,726 -- Report creating failed: {"message":"Token required - not valid tokenless upload"}
+2025-11-07T12:31:15.8323921Z Sentry is attempting to send 3 pending events
+2025-11-07T12:31:15.8324357Z Waiting up to 2 seconds
+2025-11-07T12:31:15.8324679Z Press Ctrl-C to quit
+2025-11-07T12:31:15.9403582Z ==> Running command '/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov do-upload'
+2025-11-07T12:31:15.9405435Z [command]/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov do-upload -f ./coverage.xml -F python --git-service github -n python-coverage -C c8a1ce35785768ef04e3f10a3e27e56a3bfa0dd0
+2025-11-07T12:31:16.2866669Z info - 2025-11-07 12:31:16,286 -- ci service found: github-actions
+2025-11-07T12:31:16.2960628Z warning - 2025-11-07 12:31:16,295 -- No config file could be found. Ignoring config.
+2025-11-07T12:31:16.3275009Z warning - 2025-11-07 12:31:16,327 -- xcrun is not installed or can't be found.
+2025-11-07T12:31:16.3815821Z warning - 2025-11-07 12:31:16,381 -- No gcov data found.
+2025-11-07T12:31:16.3819812Z warning - 2025-11-07 12:31:16,381 -- coverage.py is not installed or can't be found.
+2025-11-07T12:31:16.4588423Z info - 2025-11-07 12:31:16,458 -- Found 1 coverage files to report
+2025-11-07T12:31:16.4589845Z info - 2025-11-07 12:31:16,458 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/coverage.xml
+2025-11-07T12:31:16.6990401Z info - 2025-11-07 12:31:16,698 -- Process Upload complete
+2025-11-07T12:31:16.6991508Z error - 2025-11-07 12:31:16,698 -- Upload failed: {"message":"Token required - not valid tokenless upload"}
+2025-11-07T12:31:16.8061361Z Sentry is attempting to send 3 pending events
+2025-11-07T12:31:16.8061860Z Waiting up to 2 seconds
+2025-11-07T12:31:16.8062160Z Press Ctrl-C to quit

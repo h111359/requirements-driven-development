@@ -1,0 +1,24 @@
+﻿2025-11-07T12:35:44.3026156Z ##[group]Run .\scripts\run-tests.ps1
+2025-11-07T12:35:44.3026490Z [36;1m.\scripts\run-tests.ps1[0m
+2025-11-07T12:35:44.3085461Z shell: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE -command ". '{0}'"
+2025-11-07T12:35:44.3085838Z env:
+2025-11-07T12:35:44.3086093Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:35:44.3086505Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.9.13\x64/lib/pkgconfig
+2025-11-07T12:35:44.3086890Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:35:44.3087255Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:35:44.3087633Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:35:44.3087920Z ##[endgroup]
+2025-11-07T12:35:44.6951236Z 
+2025-11-07T12:35:44.6965175Z ============================================================
+2025-11-07T12:35:44.6981158Z   RDD Framework Test Runner (Windows)
+2025-11-07T12:35:44.6988814Z ============================================================
+2025-11-07T12:35:44.6992888Z 
+2025-11-07T12:35:45.9024699Z Print-Info : The term 'Print-Info' is not recognized as the name of a cmdlet, function, script file, or operable 
+2025-11-07T12:35:45.9026002Z program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+2025-11-07T12:35:45.9027139Z At D:\a\requirements-driven-development\requirements-driven-development\scripts\run-tests.ps1:59 char:1
+2025-11-07T12:35:45.9027967Z + Print-Info "Checking prerequisites..."
+2025-11-07T12:35:45.9028227Z + ~~~~~~~~~~
+2025-11-07T12:35:45.9028854Z     + CategoryInfo          : ObjectNotFound: (Print-Info:String) [], ParentContainsErrorRecordException
+2025-11-07T12:35:45.9029663Z     + FullyQualifiedErrorId : CommandNotFoundException
+2025-11-07T12:35:45.9030078Z  
+2025-11-07T12:35:45.9229803Z ##[error]Process completed with exit code 1.

@@ -48,7 +48,7 @@ The main entry point (`rdd.py`) uses a domain-based routing pattern:
 python .rdd/scripts/rdd.py <domain> <action> [options]
 ```
 Examples:
-- `python .rdd/scripts/rdd.py branch create enh my-feature`
+- `python .rdd/scripts/rdd.py change create` (interactive menu for type selection)
 - `python .rdd/scripts/rdd.py workspace init change`
 - `python .rdd/scripts/rdd.py requirements merge`
 - `python .rdd/scripts/rdd.py config show`
@@ -57,6 +57,24 @@ Examples:
 **Cross-Platform Compatibility**: The framework uses the `python` command (not `python3`) to ensure compatibility across Windows, Linux, and macOS. On older Linux systems where the `python` command is not available, users can install the `python-is-python3` package or create an alias/symlink.
 
 This Python implementation replaced the previous bash scripts (`rdd.sh`) which are now archived.
+
+### Branch Naming Flexibility
+The framework provides flexible branch naming while preserving workspace initialization context:
+
+**User Control**: Users provide complete branch names without automatic prefixes
+- Valid examples: `my-feature`, `fix/my-bugfix`, `20251107-0541-install-scripts-outside`, `feature/add-authentication`
+- The system only validates kebab-case format with support for forward slashes
+- No automatic timestamp injection or type-based prefixes
+
+**Type Selection Purpose**: The fix/enhancement selection during change creation:
+- Determines workspace initialization content (fix-specific vs enhancement-specific files)
+- Does NOT affect the branch name provided by users
+- Allows users to choose their own naming conventions (with or without prefixes)
+
+**Validation**: Branch names must follow kebab-case format:
+- Lowercase letters, numbers, hyphens, and forward slashes allowed
+- Pattern: `^[a-z0-9]+([/-][a-z0-9]+)*$`
+- Examples: `my-branch`, `fix/bug-123`, `20251107-feature-name`, `team/user/feature`
 
 ### Template-Based File Generation
 All workspace files are generated from templates stored in `.rdd/templates/` or `src/{platform}/.rdd/templates/`, ensuring consistency across projects and changes.
