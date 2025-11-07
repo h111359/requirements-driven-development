@@ -1,0 +1,28 @@
+﻿2025-11-07T12:22:33.8866216Z ##[group]Run python setup-test-env.py
+2025-11-07T12:22:33.8866624Z [36;1mpython setup-test-env.py[0m
+2025-11-07T12:22:33.8939460Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2025-11-07T12:22:33.8939839Z env:
+2025-11-07T12:22:33.8940123Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:22:33.8940584Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.9.13\x64/lib/pkgconfig
+2025-11-07T12:22:33.8941027Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:22:33.8941429Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:22:33.8941841Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:22:33.8942156Z ##[endgroup]
+2025-11-07T12:22:39.7182845Z 
+2025-11-07T12:22:39.7183428Z ============================================================
+2025-11-07T12:22:39.7184455Z   RDD Test Environment Setup
+2025-11-07T12:22:39.7184840Z ============================================================
+2025-11-07T12:22:39.7185571Z Traceback (most recent call last):
+2025-11-07T12:22:39.7192954Z   File "D:\a\requirements-driven-development\requirements-driven-development\setup-test-env.py", line 186, in <module>
+2025-11-07T12:22:39.7193689Z 
+2025-11-07T12:22:39.7330482Z     sys.exit(main())
+2025-11-07T12:22:39.7331927Z   File "D:\a\requirements-driven-development\requirements-driven-development\setup-test-env.py", line 154, in main
+2025-11-07T12:22:39.7333206Z     if not check_python_version():
+2025-11-07T12:22:39.7334626Z   File "D:\a\requirements-driven-development\requirements-driven-development\setup-test-env.py", line 57, in check_python_version
+2025-11-07T12:22:39.7336541Z     print_success(f"Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro} detected")
+2025-11-07T12:22:39.7338330Z   File "D:\a\requirements-driven-development\requirements-driven-development\setup-test-env.py", line 23, in print_success
+2025-11-07T12:22:39.7339252Z     print(f"\u2713 {msg}")
+2025-11-07T12:22:39.7339830Z   File "C:\hostedtoolcache\windows\Python\3.9.13\x64\lib\encodings\cp1252.py", line 19, in encode
+2025-11-07T12:22:39.7385624Z     return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+2025-11-07T12:22:39.7386733Z UnicodeEncodeError: 'charmap' codec can't encode character '\u2713' in position 0: character maps to <undefined>
+2025-11-07T12:22:40.3225058Z ##[error]Process completed with exit code 1.

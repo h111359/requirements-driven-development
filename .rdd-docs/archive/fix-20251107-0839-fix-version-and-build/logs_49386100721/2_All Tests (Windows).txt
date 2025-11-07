@@ -1,0 +1,378 @@
+﻿2025-11-07T12:58:56.1782035Z Current runner version: '2.329.0'
+2025-11-07T12:58:56.1813840Z ##[group]Runner Image Provisioner
+2025-11-07T12:58:56.1814750Z Hosted Compute Agent
+2025-11-07T12:58:56.1815448Z Version: 20251016.436
+2025-11-07T12:58:56.1816089Z Commit: 8ab8ac8bfd662a3739dab9fe09456aba92132568
+2025-11-07T12:58:56.1816852Z Build Date: 2025-10-15T20:44:12Z
+2025-11-07T12:58:56.1817420Z ##[endgroup]
+2025-11-07T12:58:56.1817871Z ##[group]Operating System
+2025-11-07T12:58:56.1818505Z Microsoft Windows Server 2025
+2025-11-07T12:58:56.1819064Z 10.0.26100
+2025-11-07T12:58:56.1819470Z Datacenter
+2025-11-07T12:58:56.1819941Z ##[endgroup]
+2025-11-07T12:58:56.1820354Z ##[group]Runner Image
+2025-11-07T12:58:56.1820890Z Image: windows-2025
+2025-11-07T12:58:56.1821358Z Version: 20251021.67.1
+2025-11-07T12:58:56.1822443Z Included Software: https://github.com/actions/runner-images/blob/win25/20251021.67/images/windows/Windows2025-Readme.md
+2025-11-07T12:58:56.1825006Z Image Release: https://github.com/actions/runner-images/releases/tag/win25%2F20251021.67
+2025-11-07T12:58:56.1826248Z ##[endgroup]
+2025-11-07T12:58:56.1827337Z ##[group]GITHUB_TOKEN Permissions
+2025-11-07T12:58:56.1829353Z Contents: read
+2025-11-07T12:58:56.1829917Z Metadata: read
+2025-11-07T12:58:56.1830407Z Packages: read
+2025-11-07T12:58:56.1830893Z ##[endgroup]
+2025-11-07T12:58:56.1833097Z Secret source: Actions
+2025-11-07T12:58:56.1833724Z Prepare workflow directory
+2025-11-07T12:58:56.2243895Z Prepare all required actions
+2025-11-07T12:58:56.2304177Z Getting action download info
+2025-11-07T12:58:56.4396078Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-11-07T12:58:56.5762282Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2025-11-07T12:58:56.8384208Z Complete job name: All Tests (Windows)
+2025-11-07T12:58:56.9685280Z ##[group]Run actions/checkout@v4
+2025-11-07T12:58:56.9686364Z with:
+2025-11-07T12:58:56.9686816Z   repository: h111359/requirements-driven-development
+2025-11-07T12:58:56.9687659Z   token: ***
+2025-11-07T12:58:56.9688015Z   ssh-strict: true
+2025-11-07T12:58:56.9688367Z   ssh-user: git
+2025-11-07T12:58:56.9688737Z   persist-credentials: true
+2025-11-07T12:58:56.9689143Z   clean: true
+2025-11-07T12:58:56.9689514Z   sparse-checkout-cone-mode: true
+2025-11-07T12:58:56.9689953Z   fetch-depth: 1
+2025-11-07T12:58:56.9690308Z   fetch-tags: false
+2025-11-07T12:58:56.9690711Z   show-progress: true
+2025-11-07T12:58:56.9691079Z   lfs: false
+2025-11-07T12:58:56.9691404Z   submodules: false
+2025-11-07T12:58:56.9691764Z   set-safe-directory: true
+2025-11-07T12:58:56.9692381Z ##[endgroup]
+2025-11-07T12:58:57.1450638Z Syncing repository: h111359/requirements-driven-development
+2025-11-07T12:58:57.1453496Z ##[group]Getting Git version info
+2025-11-07T12:58:57.1454930Z Working directory is 'D:\a\requirements-driven-development\requirements-driven-development'
+2025-11-07T12:58:57.2699046Z [command]"C:\Program Files\Git\bin\git.exe" version
+2025-11-07T12:58:57.6216461Z git version 2.51.1.windows.1
+2025-11-07T12:58:57.6286942Z ##[endgroup]
+2025-11-07T12:58:57.6313313Z Temporarily overriding HOME='D:\a\_temp\710c5e4c-ad97-4378-acfe-65ddf023591e' before making global git config changes
+2025-11-07T12:58:57.6315957Z Adding repository directory to the temporary git global config as a safe directory
+2025-11-07T12:58:57.6326947Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\requirements-driven-development\requirements-driven-development
+2025-11-07T12:58:57.6863450Z Deleting the contents of 'D:\a\requirements-driven-development\requirements-driven-development'
+2025-11-07T12:58:57.6869774Z ##[group]Initializing the repository
+2025-11-07T12:58:57.6881149Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\requirements-driven-development\requirements-driven-development
+2025-11-07T12:58:57.7535648Z Initialized empty Git repository in D:/a/requirements-driven-development/requirements-driven-development/.git/
+2025-11-07T12:58:57.7588992Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/h111359/requirements-driven-development
+2025-11-07T12:58:57.8130921Z ##[endgroup]
+2025-11-07T12:58:57.8131922Z ##[group]Disabling automatic garbage collection
+2025-11-07T12:58:57.8141919Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2025-11-07T12:58:57.8474909Z ##[endgroup]
+2025-11-07T12:58:57.8476971Z ##[group]Setting up auth
+2025-11-07T12:58:57.8490151Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2025-11-07T12:58:57.8829123Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2025-11-07T12:58:59.1103159Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-11-07T12:58:59.1432578Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2025-11-07T12:58:59.7175131Z [command]"C:\Program Files\Git\bin\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2025-11-07T12:58:59.7510095Z ##[endgroup]
+2025-11-07T12:58:59.7510798Z ##[group]Fetching the repository
+2025-11-07T12:58:59.7524338Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +25cdb7bf516379c40004764480a94297b60e813d:refs/remotes/pull/53/merge
+2025-11-07T12:59:01.5979509Z From https://github.com/h111359/requirements-driven-development
+2025-11-07T12:59:01.5982874Z  * [new ref]         25cdb7bf516379c40004764480a94297b60e813d -> pull/53/merge
+2025-11-07T12:59:01.6251390Z ##[endgroup]
+2025-11-07T12:59:01.6251838Z ##[group]Determining the checkout info
+2025-11-07T12:59:01.6254520Z ##[endgroup]
+2025-11-07T12:59:01.6272071Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2025-11-07T12:59:01.6743532Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2025-11-07T12:59:01.7079347Z ##[group]Checking out the ref
+2025-11-07T12:59:01.7090564Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force refs/remotes/pull/53/merge
+2025-11-07T12:59:01.8337531Z Note: switching to 'refs/remotes/pull/53/merge'.
+2025-11-07T12:59:01.8338019Z 
+2025-11-07T12:59:01.8338348Z You are in 'detached HEAD' state. You can look around, make experimental
+2025-11-07T12:59:01.8339040Z changes and commit them, and you can discard any commits you make in this
+2025-11-07T12:59:01.8339828Z state without impacting any branches by switching back to a branch.
+2025-11-07T12:59:01.8340232Z 
+2025-11-07T12:59:01.8340463Z If you want to create a new branch to retain commits you create, you may
+2025-11-07T12:59:01.8341142Z do so (now or later) by using -c with the switch command. Example:
+2025-11-07T12:59:01.8341531Z 
+2025-11-07T12:59:01.8341777Z   git switch -c <new-branch-name>
+2025-11-07T12:59:01.8342068Z 
+2025-11-07T12:59:01.8342468Z Or undo this operation with:
+2025-11-07T12:59:01.8342751Z 
+2025-11-07T12:59:01.8342868Z   git switch -
+2025-11-07T12:59:01.8343770Z 
+2025-11-07T12:59:01.8344108Z Turn off this advice by setting config variable advice.detachedHead to false
+2025-11-07T12:59:01.8344594Z 
+2025-11-07T12:59:01.8345137Z HEAD is now at 25cdb7b Merge 5b16b7ec1a6439ca3f77e84da9b5266b113e6303 into ad751367b0c9a6c17544dd7edb9b3fb764dac4a9
+2025-11-07T12:59:01.8382093Z ##[endgroup]
+2025-11-07T12:59:01.8835201Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2025-11-07T12:59:01.9120432Z 25cdb7bf516379c40004764480a94297b60e813d
+2025-11-07T12:59:01.9581114Z ##[group]Run actions/setup-python@v5
+2025-11-07T12:59:01.9581459Z with:
+2025-11-07T12:59:01.9582374Z   python-version: 3.9
+2025-11-07T12:59:01.9582573Z   check-latest: false
+2025-11-07T12:59:01.9582900Z   token: ***
+2025-11-07T12:59:01.9583083Z   update-environment: true
+2025-11-07T12:59:01.9583301Z   allow-prereleases: false
+2025-11-07T12:59:01.9583484Z   freethreaded: false
+2025-11-07T12:59:01.9583663Z ##[endgroup]
+2025-11-07T12:59:02.2004289Z ##[group]Installed versions
+2025-11-07T12:59:02.2319399Z Successfully set up CPython (3.9.13)
+2025-11-07T12:59:02.2320955Z ##[endgroup]
+2025-11-07T12:59:02.2646616Z ##[group]Run Install-Module -Name Pester -Force -SkipPublisherCheck
+2025-11-07T12:59:02.2647257Z [36;1mInstall-Module -Name Pester -Force -SkipPublisherCheck[0m
+2025-11-07T12:59:02.3101398Z shell: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE -command ". '{0}'"
+2025-11-07T12:59:02.3101843Z env:
+2025-11-07T12:59:02.3102118Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:59:02.3102757Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.9.13\x64/lib/pkgconfig
+2025-11-07T12:59:02.3103219Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:59:02.3103607Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:59:02.3103996Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:59:02.3104296Z ##[endgroup]
+2025-11-07T12:59:16.2244427Z ##[group]Run python setup-test-env.py
+2025-11-07T12:59:16.2244793Z [36;1mpython setup-test-env.py[0m
+2025-11-07T12:59:16.2448430Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2025-11-07T12:59:16.2448818Z env:
+2025-11-07T12:59:16.2449144Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:59:16.2449642Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.9.13\x64/lib/pkgconfig
+2025-11-07T12:59:16.2450131Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:59:16.2450564Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:59:16.2451035Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:59:16.2451385Z ##[endgroup]
+2025-11-07T12:59:37.8316870Z 
+2025-11-07T12:59:37.8317213Z ============================================================
+2025-11-07T12:59:37.8317554Z   RDD Test Environment Setup
+2025-11-07T12:59:37.8318093Z ============================================================
+2025-11-07T12:59:37.8318350Z 
+2025-11-07T12:59:37.8318723Z ✓ Python 3.9.13 detected
+2025-11-07T12:59:37.8318903Z 
+2025-11-07T12:59:37.8319284Z Repository root: D:\a\requirements-driven-development\requirements-driven-development
+2025-11-07T12:59:37.8320246Z Virtual environment: D:\a\requirements-driven-development\requirements-driven-development\.venv
+2025-11-07T12:59:37.8321365Z Requirements file: D:\a\requirements-driven-development\requirements-driven-development\tests\requirements.txt
+2025-11-07T12:59:37.8322062Z 
+2025-11-07T12:59:37.8322779Z ℹ Creating virtual environment at D:\a\requirements-driven-development\requirements-driven-development\.venv...
+2025-11-07T12:59:37.8323467Z ✓ Virtual environment created
+2025-11-07T12:59:37.8323718Z ℹ Upgrading pip...
+2025-11-07T12:59:37.8323920Z ✓ pip upgraded
+2025-11-07T12:59:37.8324464Z ℹ Installing/updating test dependencies...
+2025-11-07T12:59:37.8325013Z ✓ Test dependencies installed/updated
+2025-11-07T12:59:37.8325329Z 
+2025-11-07T12:59:37.8325458Z ============================================================
+2025-11-07T12:59:37.8325906Z Setup completed successfully!
+2025-11-07T12:59:37.8326273Z ============================================================
+2025-11-07T12:59:37.8326580Z 
+2025-11-07T12:59:37.8326751Z To activate the virtual environment:
+2025-11-07T12:59:37.8327728Z   D:\a\requirements-driven-development\requirements-driven-development\.venv\Scripts\activate          (Command Prompt)
+2025-11-07T12:59:37.8329157Z   D:\a\requirements-driven-development\requirements-driven-development\.venv\Scripts\Activate.ps1      (PowerShell)
+2025-11-07T12:59:37.8330548Z 
+2025-11-07T12:59:37.8330676Z To run tests:
+2025-11-07T12:59:37.8331003Z   pytest tests/python/
+2025-11-07T12:59:37.8331223Z 
+2025-11-07T12:59:37.8331358Z To deactivate:
+2025-11-07T12:59:37.8331630Z   deactivate
+2025-11-07T12:59:37.8331787Z 
+2025-11-07T12:59:38.3934218Z ##[group]Run .\scripts\run-tests.ps1
+2025-11-07T12:59:38.3934567Z [36;1m.\scripts\run-tests.ps1[0m
+2025-11-07T12:59:38.4004147Z shell: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE -command ". '{0}'"
+2025-11-07T12:59:38.4004533Z env:
+2025-11-07T12:59:38.4004796Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:59:38.4005228Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.9.13\x64/lib/pkgconfig
+2025-11-07T12:59:38.4005619Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:59:38.4005972Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:59:38.4006313Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:59:38.4006610Z ##[endgroup]
+2025-11-07T12:59:38.8165712Z 
+2025-11-07T12:59:38.8182998Z ============================================================
+2025-11-07T12:59:38.8190951Z   RDD Framework Test Runner (Windows)
+2025-11-07T12:59:38.8198632Z ============================================================
+2025-11-07T12:59:38.8202605Z 
+2025-11-07T12:59:38.8209982Z [INFO] Checking prerequisites...
+2025-11-07T12:59:38.8351961Z [OK] Python found: Python 3.9.13
+2025-11-07T12:59:38.8407936Z [OK] Virtual environment found
+2025-11-07T12:59:38.8415388Z [INFO] Activating virtual environment...
+2025-11-07T12:59:38.9943933Z [OK] Virtual environment activated
+2025-11-07T12:59:39.4885902Z [OK] pytest found: pytest 8.4.2
+2025-11-07T12:59:39.4890521Z 
+2025-11-07T12:59:39.4898789Z ============================================================
+2025-11-07T12:59:39.4906842Z   Running Tests
+2025-11-07T12:59:39.4914442Z ============================================================
+2025-11-07T12:59:39.4918487Z 
+2025-11-07T12:59:39.4925592Z [1/4] Running Python unit tests
+2025-11-07T12:59:39.8404287Z ============================= test session starts =============================
+2025-11-07T12:59:39.8408480Z platform win32 -- Python 3.9.13, pytest-8.4.2, pluggy-1.6.0 -- D:\a\requirements-driven-development\requirements-driven-development\.venv\Scripts\python.exe
+2025-11-07T12:59:39.8409678Z cachedir: .pytest_cache
+2025-11-07T12:59:39.8410137Z rootdir: D:\a\requirements-driven-development\requirements-driven-development
+2025-11-07T12:59:39.8410718Z plugins: cov-7.0.0, mock-3.15.1, timeout-2.4.0, xdist-3.8.0
+2025-11-07T12:59:39.9392919Z collecting ... collected 49 items
+2025-11-07T12:59:39.9393211Z 
+2025-11-07T12:59:40.2451293Z tests/python/test_integration.py::TestChangeWorkflow::test_fix_branch_workflow PASSED [  2%]
+2025-11-07T12:59:40.5058615Z tests/python/test_integration.py::TestRequirementsManagement::test_requirements_changes_format PASSED [  4%]
+2025-11-07T12:59:40.7653896Z tests/python/test_integration.py::TestWorkspaceArchiving::test_workspace_backup_creation PASSED [  6%]
+2025-11-07T12:59:41.0739526Z tests/python/test_integration.py::TestGitIntegration::test_branch_creation_and_switching PASSED [  8%]
+2025-11-07T12:59:41.3446654Z tests/python/test_integration.py::TestGitIntegration::test_uncommitted_changes_detection PASSED [ 10%]
+2025-11-07T12:59:41.7278585Z tests/python/test_integration.py::TestConfigManagement::test_config_read_write_cycle PASSED [ 12%]
+2025-11-07T12:59:42.0538635Z tests/python/test_integration.py::TestConfigManagement::test_config_default_branch PASSED [ 14%]
+2025-11-07T12:59:42.0557258Z tests/python/test_rdd_main.py::TestCLIHelp::test_version_command PASSED  [ 16%]
+2025-11-07T12:59:42.0571795Z tests/python/test_rdd_main.py::TestCLIHelp::test_help_command PASSED     [ 18%]
+2025-11-07T12:59:42.0586732Z tests/python/test_rdd_main.py::TestDomainRouting::test_config_show_routing PASSED [ 20%]
+2025-11-07T12:59:42.0602587Z tests/python/test_rdd_main.py::TestDomainRouting::test_workspace_init_routing PASSED [ 22%]
+2025-11-07T12:59:42.1518779Z tests/python/test_rdd_main.py::TestChangeCommands::test_change_create_requires_default_branch PASSED [ 24%]
+2025-11-07T12:59:42.3422876Z tests/python/test_rdd_main.py::TestMenuInteraction::test_curses_menu_selection FAILED [ 26%]
+2025-11-07T12:59:42.3436500Z tests/python/test_rdd_main.py::TestValidationCommands::test_check_repo_valid PASSED [ 28%]
+2025-11-07T12:59:42.3451227Z tests/python/test_rdd_main.py::TestErrorHandling::test_no_command_shows_help PASSED [ 30%]
+2025-11-07T12:59:42.3465231Z tests/python/test_rdd_main.py::TestErrorHandling::test_invalid_domain_error PASSED [ 32%]
+2025-11-07T12:59:42.3479948Z tests/python/test_rdd_main.py::TestErrorHandling::test_invalid_action_error PASSED [ 34%]
+2025-11-07T12:59:42.3492761Z tests/python/test_rdd_utils.py::TestOutputFunctions::test_print_success PASSED [ 36%]
+2025-11-07T12:59:42.3506982Z tests/python/test_rdd_utils.py::TestOutputFunctions::test_print_error PASSED [ 38%]
+2025-11-07T12:59:42.3521901Z tests/python/test_rdd_utils.py::TestOutputFunctions::test_print_warning PASSED [ 40%]
+2025-11-07T12:59:42.3535622Z tests/python/test_rdd_utils.py::TestOutputFunctions::test_print_info PASSED [ 42%]
+2025-11-07T12:59:42.3550041Z tests/python/test_rdd_utils.py::TestValidationFunctions::test_validate_name_valid PASSED [ 44%]
+2025-11-07T12:59:42.3564349Z tests/python/test_rdd_utils.py::TestValidationFunctions::test_validate_name_with_spaces PASSED [ 46%]
+2025-11-07T12:59:42.3577355Z tests/python/test_rdd_utils.py::TestValidationFunctions::test_validate_name_with_special_chars PASSED [ 48%]
+2025-11-07T12:59:42.3589956Z tests/python/test_rdd_utils.py::TestValidationFunctions::test_validate_name_empty PASSED [ 51%]
+2025-11-07T12:59:42.3605002Z tests/python/test_rdd_utils.py::TestValidationFunctions::test_normalize_to_kebab_case PASSED [ 53%]
+2025-11-07T12:59:42.3633934Z tests/python/test_rdd_utils.py::TestValidationFunctions::test_validate_file_exists PASSED [ 55%]
+2025-11-07T12:59:42.3654541Z tests/python/test_rdd_utils.py::TestValidationFunctions::test_validate_dir_exists PASSED [ 57%]
+2025-11-07T12:59:42.3684094Z tests/python/test_rdd_utils.py::TestGitFunctions::test_check_git_repo_valid PASSED [ 59%]
+2025-11-07T12:59:42.3705847Z tests/python/test_rdd_utils.py::TestGitFunctions::test_check_git_repo_invalid PASSED [ 61%]
+2025-11-07T12:59:42.3720923Z tests/python/test_rdd_utils.py::TestGitFunctions::test_get_current_branch PASSED [ 63%]
+2025-11-07T12:59:42.6345096Z tests/python/test_rdd_utils.py::TestGitFunctions::test_get_default_branch_from_config PASSED [ 65%]
+2025-11-07T12:59:42.6362249Z tests/python/test_rdd_utils.py::TestGitFunctions::test_get_branch_type_fix PASSED [ 67%]
+2025-11-07T12:59:42.6379450Z tests/python/test_rdd_utils.py::TestGitFunctions::test_get_branch_type_enh PASSED [ 69%]
+2025-11-07T12:59:42.6394604Z tests/python/test_rdd_utils.py::TestGitFunctions::test_get_branch_type_main PASSED [ 71%]
+2025-11-07T12:59:42.6410220Z tests/python/test_rdd_utils.py::TestGitFunctions::test_is_enh_or_fix_branch PASSED [ 73%]
+2025-11-07T12:59:42.6421858Z tests/python/test_rdd_utils.py::TestTimestampFunctions::test_get_timestamp_format PASSED [ 75%]
+2025-11-07T12:59:42.6432990Z tests/python/test_rdd_utils.py::TestTimestampFunctions::test_get_timestamp_filename_format PASSED [ 77%]
+2025-11-07T12:59:42.9548676Z tests/python/test_rdd_utils.py::TestConfigFunctions::test_get_rdd_config_existing_key PASSED [ 79%]
+2025-11-07T12:59:43.2518288Z tests/python/test_rdd_utils.py::TestConfigFunctions::test_get_rdd_config_missing_key_with_default PASSED [ 81%]
+2025-11-07T12:59:43.5456924Z tests/python/test_rdd_utils.py::TestConfigFunctions::test_set_rdd_config PASSED [ 83%]
+2025-11-07T12:59:43.8500755Z tests/python/test_rdd_utils.py::TestConfigFunctions::test_get_rdd_config_path FAILED [ 85%]
+2025-11-07T12:59:43.8533502Z tests/python/test_rdd_utils.py::TestWorkspaceUtilities::test_ensure_dir_creates_directory PASSED [ 87%]
+2025-11-07T12:59:43.8553609Z tests/python/test_rdd_utils.py::TestWorkspaceUtilities::test_ensure_dir_existing_directory PASSED [ 89%]
+2025-11-07T12:59:44.1197718Z tests/python/test_rdd_utils.py::TestPromptFunctions::test_mark_prompt_completed PASSED [ 91%]
+2025-11-07T12:59:44.1215087Z tests/python/test_rdd_utils.py::TestConfirmAction::test_confirm_action_yes PASSED [ 93%]
+2025-11-07T12:59:44.1228631Z tests/python/test_rdd_utils.py::TestConfirmAction::test_confirm_action_no PASSED [ 95%]
+2025-11-07T12:59:44.1241800Z tests/python/test_rdd_utils.py::TestConfirmAction::test_confirm_action_yes_full PASSED [ 97%]
+2025-11-07T12:59:44.1599735Z tests/python/test_rdd_utils.py::TestConfirmAction::test_confirm_action_invalid PASSED [100%]
+2025-11-07T12:59:44.1600654Z 
+2025-11-07T12:59:44.1600788Z ================================== FAILURES ===================================
+2025-11-07T12:59:44.1601327Z _______________ TestMenuInteraction.test_curses_menu_selection ________________
+2025-11-07T12:59:44.1601991Z C:\hostedtoolcache\windows\Python\3.9.13\x64\lib\unittest\mock.py:1333: in patched
+2025-11-07T12:59:44.1602566Z     with self.decoration_helper(patched,
+2025-11-07T12:59:44.1603069Z C:\hostedtoolcache\windows\Python\3.9.13\x64\lib\contextlib.py:119: in __enter__
+2025-11-07T12:59:44.1603578Z     return next(self.gen)
+2025-11-07T12:59:44.1604073Z C:\hostedtoolcache\windows\Python\3.9.13\x64\lib\unittest\mock.py:1315: in decoration_helper
+2025-11-07T12:59:44.1604627Z     arg = exit_stack.enter_context(patching)
+2025-11-07T12:59:44.1605150Z C:\hostedtoolcache\windows\Python\3.9.13\x64\lib\contextlib.py:448: in enter_context
+2025-11-07T12:59:44.1605663Z     result = _cm_type.__enter__(cm)
+2025-11-07T12:59:44.1606150Z C:\hostedtoolcache\windows\Python\3.9.13\x64\lib\unittest\mock.py:1388: in __enter__
+2025-11-07T12:59:44.1606654Z     self.target = self.getter()
+2025-11-07T12:59:44.1607124Z C:\hostedtoolcache\windows\Python\3.9.13\x64\lib\unittest\mock.py:1563: in <lambda>
+2025-11-07T12:59:44.1607637Z     getter = lambda: _importer(target)
+2025-11-07T12:59:44.1608126Z C:\hostedtoolcache\windows\Python\3.9.13\x64\lib\unittest\mock.py:1235: in _importer
+2025-11-07T12:59:44.1608641Z     thing = __import__(import_path)
+2025-11-07T12:59:44.1609111Z C:\hostedtoolcache\windows\Python\3.9.13\x64\lib\curses\__init__.py:13: in <module>
+2025-11-07T12:59:44.1609608Z     from _curses import *
+2025-11-07T12:59:44.1609914Z E   ModuleNotFoundError: No module named '_curses'
+2025-11-07T12:59:44.1610390Z ________________ TestConfigFunctions.test_get_rdd_config_path _________________
+2025-11-07T12:59:44.1611124Z D:\a\requirements-driven-development\requirements-driven-development\tests\python\test_rdd_utils.py:178: in test_get_rdd_config_path
+2025-11-07T12:59:44.1611743Z     assert Path(config_path) == expected
+2025-11-07T12:59:44.1612937Z E   AssertionError: assert WindowsPath('C:/Users/runneradmin/AppData/Local/Temp/tmpwof7q6ep/.rdd-docs/config.json') == WindowsPath('C:/Users/RUNNER~1/AppData/Local/Temp/tmpwof7q6ep/.rdd-docs/config.json')
+2025-11-07T12:59:44.1615067Z E    +  where WindowsPath('C:/Users/runneradmin/AppData/Local/Temp/tmpwof7q6ep/.rdd-docs/config.json') = Path('C:/Users/runneradmin/AppData/Local/Temp/tmpwof7q6ep\\.rdd-docs\\config.json')
+2025-11-07T12:59:44.1616448Z =========================== short test summary info ===========================
+2025-11-07T12:59:44.1617601Z FAILED tests/python/test_rdd_main.py::TestMenuInteraction::test_curses_menu_selection - ModuleNotFoundError: No module named '_curses'
+2025-11-07T12:59:44.1620489Z FAILED tests/python/test_rdd_utils.py::TestConfigFunctions::test_get_rdd_config_path - AssertionError: assert WindowsPath('C:/Users/runneradmin/AppData/Local/Temp/tmpwof7q6ep/.rdd-docs/config.json') == WindowsPath('C:/Users/RUNNER~1/AppData/Local/Temp/tmpwof7q6ep/.rdd-docs/config.json')
+2025-11-07T12:59:44.1622238Z  +  where WindowsPath('C:/Users/runneradmin/AppData/Local/Temp/tmpwof7q6ep/.rdd-docs/config.json') = Path('C:/Users/runneradmin/AppData/Local/Temp/tmpwof7q6ep\\.rdd-docs\\config.json')
+2025-11-07T12:59:44.1623337Z ======================== 2 failed, 47 passed in 4.30s =========================
+2025-11-07T12:59:44.2034009Z [ERROR] Python unit tests failed
+2025-11-07T12:59:44.2044903Z 
+2025-11-07T12:59:44.2052876Z [2/4] Running build tests
+2025-11-07T12:59:44.5309028Z ============================= test session starts =============================
+2025-11-07T12:59:44.5310092Z platform win32 -- Python 3.9.13, pytest-8.4.2, pluggy-1.6.0 -- D:\a\requirements-driven-development\requirements-driven-development\.venv\Scripts\python.exe
+2025-11-07T12:59:44.5310940Z cachedir: .pytest_cache
+2025-11-07T12:59:44.5311400Z rootdir: D:\a\requirements-driven-development\requirements-driven-development
+2025-11-07T12:59:44.5312132Z plugins: cov-7.0.0, mock-3.15.1, timeout-2.4.0, xdist-3.8.0
+2025-11-07T12:59:44.5652826Z collecting ... collected 15 items
+2025-11-07T12:59:44.5653185Z 
+2025-11-07T12:59:44.5852438Z tests/build/test_build.py::TestVersionExtraction::test_read_version_from_config PASSED [  6%]
+2025-11-07T12:59:44.6138133Z tests/build/test_build.py::TestBuildDirCreation::test_create_build_dir PASSED [ 13%]
+2025-11-07T12:59:44.6394446Z tests/build/test_build.py::TestFileCopying::test_copy_prompts PASSED     [ 20%]
+2025-11-07T12:59:44.6672319Z tests/build/test_build.py::TestFileCopying::test_copy_scripts PASSED     [ 26%]
+2025-11-07T12:59:44.6932187Z tests/build/test_build.py::TestFileCopying::test_copy_templates PASSED   [ 33%]
+2025-11-07T12:59:44.7210255Z tests/build/test_build.py::TestFileCopying::test_copy_vscode_settings PASSED [ 40%]
+2025-11-07T12:59:44.7589500Z tests/build/test_build.py::TestFileCopying::test_copy_rdd_docs_seeds PASSED [ 46%]
+2025-11-07T12:59:44.7845728Z tests/build/test_build.py::TestTemplateGeneration::test_generate_readme PASSED [ 53%]
+2025-11-07T12:59:44.8268594Z tests/build/test_build.py::TestTemplateGeneration::test_generate_installer PASSED [ 60%]
+2025-11-07T12:59:44.8750325Z tests/build/test_build.py::TestTemplateGeneration::test_generate_bash_installer PASSED [ 66%]
+2025-11-07T12:59:44.9033595Z tests/build/test_build.py::TestTemplateGeneration::test_generate_powershell_installer PASSED [ 73%]
+2025-11-07T12:59:44.9327788Z tests/build/test_build.py::TestArchiveCreation::test_create_archive PASSED [ 80%]
+2025-11-07T12:59:44.9669953Z tests/build/test_build.py::TestChecksumGeneration::test_generate_checksum PASSED [ 86%]
+2025-11-07T12:59:44.9683571Z tests/build/test_build.py::TestOutputFunctions::test_print_success PASSED [ 93%]
+2025-11-07T12:59:44.9923322Z tests/build/test_build.py::TestOutputFunctions::test_print_error PASSED  [100%]
+2025-11-07T12:59:44.9923731Z 
+2025-11-07T12:59:44.9923861Z ============================= 15 passed in 0.45s ==============================
+2025-11-07T12:59:45.0275031Z [OK] Build tests passed
+2025-11-07T12:59:45.0278697Z 
+2025-11-07T12:59:45.0285964Z [3/4] Running install tests
+2025-11-07T12:59:45.3461913Z ============================= test session starts =============================
+2025-11-07T12:59:45.3463630Z platform win32 -- Python 3.9.13, pytest-8.4.2, pluggy-1.6.0 -- D:\a\requirements-driven-development\requirements-driven-development\.venv\Scripts\python.exe
+2025-11-07T12:59:45.3464713Z cachedir: .pytest_cache
+2025-11-07T12:59:45.3465327Z rootdir: D:\a\requirements-driven-development\requirements-driven-development
+2025-11-07T12:59:45.3466087Z plugins: cov-7.0.0, mock-3.15.1, timeout-2.4.0, xdist-3.8.0
+2025-11-07T12:59:45.3807195Z collecting ... collected 21 items
+2025-11-07T12:59:45.3807461Z 
+2025-11-07T12:59:45.3823339Z tests/install/test_install.py::TestPreFlightChecks::test_check_python_version_success PASSED [  4%]
+2025-11-07T12:59:45.3842313Z tests/install/test_install.py::TestPreFlightChecks::test_check_git_installed_success PASSED [  9%]
+2025-11-07T12:59:45.3859679Z tests/install/test_install.py::TestPreFlightChecks::test_check_git_installed_failure PASSED [ 14%]
+2025-11-07T12:59:45.6268243Z tests/install/test_install.py::TestPreFlightChecks::test_check_git_repo_valid PASSED [ 19%]
+2025-11-07T12:59:45.6289754Z tests/install/test_install.py::TestPreFlightChecks::test_check_git_repo_invalid PASSED [ 23%]
+2025-11-07T12:59:45.8846300Z tests/install/test_install.py::TestExistingInstallationDetection::test_detect_existing_installation_none PASSED [ 28%]
+2025-11-07T12:59:46.1383274Z tests/install/test_install.py::TestExistingInstallationDetection::test_detect_existing_installation_found PASSED [ 33%]
+2025-11-07T12:59:46.4573742Z tests/install/test_install.py::TestFileOperations::test_copy_prompts PASSED [ 38%]
+2025-11-07T12:59:46.7526255Z tests/install/test_install.py::TestFileOperations::test_copy_framework PASSED [ 42%]
+2025-11-07T12:59:47.0238051Z tests/install/test_install.py::TestFileOperations::test_copy_seed_templates PASSED [ 47%]
+2025-11-07T12:59:47.2611515Z tests/install/test_install.py::TestSettingsMerge::test_merge_settings_empty_target PASSED [ 52%]
+2025-11-07T12:59:47.2622549Z tests/install/test_install.py::TestSettingsMerge::test_merge_settings_existing_values PASSED [ 57%]
+2025-11-07T12:59:47.2633680Z tests/install/test_install.py::TestSettingsMerge::test_merge_settings_object_merge PASSED [ 61%]
+2025-11-07T12:59:47.5096195Z tests/install/test_install.py::TestGitignoreUpdate::test_update_gitignore_new_file PASSED [ 66%]
+2025-11-07T12:59:47.7607873Z tests/install/test_install.py::TestGitignoreUpdate::test_update_gitignore_existing_file PASSED [ 71%]
+2025-11-07T12:59:48.0115693Z tests/install/test_install.py::TestGitignoreUpdate::test_update_gitignore_already_present PASSED [ 76%]
+2025-11-07T12:59:48.3276758Z tests/install/test_install.py::TestVerification::test_verify_installation_success PASSED [ 80%]
+2025-11-07T12:59:48.5743017Z tests/install/test_install.py::TestVerification::test_verify_installation_missing_files PASSED [ 85%]
+2025-11-07T12:59:48.5756792Z tests/install/test_install.py::TestOutputFunctions::test_print_banner PASSED [ 90%]
+2025-11-07T12:59:48.5770334Z tests/install/test_install.py::TestOutputFunctions::test_print_success PASSED [ 95%]
+2025-11-07T12:59:48.6029207Z tests/install/test_install.py::TestOutputFunctions::test_print_error PASSED [100%]
+2025-11-07T12:59:48.6029683Z 
+2025-11-07T12:59:48.6029810Z ============================= 21 passed in 3.25s ==============================
+2025-11-07T12:59:48.6317386Z [OK] Install tests passed
+2025-11-07T12:59:48.6321336Z 
+2025-11-07T12:59:48.6328722Z [4/4] Running PowerShell tests (Pester)
+2025-11-07T12:59:52.1580476Z [95m
+2025-11-07T12:59:52.1581944Z [95mStarting discovery in 1 files.[0m
+2025-11-07T12:59:53.8841740Z [95mDiscovery found 27 tests in 1.34s.[0m
+2025-11-07T12:59:53.9908546Z [95mRunning tests.[0m
+2025-11-07T12:59:58.2162010Z Test message
+2025-11-07T12:59:58.2234108Z Test
+2025-11-07T12:59:58.9133535Z [32m[+] D:\a\requirements-driven-development\requirements-driven-development\tests\powershell\Install.Tests.ps1[0m[90m 6.05s (1.81s|3.04s)[0m
+2025-11-07T12:59:59.4951335Z [97mTests completed in 6.17s[0m
+2025-11-07T12:59:59.5180812Z [32mTests Passed: 27, [0m[90mFailed: 0, [0m[90mSkipped: 0, [0m[90mInconclusive: 0, [0m[37m[0m[90mNotRun: 0[0m
+2025-11-07T12:59:59.8846291Z [OK] PowerShell tests passed
+2025-11-07T12:59:59.8850109Z 
+2025-11-07T12:59:59.8854009Z 
+2025-11-07T12:59:59.8861177Z ============================================================
+2025-11-07T12:59:59.8868728Z   Test Summary
+2025-11-07T12:59:59.8875751Z ============================================================
+2025-11-07T12:59:59.8879187Z 
+2025-11-07T12:59:59.8886743Z Total test suites: 4
+2025-11-07T12:59:59.8894060Z Passed: 3
+2025-11-07T12:59:59.8901310Z Failed: 1
+2025-11-07T12:59:59.8905295Z 
+2025-11-07T12:59:59.8912617Z [ERROR] Some tests failed
+2025-11-07T12:59:59.9158331Z ##[error]Process completed with exit code 1.
+2025-11-07T12:59:59.9389013Z Post job cleanup.
+2025-11-07T13:00:00.1874957Z [command]"C:\Program Files\Git\bin\git.exe" version
+2025-11-07T13:00:00.2172026Z git version 2.51.1.windows.1
+2025-11-07T13:00:00.2251132Z Temporarily overriding HOME='D:\a\_temp\c1ce133f-0576-4e49-8e7d-bb2a5dda2b5e' before making global git config changes
+2025-11-07T13:00:00.2252757Z Adding repository directory to the temporary git global config as a safe directory
+2025-11-07T13:00:00.2263927Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\requirements-driven-development\requirements-driven-development
+2025-11-07T13:00:00.2598501Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2025-11-07T13:00:00.2935607Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2025-11-07T13:00:00.8903933Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-11-07T13:00:00.9188119Z http.https://github.com/.extraheader
+2025-11-07T13:00:00.9245129Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all http.https://github.com/.extraheader
+2025-11-07T13:00:00.9580086Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2025-11-07T13:00:01.5465927Z Cleaning up orphan processes

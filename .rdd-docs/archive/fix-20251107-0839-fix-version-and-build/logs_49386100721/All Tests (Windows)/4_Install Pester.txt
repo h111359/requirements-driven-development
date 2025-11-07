@@ -1,0 +1,10 @@
+﻿2025-11-07T12:59:02.2646593Z ##[group]Run Install-Module -Name Pester -Force -SkipPublisherCheck
+2025-11-07T12:59:02.2647253Z [36;1mInstall-Module -Name Pester -Force -SkipPublisherCheck[0m
+2025-11-07T12:59:02.3101376Z shell: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE -command ". '{0}'"
+2025-11-07T12:59:02.3101840Z env:
+2025-11-07T12:59:02.3102113Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:59:02.3102753Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.9.13\x64/lib/pkgconfig
+2025-11-07T12:59:02.3103216Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:59:02.3103605Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:59:02.3103993Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:59:02.3104293Z ##[endgroup]

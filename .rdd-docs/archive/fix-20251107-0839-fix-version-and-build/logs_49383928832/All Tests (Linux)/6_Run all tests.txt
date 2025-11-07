@@ -1,0 +1,172 @@
+﻿2025-11-07T12:26:55.2274471Z ##[group]Run bash scripts/run-tests.sh
+2025-11-07T12:26:55.2274795Z [36;1mbash scripts/run-tests.sh[0m
+2025-11-07T12:26:55.2307929Z shell: /usr/bin/bash -e {0}
+2025-11-07T12:26:55.2308153Z env:
+2025-11-07T12:26:55.2308381Z   pythonLocation: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:26:55.2308779Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.9.24/x64/lib/pkgconfig
+2025-11-07T12:26:55.2309152Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:26:55.2309480Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:26:55.2309811Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:26:55.2310575Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.9.24/x64/lib
+2025-11-07T12:26:55.2310909Z ##[endgroup]
+2025-11-07T12:26:55.2397274Z 
+2025-11-07T12:26:55.2397529Z ============================================================
+2025-11-07T12:26:55.2397996Z   RDD Framework Test Runner (Linux)
+2025-11-07T12:26:55.2398406Z ============================================================
+2025-11-07T12:26:55.2398664Z 
+2025-11-07T12:26:55.2399023Z [0;34mℹ[0m Checking prerequisites...
+2025-11-07T12:26:55.2414304Z [0;32m✓[0m Python found: Python 3.9.24
+2025-11-07T12:26:55.2414822Z [0;32m✓[0m Virtual environment found
+2025-11-07T12:26:55.2415318Z [0;34mℹ[0m Activating virtual environment...
+2025-11-07T12:26:55.2417857Z [0;32m✓[0m Virtual environment activated
+2025-11-07T12:26:55.9559431Z [0;32m✓[0m pytest found: pytest 8.4.2
+2025-11-07T12:26:55.9559830Z 
+2025-11-07T12:26:55.9559840Z 
+2025-11-07T12:26:55.9559993Z ============================================================
+2025-11-07T12:26:55.9560641Z   Running Tests
+2025-11-07T12:26:55.9561013Z ============================================================
+2025-11-07T12:26:55.9561309Z 
+2025-11-07T12:26:55.9561559Z [0;34m[1/4][0m Running Python unit tests
+2025-11-07T12:26:56.4956340Z ============================= test session starts ==============================
+2025-11-07T12:26:56.4957379Z platform linux -- Python 3.9.24, pytest-8.4.2, pluggy-1.6.0 -- /home/runner/work/requirements-driven-development/requirements-driven-development/.venv/bin/python
+2025-11-07T12:26:56.4958058Z cachedir: .pytest_cache
+2025-11-07T12:26:56.4958449Z rootdir: /home/runner/work/requirements-driven-development/requirements-driven-development
+2025-11-07T12:26:56.4958945Z plugins: timeout-2.4.0, cov-7.0.0, xdist-3.8.0, mock-3.15.1
+2025-11-07T12:26:56.5789556Z collecting ... collected 49 items
+2025-11-07T12:26:56.5789986Z 
+2025-11-07T12:26:56.6088036Z tests/python/test_integration.py::TestChangeWorkflow::test_fix_branch_workflow PASSED [  2%]
+2025-11-07T12:26:56.6339528Z tests/python/test_integration.py::TestRequirementsManagement::test_requirements_changes_format PASSED [  4%]
+2025-11-07T12:26:56.6582295Z tests/python/test_integration.py::TestWorkspaceArchiving::test_workspace_backup_creation PASSED [  6%]
+2025-11-07T12:26:56.6874250Z tests/python/test_integration.py::TestGitIntegration::test_branch_creation_and_switching PASSED [  8%]
+2025-11-07T12:26:56.7137256Z tests/python/test_integration.py::TestGitIntegration::test_uncommitted_changes_detection PASSED [ 10%]
+2025-11-07T12:26:56.7497656Z tests/python/test_integration.py::TestConfigManagement::test_config_read_write_cycle PASSED [ 12%]
+2025-11-07T12:26:56.7797346Z tests/python/test_integration.py::TestConfigManagement::test_config_default_branch PASSED [ 14%]
+2025-11-07T12:26:56.7815377Z tests/python/test_rdd_main.py::TestCLIHelp::test_version_command PASSED  [ 16%]
+2025-11-07T12:26:56.7827382Z tests/python/test_rdd_main.py::TestCLIHelp::test_help_command PASSED     [ 18%]
+2025-11-07T12:26:56.7838989Z tests/python/test_rdd_main.py::TestDomainRouting::test_config_show_routing PASSED [ 20%]
+2025-11-07T12:26:56.7851941Z tests/python/test_rdd_main.py::TestDomainRouting::test_workspace_init_routing PASSED [ 22%]
+2025-11-07T12:26:56.7952178Z tests/python/test_rdd_main.py::TestChangeCommands::test_change_create_requires_default_branch PASSED [ 24%]
+2025-11-07T12:26:56.8668381Z tests/python/test_rdd_main.py::TestMenuInteraction::test_curses_menu_selection PASSED [ 26%]
+2025-11-07T12:26:56.8680691Z tests/python/test_rdd_main.py::TestValidationCommands::test_check_repo_valid PASSED [ 28%]
+2025-11-07T12:26:56.8692823Z tests/python/test_rdd_main.py::TestErrorHandling::test_no_command_shows_help PASSED [ 30%]
+2025-11-07T12:26:56.8705888Z tests/python/test_rdd_main.py::TestErrorHandling::test_invalid_domain_error PASSED [ 32%]
+2025-11-07T12:26:56.8718726Z tests/python/test_rdd_main.py::TestErrorHandling::test_invalid_action_error PASSED [ 34%]
+2025-11-07T12:26:56.8729430Z tests/python/test_rdd_utils.py::TestOutputFunctions::test_print_success PASSED [ 36%]
+2025-11-07T12:26:56.8740637Z tests/python/test_rdd_utils.py::TestOutputFunctions::test_print_error PASSED [ 38%]
+2025-11-07T12:26:56.8751012Z tests/python/test_rdd_utils.py::TestOutputFunctions::test_print_warning PASSED [ 40%]
+2025-11-07T12:26:56.8761879Z tests/python/test_rdd_utils.py::TestOutputFunctions::test_print_info PASSED [ 42%]
+2025-11-07T12:26:56.8773344Z tests/python/test_rdd_utils.py::TestValidationFunctions::test_validate_name_valid PASSED [ 44%]
+2025-11-07T12:26:56.8782932Z tests/python/test_rdd_utils.py::TestValidationFunctions::test_validate_name_with_spaces PASSED [ 46%]
+2025-11-07T12:26:56.8792509Z tests/python/test_rdd_utils.py::TestValidationFunctions::test_validate_name_with_special_chars PASSED [ 48%]
+2025-11-07T12:26:56.8801815Z tests/python/test_rdd_utils.py::TestValidationFunctions::test_validate_name_empty PASSED [ 51%]
+2025-11-07T12:26:56.8812680Z tests/python/test_rdd_utils.py::TestValidationFunctions::test_normalize_to_kebab_case PASSED [ 53%]
+2025-11-07T12:26:56.8826420Z tests/python/test_rdd_utils.py::TestValidationFunctions::test_validate_file_exists PASSED [ 55%]
+2025-11-07T12:26:56.8838487Z tests/python/test_rdd_utils.py::TestValidationFunctions::test_validate_dir_exists PASSED [ 57%]
+2025-11-07T12:26:56.8857942Z tests/python/test_rdd_utils.py::TestGitFunctions::test_check_git_repo_valid PASSED [ 59%]
+2025-11-07T12:26:56.8873216Z tests/python/test_rdd_utils.py::TestGitFunctions::test_check_git_repo_invalid PASSED [ 61%]
+2025-11-07T12:26:56.8886048Z tests/python/test_rdd_utils.py::TestGitFunctions::test_get_current_branch PASSED [ 63%]
+2025-11-07T12:26:56.9143572Z tests/python/test_rdd_utils.py::TestGitFunctions::test_get_default_branch_from_config PASSED [ 65%]
+2025-11-07T12:26:56.9156150Z tests/python/test_rdd_utils.py::TestGitFunctions::test_get_branch_type_fix PASSED [ 67%]
+2025-11-07T12:26:56.9169230Z tests/python/test_rdd_utils.py::TestGitFunctions::test_get_branch_type_enh PASSED [ 69%]
+2025-11-07T12:26:56.9182328Z tests/python/test_rdd_utils.py::TestGitFunctions::test_get_branch_type_main PASSED [ 71%]
+2025-11-07T12:26:56.9195389Z tests/python/test_rdd_utils.py::TestGitFunctions::test_is_enh_or_fix_branch PASSED [ 73%]
+2025-11-07T12:26:56.9204287Z tests/python/test_rdd_utils.py::TestTimestampFunctions::test_get_timestamp_format PASSED [ 75%]
+2025-11-07T12:26:56.9212938Z tests/python/test_rdd_utils.py::TestTimestampFunctions::test_get_timestamp_filename_format PASSED [ 77%]
+2025-11-07T12:26:56.9483870Z tests/python/test_rdd_utils.py::TestConfigFunctions::test_get_rdd_config_existing_key PASSED [ 79%]
+2025-11-07T12:26:56.9756178Z tests/python/test_rdd_utils.py::TestConfigFunctions::test_get_rdd_config_missing_key_with_default PASSED [ 81%]
+2025-11-07T12:26:57.0030675Z tests/python/test_rdd_utils.py::TestConfigFunctions::test_set_rdd_config PASSED [ 83%]
+2025-11-07T12:26:57.0305575Z tests/python/test_rdd_utils.py::TestConfigFunctions::test_get_rdd_config_path PASSED [ 85%]
+2025-11-07T12:26:57.0320530Z tests/python/test_rdd_utils.py::TestWorkspaceUtilities::test_ensure_dir_creates_directory PASSED [ 87%]
+2025-11-07T12:26:57.0332318Z tests/python/test_rdd_utils.py::TestWorkspaceUtilities::test_ensure_dir_existing_directory PASSED [ 89%]
+2025-11-07T12:26:57.0576529Z tests/python/test_rdd_utils.py::TestPromptFunctions::test_mark_prompt_completed PASSED [ 91%]
+2025-11-07T12:26:57.0591702Z tests/python/test_rdd_utils.py::TestConfirmAction::test_confirm_action_yes PASSED [ 93%]
+2025-11-07T12:26:57.0603290Z tests/python/test_rdd_utils.py::TestConfirmAction::test_confirm_action_no PASSED [ 95%]
+2025-11-07T12:26:57.0615140Z tests/python/test_rdd_utils.py::TestConfirmAction::test_confirm_action_yes_full PASSED [ 97%]
+2025-11-07T12:26:57.0862636Z tests/python/test_rdd_utils.py::TestConfirmAction::test_confirm_action_invalid PASSED [100%]
+2025-11-07T12:26:57.0863238Z 
+2025-11-07T12:26:57.0863432Z ============================== 49 passed in 0.58s ==============================
+2025-11-07T12:26:57.1102304Z [0;32m✓[0m Python unit tests passed
+2025-11-07T12:26:57.1102631Z 
+2025-11-07T12:26:57.1102836Z [0;34m[2/4][0m Running build tests
+2025-11-07T12:26:57.3083420Z ============================= test session starts ==============================
+2025-11-07T12:26:57.3084768Z platform linux -- Python 3.9.24, pytest-8.4.2, pluggy-1.6.0 -- /home/runner/work/requirements-driven-development/requirements-driven-development/.venv/bin/python
+2025-11-07T12:26:57.3085956Z cachedir: .pytest_cache
+2025-11-07T12:26:57.3086738Z rootdir: /home/runner/work/requirements-driven-development/requirements-driven-development
+2025-11-07T12:26:57.3087649Z plugins: timeout-2.4.0, cov-7.0.0, xdist-3.8.0, mock-3.15.1
+2025-11-07T12:26:57.3383841Z collecting ... collected 15 items
+2025-11-07T12:26:57.3384155Z 
+2025-11-07T12:26:57.3419190Z tests/build/test_build.py::TestVersionExtraction::test_read_version_from_config PASSED [  6%]
+2025-11-07T12:26:57.3460771Z tests/build/test_build.py::TestBuildDirCreation::test_create_build_dir PASSED [ 13%]
+2025-11-07T12:26:57.3505167Z tests/build/test_build.py::TestFileCopying::test_copy_prompts PASSED     [ 20%]
+2025-11-07T12:26:57.3547937Z tests/build/test_build.py::TestFileCopying::test_copy_scripts PASSED     [ 26%]
+2025-11-07T12:26:57.3590505Z tests/build/test_build.py::TestFileCopying::test_copy_templates PASSED   [ 33%]
+2025-11-07T12:26:57.3631975Z tests/build/test_build.py::TestFileCopying::test_copy_vscode_settings PASSED [ 40%]
+2025-11-07T12:26:57.3678969Z tests/build/test_build.py::TestFileCopying::test_copy_rdd_docs_seeds PASSED [ 46%]
+2025-11-07T12:26:57.3722844Z tests/build/test_build.py::TestTemplateGeneration::test_generate_readme PASSED [ 53%]
+2025-11-07T12:26:57.3764892Z tests/build/test_build.py::TestTemplateGeneration::test_generate_installer PASSED [ 60%]
+2025-11-07T12:26:57.3806532Z tests/build/test_build.py::TestTemplateGeneration::test_generate_bash_installer PASSED [ 66%]
+2025-11-07T12:26:57.3847926Z tests/build/test_build.py::TestTemplateGeneration::test_generate_powershell_installer PASSED [ 73%]
+2025-11-07T12:26:57.3900509Z tests/build/test_build.py::TestArchiveCreation::test_create_archive PASSED [ 80%]
+2025-11-07T12:26:57.3948768Z tests/build/test_build.py::TestChecksumGeneration::test_generate_checksum PASSED [ 86%]
+2025-11-07T12:26:57.3959414Z tests/build/test_build.py::TestOutputFunctions::test_print_success PASSED [ 93%]
+2025-11-07T12:26:57.4167719Z tests/build/test_build.py::TestOutputFunctions::test_print_error PASSED  [100%]
+2025-11-07T12:26:57.4168271Z 
+2025-11-07T12:26:57.4168458Z ============================== 15 passed in 0.10s ==============================
+2025-11-07T12:26:57.4373332Z [0;32m✓[0m Build tests passed
+2025-11-07T12:26:57.4373619Z 
+2025-11-07T12:26:57.4373835Z [0;34m[3/4][0m Running install tests
+2025-11-07T12:26:57.6428806Z ============================= test session starts ==============================
+2025-11-07T12:26:57.6429736Z platform linux -- Python 3.9.24, pytest-8.4.2, pluggy-1.6.0 -- /home/runner/work/requirements-driven-development/requirements-driven-development/.venv/bin/python
+2025-11-07T12:26:57.6430798Z cachedir: .pytest_cache
+2025-11-07T12:26:57.6431549Z rootdir: /home/runner/work/requirements-driven-development/requirements-driven-development
+2025-11-07T12:26:57.6432157Z plugins: timeout-2.4.0, cov-7.0.0, xdist-3.8.0, mock-3.15.1
+2025-11-07T12:26:57.6726658Z collecting ... collected 21 items
+2025-11-07T12:26:57.6726895Z 
+2025-11-07T12:26:57.6736872Z tests/install/test_install.py::TestPreFlightChecks::test_check_python_version_success PASSED [  4%]
+2025-11-07T12:26:57.6749712Z tests/install/test_install.py::TestPreFlightChecks::test_check_git_installed_success PASSED [  9%]
+2025-11-07T12:26:57.6761697Z tests/install/test_install.py::TestPreFlightChecks::test_check_git_installed_failure PASSED [ 14%]
+2025-11-07T12:26:57.7004279Z tests/install/test_install.py::TestPreFlightChecks::test_check_git_repo_valid PASSED [ 19%]
+2025-11-07T12:26:57.7017902Z tests/install/test_install.py::TestPreFlightChecks::test_check_git_repo_invalid PASSED [ 23%]
+2025-11-07T12:26:57.7242503Z tests/install/test_install.py::TestExistingInstallationDetection::test_detect_existing_installation_none PASSED [ 28%]
+2025-11-07T12:26:57.7467983Z tests/install/test_install.py::TestExistingInstallationDetection::test_detect_existing_installation_found PASSED [ 33%]
+2025-11-07T12:26:57.7729277Z tests/install/test_install.py::TestFileOperations::test_copy_prompts PASSED [ 38%]
+2025-11-07T12:26:57.7979768Z tests/install/test_install.py::TestFileOperations::test_copy_framework PASSED [ 42%]
+2025-11-07T12:26:57.8226181Z tests/install/test_install.py::TestFileOperations::test_copy_seed_templates PASSED [ 47%]
+2025-11-07T12:26:57.8449147Z tests/install/test_install.py::TestSettingsMerge::test_merge_settings_empty_target PASSED [ 52%]
+2025-11-07T12:26:57.8458649Z tests/install/test_install.py::TestSettingsMerge::test_merge_settings_existing_values PASSED [ 57%]
+2025-11-07T12:26:57.8467153Z tests/install/test_install.py::TestSettingsMerge::test_merge_settings_object_merge PASSED [ 61%]
+2025-11-07T12:26:57.8689520Z tests/install/test_install.py::TestGitignoreUpdate::test_update_gitignore_new_file PASSED [ 66%]
+2025-11-07T12:26:57.8914952Z tests/install/test_install.py::TestGitignoreUpdate::test_update_gitignore_existing_file PASSED [ 71%]
+2025-11-07T12:26:57.9139350Z tests/install/test_install.py::TestGitignoreUpdate::test_update_gitignore_already_present PASSED [ 76%]
+2025-11-07T12:26:57.9525072Z tests/install/test_install.py::TestVerification::test_verify_installation_success PASSED [ 80%]
+2025-11-07T12:26:57.9747886Z tests/install/test_install.py::TestVerification::test_verify_installation_missing_files PASSED [ 85%]
+2025-11-07T12:26:57.9759873Z tests/install/test_install.py::TestOutputFunctions::test_print_banner PASSED [ 90%]
+2025-11-07T12:26:57.9770604Z tests/install/test_install.py::TestOutputFunctions::test_print_success PASSED [ 95%]
+2025-11-07T12:26:58.0005966Z tests/install/test_install.py::TestOutputFunctions::test_print_error PASSED [100%]
+2025-11-07T12:26:58.0006537Z 
+2025-11-07T12:26:58.0006725Z ============================== 21 passed in 0.35s ==============================
+2025-11-07T12:26:58.0229594Z [0;32m✓[0m Install tests passed
+2025-11-07T12:26:58.0229912Z 
+2025-11-07T12:26:58.0230326Z [0;34m[4/4][0m Running shell tests (BATS)
+2025-11-07T12:26:58.0762451Z 1..10
+2025-11-07T12:26:58.1567645Z ok 1 install.sh exists and is executable
+2025-11-07T12:26:58.1883242Z ok 2 install.sh shows version banner # skip Interactive test - requires user input
+2025-11-07T12:26:58.2217154Z ok 3 check python3 availability
+2025-11-07T12:26:58.2549639Z ok 4 check git availability
+2025-11-07T12:26:58.2944758Z ok 5 create test git repository
+2025-11-07T12:26:58.3258438Z ok 6 install.py can be executed with python # skip install.py is interactive and doesn't support --help flag
+2025-11-07T12:26:58.3614340Z ok 7 directory navigation functions work
+2025-11-07T12:26:58.3997865Z ok 8 git repository detection works
+2025-11-07T12:26:58.4375803Z ok 9 file operations work correctly
+2025-11-07T12:26:58.4733898Z ok 10 directory traversal safety
+2025-11-07T12:26:58.4817657Z [0;32m✓[0m Shell tests passed
+2025-11-07T12:26:58.4818247Z 
+2025-11-07T12:26:58.4818261Z 
+2025-11-07T12:26:58.4818405Z ============================================================
+2025-11-07T12:26:58.4818814Z   Test Summary
+2025-11-07T12:26:58.4819111Z ============================================================
+2025-11-07T12:26:58.4819412Z 
+2025-11-07T12:26:58.4819539Z Total test suites: 4
+2025-11-07T12:26:58.4820338Z [0;32mPassed: 4[0m
+2025-11-07T12:26:58.4820532Z 
+2025-11-07T12:26:58.4820739Z [0;32m✓[0m All tests passed!

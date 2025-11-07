@@ -138,19 +138,18 @@ def validate_name(name: str) -> bool:
 
 def validate_branch_name(branch_name: str) -> bool:
     """
-    Validate branch name format: {type}/{timestamp}-{name}.
-    Where type is enh or fix.
+    Validate branch name format: kebab-case only.
     Returns True if valid, False if invalid.
     """
     if not branch_name:
         print_error("Branch name cannot be empty")
         return False
     
-    # Check format: {type}/{timestamp}-{name}
-    if not re.match(r'^(enh|fix)/[0-9]{8}-[0-9]{4}-.+$', branch_name):
+    # Check kebab-case format (lowercase, hyphens, numbers, slashes allowed)
+    if not re.match(r'^[a-z0-9]+([/-][a-z0-9]+)*$', branch_name):
         print_error(f"Invalid branch name format: '{branch_name}'")
-        print_error("Expected format: {enh|fix}/{YYYYMMDD-HHmm}-{name}")
-        print_error("Example: enh/20231101-1234-my-enhancement")
+        print_error("Must be kebab-case (lowercase, hyphens, numbers, and slashes only)")
+        print_error("Example: fix/my-bugfix, my-enhancement, 20251107-my-fix")
         return False
     
     return True
@@ -195,7 +194,8 @@ def validate_dir_exists(dir_path: str, dir_description: str = "Directory") -> bo
 def normalize_to_kebab_case(input_str: str) -> Optional[str]:
     """
     Normalize text to kebab-case format.
-    Handles various inputs: "Add User Auth", "fix_login_bug", "update-README"
+    Handles various inputs: "Add User Auth", "fix_login_bug", "fix/update-README"
+    Preserves slashes for branch prefixes like "fix/" or "enh/"
     Returns kebab-case string or None on failure.
     """
     if not input_str:
@@ -203,14 +203,14 @@ def normalize_to_kebab_case(input_str: str) -> Optional[str]:
     
     # Normalization steps:
     # 1. Convert to lowercase
-    # 2. Replace underscores and spaces with hyphens
-    # 3. Remove any characters that aren't lowercase letters, numbers, or hyphens
+    # 2. Replace underscores and spaces with hyphens (but keep slashes)
+    # 3. Remove any characters that aren't lowercase letters, numbers, hyphens, or slashes
     # 4. Replace multiple consecutive hyphens with single hyphen
-    # 5. Remove leading and trailing hyphens
+    # 5. Remove leading and trailing hyphens (but not slashes)
     
     normalized = input_str.lower()
     normalized = normalized.replace('_', '-').replace(' ', '-')
-    normalized = re.sub(r'[^a-z0-9-]', '', normalized)
+    normalized = re.sub(r'[^a-z0-9/-]', '', normalized)
     normalized = re.sub(r'-+', '-', normalized)
     normalized = normalized.strip('-')
     

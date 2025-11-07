@@ -1,0 +1,12 @@
+﻿2025-11-07T12:18:05.0236933Z ##[group]Run actions/setup-python@v5
+2025-11-07T12:18:05.0237292Z with:
+2025-11-07T12:18:05.0238524Z   python-version: 3.9
+2025-11-07T12:18:05.0238748Z   check-latest: false
+2025-11-07T12:18:05.0239089Z   token: ***
+2025-11-07T12:18:05.0239270Z   update-environment: true
+2025-11-07T12:18:05.0239492Z   allow-prereleases: false
+2025-11-07T12:18:05.0239688Z   freethreaded: false
+2025-11-07T12:18:05.0239873Z ##[endgroup]
+2025-11-07T12:18:05.2557561Z ##[group]Installed versions
+2025-11-07T12:18:05.3369784Z Successfully set up CPython (3.9.13)
+2025-11-07T12:18:05.3371526Z ##[endgroup]

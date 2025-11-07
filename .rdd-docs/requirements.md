@@ -86,6 +86,9 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-63] Seed Template Installation**: The build process shall copy one-time seed templates (config.json, data-model.md, requirements.md, tech-spec.md) to .rdd-docs/ directory during installation, not during change creation
 - **[FR-64] Seed Template Validation**: The change creation process shall validate existence of seed templates in .rdd-docs/ and notify user if missing, indicating installation issue
 - **[FR-65] Template File Organization**: One-time seed templates shall be stored in templates/ directory (not .rdd/templates/) and included in build archives under .rdd-docs/ for direct installation
+- **[FR-66] User-Controlled Branch Naming**: The change creation workflow shall accept complete branch names from users without automatically adding type prefixes (fix/ or enh/), allowing users full control over branch naming conventions
+- **[FR-67] Flexible Branch Name Validation**: Branch name validation shall only enforce kebab-case format with support for forward slashes, allowing users to include custom prefixes, timestamps, or any naming convention they prefer
+- **[FR-68] Branch Type for Workspace Context**: The fix/enhancement type selection shall be preserved for determining workspace initialization content, but shall not affect the branch name provided by users
 
 # Non-Functional Requirements
 

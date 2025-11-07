@@ -1,0 +1,30 @@
+﻿2025-11-07T12:26:56.3621777Z ##[group]Run python setup-test-env.py
+2025-11-07T12:26:56.3622149Z [36;1mpython setup-test-env.py[0m
+2025-11-07T12:26:56.4122269Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2025-11-07T12:26:56.4122665Z env:
+2025-11-07T12:26:56.4122974Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:26:56.4123451Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.9.13\x64/lib/pkgconfig
+2025-11-07T12:26:56.4123917Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:26:56.4124349Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:26:56.4124791Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:26:56.4125131Z ##[endgroup]
+2025-11-07T12:27:21.0937173Z ✗ Failed to upgrade pip:
+2025-11-07T12:27:21.0937935Z ERROR: Could not install packages due to an OSError: [WinError 5] Access is denied: 'd:\\a\\requirements-driven-development\\requirements-driven-development\\.venv\\scripts\\pip.exe'
+2025-11-07T12:27:21.0939224Z Check the permissions.
+2025-11-07T12:27:21.0939425Z 
+2025-11-07T12:27:21.0939435Z 
+2025-11-07T12:27:21.0939455Z 
+2025-11-07T12:27:21.0939574Z ============================================================
+2025-11-07T12:27:21.0939957Z   RDD Test Environment Setup
+2025-11-07T12:27:21.0940274Z ============================================================
+2025-11-07T12:27:21.0940537Z 
+2025-11-07T12:27:21.0940752Z ✓ Python 3.9.13 detected
+2025-11-07T12:27:21.0940941Z 
+2025-11-07T12:27:21.0941317Z Repository root: D:\a\requirements-driven-development\requirements-driven-development
+2025-11-07T12:27:21.0941929Z Virtual environment: D:\a\requirements-driven-development\requirements-driven-development\.venv
+2025-11-07T12:27:21.0942587Z Requirements file: D:\a\requirements-driven-development\requirements-driven-development\tests\requirements.txt
+2025-11-07T12:27:21.0942988Z 
+2025-11-07T12:27:21.0943679Z ℹ Creating virtual environment at D:\a\requirements-driven-development\requirements-driven-development\.venv...
+2025-11-07T12:27:21.0944624Z ✓ Virtual environment created
+2025-11-07T12:27:21.0945035Z ℹ Upgrading pip...
+2025-11-07T12:27:21.8808432Z ##[error]Process completed with exit code 1.

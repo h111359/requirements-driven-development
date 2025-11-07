@@ -1,0 +1,166 @@
+﻿2025-11-07T12:00:33.5976905Z Current runner version: '2.329.0'
+2025-11-07T12:00:33.6015672Z ##[group]Runner Image Provisioner
+2025-11-07T12:00:33.6016927Z Hosted Compute Agent
+2025-11-07T12:00:33.6017807Z Version: 20251016.436
+2025-11-07T12:00:33.6018622Z Commit: 8ab8ac8bfd662a3739dab9fe09456aba92132568
+2025-11-07T12:00:33.6019695Z Build Date: 2025-10-15T20:44:12Z
+2025-11-07T12:00:33.6020506Z ##[endgroup]
+2025-11-07T12:00:33.6021244Z ##[group]Operating System
+2025-11-07T12:00:33.6022212Z Microsoft Windows Server 2025
+2025-11-07T12:00:33.6023104Z 10.0.26100
+2025-11-07T12:00:33.6023793Z Datacenter
+2025-11-07T12:00:33.6024626Z ##[endgroup]
+2025-11-07T12:00:33.6025534Z ##[group]Runner Image
+2025-11-07T12:00:33.6026265Z Image: windows-2025
+2025-11-07T12:00:33.6027829Z Version: 20251021.67.1
+2025-11-07T12:00:33.6029136Z Included Software: https://github.com/actions/runner-images/blob/win25/20251021.67/images/windows/Windows2025-Readme.md
+2025-11-07T12:00:33.6030947Z Image Release: https://github.com/actions/runner-images/releases/tag/win25%2F20251021.67
+2025-11-07T12:00:33.6031884Z ##[endgroup]
+2025-11-07T12:00:33.6032939Z ##[group]GITHUB_TOKEN Permissions
+2025-11-07T12:00:33.6034855Z Contents: read
+2025-11-07T12:00:33.6035303Z Metadata: read
+2025-11-07T12:00:33.6035774Z Packages: read
+2025-11-07T12:00:33.6036319Z ##[endgroup]
+2025-11-07T12:00:33.6038397Z Secret source: Actions
+2025-11-07T12:00:33.6039036Z Prepare workflow directory
+2025-11-07T12:00:33.6447910Z Prepare all required actions
+2025-11-07T12:00:33.6487608Z Getting action download info
+2025-11-07T12:00:33.9187301Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-11-07T12:00:34.0456329Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2025-11-07T12:00:34.2884654Z Complete job name: All Tests (Windows)
+2025-11-07T12:00:34.4686446Z ##[group]Run actions/checkout@v4
+2025-11-07T12:00:34.4687760Z with:
+2025-11-07T12:00:34.4688304Z   repository: h111359/requirements-driven-development
+2025-11-07T12:00:34.4689289Z   token: ***
+2025-11-07T12:00:34.4689742Z   ssh-strict: true
+2025-11-07T12:00:34.4690139Z   ssh-user: git
+2025-11-07T12:00:34.4690600Z   persist-credentials: true
+2025-11-07T12:00:34.4691091Z   clean: true
+2025-11-07T12:00:34.4691491Z   sparse-checkout-cone-mode: true
+2025-11-07T12:00:34.4692004Z   fetch-depth: 1
+2025-11-07T12:00:34.4692380Z   fetch-tags: false
+2025-11-07T12:00:34.4692840Z   show-progress: true
+2025-11-07T12:00:34.4693281Z   lfs: false
+2025-11-07T12:00:34.4693687Z   submodules: false
+2025-11-07T12:00:34.4694112Z   set-safe-directory: true
+2025-11-07T12:00:34.4694907Z ##[endgroup]
+2025-11-07T12:00:34.7104258Z Syncing repository: h111359/requirements-driven-development
+2025-11-07T12:00:34.7106721Z ##[group]Getting Git version info
+2025-11-07T12:00:34.7107764Z Working directory is 'D:\a\requirements-driven-development\requirements-driven-development'
+2025-11-07T12:00:34.7909332Z [command]"C:\Program Files\Git\bin\git.exe" version
+2025-11-07T12:00:35.0418400Z git version 2.51.1.windows.1
+2025-11-07T12:00:35.0475410Z ##[endgroup]
+2025-11-07T12:00:35.0499764Z Temporarily overriding HOME='D:\a\_temp\e49042b6-6b38-469e-a710-1bdf49179055' before making global git config changes
+2025-11-07T12:00:35.0501074Z Adding repository directory to the temporary git global config as a safe directory
+2025-11-07T12:00:35.0512106Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\requirements-driven-development\requirements-driven-development
+2025-11-07T12:00:35.0860429Z Deleting the contents of 'D:\a\requirements-driven-development\requirements-driven-development'
+2025-11-07T12:00:35.0867525Z ##[group]Initializing the repository
+2025-11-07T12:00:35.0878493Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\requirements-driven-development\requirements-driven-development
+2025-11-07T12:00:35.1792091Z Initialized empty Git repository in D:/a/requirements-driven-development/requirements-driven-development/.git/
+2025-11-07T12:00:35.1854306Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/h111359/requirements-driven-development
+2025-11-07T12:00:35.2257058Z ##[endgroup]
+2025-11-07T12:00:35.2258730Z ##[group]Disabling automatic garbage collection
+2025-11-07T12:00:35.2265039Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2025-11-07T12:00:35.2599980Z ##[endgroup]
+2025-11-07T12:00:35.2601377Z ##[group]Setting up auth
+2025-11-07T12:00:35.2615875Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2025-11-07T12:00:35.2951741Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2025-11-07T12:00:36.4435557Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-11-07T12:00:36.4768485Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2025-11-07T12:00:37.0562525Z [command]"C:\Program Files\Git\bin\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2025-11-07T12:00:37.0915729Z ##[endgroup]
+2025-11-07T12:00:37.0916943Z ##[group]Fetching the repository
+2025-11-07T12:00:37.0931289Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +4567590f6b545c0712a97ec8a4bea4b2637fca79:refs/remotes/pull/53/merge
+2025-11-07T12:00:38.0176950Z From https://github.com/h111359/requirements-driven-development
+2025-11-07T12:00:38.0181129Z  * [new ref]         4567590f6b545c0712a97ec8a4bea4b2637fca79 -> pull/53/merge
+2025-11-07T12:00:38.0390476Z ##[endgroup]
+2025-11-07T12:00:38.0391208Z ##[group]Determining the checkout info
+2025-11-07T12:00:38.0392122Z ##[endgroup]
+2025-11-07T12:00:38.0404935Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2025-11-07T12:00:38.0768979Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2025-11-07T12:00:38.1101885Z ##[group]Checking out the ref
+2025-11-07T12:00:38.1112442Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force refs/remotes/pull/53/merge
+2025-11-07T12:00:38.2205090Z Note: switching to 'refs/remotes/pull/53/merge'.
+2025-11-07T12:00:38.2206033Z 
+2025-11-07T12:00:38.2206658Z You are in 'detached HEAD' state. You can look around, make experimental
+2025-11-07T12:00:38.2336587Z changes and commit them, and you can discard any commits you make in this
+2025-11-07T12:00:38.2337470Z state without impacting any branches by switching back to a branch.
+2025-11-07T12:00:38.2337913Z 
+2025-11-07T12:00:38.2338185Z If you want to create a new branch to retain commits you create, you may
+2025-11-07T12:00:38.2338789Z do so (now or later) by using -c with the switch command. Example:
+2025-11-07T12:00:38.2339141Z 
+2025-11-07T12:00:38.2339335Z   git switch -c <new-branch-name>
+2025-11-07T12:00:38.2339595Z 
+2025-11-07T12:00:38.2339743Z Or undo this operation with:
+2025-11-07T12:00:38.2339976Z 
+2025-11-07T12:00:38.2340090Z   git switch -
+2025-11-07T12:00:38.2340305Z 
+2025-11-07T12:00:38.2340649Z Turn off this advice by setting config variable advice.detachedHead to false
+2025-11-07T12:00:38.2341067Z 
+2025-11-07T12:00:38.2341525Z HEAD is now at 4567590 Merge 261265e41c4ce6cf6f839f151b05a62dfa432e61 into ad751367b0c9a6c17544dd7edb9b3fb764dac4a9
+2025-11-07T12:00:38.2343918Z ##[endgroup]
+2025-11-07T12:00:38.2611395Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2025-11-07T12:00:38.2889787Z 4567590f6b545c0712a97ec8a4bea4b2637fca79
+2025-11-07T12:00:38.3361917Z ##[group]Run actions/setup-python@v5
+2025-11-07T12:00:38.3362291Z with:
+2025-11-07T12:00:38.3363345Z   python-version: 3.9
+2025-11-07T12:00:38.3363544Z   check-latest: false
+2025-11-07T12:00:38.3363938Z   token: ***
+2025-11-07T12:00:38.3364109Z   update-environment: true
+2025-11-07T12:00:38.3364322Z   allow-prereleases: false
+2025-11-07T12:00:38.3364538Z   freethreaded: false
+2025-11-07T12:00:38.3364710Z ##[endgroup]
+2025-11-07T12:00:38.5749804Z ##[group]Installed versions
+2025-11-07T12:00:38.6201373Z Successfully set up CPython (3.9.13)
+2025-11-07T12:00:38.6202741Z ##[endgroup]
+2025-11-07T12:00:38.6545639Z ##[group]Run Install-Module -Name Pester -Force -SkipPublisherCheck
+2025-11-07T12:00:38.6546283Z [36;1mInstall-Module -Name Pester -Force -SkipPublisherCheck[0m
+2025-11-07T12:00:38.7456085Z shell: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE -command ". '{0}'"
+2025-11-07T12:00:38.7456508Z env:
+2025-11-07T12:00:38.7456761Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:00:38.7457182Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.9.13\x64/lib/pkgconfig
+2025-11-07T12:00:38.7457600Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:00:38.7457963Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:00:38.7458298Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:00:38.7458558Z ##[endgroup]
+2025-11-07T12:01:17.4486897Z ##[group]Run python setup-test-env.py
+2025-11-07T12:01:17.4487340Z [36;1mpython setup-test-env.py[0m
+2025-11-07T12:01:17.5472536Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2025-11-07T12:01:17.5472922Z env:
+2025-11-07T12:01:17.5473191Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:01:17.5473599Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.9.13\x64/lib/pkgconfig
+2025-11-07T12:01:17.5473979Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:01:17.5474333Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:01:17.5474734Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2025-11-07T12:01:17.5475037Z ##[endgroup]
+2025-11-07T12:01:28.4858990Z 
+2025-11-07T12:01:28.4859653Z ============================================================
+2025-11-07T12:01:28.4860368Z   RDD Test Environment Setup
+2025-11-07T12:01:28.4860852Z ============================================================
+2025-11-07T12:01:28.4861090Z 
+2025-11-07T12:01:28.4916169Z Traceback (most recent call last):
+2025-11-07T12:01:28.4926393Z   File "D:\a\requirements-driven-development\requirements-driven-development\setup-test-env.py", line 186, in <module>
+2025-11-07T12:01:28.5217739Z     sys.exit(main())
+2025-11-07T12:01:28.5218955Z   File "D:\a\requirements-driven-development\requirements-driven-development\setup-test-env.py", line 154, in main
+2025-11-07T12:01:28.5220296Z     if not check_python_version():
+2025-11-07T12:01:28.5221088Z   File "D:\a\requirements-driven-development\requirements-driven-development\setup-test-env.py", line 57, in check_python_version
+2025-11-07T12:01:28.5222189Z     print_success(f"Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro} detected")
+2025-11-07T12:01:28.5223067Z   File "D:\a\requirements-driven-development\requirements-driven-development\setup-test-env.py", line 23, in print_success
+2025-11-07T12:01:28.5223714Z     print(f"\u2713 {msg}")
+2025-11-07T12:01:28.5224255Z   File "C:\hostedtoolcache\windows\Python\3.9.13\x64\lib\encodings\cp1252.py", line 19, in encode
+2025-11-07T12:01:28.5330506Z     return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+2025-11-07T12:01:28.5331157Z UnicodeEncodeError: 'charmap' codec can't encode character '\u2713' in position 0: character maps to <undefined>
+2025-11-07T12:01:29.5940462Z ##[error]Process completed with exit code 1.
+2025-11-07T12:01:29.6176349Z Post job cleanup.
+2025-11-07T12:01:29.8315646Z [command]"C:\Program Files\Git\bin\git.exe" version
+2025-11-07T12:01:29.8603920Z git version 2.51.1.windows.1
+2025-11-07T12:01:29.8683178Z Temporarily overriding HOME='D:\a\_temp\fc244b2a-a5e9-4695-8b3a-afd43a6927ce' before making global git config changes
+2025-11-07T12:01:29.8684156Z Adding repository directory to the temporary git global config as a safe directory
+2025-11-07T12:01:29.8695084Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\requirements-driven-development\requirements-driven-development
+2025-11-07T12:01:29.9026711Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2025-11-07T12:01:29.9367393Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2025-11-07T12:01:30.5188377Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-11-07T12:01:30.5473326Z http.https://github.com/.extraheader
+2025-11-07T12:01:30.5539006Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all http.https://github.com/.extraheader
+2025-11-07T12:01:30.5874673Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2025-11-07T12:01:31.1800470Z Cleaning up orphan processes

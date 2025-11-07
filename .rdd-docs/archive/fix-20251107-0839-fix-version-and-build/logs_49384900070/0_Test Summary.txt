@@ -1,0 +1,37 @@
+﻿2025-11-07T12:43:05.0988011Z Current runner version: '2.329.0'
+2025-11-07T12:43:05.1024561Z ##[group]Runner Image Provisioner
+2025-11-07T12:43:05.1026056Z Hosted Compute Agent
+2025-11-07T12:43:05.1027183Z Version: 20251016.436
+2025-11-07T12:43:05.1028167Z Commit: 8ab8ac8bfd662a3739dab9fe09456aba92132568
+2025-11-07T12:43:05.1029286Z Build Date: 2025-10-15T20:44:12Z
+2025-11-07T12:43:05.1030330Z ##[endgroup]
+2025-11-07T12:43:05.1031271Z ##[group]Operating System
+2025-11-07T12:43:05.1032183Z Ubuntu
+2025-11-07T12:43:05.1033110Z 24.04.3
+2025-11-07T12:43:05.1033827Z LTS
+2025-11-07T12:43:05.1034582Z ##[endgroup]
+2025-11-07T12:43:05.1035745Z ##[group]Runner Image
+2025-11-07T12:43:05.1036676Z Image: ubuntu-24.04
+2025-11-07T12:43:05.1037514Z Version: 20251030.96.2
+2025-11-07T12:43:05.1039401Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20251030.96/images/ubuntu/Ubuntu2404-Readme.md
+2025-11-07T12:43:05.1042096Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20251030.96
+2025-11-07T12:43:05.1043916Z ##[endgroup]
+2025-11-07T12:43:05.1046157Z ##[group]GITHUB_TOKEN Permissions
+2025-11-07T12:43:05.1049191Z Contents: read
+2025-11-07T12:43:05.1050150Z Metadata: read
+2025-11-07T12:43:05.1051143Z Packages: read
+2025-11-07T12:43:05.1051995Z ##[endgroup]
+2025-11-07T12:43:05.1055004Z Secret source: Actions
+2025-11-07T12:43:05.1056460Z Prepare workflow directory
+2025-11-07T12:43:05.1541585Z Prepare all required actions
+2025-11-07T12:43:05.1682871Z Complete job name: Test Summary
+2025-11-07T12:43:05.2770676Z ##[group]Run echo "All tests completed"
+2025-11-07T12:43:05.2771481Z [36;1mecho "All tests completed"[0m
+2025-11-07T12:43:05.2772167Z [36;1mecho "All Tests (Linux): success"[0m
+2025-11-07T12:43:05.2772848Z [36;1mecho "All Tests (Windows): failure"[0m
+2025-11-07T12:43:05.4507872Z shell: /usr/bin/bash -e {0}
+2025-11-07T12:43:05.4509684Z ##[endgroup]
+2025-11-07T12:43:05.4777850Z All tests completed
+2025-11-07T12:43:05.4779113Z All Tests (Linux): success
+2025-11-07T12:43:05.4780319Z All Tests (Windows): failure
+2025-11-07T12:43:05.4979167Z Cleaning up orphan processes

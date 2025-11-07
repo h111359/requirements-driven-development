@@ -479,14 +479,12 @@ def create_branch(branch_type: str, branch_name: str) -> bool:
         print_info("Valid types: enh, fix")
         return False
     
-    # Validate branch name format
+    # Validate branch name format (kebab-case only, no prefix added)
     if not validate_name(branch_name):
         return False
     
-    # Generate branch ID with timestamp
-    date_time = get_timestamp_filename()
-    branch_id = f"{date_time}-{branch_name}"
-    full_branch_name = f"{branch_type}/{branch_id}"
+    # Use the branch_name as-is (no automatic prefix or timestamp)
+    full_branch_name = branch_name
     
     # Check if branch already exists
     result = subprocess.run(
@@ -537,9 +535,7 @@ def create_branch(branch_type: str, branch_name: str) -> bool:
         print()
         print_info("Branch details:")
         print(f"  Type: {branch_type}")
-        print(f"  Name: {branch_name}")
-        print(f"  ID: {branch_id}")
-        print(f"  Full: {full_branch_name}")
+        print(f"  Branch: {full_branch_name}")
         return True
     else:
         print_error("Failed to create branch")
@@ -1123,7 +1119,7 @@ def create_change(normalized_name: str, change_type: str = "enh") -> bool:
     
     print()
     print_success("Change created successfully!")
-    print_info(f"Branch: {change_type}/{get_timestamp_filename()}-{normalized_name}")
+    print_info(f"Branch: {change_type} - {normalized_name}")
     print_info(f"Workspace initialized in: {WORKSPACE_DIR}")
     
     return True
@@ -1142,11 +1138,12 @@ def wrap_up_change() -> bool:
         print_error(f"Cannot wrap up: not on an enhancement or fix branch")
         print_warning(f"Current branch: {current_branch}")
         print()
-        print_info("Wrap-up can only be performed on branches starting with 'enh/' or 'fix/'")
+        print_info("Wrap-up can only be performed on branches identified as fix or enhancement")
         print()
-        print("Valid branch format examples:")
-        print("  • enh/20241101-1234-my-enhancement")
-        print("  • fix/20241101-1234-my-bugfix")
+        print("Valid branch examples:")
+        print("  • my-enhancement")
+        print("  • fix/my-bugfix")
+        print("  • 20241101-1234-my-feature")
         return False
     
     print_banner("Wrap Up Change")
@@ -1257,8 +1254,9 @@ def show_branch_help() -> None:
     print()
     print("Examples:")
     print("  rdd.py branch create enh my-enhancement")
+    print("  rdd.py branch create fix fix/20251107-my-bugfix")
     print("  rdd.py branch delete my-old-branch")
-    print("  rdd.py branch cleanup enh/20241101-1234-my-enhancement")
+    print("  rdd.py branch cleanup my-enhancement")
     print("  rdd.py branch list")
 
 
@@ -1445,20 +1443,20 @@ def route_change(args: List[str]) -> int:
         print("║  Prompt: Create Change                                       ║")
         print("║                                                              ║")
         print("║  Description:                                                ║")
-        print("║    • Create a new Change with timestamped branch naming      ║")
+        print("║    • Create a new Change with user-controlled branch name    ║")
         print("║    • Initialize workspace with necessary files               ║")
         print("║    • Set up branch for development                           ║")
         print("║                                                              ║")
         print("║  User Action:                                                ║")
-        print("║    → Provide a name for the change                           ║")
+        print("║    → Provide a name for the change (full branch name)        ║")
         print("╚══════════════════════════════════════════════════════════════╝")
         print()
         
         # Prompt for name with normalization loop
         normalized_name = None
         while not normalized_name:
-            print("Please provide a name for the change (will be normalized to kebab-case):")
-            print("(e.g., 'add user auth', 'Fix Login Bug', 'update-readme')")
+            print("Please provide a branch name for the change (will be normalized to kebab-case):")
+            print("(e.g., 'fix/my-bugfix', 'my-feature', '20251107-update-readme')")
             try:
                 change_name = input("> ").strip()
             except (KeyboardInterrupt, EOFError):
@@ -1467,7 +1465,7 @@ def route_change(args: List[str]) -> int:
                 return 1
             
             if not change_name:
-                print_error("Change name cannot be empty")
+                print_error("Branch name cannot be empty")
                 continue
             
             # Normalize the name
@@ -1475,19 +1473,19 @@ def route_change(args: List[str]) -> int:
             
             if not normalized_name:
                 print_error(f"Unable to normalize name: {change_name}")
-                print("Please try a different name (use only letters, numbers, spaces, hyphens)")
+                print("Please try a different name (use only letters, numbers, spaces, hyphens, slashes)")
                 continue
             
             # Validate normalized name
             if not validate_name(normalized_name):
                 print_warning(f"Normalized name '{normalized_name}' doesn't meet requirements")
-                print("Requirements: kebab-case, max 5 words, lowercase, hyphens only")
+                print("Requirements: kebab-case, max 5 words, lowercase, hyphens/slashes only")
                 print()
                 normalized_name = None
                 continue
             
             # Show normalized name and confirm
-            print_success(f"Normalized name: {normalized_name}")
+            print_success(f"Normalized branch name: {normalized_name}")
             try:
                 confirm = input("Use this name? (y/n): ").strip().lower()
             except (KeyboardInterrupt, EOFError):

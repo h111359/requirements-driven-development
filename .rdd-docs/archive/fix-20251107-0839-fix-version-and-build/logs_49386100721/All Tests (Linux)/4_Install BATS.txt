@@ -1,0 +1,100 @@
+﻿2025-11-07T12:58:59.5525515Z ##[group]Run sudo apt-get update
+2025-11-07T12:58:59.5527458Z [36;1msudo apt-get update[0m
+2025-11-07T12:58:59.5529291Z [36;1msudo apt-get install -y bats[0m
+2025-11-07T12:58:59.5589346Z shell: /usr/bin/bash -e {0}
+2025-11-07T12:58:59.5590367Z env:
+2025-11-07T12:58:59.5591388Z   pythonLocation: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:58:59.5593418Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.9.24/x64/lib/pkgconfig
+2025-11-07T12:58:59.5595182Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:58:59.5596759Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:58:59.5662813Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-07T12:58:59.5664985Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.9.24/x64/lib
+2025-11-07T12:58:59.5666417Z ##[endgroup]
+2025-11-07T12:58:59.6560496Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2025-11-07T12:58:59.6876133Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2025-11-07T12:58:59.6881233Z Get:6 https://packages.microsoft.com/repos/azure-cli noble InRelease [3564 B]
+2025-11-07T12:58:59.6900036Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2025-11-07T12:58:59.6927819Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2025-11-07T12:58:59.6958436Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2025-11-07T12:58:59.7035071Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2025-11-07T12:58:59.8196029Z Get:8 https://packages.microsoft.com/repos/azure-cli noble/main amd64 Packages [1700 B]
+2025-11-07T12:58:59.8663892Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1585 kB]
+2025-11-07T12:58:59.8762243Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [299 kB]
+2025-11-07T12:58:59.8773770Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [175 kB]
+2025-11-07T12:58:59.8882333Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 c-n-f Metadata [15.7 kB]
+2025-11-07T12:58:59.8927660Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1498 kB]
+2025-11-07T12:58:59.8990178Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [377 kB]
+2025-11-07T12:58:59.9024761Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 c-n-f Metadata [31.4 kB]
+2025-11-07T12:58:59.9056164Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2244 kB]
+2025-11-07T12:58:59.9187024Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [509 kB]
+2025-11-07T12:58:59.9219290Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Components [212 B]
+2025-11-07T12:58:59.9311161Z Get:20 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [66.8 kB]
+2025-11-07T12:58:59.9355267Z Get:21 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [11.2 kB]
+2025-11-07T12:58:59.9389254Z Get:22 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [49.6 kB]
+2025-11-07T12:58:59.9662420Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+2025-11-07T12:58:59.9810081Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [7136 B]
+2025-11-07T12:58:59.9824837Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [11.0 kB]
+2025-11-07T12:58:59.9837217Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-backports/restricted amd64 Components [216 B]
+2025-11-07T12:58:59.9851468Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Components [212 B]
+2025-11-07T12:59:00.0383678Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1305 kB]
+2025-11-07T12:59:00.0488288Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [215 kB]
+2025-11-07T12:59:00.0510423Z Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [21.5 kB]
+2025-11-07T12:59:00.0532693Z Get:30 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 c-n-f Metadata [9336 B]
+2025-11-07T12:59:00.0546514Z Get:31 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [906 kB]
+2025-11-07T12:59:00.0622804Z Get:32 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [203 kB]
+2025-11-07T12:59:00.0649500Z Get:33 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [52.2 kB]
+2025-11-07T12:59:00.0663583Z Get:34 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 c-n-f Metadata [19.4 kB]
+2025-11-07T12:59:00.0678818Z Get:35 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [2135 kB]
+2025-11-07T12:59:00.1233062Z Get:36 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [485 kB]
+2025-11-07T12:59:00.1265601Z Get:37 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Components [212 B]
+2025-11-07T12:59:00.1276495Z Get:38 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Components [208 B]
+2025-11-07T12:59:08.9970092Z Fetched 12.6 MB in 1s (8422 kB/s)
+2025-11-07T12:59:09.8248231Z Reading package lists...
+2025-11-07T12:59:09.8588270Z Reading package lists...
+2025-11-07T12:59:10.0927766Z Building dependency tree...
+2025-11-07T12:59:10.0935288Z Reading state information...
+2025-11-07T12:59:10.3155327Z The following NEW packages will be installed:
+2025-11-07T12:59:10.3166287Z   bats
+2025-11-07T12:59:10.3357769Z 0 upgraded, 1 newly installed, 0 to remove and 22 not upgraded.
+2025-11-07T12:59:10.3358406Z Need to get 45.5 kB of archives.
+2025-11-07T12:59:10.3358892Z After this operation, 166 kB of additional disk space will be used.
+2025-11-07T12:59:10.3359619Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2025-11-07T12:59:10.4249860Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 bats all 1.10.0-1 [45.5 kB]
+2025-11-07T12:59:10.6981663Z Fetched 45.5 kB in 0s (447 kB/s)
+2025-11-07T12:59:10.7221433Z Selecting previously unselected package bats.
+2025-11-07T12:59:10.7565769Z (Reading database ... 
+2025-11-07T12:59:10.7566456Z (Reading database ... 5%
+2025-11-07T12:59:10.7566824Z (Reading database ... 10%
+2025-11-07T12:59:10.7567164Z (Reading database ... 15%
+2025-11-07T12:59:10.7567490Z (Reading database ... 20%
+2025-11-07T12:59:10.7567816Z (Reading database ... 25%
+2025-11-07T12:59:10.7568149Z (Reading database ... 30%
+2025-11-07T12:59:10.7568464Z (Reading database ... 35%
+2025-11-07T12:59:10.7568974Z (Reading database ... 40%
+2025-11-07T12:59:10.7569290Z (Reading database ... 45%
+2025-11-07T12:59:10.7569611Z (Reading database ... 50%
+2025-11-07T12:59:10.7686597Z (Reading database ... 55%
+2025-11-07T12:59:11.0247212Z (Reading database ... 60%
+2025-11-07T12:59:11.2167159Z (Reading database ... 65%
+2025-11-07T12:59:11.4683642Z (Reading database ... 70%
+2025-11-07T12:59:11.6248668Z (Reading database ... 75%
+2025-11-07T12:59:11.8598640Z (Reading database ... 80%
+2025-11-07T12:59:12.1095745Z (Reading database ... 85%
+2025-11-07T12:59:12.2698001Z (Reading database ... 90%
+2025-11-07T12:59:12.5209656Z (Reading database ... 95%
+2025-11-07T12:59:12.5210110Z (Reading database ... 100%
+2025-11-07T12:59:12.5210637Z (Reading database ... 215802 files and directories currently installed.)
+2025-11-07T12:59:12.5259067Z Preparing to unpack .../archives/bats_1.10.0-1_all.deb ...
+2025-11-07T12:59:12.5288179Z Unpacking bats (1.10.0-1) ...
+2025-11-07T12:59:12.5958239Z Setting up bats (1.10.0-1) ...
+2025-11-07T12:59:12.5991757Z Processing triggers for man-db (2.12.0-4build2) ...
+2025-11-07T12:59:26.2993647Z 
+2025-11-07T12:59:26.2994275Z Running kernel seems to be up-to-date.
+2025-11-07T12:59:26.2996274Z 
+2025-11-07T12:59:26.2996793Z No services need to be restarted.
+2025-11-07T12:59:26.2997076Z 
+2025-11-07T12:59:26.2997213Z No containers need to be restarted.
+2025-11-07T12:59:26.2997872Z 
+2025-11-07T12:59:26.2998116Z No user sessions are running outdated binaries.
+2025-11-07T12:59:26.2998488Z 
+2025-11-07T12:59:26.2998847Z No VM guests are running outdated hypervisor (qemu) binaries on this host.

@@ -1,0 +1,73 @@
+﻿2025-11-07T12:30:19.8380990Z ##[group]Run actions/checkout@v4
+2025-11-07T12:30:19.8381994Z with:
+2025-11-07T12:30:19.8382450Z   repository: h111359/requirements-driven-development
+2025-11-07T12:30:19.8383207Z   token: ***
+2025-11-07T12:30:19.8383558Z   ssh-strict: true
+2025-11-07T12:30:19.8383926Z   ssh-user: git
+2025-11-07T12:30:19.8384295Z   persist-credentials: true
+2025-11-07T12:30:19.8384714Z   clean: true
+2025-11-07T12:30:19.8385076Z   sparse-checkout-cone-mode: true
+2025-11-07T12:30:19.8385538Z   fetch-depth: 1
+2025-11-07T12:30:19.8385904Z   fetch-tags: false
+2025-11-07T12:30:19.8386268Z   show-progress: true
+2025-11-07T12:30:19.8386638Z   lfs: false
+2025-11-07T12:30:19.8386971Z   submodules: false
+2025-11-07T12:30:19.8387340Z   set-safe-directory: true
+2025-11-07T12:30:19.8387945Z ##[endgroup]
+2025-11-07T12:30:20.0328713Z Syncing repository: h111359/requirements-driven-development
+2025-11-07T12:30:20.0332713Z ##[group]Getting Git version info
+2025-11-07T12:30:20.0334757Z Working directory is 'D:\a\requirements-driven-development\requirements-driven-development'
+2025-11-07T12:30:20.1285041Z [command]"C:\Program Files\Git\bin\git.exe" version
+2025-11-07T12:30:20.4074181Z git version 2.51.1.windows.1
+2025-11-07T12:30:20.4127564Z ##[endgroup]
+2025-11-07T12:30:20.4148203Z Temporarily overriding HOME='D:\a\_temp\3370c91d-2f15-4738-bf35-8922ac3d9be4' before making global git config changes
+2025-11-07T12:30:20.4149562Z Adding repository directory to the temporary git global config as a safe directory
+2025-11-07T12:30:20.4159688Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\requirements-driven-development\requirements-driven-development
+2025-11-07T12:30:20.4448520Z Deleting the contents of 'D:\a\requirements-driven-development\requirements-driven-development'
+2025-11-07T12:30:20.4454802Z ##[group]Initializing the repository
+2025-11-07T12:30:20.4464202Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\requirements-driven-development\requirements-driven-development
+2025-11-07T12:30:20.5273986Z Initialized empty Git repository in D:/a/requirements-driven-development/requirements-driven-development/.git/
+2025-11-07T12:30:20.5319256Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/h111359/requirements-driven-development
+2025-11-07T12:30:20.5614660Z ##[endgroup]
+2025-11-07T12:30:20.5615418Z ##[group]Disabling automatic garbage collection
+2025-11-07T12:30:20.5623745Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2025-11-07T12:30:20.5899287Z ##[endgroup]
+2025-11-07T12:30:20.5899992Z ##[group]Setting up auth
+2025-11-07T12:30:20.5913066Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2025-11-07T12:30:20.6199346Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2025-11-07T12:30:21.7792917Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-11-07T12:30:21.8092310Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2025-11-07T12:30:22.3228368Z [command]"C:\Program Files\Git\bin\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2025-11-07T12:30:22.3530794Z ##[endgroup]
+2025-11-07T12:30:22.3531702Z ##[group]Fetching the repository
+2025-11-07T12:30:22.3545408Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +747b07b5b663b7c6abeb5af5dca04cce658b07eb:refs/remotes/pull/53/merge
+2025-11-07T12:30:23.1584517Z From https://github.com/h111359/requirements-driven-development
+2025-11-07T12:30:23.1585333Z  * [new ref]         747b07b5b663b7c6abeb5af5dca04cce658b07eb -> pull/53/merge
+2025-11-07T12:30:23.1763217Z ##[endgroup]
+2025-11-07T12:30:23.1763663Z ##[group]Determining the checkout info
+2025-11-07T12:30:23.1766169Z ##[endgroup]
+2025-11-07T12:30:23.1782408Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2025-11-07T12:30:23.2124019Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2025-11-07T12:30:23.2423593Z ##[group]Checking out the ref
+2025-11-07T12:30:23.2434237Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force refs/remotes/pull/53/merge
+2025-11-07T12:30:23.3603751Z Note: switching to 'refs/remotes/pull/53/merge'.
+2025-11-07T12:30:23.3605305Z 
+2025-11-07T12:30:23.3605644Z You are in 'detached HEAD' state. You can look around, make experimental
+2025-11-07T12:30:23.3606377Z changes and commit them, and you can discard any commits you make in this
+2025-11-07T12:30:23.3607107Z state without impacting any branches by switching back to a branch.
+2025-11-07T12:30:23.3607594Z 
+2025-11-07T12:30:23.3607862Z If you want to create a new branch to retain commits you create, you may
+2025-11-07T12:30:23.3608518Z do so (now or later) by using -c with the switch command. Example:
+2025-11-07T12:30:23.3608911Z 
+2025-11-07T12:30:23.3609117Z   git switch -c <new-branch-name>
+2025-11-07T12:30:23.3609384Z 
+2025-11-07T12:30:23.3609517Z Or undo this operation with:
+2025-11-07T12:30:23.3609756Z 
+2025-11-07T12:30:23.3609854Z   git switch -
+2025-11-07T12:30:23.3610012Z 
+2025-11-07T12:30:23.3610340Z Turn off this advice by setting config variable advice.detachedHead to false
+2025-11-07T12:30:23.3610827Z 
+2025-11-07T12:30:23.3611349Z HEAD is now at 747b07b Merge c8a1ce35785768ef04e3f10a3e27e56a3bfa0dd0 into ad751367b0c9a6c17544dd7edb9b3fb764dac4a9
+2025-11-07T12:30:23.3641239Z ##[endgroup]
+2025-11-07T12:30:23.3967455Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2025-11-07T12:30:23.4220698Z 747b07b5b663b7c6abeb5af5dca04cce658b07eb
