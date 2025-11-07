@@ -30,8 +30,8 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
      - `.rdd-docs/folder-structure.md`
      - `.rdd-docs/data-model.md`
      - Any other relevant files mentioned in the prompt
-   - Execute the instructions in the prompt exactly as if the user had entered them directly in the chat.
-   - Think if the prompt instructions are clear and unambiguous. In case of unclarity or unambiguity which leads to multiple possible choices for implementation - ask the user for guidance or chosing an option, following instructions for question formatting in `.rdd/templates/questions-formatting.md`.
+   - Think first if the prompt instructions are clear and unambiguous. In case of unclarity or unambiguity which leads to multiple possible choices for implementation - ask the user for guidance or chosing an option, following instructions for question formatting in `.rdd/templates/questions-formatting.md`.
+   - Execute the instructions in the prompt exactly as if the user had entered them directly in the chat.   
    - Follow all instructions in the prompt carefully. The instructions in the prompt take precedence over the context.
    - Along with execution add continuously information for the implementation details in the file `.rdd-docs/workspace/<put-prompt-ID-here>-implementation.md` on each step
    - If you are asked to make an analysis, create a plan, plan, research, advice, recommendation, best-practice review or similar - make the analysis in the file `.rdd-docs/workspace/<put-prompt-ID-here>-implementation.md`.
