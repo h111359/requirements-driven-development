@@ -95,36 +95,36 @@ print_header "Running Tests"
 print_step 1 4 "Running Python unit tests"
 if pytest tests/python/ -v --tb=short; then
     print_success "Python unit tests passed"
-    ((PASSED_TESTS++))
+    PASSED_TESTS=$((PASSED_TESTS + 1))
 else
     print_error "Python unit tests failed"
-    ((FAILED_TESTS++))
+    FAILED_TESTS=$((FAILED_TESTS + 1))
 fi
-((TOTAL_TESTS++))
+TOTAL_TESTS=$((TOTAL_TESTS + 1))
 echo ""
 
 # Step 2: Build Tests
 print_step 2 4 "Running build tests"
 if pytest tests/build/ -v --tb=short; then
     print_success "Build tests passed"
-    ((PASSED_TESTS++))
+    PASSED_TESTS=$((PASSED_TESTS + 1))
 else
     print_error "Build tests failed"
-    ((FAILED_TESTS++))
+    FAILED_TESTS=$((FAILED_TESTS + 1))
 fi
-((TOTAL_TESTS++))
+TOTAL_TESTS=$((TOTAL_TESTS + 1))
 echo ""
 
 # Step 3: Install Tests
 print_step 3 4 "Running install tests"
 if pytest tests/install/ -v --tb=short; then
     print_success "Install tests passed"
-    ((PASSED_TESTS++))
+    PASSED_TESTS=$((PASSED_TESTS + 1))
 else
     print_error "Install tests failed"
-    ((FAILED_TESTS++))
+    FAILED_TESTS=$((FAILED_TESTS + 1))
 fi
-((TOTAL_TESTS++))
+TOTAL_TESTS=$((TOTAL_TESTS + 1))
 echo ""
 
 # Step 4: Shell Tests (BATS)
@@ -132,12 +132,12 @@ print_step 4 4 "Running shell tests (BATS)"
 if command -v bats &> /dev/null; then
     if bats tests/shell/*.bats; then
         print_success "Shell tests passed"
-        ((PASSED_TESTS++))
+        PASSED_TESTS=$((PASSED_TESTS + 1))
     else
         print_error "Shell tests failed"
-        ((FAILED_TESTS++))
+        FAILED_TESTS=$((FAILED_TESTS + 1))
     fi
-    ((TOTAL_TESTS++))
+    TOTAL_TESTS=$((TOTAL_TESTS + 1))
 else
     print_warning "BATS not found - skipping shell tests"
     print_info "Install: sudo apt-get install bats (Ubuntu/Debian)"
