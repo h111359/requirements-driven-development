@@ -169,7 +169,7 @@ repo-root/
   - VS Code settings template (.vscode/settings.json from templates/settings.json)
   - Seed templates (.rdd-docs/ with config.json, data-model.md, requirements.md, tech-spec.md from templates/)
 - **Verification**: SHA256 checksum file generated for each archive
-- **Version source**: Extracted from `RDD_VERSION` constant in rdd.py
+- **Version source**: Extracted from `.rdd-docs/config.json`
 - **Template processing**: Reads templates from templates/ directory with {{VERSION}} placeholder substitution
 
 ## 📝 RDD Workflow File Locations

@@ -45,8 +45,8 @@ def print_success(message: str) -> None:
 
 
 def print_error(message: str) -> None:
-    """Print error message with red X."""
-    print(f"{Colors.RED}✗ {message}{Colors.NC}")
+    """Print error message with red X to stderr."""
+    print(f"{Colors.RED}✗ {message}{Colors.NC}", file=sys.stderr)
 
 
 def print_warning(message: str) -> None:
@@ -250,20 +250,33 @@ def get_timestamp_filename() -> str:
 # GIT REPOSITORY CHECKS
 # ============================================================================
 
-def check_git_repo() -> bool:
+def check_git_repo(repo_path: str = None, exit_on_error: bool = True) -> bool:
     """
     Check if we're in a git repository.
-    Returns True if in git repo, exits with error if not.
+    
+    Args:
+        repo_path: Optional path to check. If None, checks current directory.
+        exit_on_error: If True, exits with error when not a git repo. If False, returns False.
+    
+    Returns:
+        True if in git repo, False if not (when exit_on_error=False), exits otherwise.
     """
-    result = subprocess.run(
-        ['git', 'rev-parse', '--is-inside-work-tree'],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL
-    )
+    cmd = ['git', 'rev-parse', '--is-inside-work-tree']
+    kwargs = {
+        'stdout': subprocess.DEVNULL,
+        'stderr': subprocess.DEVNULL
+    }
+    
+    if repo_path:
+        kwargs['cwd'] = repo_path
+    
+    result = subprocess.run(cmd, **kwargs)
     
     if result.returncode != 0:
-        print_error("Not a git repository. Please run this from within a git repository.")
-        sys.exit(1)
+        if exit_on_error:
+            print_error("Not a git repository. Please run this from within a git repository.")
+            sys.exit(1)
+        return False
     
     debug_print("Git repository verified")
     return True

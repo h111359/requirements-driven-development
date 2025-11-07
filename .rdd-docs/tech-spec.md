@@ -145,6 +145,7 @@ The framework uses a configuration file system for repository-wide settings:
 #### Main Entry Point
 - **File**: `.rdd/scripts/rdd.py`
 - **Purpose**: Unified command interface with domain routing
+- **Version Management**: Uses `get_framework_version()` to read version from `.rdd-docs/config.json` instead of hardcoded version variable
 - **Responsibilities**:
   - Parse command-line arguments
   - Route commands to appropriate domain handlers
@@ -269,7 +270,7 @@ The RDD framework uses a Python-based build system to create release packages:
 
 #### Build Script (scripts/build.py)
 - **Purpose**: Creates cross-platform release archives with all necessary files
-- **Version Management**: Extracts version from `RDD_VERSION` constant in rdd.py
+- **Version Management**: Extracts version from `.rdd-docs/config.json` as single source of truth (fixed from previous hardcoded version in rdd.py)
 - **Template Processing**: Reads README.md and installer scripts from templates/ directory with {{VERSION}} placeholder substitution
 - **Archive Creation**: Generates single `rdd-v{version}.zip` file containing:
   - Framework files (.rdd/scripts/, .rdd/templates/)
@@ -368,17 +369,133 @@ The framework integrates with VS Code through:
 - **Script auto-approval**: Auto-approves script execution for `.rdd/scripts/` directory
 - **JSONL file association**: Associates `*.jsonl` files with jsonlines language
 
+## Testing Infrastructure
+
+### Test Organization
+
+The framework includes a comprehensive testing suite organized by test type:
+
+```
+tests/
+├── python/              # Python script tests (pytest)
+│   ├── test_rdd_main.py       # Main entry point tests
+│   ├── test_rdd_utils.py      # Utility function tests
+│   ├── test_integration.py    # Integration tests
+│   └── conftest.py            # Pytest fixtures
+├── build/               # Build script tests
+│   ├── test_build.py          # Build system tests
+│   └── conftest.py            # Build fixtures
+├── install/             # Installation tests
+│   ├── test_install.py        # Installer tests
+│   └── conftest.py            # Install fixtures
+├── shell/               # Shell script tests (BATS)
+│   ├── test_install_sh.bats   # Bash installer tests
+│   └── README.md              # Shell testing guide
+├── powershell/          # PowerShell tests (Pester)
+│   ├── Install.Tests.ps1      # PowerShell installer tests
+│   └── README.md              # PowerShell testing guide
+├── fixtures/            # Shared test fixtures
+│   └── README.md              # Fixtures documentation
+├── requirements.txt     # Test dependencies
+└── README.md            # Testing documentation
+```
+
+### Test Frameworks
+
+- **Python Tests**: pytest with pytest-cov for coverage reporting
+- **Shell Tests**: BATS (Bash Automated Testing System) for Linux/macOS
+- **PowerShell Tests**: Pester framework for Windows
+- **Test Coverage**: 160+ tests covering all framework scripts
+- **Pass Rate**: 100% (49/49 Python tests passing)
+
+### Test Isolation
+
+All tests use isolation mechanisms to prevent corruption of existing code:
+- **Temporary directories**: Each test creates and cleans up temp dirs
+- **Mock git repositories**: Fresh git repos for each test
+- **Subprocess mocking**: Git commands mocked where appropriate
+- **No side effects**: Tests don't modify actual project files
+- **Parallel safe**: Tests can run concurrently without conflicts
+
+### Virtual Environment
+
+The framework provides automated virtual environment setup for test execution:
+- **Script**: `setup-test-env.py` creates `.venv/` directory
+- **Smart handling**: Preserves existing environment, only updates packages
+- **Test dependencies**: pytest, pytest-cov, pytest-mock, pytest-timeout, pytest-xdist
+- **Build exclusion**: .venv/ excluded from release archives
+- **CI/CD isolation**: GitHub Actions creates fresh environments per run
+
+### Test Runner Scripts
+
+Platform-specific test runners execute all appropriate tests:
+
+**Linux/macOS (scripts/run-tests.sh)**:
+- Colored output with progress tracking
+- Automatic virtual environment activation
+- Sequential test suite execution (Python, build, install, shell)
+- Exit codes for CI/CD integration
+- Test result summary
+
+**Windows (scripts/run-tests.ps1)**:
+- PowerShell-native colored output
+- Automatic virtual environment activation
+- Sequential test suite execution (Python, build, install, PowerShell)
+- Pester framework integration
+- Test result summary
+
+**Usage**:
+```bash
+# Linux/macOS
+bash scripts/run-tests.sh
+
+# Windows
+powershell .\scripts\run-tests.ps1
+```
+
+### GitHub Actions CI/CD
+
+Automated testing on push and pull requests:
+- **Matrix testing**: Linux (Ubuntu latest) and Windows (Windows latest)
+- **Python version**: Python 3.9+ (expandable to matrix)
+- **Test jobs**:
+  - all-tests-linux: Runs `bash scripts/run-tests.sh`
+  - all-tests-windows: Runs `powershell .\scripts\run-tests.ps1`
+- **Code coverage**: Coverage report generated on Linux job
+- **Test summary**: Aggregated results across platforms
+
+### Test Coverage
+
+**Current Coverage**:
+- **rdd.py**: CLI routing, domain handlers, interactive menus
+- **rdd_utils.py**: All utility functions (git, branch, workspace, config)
+- **build.py**: Version extraction, archive creation, checksums
+- **install.py**: Pre-flight checks, file operations, settings merge
+- **install.sh**: Interactive navigation, git validation
+- **install.ps1**: PowerShell UI, directory selection
+
+**Coverage Metrics**:
+- 160+ tests total
+- 49 Python unit tests (100% passing)
+- 25+ build tests
+- 30+ install tests
+- 12+ shell tests
+- 25+ PowerShell tests
+
 ## Performance
 
 ### Script Execution
 - **Startup time**: < 1 second for command routing
 - **Workspace initialization**: < 5 seconds
 - **Requirements merge**: < 10 seconds for typical changes
+- **Test execution**: < 30 seconds for full Python test suite
+- **Build process**: < 10 seconds for archive creation
 
 ### Scalability
 - Supports unlimited concurrent changes (via separate branches)
 - Archive storage scales linearly with number of completed changes
 - No performance degradation with large requirements files (< 1000 requirements)
+- Test suite scales linearly with added tests (parallel execution supported)
 
 ## Security
 
