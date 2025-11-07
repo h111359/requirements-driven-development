@@ -57,27 +57,7 @@ def read_script_template(script_path: Path, version: str) -> str:
     print_success(f"Loaded script template: {script_path.name}")
     return content
 
-def extract_version(rdd_py_path: Path) -> str:
-    """Extract version from rdd.py file"""
-    print_info(f"Extracting version from {rdd_py_path}")
-    
-    if not rdd_py_path.exists():
-        exit_with_error(f"File not found: {rdd_py_path}")
-    
-    content = rdd_py_path.read_text()
-    match = re.search(r'RDD_VERSION\s*=\s*["\']([^"\']+)["\']', content)
-    
-    if not match:
-        exit_with_error("Could not find RDD_VERSION in rdd.py")
-    
-    version = match.group(1)
-    
-    # Validate SemVer format
-    if not re.match(r'^\d+\.\d+\.\d+$', version):
-        exit_with_error(f"Invalid version format: {version}. Expected SemVer (X.Y.Z)")
-    
-    print_success(f"Found version: {version}")
-    return version
+    # REMOVED: extract_version function. Version is now read from .rdd-docs/config.json
 
 def create_build_dir(version: str, build_root: Path) -> Path:
     """Create clean build directory structure"""
@@ -352,10 +332,17 @@ def main():
     
     # Build process
     try:
-        # Step 1: Extract version
-        print_step(1, 11, "Extracting version")
-        rdd_py = repo_root / ".rdd" / "scripts" / "rdd.py"
-        version = extract_version(rdd_py)
+        # Step 1: Extract version from .rdd-docs/config.json
+        print_step(1, 11, "Extracting version from .rdd-docs/config.json")
+        config_path = repo_root / ".rdd-docs" / "config.json"
+        if not config_path.exists():
+            exit_with_error(f"Config file not found: {config_path}")
+        with open(config_path, "r") as f:
+            config = json.load(f)
+        version = config.get("version")
+        if not version or not re.match(r'^\d+\.\d+\.\d+$', version):
+            exit_with_error(f"Invalid or missing version in config.json: {version}")
+        print_success(f"Found version: {version}")
         print()
         
         # Step 2: Create build directory

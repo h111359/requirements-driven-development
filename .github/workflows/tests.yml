@@ -1,0 +1,82 @@
+name: RDD Framework Tests
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+  workflow_dispatch:
+
+jobs:
+  all-tests-linux:
+    name: All Tests (Linux)
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
+    
+    - name: Install BATS
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y bats
+    
+    - name: Setup test environment
+      run: python setup-test-env.py
+    
+    - name: Run all tests
+      run: bash scripts/run-tests.sh
+    
+    - name: Generate coverage report
+      run: |
+        source .venv/bin/activate
+        pytest tests/python/ --cov=.rdd/scripts --cov=scripts --cov-report=xml --cov-report=term
+    
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.xml
+        flags: python
+        name: python-coverage
+      if: always()
+  
+  all-tests-windows:
+    name: All Tests (Windows)
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
+    
+    - name: Install Pester
+      shell: powershell
+      run: |
+        Install-Module -Name Pester -Force -SkipPublisherCheck
+    
+    - name: Setup test environment
+      run: python setup-test-env.py
+    
+    - name: Run all tests
+      shell: powershell
+      run: .\scripts\run-tests.ps1
+  
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [all-tests-linux, all-tests-windows]
+    if: always()
+    
+    steps:
+    - name: Check test results
+      run: |
+        echo "All tests completed"
+        echo "All Tests (Linux): ${{ needs.all-tests-linux.result }}"
+        echo "All Tests (Windows): ${{ needs.all-tests-windows.result }}"

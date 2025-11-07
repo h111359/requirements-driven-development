@@ -45,9 +45,6 @@ from rdd_utils import (
     Colors
 )
 
-# Version information
-RDD_VERSION = "1.0.0"
-
 # Constants
 WORKSPACE_DIR = ".rdd-docs/workspace"
 ARCHIVE_BASE_DIR = ".rdd-docs/archive"
@@ -1198,9 +1195,23 @@ def wrap_up_change() -> bool:
 # HELP SYSTEM
 # ============================================================================
 
+def get_framework_version() -> str:
+    """Get framework version from config.json"""
+    config_path = get_rdd_config_path()
+    if os.path.isfile(config_path):
+        try:
+            with open(config_path, 'r') as f:
+                config = json.load(f)
+                return config.get("version", "unknown")
+        except Exception:
+            pass
+    return "unknown"
+
+
 def show_version() -> None:
     """Show version information."""
-    print(f"RDD Framework v{RDD_VERSION} (Python)")
+    version = get_framework_version()
+    print(f"RDD Framework v{version} (Python)")
 
 
 def show_main_help() -> None:
@@ -1522,7 +1533,7 @@ def route_change(args: List[str]) -> int:
     else:
         print_error(f"Unknown change action: {action}")
         print("Use 'rdd.py change --help' for usage information")
-        return 1
+        sys.exit(1)
 
 
 def route_fix(args: List[str]) -> int:
@@ -1729,16 +1740,16 @@ def main() -> int:
     # Handle no arguments - show help
     if not args:
         show_main_help()
-        return 0
+        sys.exit(0)
     
     # Handle global options
     if args[0] in ['--version', '-v']:
         show_version()
-        return 0
+        sys.exit(0)
     
     if args[0] in ['--help', '-h']:
         show_main_help()
-        return 0
+        sys.exit(0)
     
     # Route to domain handler
     domain = args[0]
@@ -1764,7 +1775,7 @@ def main() -> int:
         print("Available domains: branch, workspace, change, fix, git, prompt, config")
         print()
         print("Use 'rdd.py --help' for more information")
-        return 1
+        sys.exit(1)
 
 
 if __name__ == '__main__':

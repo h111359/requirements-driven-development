@@ -139,7 +139,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[TR-30] Platform-Agnostic Python Command**: All prompt files and documentation shall use `python` (not `python3`) as the command to invoke Python scripts, ensuring compatibility across Windows, Linux, and macOS platforms
 - **[TR-31] Build Artifact Structure**: Build archives shall follow naming convention `rdd-v{version}.zip` with single cross-platform archive containing nested directory structure preserving original file organization
 - **[TR-32] Checksum Generation**: Build process shall generate SHA256 checksum files (.sha256) for all release archives using format compatible with standard sha256sum verification tools
-- **[TR-33] Version Extraction**: Build system shall extract version information from RDD_VERSION constant in rdd.py and validate it matches semantic versioning format (MAJOR.MINOR.PATCH)
+- **[TR-33] Version Extraction**: Build system shall extract version information from `.rdd-docs/config.json` and validate it matches semantic versioning format (MAJOR.MINOR.PATCH)
 - **[TR-34] Archive Cleanup**: Build process shall remove temporary staging directories after archive creation, keeping only final zip archive and checksum file in build/ directory
 - **[TR-35] Settings Merge Logic**: Installer shall intelligently merge VS Code settings by appending unique array values, merging object keys, and replacing editor-specific settings that require exact RDD configuration
 - **[TR-36] Configuration File Format**: The framework shall use JSON format for configuration files (config.json) containing version, defaultBranch, created, and lastModified fields
@@ -149,6 +149,17 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[TR-40] Build Template Management**: Build scripts shall read installer scripts (install.py, install.sh, install.ps1) and README.md from templates/ directory with version placeholder substitution
 - **[TR-41] Template Placeholder Format**: Template files in templates/ directory shall use {{VERSION}} as placeholder for version substitution during build process
 - **[TR-42] Seed Templates Directory Structure**: Build archives shall include .rdd-docs/ directory with pre-seeded template files for direct installation to project .rdd-docs/ directory
+- **[TR-43] Testing Framework Structure**: The framework shall maintain tests in a dedicated tests/ directory with subdirectories organized by test type (python/, build/, install/, shell/, powershell/)
+- **[TR-44] Python Test Framework**: The framework shall use pytest as the primary testing framework for Python code with pytest-cov for coverage reporting
+- **[TR-45] Shell Script Testing**: The framework shall use BATS (Bash Automated Testing System) for testing shell scripts on Linux/macOS platforms
+- **[TR-46] PowerShell Testing**: The framework shall use Pester framework for testing PowerShell scripts on Windows platforms
+- **[TR-47] Test Isolation**: All tests shall use temporary directories and mock objects to prevent modification of actual project files and ensure test independence
+- **[TR-48] Test Dependencies**: Test dependencies shall be specified in tests/requirements.txt and installed in an isolated virtual environment
+- **[TR-49] Virtual Environment for Tests**: The framework shall provide a setup-test-env.py script to create and maintain a .venv virtual environment specifically for test execution
+- **[TR-50] Test Runner Scripts**: The framework shall provide platform-specific test runner scripts (run-tests.sh for Linux/macOS, run-tests.ps1 for Windows) that execute all appropriate tests for each platform
+- **[TR-51] CI/CD Testing**: The framework shall use GitHub Actions to run tests on both Linux and Windows platforms automatically on push and pull request events
+- **[TR-52] Test Coverage Reporting**: The test framework shall generate code coverage reports for Python code and report coverage metrics in CI/CD pipelines
+- **[TR-53] Colored Test Output**: Test runner scripts shall provide colored output (green for success, red for failure, yellow for warnings) to improve readability
 
 ```
 
