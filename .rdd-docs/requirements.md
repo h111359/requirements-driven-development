@@ -91,6 +91,13 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-68] Branch Type for Workspace Context**: The fix/enhancement type selection shall be preserved for determining workspace initialization content, but shall not affect the branch name provided by users
 - **[FR-69] Python-Only Installation**: The framework shall provide only Python-based installation (install.py) without shell or PowerShell wrapper scripts, simplifying the installation process and reducing maintenance overhead
 - **[FR-70] Python Test Runner**: The framework shall provide a Python-based test runner (run-tests.py) that executes all test types (pytest, build tests, install tests) in a unified cross-platform manner without requiring BATS or Pester frameworks
+- **[FR-71] Local-Only Mode Configuration**: The framework shall support local-only mode through a configurable `localOnly` boolean field in config.json, allowing repositories to operate without GitHub remote
+- **[FR-72] Local-Only Mode Installation Prompt**: The installation process shall prompt users to choose between GitHub remote mode (default) and local-only mode, setting the `localOnly` configuration accordingly
+- **[FR-73] Remote Operation Skipping**: When `localOnly` is set to true, the framework shall skip all remote git operations (fetch, push, pull) while maintaining full functionality for local operations
+- **[FR-74] Local-Only Mode User Feedback**: The framework shall provide clear informational messages when remote operations are skipped due to local-only mode, ensuring users understand the system behavior
+- **[FR-75] Numeric Menu Navigation**: The framework shall provide a simplified numeric menu system where users select options by entering numbers, replacing complex arrow-based navigation for improved reliability
+- **[FR-76] Interactive Version Management in Build**: The build process shall display the current version and prompt users to increment the patch version (last digit) or rebuild with the same version, with automatic config.json updates
+- **[FR-77] Build Version Persistence**: When users choose to increment the version during build, the system shall update `.rdd-docs/config.json` with the new version number before creating release archives
 
 # Non-Functional Requirements
 

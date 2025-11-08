@@ -95,42 +95,35 @@ The framework follows a sequential phase workflow:
 6. **Clean-Up**: After PR merge, clean up local environment and remove merged branches
 
 ### Interactive Menu System
-The framework provides interactive menus for user input using Python's curses library:
+The framework provides simplified numeric menus for user input:
 
 **Features**:
-- Visual navigation with arrow keys (↑/↓)
-- Selection with Enter or Space
-- Automatic fallback to numeric input when curses unavailable
-- Beautiful Unicode box drawing (╔═╗╚╝║╠╣) for professional appearance
-- Clear visual indicators (→ for current selection with bold + reverse video)
-- Support for custom text input options
-- Dynamic box width (adapts to terminal, max 80 chars)
-- Centered title and help text
+- Numeric selection system where users enter numbers to select options
+- Clear numbered menu options for easy navigation
+- Reliable and error-resistant compared to arrow-based navigation
+- Works consistently across all terminal types and platforms
+- Support for custom text input when needed
+- Color-coded output for improved readability
 
 **Implementation**:
-- `_curses_menu()` function in rdd.py provides core menu functionality
+- Simplified numeric menu functions in rdd.py
 - Used for change type selection (Fix/Enhancement)
-- Used for default branch selection during initialization
-- Handles terminal compatibility issues gracefully
+- Used for default branch selection during installation
+- Prompts user to enter option number or text input
 
-**Example Visual**:
+**Example Interaction**:
 ```
-╔═══════════════════════════════════════════════════════════╗
-║                  Select change type                        ║
-╠═══════════════════════════════════════════════════════════╣
-║  Use ↑/↓ arrows to navigate, Enter to select, ESC/q...   ║
-╠═══════════════════════════════════════════════════════════╣
-║ → Fix                                                      ║  (highlighted)
-║   Enhancement                                              ║
-╚═══════════════════════════════════════════════════════════╝
+Select change type:
+1. Fix
+2. Enhancement
+
+Enter your choice (1-2): 1
 ```
 
 **Example Usage**:
 ```python
 python .rdd/scripts/rdd.py change create
-# Displays interactive menu:
-# → Fix
-#   Enhancement (hidden by default)
+# Prompts user to enter 1 or 2 to select change type
 ```
 
 ### Configuration Management
@@ -138,7 +131,7 @@ The framework uses a configuration file system for repository-wide settings:
 
 **Configuration Storage**:
 - **Location**: `.rdd-docs/config.json`
-- **Format**: JSON with version, defaultBranch, timestamps
+- **Format**: JSON with version, defaultBranch, localOnly, timestamps
 - **Version Control**: File is tracked in repository and shared across team
 
 **Configuration Access**:
@@ -161,6 +154,23 @@ The framework uses a configuration file system for repository-wide settings:
 1. Read from `.rdd-docs/config.json` if exists
 2. Fall back to branch detection (main → master)
 3. Default to "main"
+
+**Local-Only Mode Configuration**:
+- **Purpose**: Allows repositories to operate without GitHub remote
+- **Configuration**: Set `localOnly: true` in config.json to enable
+- **Installation**: User prompted during installation to choose mode
+- **Default**: `localOnly: false` (GitHub remote enabled)
+- **Behavior**: When enabled, all remote git operations (fetch, push, pull) are skipped
+- **Implementation**:
+  - `is_local_only_mode()` function checks config.json for localOnly setting
+  - `pull_main()` skips remote fetch when local-only mode enabled
+  - `interactive_branch_cleanup()` skips remote fetch and deletion prompts
+  - Clear informational messages displayed when operations skipped
+- **Use Cases**: 
+  - Repositories without GitHub/remote hosting
+  - Local-only development workflows
+  - Offline development environments
+  - Testing and experimentation without remote side effects
 
 ## Component Architecture
 
@@ -263,6 +273,7 @@ Located in `.rdd-docs/config.json`, version-controlled with repository:
 {
   "version": "1.0.0",
   "defaultBranch": "main",
+  "localOnly": false,
   "created": "2025-11-06T08:00:00Z",
   "lastModified": "2025-11-06T08:00:00Z"
 }
@@ -271,6 +282,7 @@ Located in `.rdd-docs/config.json`, version-controlled with repository:
 Fields:
 - **version**: Framework version (semantic versioning)
 - **defaultBranch**: Name of the repository's default branch (e.g., "main", "dev", "master")
+- **localOnly**: Boolean flag for local-only mode (true = no remote operations, false = normal GitHub remote mode)
 - **created**: ISO 8601 timestamp of initial configuration creation
 - **lastModified**: ISO 8601 timestamp of last configuration update
 
@@ -295,6 +307,8 @@ The RDD framework uses a Python-based build system to create release packages:
 #### Build Script (scripts/build.py)
 - **Purpose**: Creates cross-platform release archives with all necessary files
 - **Version Management**: Extracts version from `.rdd-docs/config.json` as single source of truth (fixed from previous hardcoded version in rdd.py)
+- **Interactive Version Control**: Displays current version and prompts user to either increment patch version or rebuild with same version
+- **Version Persistence**: Automatically updates `.rdd-docs/config.json` when user chooses to increment version
 - **Template Processing**: Reads README.md and installer scripts from templates/ directory with {{VERSION}} placeholder substitution
 - **Archive Creation**: Generates single `rdd-v{version}.zip` file containing:
   - Framework files (.rdd/scripts/, .rdd/templates/)
@@ -307,16 +321,18 @@ The RDD framework uses a Python-based build system to create release packages:
 - **Cleanup**: Removes temporary build directories, keeping only archive and checksum
 
 #### Build Process Steps
-1. Extract version from rdd.py and validate SemVer format
-2. Create build directory structure (including .rdd-docs/)
-3. Copy framework files (prompts, scripts, templates, LICENSE)
-4. Copy VS Code settings template to .vscode/settings.json
-5. Copy seed templates to .rdd-docs/ (config.json, data-model.md, requirements.md, tech-spec.md)
-6. Generate README.md from templates/README.md with version substitution
-7. Generate install.py from scripts/install.py template with version substitution
-8. Create ZIP archive with nested directory structure
-9. Generate SHA256 checksum file
-10. Clean up temporary staging directories
+1. Extract version from `.rdd-docs/config.json` and validate SemVer format
+2. Display current version and prompt for version increment (patch only)
+3. Update `.rdd-docs/config.json` with new version if user chooses to increment
+4. Create build directory structure (including .rdd-docs/)
+5. Copy framework files (prompts, scripts, templates, LICENSE)
+6. Copy VS Code settings template to .vscode/settings.json
+7. Copy seed templates to .rdd-docs/ (config.json, data-model.md, requirements.md, tech-spec.md)
+8. Generate README.md from templates/README.md with version substitution
+9. Generate install.py from scripts/install.py template with version substitution
+10. Create ZIP archive with nested directory structure
+11. Generate SHA256 checksum file
+12. Clean up temporary staging directories
 
 ### Installation System
 The RDD framework provides Python-based cross-platform installation:

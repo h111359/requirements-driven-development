@@ -309,6 +309,110 @@ def get_current_branch() -> str:
     return result.stdout.strip()
 
 
+def interactive_branch_cleanup(base_branch: str = None) -> None:
+    """
+    Show an interactive menu listing all branches merged into the base branch.
+    Lets the user choose branches to delete locally (and optionally remotely).
+    """
+    if not base_branch:
+        base_branch = get_default_branch()
+
+    print_banner("Merged Branches Cleanup", f"Base: {base_branch}")
+    
+    # Check for uncommitted changes before attempting checkout
+    if not check_uncommitted_changes():
+        print_error("Cannot proceed with branch cleanup.")
+        print_info("Please commit or stash your changes first.")
+        return
+    
+    # Fetch from remote only if not in local-only mode
+    if not is_local_only_mode():
+        subprocess.run(["git", "fetch", "origin", "--quiet"])
+    else:
+        print_info("Local-only mode: Skipping remote fetch")
+    
+    # Attempt to checkout base branch
+    result = subprocess.run(
+        ["git", "checkout", base_branch],
+        capture_output=True,
+        text=True
+    )
+    
+    if result.returncode != 0:
+        print_error(f"Failed to checkout {base_branch}")
+        if result.stderr:
+            print(result.stderr)
+        return
+
+    # Get merged branches
+    result = subprocess.run(
+        ["git", "branch", "--merged", base_branch],
+        capture_output=True, text=True
+    )
+    
+    # Protected branches that should never be deleted
+    protected_branches = {base_branch, "dev", "main", "master"}
+    
+    merged_branches = []
+    for b in result.stdout.splitlines():
+        # Remove leading/trailing whitespace and the asterisk marker
+        branch_name = b.strip().lstrip("* ").strip()
+        # Only include if non-empty and not protected
+        if branch_name and branch_name not in protected_branches:
+            merged_branches.append(branch_name)
+
+    if not merged_branches:
+        print_info("No merged branches to clean up.")
+        return
+
+    print_info("The following branches are fully merged:")
+    for i, branch in enumerate(merged_branches, start=1):
+        print(f"  {i}. {branch}")
+
+    print("")
+    selected = input(f"{Colors.YELLOW}Enter numbers to delete (comma-sep or 'all' to delete all, ENTER to cancel): {Colors.NC}").strip()
+
+    if not selected:
+        print_info("Cleanup cancelled.")
+        return
+
+    if selected.lower() == "all":
+        to_delete = merged_branches
+    else:
+        try:
+            indexes = [int(x.strip()) for x in selected.split(",") if x.strip().isdigit()]
+            to_delete = [merged_branches[i - 1] for i in indexes if 0 < i <= len(merged_branches)]
+        except Exception:
+            print_error("Invalid input.")
+            return
+
+    if not to_delete:
+        print_info("No valid branches selected.")
+        return
+
+    print("")
+    print_warning(f"About to delete {len(to_delete)} merged branch(es):")
+    for b in to_delete:
+        print(f"  - {b}")
+
+    if not confirm_action("Proceed with deletion?"):
+        print_info("Cleanup aborted.")
+        return
+
+    for b in to_delete:
+        subprocess.run(["git", "branch", "-d", b])
+    print_success("Selected merged branches deleted locally.")
+
+    # Only ask about remote deletion if not in local-only mode
+    if not is_local_only_mode():
+        if confirm_action("Also delete them from origin (remote)?"):
+            for b in to_delete:
+                subprocess.run(["git", "push", "origin", "--delete", b])
+            print_success("Deleted selected branches from remote as well.")
+    else:
+        print_info("Local-only mode: Skipping remote branch deletion")
+
+
 def get_default_branch() -> str:
     """
     Get the default branch name with intelligent detection.
@@ -570,9 +674,16 @@ def restore_stashed_changes() -> int:
 def pull_main() -> bool:
     """
     Pull latest changes from default branch.
+    In local-only mode, skips remote operations.
     Returns True on success, False on failure.
     """
     default_branch = get_default_branch()
+    
+    # Check if we're in local-only mode
+    if is_local_only_mode():
+        print_info(f"Local-only mode: Skipping remote fetch from origin/{default_branch}")
+        print_success(f"Using local {default_branch} branch (no remote sync)")
+        return True
     
     print_step(f"Pulling latest changes from origin/{default_branch}...")
     
@@ -977,6 +1088,18 @@ def set_rdd_config(key: str, value: str) -> bool:
     except Exception as e:
         print_error(f"Failed to write config: {e}")
         return False
+
+
+def is_local_only_mode() -> bool:
+    """
+    Check if the repository is configured for local-only mode (no GitHub remote).
+    Returns True if localOnly is set to true in config.json, False otherwise.
+    """
+    local_only = get_rdd_config("localOnly", "false")
+    # Handle both string and boolean values
+    if isinstance(local_only, bool):
+        return local_only
+    return str(local_only).lower() in ['true', '1', 'yes']
 
 
 # ============================================================================

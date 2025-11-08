@@ -37,7 +37,7 @@ from rdd_utils import (
     exit_with_error, debug_print,
     # Config functions
     find_change_config, get_config, set_config,
-    get_rdd_config_path, get_rdd_config, set_rdd_config,
+    get_rdd_config_path, get_rdd_config, set_rdd_config, is_local_only_mode,
     # Prompt functions
     mark_prompt_completed, log_prompt_execution, list_prompts, validate_prompt_status,
     # Help functions
@@ -59,92 +59,97 @@ SHOW_ENH_IN_MENU_DEFAULT = False
 # INTERACTIVE UI HELPERS
 # ============================================================================
 
-def _curses_menu(stdscr, title: str, items: list) -> int:
+def _simple_menu(title: str, items: list) -> int:
     """
-    Beautiful arrow-key menu using curses. Returns selected index.
-    Controls: Up/Down to move, Enter/Space to select, 'q' or ESC to cancel (returns -1).
+    Simple numbered menu. Returns selected index.
+    Returns -1 if user cancels (enters 'q' or invalid input).
     """
-    curses = None
+    print()
+    print("=" * 60)
+    print(f"  {title}")
+    print("=" * 60)
+    print()
+    
+    for idx, label in enumerate(items, start=1):
+        print(f"  {idx}. {label}")
+    
+    print()
+    print("Enter number to select (or 'q' to cancel): ", end="")
+    
     try:
-        import curses  # type: ignore
-    except Exception:
-        # Should never get here because this function is only called after import succeeded
+        choice = input().strip().lower()
+        
+        if choice == 'q' or choice == '':
+            return -1
+        
+        try:
+            selected = int(choice)
+            if 1 <= selected <= len(items):
+                return selected - 1
+            else:
+                print_warning(f"Invalid choice. Please enter a number between 1 and {len(items)}")
+                return -1
+        except ValueError:
+            print_warning("Invalid input. Please enter a number.")
+            return -1
+            
+    except (KeyboardInterrupt, EOFError):
+        print()
         return -1
 
-    curses.curs_set(0)
-    stdscr.nodelay(False)
-    stdscr.keypad(True)
 
-    current = 0
+def _simple_text_input(title: str, prompt: str, default: str = "") -> Optional[str]:
+    """
+    Simple text input dialog.
+    Returns user input or None if cancelled.
+    """
+    print()
+    print("=" * 60)
+    print(f"  {title}")
+    print("=" * 60)
+    print()
+    print(prompt)
+    if default:
+        print(f"(Press Enter for default: {default})")
+    print()
+    print("Enter value (or 'q' to cancel): ", end="")
+    
+    try:
+        user_input = input().strip()
+        
+        if user_input.lower() == 'q':
+            return None
+        
+        if not user_input and default:
+            return default
+        
+        return user_input if user_input else None
+            
+    except (KeyboardInterrupt, EOFError):
+        print()
+        return None
 
-    while True:
-        stdscr.clear()
-        h, w = stdscr.getmaxyx()
 
-        # Calculate box width (use most of terminal width, but cap at 80)
-        box_width = min(w - 4, 80)
-        
-        # Title box
-        row = 0
-        stdscr.addstr(row, 0, "╔" + "═" * (box_width - 2) + "╗")
-        row += 1
-        
-        # Center title in box
-        padding = (box_width - 2 - len(title)) // 2
-        title_line = "║" + " " * padding + title + " " * (box_width - 2 - padding - len(title)) + "║"
-        stdscr.addstr(row, 0, title_line)
-        row += 1
-        
-        stdscr.addstr(row, 0, "╠" + "═" * (box_width - 2) + "╣")
-        row += 1
-        
-        # Help text
-        help_text = "Use ↑/↓ arrows to navigate, Enter to select, ESC/q to cancel"
-        help_padding = (box_width - 2 - len(help_text)) // 2
-        help_line = "║" + " " * help_padding + help_text + " " * (box_width - 2 - help_padding - len(help_text)) + "║"
-        stdscr.addstr(row, 0, help_line)
-        row += 1
-        
-        stdscr.addstr(row, 0, "╠" + "═" * (box_width - 2) + "╣")
-        row += 1
-        
-        # Items
-        for idx, label in enumerate(items):
-            if idx == current:
-                # Highlighted item with arrow
-                prefix = "→ "
-                item_text = prefix + label
-                item_padding = box_width - 2 - len(item_text)
-                line = "║" + item_text + " " * item_padding + "║"
-                try:
-                    stdscr.attron(curses.A_REVERSE | curses.A_BOLD)
-                    stdscr.addstr(row, 0, line)
-                    stdscr.attroff(curses.A_REVERSE | curses.A_BOLD)
-                except Exception:
-                    stdscr.addstr(row, 0, line)
-            else:
-                # Regular item
-                prefix = "  "
-                item_text = prefix + label
-                item_padding = box_width - 2 - len(item_text)
-                line = "║" + item_text + " " * item_padding + "║"
-                stdscr.addstr(row, 0, line)
-            row += 1
-        
-        # Bottom border
-        stdscr.addstr(row, 0, "╚" + "═" * (box_width - 2) + "╝")
-
-        stdscr.refresh()
-
-        key = stdscr.getch()
-        if key in (ord('q'), 27):  # q or ESC
-            return -1
-        if key in (curses.KEY_UP, ord('k')):
-            current = (current - 1) % len(items)
-        elif key in (curses.KEY_DOWN, ord('j')):
-            current = (current + 1) % len(items)
-        elif key in (curses.KEY_ENTER, 10, 13, ord(' ')):
-            return current
+def _simple_confirmation(title: str, message: str) -> bool:
+    """
+    Simple yes/no confirmation dialog.
+    Returns True if confirmed, False otherwise.
+    """
+    print()
+    print("=" * 60)
+    print(f"  {title}")
+    print("=" * 60)
+    print()
+    print(message)
+    print()
+    print("Confirm? (y/n): ", end="")
+    
+    try:
+        response = input().strip().lower()
+        return response in ['y', 'yes']
+    except (KeyboardInterrupt, EOFError):
+        print()
+        return False
 
 
 def select_change_type_interactive(reveal_enh: bool = SHOW_ENH_IN_MENU_DEFAULT) -> Optional[str]:
@@ -160,37 +165,11 @@ def select_change_type_interactive(reveal_enh: bool = SHOW_ENH_IN_MENU_DEFAULT) 
 
     labels = [label for (label, _code) in visible_options]
 
-    # Try curses-based UI first
-    try:
-        import curses  # noqa: F401
-
-        def _run(stdscr):
-            return _curses_menu(stdscr, "Select change type", labels)
-
-        selected_idx = __import__('curses').wrapper(_run)
-        if selected_idx is None or selected_idx < 0:
-            return None
-        return visible_options[selected_idx][1]
-    except Exception:
-        # Fallback to simple numeric input
-        print_info("Interactive menu unavailable; falling back to numeric selection.")
-        for i, (label, _code) in enumerate(visible_options, start=1):
-            print(f"  {i}. {label}")
-        try:
-            raw = input("Choose an option [1..{0}] (Enter for 1): ".format(len(visible_options))).strip()
-        except (KeyboardInterrupt, EOFError):
-            print()
-            return None
-        if not raw:
-            return visible_options[0][1]
-        try:
-            idx = int(raw)
-            if 1 <= idx <= len(visible_options):
-                return visible_options[idx - 1][1]
-        except ValueError:
-            pass
-        print_warning("Invalid selection. Defaulting to 'fix'.")
-        return 'fix'
+    # Use simple numeric menu
+    selected_idx = _simple_menu("Select change type", labels)
+    if selected_idx is None or selected_idx < 0:
+        return None
+    return visible_options[selected_idx][1]
 
 
 def select_default_branch_interactive() -> Optional[str]:
@@ -208,77 +187,33 @@ def select_default_branch_interactive() -> Optional[str]:
     
     labels = [label for (label, _code) in menu_options]
     
-    # Try curses-based UI first
-    try:
-        import curses  # noqa: F401
+    # Use simple numeric menu
+    selected_idx = _simple_menu("Select default branch for RDD framework", labels)
+    if selected_idx is None or selected_idx < 0:
+        return None
+    
+    code = menu_options[selected_idx][1]
+    
+    # If custom, prompt for input
+    if code == "custom":
+        branch_name = _simple_text_input(
+            "Custom Branch Name",
+            "Enter branch name:",
+            default="main"
+        )
         
-        def _run(stdscr):
-            return _curses_menu(stdscr, "Select default branch for RDD framework", labels)
-        
-        selected_idx = __import__('curses').wrapper(_run)
-        if selected_idx is None or selected_idx < 0:
-            return None
-        
-        code = menu_options[selected_idx][1]
-        
-        # If custom, prompt for input
-        if code == "custom":
-            try:
-                branch_name = input("Enter branch name: ").strip()
-                if not branch_name:
-                    print_warning("No branch name entered. Defaulting to 'main'.")
-                    return "main"
-                # Validate branch name format
-                if not validate_branch_name(branch_name):
-                    print_error(f"Invalid branch name: {branch_name}")
-                    return None
-                return branch_name
-            except (KeyboardInterrupt, EOFError):
-                print()
-                return None
-        
-        return code
-        
-    except Exception:
-        # Fallback to simple numeric input
-        print_info("Interactive menu unavailable; falling back to numeric selection.")
-        for i, (label, _code) in enumerate(menu_options, start=1):
-            print(f"  {i}. {label}")
-        try:
-            raw = input("Choose an option [1..3] (Enter for 1): ").strip()
-        except (KeyboardInterrupt, EOFError):
-            print()
-            return None
-        
-        if not raw:
+        if not branch_name:
+            print_warning("No branch name entered. Defaulting to 'main'.")
             return "main"
         
-        try:
-            idx = int(raw)
-            if 1 <= idx <= len(menu_options):
-                code = menu_options[idx - 1][1]
-                
-                # If custom, prompt for input
-                if code == "custom":
-                    try:
-                        branch_name = input("Enter branch name: ").strip()
-                        if not branch_name:
-                            print_warning("No branch name entered. Defaulting to 'main'.")
-                            return "main"
-                        if not validate_branch_name(branch_name):
-                            print_error(f"Invalid branch name: {branch_name}")
-                            return None
-                        return branch_name
-                    except (KeyboardInterrupt, EOFError):
-                        print()
-                        return None
-                
-                return code
-        except ValueError:
-            pass
+        # Validate branch name format
+        if not validate_branch_name(branch_name):
+            print_error(f"Invalid branch name: {branch_name}")
+            return None
         
-        print_warning("Invalid selection. Defaulting to 'main'.")
-        return 'main'
+        return branch_name
+    
+    return code
 
 
 # ============================================================================
@@ -666,6 +601,9 @@ def cleanup_after_merge(branch_name: str = None) -> bool:
     Returns:
         True on success, False on failure
     """
+
+    from rdd_utils import interactive_branch_cleanup
+
     check_git_repo()
     
     print_banner("POST-MERGE CLEANUP")
@@ -676,32 +614,32 @@ def cleanup_after_merge(branch_name: str = None) -> bool:
     current_branch = get_current_branch()
     
     # If no branch name provided, prompt for it or use current branch
-    if not branch_name:
-        # If we're not on the default branch, offer to delete current branch
-        if current_branch != default_branch:
-            print_info(f"Current branch: {current_branch}")
-            if confirm_action("Delete current branch after cleanup?"):
-                branch_name = current_branch
-            else:
-                try:
-                    branch_name = input("Enter branch name to delete (or press Enter to skip): ").strip()
-                except (KeyboardInterrupt, EOFError):
-                    print()
-                    print_info("Operation cancelled")
-                    return False
+    # if not branch_name:
+    #     # If we're not on the default branch, offer to delete current branch
+    #     if current_branch != default_branch:
+    #         print_info(f"Current branch: {current_branch}")
+    #         if confirm_action("Delete current branch after cleanup?"):
+    #             branch_name = current_branch
+    #         else:
+    #             try:
+    #                 branch_name = input("Enter branch name to delete (or press Enter to skip): ").strip()
+    #             except (KeyboardInterrupt, EOFError):
+    #                 print()
+    #                 print_info("Operation cancelled")
+    #                 return False
                 
-                if not branch_name:
-                    print_info("No branch specified for deletion")
-        else:
-            try:
-                branch_name = input("Enter branch name to delete (or press Enter to skip): ").strip()
-            except (KeyboardInterrupt, EOFError):
-                print()
-                print_info("Operation cancelled")
-                return False
+    #             if not branch_name:
+    #                 print_info("No branch specified for deletion")
+    #     else:
+    #         try:
+    #             branch_name = input("Enter branch name to delete (or press Enter to skip): ").strip()
+    #         except (KeyboardInterrupt, EOFError):
+    #             print()
+    #             print_info("Operation cancelled")
+    #             return False
             
-            if not branch_name:
-                print_info("No branch specified for deletion")
+    #         if not branch_name:
+    #             print_info("No branch specified for deletion")
     
     # Switch to default branch
     print_step(f"1. Switching to '{default_branch}' branch")
@@ -721,7 +659,7 @@ def cleanup_after_merge(branch_name: str = None) -> bool:
     print()
     
     # Fetch latest changes
-    print_step("2. Fetching latest changes from remote")
+    # print_step("2. Fetching latest changes from remote")
     result = subprocess.run(
         ['git', 'fetch', 'origin'],
         stdout=subprocess.DEVNULL,
@@ -730,12 +668,12 @@ def cleanup_after_merge(branch_name: str = None) -> bool:
     
     if result.returncode != 0:
         print_warning("Failed to fetch from remote")
-    else:
-        print_success("Fetched latest changes")
+    # else:
+    #     print_success("Fetched latest changes")
     print()
     
     # Pull latest changes for default branch
-    print_step(f"3. Pulling latest changes for '{default_branch}'")
+    # print_step(f"3. Pulling latest changes for '{default_branch}'")
     result = subprocess.run(
         ['git', 'pull', 'origin', default_branch],
         stdout=subprocess.DEVNULL,
@@ -744,70 +682,73 @@ def cleanup_after_merge(branch_name: str = None) -> bool:
     
     if result.returncode != 0:
         print_warning("Failed to pull latest changes")
-    else:
-        print_success("Pulled latest changes")
-    print()
+    # else:
+    #     print_success("Pulled latest changes")
+    # print()
+
+
+    interactive_branch_cleanup(default_branch)
     
     # Delete the branch if specified
-    if branch_name:
-        print_step(f"4. Deleting branch '{branch_name}'")
+    # if branch_name:
+    #     print_step(f"4. Deleting branch '{branch_name}'")
         
-        # Check if branch exists locally
-        result = subprocess.run(
-            ['git', 'show-ref', '--verify', '--quiet', f'refs/heads/{branch_name}'],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL
-        )
+    #     # Check if branch exists locally
+    #     result = subprocess.run(
+    #         ['git', 'show-ref', '--verify', '--quiet', f'refs/heads/{branch_name}'],
+    #         stdout=subprocess.DEVNULL,
+    #         stderr=subprocess.DEVNULL
+    #     )
         
-        if result.returncode == 0:
-            # Try to delete local branch
-            result = subprocess.run(
-                ['git', 'branch', '-d', branch_name],
-                capture_output=True,
-                text=True
-            )
+    #     if result.returncode == 0:
+    #         # Try to delete local branch
+    #         result = subprocess.run(
+    #             ['git', 'branch', '-d', branch_name],
+    #             capture_output=True,
+    #             text=True
+    #         )
             
-            if result.returncode == 0:
-                print_success("Local branch deleted")
-            else:
-                print_warning("Branch not fully merged, use --force if needed")
-                if confirm_action("Force delete local branch?"):
-                    result = subprocess.run(
-                        ['git', 'branch', '-D', branch_name],
-                        capture_output=True,
-                        text=True
-                    )
+    #         if result.returncode == 0:
+    #             print_success("Local branch deleted")
+    #         else:
+    #             print_warning("Branch not fully merged, use --force if needed")
+    #             if confirm_action("Force delete local branch?"):
+    #                 result = subprocess.run(
+    #                     ['git', 'branch', '-D', branch_name],
+    #                     capture_output=True,
+    #                     text=True
+    #                 )
                     
-                    if result.returncode == 0:
-                        print_success("Local branch force-deleted")
-                    else:
-                        print_error("Failed to delete local branch")
-        else:
-            print_info("Local branch does not exist (already deleted)")
+    #                 if result.returncode == 0:
+    #                     print_success("Local branch force-deleted")
+    #                 else:
+    #                     print_error("Failed to delete local branch")
+    #     else:
+    #         print_info("Local branch does not exist (already deleted)")
         
-        # Check and delete remote branch
-        result = subprocess.run(
-            ['git', 'ls-remote', '--heads', 'origin', branch_name],
-            capture_output=True,
-            text=True
-        )
+    #     # Check and delete remote branch
+    #     result = subprocess.run(
+    #         ['git', 'ls-remote', '--heads', 'origin', branch_name],
+    #         capture_output=True,
+    #         text=True
+    #     )
         
-        if result.stdout.strip():
-            print_info(f"Deleting remote branch 'origin/{branch_name}'...")
-            result = subprocess.run(
-                ['git', 'push', 'origin', '--delete', branch_name],
-                capture_output=True,
-                text=True
-            )
+    #     if result.stdout.strip():
+    #         print_info(f"Deleting remote branch 'origin/{branch_name}'...")
+    #         result = subprocess.run(
+    #             ['git', 'push', 'origin', '--delete', branch_name],
+    #             capture_output=True,
+    #             text=True
+    #         )
             
-            if result.returncode == 0:
-                print_success("Remote branch deleted")
-            else:
-                print_error("Failed to delete remote branch")
-        else:
-            print_info("Remote branch does not exist (already deleted)")
+    #         if result.returncode == 0:
+    #             print_success("Remote branch deleted")
+    #         else:
+    #             print_error("Failed to delete remote branch")
+    #     else:
+    #         print_info("Remote branch does not exist (already deleted)")
         
-        print()
+    #     print()
     
     # Display completion summary
     print_banner("CLEANUP COMPLETE")
@@ -1628,54 +1569,418 @@ def show_config_help() -> None:
 # MAIN ENTRY POINT
 # ============================================================================
 
-def main() -> int:
-    """Main entry point for the script."""
-    args = sys.argv[1:]
-    
-    # Handle no arguments - show help
-    if not args:
-        show_main_help()
-        sys.exit(0)
-    
-    # Handle global options
-    if args[0] in ['--version', '-v']:
-        show_version()
-        sys.exit(0)
-    
-    if args[0] in ['--help', '-h']:
-        show_main_help()
-        sys.exit(0)
-    
-    # Route to domain handler
-    domain = args[0]
-    domain_args = args[1:]
-    
-    if domain == 'branch':
-        return route_branch(domain_args)
-    elif domain == 'workspace':
-        return route_workspace(domain_args)
-    elif domain == 'change':
-        return route_change(domain_args)
-    elif domain == 'fix':
-        return route_fix(domain_args)
-    elif domain == 'git':
-        return route_git(domain_args)
-    elif domain == 'prompt':
-        return route_prompt(domain_args)
-    elif domain == 'config':
-        return route_config(domain_args)
-    else:
-        print_error(f"Unknown domain: {domain}")
-        print()
-        print("Available domains: branch, workspace, change, fix, git, prompt, config")
-        print()
-        print("Use 'rdd.py --help' for more information")
-        sys.exit(1)
 
+# ============================================================================
+# SIMPLIFIED SUBMENU IMPLEMENTATIONS
+# ============================================================================
+
+def branch_operations_submenu() -> None:
+    """Interactive submenu for branch operations - Simple numbered menu."""
+    while True:
+        items = [
+            "Create Branch",
+            "Delete Branch",
+            "List Branches",
+            "Cleanup After Merge",
+            "Back to Main Menu"
+        ]
+        
+        selected = _simple_menu("Branch Operations", items)
+        
+        if selected == -1 or selected == 4:  # Back to main menu
+            return
+        
+        try:
+            if selected == 0:  # Create Branch
+                # Select branch type
+                type_items = ["Fix", "Enhancement"]
+                type_selected = _simple_menu("Select Branch Type", type_items)
+                
+                if type_selected == -1:
+                    continue
+                
+                branch_type = 'fix' if type_selected == 0 else 'enh'
+                
+                # Get branch name
+                branch_name = _simple_text_input(
+                    "Create Branch",
+                    "Enter branch name (will be normalized to kebab-case):"
+                )
+                
+                if not branch_name:
+                    continue
+                
+                normalized_name = normalize_to_kebab_case(branch_name)
+                
+                if normalized_name and validate_branch_name(normalized_name):
+                    create_branch(branch_type, normalized_name)
+                    input("\nPress Enter to continue...")
+                else:
+                    print_error("Invalid branch name")
+                    input("\nPress Enter to continue...")
+            
+            elif selected == 1:  # Delete Branch
+                current = get_current_branch() or ""
+                branch_name = _simple_text_input(
+                    "Delete Branch",
+                    f"Enter branch name to delete",
+                    default=current
+                )
+                
+                if branch_name:
+                    delete_branch(branch_name)
+                    input("\nPress Enter to continue...")
+                    
+            elif selected == 2:  # List Branches
+                print_banner("List Branches")
+                print()
+                list_branches()
+                input("\nPress Enter to return to menu...")
+                
+            elif selected == 3:  # Cleanup After Merge
+                print_banner("Cleanup After Merge")
+                print()
+                cleanup_after_merge()
+                input("\nPress Enter to return to menu...")
+
+        except Exception as e:
+            print_error(f"Error: {e}")
+            input("\nPress Enter to return to menu...")
+
+
+def workspace_operations_submenu() -> None:
+    """Interactive submenu for workspace operations."""
+    while True:
+        items = [
+            "Initialize Workspace",
+            "Archive Workspace",
+            "Clear Workspace",
+            "Back to Main Menu"
+        ]
+        
+        selected = _simple_menu("Workspace Operations", items)
+
+        if selected == -1 or selected == 3:
+            return
+
+        try:
+            if selected == 0:  # Initialize Workspace
+                type_items = ["change", "fix"]
+                type_selected = _simple_menu("Initialize Workspace - Select Type", type_items)
+                
+                if type_selected == -1:
+                    continue
+                
+                workspace_type = type_items[type_selected]
+                init_workspace(workspace_type)
+                input("\nPress Enter to continue...")
+                    
+            elif selected == 1:  # Archive Workspace
+                branch_name = get_current_branch()
+                keep = _simple_confirmation(
+                    "Archive Workspace",
+                    f"Archive workspace for branch: {branch_name}\n\nKeep workspace after archiving?"
+                )
+                
+                archive_workspace(branch_name, keep)
+                input("\nPress Enter to continue...")
+                
+            elif selected == 2:  # Clear Workspace
+                confirmed = _simple_confirmation(
+                    "Clear Workspace",
+                    "WARNING: This will delete all workspace files!\n\nAre you sure?"
+                )
+                
+                if confirmed:
+                    clear_workspace()
+                    input("\nPress Enter to continue...")
+
+        except Exception as e:
+            print_error(f"Error: {e}")
+            input("\nPress Enter to return to menu...")
+
+
+def change_workflow_submenu() -> None:
+    """Interactive submenu for change workflow."""
+    while True:
+        items = [
+            "Create Change",
+            "Wrap Up Change",
+            "Back to Main Menu"
+        ]
+        
+        selected = _simple_menu("Change Workflow", items)
+
+        if selected == -1 or selected == 2:
+            return
+
+        try:
+            if selected == 0:  # Create Change
+                route_change(['create'])
+                
+            elif selected == 1:  # Wrap Up
+                print_banner("Wrap Up Change")
+                print()
+                wrap_up_change()
+                input("\nPress Enter to return to menu...")
+
+        except Exception as e:
+            print_error(f"Error: {e}")
+            input("\nPress Enter to return to menu...")
+
+
+def git_operations_submenu() -> None:
+    """Interactive submenu for git operations."""
+    while True:
+        items = [
+            "Compare with Main",
+            "Modified Files",
+            "Push to Remote",
+            "Update from Main",
+            "Back to Main Menu"
+        ]
+        
+        selected = _simple_menu("Git Operations", items)
+
+        if selected == -1 or selected == 4:
+            return
+
+        try:
+            if selected == 0:
+                compare_with_main()
+            elif selected == 1:
+                get_modified_files()
+            elif selected == 2:
+                push_to_remote()
+            elif selected == 3:
+                update_from_main()
+
+            input("\nPress Enter to return to menu...")
+
+        except Exception as e:
+            print_error(f"Error: {e}")
+            input("\nPress Enter to return to menu...")
+
+
+def prompt_management_submenu() -> None:
+    """Interactive submenu for prompt management."""
+    while True:
+        items = [
+            "Mark Prompt Completed",
+            "List Prompts",
+            "Log Execution",
+            "Back to Main Menu"
+        ]
+        
+        selected = _simple_menu("Prompt Management", items)
+
+        if selected == -1 or selected == 3:
+            return
+
+        try:
+            journal_file = os.path.join(WORKSPACE_DIR, ".rdd.copilot-prompts.md")
+            
+            if selected == 0:  # Mark Completed
+                prompt_id = _simple_text_input(
+                    "Mark Prompt Completed",
+                    "Enter prompt ID (e.g., P01):"
+                )
+                
+                if prompt_id:
+                    mark_prompt_completed(prompt_id, journal_file)
+                    input("\nPress Enter to continue...")
+                
+            elif selected == 1:  # List Prompts
+                print_banner("List Prompts")
+                print()
+                list_prompts("all", journal_file)
+                input("\nPress Enter to continue...")
+                
+            elif selected == 2:  # Log Execution
+                prompt_id = _simple_text_input(
+                    "Log Execution",
+                    "Enter prompt ID:"
+                )
+                
+                if not prompt_id:
+                    continue
+                
+                details = _simple_text_input(
+                    "Log Execution",
+                    "Enter execution details:"
+                )
+                
+                if not details:
+                    continue
+                
+                session_id = f"exec-{get_timestamp_filename()}"
+                log_prompt_execution(prompt_id, details, session_id)
+                input("\nPress Enter to continue...")
+
+        except Exception as e:
+            print_error(f"Error: {e}")
+            input("\nPress Enter to return to menu...")
+
+
+def config_management_submenu() -> None:
+    """Interactive submenu for configuration management."""
+    while True:
+        items = [
+            "Show Configuration",
+            "Get Config Value",
+            "Set Config Value",
+            "Back to Main Menu"
+        ]
+        
+        selected = _simple_menu("Configuration Management", items)
+
+        if selected == -1 or selected == 3:
+            return
+
+        try:
+            if selected == 0:  # Show Config
+                route_config(['show'])
+                input("\nPress Enter to continue...")
+                
+            elif selected == 1:  # Get Value
+                key = _simple_text_input(
+                    "Get Config Value",
+                    "Enter config key (e.g., defaultBranch):"
+                )
+                
+                if key:
+                    route_config(['get', key])
+                    input("\nPress Enter to continue...")
+                
+            elif selected == 2:  # Set Value
+                key = _simple_text_input(
+                    "Set Config Value",
+                    "Enter config key:"
+                )
+                
+                if not key:
+                    continue
+                
+                value = _simple_text_input(
+                    "Set Config Value",
+                    f"Enter value for '{key}':"
+                )
+                
+                if not value:
+                    continue
+                
+                route_config(['set', key, value])
+                input("\nPress Enter to continue...")
+
+        except Exception as e:
+            print_error(f"Error: {e}")
+            input("\nPress Enter to return to menu...")
+
+
+# ============================================================================
+# MAIN MENU SYSTEM
+# ============================================================================
+
+def main_menu_loop() -> None:
+    """Main interactive menu loop - Simple numbered menu."""
+    # Show banner
+    print()
+    print("╔" + "═" * 62 + "╗")
+    print("║" + " " * 62 + "║")
+    print("║" + "            RDD Framework            ".center(62) + "║")
+    print("║" + "    Requirements-Driven Development   ".center(62) + "║")
+    print("║" + " " * 62 + "║")
+    print("╚" + "═" * 62 + "╝")
+    print()
+    print(f"Version: {get_framework_version()}")
+    print()
+    input("Press Enter to continue...")
+
+    while True:
+        # Get current context
+        current_branch = get_current_branch() or "unknown"
+        print()
+        print(f"Current branch: {current_branch}")
+        
+        items = [
+            "Branch Operations",
+            "Workspace Operations",
+            "Change Workflow",
+            "Git Operations",
+            "Prompt Management",
+            "Configuration",
+            "Help & Documentation",
+            "Exit"
+        ]
+        
+        selected = _simple_menu("RDD Framework - Main Menu", items)
+
+        if selected == -1 or selected == 7:  # Exit
+            print_success("Thank you for using RDD Framework!")
+            return
+
+        try:
+            if selected == 0:
+                branch_operations_submenu()
+            elif selected == 1:
+                workspace_operations_submenu()
+            elif selected == 2:
+                change_workflow_submenu()
+            elif selected == 3:
+                git_operations_submenu()
+            elif selected == 4:
+                prompt_management_submenu()
+            elif selected == 5:
+                config_management_submenu()
+            elif selected == 6:
+                show_main_help()
+                input("\nPress Enter to continue...")
+        except Exception as e:
+            print_error(f"Error: {e}")
+            input("\nPress Enter to continue...")
+
+# ============================================================================
+# MAIN ENTRY POINT
+# ============================================================================
 
 if __name__ == '__main__':
     try:
-        sys.exit(main())
+        if len(sys.argv) == 1:
+            # No arguments - launch interactive menu
+            main_menu_loop()
+            sys.exit(0)
+        else:
+            # CLI mode for scriptable use
+            args = sys.argv[1:]
+            if args[0] in ['--version', '-v']:
+                show_version()
+                sys.exit(0)
+            if args[0] in ['--help', '-h']:
+                show_main_help()
+                sys.exit(0)
+            domain = args[0]
+            domain_args = args[1:]
+            if domain == 'branch':
+                sys.exit(route_branch(domain_args))
+            elif domain == 'workspace':
+                sys.exit(route_workspace(domain_args))
+            elif domain == 'change':
+                sys.exit(route_change(domain_args))
+            elif domain == 'fix':
+                sys.exit(route_fix(domain_args))
+            elif domain == 'git':
+                sys.exit(route_git(domain_args))
+            elif domain == 'prompt':
+                sys.exit(route_prompt(domain_args))
+            elif domain == 'config':
+                sys.exit(route_config(domain_args))
+            else:
+                print_error(f"Unknown domain: {domain}")
+                print()
+                print("Available domains: branch, workspace, change, fix, git, prompt, config")
+                print()
+                print("Use 'rdd.py --help' for more information")
+                sys.exit(1)
     except KeyboardInterrupt:
         print()
         print_warning("Operation cancelled by user")
