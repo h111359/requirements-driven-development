@@ -98,6 +98,17 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-75] Numeric Menu Navigation**: The framework shall provide a simplified numeric menu system where users select options by entering numbers, replacing complex arrow-based navigation for improved reliability
 - **[FR-76] Interactive Version Management in Build**: The build process shall display the current version and prompt users to increment the patch version (last digit) or rebuild with the same version, with automatic config.json updates
 - **[FR-77] Build Version Persistence**: When users choose to increment the version during build, the system shall update `.rdd-docs/config.json` with the new version number before creating release archives
+- **[FR-78] Simplified Iteration Workflow**: The framework shall provide a streamlined 4-option menu (Create new iteration, Update from default, Complete current iteration, Delete merged branches) focused on core development workflow
+- **[FR-79] Create Iteration Safety Checks**: The create iteration workflow shall verify user is on default branch and workspace is empty before allowing iteration creation
+- **[FR-80] Complete Iteration Safety Checks**: The complete iteration workflow shall verify user is NOT on default branch and workspace is NOT empty before allowing iteration completion
+- **[FR-81] Iteration Branch Naming**: The create iteration workflow shall prompt for branch name with normalization to kebab-case format, allowing user full control over naming convention without automatic prefixes
+- **[FR-82] Iteration Workspace Initialization**: The create iteration workflow shall initialize workspace with only copilot-prompts.md template, keeping workspace minimal
+- **[FR-83] Iteration Completion Archiving**: The complete iteration workflow shall archive all workspace files to `.rdd-docs/archive/<sanitized-branch-name>/` with metadata including timestamp, branch, author, and commit info
+- **[FR-84] Iteration Completion Commit**: The complete iteration workflow shall commit all changes with message "Completing work on <branch-name>" after archiving
+- **[FR-85] Iteration Push Prompt**: The complete iteration workflow shall prompt user to push to remote (if not local-only mode) and remind about pull request creation
+- **[FR-86] Iteration Branch Cleanup**: The delete merged branches workflow shall list all branches fully merged into default branch, allow user selection, and delete locally with optional remote deletion
+- **[FR-87] Protected Branch Exclusion**: The delete merged branches workflow shall exclude protected branches (default, main, master, dev) from deletion lists
+- **[FR-88] Legacy CLI Compatibility**: The framework shall maintain domain-based CLI commands (branch, workspace, change, git, prompt, config) for scripting and advanced users alongside simplified menu
 
 # Non-Functional Requirements
 

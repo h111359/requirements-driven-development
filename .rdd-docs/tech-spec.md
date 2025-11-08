@@ -94,10 +94,17 @@ The framework follows a sequential phase workflow:
 5. **Wrap-Up**: Archive workspace, merge requirements, prepare for PR
 6. **Clean-Up**: After PR merge, clean up local environment and remove merged branches
 
-### Interactive Menu System
-The framework provides simplified numeric menus for user input:
+### Simplified Workflow (v1.0.3+)
 
-**Features**:
+The framework provides a streamlined 4-option workflow focused on core iteration tasks:
+
+**Main Menu Options**:
+1. **Create new iteration** - Start work on a new feature/fix
+2. **Update from default** - Sync current branch with latest changes from default branch
+3. **Complete current iteration** - Archive work, commit changes, and return to default branch
+4. **Delete merged branches** - Interactive cleanup of fully merged branches
+
+**Interactive Menu System**:
 - Numeric selection system where users enter numbers to select options
 - Clear numbered menu options for easy navigation
 - Reliable and error-resistant compared to arrow-based navigation
@@ -107,23 +114,129 @@ The framework provides simplified numeric menus for user input:
 
 **Implementation**:
 - Simplified numeric menu functions in rdd.py
-- Used for change type selection (Fix/Enhancement)
+- Main menu launched when running `python .rdd/scripts/rdd.py` without arguments
+- Used for legacy change type selection (Fix/Enhancement) when using CLI commands
 - Used for default branch selection during installation
 - Prompts user to enter option number or text input
 
+**Workflow Functions**:
+- `create_iteration()` - Creates new branch and initializes workspace
+- `update_from_default_branch()` - Fetches/merges default branch into current
+- `complete_iteration()` - Archives workspace, commits, optionally pushes
+- `interactive_branch_cleanup()` - Lists and deletes merged branches
+
 **Example Interaction**:
 ```
-Select change type:
-1. Fix
-2. Enhancement
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║            RDD Framework                                     ║
+║    Requirements-Driven Development                           ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
 
-Enter your choice (1-2): 1
+Current branch: dev
+Default branch: dev
+
+RDD Framework - Main Menu:
+1. Create new iteration
+2. Update from default
+3. Complete current iteration
+4. Delete merged branches
+5. Exit
+
+Enter your choice (1-5): 1
 ```
 
-**Example Usage**:
+**Legacy CLI Access**:
 ```python
+# Legacy commands still available for scripting
 python .rdd/scripts/rdd.py change create
-# Prompts user to enter 1 or 2 to select change type
+python .rdd/scripts/rdd.py branch cleanup
+python .rdd/scripts/rdd.py git update-from-default-branch
+```
+
+### Iteration Workflow Architecture (v1.0.3+)
+
+The framework's core workflow is built around four iteration management functions:
+
+#### 1. Create New Iteration (`create_iteration()`)
+
+**Purpose**: Start work on a new feature or fix
+
+**Safety Checks**:
+- Verifies user IS on default branch (stops if not)
+- Verifies workspace IS empty (stops if not empty)
+
+**Process**:
+1. Prompts for branch name with normalization and validation
+2. Pulls latest from default branch (if not local-only mode)
+3. Creates and checks out new branch
+4. Initializes workspace with `.rdd/templates/copilot-prompts.md`
+
+**Branch Naming**:
+- Accepts user input with normalization to kebab-case
+- Validates format (lowercase, hyphens, forward slashes)
+- No automatic prefixes or timestamps added
+
+#### 2. Update From Default (`update_from_default_branch()`)
+
+**Purpose**: Sync current branch with latest changes from default branch
+
+**Safety Checks**:
+- Stops if already on default branch
+
+**Process**:
+1. Stashes any uncommitted changes
+2. Fetches and pulls latest from default branch (if not local-only mode)
+3. Merges default branch into current branch
+4. Restores stashed changes
+5. Shows clear error messages on conflicts
+
+#### 3. Complete Current Iteration (`complete_iteration()`)
+
+**Purpose**: Archive work, commit changes, and return to default branch
+
+**Safety Checks**:
+- Verifies user is NOT on default branch (stops if on default)
+- Verifies workspace is NOT empty (stops if empty)
+
+**Process**:
+1. Archives all workspace files to `.rdd-docs/archive/<sanitized-branch-name>/`
+2. Creates archive metadata with timestamp, branch, author, commit info
+3. Commits all changes with message "Completing work on <branch-name>"
+4. Asks user if they want to push to remote (if not local-only mode)
+5. If yes, pushes branch and reminds about pull request
+6. Checks out to default branch
+
+**Archive Naming**:
+- Uses sanitized branch name (replaces `/` and `\` with `-`)
+- Example: `fix/bug-123` → `.rdd-docs/archive/fix-bug-123/`
+
+#### 4. Delete Merged Branches (`interactive_branch_cleanup()`)
+
+**Purpose**: Clean up branches that have been fully merged
+
+**Process**:
+1. Fetches from remote (if not local-only mode)
+2. Checks out default branch
+3. Lists all branches fully merged into default branch
+4. Excludes protected branches (default, main, master, dev)
+5. Prompts user to select branches by number or "all"
+6. Deletes selected branches locally
+7. Optionally deletes from remote (if not local-only mode)
+
+**Protected Branches**:
+- Default branch (from config.json)
+- "main", "master", "dev"
+
+**User Interaction**:
+```
+The following branches are fully merged:
+  1. fix/bug-123
+  2. feature/add-login
+  3. hotfix/urgent-fix
+
+Enter numbers to delete (comma-sep or 'all' to delete all, ENTER to cancel): 1,3
 ```
 
 ### Configuration Management
