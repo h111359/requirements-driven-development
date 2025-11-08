@@ -671,7 +671,7 @@ def restore_stashed_changes() -> int:
         return 1
 
 
-def pull_main() -> bool:
+def pull_default_branch() -> bool:
     """
     Pull latest changes from default branch.
     In local-only mode, skips remote operations.
@@ -757,7 +757,7 @@ def pull_main() -> bool:
             return False
 
 
-def merge_main_into_current() -> bool:
+def merge_default_branch_into_current() -> bool:
     """
     Merge default branch into current branch.
     Returns True on success, False on failure (including conflicts).
@@ -765,7 +765,7 @@ def merge_main_into_current() -> bool:
     default_branch = get_default_branch()
     current_branch = get_current_branch()
     
-    # Safety check: don't merge if we're on main
+    # Safety check: don't merge if we're on default branch
     if current_branch == default_branch:
         print_error(f"Cannot merge {default_branch} into itself")
         return False
@@ -821,10 +821,10 @@ def merge_main_into_current() -> bool:
             return False
 
 
-def update_from_main() -> bool:
+def update_from_default_branch() -> bool:
     """
-    Update current branch from main (full workflow).
-    Stashes changes, pulls main, merges, and restores stash.
+    Update current branch from default branch (full workflow).
+    Stashes changes, pulls default branch, merges, and restores stash.
     Returns True on success, False on failure.
     """
     default_branch = get_default_branch()
@@ -836,7 +836,7 @@ def update_from_main() -> bool:
     print_info(f"Target: {default_branch}")
     print("")
     
-    # Safety check: don't run on main
+    # Safety check: don't run on default branch
     if current_branch == default_branch:
         print_error(f"Cannot update {default_branch} from itself")
         print_info(f"This command is meant to update feature branches with latest {default_branch}")
@@ -847,8 +847,8 @@ def update_from_main() -> bool:
         print_error("Failed to stash changes. Aborting.")
         return False
     
-    # Step 2: Pull latest main
-    if not pull_main():
+    # Step 2: Pull latest default branch
+    if not pull_default_branch():
         print_error(f"Failed to pull latest {default_branch}. Aborting.")
         # Try to restore stash
         restore_result = restore_stashed_changes()
@@ -857,8 +857,8 @@ def update_from_main() -> bool:
             print_warning("Your changes are safely in the stash. Run 'git stash list' to see them.")
         return False
     
-    # Step 3: Merge main into current branch
-    if not merge_main_into_current():
+    # Step 3: Merge default branch into current branch
+    if not merge_default_branch_into_current():
         print_error("Merge failed. Please resolve conflicts manually.")
         print_warning("Your changes are still stashed. After resolving conflicts:")
         print("  1. Complete the merge: git commit")
@@ -1198,68 +1198,6 @@ def mark_prompt_completed(prompt_id: str, journal_file: str = None) -> bool:
         return True
     except Exception as e:
         print_error(f"Failed to mark prompt {prompt_id} as completed: {e}")
-        return False
-
-
-def log_prompt_execution(prompt_id: str, execution_details: str, session_id: str = None) -> bool:
-    """
-    Log prompt execution details to log.jsonl.
-    Creates a structured JSONL entry with timestamp, promptId, executionDetails, sessionId.
-    
-    Args:
-        prompt_id: The ID of the executed prompt (e.g., P01, P02)
-        execution_details: Full content describing what was executed
-        session_id: Optional session identifier (defaults to exec-YYYYMMDD-HHmm)
-    
-    Returns:
-        True on success, False on error
-    
-    Format:
-        {"timestamp":"2025-11-05T10:30:00Z","promptId":"P01","executionDetails":"...","sessionId":"exec-20251105-1030"}
-    """
-    from datetime import datetime
-    
-    workspace_dir = ".rdd-docs/workspace"
-    log_file = os.path.join(workspace_dir, "log.jsonl")
-    
-    # Validate required parameters
-    if not prompt_id:
-        print_error("Prompt ID is required for logging")
-        return False
-    
-    if not execution_details:
-        print_error("Execution details are required for logging")
-        return False
-    
-    # Default session ID if not provided
-    if not session_id:
-        session_id = f"exec-{datetime.now().strftime('%Y%m%d-%H%M')}"
-    
-    # Ensure workspace directory exists
-    os.makedirs(workspace_dir, exist_ok=True)
-    
-    # Create log file if it doesn't exist
-    if not os.path.isfile(log_file):
-        open(log_file, 'a').close()
-        debug_print(f"Created log file: {log_file}")
-    
-    # Create JSON line entry
-    timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
-    log_entry = {
-        "timestamp": timestamp,
-        "promptId": prompt_id,
-        "executionDetails": execution_details,
-        "sessionId": session_id
-    }
-    
-    # Write to log file
-    try:
-        with open(log_file, 'a', encoding='utf-8') as f:
-            f.write(json.dumps(log_entry) + '\n')
-        print_success(f"Logged execution details for prompt {prompt_id} to {log_file}")
-        return True
-    except Exception as e:
-        print_error(f"Failed to log execution: {e}")
         return False
 
 

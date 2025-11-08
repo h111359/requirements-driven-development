@@ -1,7 +1,7 @@
 {
-  "archivedAt": "2025-11-08T11:19:37Z",
+  "archivedAt": "2025-11-08T22:36:23Z",
   "branch": "feature/v103-menu-and-build",
   "archivedBy": "Hristo Hristov <hmhristov@outlook.com>",
-  "lastCommit": "859241e09bee6ac52284d81af06b5ab0be7af441",
-  "lastCommitMessage": "Merge pull request #59 from h111359/feature-20251107-1939-fix-tests"
+  "lastCommit": "e0944258d7508a9a6eeffa85aa91f3557689b233",
+  "lastCommitMessage": "fix tests"
 }

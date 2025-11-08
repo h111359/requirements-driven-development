@@ -33,7 +33,8 @@ class TestCLIHelp:
         assert result == 0
         captured = capsys.readouterr()
         assert "Usage:" in captured.out
-        assert "domains:" in captured.out.lower()
+        # After P06 simplification, help text now says "Available domains for command-line usage:"
+        assert "available domains" in captured.out.lower()
 
 
 class TestDomainRouting:
