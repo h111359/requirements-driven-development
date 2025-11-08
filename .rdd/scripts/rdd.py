@@ -1943,51 +1943,60 @@ def main_menu_loop() -> None:
 # MAIN ENTRY POINT
 # ============================================================================
 
-if __name__ == '__main__':
+def main() -> int:
+    """
+    Main entry point for the RDD framework.
+    Returns exit code (0 for success, non-zero for error).
+    Can be called directly by tests or through CLI.
+    """
     try:
         if len(sys.argv) == 1:
             # No arguments - launch interactive menu
             main_menu_loop()
-            sys.exit(0)
+            return 0
         else:
             # CLI mode for scriptable use
             args = sys.argv[1:]
             if args[0] in ['--version', '-v']:
                 show_version()
-                sys.exit(0)
+                return 0
             if args[0] in ['--help', '-h']:
                 show_main_help()
-                sys.exit(0)
+                return 0
             domain = args[0]
             domain_args = args[1:]
             if domain == 'branch':
-                sys.exit(route_branch(domain_args))
+                return route_branch(domain_args)
             elif domain == 'workspace':
-                sys.exit(route_workspace(domain_args))
+                return route_workspace(domain_args)
             elif domain == 'change':
-                sys.exit(route_change(domain_args))
+                return route_change(domain_args)
             elif domain == 'fix':
-                sys.exit(route_fix(domain_args))
+                return route_fix(domain_args)
             elif domain == 'git':
-                sys.exit(route_git(domain_args))
+                return route_git(domain_args)
             elif domain == 'prompt':
-                sys.exit(route_prompt(domain_args))
+                return route_prompt(domain_args)
             elif domain == 'config':
-                sys.exit(route_config(domain_args))
+                return route_config(domain_args)
             else:
                 print_error(f"Unknown domain: {domain}")
                 print()
                 print("Available domains: branch, workspace, change, fix, git, prompt, config")
                 print()
                 print("Use 'rdd.py --help' for more information")
-                sys.exit(1)
+                return 1
     except KeyboardInterrupt:
         print()
         print_warning("Operation cancelled by user")
-        sys.exit(130)
+        return 130
     except Exception as e:
         print_error(f"Unexpected error: {e}")
         if os.environ.get('DEBUG') == '1':
             import traceback
             traceback.print_exc()
-        sys.exit(1)
+        return 1
+
+
+if __name__ == '__main__':
+    sys.exit(main())

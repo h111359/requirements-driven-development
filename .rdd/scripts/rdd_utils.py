@@ -11,7 +11,7 @@ import re
 import subprocess
 import shutil
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, List, Tuple
 from pathlib import Path
 
@@ -238,7 +238,7 @@ def ensure_dir(dir_path: str) -> None:
 
 def get_timestamp() -> str:
     """Get timestamp in ISO 8601 format (e.g., 2023-11-01T12:34:56Z)."""
-    return datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+    return datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
 
 
 def get_timestamp_filename() -> str:
@@ -1244,7 +1244,7 @@ def log_prompt_execution(prompt_id: str, execution_details: str, session_id: str
         debug_print(f"Created log file: {log_file}")
     
     # Create JSON line entry
-    timestamp = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+    timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
     log_entry = {
         "timestamp": timestamp,
         "promptId": prompt_id,
