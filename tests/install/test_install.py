@@ -128,6 +128,7 @@ class TestLauncherScriptInstallation:
         assert "#!/bin/bash" in content
         assert ".rdd/scripts/rdd.py" in content
     
+    @pytest.mark.skipif(os.name == "nt", reason="Unix-only permission test")
     @patch('os.name', 'posix')
     def test_launcher_executable_permissions_unix(self, mock_rdd_archive, mock_git_repo_for_install):
         """Test that rdd.sh gets executable permissions on Unix"""
