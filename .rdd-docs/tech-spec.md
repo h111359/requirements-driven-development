@@ -495,6 +495,7 @@ The RDD framework provides Python-based cross-platform installation with GUI and
 - **Automated file operations**:
   - Copy prompts to `.github/prompts/`
   - Copy framework to `.rdd/`
+  - Copy user guide from `templates/user-guide.md` to `.rdd/user-guide.md`
   - Intelligent VS Code settings merge
   - .gitignore update with workspace exclusion
 - **Post-installation verification**:

@@ -44,6 +44,5 @@ This file defines user stories, features, and tasks for GitHub Copilot to use as
 > - .gitignore file to be created in the root folder of the repo
 > - gitignore to follow the best practices, still to be avoided unnecessary complexity
 > - .github, .vscode and .rdd should not be excluded
-> - The development to be made in a separate fix branch named as per the specified in .> rdd-docs/version-control.md
 > - PR with added .gitignore file 
 ```

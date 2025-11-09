@@ -262,6 +262,15 @@ def copy_rdd_framework(source_dir: Path, target_dir: Path):
         rdd_script = dst_rdd / "scripts" / "rdd.py"
         rdd_script.chmod(0o755)
     
+    # Copy user-guide.md to .rdd directory
+    src_user_guide = source_dir / "templates" / "user-guide.md"
+    if src_user_guide.exists():
+        dst_user_guide = dst_rdd / "user-guide.md"
+        shutil.copy2(src_user_guide, dst_user_guide)
+        print_info("  Copied user-guide.md to .rdd/")
+    else:
+        print_warning("  user-guide.md not found in templates/")
+    
     print_success("Installed RDD framework")
 
 def install_launcher_script(source_dir: Path, target_dir: Path):

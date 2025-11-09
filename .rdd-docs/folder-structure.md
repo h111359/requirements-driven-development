@@ -15,9 +15,7 @@ This document describes the organized structure of the Requirements-Driven Devel
 repo-root/
 ├── .github/                      # GitHub workflows, prompts, Copilot instructions
 │   ├── prompts/                  # Prompt templates for Copilot and RDD workflow
-│   │   ├── rdd.01-initiate.prompt.md
-│   │   ├── rdd.06-execute.prompt.md
-│   │   ├── rdd.08-wrap-up.prompt.md
+│   │   ├── rdd.execute.prompt.md
 │   └── copilot-instructions.md   # Copilot agent behavioral guidelines
 ├── .rdd/                         # RDD framework internals
 │   ├── scripts/                  # Python automation scripts
@@ -27,14 +25,14 @@ repo-root/
 │   │   ├── IMPLEMENTATION-SUMMARY.md  # Migration documentation
 │   │   ├── README-PYTHON.md      # Python implementation guide
 │   │   └── shell-to-python-mapping.md # Legacy bash to Python mapping
-│   └── templates/                # File templates for initialization
-│       ├── copilot-prompts.md    # Stand-alone prompts template
-│       ├── clarity-checklist.md  # Clarity checklist template
-│       ├── design-checklist.md   # Design checklist template
-│       ├── folder-structure.md   # Folder structure template
-│       ├── questions-formatting.md  # Question formatting guidelines
-│       ├── requirements-format.md   # Requirements format guidelines
-│       └── version-control.md    # Version control guidelines
+│   ├── templates/                # File templates for initialization
+│   │   ├── copilot-prompts.md    # Stand-alone prompts template
+│   │   ├── clarity-checklist.md  # Clarity checklist template
+│   │   ├── design-checklist.md   # Design checklist template
+│   │   ├── folder-structure.md   # Folder structure template
+│   │   ├── questions-formatting.md  # Question formatting guidelines
+│   │   ├── requirements-format.md   # Requirements format guidelines
+│   └── user-guide.md             # Comprehensive user guide (installed during setup)
 ├── src/                          # Legacy platform-specific implementations (archived)
 │   ├── linux/                    # Linux/macOS implementation
 │   │   ├── .rdd/
@@ -103,6 +101,7 @@ repo-root/
 │   ├── requirements.md           # Requirements seed template
 │   ├── tech-spec.md              # Technical spec seed template
 │   ├── settings.json             # VS Code settings template
+│   ├── user-guide.md             # Comprehensive user guide (copied to .rdd/ during install)
 │   ├── install.sh                # Bash launcher template (Linux/macOS)
 │   └── install.bat               # Batch launcher template (Windows)
 ├── README.md                     # Project overview and quick start
@@ -123,12 +122,6 @@ repo-root/
 - **Type**: `fix` or `enh` 
 - **Purpose**: Embeds change metadata directly in filename
 - **Example**: `.rdd.fix.20251103-1257-prompt-08-bug-workspace-unclean`
-
-### 3. No Auto-Creation Policy
-- Documentation files (`clarity-checklist.md`, `version-control.md`) are NOT automatically copied to workspace
-- Template files are only copied when explicitly needed by workflow
-- Workspace remains minimal with only essential working files
-- **change.md template removed**: The `change.md` file is no longer created during workspace initialization
 
 ### 4. Complete Workspace Clearing
 - After archiving, ALL files are removed from workspace (not just a hardcoded list)

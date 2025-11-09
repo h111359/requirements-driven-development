@@ -51,12 +51,21 @@ def mock_rdd_archive(temp_install_dir):
     (archive_dir / ".rdd" / "templates").mkdir(parents=True)
     (archive_dir / ".rdd-docs").mkdir(parents=True)
     (archive_dir / ".vscode").mkdir(parents=True)
+    (archive_dir / "templates").mkdir(parents=True)
     
     # Create mock files
     (archive_dir / ".rdd" / "scripts" / "rdd.py").write_text('#!/usr/bin/env python3\nprint("RDD")')
     (archive_dir / ".rdd" / "scripts" / "rdd_utils.py").write_text('# Utils')
     (archive_dir / ".rdd" / "templates" / "test.md").write_text('# Template')
     (archive_dir / ".github" / "prompts" / "test.prompt.md").write_text('# Prompt')
+    
+    # Create templates/user-guide.md (new in P01)
+    (archive_dir / "templates" / "user-guide.md").write_text(
+        '# RDD Framework User Guide\n\n'
+        'This is a comprehensive user guide for the RDD framework.\n\n'
+        '## Overview\n\n'
+        'The RDD framework provides structured workflows...\n'
+    )
     
     # Create seed templates in .rdd-docs
     config = {

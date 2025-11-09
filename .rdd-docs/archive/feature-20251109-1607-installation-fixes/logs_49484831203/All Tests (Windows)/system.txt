@@ -1,5 +1,0 @@
-2025-11-09T13:52:10.3300000Z Requested labels: windows-latest
-2025-11-09T13:52:10.3300000Z Job defined at: h111359/requirements-driven-development/.github/workflows/tests.yml@refs/pull/65/merge
-2025-11-09T13:52:10.3300000Z Waiting for a runner to pick up this job...
-2025-11-09T13:52:10.8290000Z Job is waiting for a hosted runner to come online.
-2025-11-09T13:52:10.8290000Z Job is about to start running on the hosted runner: GitHub Actions 1000000939
