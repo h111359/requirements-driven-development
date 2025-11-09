@@ -11,3 +11,7 @@ Prompts that the agent execute - follow the instructions which prompts to be exe
  - [ ] [P04] <PROMPT-PLACEHOLDER>
 
  - [ ] [P05] <PROMPT-PLACEHOLDER>
+
+ ## Recommended Prompts
+
+ - [ ] [R01] Update the tests accordingly the changes in `.rdd-docs/workspace/.rdd.copilot-prompts.md` and the implementation files in `.rdd-docs/workspace` folder.

@@ -264,6 +264,39 @@ def copy_rdd_framework(source_dir: Path, target_dir: Path):
     
     print_success("Installed RDD framework")
 
+def install_launcher_script(source_dir: Path, target_dir: Path):
+    """Copy appropriate launcher script (rdd.bat or rdd.sh) to target root"""
+    print_info("Installing RDD launcher script...")
+    
+    # Detect OS and select appropriate launcher
+    if os.name == 'nt':  # Windows
+        launcher_name = "rdd.bat"
+    else:  # Linux, macOS, etc.
+        launcher_name = "rdd.sh"
+    
+    src_launcher = source_dir / launcher_name
+    dst_launcher = target_dir / launcher_name
+    
+    if not src_launcher.exists():
+        print_warning(f"Launcher script not found: {src_launcher}")
+        return
+    
+    # Copy launcher to target root
+    shutil.copy2(src_launcher, dst_launcher)
+    
+    # Set executable permissions (Unix only)
+    if os.name != 'nt':
+        dst_launcher.chmod(0o755)
+        print_success(f"Installed {launcher_name} (executable)")
+    else:
+        print_success(f"Installed {launcher_name}")
+    
+    # Provide usage hint
+    if os.name == 'nt':
+        print_info(f"  Usage: Double-click {launcher_name} or run from terminal")
+    else:
+        print_info(f"  Usage: ./{launcher_name} or double-click from file manager")
+
 def ask_local_only_mode() -> bool:
     """Ask user if they want to use local-only mode (no GitHub remote)"""
     print()
@@ -507,6 +540,7 @@ def main():
         # Install files
         copy_prompts(source_dir, target_dir)
         copy_rdd_framework(source_dir, target_dir)
+        install_launcher_script(source_dir, target_dir)
         copy_rdd_docs_seeds(source_dir, target_dir, local_only)
         merge_vscode_settings(source_dir, target_dir)
         update_gitignore(target_dir)
@@ -523,9 +557,9 @@ def main():
         print()
         print("Next steps:")
         print("  1. Restart VS Code")
-        print("  2. Create your first change:")
+        print("  2. Create your first work itteration:")
         print(f"     cd {target_dir}")
-        print("     python .rdd/scripts/rdd.py change create enh my-feature")
+        print("     python .rdd/scripts/rdd.py ")
         print()
         print("Documentation: https://github.com/h111359/requirements-driven-development")
         print()

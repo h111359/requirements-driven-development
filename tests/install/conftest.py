@@ -82,4 +82,24 @@ def mock_rdd_archive(temp_install_dir):
     # LICENSE
     (archive_dir / "LICENSE").write_text("MIT License")
     
+    # RDD launcher scripts (in archive root, will be installed to project root)
+    (archive_dir / "rdd.bat").write_text(
+        '@echo off\n'
+        'REM RDD Framework Launcher for Windows\n'
+        'if not exist ".rdd\\scripts\\rdd.py" (\n'
+        '    echo Error: RDD framework not found\n'
+        '    exit /b 1\n'
+        ')\n'
+        'python .rdd\\scripts\\rdd.py %*\n'
+    )
+    (archive_dir / "rdd.sh").write_text(
+        '#!/bin/bash\n'
+        '# RDD Framework Launcher for Linux/macOS\n'
+        'if [ ! -f ".rdd/scripts/rdd.py" ]; then\n'
+        '    echo "Error: RDD framework not found"\n'
+        '    exit 1\n'
+        'fi\n'
+        'python .rdd/scripts/rdd.py "$@"\n'
+    )
+    
     yield archive_dir
