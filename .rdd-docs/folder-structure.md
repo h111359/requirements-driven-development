@@ -93,7 +93,9 @@ repo-root/
 │   ├── build.py                  # Build script for creating releases
 │   ├── install.py                # Python installer template
 │   ├── install.sh                # Bash installer template
-│   └── install.ps1               # PowerShell installer template
+│   ├── install.ps1               # PowerShell installer template (deprecated)
+│   ├── rdd.bat                   # Windows RDD launcher (installed to project root)
+│   └── rdd.sh                    # Linux/macOS RDD launcher (installed to project root)
 ├── templates/                    # One-time seed templates (installed to .rdd-docs/)
 │   ├── README.md                 # README template for build
 │   ├── config.json               # Configuration seed template
@@ -177,8 +179,11 @@ repo-root/
   - Framework files (.rdd/, .github/prompts/)
   - Installation scripts:
     - install.py (from scripts/install.py - Python installer with GUI support)
-    - install.sh (from templates/install.sh - Bash launcher for Linux/macOS)
-    - install.bat (from templates/install.bat - Batch launcher for Windows)
+    - install.sh (from templates/install.sh - Bash launcher for installer)
+    - install.bat (from templates/install.bat - Batch launcher for installer)
+  - RDD launcher scripts (installed to project root):
+    - rdd.bat (from scripts/rdd.bat - Windows RDD menu launcher)
+    - rdd.sh (from scripts/rdd.sh - Linux/macOS RDD menu launcher)
   - Documentation (README.md from templates/README.md, LICENSE)
   - VS Code settings template (.vscode/settings.json from templates/settings.json)
   - Seed templates (.rdd-docs/ with config.json, data-model.md, requirements.md, tech-spec.md from templates/)

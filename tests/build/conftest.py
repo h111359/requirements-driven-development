@@ -74,4 +74,12 @@ def mock_rdd_project(temp_build_dir):
         '$VERSION = "{{VERSION}}"\nWrite-Host "Installer"'
     )
     
+    # Create RDD launcher scripts
+    (project_root / "scripts" / "rdd.bat").write_text(
+        '@echo off\nREM RDD Launcher\npython .rdd\\scripts\\rdd.py %*'
+    )
+    (project_root / "scripts" / "rdd.sh").write_text(
+        '#!/bin/bash\n# RDD Launcher\npython .rdd/scripts/rdd.py "$@"'
+    )
+    
     yield project_root

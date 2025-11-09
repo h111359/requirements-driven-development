@@ -270,6 +270,36 @@ def generate_batch_installer(build_dir: Path, version: str, repo_root: Path):
     
     print_success("Generated install.bat launcher")
 
+def copy_rdd_launcher_scripts(build_dir: Path, repo_root: Path):
+    """Copy RDD launcher scripts (rdd.bat and rdd.sh) to build directory"""
+    print_info("Copying RDD launcher scripts...")
+    
+    scripts_src = repo_root / "scripts"
+    
+    launchers = ["rdd.bat", "rdd.sh"]
+    copied = 0
+    
+    for launcher_name in launchers:
+        launcher_src = scripts_src / launcher_name
+        launcher_dst = build_dir / launcher_name
+        
+        if not launcher_src.exists():
+            print_warning(f"Launcher script not found: {launcher_src}")
+            continue
+        
+        shutil.copy2(launcher_src, launcher_dst)
+        
+        # Make rdd.sh executable on Unix systems
+        if launcher_name == "rdd.sh" and os.name != 'nt':
+            launcher_dst.chmod(0o755)
+        
+        copied += 1
+    
+    if copied == 0:
+        print_warning("No launcher scripts copied")
+    else:
+        print_success(f"Copied {copied} RDD launcher script(s)")
+
 def generate_powershell_installer(build_dir: Path, version: str, repo_root: Path):
     """Generate install.ps1 script from template (DEPRECATED - replaced by install.bat)"""
     print_info("Generating install.ps1...")
@@ -477,6 +507,7 @@ def main():
         generate_installer(build_dir, version, repo_root)
         generate_bash_installer(build_dir, version, repo_root)
         generate_batch_installer(build_dir, version, repo_root)
+        copy_rdd_launcher_scripts(build_dir, repo_root)
         print()
 
         # Step 6: Create archive
@@ -506,8 +537,10 @@ def main():
         print("Contents:")
         print("  - README.md (Installation instructions)")
         print("  - install.py (Python installer)")
-        print("  - install.sh (Linux/macOS launcher)")
-        print("  - install.bat (Windows launcher)")
+        print("  - install.sh (Linux/macOS installer launcher)")
+        print("  - install.bat (Windows installer launcher)")
+        print("  - rdd.sh (Linux/macOS RDD launcher)")
+        print("  - rdd.bat (Windows RDD launcher)")
         print()
         print("Next steps:")
         print("  1. Test installer:")

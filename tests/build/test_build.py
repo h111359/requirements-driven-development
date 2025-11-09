@@ -97,6 +97,25 @@ class TestFileCopying:
         assert (rdd_docs / "requirements.md").exists()
         assert (rdd_docs / "tech-spec.md").exists()
         assert (rdd_docs / "folder-structure.md").exists()
+    
+    def test_copy_rdd_launcher_scripts(self, mock_rdd_project):
+        """Test copying RDD launcher scripts (rdd.bat and rdd.sh)"""
+        build_dir = build.create_build_dir("1.0.0", mock_rdd_project / "build")
+        build.copy_rdd_launcher_scripts(build_dir, mock_rdd_project)
+        
+        # Verify both launcher scripts are copied
+        assert (build_dir / "rdd.bat").exists()
+        assert (build_dir / "rdd.sh").exists()
+        
+        # Verify rdd.bat content
+        bat_content = (build_dir / "rdd.bat").read_text()
+        assert "@echo off" in bat_content
+        assert ".rdd\\scripts\\rdd.py" in bat_content
+        
+        # Verify rdd.sh content
+        sh_content = (build_dir / "rdd.sh").read_text()
+        assert "#!/bin/bash" in sh_content
+        assert ".rdd/scripts/rdd.py" in sh_content
 
 
 class TestTemplateGeneration:

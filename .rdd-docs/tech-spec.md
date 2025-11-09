@@ -450,7 +450,7 @@ The RDD framework uses a Python-based build system to create release packages:
 ### Installation System
 The RDD framework provides Python-based cross-platform installation with GUI and command-line options:
 
-#### Launcher Scripts (Recommended Installation Method)
+#### Installer Launcher Scripts (Recommended Installation Method)
 **Bash Launcher (install.sh - Linux/macOS)**:
 - Checks for `python` command first, then `python3`
 - Displays clear error messages with installation URLs if Python not found
@@ -517,6 +517,33 @@ For users who prefer direct control:
 - Run: `python /path/to/extracted/rdd-vX.X.X/install.py`
 - Same features as launcher-based installation
 - Useful for scripted or automated installations
+
+#### RDD Launcher Scripts (Post-Installation)
+After installation, the RDD framework provides convenient launcher scripts in the project root for easy access to the RDD menu:
+
+**Windows Launcher (rdd.bat)**:
+- Located in project root after installation
+- Double-click to launch RDD interactive menu
+- Can also be run from terminal: `rdd.bat`
+- Checks for Python availability (python or python3)
+- Validates RDD framework installation
+- Passes command-line arguments to rdd.py
+- Keeps window open after execution if double-clicked
+
+**Linux/macOS Launcher (rdd.sh)**:
+- Located in project root after installation
+- Executable permissions set automatically during installation
+- Double-click from file manager or run from terminal: `./rdd.sh`
+- Checks for Python availability (python or python3)
+- Validates RDD framework installation
+- Passes command-line arguments to rdd.py
+- Displays clear error messages with installation guidance
+
+**Installation Process**:
+- Installer detects OS using `os.name == 'nt'` (Windows vs Unix)
+- Copies appropriate launcher (rdd.bat or rdd.sh) to project root
+- Sets executable permissions on Unix systems (chmod 0o755)
+- Provides usage instructions after installation
 
 ### Platform Compatibility
 - **Python-based**: Single implementation works on all platforms (Windows, Linux, macOS)
