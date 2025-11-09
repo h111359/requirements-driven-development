@@ -321,6 +321,80 @@ def cleanup_staging(build_dir: Path):
         shutil.rmtree(build_dir)
         print_success("Staging directory removed")
 
+def increment_patch_version(version: str) -> str:
+    """Increment the patch version (last digit) of a semantic version string"""
+    parts = version.split('.')
+    if len(parts) != 3:
+        exit_with_error(f"Invalid version format: {version}")
+    
+    try:
+        major = int(parts[0])
+        minor = int(parts[1])
+        patch = int(parts[2])
+    except ValueError:
+        exit_with_error(f"Invalid version format: {version}")
+    
+    new_version = f"{major}.{minor}.{patch + 1}"
+    return new_version
+
+def update_config_version(config_path: Path, new_version: str):
+    """Update version in config.json and set lastModified timestamp"""
+    print_info(f"Updating config.json with version {new_version}")
+    
+    if not config_path.exists():
+        exit_with_error(f"Config file not found: {config_path}")
+    
+    with open(config_path, "r") as f:
+        config = json.load(f)
+    
+    config["version"] = new_version
+    
+    # Update lastModified with current timestamp in ISO format
+    from datetime import datetime, timezone
+    config["lastModified"] = datetime.now(timezone.utc).isoformat()
+    
+    with open(config_path, "w") as f:
+        json.dump(config, f, indent=2)
+    
+    print_success(f"Updated config.json: version → {new_version}")
+
+def prompt_version_selection(current_version: str) -> str:
+    """
+    Prompt user to choose version: keep current or increment patch.
+    Returns the selected version string.
+    """
+    print()
+    print("=" * 60)
+    print("  Version Selection")
+    print("=" * 60)
+    print()
+    print(f"Current version: {Colors.BLUE}{current_version}{Colors.NC}")
+    print()
+    
+    # Calculate what the incremented version would be
+    incremented = increment_patch_version(current_version)
+    print(f"Options:")
+    print(f"  1. Keep current version ({current_version})")
+    print(f"  2. Increment patch version ({incremented})")
+    print()
+    
+    while True:
+        try:
+            choice = input("Enter your choice (1 or 2): ").strip()
+            
+            if choice == '1':
+                print_info(f"Using current version: {current_version}")
+                return current_version
+            elif choice == '2':
+                print_info(f"Incrementing to version: {incremented}")
+                return incremented
+            else:
+                print_warning("Invalid choice. Please enter 1 or 2.")
+        except (KeyboardInterrupt, EOFError):
+            print()
+            print_warning("Version selection cancelled")
+            sys.exit(130)
+
 def main():
     """Main build process"""
     print()
@@ -337,28 +411,37 @@ def main():
     
     # Build process
     try:
-        # Step 1: Extract version from .rdd-docs/config.json
-        print_step(1, 8, "Extracting version from .rdd-docs/config.json")
+        # Step 1: Extract version from .rdd-docs/config.json and prompt for version selection
+        print_step(1, 9, "Version selection")
         config_path = repo_root / ".rdd-docs" / "config.json"
         if not config_path.exists():
             exit_with_error(f"Config file not found: {config_path}")
         with open(config_path, "r") as f:
             config = json.load(f)
-        version = config.get("version")
-        if not version or not re.match(r'^\d+\.\d+\.\d+$', version):
-            exit_with_error(f"Invalid or missing version in config.json: {version}")
-        print_success(f"Found version: {version}")
+        current_version = config.get("version")
+        if not current_version or not re.match(r'^\d+\.\d+\.\d+$', current_version):
+            exit_with_error(f"Invalid or missing version in config.json: {current_version}")
+        print_success(f"Found current version: {current_version}")
+        
+        # Prompt user for version selection
+        selected_version = prompt_version_selection(current_version)
+        
+        # Update config.json if version changed
+        if selected_version != current_version:
+            update_config_version(config_path, selected_version)
+        
+        version = selected_version
         print()
 
         # Step 2: Create build directory
-        print_step(2, 8, "Creating build directory")
+        print_step(2, 9, "Creating build directory")
         build_root = repo_root / "build"
         build_root.mkdir(exist_ok=True)
         build_dir = create_build_dir(version, build_root)
         print()
 
         # Step 3: Copy files
-        print_step(3, 8, "Copying files")
+        print_step(3, 9, "Copying files")
         copy_prompts(repo_root, build_dir)
         copy_scripts(repo_root, build_dir)
         copy_templates(repo_root, build_dir)
@@ -368,27 +451,27 @@ def main():
         print()
 
         # Step 4: Generate README
-        print_step(4, 8, "Generating README.md")
+        print_step(4, 9, "Generating README.md")
         generate_readme(build_dir, version, repo_root)
         print()
 
         # Step 5: Generate Python installer
-        print_step(5, 8, "Generating install.py")
+        print_step(5, 9, "Generating install.py")
         generate_installer(build_dir, version, repo_root)
         print()
 
         # Step 6: Create archive
-        print_step(6, 8, "Creating archive")
+        print_step(6, 9, "Creating archive")
         archive_path = create_archive(build_dir, build_root, version)
         print()
 
         # Step 7: Generate checksum
-        print_step(7, 8, "Generating checksum")
+        print_step(7, 9, "Generating checksum")
         generate_checksum(archive_path)
         print()
 
         # Step 8: Cleanup
-        print_step(8, 8, "Cleaning up")
+        print_step(8, 9, "Cleaning up")
         cleanup_staging(build_dir)
         print()
 

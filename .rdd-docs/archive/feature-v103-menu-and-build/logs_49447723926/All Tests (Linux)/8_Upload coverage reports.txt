@@ -1,0 +1,84 @@
+﻿2025-11-08T11:25:00.3148070Z ##[group]Run codecov/codecov-action@v4
+2025-11-08T11:25:00.3148352Z with:
+2025-11-08T11:25:00.3148520Z   file: ./coverage.xml
+2025-11-08T11:25:00.3148711Z   flags: python
+2025-11-08T11:25:00.3148891Z   name: python-coverage
+2025-11-08T11:25:00.3149088Z env:
+2025-11-08T11:25:00.3149312Z   pythonLocation: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-08T11:25:00.3150255Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.9.24/x64/lib/pkgconfig
+2025-11-08T11:25:00.3150635Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-08T11:25:00.3150967Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-08T11:25:00.3151318Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.24/x64
+2025-11-08T11:25:00.3151659Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.9.24/x64/lib
+2025-11-08T11:25:00.3151948Z ##[endgroup]
+2025-11-08T11:25:00.3992285Z eventName: pull_request
+2025-11-08T11:25:00.3993631Z baseRef: h111359:dev | headRef: h111359:feature/v103-menu-and-build
+2025-11-08T11:25:00.4001550Z ==> linux OS detected
+2025-11-08T11:25:00.8471609Z https://cli.codecov.io/latest/linux/codecov.SHA256SUM
+2025-11-08T11:25:00.9995613Z gpg: directory '/home/runner/.gnupg' created
+2025-11-08T11:25:01.0000532Z gpg: keybox '/home/runner/.gnupg/pubring.kbx' created
+2025-11-08T11:25:01.0021596Z gpg: /home/runner/.gnupg/trustdb.gpg: trustdb created
+2025-11-08T11:25:01.0022658Z gpg: key 806BB28AED779869: public key "Codecov Uploader (Codecov Uploader Verification Key) <security@codecov.io>" imported
+2025-11-08T11:25:01.0197411Z gpg: Total number processed: 1
+2025-11-08T11:25:01.0197789Z gpg:               imported: 1
+2025-11-08T11:25:01.0247224Z gpg: Signature made Thu Oct 23 15:06:21 2025 UTC
+2025-11-08T11:25:01.0247825Z gpg:                using RSA key 27034E7FDB850E0BBC2C62FF806BB28AED779869
+2025-11-08T11:25:01.0250284Z gpg: Good signature from "Codecov Uploader (Codecov Uploader Verification Key) <security@codecov.io>" [unknown]
+2025-11-08T11:25:01.0251098Z gpg: WARNING: This key is not certified with a trusted signature!
+2025-11-08T11:25:01.0270518Z gpg:          There is no indication that the signature belongs to the owner.
+2025-11-08T11:25:01.0271300Z Primary key fingerprint: 2703 4E7F DB85 0E0B BC2C  62FF 806B B28A ED77 9869
+2025-11-08T11:25:01.0474799Z ==> Uploader SHASUM verified (3e4d282fe243aa7283b17016ff65ab2806c262f16abb41125f0caeea380dfe77  codecov)
+2025-11-08T11:25:01.0475971Z ==> Running version latest
+2025-11-08T11:25:01.1314490Z Could not pull latest version information: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2025-11-08T11:25:01.1316761Z ==> Running git config --global --add safe.directory /home/runner/work/requirements-driven-development/requirements-driven-development
+2025-11-08T11:25:01.1404483Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/requirements-driven-development/requirements-driven-development
+2025-11-08T11:25:01.1453852Z ==> Running command '/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-commit'
+2025-11-08T11:25:01.1456817Z [command]/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-commit --git-service github -C 62159f781608cd2ff40036a3896bf378c03e8a1b
+2025-11-08T11:25:01.5238402Z info - 2025-11-08 11:25:01,523 -- ci service found: github-actions
+2025-11-08T11:25:01.5325960Z warning - 2025-11-08 11:25:01,532 -- No config file could be found. Ignoring config.
+2025-11-08T11:25:01.5627155Z warning - 2025-11-08 11:25:01,562 -- Branch `feature/v103-menu-and-build` is protected but no token was provided
+2025-11-08T11:25:01.5628341Z warning - 2025-11-08 11:25:01,562 -- For information on Codecov upload tokens, see https://docs.codecov.com/docs/codecov-tokens
+2025-11-08T11:25:01.8043681Z info - 2025-11-08 11:25:01,803 -- Process Commit creating complete
+2025-11-08T11:25:01.8044594Z error - 2025-11-08 11:25:01,804 -- Commit creating failed: {"message":"Token required - not valid tokenless upload"}
+2025-11-08T11:25:01.9098838Z Sentry is attempting to send 2 pending events
+2025-11-08T11:25:01.9100075Z Waiting up to 2 seconds
+2025-11-08T11:25:01.9100369Z Press Ctrl-C to quit
+2025-11-08T11:25:01.9817514Z ==> Running command '/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-report'
+2025-11-08T11:25:01.9820243Z [command]/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-report --git-service github -C 62159f781608cd2ff40036a3896bf378c03e8a1b
+2025-11-08T11:25:02.3268573Z info - 2025-11-08 11:25:02,326 -- ci service found: github-actions
+2025-11-08T11:25:02.3359178Z warning - 2025-11-08 11:25:02,335 -- No config file could be found. Ignoring config.
+2025-11-08T11:25:02.5738776Z info - 2025-11-08 11:25:02,573 -- Process Report creating complete
+2025-11-08T11:25:02.5744157Z error - 2025-11-08 11:25:02,574 -- Report creating failed: {"message":"Token required - not valid tokenless upload"}
+2025-11-08T11:25:02.6802858Z Sentry is attempting to send 3 pending events
+2025-11-08T11:25:02.6803222Z Waiting up to 2 seconds
+2025-11-08T11:25:02.6803454Z Press Ctrl-C to quit
+2025-11-08T11:25:02.7855543Z ==> Running command '/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov do-upload'
+2025-11-08T11:25:02.7857187Z [command]/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov do-upload -f ./coverage.xml -F python --git-service github -n python-coverage -C 62159f781608cd2ff40036a3896bf378c03e8a1b
+2025-11-08T11:25:03.1303405Z info - 2025-11-08 11:25:03,129 -- ci service found: github-actions
+2025-11-08T11:25:03.1393958Z warning - 2025-11-08 11:25:03,139 -- No config file could be found. Ignoring config.
+2025-11-08T11:25:03.1708809Z warning - 2025-11-08 11:25:03,170 -- xcrun is not installed or can't be found.
+2025-11-08T11:25:03.2280486Z warning - 2025-11-08 11:25:03,227 -- No gcov data found.
+2025-11-08T11:25:03.2284719Z warning - 2025-11-08 11:25:03,228 -- coverage.py is not installed or can't be found.
+2025-11-08T11:25:03.3176314Z warning - 2025-11-08 11:25:03,317 -- Some files were not found --- {"not_found_files": ["coverage.xml"]}
+2025-11-08T11:25:03.3302564Z info - 2025-11-08 11:25:03,329 -- Found 16 coverage files to report
+2025-11-08T11:25:03.3304910Z info - 2025-11-08 11:25:03,330 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/.rdd-docs/archive/fix-20251107-0839-fix-version-and-build/logs_49382254335/All Tests (Linux)/8_Upload coverage reports.txt
+2025-11-08T11:25:03.3307235Z info - 2025-11-08 11:25:03,330 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/.rdd-docs/archive/fix-20251107-0839-fix-version-and-build/logs_49383406896/All Tests (Linux)/8_Upload coverage reports.txt
+2025-11-08T11:25:03.3310438Z info - 2025-11-08 11:25:03,330 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/.rdd-docs/archive/fix-20251107-0839-fix-version-and-build/logs_49384900070/All Tests (Linux)/8_Upload coverage reports.txt
+2025-11-08T11:25:03.3313106Z info - 2025-11-08 11:25:03,330 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/.rdd-docs/archive/fix-20251107-0839-fix-version-and-build/logs_49384197067/All Tests (Linux)/7_Generate coverage report.txt
+2025-11-08T11:25:03.3315723Z info - 2025-11-08 11:25:03,330 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/.rdd-docs/archive/fix-20251107-0839-fix-version-and-build/logs_49384197067/All Tests (Linux)/8_Upload coverage reports.txt
+2025-11-08T11:25:03.3318314Z info - 2025-11-08 11:25:03,330 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/.rdd-docs/archive/fix-20251107-0839-fix-version-and-build/logs_49383682462/All Tests (Linux)/8_Upload coverage reports.txt
+2025-11-08T11:25:03.3321118Z info - 2025-11-08 11:25:03,330 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/.rdd-docs/archive/fix-20251107-0839-fix-version-and-build/logs_49386100721/All Tests (Linux)/8_Upload coverage reports.txt
+2025-11-08T11:25:03.3323145Z info - 2025-11-08 11:25:03,330 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/.rdd-docs/archive/fix-20251107-0839-fix-version-and-build/logs_49384900070/All Tests (Linux)/7_Generate coverage report.txt
+2025-11-08T11:25:03.3325322Z info - 2025-11-08 11:25:03,331 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/.rdd-docs/archive/fix-20251107-0839-fix-version-and-build/logs_49384503808/All Tests (Linux)/7_Generate coverage report.txt
+2025-11-08T11:25:03.3326852Z info - 2025-11-08 11:25:03,331 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/.rdd-docs/archive/fix-20251107-0839-fix-version-and-build/logs_49384503808/All Tests (Linux)/8_Upload coverage reports.txt
+2025-11-08T11:25:03.3328382Z info - 2025-11-08 11:25:03,331 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/.rdd-docs/archive/fix-20251107-0839-fix-version-and-build/logs_49383928832/All Tests (Linux)/7_Generate coverage report.txt
+2025-11-08T11:25:03.3330060Z info - 2025-11-08 11:25:03,331 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/.rdd-docs/archive/fix-20251107-0839-fix-version-and-build/logs_49383928832/All Tests (Linux)/8_Upload coverage reports.txt
+2025-11-08T11:25:03.3331566Z info - 2025-11-08 11:25:03,331 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/.rdd-docs/archive/fix-20251107-0839-fix-version-and-build/logs_49385917725/All Tests (Linux)/7_Generate coverage report.txt
+2025-11-08T11:25:03.3333056Z info - 2025-11-08 11:25:03,331 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/.rdd-docs/archive/fix-20251107-0839-fix-version-and-build/logs_49385917725/All Tests (Linux)/8_Upload coverage reports.txt
+2025-11-08T11:25:03.3334700Z info - 2025-11-08 11:25:03,331 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/.rdd-docs/archive/fix-20251107-0839-fix-version-and-build/logs_49383682462/All Tests (Linux)/7_Generate coverage report.txt
+2025-11-08T11:25:03.3336196Z info - 2025-11-08 11:25:03,331 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/.rdd-docs/archive/fix-20251107-0839-fix-version-and-build/logs_49386100721/All Tests (Linux)/7_Generate coverage report.txt
+2025-11-08T11:25:03.7625092Z info - 2025-11-08 11:25:03,762 -- Process Upload complete
+2025-11-08T11:25:03.7625971Z error - 2025-11-08 11:25:03,762 -- Upload failed: {"message":"Token required - not valid tokenless upload"}
+2025-11-08T11:25:03.8695738Z Sentry is attempting to send 2 pending events
+2025-11-08T11:25:03.8696143Z Waiting up to 2 seconds
+2025-11-08T11:25:03.8696380Z Press Ctrl-C to quit

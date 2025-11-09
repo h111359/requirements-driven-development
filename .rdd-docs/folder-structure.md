@@ -144,20 +144,30 @@ repo-root/
 
 ### 7. Unified Command Interface
 - All RDD operations accessible through `python .rdd/scripts/rdd.py`
-- Domain-based routing: `python .rdd/scripts/rdd.py <domain> <action> [options]`
-- Domains include: change, branch, workspace, requirements, config
+- **Interactive menu (recommended)**: Run without arguments to access simplified 4-option workflow menu
+- **CLI mode (advanced)**: Domain-based routing: `python .rdd/scripts/rdd.py <domain> <action> [options]`
+- Domains include: change, branch, workspace, git, prompt, config
 - Replaces standalone scripts like ~~`fix-management.sh`~~ and ~~`rdd.sh`~~ (deprecated)
 - Uses `python` (not `python3`) for cross-platform compatibility (Windows, Linux, macOS)
 
-### 8. Configuration Management
+### 8. Simplified Iteration Workflow (v1.0.3+)
+- **Interactive menu system**: Numeric selection (no arrow keys) for reliability
+- **4 core operations**: Create iteration, Update from default, Complete iteration, Delete merged branches
+- **Safety checks**: Validates branch state and workspace emptiness before operations
+- **Local-only mode support**: Skips remote operations when configured
+- **Clear user feedback**: Informational messages guide users through each step
+- **Legacy CLI access**: Advanced users can still use domain commands for scripting
+
+### 9. Configuration Management
 - **Configuration file**: `.rdd-docs/config.json` stores framework settings
 - **Template location**: `templates/config.json` (seed template installed during build)
 - **Version controlled**: Config shared across team in repository
 - **CLI access**: `python .rdd/scripts/rdd.py config [show|get|set]`
-- **Key settings**: defaultBranch, version, timestamps
-- **Interactive setup**: Branch selection menu during initialization populates config
+- **Key settings**: defaultBranch, version, localOnly, timestamps
+- **Interactive setup**: Branch selection and local-only mode prompts during initialization populate config
+- **Local-only mode**: When `localOnly: true`, all remote git operations are automatically skipped
 
-### 9. Build and Release System
+### 10. Build and Release System
 - **Build script**: `scripts/build.py` creates release archives
 - **Build artifacts**: Generated in `build/` directory (Git-ignored)
 - **Release format**: Single cross-platform `rdd-v{version}.zip` archive

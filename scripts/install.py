@@ -183,7 +183,27 @@ def copy_rdd_framework(source_dir: Path, target_dir: Path):
     
     print_success("Installed RDD framework")
 
-def copy_rdd_docs_seeds(source_dir: Path, target_dir: Path):
+def ask_local_only_mode() -> bool:
+    """Ask user if they want to use local-only mode (no GitHub remote)"""
+    print()
+    print("=" * 60)
+    print("  Repository Mode Configuration")
+    print("=" * 60)
+    print()
+    print("Will you be using GitHub remote for this repository?")
+    print()
+    print("  • Yes (default): Normal mode with GitHub push/pull/fetch")
+    print("  • No: Local-only mode (no remote operations)")
+    print()
+    print("Use GitHub remote? (Y/n):")
+    response = input("> ").strip().lower()
+    
+    # Default to Yes (not local-only)
+    # Local-only is true only if user explicitly says no
+    return response in ['n', 'no']
+
+
+def copy_rdd_docs_seeds(source_dir: Path, target_dir: Path, local_only: bool = False):
     """Copy seed template files from .rdd-docs in source to target"""
     print_info("Installing .rdd-docs seed templates...")
     
@@ -209,6 +229,22 @@ def copy_rdd_docs_seeds(source_dir: Path, target_dir: Path):
         if src_file.exists():
             shutil.copy2(src_file, dst_file)
             copied += 1
+            
+            # If this is config.json, update it with localOnly setting
+            if seed_file == "config.json":
+                try:
+                    with open(dst_file, 'r') as f:
+                        config_data = json.load(f)
+                    
+                    config_data['localOnly'] = local_only
+                    
+                    with open(dst_file, 'w') as f:
+                        json.dump(config_data, f, indent=2)
+                    
+                    mode_str = "local-only" if local_only else "GitHub remote"
+                    print_info(f"  Configured for {mode_str} mode")
+                except Exception as e:
+                    print_warning(f"  Could not update config.json: {e}")
     
     print_success(f"Installed {copied} seed template(s)")
 
@@ -376,6 +412,9 @@ def main():
         print_info("Installation cancelled by user")
         sys.exit(0)
     
+    # Ask about local-only mode
+    local_only = ask_local_only_mode()
+    
     print()
     print("Installing...")
     print()
@@ -384,7 +423,7 @@ def main():
         # Install files
         copy_prompts(source_dir, target_dir)
         copy_rdd_framework(source_dir, target_dir)
-        copy_rdd_docs_seeds(source_dir, target_dir)
+        copy_rdd_docs_seeds(source_dir, target_dir, local_only)
         merge_vscode_settings(source_dir, target_dir)
         update_gitignore(target_dir)
         

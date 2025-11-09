@@ -36,7 +36,16 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
    - Along with execution add continuously information for the implementation details in the file `.rdd-docs/workspace/<put-prompt-ID-here>-implementation.md` on each step. Especially take care of adding the commands you run!
    - If you are asked to make an analysis, create a plan, plan, research, advice, recommendation, best-practice review or similar - make the analysis in the file `.rdd-docs/workspace/<put-prompt-ID-here>-implementation.md`.
 
-4. **Mark the prompt as completed**:
+
+4. **Update the documentation files**:
+   - According to all changes made during the execution of the prompt in the previous step, update the relevant documentation files:
+     - `.rdd-docs/requirements.md`
+     - `.rdd-docs/tech-spec.md`
+     - `.rdd-docs/folder-structure.md`
+     - `.rdd-docs/data-model.md`
+
+
+5. **Mark the prompt as completed**:
    - After successfully executing the prompt, mark it as completed by running the script:
      ```python
      python .rdd/scripts/rdd.py prompt mark-completed <PROMPT_ID>
@@ -45,7 +54,7 @@ Execute a stand-alone prompt from the "## Stand Alone Prompts" section in the fi
    - The script will automatically change the checkbox from `- [ ]` to `- [x]`
    - Never manually edit the .rdd.copilot-prompts.md file to mark checkboxes!
 
-5. **Handle uncertainties**:
+6. **Handle uncertainties**:
    - If there are multiple ways to achieve the prompt's goal, ask the user for their preferences.
    - **Never anticipate or assume you know the user's preference**.
    - Always seek clarification when needed.

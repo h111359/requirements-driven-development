@@ -11,7 +11,7 @@ import re
 import subprocess
 import shutil
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, List, Tuple
 from pathlib import Path
 
@@ -238,7 +238,7 @@ def ensure_dir(dir_path: str) -> None:
 
 def get_timestamp() -> str:
     """Get timestamp in ISO 8601 format (e.g., 2023-11-01T12:34:56Z)."""
-    return datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+    return datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
 
 
 def get_timestamp_filename() -> str:
@@ -307,6 +307,110 @@ def get_current_branch() -> str:
         text=True
     )
     return result.stdout.strip()
+
+
+def interactive_branch_cleanup(base_branch: str = None) -> None:
+    """
+    Show an interactive menu listing all branches merged into the base branch.
+    Lets the user choose branches to delete locally (and optionally remotely).
+    """
+    if not base_branch:
+        base_branch = get_default_branch()
+
+    print_banner("Merged Branches Cleanup", f"Base: {base_branch}")
+    
+    # Check for uncommitted changes before attempting checkout
+    if not check_uncommitted_changes():
+        print_error("Cannot proceed with branch cleanup.")
+        print_info("Please commit or stash your changes first.")
+        return
+    
+    # Fetch from remote only if not in local-only mode
+    if not is_local_only_mode():
+        subprocess.run(["git", "fetch", "origin", "--quiet"])
+    else:
+        print_info("Local-only mode: Skipping remote fetch")
+    
+    # Attempt to checkout base branch
+    result = subprocess.run(
+        ["git", "checkout", base_branch],
+        capture_output=True,
+        text=True
+    )
+    
+    if result.returncode != 0:
+        print_error(f"Failed to checkout {base_branch}")
+        if result.stderr:
+            print(result.stderr)
+        return
+
+    # Get merged branches
+    result = subprocess.run(
+        ["git", "branch", "--merged", base_branch],
+        capture_output=True, text=True
+    )
+    
+    # Protected branches that should never be deleted
+    protected_branches = {base_branch, "dev", "main", "master"}
+    
+    merged_branches = []
+    for b in result.stdout.splitlines():
+        # Remove leading/trailing whitespace and the asterisk marker
+        branch_name = b.strip().lstrip("* ").strip()
+        # Only include if non-empty and not protected
+        if branch_name and branch_name not in protected_branches:
+            merged_branches.append(branch_name)
+
+    if not merged_branches:
+        print_info("No merged branches to clean up.")
+        return
+
+    print_info("The following branches are fully merged:")
+    for i, branch in enumerate(merged_branches, start=1):
+        print(f"  {i}. {branch}")
+
+    print("")
+    selected = input(f"{Colors.YELLOW}Enter numbers to delete (comma-sep or 'all' to delete all, ENTER to cancel): {Colors.NC}").strip()
+
+    if not selected:
+        print_info("Cleanup cancelled.")
+        return
+
+    if selected.lower() == "all":
+        to_delete = merged_branches
+    else:
+        try:
+            indexes = [int(x.strip()) for x in selected.split(",") if x.strip().isdigit()]
+            to_delete = [merged_branches[i - 1] for i in indexes if 0 < i <= len(merged_branches)]
+        except Exception:
+            print_error("Invalid input.")
+            return
+
+    if not to_delete:
+        print_info("No valid branches selected.")
+        return
+
+    print("")
+    print_warning(f"About to delete {len(to_delete)} merged branch(es):")
+    for b in to_delete:
+        print(f"  - {b}")
+
+    if not confirm_action("Proceed with deletion?"):
+        print_info("Cleanup aborted.")
+        return
+
+    for b in to_delete:
+        subprocess.run(["git", "branch", "-d", b])
+    print_success("Selected merged branches deleted locally.")
+
+    # Only ask about remote deletion if not in local-only mode
+    if not is_local_only_mode():
+        if confirm_action("Also delete them from origin (remote)?"):
+            for b in to_delete:
+                subprocess.run(["git", "push", "origin", "--delete", b])
+            print_success("Deleted selected branches from remote as well.")
+    else:
+        print_info("Local-only mode: Skipping remote branch deletion")
 
 
 def get_default_branch() -> str:
@@ -567,12 +671,19 @@ def restore_stashed_changes() -> int:
         return 1
 
 
-def pull_main() -> bool:
+def pull_default_branch() -> bool:
     """
     Pull latest changes from default branch.
+    In local-only mode, skips remote operations.
     Returns True on success, False on failure.
     """
     default_branch = get_default_branch()
+    
+    # Check if we're in local-only mode
+    if is_local_only_mode():
+        print_info(f"Local-only mode: Skipping remote fetch from origin/{default_branch}")
+        print_success(f"Using local {default_branch} branch (no remote sync)")
+        return True
     
     print_step(f"Pulling latest changes from origin/{default_branch}...")
     
@@ -646,7 +757,7 @@ def pull_main() -> bool:
             return False
 
 
-def merge_main_into_current() -> bool:
+def merge_default_branch_into_current() -> bool:
     """
     Merge default branch into current branch.
     Returns True on success, False on failure (including conflicts).
@@ -654,7 +765,7 @@ def merge_main_into_current() -> bool:
     default_branch = get_default_branch()
     current_branch = get_current_branch()
     
-    # Safety check: don't merge if we're on main
+    # Safety check: don't merge if we're on default branch
     if current_branch == default_branch:
         print_error(f"Cannot merge {default_branch} into itself")
         return False
@@ -710,10 +821,10 @@ def merge_main_into_current() -> bool:
             return False
 
 
-def update_from_main() -> bool:
+def update_from_default_branch() -> bool:
     """
-    Update current branch from main (full workflow).
-    Stashes changes, pulls main, merges, and restores stash.
+    Update current branch from default branch (full workflow).
+    Stashes changes, pulls default branch, merges, and restores stash.
     Returns True on success, False on failure.
     """
     default_branch = get_default_branch()
@@ -725,7 +836,7 @@ def update_from_main() -> bool:
     print_info(f"Target: {default_branch}")
     print("")
     
-    # Safety check: don't run on main
+    # Safety check: don't run on default branch
     if current_branch == default_branch:
         print_error(f"Cannot update {default_branch} from itself")
         print_info(f"This command is meant to update feature branches with latest {default_branch}")
@@ -736,8 +847,8 @@ def update_from_main() -> bool:
         print_error("Failed to stash changes. Aborting.")
         return False
     
-    # Step 2: Pull latest main
-    if not pull_main():
+    # Step 2: Pull latest default branch
+    if not pull_default_branch():
         print_error(f"Failed to pull latest {default_branch}. Aborting.")
         # Try to restore stash
         restore_result = restore_stashed_changes()
@@ -746,8 +857,8 @@ def update_from_main() -> bool:
             print_warning("Your changes are safely in the stash. Run 'git stash list' to see them.")
         return False
     
-    # Step 3: Merge main into current branch
-    if not merge_main_into_current():
+    # Step 3: Merge default branch into current branch
+    if not merge_default_branch_into_current():
         print_error("Merge failed. Please resolve conflicts manually.")
         print_warning("Your changes are still stashed. After resolving conflicts:")
         print("  1. Complete the merge: git commit")
@@ -979,6 +1090,18 @@ def set_rdd_config(key: str, value: str) -> bool:
         return False
 
 
+def is_local_only_mode() -> bool:
+    """
+    Check if the repository is configured for local-only mode (no GitHub remote).
+    Returns True if localOnly is set to true in config.json, False otherwise.
+    """
+    local_only = get_rdd_config("localOnly", "false")
+    # Handle both string and boolean values
+    if isinstance(local_only, bool):
+        return local_only
+    return str(local_only).lower() in ['true', '1', 'yes']
+
+
 # ============================================================================
 # HELP MESSAGE GENERATION
 # ============================================================================
@@ -1075,68 +1198,6 @@ def mark_prompt_completed(prompt_id: str, journal_file: str = None) -> bool:
         return True
     except Exception as e:
         print_error(f"Failed to mark prompt {prompt_id} as completed: {e}")
-        return False
-
-
-def log_prompt_execution(prompt_id: str, execution_details: str, session_id: str = None) -> bool:
-    """
-    Log prompt execution details to log.jsonl.
-    Creates a structured JSONL entry with timestamp, promptId, executionDetails, sessionId.
-    
-    Args:
-        prompt_id: The ID of the executed prompt (e.g., P01, P02)
-        execution_details: Full content describing what was executed
-        session_id: Optional session identifier (defaults to exec-YYYYMMDD-HHmm)
-    
-    Returns:
-        True on success, False on error
-    
-    Format:
-        {"timestamp":"2025-11-05T10:30:00Z","promptId":"P01","executionDetails":"...","sessionId":"exec-20251105-1030"}
-    """
-    from datetime import datetime
-    
-    workspace_dir = ".rdd-docs/workspace"
-    log_file = os.path.join(workspace_dir, "log.jsonl")
-    
-    # Validate required parameters
-    if not prompt_id:
-        print_error("Prompt ID is required for logging")
-        return False
-    
-    if not execution_details:
-        print_error("Execution details are required for logging")
-        return False
-    
-    # Default session ID if not provided
-    if not session_id:
-        session_id = f"exec-{datetime.now().strftime('%Y%m%d-%H%M')}"
-    
-    # Ensure workspace directory exists
-    os.makedirs(workspace_dir, exist_ok=True)
-    
-    # Create log file if it doesn't exist
-    if not os.path.isfile(log_file):
-        open(log_file, 'a').close()
-        debug_print(f"Created log file: {log_file}")
-    
-    # Create JSON line entry
-    timestamp = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
-    log_entry = {
-        "timestamp": timestamp,
-        "promptId": prompt_id,
-        "executionDetails": execution_details,
-        "sessionId": session_id
-    }
-    
-    # Write to log file
-    try:
-        with open(log_file, 'a', encoding='utf-8') as f:
-            f.write(json.dumps(log_entry) + '\n')
-        print_success(f"Logged execution details for prompt {prompt_id} to {log_file}")
-        return True
-    except Exception as e:
-        print_error(f"Failed to log execution: {e}")
         return False
 
 

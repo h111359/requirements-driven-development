@@ -40,6 +40,17 @@ Framework-wide configuration file storing repository and workflow settings. Loca
     - Format: ISO 8601 datetime with timezone (UTC)
     - Example: "2025-11-06T10:30:00Z"
 
+  - localOnly:
+    - Description: Flag indicating whether the repository operates in local-only mode without GitHub remote
+    - Mandatory: Yes
+    - Data Type: Boolean
+    - Format: true or false
+    - Data validation rules:
+       - Must be a boolean value
+       - When true, all remote operations (fetch, push, pull) are skipped
+       - When false (default), normal GitHub remote operations are performed
+    - Example: false, true
+
 #### Constraints
 
   - Primary-Key: N/A (single instance file)
@@ -50,6 +61,7 @@ Framework-wide configuration file storing repository and workflow settings. Loca
 {
   "version": "1.0.0",
   "defaultBranch": "dev",
+  "localOnly": false,
   "created": "2025-11-06T08:00:00Z",
   "lastModified": "2025-11-06T10:30:00Z"
 }
