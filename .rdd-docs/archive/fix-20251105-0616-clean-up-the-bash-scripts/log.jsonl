@@ -1,1 +1,0 @@
-{"timestamp": "2025-11-05T04:30:10Z", "promptId": "P01", "executionDetails": "Created .github/prompts/rdd.09-clean-up.prompt.md following common format identified from existing prompts. Prompt provides instructions for cleaning up local environment after PR merge using 'python3 .rdd/scripts/rdd.py branch cleanup' command.", "sessionId": "exec-20251105-0630"}

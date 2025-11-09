@@ -1,7 +1,0 @@
-{
-  "archivedAt": "2025-11-07T13:20:16Z",
-  "branch": "fix/20251107-1511-branch-name-free-text",
-  "archivedBy": "Hristo Hristov <hmhristov@outlook.com>",
-  "lastCommit": "6f7dfddcb03bcb7e9995c29e2a02f374d930516c",
-  "lastCommitMessage": "Merge pull request #53 from h111359/fix/20251107-0839-fix-version-and-build"
-}

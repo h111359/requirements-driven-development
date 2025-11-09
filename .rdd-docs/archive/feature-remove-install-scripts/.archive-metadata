@@ -1,7 +1,0 @@
-{
-  "archivedAt": "2025-11-07T17:18:55Z",
-  "branch": "feature-remove-install-scripts",
-  "archivedBy": "Hristo Hristov <hmhristov@outlook.com>",
-  "lastCommit": "f2dab0f152665a0881b2828bc21a36ce7936b656",
-  "lastCommitMessage": "Merge pull request #54 from h111359/fix/20251107-1511-branch-name-free-text"
-}

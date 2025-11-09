@@ -1,7 +1,0 @@
-{
-  "archivedAt": "2025-11-07T05:20:54Z",
-  "branch": "fix/20251107-0541-install-scripts-outside",
-  "archivedBy": "Hristo Hristov <hmhristov@outlook.com>",
-  "lastCommit": "d278c4a28b2a7487b8b173d95092b6003ae6c3a5",
-  "lastCommitMessage": "Merge pull request #47 from h111359/copilot/fix-install-script-windows"
-}
