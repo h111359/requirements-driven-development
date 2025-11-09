@@ -27,158 +27,102 @@ source ~/.bashrc
 
 ## Installation
 
-### Option 1: Interactive Installation (Recommended)
-
-The interactive installer provides a visual menu to navigate and select your project directory.
-
-#### Windows
-
-1. **Extract this archive** to a temporary location (e.g., `C:\Users\YourName\Downloads\rdd-v{{VERSION}}`)
-2. **Open PowerShell** (right-click Start menu → Windows PowerShell)
-3. **Navigate to extracted folder**:
-   ```powershell
-   cd C:\Users\YourName\Downloads\rdd-v{{VERSION}}
-   ```
-4. **Run the interactive installer**:
-   ```powershell
-   .\install.ps1
-   ```
-5. **Navigate with arrow keys** (↑/↓) to browse folders
-6. **Press Enter** on a folder to enter it, or select `[SELECT THIS DIRECTORY]` to install here
-7. **Confirm installation** when prompted
-
-#### Linux/macOS
-
-1. **Extract this archive** to a temporary location (e.g., `/tmp/rdd-v{{VERSION}}`)
-2. **Open terminal**
-3. **Navigate to extracted folder**:
-   ```bash
-   cd /tmp/rdd-v{{VERSION}}
-   ```
-4. **Make the installer executable**:
-   ```bash
-   chmod +x install.sh
-   ```
-5. **Run the interactive installer**:
-   ```bash
-   ./install.sh
-   ```
-6. **Navigate with arrow keys** (↑/↓) to browse folders
-7. **Press Enter** on a folder to enter it, or select `[SELECT THIS DIRECTORY]` to install here
-8. **Confirm installation** when prompted
-
-### Option 2: Direct Python Installation
-
-If you prefer to specify the path directly or the interactive installer doesn't work:
-
-#### Windows
-```powershell
-cd C:\path\to\your\project
-python C:\Users\YourName\Downloads\rdd-v{{VERSION}}\install.py
-```
-
-#### Linux/macOS
-```bash
-cd /path/to/your/project
-python /tmp/rdd-v{{VERSION}}/install.py
-```
-
-The installer will:
-- Verify prerequisites
-- Copy RDD framework files to your project
-- Merge VS Code settings
-- Update .gitignore
-
-### Option 3: Manual Installation
-
-If you prefer manual installation or the installers don't work:
-
-#### Windows (PowerShell)
-```powershell
-# Copy prompts
-Copy-Item -Recurse .github\prompts C:\path\to\your\project\.github\
-
-# Copy RDD framework
-Copy-Item -Recurse .rdd C:\path\to\your\project\
-
-# Update .gitignore
-Add-Content C:\path\to\your\project\.gitignore ".rdd-docs/workspace/"
-```
-
-#### Linux/macOS (Bash)
-```bash
-# Copy prompts
-cp -r .github/prompts /path/to/your/project/.github/
-
-# Copy RDD framework
-cp -r .rdd /path/to/your/project/
-
-# Set executable permissions
-chmod +x /path/to/your/project/.rdd/scripts/rdd.py
-
-# Update .gitignore
-echo ".rdd-docs/workspace/" >> /path/to/your/project/.gitignore
-```
-
-**Then manually merge VS Code settings**:
-- Copy settings from `.vscode/settings.json` to your project's `.vscode/settings.json`
-- Merge the arrays (don't replace existing settings)
-
-## Verification
-
-After installation, verify RDD is working:
-
-#### Windows
-```powershell
-cd C:\path\to\your\project
-python .rdd\scripts\rdd.py --version
-```
-
-#### Linux/macOS
-```bash
-cd /path/to/your/project
-python .rdd/scripts/rdd.py --version
-```
-
-You should see: `RDD Framework v{{VERSION}}`
-
-## Getting Started
-
-Initialize your first enhancement or fix:
-
-#### Windows
-```powershell
-python .rdd\scripts\rdd.py change create enh my-first-feature
-```
-
-#### Linux/macOS
-```bash
-python .rdd/scripts/rdd.py change create enh my-first-feature
-```
-
-Then follow the RDD workflow prompts in VS Code with GitHub Copilot.
-
-## Troubleshooting
-
-### "python: command not found" (Linux)
-Install the python-is-python3 package or create an alias (see System Requirements above).
-
-### "Not a git repository"
-RDD requires your project to be a Git repository. Initialize one with:
+RDD requires that your project is already a Git repository. If not, initialize Git first:
 ```bash
 git init
 ```
 
-### "Permission denied" (Linux/macOS)
-Make the script executable:
-```bash
-chmod +x .rdd/scripts/rdd.py
+### Quick Start Installation (Recommended)
+
+Extract the archive and run the installer launcher:
+
+**Windows:**
+1. Extract to a temporary location (e.g., `Downloads\rdd-v{{VERSION}}`)
+2. Double-click `install.bat` **OR** run in PowerShell:
+   ```powershell
+   cd path\to\extracted\rdd-v{{VERSION}}
+   .\install.bat
+   ```
+3. Choose GUI folder browser or enter path manually
+4. Confirm installation
+
+**Linux/macOS:**
+1. Extract to a temporary location (e.g., `/tmp/rdd-v{{VERSION}}`)
+2. Open terminal and run:
+   ```bash
+   cd /tmp/rdd-v{{VERSION}}
+   chmod +x install.sh
+   ./install.sh
+   ```
+3. Choose GUI folder browser or enter path manually
+4. Confirm installation
+
+The installer automatically:
+- Verifies Python 3.7+ and Git are installed
+- Checks the target is a Git repository
+- Detects and warns about existing RDD installations
+- Copies framework files (.rdd/, .github/prompts/, .rdd-docs/ templates)
+- Merges VS Code settings intelligently
+- Updates .gitignore
+- Verifies successful installation
+
+### Direct Python Installation
+
+If you prefer direct control, navigate to your project directory and run install.py:
+
+**Windows:**
+```powershell
+cd C:\path\to\your\project
+python C:\path\to\extracted\rdd-v{{VERSION}}\install.py
 ```
 
-### VS Code settings not taking effect
-1. Restart VS Code
-2. Check `.vscode/settings.json` was created/updated
-3. Verify GitHub Copilot extension is installed
+**Linux/macOS:**
+```bash
+cd /path/to/your/project
+python /path/to/extracted/rdd-v{{VERSION}}/install.py
+```
+
+## Getting Started
+
+After successful installation:
+
+1. **Verify installation:**
+   ```bash
+   python .rdd/scripts/rdd.py --version
+   ```
+   Should display: `RDD Framework v{{VERSION}}`
+
+2. **Start interactive menu:**
+   ```bash
+   python .rdd/scripts/rdd.py
+   ```
+   Choose "Create new iteration" to begin your first feature or fix.
+
+3. **Open VS Code** and use GitHub Copilot with RDD prompts to guide your development.
+
+## Troubleshooting
+
+**"python: command not found" (Linux)**
+```bash
+sudo apt-get install python-is-python3
+```
+
+**"Not a git repository"**
+```bash
+cd /path/to/your/project
+git init
+```
+
+**"Permission denied" (Linux/macOS)**
+```bash
+chmod +x .rdd/scripts/rdd.py
+chmod +x install.sh
+```
+
+**VS Code settings not applied**
+- Restart VS Code
+- Verify `.vscode/settings.json` exists
+- Install GitHub Copilot extension if not already installed
 
 ## Documentation
 

@@ -16,6 +16,14 @@ from typing import Optional, Dict, Any
 # Minimum Python version
 MIN_PYTHON_VERSION = (3, 7)
 
+# Try to import tkinter for GUI folder selection
+try:
+    import tkinter as tk
+    from tkinter import filedialog
+    TKINTER_AVAILABLE = True
+except ImportError:
+    TKINTER_AVAILABLE = False
+
 # Color codes for output
 class Colors:
     RED = '\033[0;31m'
@@ -41,6 +49,18 @@ def print_banner():
     print("=" * 60)
     print(f"  RDD Framework Installer v{{VERSION}}")
     print("=" * 60)
+    print()
+
+def print_installation_description():
+    """Print a description of what the installer will do"""
+    print()
+    print("This installer will:")
+    print("  • Copy RDD framework files (.rdd/ directory)")
+    print("  • Copy GitHub prompts (.github/prompts/)")
+    print("  • Copy seed templates to .rdd-docs/")
+    print("  • Merge VS Code settings")
+    print("  • Update .gitignore")
+    print("  • Verify installation")
     print()
 
 def exit_with_error(msg: str, code: int = 1):
@@ -101,25 +121,82 @@ def detect_existing_installation(target_dir: Path) -> bool:
     """Check if RDD is already installed"""
     print_info("Checking for existing RDD installation...")
     
+    rdd_dir = target_dir / ".rdd"
     rdd_script = target_dir / ".rdd" / "scripts" / "rdd.py"
     prompts_dir = target_dir / ".github" / "prompts"
+    rdd_docs_dir = target_dir / ".rdd-docs"
     
     has_scripts = rdd_script.exists()
     has_prompts = prompts_dir.exists() and any(prompts_dir.glob("rdd.*.prompt.md"))
+    has_rdd_dir = rdd_dir.exists()
+    has_docs = rdd_docs_dir.exists()
     
-    if has_scripts or has_prompts:
-        print_warning("Existing RDD installation detected")
+    if has_scripts or has_prompts or has_rdd_dir:
+        print_warning("Existing RDD installation detected:")
+        if has_rdd_dir:
+            print(f"  • .rdd/ directory exists")
+        if has_prompts:
+            print(f"  • RDD prompt files found in .github/prompts/")
+        if has_docs:
+            print(f"  • .rdd-docs/ directory exists (contains your project data)")
+        print()
+        print_warning("Installation will OVERWRITE framework files but preserve .rdd-docs/ content")
         return True
     
     print_info("No existing installation found")
     return False
 
+def get_target_directory_gui() -> Optional[Path]:
+    """Use Tkinter GUI to select target directory"""
+    if not TKINTER_AVAILABLE:
+        return None
+    
+    try:
+        # Create a hidden root window
+        root = tk.Tk()
+        root.withdraw()
+        root.attributes('-topmost', True)
+        
+        # Show folder selection dialog
+        print_info("Opening folder selection dialog...")
+        folder_path = filedialog.askdirectory(
+            title="Select Git Repository for RDD Installation",
+            initialdir=Path.cwd()
+        )
+        
+        root.destroy()
+        
+        if folder_path:
+            return Path(folder_path).resolve()
+        return None
+    except Exception as e:
+        print_warning(f"GUI folder picker failed: {e}")
+        return None
+
 def get_target_directory() -> Path:
-    """Prompt user for target directory"""
+    """Prompt user for target directory with GUI option"""
     default = Path.cwd()
     
     print()
-    print(f"Target directory (default: {default}):")
+    
+    # Try GUI first if available
+    if TKINTER_AVAILABLE:
+        print("Choose installation method:")
+        print("  1. Browse for folder (GUI)")
+        print("  2. Enter path manually")
+        print()
+        choice = input("Enter choice (1 or 2, default: 1): ").strip()
+        
+        if choice == "" or choice == "1":
+            gui_path = get_target_directory_gui()
+            if gui_path:
+                print_success(f"Selected: {gui_path}")
+                return validate_target_directory(gui_path)
+            else:
+                print_info("No folder selected, falling back to manual entry")
+    
+    # Fallback to text input
+    print(f"Enter target directory path (default: {default}):")
     response = input("> ").strip()
     
     if not response:
@@ -127,6 +204,10 @@ def get_target_directory() -> Path:
     else:
         target = Path(response).expanduser().resolve()
     
+    return validate_target_directory(target)
+
+def validate_target_directory(target: Path) -> Path:
+    """Validate that target is a valid directory"""
     if not target.exists():
         exit_with_error(f"Directory does not exist: {target}")
     
@@ -399,6 +480,9 @@ def main():
     # Pre-flight checks
     check_python_version()
     check_git_installed()
+    
+    # Show what the installer will do
+    print_installation_description()
     
     # Get target directory
     target_dir = get_target_directory()

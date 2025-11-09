@@ -100,7 +100,9 @@ repo-root/
 │   ├── data-model.md             # Data model seed template
 │   ├── requirements.md           # Requirements seed template
 │   ├── tech-spec.md              # Technical spec seed template
-│   └── settings.json             # VS Code settings template
+│   ├── settings.json             # VS Code settings template
+│   ├── install.sh                # Bash launcher template (Linux/macOS)
+│   └── install.bat               # Batch launcher template (Windows)
 ├── README.md                     # Project overview and quick start
 ├── LICENSE                       # Project license
 └── .gitignore                    # Git ignore rules
@@ -173,7 +175,10 @@ repo-root/
 - **Release format**: Single cross-platform `rdd-v{version}.zip` archive
 - **Archive contents**:
   - Framework files (.rdd/, .github/prompts/)
-  - Installation scripts (install.py, install.sh, install.ps1) - from templates/ directory
+  - Installation scripts:
+    - install.py (from scripts/install.py - Python installer with GUI support)
+    - install.sh (from templates/install.sh - Bash launcher for Linux/macOS)
+    - install.bat (from templates/install.bat - Batch launcher for Windows)
   - Documentation (README.md from templates/README.md, LICENSE)
   - VS Code settings template (.vscode/settings.json from templates/settings.json)
   - Seed templates (.rdd-docs/ with config.json, data-model.md, requirements.md, tech-spec.md from templates/)

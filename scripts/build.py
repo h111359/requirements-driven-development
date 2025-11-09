@@ -239,11 +239,11 @@ def generate_installer(build_dir: Path, version: str, repo_root: Path):
     print_success("Generated install.py")
 
 def generate_bash_installer(build_dir: Path, version: str, repo_root: Path):
-    """Generate install.sh script from template"""
-    print_info("Generating install.sh...")
+    """Generate install.sh launcher script from template"""
+    print_info("Generating install.sh launcher...")
     
     # Read template and substitute version
-    template_path = repo_root / "scripts" / "install.sh"
+    template_path = repo_root / "templates" / "install.sh"
     installer_content = read_script_template(template_path, version)
     
     # Write to build directory
@@ -254,14 +254,31 @@ def generate_bash_installer(build_dir: Path, version: str, repo_root: Path):
     if os.name != 'nt':
         installer_path.chmod(0o755)
     
-    print_success("Generated install.sh")
+    print_success("Generated install.sh launcher")
+
+def generate_batch_installer(build_dir: Path, version: str, repo_root: Path):
+    """Generate install.bat launcher script from template"""
+    print_info("Generating install.bat launcher...")
+    
+    # Read template and substitute version
+    template_path = repo_root / "templates" / "install.bat"
+    installer_content = read_script_template(template_path, version)
+    
+    # Write to build directory
+    installer_path = build_dir / "install.bat"
+    installer_path.write_text(installer_content)
+    
+    print_success("Generated install.bat launcher")
 
 def generate_powershell_installer(build_dir: Path, version: str, repo_root: Path):
-    """Generate install.ps1 script from template"""
+    """Generate install.ps1 script from template (DEPRECATED - replaced by install.bat)"""
     print_info("Generating install.ps1...")
     
     # Read template and substitute version
-    template_path = repo_root / "scripts" / "install.ps1"
+    template_path = repo_root / "templates" / "install.ps1"
+    if not template_path.exists():
+        print_warning("install.ps1 template not found, skipping")
+        return
     installer_content = read_script_template(template_path, version)
     
     # Write to build directory
@@ -455,9 +472,11 @@ def main():
         generate_readme(build_dir, version, repo_root)
         print()
 
-        # Step 5: Generate Python installer
-        print_step(5, 9, "Generating install.py")
+        # Step 5: Generate installers
+        print_step(5, 9, "Generating installers")
         generate_installer(build_dir, version, repo_root)
+        generate_bash_installer(build_dir, version, repo_root)
+        generate_batch_installer(build_dir, version, repo_root)
         print()
 
         # Step 6: Create archive
@@ -485,12 +504,17 @@ def main():
         print(f"Checksum:    {archive_path}.sha256")
         print()
         print("Contents:")
-        print("  - README.md (Python-only installation instructions)")
+        print("  - README.md (Installation instructions)")
         print("  - install.py (Python installer)")
+        print("  - install.sh (Linux/macOS launcher)")
+        print("  - install.bat (Windows launcher)")
         print()
         print("Next steps:")
         print("  1. Test installer:")
-        print(f"     unzip {archive_path} -d /tmp/rdd-test && cd /tmp/rdd-test/rdd-v{version} && python install.py")
+        print(f"     Linux/macOS: unzip {archive_path} -d /tmp/rdd-test && cd /tmp/rdd-test/rdd-v{version} && ./install.sh")
+        print(f"     Windows: Extract archive, navigate to folder, double-click install.bat")
+        print("  2. Or test direct Python installer:")
+        print(f"     python install.py")
         print()
         print("  2. Create GitHub release:")
         print(f"     - Tag: v{version}")

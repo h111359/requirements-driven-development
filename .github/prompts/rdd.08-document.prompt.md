@@ -25,7 +25,16 @@ Ensure project documentation reflects your changes:
    - **Data model changes** → `.rdd-docs/data-model.md`
    - **Release notes** → `.rdd-docs/release-notes-<version>.md` (where `<version>` is the new version from `.rdd-docs/config.json`) - create or update release notes file, summarize key changes, new features, bug fixes and follow the existing format for consistency.
 
-3. **Important guidelines**:
+3. **Update Folder Structure**:
+   - Scan recursively the project directory to identify any new files, directories, or structural changes. (Exclude `.rdd-docs/archive`, `.venv`, `venv`, and `.git` directories)
+   - Reflect any new files, directories, or structural changes in `.rdd-docs/folder-structure.md`.
+   - Ensure descriptions are clear and concise. 
+
+4. **Update Data Model**:
+   - Review changes in data-related files (e.g., JSON, YAML, database schemas).
+   - Update `.rdd-docs/data-model.md` to reflect any additions, deletions, or modifications to the data model.
+
+## **Important guidelines**:
    - Preserve ID sequences (never renumber existing IDs)
    - When adding requirements, continue from highest existing ID in that section
    - Maintain existing structure and formatting
