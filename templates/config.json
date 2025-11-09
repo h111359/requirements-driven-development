@@ -1,6 +1,7 @@
 {
   "version": "1.0.0",
   "defaultBranch": "main",
+  "localOnly": false,
   "created": "",
   "lastModified": ""
 }

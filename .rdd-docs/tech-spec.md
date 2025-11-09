@@ -94,43 +94,149 @@ The framework follows a sequential phase workflow:
 5. **Wrap-Up**: Archive workspace, merge requirements, prepare for PR
 6. **Clean-Up**: After PR merge, clean up local environment and remove merged branches
 
-### Interactive Menu System
-The framework provides interactive menus for user input using Python's curses library:
+### Simplified Workflow (v1.0.3+)
 
-**Features**:
-- Visual navigation with arrow keys (↑/↓)
-- Selection with Enter or Space
-- Automatic fallback to numeric input when curses unavailable
-- Beautiful Unicode box drawing (╔═╗╚╝║╠╣) for professional appearance
-- Clear visual indicators (→ for current selection with bold + reverse video)
-- Support for custom text input options
-- Dynamic box width (adapts to terminal, max 80 chars)
-- Centered title and help text
+The framework provides a streamlined 4-option workflow focused on core iteration tasks:
+
+**Main Menu Options**:
+1. **Create new iteration** - Start work on a new feature/fix
+2. **Update from default** - Sync current branch with latest changes from default branch
+3. **Complete current iteration** - Archive work, commit changes, and return to default branch
+4. **Delete merged branches** - Interactive cleanup of fully merged branches
+
+**Interactive Menu System**:
+- Numeric selection system where users enter numbers to select options
+- Clear numbered menu options for easy navigation
+- Reliable and error-resistant compared to arrow-based navigation
+- Works consistently across all terminal types and platforms
+- Support for custom text input when needed
+- Color-coded output for improved readability
 
 **Implementation**:
-- `_curses_menu()` function in rdd.py provides core menu functionality
-- Used for change type selection (Fix/Enhancement)
-- Used for default branch selection during initialization
-- Handles terminal compatibility issues gracefully
+- Simplified numeric menu functions in rdd.py
+- Main menu launched when running `python .rdd/scripts/rdd.py` without arguments
+- Used for legacy change type selection (Fix/Enhancement) when using CLI commands
+- Used for default branch selection during installation
+- Prompts user to enter option number or text input
 
-**Example Visual**:
+**Workflow Functions**:
+- `create_iteration()` - Creates new branch and initializes workspace
+- `update_from_default_branch()` - Fetches/merges default branch into current
+- `complete_iteration()` - Archives workspace, commits, optionally pushes
+- `interactive_branch_cleanup()` - Lists and deletes merged branches
+
+**Example Interaction**:
 ```
-╔═══════════════════════════════════════════════════════════╗
-║                  Select change type                        ║
-╠═══════════════════════════════════════════════════════════╣
-║  Use ↑/↓ arrows to navigate, Enter to select, ESC/q...   ║
-╠═══════════════════════════════════════════════════════════╣
-║ → Fix                                                      ║  (highlighted)
-║   Enhancement                                              ║
-╚═══════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║            RDD Framework                                     ║
+║    Requirements-Driven Development                           ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+Current branch: dev
+Default branch: dev
+
+RDD Framework - Main Menu:
+1. Create new iteration
+2. Update from default
+3. Complete current iteration
+4. Delete merged branches
+5. Exit
+
+Enter your choice (1-5): 1
 ```
 
-**Example Usage**:
+**Legacy CLI Access**:
 ```python
+# Legacy commands still available for scripting
 python .rdd/scripts/rdd.py change create
-# Displays interactive menu:
-# → Fix
-#   Enhancement (hidden by default)
+python .rdd/scripts/rdd.py branch cleanup
+python .rdd/scripts/rdd.py git update-from-default-branch
+```
+
+### Iteration Workflow Architecture (v1.0.3+)
+
+The framework's core workflow is built around four iteration management functions:
+
+#### 1. Create New Iteration (`create_iteration()`)
+
+**Purpose**: Start work on a new feature or fix
+
+**Safety Checks**:
+- Verifies user IS on default branch (stops if not)
+- Verifies workspace IS empty (stops if not empty)
+
+**Process**:
+1. Prompts for branch name with normalization and validation
+2. Pulls latest from default branch (if not local-only mode)
+3. Creates and checks out new branch
+4. Initializes workspace with `.rdd/templates/copilot-prompts.md`
+
+**Branch Naming**:
+- Accepts user input with normalization to kebab-case
+- Validates format (lowercase, hyphens, forward slashes)
+- No automatic prefixes or timestamps added
+
+#### 2. Update From Default (`update_from_default_branch()`)
+
+**Purpose**: Sync current branch with latest changes from default branch
+
+**Safety Checks**:
+- Stops if already on default branch
+
+**Process**:
+1. Stashes any uncommitted changes
+2. Fetches and pulls latest from default branch (if not local-only mode)
+3. Merges default branch into current branch
+4. Restores stashed changes
+5. Shows clear error messages on conflicts
+
+#### 3. Complete Current Iteration (`complete_iteration()`)
+
+**Purpose**: Archive work, commit changes, and return to default branch
+
+**Safety Checks**:
+- Verifies user is NOT on default branch (stops if on default)
+- Verifies workspace is NOT empty (stops if empty)
+
+**Process**:
+1. Archives all workspace files to `.rdd-docs/archive/<sanitized-branch-name>/`
+2. Creates archive metadata with timestamp, branch, author, commit info
+3. Commits all changes with message "Completing work on <branch-name>"
+4. Asks user if they want to push to remote (if not local-only mode)
+5. If yes, pushes branch and reminds about pull request
+6. Checks out to default branch
+
+**Archive Naming**:
+- Uses sanitized branch name (replaces `/` and `\` with `-`)
+- Example: `fix/bug-123` → `.rdd-docs/archive/fix-bug-123/`
+
+#### 4. Delete Merged Branches (`interactive_branch_cleanup()`)
+
+**Purpose**: Clean up branches that have been fully merged
+
+**Process**:
+1. Fetches from remote (if not local-only mode)
+2. Checks out default branch
+3. Lists all branches fully merged into default branch
+4. Excludes protected branches (default, main, master, dev)
+5. Prompts user to select branches by number or "all"
+6. Deletes selected branches locally
+7. Optionally deletes from remote (if not local-only mode)
+
+**Protected Branches**:
+- Default branch (from config.json)
+- "main", "master", "dev"
+
+**User Interaction**:
+```
+The following branches are fully merged:
+  1. fix/bug-123
+  2. feature/add-login
+  3. hotfix/urgent-fix
+
+Enter numbers to delete (comma-sep or 'all' to delete all, ENTER to cancel): 1,3
 ```
 
 ### Configuration Management
@@ -138,7 +244,7 @@ The framework uses a configuration file system for repository-wide settings:
 
 **Configuration Storage**:
 - **Location**: `.rdd-docs/config.json`
-- **Format**: JSON with version, defaultBranch, timestamps
+- **Format**: JSON with version, defaultBranch, localOnly, timestamps
 - **Version Control**: File is tracked in repository and shared across team
 
 **Configuration Access**:
@@ -161,6 +267,23 @@ The framework uses a configuration file system for repository-wide settings:
 1. Read from `.rdd-docs/config.json` if exists
 2. Fall back to branch detection (main → master)
 3. Default to "main"
+
+**Local-Only Mode Configuration**:
+- **Purpose**: Allows repositories to operate without GitHub remote
+- **Configuration**: Set `localOnly: true` in config.json to enable
+- **Installation**: User prompted during installation to choose mode
+- **Default**: `localOnly: false` (GitHub remote enabled)
+- **Behavior**: When enabled, all remote git operations (fetch, push, pull) are skipped
+- **Implementation**:
+  - `is_local_only_mode()` function checks config.json for localOnly setting
+  - `pull_main()` skips remote fetch when local-only mode enabled
+  - `interactive_branch_cleanup()` skips remote fetch and deletion prompts
+  - Clear informational messages displayed when operations skipped
+- **Use Cases**: 
+  - Repositories without GitHub/remote hosting
+  - Local-only development workflows
+  - Offline development environments
+  - Testing and experimentation without remote side effects
 
 ## Component Architecture
 
@@ -263,6 +386,7 @@ Located in `.rdd-docs/config.json`, version-controlled with repository:
 {
   "version": "1.0.0",
   "defaultBranch": "main",
+  "localOnly": false,
   "created": "2025-11-06T08:00:00Z",
   "lastModified": "2025-11-06T08:00:00Z"
 }
@@ -271,6 +395,7 @@ Located in `.rdd-docs/config.json`, version-controlled with repository:
 Fields:
 - **version**: Framework version (semantic versioning)
 - **defaultBranch**: Name of the repository's default branch (e.g., "main", "dev", "master")
+- **localOnly**: Boolean flag for local-only mode (true = no remote operations, false = normal GitHub remote mode)
 - **created**: ISO 8601 timestamp of initial configuration creation
 - **lastModified**: ISO 8601 timestamp of last configuration update
 
@@ -295,6 +420,8 @@ The RDD framework uses a Python-based build system to create release packages:
 #### Build Script (scripts/build.py)
 - **Purpose**: Creates cross-platform release archives with all necessary files
 - **Version Management**: Extracts version from `.rdd-docs/config.json` as single source of truth (fixed from previous hardcoded version in rdd.py)
+- **Interactive Version Control**: Displays current version and prompts user to either increment patch version or rebuild with same version
+- **Version Persistence**: Automatically updates `.rdd-docs/config.json` when user chooses to increment version
 - **Template Processing**: Reads README.md and installer scripts from templates/ directory with {{VERSION}} placeholder substitution
 - **Archive Creation**: Generates single `rdd-v{version}.zip` file containing:
   - Framework files (.rdd/scripts/, .rdd/templates/)
@@ -307,16 +434,18 @@ The RDD framework uses a Python-based build system to create release packages:
 - **Cleanup**: Removes temporary build directories, keeping only archive and checksum
 
 #### Build Process Steps
-1. Extract version from rdd.py and validate SemVer format
-2. Create build directory structure (including .rdd-docs/)
-3. Copy framework files (prompts, scripts, templates, LICENSE)
-4. Copy VS Code settings template to .vscode/settings.json
-5. Copy seed templates to .rdd-docs/ (config.json, data-model.md, requirements.md, tech-spec.md)
-6. Generate README.md from templates/README.md with version substitution
-7. Generate install.py from scripts/install.py template with version substitution
-8. Create ZIP archive with nested directory structure
-9. Generate SHA256 checksum file
-10. Clean up temporary staging directories
+1. Extract version from `.rdd-docs/config.json` and validate SemVer format
+2. Display current version and prompt for version increment (patch only)
+3. Update `.rdd-docs/config.json` with new version if user chooses to increment
+4. Create build directory structure (including .rdd-docs/)
+5. Copy framework files (prompts, scripts, templates, LICENSE)
+6. Copy VS Code settings template to .vscode/settings.json
+7. Copy seed templates to .rdd-docs/ (config.json, data-model.md, requirements.md, tech-spec.md)
+8. Generate README.md from templates/README.md with version substitution
+9. Generate install.py from scripts/install.py template with version substitution
+10. Create ZIP archive with nested directory structure
+11. Generate SHA256 checksum file
+12. Clean up temporary staging directories
 
 ### Installation System
 The RDD framework provides Python-based cross-platform installation:

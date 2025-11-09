@@ -28,18 +28,18 @@ from rdd_utils import (
     check_git_repo, get_current_branch, get_default_branch, get_branch_type, 
     is_enh_or_fix_branch, is_valid_work_branch, get_git_user,
     check_uncommitted_changes, get_repo_root,
-    stash_changes, restore_stashed_changes, pull_main, merge_main_into_current,
-    update_from_main,
+    stash_changes, restore_stashed_changes, pull_default_branch, merge_default_branch_into_current,
+    update_from_default_branch,
     # String functions
     normalize_to_kebab_case,
     # Utility functions
     ensure_dir, get_timestamp, get_timestamp_filename, confirm_action,
-    exit_with_error, debug_print,
+    exit_with_error, debug_print, is_debug_mode,
     # Config functions
     find_change_config, get_config, set_config,
-    get_rdd_config_path, get_rdd_config, set_rdd_config,
+    get_rdd_config_path, get_rdd_config, set_rdd_config, is_local_only_mode,
     # Prompt functions
-    mark_prompt_completed, log_prompt_execution, list_prompts, validate_prompt_status,
+    mark_prompt_completed, list_prompts, validate_prompt_status,
     # Help functions
     help_section, help_command, help_option,
     Colors
@@ -59,92 +59,97 @@ SHOW_ENH_IN_MENU_DEFAULT = False
 # INTERACTIVE UI HELPERS
 # ============================================================================
 
-def _curses_menu(stdscr, title: str, items: list) -> int:
+def _simple_menu(title: str, items: list) -> int:
     """
-    Beautiful arrow-key menu using curses. Returns selected index.
-    Controls: Up/Down to move, Enter/Space to select, 'q' or ESC to cancel (returns -1).
+    Simple numbered menu. Returns selected index.
+    Returns -1 if user cancels (enters 'q' or invalid input).
     """
-    curses = None
+    print()
+    print("=" * 60)
+    print(f"  {title}")
+    print("=" * 60)
+    print()
+    
+    for idx, label in enumerate(items, start=1):
+        print(f"  {idx}. {label}")
+    
+    print()
+    print("Enter number to select (or 'q' to cancel): ", end="")
+    
     try:
-        import curses  # type: ignore
-    except Exception:
-        # Should never get here because this function is only called after import succeeded
+        choice = input().strip().lower()
+        
+        if choice == 'q' or choice == '':
+            return -1
+        
+        try:
+            selected = int(choice)
+            if 1 <= selected <= len(items):
+                return selected - 1
+            else:
+                print_warning(f"Invalid choice. Please enter a number between 1 and {len(items)}")
+                return -1
+        except ValueError:
+            print_warning("Invalid input. Please enter a number.")
+            return -1
+            
+    except (KeyboardInterrupt, EOFError):
+        print()
         return -1
 
-    curses.curs_set(0)
-    stdscr.nodelay(False)
-    stdscr.keypad(True)
 
-    current = 0
+def _simple_text_input(title: str, prompt: str, default: str = "") -> Optional[str]:
+    """
+    Simple text input dialog.
+    Returns user input or None if cancelled.
+    """
+    print()
+    print("=" * 60)
+    print(f"  {title}")
+    print("=" * 60)
+    print()
+    print(prompt)
+    if default:
+        print(f"(Press Enter for default: {default})")
+    print()
+    print("Enter value (or 'q' to cancel): ", end="")
+    
+    try:
+        user_input = input().strip()
+        
+        if user_input.lower() == 'q':
+            return None
+        
+        if not user_input and default:
+            return default
+        
+        return user_input if user_input else None
+            
+    except (KeyboardInterrupt, EOFError):
+        print()
+        return None
 
-    while True:
-        stdscr.clear()
-        h, w = stdscr.getmaxyx()
 
-        # Calculate box width (use most of terminal width, but cap at 80)
-        box_width = min(w - 4, 80)
-        
-        # Title box
-        row = 0
-        stdscr.addstr(row, 0, "╔" + "═" * (box_width - 2) + "╗")
-        row += 1
-        
-        # Center title in box
-        padding = (box_width - 2 - len(title)) // 2
-        title_line = "║" + " " * padding + title + " " * (box_width - 2 - padding - len(title)) + "║"
-        stdscr.addstr(row, 0, title_line)
-        row += 1
-        
-        stdscr.addstr(row, 0, "╠" + "═" * (box_width - 2) + "╣")
-        row += 1
-        
-        # Help text
-        help_text = "Use ↑/↓ arrows to navigate, Enter to select, ESC/q to cancel"
-        help_padding = (box_width - 2 - len(help_text)) // 2
-        help_line = "║" + " " * help_padding + help_text + " " * (box_width - 2 - help_padding - len(help_text)) + "║"
-        stdscr.addstr(row, 0, help_line)
-        row += 1
-        
-        stdscr.addstr(row, 0, "╠" + "═" * (box_width - 2) + "╣")
-        row += 1
-        
-        # Items
-        for idx, label in enumerate(items):
-            if idx == current:
-                # Highlighted item with arrow
-                prefix = "→ "
-                item_text = prefix + label
-                item_padding = box_width - 2 - len(item_text)
-                line = "║" + item_text + " " * item_padding + "║"
-                try:
-                    stdscr.attron(curses.A_REVERSE | curses.A_BOLD)
-                    stdscr.addstr(row, 0, line)
-                    stdscr.attroff(curses.A_REVERSE | curses.A_BOLD)
-                except Exception:
-                    stdscr.addstr(row, 0, line)
-            else:
-                # Regular item
-                prefix = "  "
-                item_text = prefix + label
-                item_padding = box_width - 2 - len(item_text)
-                line = "║" + item_text + " " * item_padding + "║"
-                stdscr.addstr(row, 0, line)
-            row += 1
-        
-        # Bottom border
-        stdscr.addstr(row, 0, "╚" + "═" * (box_width - 2) + "╝")
-
-        stdscr.refresh()
-
-        key = stdscr.getch()
-        if key in (ord('q'), 27):  # q or ESC
-            return -1
-        if key in (curses.KEY_UP, ord('k')):
-            current = (current - 1) % len(items)
-        elif key in (curses.KEY_DOWN, ord('j')):
-            current = (current + 1) % len(items)
-        elif key in (curses.KEY_ENTER, 10, 13, ord(' ')):
-            return current
+def _simple_confirmation(title: str, message: str) -> bool:
+    """
+    Simple yes/no confirmation dialog.
+    Returns True if confirmed, False otherwise.
+    """
+    print()
+    print("=" * 60)
+    print(f"  {title}")
+    print("=" * 60)
+    print()
+    print(message)
+    print()
+    print("Confirm? (y/n): ", end="")
+    
+    try:
+        response = input().strip().lower()
+        return response in ['y', 'yes']
+    except (KeyboardInterrupt, EOFError):
+        print()
+        return False
 
 
 def select_change_type_interactive(reveal_enh: bool = SHOW_ENH_IN_MENU_DEFAULT) -> Optional[str]:
@@ -160,37 +165,11 @@ def select_change_type_interactive(reveal_enh: bool = SHOW_ENH_IN_MENU_DEFAULT) 
 
     labels = [label for (label, _code) in visible_options]
 
-    # Try curses-based UI first
-    try:
-        import curses  # noqa: F401
-
-        def _run(stdscr):
-            return _curses_menu(stdscr, "Select change type", labels)
-
-        selected_idx = __import__('curses').wrapper(_run)
-        if selected_idx is None or selected_idx < 0:
-            return None
-        return visible_options[selected_idx][1]
-    except Exception:
-        # Fallback to simple numeric input
-        print_info("Interactive menu unavailable; falling back to numeric selection.")
-        for i, (label, _code) in enumerate(visible_options, start=1):
-            print(f"  {i}. {label}")
-        try:
-            raw = input("Choose an option [1..{0}] (Enter for 1): ".format(len(visible_options))).strip()
-        except (KeyboardInterrupt, EOFError):
-            print()
-            return None
-        if not raw:
-            return visible_options[0][1]
-        try:
-            idx = int(raw)
-            if 1 <= idx <= len(visible_options):
-                return visible_options[idx - 1][1]
-        except ValueError:
-            pass
-        print_warning("Invalid selection. Defaulting to 'fix'.")
-        return 'fix'
+    # Use simple numeric menu
+    selected_idx = _simple_menu("Select change type", labels)
+    if selected_idx is None or selected_idx < 0:
+        return None
+    return visible_options[selected_idx][1]
 
 
 def select_default_branch_interactive() -> Optional[str]:
@@ -208,84 +187,40 @@ def select_default_branch_interactive() -> Optional[str]:
     
     labels = [label for (label, _code) in menu_options]
     
-    # Try curses-based UI first
-    try:
-        import curses  # noqa: F401
+    # Use simple numeric menu
+    selected_idx = _simple_menu("Select default branch for RDD framework", labels)
+    if selected_idx is None or selected_idx < 0:
+        return None
+    
+    code = menu_options[selected_idx][1]
+    
+    # If custom, prompt for input
+    if code == "custom":
+        branch_name = _simple_text_input(
+            "Custom Branch Name",
+            "Enter branch name:",
+            default="main"
+        )
         
-        def _run(stdscr):
-            return _curses_menu(stdscr, "Select default branch for RDD framework", labels)
-        
-        selected_idx = __import__('curses').wrapper(_run)
-        if selected_idx is None or selected_idx < 0:
-            return None
-        
-        code = menu_options[selected_idx][1]
-        
-        # If custom, prompt for input
-        if code == "custom":
-            try:
-                branch_name = input("Enter branch name: ").strip()
-                if not branch_name:
-                    print_warning("No branch name entered. Defaulting to 'main'.")
-                    return "main"
-                # Validate branch name format
-                if not validate_branch_name(branch_name):
-                    print_error(f"Invalid branch name: {branch_name}")
-                    return None
-                return branch_name
-            except (KeyboardInterrupt, EOFError):
-                print()
-                return None
-        
-        return code
-        
-    except Exception:
-        # Fallback to simple numeric input
-        print_info("Interactive menu unavailable; falling back to numeric selection.")
-        for i, (label, _code) in enumerate(menu_options, start=1):
-            print(f"  {i}. {label}")
-        try:
-            raw = input("Choose an option [1..3] (Enter for 1): ").strip()
-        except (KeyboardInterrupt, EOFError):
-            print()
-            return None
-        
-        if not raw:
+        if not branch_name:
+            print_warning("No branch name entered. Defaulting to 'main'.")
             return "main"
         
-        try:
-            idx = int(raw)
-            if 1 <= idx <= len(menu_options):
-                code = menu_options[idx - 1][1]
-                
-                # If custom, prompt for input
-                if code == "custom":
-                    try:
-                        branch_name = input("Enter branch name: ").strip()
-                        if not branch_name:
-                            print_warning("No branch name entered. Defaulting to 'main'.")
-                            return "main"
-                        if not validate_branch_name(branch_name):
-                            print_error(f"Invalid branch name: {branch_name}")
-                            return None
-                        return branch_name
-                    except (KeyboardInterrupt, EOFError):
-                        print()
-                        return None
-                
-                return code
-        except ValueError:
-            pass
+        # Validate branch name format
+        if not validate_branch_name(branch_name):
+            print_error(f"Invalid branch name: {branch_name}")
+            return None
         
-        print_warning("Invalid selection. Defaulting to 'main'.")
-        return 'main'
+        return branch_name
+    
+    return code
 
 
 # ============================================================================
 # GIT OPERATIONS
 # ============================================================================
 
-def fetch_main() -> bool:
+def fetch_default_branch() -> bool:
     """Fetch latest changes from remote default branch. Returns True on success."""
     default_branch = get_default_branch()
     print_step(f"Fetching latest from origin/{default_branch}...")
@@ -371,9 +306,9 @@ def auto_commit(message: str) -> int:
         return 1
 
 
-def compare_with_main() -> bool:
-    """Compare current branch with main branch."""
-    fetch_main()
+def compare_with_default_branch() -> bool:
+    """Compare current branch with default branch."""
+    fetch_default_branch()
     
     default_branch = get_default_branch()
     current_branch = get_current_branch()
@@ -666,6 +601,9 @@ def cleanup_after_merge(branch_name: str = None) -> bool:
     Returns:
         True on success, False on failure
     """
+
+    from rdd_utils import interactive_branch_cleanup
+
     check_git_repo()
     
     print_banner("POST-MERGE CLEANUP")
@@ -676,32 +614,32 @@ def cleanup_after_merge(branch_name: str = None) -> bool:
     current_branch = get_current_branch()
     
     # If no branch name provided, prompt for it or use current branch
-    if not branch_name:
-        # If we're not on the default branch, offer to delete current branch
-        if current_branch != default_branch:
-            print_info(f"Current branch: {current_branch}")
-            if confirm_action("Delete current branch after cleanup?"):
-                branch_name = current_branch
-            else:
-                try:
-                    branch_name = input("Enter branch name to delete (or press Enter to skip): ").strip()
-                except (KeyboardInterrupt, EOFError):
-                    print()
-                    print_info("Operation cancelled")
-                    return False
+    # if not branch_name:
+    #     # If we're not on the default branch, offer to delete current branch
+    #     if current_branch != default_branch:
+    #         print_info(f"Current branch: {current_branch}")
+    #         if confirm_action("Delete current branch after cleanup?"):
+    #             branch_name = current_branch
+    #         else:
+    #             try:
+    #                 branch_name = input("Enter branch name to delete (or press Enter to skip): ").strip()
+    #             except (KeyboardInterrupt, EOFError):
+    #                 print()
+    #                 print_info("Operation cancelled")
+    #                 return False
                 
-                if not branch_name:
-                    print_info("No branch specified for deletion")
-        else:
-            try:
-                branch_name = input("Enter branch name to delete (or press Enter to skip): ").strip()
-            except (KeyboardInterrupt, EOFError):
-                print()
-                print_info("Operation cancelled")
-                return False
+    #             if not branch_name:
+    #                 print_info("No branch specified for deletion")
+    #     else:
+    #         try:
+    #             branch_name = input("Enter branch name to delete (or press Enter to skip): ").strip()
+    #         except (KeyboardInterrupt, EOFError):
+    #             print()
+    #             print_info("Operation cancelled")
+    #             return False
             
-            if not branch_name:
-                print_info("No branch specified for deletion")
+    #         if not branch_name:
+    #             print_info("No branch specified for deletion")
     
     # Switch to default branch
     print_step(f"1. Switching to '{default_branch}' branch")
@@ -721,7 +659,7 @@ def cleanup_after_merge(branch_name: str = None) -> bool:
     print()
     
     # Fetch latest changes
-    print_step("2. Fetching latest changes from remote")
+    # print_step("2. Fetching latest changes from remote")
     result = subprocess.run(
         ['git', 'fetch', 'origin'],
         stdout=subprocess.DEVNULL,
@@ -730,12 +668,12 @@ def cleanup_after_merge(branch_name: str = None) -> bool:
     
     if result.returncode != 0:
         print_warning("Failed to fetch from remote")
-    else:
-        print_success("Fetched latest changes")
+    # else:
+    #     print_success("Fetched latest changes")
     print()
     
     # Pull latest changes for default branch
-    print_step(f"3. Pulling latest changes for '{default_branch}'")
+    # print_step(f"3. Pulling latest changes for '{default_branch}'")
     result = subprocess.run(
         ['git', 'pull', 'origin', default_branch],
         stdout=subprocess.DEVNULL,
@@ -744,70 +682,73 @@ def cleanup_after_merge(branch_name: str = None) -> bool:
     
     if result.returncode != 0:
         print_warning("Failed to pull latest changes")
-    else:
-        print_success("Pulled latest changes")
-    print()
+    # else:
+    #     print_success("Pulled latest changes")
+    # print()
+
+
+    interactive_branch_cleanup(default_branch)
     
     # Delete the branch if specified
-    if branch_name:
-        print_step(f"4. Deleting branch '{branch_name}'")
+    # if branch_name:
+    #     print_step(f"4. Deleting branch '{branch_name}'")
         
-        # Check if branch exists locally
-        result = subprocess.run(
-            ['git', 'show-ref', '--verify', '--quiet', f'refs/heads/{branch_name}'],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL
-        )
+    #     # Check if branch exists locally
+    #     result = subprocess.run(
+    #         ['git', 'show-ref', '--verify', '--quiet', f'refs/heads/{branch_name}'],
+    #         stdout=subprocess.DEVNULL,
+    #         stderr=subprocess.DEVNULL
+    #     )
         
-        if result.returncode == 0:
-            # Try to delete local branch
-            result = subprocess.run(
-                ['git', 'branch', '-d', branch_name],
-                capture_output=True,
-                text=True
-            )
+    #     if result.returncode == 0:
+    #         # Try to delete local branch
+    #         result = subprocess.run(
+    #             ['git', 'branch', '-d', branch_name],
+    #             capture_output=True,
+    #             text=True
+    #         )
             
-            if result.returncode == 0:
-                print_success("Local branch deleted")
-            else:
-                print_warning("Branch not fully merged, use --force if needed")
-                if confirm_action("Force delete local branch?"):
-                    result = subprocess.run(
-                        ['git', 'branch', '-D', branch_name],
-                        capture_output=True,
-                        text=True
-                    )
+    #         if result.returncode == 0:
+    #             print_success("Local branch deleted")
+    #         else:
+    #             print_warning("Branch not fully merged, use --force if needed")
+    #             if confirm_action("Force delete local branch?"):
+    #                 result = subprocess.run(
+    #                     ['git', 'branch', '-D', branch_name],
+    #                     capture_output=True,
+    #                     text=True
+    #                 )
                     
-                    if result.returncode == 0:
-                        print_success("Local branch force-deleted")
-                    else:
-                        print_error("Failed to delete local branch")
-        else:
-            print_info("Local branch does not exist (already deleted)")
+    #                 if result.returncode == 0:
+    #                     print_success("Local branch force-deleted")
+    #                 else:
+    #                     print_error("Failed to delete local branch")
+    #     else:
+    #         print_info("Local branch does not exist (already deleted)")
         
-        # Check and delete remote branch
-        result = subprocess.run(
-            ['git', 'ls-remote', '--heads', 'origin', branch_name],
-            capture_output=True,
-            text=True
-        )
+    #     # Check and delete remote branch
+    #     result = subprocess.run(
+    #         ['git', 'ls-remote', '--heads', 'origin', branch_name],
+    #         capture_output=True,
+    #         text=True
+    #     )
         
-        if result.stdout.strip():
-            print_info(f"Deleting remote branch 'origin/{branch_name}'...")
-            result = subprocess.run(
-                ['git', 'push', 'origin', '--delete', branch_name],
-                capture_output=True,
-                text=True
-            )
+    #     if result.stdout.strip():
+    #         print_info(f"Deleting remote branch 'origin/{branch_name}'...")
+    #         result = subprocess.run(
+    #             ['git', 'push', 'origin', '--delete', branch_name],
+    #             capture_output=True,
+    #             text=True
+    #         )
             
-            if result.returncode == 0:
-                print_success("Remote branch deleted")
-            else:
-                print_error("Failed to delete remote branch")
-        else:
-            print_info("Remote branch does not exist (already deleted)")
+    #         if result.returncode == 0:
+    #             print_success("Remote branch deleted")
+    #         else:
+    #             print_error("Failed to delete remote branch")
+    #     else:
+    #         print_info("Remote branch does not exist (already deleted)")
         
-        print()
+    #     print()
     
     # Display completion summary
     print_banner("CLEANUP COMPLETE")
@@ -992,7 +933,277 @@ def clear_workspace_forced() -> None:
 
 
 # ============================================================================
-# CHANGE OPERATIONS
+# ITERATION OPERATIONS (Simplified Workflow)
+# ============================================================================
+
+def complete_iteration() -> bool:
+    """
+    Complete current iteration workflow.
+    Simplified version that archives workspace, commits, and returns to default branch.
+    Returns True on success, False on failure.
+    """
+    current_branch = get_current_branch()
+    default_branch = get_default_branch()
+    
+    if not current_branch:
+        print_error("Could not determine current branch")
+        return False
+    
+    print_banner("Complete Current Iteration")
+    print()
+    
+    # Safety check 1: Not on default branch
+    if current_branch == default_branch:
+        print_error(f"Cannot complete iteration on the default branch ({default_branch})")
+        print_warning("The default branch is not supposed to be committed to directly")
+        print()
+        print_info("Please create a feature branch first using 'Create new iteration'")
+        return False
+    
+    # Safety check 2: Workspace not empty
+    if not os.path.isdir(WORKSPACE_DIR) or not os.listdir(WORKSPACE_DIR):
+        print_error("Workspace directory is empty")
+        print_warning("There is no work to complete")
+        print()
+        print_info("Use 'Create new iteration' to start working on a feature")
+        return False
+    
+    print_info(f"Current branch: {current_branch}")
+    print_info(f"Workspace: {WORKSPACE_DIR}")
+    print()
+    
+    # Step 1: Archive workspace
+    print_step("1/4 Archiving workspace...")
+    if not archive_workspace(current_branch, keep_workspace=False):
+        print_error("Failed to archive workspace")
+        return False
+    print()
+    
+    # Step 2: Commit changes
+    print_step("2/4 Committing changes...")
+    commit_msg = f"Completing work on {current_branch}"
+    result = auto_commit(commit_msg)
+    
+    if result == 2:
+        print_info("No uncommitted changes to commit")
+    elif result != 0:
+        print_error("Failed to commit changes")
+        return False
+    print()
+    
+    # Step 3: Push to remote (if not local-only)
+    if not is_local_only_mode():
+        print_step("3/4 Push to remote...")
+        if confirm_action("Do you want to push this branch to remote?"):
+            if push_to_remote(current_branch):
+                print()
+                print_success("Branch pushed to remote")
+                print_info("Don't forget to create a pull request on GitHub!")
+            else:
+                print_warning("Failed to push to remote, but continuing...")
+        else:
+            print_info("Skipping push to remote")
+    else:
+        print_info("3/4 Local-only mode: Skipping push to remote")
+    print()
+    
+    # Step 4: Checkout to default branch
+    print_step(f"4/4 Switching to {default_branch} branch...")
+    result = subprocess.run(
+        ['git', 'checkout', default_branch],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+    
+    if result.returncode == 0:
+        print_success(f"Switched to {default_branch} branch")
+    else:
+        print_error(f"Failed to checkout {default_branch}")
+        return False
+    
+    print()
+    print_banner("Iteration Complete!")
+    print_success(f"Successfully completed work on: {current_branch}")
+    print()
+    print_info("Summary:")
+    print(f"  • Workspace archived to: .rdd-docs/archive/{current_branch.replace('/', '-')}/")
+    print(f"  • Changes committed: {commit_msg}")
+    print(f"  • Now on branch: {default_branch}")
+    if not is_local_only_mode():
+        print()
+        print_info("Next steps:")
+        print("  1. Create a pull request on GitHub if you pushed")
+        print("  2. Request code review")
+        print("  3. Merge after approval")
+    
+    return True
+
+
+def create_iteration() -> bool:
+    """
+    Create new iteration workflow.
+    Simplified version that creates branch and initializes workspace.
+    Returns True on success, False on failure.
+    """
+    current_branch = get_current_branch()
+    default_branch = get_default_branch()
+    
+    if not current_branch:
+        print_error("Could not determine current branch")
+        return False
+    
+    print_banner("Create New Iteration")
+    print()
+    
+    # Safety check: Must be on default branch
+    if current_branch != default_branch:
+        print_error(f"Must be on {default_branch} branch to create new iteration")
+        print_warning(f"Current branch: {current_branch}")
+        print()
+        print_info(f"Please checkout to {default_branch} first:")
+        print(f"  git checkout {default_branch}")
+        return False
+    
+    # Safety check: Workspace must be empty
+    if os.path.isdir(WORKSPACE_DIR) and os.listdir(WORKSPACE_DIR):
+        print_error("Workspace directory is not empty")
+        print_warning(f"Workspace path: {WORKSPACE_DIR}")
+        print()
+        print("Please complete or clear the current iteration first:")
+        print("  • Use 'Complete current iteration' to finish current work")
+        print("  • Or manually clear workspace if needed")
+        return False
+    
+    print_info("Ready to create new iteration")
+    print()
+    
+    # Get branch name from user
+    normalized_name = None
+    while not normalized_name:
+        print("Enter branch name (will be normalized to kebab-case):")
+        print("Examples: 'my-feature', 'fix-bug-123', '20251108-update-docs'")
+        try:
+            branch_name = input("> ").strip()
+        except (KeyboardInterrupt, EOFError):
+            print()
+            print_error("Operation cancelled")
+            return False
+        
+        if not branch_name:
+            print_error("Branch name cannot be empty")
+            continue
+        
+        # Normalize the name
+        normalized_name = normalize_to_kebab_case(branch_name)
+        
+        if not normalized_name:
+            print_error(f"Unable to normalize name: {branch_name}")
+            print("Please try a different name (use only letters, numbers, spaces, hyphens, slashes)")
+            continue
+        
+        # Validate normalized name
+        if not validate_branch_name(normalized_name):
+            print_warning(f"Normalized name '{normalized_name}' doesn't meet requirements")
+            print("Requirements: kebab-case, lowercase, hyphens/slashes only")
+            print()
+            normalized_name = None
+            continue
+        
+        # Show normalized name and confirm
+        print_success(f"Branch name: {normalized_name}")
+        try:
+            confirm = input("Use this name? (y/n): ").strip().lower()
+        except (KeyboardInterrupt, EOFError):
+            print()
+            print_error("Operation cancelled")
+            return False
+        
+        if confirm not in ['y', 'yes']:
+            print("Let's try again...")
+            print()
+            normalized_name = None
+    
+    print()
+    
+    # Step 1: Create branch
+    print_step(f"1/3 Creating branch: {normalized_name}")
+    
+    # Check if branch already exists
+    result = subprocess.run(
+        ['git', 'show-ref', '--verify', '--quiet', f'refs/heads/{normalized_name}'],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+    
+    if result.returncode == 0:
+        print_error(f"Branch '{normalized_name}' already exists")
+        return False
+    
+    # Pull latest from default branch
+    if not is_local_only_mode():
+        print_info(f"Pulling latest from {default_branch}...")
+        result = subprocess.run(
+            ['git', 'pull', 'origin', default_branch],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+        
+        if result.returncode != 0:
+            print_warning("Failed to pull latest (continuing anyway)")
+    
+    # Create and checkout new branch
+    result = subprocess.run(
+        ['git', 'checkout', '-b', normalized_name],
+        capture_output=True,
+        text=True
+    )
+    
+    if result.returncode != 0:
+        print_error("Failed to create branch")
+        return False
+    
+    print_success(f"Created and checked out branch: {normalized_name}")
+    print()
+    
+    # Step 2: Initialize workspace
+    print_step("2/3 Initializing workspace...")
+    
+    # Ensure workspace directory exists
+    ensure_dir(WORKSPACE_DIR)
+    
+    # Copy only copilot-prompts.md template
+    template_path = os.path.join(TEMPLATES_DIR, "copilot-prompts.md")
+    dest_path = os.path.join(WORKSPACE_DIR, ".rdd.copilot-prompts.md")
+    
+    if not os.path.isfile(template_path):
+        print_error(f"Template not found: {template_path}")
+        return False
+    
+    shutil.copy2(template_path, dest_path)
+    print_success("Workspace initialized with copilot-prompts.md")
+    print()
+    
+    # Step 3: Summary
+    print_step("3/3 Setup complete")
+    print()
+    print_banner("New Iteration Created!")
+    print_success(f"Ready to work on: {normalized_name}")
+    print()
+    print_info("Summary:")
+    print(f"  • Branch: {normalized_name}")
+    print(f"  • Workspace: {WORKSPACE_DIR}")
+    print(f"  • Template: .rdd.copilot-prompts.md")
+    print()
+    print_info("Next steps:")
+    print("  1. Start working on your feature")
+    print("  2. Use workspace files to track progress")
+    print("  3. When done, use 'Complete current iteration'")
+    
+    return True
+
+
+# ============================================================================
+# CHANGE OPERATIONS (Legacy - kept for CLI compatibility)
 # ============================================================================
 
 def create_change(normalized_name: str, change_type: str = "enh") -> bool:
@@ -1112,13 +1323,28 @@ def show_main_help() -> None:
     """Show main help message."""
     print_banner("RDD Framework - Requirements-Driven Development")
     print()
-    print("Usage: rdd.py <domain> <action> [options]")
+    print("Usage:")
+    print("  Interactive Menu:  python .rdd/scripts/rdd.py")
+    print("  CLI Mode:          python .rdd/scripts/rdd.py <domain> <action> [options]")
     print()
-    print("Domains:")
+    print("━" * 60)
+    print()
+    print("INTERACTIVE MENU (Recommended)")
+    print()
+    print("Run without arguments to access the simplified menu:")
+    print("  1. Create new iteration")
+    print("  2. Update from default")
+    print("  3. Complete current iteration")
+    print("  4. Delete merged branches")
+    print()
+    print("━" * 60)
+    print()
+    print("CLI MODE (Advanced)")
+    print()
+    print("Available domains for command-line usage:")
     print("  branch        Branch management operations")
     print("  workspace     Workspace initialization and management")
-    print("  change        Change workflow management")
-    print("  fix           Fix workflow management")
+    print("  change        Change workflow management (legacy)")
     print("  git           Git operations and comparisons")
     print("  prompt        Stand-alone prompt management")
     print("  config        Configuration management")
@@ -1127,14 +1353,17 @@ def show_main_help() -> None:
     print("  --help, -h    Show this help message")
     print("  --version, -v Show version information")
     print()
-    print("For domain-specific help, use: rdd.py <domain> --help")
+    print("For domain-specific help, use: python .rdd/scripts/rdd.py <domain> --help")
     print()
     print("Examples:")
-    print("  rdd.py change create")
-    print("  rdd.py branch delete my-branch")
-    print("  rdd.py git compare")
-    print("  rdd.py prompt mark-completed P01")
-    print("  rdd.py config show")
+    print("  python .rdd/scripts/rdd.py branch delete my-branch")
+    print("  python .rdd/scripts/rdd.py git compare")
+    print("  python .rdd/scripts/rdd.py prompt mark-completed P01")
+    print("  python .rdd/scripts/rdd.py config show")
+    print()
+    print("━" * 60)
+    print()
+    print("RECOMMENDATION: Use the interactive menu for simplicity!")
 
 
 def show_branch_help() -> None:
@@ -1146,7 +1375,7 @@ def show_branch_help() -> None:
     print("Actions:")
     print("  create <type> <name>    Create new branch (type: enh|fix)")
     print("  delete [name] [--force] Delete branch (current if name omitted)")
-    print("  cleanup [name]          Post-merge cleanup: fetch main, pull, delete branch")
+    print("  cleanup [name]          Post-merge cleanup: fetch default branch, pull, delete branch")
     print("  list [filter]           List branches (optional filter)")
     print()
     print("Examples:")
@@ -1198,16 +1427,16 @@ def show_git_help() -> None:
     print("Usage: rdd.py git <action> [options]")
     print()
     print("Actions:")
-    print("  compare           Compare current branch with main")
-    print("  modified-files    List modified files")
-    print("  push              Push current branch to remote")
-    print("  update-from-main  Update current branch from main")
+    print("  compare                      Compare current branch with default branch")
+    print("  modified-files               List modified files")
+    print("  push                         Push current branch to remote")
+    print("  update-from-default-branch   Update current branch from default branch")
     print()
     print("Examples:")
     print("  rdd.py git compare")
     print("  rdd.py git modified-files")
     print("  rdd.py git push")
-    print("  rdd.py git update-from-main")
+    print("  rdd.py git update-from-default-branch")
 
 
 def show_prompt_help() -> None:
@@ -1218,12 +1447,10 @@ def show_prompt_help() -> None:
     print()
     print("Actions:")
     print("  mark-completed <id>          Mark prompt as completed")
-    print("  log-execution <id> <details> Log prompt execution")
     print("  list [--status=unchecked]    List prompts")
     print()
     print("Examples:")
     print("  rdd.py prompt mark-completed P01")
-    print("  rdd.py prompt log-execution P01 \"Created enhancement\"")
     print("  rdd.py prompt list --status=unchecked")
 
 
@@ -1486,7 +1713,7 @@ def route_git(args: List[str]) -> int:
     action = args[0]
     
     if action == 'compare':
-        return 0 if compare_with_main() else 1
+        return 0 if compare_with_default_branch() else 1
     
     elif action == 'modified-files':
         return 0 if get_modified_files() else 1
@@ -1494,8 +1721,8 @@ def route_git(args: List[str]) -> int:
     elif action == 'push':
         return 0 if push_to_remote() else 1
     
-    elif action == 'update-from-main':
-        return 0 if update_from_main() else 1
+    elif action == 'update-from-default-branch':
+        return 0 if update_from_default_branch() else 1
     
     else:
         print_error(f"Unknown git action: {action}")
@@ -1518,14 +1745,6 @@ def route_prompt(args: List[str]) -> int:
             return 1
         journal_file = os.path.join(WORKSPACE_DIR, ".rdd.copilot-prompts.md")
         return 0 if mark_prompt_completed(args[1], journal_file) else 1
-    
-    elif action == 'log-execution':
-        if len(args) < 3:
-            print_error("Prompt ID and details required")
-            print("Usage: rdd.py prompt log-execution <id> <details>")
-            return 1
-        session_id = f"exec-{get_timestamp_filename()}"
-        return 0 if log_prompt_execution(args[1], args[2], session_id) else 1
     
     elif action == 'list':
         status = "all"
@@ -1628,61 +1847,131 @@ def show_config_help() -> None:
 # MAIN ENTRY POINT
 # ============================================================================
 
+
+# ============================================================================
+# MAIN MENU SYSTEM
+# ============================================================================
+
+def main_menu_loop() -> None:
+    """Main interactive menu loop - Simplified 4-option menu."""
+    # Show banner
+    print()
+    print("╔" + "═" * 62 + "╗")
+    print("║" + " " * 62 + "║")
+    print("║" + "            RDD Framework            ".center(62) + "║")
+    print("║" + "    Requirements-Driven Development   ".center(62) + "║")
+    print("║" + " " * 62 + "║")
+    print("╚" + "═" * 62 + "╝")
+    print()
+    print(f"Version: {get_framework_version()}")
+    print()
+    input("Press Enter to continue...")
+
+    while True:
+        # Get current context
+        current_branch = get_current_branch() or "unknown"
+        default_branch = get_default_branch()
+        
+        print()
+        print(f"Current branch: {current_branch}")
+        print(f"Default branch: {default_branch}")
+        
+        items = [
+            "Create new iteration",
+            "Update from default",
+            "Complete current iteration",
+            "Delete merged branches",
+            "Exit"
+        ]
+        
+        selected = _simple_menu("RDD Framework - Main Menu", items)
+
+        if selected == -1 or selected == 4:  # Exit
+            print_success("Thank you for using RDD Framework!")
+            return
+
+        try:
+            if selected == 0:  # Create new iteration
+                create_iteration()
+                input("\nPress Enter to continue...")
+                
+            elif selected == 1:  # Update from default
+                update_from_default_branch()
+                input("\nPress Enter to continue...")
+                
+            elif selected == 2:  # Complete current iteration
+                complete_iteration()
+                input("\nPress Enter to continue...")
+                
+            elif selected == 3:  # Delete merged branches
+                cleanup_after_merge()
+                input("\nPress Enter to continue...")
+                
+        except Exception as e:
+            print_error(f"Error: {e}")
+            if is_debug_mode():
+                import traceback
+                traceback.print_exc()
+            input("\nPress Enter to continue...")
+
+# ============================================================================
+# MAIN ENTRY POINT
+# ============================================================================
+
 def main() -> int:
-    """Main entry point for the script."""
-    args = sys.argv[1:]
-    
-    # Handle no arguments - show help
-    if not args:
-        show_main_help()
-        sys.exit(0)
-    
-    # Handle global options
-    if args[0] in ['--version', '-v']:
-        show_version()
-        sys.exit(0)
-    
-    if args[0] in ['--help', '-h']:
-        show_main_help()
-        sys.exit(0)
-    
-    # Route to domain handler
-    domain = args[0]
-    domain_args = args[1:]
-    
-    if domain == 'branch':
-        return route_branch(domain_args)
-    elif domain == 'workspace':
-        return route_workspace(domain_args)
-    elif domain == 'change':
-        return route_change(domain_args)
-    elif domain == 'fix':
-        return route_fix(domain_args)
-    elif domain == 'git':
-        return route_git(domain_args)
-    elif domain == 'prompt':
-        return route_prompt(domain_args)
-    elif domain == 'config':
-        return route_config(domain_args)
-    else:
-        print_error(f"Unknown domain: {domain}")
-        print()
-        print("Available domains: branch, workspace, change, fix, git, prompt, config")
-        print()
-        print("Use 'rdd.py --help' for more information")
-        sys.exit(1)
-
-
-if __name__ == '__main__':
+    """
+    Main entry point for the RDD framework.
+    Returns exit code (0 for success, non-zero for error).
+    Can be called directly by tests or through CLI.
+    """
     try:
-        sys.exit(main())
+        if len(sys.argv) == 1:
+            # No arguments - launch interactive menu
+            main_menu_loop()
+            return 0
+        else:
+            # CLI mode for scriptable use
+            args = sys.argv[1:]
+            if args[0] in ['--version', '-v']:
+                show_version()
+                return 0
+            if args[0] in ['--help', '-h']:
+                show_main_help()
+                return 0
+            domain = args[0]
+            domain_args = args[1:]
+            if domain == 'branch':
+                return route_branch(domain_args)
+            elif domain == 'workspace':
+                return route_workspace(domain_args)
+            elif domain == 'change':
+                return route_change(domain_args)
+            elif domain == 'fix':
+                return route_fix(domain_args)
+            elif domain == 'git':
+                return route_git(domain_args)
+            elif domain == 'prompt':
+                return route_prompt(domain_args)
+            elif domain == 'config':
+                return route_config(domain_args)
+            else:
+                print_error(f"Unknown domain: {domain}")
+                print()
+                print("Available domains: branch, workspace, change, fix, git, prompt, config")
+                print()
+                print("Use 'rdd.py --help' for more information")
+                return 1
     except KeyboardInterrupt:
         print()
         print_warning("Operation cancelled by user")
-        sys.exit(130)
+        return 130
     except Exception as e:
         print_error(f"Unexpected error: {e}")
         if os.environ.get('DEBUG') == '1':
             import traceback
             traceback.print_exc()
-        sys.exit(1)
+        return 1
+
+
+if __name__ == '__main__':
+    sys.exit(main())
