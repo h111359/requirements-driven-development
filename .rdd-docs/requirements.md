@@ -114,6 +114,7 @@
 - **[FR-94] Launcher Python Detection**: Launcher scripts shall check for both `python` and `python3` commands, provide clear error messages if Python is not found, and include installation guidance
 - **[FR-95] Double-Click Installation**: Windows users shall be able to double-click install.bat to launch the installer without opening a terminal; Linux/macOS users shall be able to run ./install.sh after chmod +x
 - **[FR-96] Simplified Installation Documentation**: The README.md in release archives shall present installation in two clear options: Quick Start (recommended, using launcher scripts) and Direct Python Installation, eliminating verbose manual installation instructions
+- **[FR-97] User Guide Documentation**: The framework shall provide a comprehensive user guide (user-guide.md) that explains the complete workflow, terminal menu options, Copilot prompt usage, best practices, and troubleshooting, installed to .rdd/ directory for easy access
 
 # Non-Functional Requirements
 
