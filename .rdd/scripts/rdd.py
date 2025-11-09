@@ -1074,8 +1074,6 @@ def create_iteration() -> bool:
         print("  • Or manually clear workspace if needed")
         return False
     
-    print_info("Ready to create new iteration")
-    print()
     
     # Get branch name from user
     normalized_name = None
