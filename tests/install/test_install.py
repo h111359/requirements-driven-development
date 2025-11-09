@@ -88,6 +88,8 @@ class TestFileOperations:
         assert (rdd_dir / "scripts" / "rdd.py").exists()
         assert (rdd_dir / "scripts" / "rdd_utils.py").exists()
         assert (rdd_dir / "templates" / "test.md").exists()
+        # Verify user-guide.md is copied (P01 change)
+        assert (rdd_dir / "user-guide.md").exists()
     
     def test_copy_seed_templates(self, mock_rdd_archive, mock_git_repo_for_install):
         """Test copying seed templates to .rdd-docs"""
@@ -99,6 +101,47 @@ class TestFileOperations:
         assert (rdd_docs / "requirements.md").exists()
         assert (rdd_docs / "tech-spec.md").exists()
         assert (rdd_docs / "data-model.md").exists()
+
+
+class TestLauncherScriptInstallation:
+    """Test launcher script installation based on OS"""
+    
+    @patch('os.name', 'nt')
+    def test_install_launcher_windows(self, mock_rdd_archive, mock_git_repo_for_install):
+        """Test installing rdd.bat on Windows"""
+        install.install_launcher_script(mock_rdd_archive, mock_git_repo_for_install)
+        
+        launcher = mock_git_repo_for_install / "rdd.bat"
+        assert launcher.exists()
+        
+        content = launcher.read_text()
+        assert "@echo off" in content
+        assert ".rdd\\scripts\\rdd.py" in content
+    
+    @patch('os.name', 'posix')
+    def test_install_launcher_linux(self, mock_rdd_archive, mock_git_repo_for_install):
+        """Test installing rdd.sh on Linux/macOS"""
+        install.install_launcher_script(mock_rdd_archive, mock_git_repo_for_install)
+        
+        launcher = mock_git_repo_for_install / "rdd.sh"
+        assert launcher.exists()
+        
+        content = launcher.read_text()
+        assert "#!/bin/bash" in content
+        assert ".rdd/scripts/rdd.py" in content
+    
+    @pytest.mark.skipif(os.name == "nt", reason="Unix-only permission test")
+    @patch('os.name', 'posix')
+    def test_launcher_executable_permissions_unix(self, mock_rdd_archive, mock_git_repo_for_install):
+        """Test that rdd.sh gets executable permissions on Unix"""
+        install.install_launcher_script(mock_rdd_archive, mock_git_repo_for_install)
+        
+        launcher = mock_git_repo_for_install / "rdd.sh"
+        
+        # Check that file is executable (at least user execute bit)
+        import stat
+        mode = launcher.stat().st_mode
+        assert mode & stat.S_IXUSR  # User execute bit should be set
 
 
 class TestSettingsMerge:

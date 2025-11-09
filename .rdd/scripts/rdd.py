@@ -1074,14 +1074,12 @@ def create_iteration() -> bool:
         print("  • Or manually clear workspace if needed")
         return False
     
-    print_info("Ready to create new iteration")
-    print()
     
     # Get branch name from user
     normalized_name = None
     while not normalized_name:
-        print("Enter branch name (will be normalized to kebab-case):")
-        print("Examples: 'my-feature', 'fix-bug-123', '20251108-update-docs'")
+        print("Enter branch name (will be normalized):")
+        print("Examples: 'feature-20251109-1355-improve-installation', 'fix-20251109-1237-bug-123'")
         try:
             branch_name = input("> ").strip()
         except (KeyboardInterrupt, EOFError):
@@ -1104,7 +1102,7 @@ def create_iteration() -> bool:
         # Validate normalized name
         if not validate_branch_name(normalized_name):
             print_warning(f"Normalized name '{normalized_name}' doesn't meet requirements")
-            print("Requirements: kebab-case, lowercase, hyphens/slashes only")
+            print("Requirements: no spaces, use hyphens instead of underscores, avoid special characters")
             print()
             normalized_name = None
             continue
@@ -1126,7 +1124,6 @@ def create_iteration() -> bool:
     print()
     
     # Step 1: Create branch
-    print_step(f"1/3 Creating branch: {normalized_name}")
     
     # Check if branch already exists
     result = subprocess.run(
@@ -1162,11 +1159,8 @@ def create_iteration() -> bool:
         print_error("Failed to create branch")
         return False
     
-    print_success(f"Created and checked out branch: {normalized_name}")
-    print()
-    
+   
     # Step 2: Initialize workspace
-    print_step("2/3 Initializing workspace...")
     
     # Ensure workspace directory exists
     ensure_dir(WORKSPACE_DIR)
@@ -1180,25 +1174,23 @@ def create_iteration() -> bool:
         return False
     
     shutil.copy2(template_path, dest_path)
-    print_success("Workspace initialized with copilot-prompts.md")
-    print()
+
     
     # Step 3: Summary
-    print_step("3/3 Setup complete")
-    print()
-    print_banner("New Iteration Created!")
+
     print_success(f"Ready to work on: {normalized_name}")
     print()
     print_info("Summary:")
-    print(f"  • Branch: {normalized_name}")
-    print(f"  • Workspace: {WORKSPACE_DIR}")
-    print(f"  • Template: .rdd.copilot-prompts.md")
+    print(f"  • You are working on branch: {normalized_name}")
+    print(f"  • Your files are in Workspace: {WORKSPACE_DIR}")
     print()
     print_info("Next steps:")
-    print("  1. Start working on your feature")
-    print("  2. Use workspace files to track progress")
-    print("  3. When done, use 'Complete current iteration'")
-    
+    print("  1. Define your prompts in workspace file .rdd.copilot-prompts.md")
+    print("  2. Use execution prompt in .github/prompts to run prompts")
+    print("  3. If meanwhile other developers have updated the default branch, execute 'Update from default' to sync")    
+    print("  4. When done with changes - use document prompt to update docs")
+    print("  5. Run option 'Complete current iteration' to finish and merge to default branch")
+
     return True
 
 

@@ -4,27 +4,24 @@
 
 ## Terminology
 
-In the RDD framework, **"change"** is an umbrella term that encompasses two types of work:
-- **Enhancement** (abbreviated as "enh"): New functionality, features, or improvements to existing functionality
-- **Fix**: Bug fixes, corrections, or patches to resolve issues
 
-When we refer to a "change", we mean either an enhancement or a fix. This terminology is used consistently across the framework in branch names, workflows, and documentation.
 
 # General Functionalities
 
 - **[GF-03] Requirements Clarification Workflow**: The RDD framework shall provide a structured workflow for clarifying requirements through iterative questioning based on a clarity taxonomy
 - **[GF-04] Workspace Management**: The framework shall maintain a workspace directory (.rdd-docs/workspace/) for active development work on enhancements and fixes
-- **[GF-05] Change Tracking**: The framework shall track the current active change (enhancement or fix) being worked on
+- **[GF-05] [DELETED]
 - **[GF-06] Requirements Merging**: The framework shall support merging clarified requirements from workspace into the main requirements.md file
 - **[GF-07] Workspace Archiving**: The framework shall archive completed workspace content for historical reference
-- **[GF-08] Fix Branch Workflow**: The framework shall provide a guided workflow for creating and documenting fix branches, including naming, description, and initialization.
-- **[GF-09] Fix Branch Wrap-Up**: The framework shall provide a workflow for wrapping up fix branches, archiving documentation, and preparing for merge review.
+- **[GF-08] Fix Branch Workflow**: The framework shall provide a guided workflow for creating and documenting git branches, including naming, description, and initialization.
+- **[GF-09] [DELETED]
 - **[GF-10] Requirements Change Detection**: The framework shall provide a workflow for detecting and documenting requirements changes by comparing code with the main branch.
 - **[GF-11] Post-Merge Branch Cleanup**: The framework shall provide a workflow for cleaning up local and remote branches after PR merge, ensuring workspace synchronization with main.
+  
 # Functional Requirements
 
 - **[FR-03] Flat Workspace Structure**: The system shall store all active workspace files directly in .rdd-docs/workspace/ without enhancement-specific subfolders
-- **[FR-04] Current Change Detection**: The system shall use a configuration file named .rdd.[fix|enh].<branch-name> in workspace to mark visually the current working branch
+- **[FR-04] [DELETED]
 - **[FR-05] Workspace Initialization**: A script shall initialize workspace with: .rdd.copilot-prompts.md
 - **[FR-06] Clean Main Branch Workspace**: When on main branch, workspace shall be empty or contain only standard template content to clearly indicate no active development
 - **[FR-07] Clarity Checklist Usage**: The clarification prompt shall use .rdd-docs/workspace/clarity-checklist.md as a checklist to identify unclear requirements
@@ -41,31 +38,31 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-18] Workspace Backup**: The system shall create timestamped backups in .rdd-docs/workspace/.backups/ before destructive operations
 - **[FR-19] Backup Restoration**: The system shall support restoring workspace from latest backup
 - **[FR-20] Re-execution Detection**: The prompt shall detect previous sessions by checking existing content in workspace files
-- **[FR-21] Requirements Validation**: The system shall validate requirements-changes.md format before merging, checking for proper [ADDED|MODIFIED|DELETED] prefixes
+- **[FR-21] [DELETED]
 - **[FR-22] Automatic ID Assignment for ADDED**: The system shall automatically assign IDs to [ADDED] requirements during wrap-up by finding the highest existing ID per section (GF/FR/NFR/TR) and incrementing from there
-- **[FR-23] No IDs in Workspace for ADDED**: The workspace requirements-changes.md shall NOT include IDs for [ADDED] requirements - IDs are assigned only during wrap-up to prevent conflicts with parallel development
-- **[FR-24] Required IDs for MODIFIED**: The workspace requirements-changes.md shall REQUIRE existing IDs from requirements.md for [MODIFIED] requirements in format: [MODIFIED] [EXISTING-ID] Title: Description
-- **[FR-25] Required IDs for DELETED**: The workspace requirements-changes.md shall REQUIRE existing IDs from requirements.md for [DELETED] requirements in format: [DELETED] [EXISTING-ID] Title: Reason
-- **[FR-26] ID Mapping Documentation**: The wrap-up process shall create .id-mapping.txt documenting the mapping from workspace placeholders to final assigned IDs
-- **[FR-27] Merge Preview**: The system shall provide preview of changes (counts and content) before merging
-- **[FR-28] Backup Before Merge**: The system shall create timestamped backup of requirements.md before merging changes
-- **[FR-29] Auto-Commit Before Sync**: The wrap-up process shall automatically commit all uncommitted changes before syncing with main branch to prevent merge errors
-- **[FR-30] Smart Commit Message**: The auto-commit message shall include the change type and name from .current-change file in format: "[change-type]: [change-name] - pre-wrap-up commit"
+- **[FR-23] [DELETED]
+- **[FR-24] [DELETED]
+- **[FR-25] [DELETED]
+- **[FR-26] [DELETED]
+- **[FR-27] [DELETED]
+- **[FR-28] [DELETED]
+- **[FR-29] Auto-Commit Before Sync**: The wrap-up process shall automatically commit all uncommitted changes before syncing with default branch to prevent merge errors
+- **[FR-30] Smart Commit Message**: The auto-commit message shall include the branch name
 - **[FR-31] Main Branch Sync Before Wrap-Up**: The wrap-up process shall fetch and merge the latest state from main branch into the current enhancement branch before merging requirements
 - **[FR-32] Conflict Detection on Sync**: The system shall detect merge conflicts during pre-wrap-up sync and halt the wrap-up process if conflicts exist
 - **[FR-33] User Notification on Conflicts**: The system shall notify the user if merge conflicts are detected and instruct them to resolve conflicts manually before proceeding
 - **[FR-34] Sync Validation**: The system shall validate that the merge from main completed successfully before proceeding with requirements merge
-- **[FR-35] Archive Directory Structure**: The system shall create .rdd-docs/archive/<change-id>/ directories for each completed change
+- **[FR-35] Archive Directory Structure**: The system shall create .rdd-docs/archive/<branch-name-normalized>/ directories for each completed work itteration and branch respectively (each branch is related to a single work itteration)
 - **[FR-36] Complete Workspace Archive**: The system shall archive all workspace files from .rdd-docs/workspace/ preserving the complete state at time of archiving
 - **[FR-37] Archive Metadata**: The system shall create .archive-metadata file with archivedAt timestamp, branch name, archivedBy, lastCommit, and lastCommitMessage fields
 - **[FR-38] Workspace Preservation**: The system shall preserve workspace content during archiving (copy, not move) until explicitly cleared
 - **[FR-39] Branch-Workspace Alignment**: The system shall align workspace content with the current git branch
-- **[FR-40] Main Branch Fetch**: The wrap-up process shall fetch the latest changes from origin/main before synchronization
+- **[FR-40] Main Branch Fetch**: The wrap-up process shall fetch the latest changes from origin default branch before synchronization
 - **[FR-41] Latest Requirements Maintenance**: The .rdd-docs/requirements.md shall always reflect the latest committed state from main branch after wrap-up synchronization
 - **[FR-42] Complete Workspace Clearing**: The system shall remove all files and subdirectories from .rdd-docs/workspace/ when clearing workspace after archiving, ensuring no files remain from previous work
-- **[FR-43] Config File Naming Convention**: The system shall name workspace config files using the pattern .rdd.[type].[branch-name] where type is either 'fix' or 'enh' and branch-name matches the git branch name
+- **[FR-43] [DELETED]
 - **[FR-44] [DELETED]
-- **[FR-45] No change.md in Workspace**: The workspace initialization shall NOT create a change.md file, as this template has been removed from the framework
+- **[FR-45] [DELETED]
 - **[FR-46] [DELETED]
 - **[FR-47] Python-Based Script Implementation**: All RDD operations shall be implemented in Python (rdd.py) with domain-based command routing, replacing legacy bash scripts which are archived
 - **[FR-48] Cross-Platform Python Command**: All prompt files shall use the `python` command (not `python3`) to execute RDD scripts for cross-platform compatibility with Windows, Linux, and macOS
@@ -75,20 +72,20 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-52] [DELETED]
 - **[FR-53] Python-Based Installer**: The framework shall provide a cross-platform Python installer (install.py) that automates installation, settings merging, and .gitignore updates
 - **[FR-54] Installation Verification**: Installers shall verify prerequisites (Python version, Git availability), validate target is a Git repository, and test successful installation by running the RDD version command
-- **[FR-55] Interactive Change Type Selection**: The change creation workflow shall provide an interactive menu for selecting change type (fix/enhancement) with arrow key navigation, while maintaining parameter-based execution support for scripting
+- **[FR-55] [DELETED]
 - **[FR-56] Configurable Default Branch**: The framework shall support configuration of the default branch through a config.json file in .rdd-docs/ directory, allowing users to specify custom default branch names beyond main/master
 - **[FR-57] Default Branch Template**: The framework shall provide a config.json template in .rdd/templates/ that is copied to .rdd-docs/ during initialization
 - **[FR-58] Interactive Branch Selection During Installation**: The initialization process shall prompt users to select their default branch through an interactive menu with options for main, dev, or custom entry
 - **[FR-59] Config Management Commands**: The framework shall provide CLI commands for managing configuration (show, get, set) accessible via the config domain
 - **[FR-60] Config-First Default Branch Detection**: The get_default_branch() function shall prioritize reading from config.json before falling back to branch detection logic
-- **[FR-61] Simplified Change Creation Input**: The change creation workflow shall only prompt for change name, not description, streamlining the user input process and eliminating redundant data collection
+- **[FR-61] Simplified Itteration Creation Input**: The new itteration creation workflow shall only prompt for branch name, not description, streamlining the user input process and eliminating redundant data collection
 - **[FR-62] Implementation File Documentation**: Stand-alone prompt execution shall create implementation markdown files (<PROMPT_ID>-implementation.md) in workspace to document execution details, replacing the need for separate log.jsonl logging
 - **[FR-63] Seed Template Installation**: The build process shall copy one-time seed templates (config.json, data-model.md, requirements.md, tech-spec.md) to .rdd-docs/ directory during installation, not during change creation
-- **[FR-64] Seed Template Validation**: The change creation process shall validate existence of seed templates in .rdd-docs/ and notify user if missing, indicating installation issue
+- **[FR-64] Seed Template Validation**: The itteration creation process shall validate existence of seed templates in .rdd-docs/ and notify user if missing, indicating installation issue
 - **[FR-65] Template File Organization**: One-time seed templates shall be stored in templates/ directory (not .rdd/templates/) and included in build archives under .rdd-docs/ for direct installation
-- **[FR-66] User-Controlled Branch Naming**: The change creation workflow shall accept complete branch names from users without automatically adding type prefixes (fix/ or enh/), allowing users full control over branch naming conventions
-- **[FR-67] Flexible Branch Name Validation**: Branch name validation shall only enforce kebab-case format with support for forward slashes, allowing users to include custom prefixes, timestamps, or any naming convention they prefer
-- **[FR-68] Branch Type for Workspace Context**: The fix/enhancement type selection shall be preserved for determining workspace initialization content, but shall not affect the branch name provided by users
+- **[FR-66] [DELETED]
+- **[FR-67] Flexible Branch Name Validation**: Branch name validation shall provide support for spaces and forward slashes, allowing users to include custom prefixes, timestamps, or any naming convention they prefer
+- **[FR-68] [DELETED]
 - **[FR-69] Python-Only Installation**: The framework shall provide only Python-based installation (install.py) without shell or PowerShell wrapper scripts, simplifying the installation process and reducing maintenance overhead
 - **[FR-70] Python Test Runner**: The framework shall provide a Python-based test runner (run-tests.py) that executes all test types (pytest, build tests, install tests) in a unified cross-platform manner without requiring BATS or Pester frameworks
 - **[FR-71] Local-Only Mode Configuration**: The framework shall support local-only mode through a configurable `localOnly` boolean field in config.json, allowing repositories to operate without GitHub remote
@@ -109,6 +106,15 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[FR-86] Iteration Branch Cleanup**: The delete merged branches workflow shall list all branches fully merged into default branch, allow user selection, and delete locally with optional remote deletion
 - **[FR-87] Protected Branch Exclusion**: The delete merged branches workflow shall exclude protected branches (default, main, master, dev) from deletion lists
 - **[FR-88] Legacy CLI Compatibility**: The framework shall maintain domain-based CLI commands (branch, workspace, change, git, prompt, config) for scripting and advanced users alongside simplified menu
+- **[FR-89] GUI Folder Selection**: The Python installer shall provide a Tkinter-based GUI folder browser option for selecting the installation target directory, with automatic fallback to text input if GUI is unavailable
+- **[FR-90] Installation Method Choice**: The installer shall prompt users to choose between GUI folder browser and manual path entry, defaulting to GUI when available
+- **[FR-91] Installation Description**: The installer shall display a clear description of what it will do (copy files, merge settings, update .gitignore) before prompting for target directory
+- **[FR-92] Enhanced Overwrite Detection**: The installer shall detect existing RDD installations and display detailed warnings listing specific files/directories that will be affected, distinguishing between framework files (overwritten) and user data (.rdd-docs/ preserved)
+- **[FR-93] Cross-Platform Launcher Scripts**: The framework shall provide launcher scripts (install.sh for Linux/macOS, install.bat for Windows) that check for Python availability and execute the Python installer
+- **[FR-94] Launcher Python Detection**: Launcher scripts shall check for both `python` and `python3` commands, provide clear error messages if Python is not found, and include installation guidance
+- **[FR-95] Double-Click Installation**: Windows users shall be able to double-click install.bat to launch the installer without opening a terminal; Linux/macOS users shall be able to run ./install.sh after chmod +x
+- **[FR-96] Simplified Installation Documentation**: The README.md in release archives shall present installation in two clear options: Quick Start (recommended, using launcher scripts) and Direct Python Installation, eliminating verbose manual installation instructions
+- **[FR-97] User Guide Documentation**: The framework shall provide a comprehensive user guide (user-guide.md) that explains the complete workflow, terminal menu options, Copilot prompt usage, best practices, and troubleshooting, installed to .rdd/ directory for easy access
 
 # Non-Functional Requirements
 
@@ -116,8 +122,8 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[NFR-04] Visual Clarity**: Scripts shall use color-coded output (info: blue, success: green, warning: yellow, error: red) for clarity
 - **[NFR-05] Progress Indication**: Multi-step processes shall display progress indicators (e.g., "Step 2/3", "Clarification [1/N]")
 - **[NFR-06] Clear Error Messages**: Error messages shall include specific problem description and suggested remediation steps
-- **[NFR-07] DELETED
-- **[NFR-08] Separate Concerns**: Questions tracking (open-questions.md) and requirements changes (requirements-changes.md) shall be in separate files
+- **[NFR-07] [DELETED]
+- **[NFR-08] [DELETED]
 - **[NFR-09] Template-Based Files**: New files shall be generated from templates in .rdd/templates/ for consistency
 - **[NFR-10] Version Documentation**: All prompts shall include version number and last updated date
 - **[NFR-11] Data Preservation**: Re-execution of prompts shall preserve existing data unless explicitly reset by user
@@ -133,9 +139,9 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 
 # Technical Requirements
 
-- **[TR-03] JSON Configuration**: The .current-change file shall use JSON format for machine and human readability
-- **[TR-04] DELETED
-- **[TR-05] DELETED
+- **[TR-03] [DELETED]
+- **[TR-04] [DELETED]
+- **[TR-05] [DELETED]
 - **[TR-06] Python Scripts**: All automation scripts shall be implemented in Python for cross-platform compatibility (legacy bash scripts archived)
 - **[TR-07] Exit on Error**: Scripts shall use proper error handling to exit immediately on command failure
 - **[TR-08] JQ Dependency**: Legacy bash scripts used jq for JSON parsing; Python implementation uses native json module
@@ -144,7 +150,7 @@ When we refer to a "change", we mean either an enhancement or a fix. This termin
 - **[TR-11] Scripts Location**: All automation scripts shall be stored in .rdd/scripts/
 - **[TR-12] Prompts Location**: All prompt files shall be stored in .github/prompts/
 - **[TR-13] Workspace Location**: Active workspace shall be at .rdd-docs/workspace/
-- **[TR-14] Archive Location**: Completed workspaces shall be archived in .rdd-docs/archive/<change-id>/
+- **[TR-14] Archive Location**: Completed workspaces shall be archived in .rdd-docs/archive/<branch-name-normalized>/
 - **[TR-15] Prompt Recommendations**: VS Code settings shall configure chat.promptFilesRecommendations for RDD prompts
 - **[TR-16] Terminal Auto-Approve**: VS Code settings shall configure chat.tools.terminal.autoApprove for .rdd/scripts/
 - **[TR-17] JSONL File Association**: VS Code settings shall associate *.jsonl files with jsonlines language

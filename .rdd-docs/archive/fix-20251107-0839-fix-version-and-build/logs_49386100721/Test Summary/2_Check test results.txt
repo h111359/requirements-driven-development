@@ -1,9 +1,0 @@
-﻿2025-11-07T13:00:07.6138266Z ##[group]Run echo "All tests completed"
-2025-11-07T13:00:07.6139178Z [36;1mecho "All tests completed"[0m
-2025-11-07T13:00:07.6140041Z [36;1mecho "All Tests (Linux): success"[0m
-2025-11-07T13:00:07.6140759Z [36;1mecho "All Tests (Windows): failure"[0m
-2025-11-07T13:00:07.9815912Z shell: /usr/bin/bash -e {0}
-2025-11-07T13:00:07.9816977Z ##[endgroup]
-2025-11-07T13:00:08.0019077Z All tests completed
-2025-11-07T13:00:08.0020324Z All Tests (Linux): success
-2025-11-07T13:00:08.0021307Z All Tests (Windows): failure

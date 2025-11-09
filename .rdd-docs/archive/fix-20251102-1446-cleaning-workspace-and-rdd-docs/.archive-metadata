@@ -1,7 +1,0 @@
-{
-  "archivedAt": "2025-11-02T18:20:42Z",
-  "branch": "fix/20251102-1446-cleaning-workspace-and-rdd-docs",
-  "archivedBy": "Hristo Hristov <hmhristov@outlook.com>",
-  "lastCommit": "3746c8a41928903f41b86fb4b154452857a903b3",
-  "lastCommitMessage": "add backlog functionality"
-}

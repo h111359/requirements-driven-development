@@ -1,7 +1,0 @@
-{
-  "archivedAt": "2025-11-05T04:36:41Z",
-  "branch": "fix/20251105-0616-clean-up-the-bash-scripts",
-  "archivedBy": "Hristo Hristov <hmhristov@outlook.com>",
-  "lastCommit": "00f17878703c0e87a368c07b3e1f6cf29019a5a1",
-  "lastCommitMessage": "wrap up fix/20251104-2156-python-prompts (#37)"
-}

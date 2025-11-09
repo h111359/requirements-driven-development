@@ -448,23 +448,57 @@ The RDD framework uses a Python-based build system to create release packages:
 12. Clean up temporary staging directories
 
 ### Installation System
-The RDD framework provides Python-based cross-platform installation:
+The RDD framework provides Python-based cross-platform installation with GUI and command-line options:
+
+#### Installer Launcher Scripts (Recommended Installation Method)
+**Bash Launcher (install.sh - Linux/macOS)**:
+- Checks for `python` command first, then `python3`
+- Displays clear error messages with installation URLs if Python not found
+- Verifies install.py exists in same directory
+- Executes Python installer with proper exit code handling
+- Color-coded output for user feedback
+- Can be double-clicked or run from terminal after `chmod +x`
+
+**Batch Launcher (install.bat - Windows)**:
+- Checks for `python` command first, then `python3`
+- Displays clear error messages with installation guidance if Python not found
+- Verifies install.py exists in same directory
+- Executes Python installer with proper exit code handling
+- Color-coded output using ANSI escape codes
+- Can be double-clicked for easy installation without opening terminal
+- Includes `pause` command to keep window open after completion
 
 #### Python Installation (install.py)
 **Python Installer (install.py)**:
-- Cross-platform installer using Python standard library only
-- Pre-flight checks:
+- Cross-platform installer using Python standard library + optional Tkinter for GUI
+- **GUI Folder Selection** (if Tkinter available):
+  - Presents menu: "1. Browse for folder (GUI)" or "2. Enter path manually"
+  - Opens native folder browser dialog for easy directory selection
+  - Automatically falls back to text input if GUI fails or user prefers
+- **Installation Description**: Displays clear preview of actions before prompting for directory:
+  - Copy RDD framework files (.rdd/)
+  - Copy GitHub prompts (.github/prompts/)
+  - Copy seed templates (.rdd-docs/)
+  - Merge VS Code settings
+  - Update .gitignore
+  - Verify installation
+- **Pre-flight checks**:
   - Python version verification (≥ 3.7)
   - Git installation check
   - Target directory validation (must be Git repository)
-- Existing installation detection with upgrade warnings
-- Interactive prompts for target directory
-- Automated file operations:
+- **Enhanced existing installation detection**:
+  - Scans for .rdd/, .github/prompts/, .rdd-docs/ directories
+  - Lists specific files/directories that will be affected
+  - Distinguishes between framework files (overwritten) and user data (preserved)
+  - Clear warnings about overwrite behavior
+- **Interactive prompts** for target directory (text or GUI)
+- **Automated file operations**:
   - Copy prompts to `.github/prompts/`
   - Copy framework to `.rdd/`
+  - Copy user guide from `templates/user-guide.md` to `.rdd/user-guide.md`
   - Intelligent VS Code settings merge
   - .gitignore update with workspace exclusion
-- Post-installation verification:
+- **Post-installation verification**:
   - File existence checks
   - RDD command test (`python .rdd/scripts/rdd.py --version`)
 - Clear success/error messages with next steps
@@ -478,12 +512,39 @@ The RDD framework provides Python-based cross-platform installation:
 - **Editor settings** (editor.rulers):
   - Replaces with RDD requirements (80, 120 character columns)
 
-#### Manual Installation
-For users who prefer manual control:
-- Step-by-step file copying instructions
-- Platform-specific commands (PowerShell/Bash)
-- Manual VS Code settings merge guidance
-- Manual .gitignore update steps
+#### Direct Python Installation
+For users who prefer direct control:
+- Navigate to project directory
+- Run: `python /path/to/extracted/rdd-vX.X.X/install.py`
+- Same features as launcher-based installation
+- Useful for scripted or automated installations
+
+#### RDD Launcher Scripts (Post-Installation)
+After installation, the RDD framework provides convenient launcher scripts in the project root for easy access to the RDD menu:
+
+**Windows Launcher (rdd.bat)**:
+- Located in project root after installation
+- Double-click to launch RDD interactive menu
+- Can also be run from terminal: `rdd.bat`
+- Checks for Python availability (python or python3)
+- Validates RDD framework installation
+- Passes command-line arguments to rdd.py
+- Keeps window open after execution if double-clicked
+
+**Linux/macOS Launcher (rdd.sh)**:
+- Located in project root after installation
+- Executable permissions set automatically during installation
+- Double-click from file manager or run from terminal: `./rdd.sh`
+- Checks for Python availability (python or python3)
+- Validates RDD framework installation
+- Passes command-line arguments to rdd.py
+- Displays clear error messages with installation guidance
+
+**Installation Process**:
+- Installer detects OS using `os.name == 'nt'` (Windows vs Unix)
+- Copies appropriate launcher (rdd.bat or rdd.sh) to project root
+- Sets executable permissions on Unix systems (chmod 0o755)
+- Provides usage instructions after installation
 
 ### Platform Compatibility
 - **Python-based**: Single implementation works on all platforms (Windows, Linux, macOS)

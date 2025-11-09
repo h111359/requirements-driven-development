@@ -1,7 +1,0 @@
-{
-  "archivedAt": "2025-11-06T09:03:24Z",
-  "branch": "fix/20251106-0800-add-dev-branch",
-  "archivedBy": "Hristo Hristov <hmhristov@outlook.com>",
-  "lastCommit": "17f112c4ce2ce72f3000ef43da2e9198d3928375",
-  "lastCommitMessage": "Merge pull request #41 from h111359/fix/20251105-1915-build-release"
-}

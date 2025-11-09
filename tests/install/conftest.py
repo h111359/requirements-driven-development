@@ -51,12 +51,21 @@ def mock_rdd_archive(temp_install_dir):
     (archive_dir / ".rdd" / "templates").mkdir(parents=True)
     (archive_dir / ".rdd-docs").mkdir(parents=True)
     (archive_dir / ".vscode").mkdir(parents=True)
+    (archive_dir / "templates").mkdir(parents=True)
     
     # Create mock files
     (archive_dir / ".rdd" / "scripts" / "rdd.py").write_text('#!/usr/bin/env python3\nprint("RDD")')
     (archive_dir / ".rdd" / "scripts" / "rdd_utils.py").write_text('# Utils')
     (archive_dir / ".rdd" / "templates" / "test.md").write_text('# Template')
     (archive_dir / ".github" / "prompts" / "test.prompt.md").write_text('# Prompt')
+    
+    # Create templates/user-guide.md (new in P01)
+    (archive_dir / "templates" / "user-guide.md").write_text(
+        '# RDD Framework User Guide\n\n'
+        'This is a comprehensive user guide for the RDD framework.\n\n'
+        '## Overview\n\n'
+        'The RDD framework provides structured workflows...\n'
+    )
     
     # Create seed templates in .rdd-docs
     config = {
@@ -81,5 +90,25 @@ def mock_rdd_archive(temp_install_dir):
     
     # LICENSE
     (archive_dir / "LICENSE").write_text("MIT License")
+    
+    # RDD launcher scripts (in archive root, will be installed to project root)
+    (archive_dir / "rdd.bat").write_text(
+        '@echo off\n'
+        'REM RDD Framework Launcher for Windows\n'
+        'if not exist ".rdd\\scripts\\rdd.py" (\n'
+        '    echo Error: RDD framework not found\n'
+        '    exit /b 1\n'
+        ')\n'
+        'python .rdd\\scripts\\rdd.py %*\n'
+    )
+    (archive_dir / "rdd.sh").write_text(
+        '#!/bin/bash\n'
+        '# RDD Framework Launcher for Linux/macOS\n'
+        'if [ ! -f ".rdd/scripts/rdd.py" ]; then\n'
+        '    echo "Error: RDD framework not found"\n'
+        '    exit 1\n'
+        'fi\n'
+        'python .rdd/scripts/rdd.py "$@"\n'
+    )
     
     yield archive_dir
