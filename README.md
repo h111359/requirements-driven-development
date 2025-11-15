@@ -90,7 +90,7 @@ sudo ln -s /usr/bin/python3 /usr/local/bin/python
 
 ### 2. Define Copilot Prompts
 
-- Open and edit the file `.rdd-docs/workspace/.rdd.copilot-prompts.md` by defining new prompts on the placeholders. Prompts should be as detail as possible, telling the agent what you want to achieve
+- Open and edit the file `.rdd-docs/work-iteration-prompts.md` by defining new prompts on the placeholders. Prompts should be as detail as possible, telling the agent what you want to achieve
 - After each prompt (or after several prompts defined) - open Copilot chat
 - Choose Agent mode and choose some modern model (Claude Sonne 4.5, GPT-5 or similar as capabilities model)
 - Execute in the chat `/rdd.execute P01` where you should replace P01 with the identifier of the prompt you want the copilot to work on.
@@ -98,7 +98,7 @@ sudo ln -s /usr/bin/python3 /usr/local/bin/python
 ### 3. Update Documentation 
 
 - (Optional) You can update your branch with the changes from other developers (if you work simultaneously) from the default branch by running the option "Update from default" in the terminal menu of RDD application.
-- When all prompts in `.rdd-docs/workspace/.rdd.copilot-prompts.md` that you want to be executed in this work iteration are done - the user can execute several predefined from the framework prompts to prepare the branch for completion.
+- When all prompts in `.rdd-docs/work-iteration-prompts.md` that you want to be executed in this work iteration are done - the user can execute several predefined from the framework prompts to prepare the branch for completion.
 
 ### 4. Complete Work Itteration
 

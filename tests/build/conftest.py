@@ -55,10 +55,8 @@ def mock_rdd_project(temp_build_dir):
     (project_root / "templates" / "config.json").write_text(json.dumps(config, indent=2))
     (project_root / "templates" / "settings.json").write_text('{}')
     (project_root / "templates" / "README.md").write_text("# RDD v{{VERSION}}")
-    (project_root / "templates" / "data-model.md").write_text("# Data Model")
     (project_root / "templates" / "requirements.md").write_text("# Requirements")
-    (project_root / "templates" / "tech-spec.md").write_text("# Tech Spec")
-    (project_root / "templates" / "folder-structure.md").write_text("# Folder Structure")
+    (project_root / "templates" / "tech-spec.md").write_text("# Tech Spec\n\n## Data Architecture\n\n## Project Folder Structure")
     
     # Create LICENSE
     (project_root / "LICENSE").write_text("MIT License")

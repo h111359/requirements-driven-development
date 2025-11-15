@@ -201,7 +201,7 @@ class TestPromptFunctions:
         os.chdir(rdd_workspace)
         
         # Create prompts file with unchecked prompt
-        prompts_file = rdd_workspace / ".rdd-docs" / "workspace" / ".rdd.copilot-prompts.md"
+        prompts_file = rdd_workspace / ".rdd-docs" / "work-iteration-prompts.md"
         prompts_file.write_text("""## Stand Alone Prompts
 
  - [ ] [P01] Test prompt description

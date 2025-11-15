@@ -63,9 +63,7 @@ def rdd_workspace(mock_git_repo):
     
     # Create basic documentation files
     (repo / ".rdd-docs" / "requirements.md").write_text("# Requirements\n")
-    (repo / ".rdd-docs" / "tech-spec.md").write_text("# Technical Specification\n")
-    (repo / ".rdd-docs" / "data-model.md").write_text("# Data Model\n")
-    (repo / ".rdd-docs" / "folder-structure.md").write_text("# Folder Structure\n")
+    (repo / ".rdd-docs" / "tech-spec.md").write_text("# Technical Specification\n\n## Data Architecture\n\n## Project Folder Structure\n")
     
     yield repo
 

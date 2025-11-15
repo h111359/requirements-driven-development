@@ -9,7 +9,7 @@ The RDD framework now features a simplified 4-option menu focused on the core wo
 | Menu Option                     | Description                                                                                           | Internal Function(s)                                    |
 |---------------------------------|-------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | **1. Complete current iteration** | Archives workspace, commits changes, optionally pushes to remote, returns to default branch         | `complete_iteration()`, `archive_workspace()`, `auto_commit()`, `push_to_remote()` |
-| **2. Create new iteration**       | Creates new branch from default, initializes workspace with copilot-prompts.md                       | `create_iteration()`, git branch creation, template copy |
+| **2. Create new iteration**       | Creates new branch from default, initializes work-iteration-prompts.md                       | `create_iteration()`, git branch creation, template copy |
 | **3. Delete merged branches**     | Lists merged branches interactively, deletes selected branches locally and optionally remotely       | `cleanup_after_merge()`, `interactive_branch_cleanup()` |
 | **4. Update from default**        | Fetches/pulls default branch, merges into current branch                                             | `update_from_default_branch()`, `pull_default_branch()`, `merge_default_branch_into_current()` |
 | **5. Exit**                       | Exits the interactive menu                                                                           | N/A                                                     |
@@ -40,7 +40,7 @@ The RDD framework now features a simplified 4-option menu focused on the core wo
 1. Prompts for branch name (with normalization and validation)
 2. Pulls latest from default branch (if not local-only mode)
 3. Creates and checks out new branch
-4. Copies `.rdd/templates/copilot-prompts.md` to `.rdd-docs/workspace/.rdd.copilot-prompts.md`
+4. Copies `.rdd/templates/work-iteration-prompts.md` to `.rdd-docs/work-iteration-prompts.md`
 5. Shows summary with next steps
 
 **Note:** No fix/enhancement type selection - all branches are treated uniformly.
