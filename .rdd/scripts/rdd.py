@@ -785,8 +785,15 @@ def init_workspace(workspace_type: str = "change") -> bool:
     if workspace_type == 'fix':
         copy_template("fix.md", os.path.join(WORKSPACE_DIR, "fix.md"))
     
-    # Copy copilot-prompts.md template to workspace with new name
-    copy_template("copilot-prompts.md", os.path.join(WORKSPACE_DIR, ".rdd.copilot-prompts.md"))
+    # Copy work-iteration-prompts.md template to .rdd-docs/ (not workspace subfolder)
+    template_path = os.path.join(TEMPLATES_DIR, "work-iteration-prompts.md")
+    dest_path = ".rdd-docs/work-iteration-prompts.md"
+    
+    if os.path.isfile(template_path):
+        shutil.copy2(template_path, dest_path)
+        print_success(f"Copied work-iteration-prompts.md to .rdd-docs/")
+    else:
+        print_warning(f"Template not found: {template_path}")
     
     print_success(f"Workspace initialized successfully for {workspace_type}")
     return True
@@ -970,6 +977,48 @@ def complete_iteration() -> bool:
     
     print_info(f"Current branch: {current_branch}")
     print_info(f"Workspace: {WORKSPACE_DIR}")
+    print()
+    
+    # Step 0: Backup and reset work-iteration-prompts.md and user-story.md
+    print_step("Backing up and resetting iteration files...")
+    
+    # Backup and reset work-iteration-prompts.md
+    prompts_file = ".rdd-docs/work-iteration-prompts.md"
+    prompts_backup = os.path.join(WORKSPACE_DIR, "work-iteration-prompts.md")
+    template_prompts = os.path.join(TEMPLATES_DIR, "work-iteration-prompts.md")
+    
+    # Copy current prompts file to workspace (backup)
+    if os.path.isfile(prompts_file):
+        shutil.copy2(prompts_file, prompts_backup)
+        print_success(f"Backed up prompts file to workspace")
+    else:
+        print_warning(f"Prompts file not found: {prompts_file}")
+    
+    # Reset prompts file from template
+    if os.path.isfile(template_prompts):
+        shutil.copy2(template_prompts, prompts_file)
+        print_success(f"Reset prompts file from template")
+    else:
+        print_warning(f"Template not found: {template_prompts}")
+    
+    # Backup and reset user-story.md
+    user_story_file = ".rdd-docs/user-story.md"
+    user_story_backup = os.path.join(WORKSPACE_DIR, "user-story.md")
+    template_user_story = os.path.join(TEMPLATES_DIR, "user-story.md")
+    
+    # Copy current user story file to workspace (backup)
+    if os.path.isfile(user_story_file):
+        shutil.copy2(user_story_file, user_story_backup)
+        print_success(f"Backed up user story file to workspace")
+    else:
+        print_warning(f"User story file not found: {user_story_file}")
+    
+    # Reset user story file from template
+    if os.path.isfile(template_user_story):
+        shutil.copy2(template_user_story, user_story_file)
+        print_success(f"Reset user story file from template")
+    else:
+        print_warning(f"Template not found: {template_user_story}")
     print()
     
     # Step 1: Archive workspace
@@ -1165,15 +1214,24 @@ def create_iteration() -> bool:
     # Ensure workspace directory exists
     ensure_dir(WORKSPACE_DIR)
     
-    # Copy only copilot-prompts.md template
-    template_path = os.path.join(TEMPLATES_DIR, "copilot-prompts.md")
-    dest_path = os.path.join(WORKSPACE_DIR, ".rdd.copilot-prompts.md")
+    # Copy work-iteration-prompts.md template to .rdd-docs/ (not workspace subfolder)
+    template_path = os.path.join(TEMPLATES_DIR, "work-iteration-prompts.md")
+    dest_path = ".rdd-docs/work-iteration-prompts.md"
     
     if not os.path.isfile(template_path):
         print_error(f"Template not found: {template_path}")
         return False
     
     shutil.copy2(template_path, dest_path)
+    
+    # Copy user-story.md template to .rdd-docs/
+    user_story_template = os.path.join(TEMPLATES_DIR, "user-story.md")
+    user_story_dest = ".rdd-docs/user-story.md"
+    
+    if not os.path.isfile(user_story_template):
+        print_warning(f"User story template not found: {user_story_template}")
+    else:
+        shutil.copy2(user_story_template, user_story_dest)
 
     
     # Step 3: Summary
@@ -1185,7 +1243,7 @@ def create_iteration() -> bool:
     print(f"  • Your files are in Workspace: {WORKSPACE_DIR}")
     print()
     print_info("Next steps:")
-    print("  1. Define your prompts in workspace file .rdd.copilot-prompts.md")
+    print("  1. Define your prompts in workspace file work-iteration-prompts.md")
     print("  2. Use execution prompt in .github/prompts to run prompts")
     print("  3. If meanwhile other developers have updated the default branch, execute 'Update from default' to sync")    
     print("  4. When done with changes - use document prompt to update docs")
@@ -1735,7 +1793,7 @@ def route_prompt(args: List[str]) -> int:
             print_error("Prompt ID required")
             print("Usage: rdd.py prompt mark-completed <id>")
             return 1
-        journal_file = os.path.join(WORKSPACE_DIR, ".rdd.copilot-prompts.md")
+        journal_file = ".rdd-docs/work-iteration-prompts.md"
         return 0 if mark_prompt_completed(args[1], journal_file) else 1
     
     elif action == 'list':
@@ -1745,7 +1803,7 @@ def route_prompt(args: List[str]) -> int:
                 status = "unchecked"
             elif args[1] == "--status=checked":
                 status = "checked"
-        journal_file = os.path.join(WORKSPACE_DIR, ".rdd.copilot-prompts.md")
+        journal_file = ".rdd-docs/work-iteration-prompts.md"
         return 0 if list_prompts(status, journal_file) else 1
     
     else:
@@ -1841,6 +1899,175 @@ def show_config_help() -> None:
 
 
 # ============================================================================
+# CONFIGURATION MANAGEMENT
+# ============================================================================
+
+def update_version_part(version: str, part: str) -> str:
+    """Update version by incrementing major, minor, or patch."""
+    parts = version.split('.')
+    if len(parts) != 3 or not all(p.isdigit() for p in parts):
+        print_error("Invalid version format. Should be MAJOR.MINOR.PATCH")
+        return version
+    
+    major, minor, patch = map(int, parts)
+    
+    if part == 'major':
+        major += 1
+        minor = 0
+        patch = 0
+    elif part == 'minor':
+        minor += 1
+        patch = 0
+    elif part == 'patch':
+        patch += 1
+    else:
+        print_error(f"Invalid version part: {part}")
+        return version
+    
+    return f"{major}.{minor}.{patch}"
+
+
+def get_git_branches_list() -> list:
+    """Get list of git branches."""
+    try:
+        result = subprocess.run(
+            ['git', 'branch', '--format=%(refname:short)'],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True,
+            text=True
+        )
+        branches = [b.strip() for b in result.stdout.splitlines() if b.strip()]
+        return branches
+    except Exception as e:
+        print_error(f"Error getting git branches: {e}")
+        return []
+
+
+def interactive_config_menu() -> None:
+    """Interactive configuration management menu."""
+    print_banner("Configuration Management")
+    
+    # Read current config
+    config_path = get_rdd_config_path()
+    if not os.path.isfile(config_path):
+        print_error("Configuration file not found at .rdd-docs/config.json")
+        print_info("Initialize RDD first by creating an iteration")
+        return
+    
+    try:
+        with open(config_path, 'r') as f:
+            config = json.load(f)
+    except Exception as e:
+        print_error(f"Failed to read configuration: {e}")
+        return
+    
+    # Display current configuration
+    print()
+    print_info("Current Configuration:")
+    print(f"  Version: {config.get('version', 'N/A')}")
+    print(f"  Default Branch: {config.get('defaultBranch', 'N/A')}")
+    print(f"  Local Only: {config.get('localOnly', False)}")
+    print()
+    
+    # Configuration menu
+    menu_items = [
+        "Update version (major)",
+        "Update version (minor)",
+        "Update version (patch)",
+        "Change default branch",
+        "Toggle local-only mode",
+        "Back to main menu"
+    ]
+    
+    selected = _simple_menu("What would you like to change?", menu_items)
+    
+    if selected == -1 or selected == 5:  # Back
+        return
+    
+    modified = False
+    
+    if selected == 0:  # Major version
+        old_version = config.get('version', '0.0.0')
+        new_version = update_version_part(old_version, 'major')
+        if new_version != old_version:
+            config['version'] = new_version
+            print_success(f"Version updated: {old_version} → {new_version}")
+            modified = True
+    
+    elif selected == 1:  # Minor version
+        old_version = config.get('version', '0.0.0')
+        new_version = update_version_part(old_version, 'minor')
+        if new_version != old_version:
+            config['version'] = new_version
+            print_success(f"Version updated: {old_version} → {new_version}")
+            modified = True
+    
+    elif selected == 2:  # Patch version
+        old_version = config.get('version', '0.0.0')
+        new_version = update_version_part(old_version, 'patch')
+        if new_version != old_version:
+            config['version'] = new_version
+            print_success(f"Version updated: {old_version} → {new_version}")
+            modified = True
+    
+    elif selected == 3:  # Default branch
+        branches = get_git_branches_list()
+        if not branches:
+            print_error("No branches found")
+            return
+        
+        print()
+        print_info("Available branches:")
+        for idx, branch in enumerate(branches, 1):
+            current = " (current)" if branch == config.get('defaultBranch') else ""
+            print(f"  {idx}. {branch}{current}")
+        print()
+        
+        try:
+            choice = input("Select branch number (or 'q' to cancel): ").strip()
+            if choice.lower() == 'q':
+                return
+            
+            sel_idx = int(choice) - 1
+            if 0 <= sel_idx < len(branches):
+                old_branch = config.get('defaultBranch', 'N/A')
+                config['defaultBranch'] = branches[sel_idx]
+                print_success(f"Default branch updated: {old_branch} → {branches[sel_idx]}")
+                modified = True
+            else:
+                print_error("Invalid selection")
+        except (ValueError, KeyboardInterrupt, EOFError):
+            print()
+            print_info("Operation cancelled")
+            return
+    
+    elif selected == 4:  # Toggle local-only mode
+        current = config.get('localOnly', False)
+        config['localOnly'] = not current
+        new_value = "enabled" if config['localOnly'] else "disabled"
+        print_success(f"Local-only mode {new_value}")
+        modified = True
+    
+    # Save changes if modified
+    if modified:
+        try:
+            # Update lastModified timestamp
+            from datetime import datetime, timezone
+            now = datetime.now(timezone.utc).astimezone()
+            config['lastModified'] = now.isoformat()
+            
+            with open(config_path, 'w') as f:
+                json.dump(config, f, indent=2)
+                f.write('\n')
+            
+            print()
+            print_success("Configuration saved successfully")
+        except Exception as e:
+            print_error(f"Failed to save configuration: {e}")
+
+
+# ============================================================================
 # MAIN MENU SYSTEM
 # ============================================================================
 
@@ -1873,14 +2100,24 @@ def main_menu_loop() -> None:
             "Update from default",
             "Complete current iteration",
             "Delete merged branches",
+            "Configuration",
+            "(Reserved)",
+            "(Reserved)",
+            "(Reserved)",
             "Exit"
         ]
         
         selected = _simple_menu("RDD Framework - Main Menu", items)
 
-        if selected == -1 or selected == 4:  # Exit
+        if selected == -1 or selected == 8:  # Exit
             print_success("Thank you for using RDD Framework!")
             return
+        
+        # Skip reserved options
+        if selected in [5, 6, 7]:
+            print_warning("This option is reserved for future use")
+            input("\nPress Enter to continue...")
+            continue
 
         try:
             if selected == 0:  # Create new iteration
@@ -1897,6 +2134,10 @@ def main_menu_loop() -> None:
                 
             elif selected == 3:  # Delete merged branches
                 cleanup_after_merge()
+                input("\nPress Enter to continue...")
+            
+            elif selected == 4:  # Configuration
+                interactive_config_menu()
                 input("\nPress Enter to continue...")
                 
         except Exception as e:

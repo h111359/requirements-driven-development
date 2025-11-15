@@ -179,10 +179,8 @@ def copy_rdd_docs_seeds(repo_root: Path, build_dir: Path):
     # List of seed templates that should be copied to .rdd-docs during installation
     seed_templates = [
         "config.json",
-        "data-model.md",
         "requirements.md",
-        "tech-spec.md",
-        "folder-structure.md"
+        "tech-spec.md"
     ]
     
     if not templates_src.exists():
@@ -219,6 +217,28 @@ def generate_readme(build_dir: Path, version: str, repo_root: Path):
     readme_path.write_text(readme_content)
     
     print_success("Generated README.md from template")
+
+def copy_user_guide(build_dir: Path, repo_root: Path):
+    """Copy user-guide.md from templates to build directory root"""
+    print_info("Copying user-guide.md to build directory root...")
+    user_guide_src = repo_root / "templates" / "user-guide.md"
+    user_guide_dst = build_dir / "user-guide.md"
+    if not user_guide_src.exists():
+        print_warning(f"user-guide.md not found at {user_guide_src}, skipping copy.")
+        return
+    shutil.copy2(user_guide_src, user_guide_dst)
+    print_success("Copied user-guide.md to build directory root")
+
+def copy_user_guide_pdf(build_dir: Path, repo_root: Path):
+    """Copy RDD-Framework-User-Guide.pdf from templates to build directory root"""
+    print_info("Copying RDD-Framework-User-Guide.pdf to build directory root...")
+    pdf_src = repo_root / "templates" / "RDD-Framework-User-Guide.pdf"
+    pdf_dst = build_dir / "RDD-Framework-User-Guide.pdf"
+    if not pdf_src.exists():
+        print_warning(f"RDD-Framework-User-Guide.pdf not found at {pdf_src}, skipping copy.")
+        return
+    shutil.copy2(pdf_src, pdf_dst)
+    print_success("Copied RDD-Framework-User-Guide.pdf to build directory root")
 
 def generate_installer(build_dir: Path, version: str, repo_root: Path):
     """Generate install.py script from template"""
@@ -456,6 +476,7 @@ def main():
     
     print_info(f"Repository root: {repo_root}")
     
+
     # Build process
     try:
         # Step 1: Extract version from .rdd-docs/config.json and prompt for version selection
@@ -469,14 +490,14 @@ def main():
         if not current_version or not re.match(r'^\d+\.\d+\.\d+$', current_version):
             exit_with_error(f"Invalid or missing version in config.json: {current_version}")
         print_success(f"Found current version: {current_version}")
-        
+
         # Prompt user for version selection
         selected_version = prompt_version_selection(current_version)
-        
+
         # Update config.json if version changed
         if selected_version != current_version:
             update_config_version(config_path, selected_version)
-        
+
         version = selected_version
         print()
 
@@ -497,9 +518,11 @@ def main():
         copy_rdd_docs_seeds(repo_root, build_dir)
         print()
 
-        # Step 4: Generate README
-        print_step(4, 9, "Generating README.md")
+        # Step 4: Generate README and copy user-guide
+        print_step(4, 9, "Generating README.md and copying user-guide.md")
         generate_readme(build_dir, version, repo_root)
+        copy_user_guide(build_dir, repo_root)
+        copy_user_guide_pdf(build_dir, repo_root)
         print()
 
         # Step 5: Generate installers
@@ -536,6 +559,7 @@ def main():
         print()
         print("Contents:")
         print("  - README.md (Installation instructions)")
+        print("  - user-guide.md (Comprehensive user guide)")
         print("  - install.py (Python installer)")
         print("  - install.sh (Linux/macOS installer launcher)")
         print("  - install.bat (Windows installer launcher)")

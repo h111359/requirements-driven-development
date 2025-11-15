@@ -1136,12 +1136,12 @@ def help_option(option: str, description: str) -> None:
 
 def mark_prompt_completed(prompt_id: str, journal_file: str = None) -> bool:
     """
-    Mark a stand-alone prompt as completed in .rdd.copilot-prompts.md.
+    Mark a stand-alone prompt as completed in work-iteration-prompts.md.
     Changes checkbox from "- [ ]" to "- [x]".
     
     Args:
         prompt_id: The ID of the prompt (e.g., P01, P02, P001)
-        journal_file: Path to .rdd.copilot-prompts.md (optional, defaults to workspace file)
+        journal_file: Path to work-iteration-prompts.md (optional, defaults to workspace file)
     
     Returns:
         True on success, False on error
@@ -1149,7 +1149,7 @@ def mark_prompt_completed(prompt_id: str, journal_file: str = None) -> bool:
     import re
     
     if not journal_file:
-        journal_file = os.path.join(".rdd-docs/workspace", ".rdd.copilot-prompts.md")
+        journal_file = ".rdd-docs/work-iteration-prompts.md"
     
     # Validate prompt ID is provided
     if not prompt_id:
@@ -1158,7 +1158,7 @@ def mark_prompt_completed(prompt_id: str, journal_file: str = None) -> bool:
     
     # Check if journal file exists
     if not os.path.isfile(journal_file):
-        print_error(f".rdd.copilot-prompts.md not found at: {journal_file}")
+        print_error(f"work-iteration-prompts.md not found at: {journal_file}")
         return False
     
     # Read the file
@@ -1178,7 +1178,7 @@ def mark_prompt_completed(prompt_id: str, journal_file: str = None) -> bool:
             print_warning(f"Prompt {prompt_id} is already marked as completed")
             return True
         else:
-            print_error(f"Prompt {prompt_id} not found in .rdd.copilot-prompts.md")
+            print_error(f"Prompt {prompt_id} not found in work-iteration-prompts.md")
             return False
     
     # Mark the prompt as completed
@@ -1203,11 +1203,11 @@ def mark_prompt_completed(prompt_id: str, journal_file: str = None) -> bool:
 
 def list_prompts(status: str = "all", journal_file: str = None) -> bool:
     """
-    List prompts from .rdd.copilot-prompts.md filtered by status.
+    List prompts from work-iteration-prompts.md filtered by status.
     
     Args:
         status: Filter by status ('unchecked', 'checked', 'all')
-        journal_file: Path to .rdd.copilot-prompts.md (optional, defaults to workspace file)
+        journal_file: Path to work-iteration-prompts.md (optional, defaults to workspace file)
     
     Returns:
         True on success, False on error
@@ -1215,7 +1215,7 @@ def list_prompts(status: str = "all", journal_file: str = None) -> bool:
     import re
     
     if not journal_file:
-        journal_file = os.path.join(".rdd-docs/workspace", ".rdd.copilot-prompts.md")
+        journal_file = ".rdd-docs/work-iteration-prompts.md"
     
     # Validate status parameter
     if status not in ['unchecked', 'checked', 'all']:
@@ -1225,7 +1225,7 @@ def list_prompts(status: str = "all", journal_file: str = None) -> bool:
     
     # Check if journal file exists
     if not os.path.isfile(journal_file):
-        print_error(f".rdd.copilot-prompts.md not found at: {journal_file}")
+        print_error(f"work-iteration-prompts.md not found at: {journal_file}")
         return False
     
     # Print header
@@ -1278,12 +1278,12 @@ def list_prompts(status: str = "all", journal_file: str = None) -> bool:
 
 def validate_prompt_status(prompt_id: str, journal_file: str = None) -> int:
     """
-    Validate prompt status in copilot-prompts.md.
+    Validate prompt status in work-iteration-prompts.md.
     Checks if a prompt exists and returns its status.
     
     Args:
         prompt_id: The ID of the prompt to check (e.g., P01, P02)
-        journal_file: Path to copilot-prompts.md (optional, defaults to workspace file)
+        journal_file: Path to work-iteration-prompts.md (optional, defaults to .rdd-docs file)
     
     Returns:
         0 if prompt exists and is unchecked
@@ -1294,7 +1294,7 @@ def validate_prompt_status(prompt_id: str, journal_file: str = None) -> int:
     import re
     
     if not journal_file:
-        journal_file = os.path.join(".rdd-docs/workspace", ".rdd.copilot-prompts.md")
+        journal_file = ".rdd-docs/work-iteration-prompts.md"
     
     # Validate prompt ID is provided
     if not prompt_id:
@@ -1303,7 +1303,7 @@ def validate_prompt_status(prompt_id: str, journal_file: str = None) -> int:
     
     # Check if journal file exists
     if not os.path.isfile(journal_file):
-        print_error(f".rdd.copilot-prompts.md not found at: {journal_file}")
+        print_error(f"work-iteration-prompts.md not found at: {journal_file}")
         return 3
     
     # Read file
@@ -1325,7 +1325,7 @@ def validate_prompt_status(prompt_id: str, journal_file: str = None) -> int:
         print_info(f"Prompt {prompt_id} exists and is checked (completed)")
         return 1
     else:
-        print_warning(f"Prompt {prompt_id} not found in copilot-prompts.md")
+        print_warning(f"Prompt {prompt_id} not found in work-iteration-prompts.md")
         return 2
 
 

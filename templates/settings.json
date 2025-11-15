@@ -1,6 +1,7 @@
 {
   "chat.promptFilesRecommendations": {
-    "rdd.execute": true
+    "rdd.execute": true,
+    "rdd.update": true
   },
   "chat.tools.terminal.autoApprove": {
     "python .rdd/scripts/rdd.py": true

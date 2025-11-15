@@ -251,7 +251,7 @@ Tests for utility functions in `rdd_utils.py`.
 #### TestPromptFunctions (1 test)
 
 **test_mark_prompt_completed**
-- **Purpose:** Verifies prompt completion marking in copilot-prompts.md
+- **Purpose:** Verifies prompt completion marking in work-iteration-prompts.md
 - **How:** Creates mock prompts file, marks prompt as complete
 - **Asserts:** Checkbox changes from [ ] to [x]
 
