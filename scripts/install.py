@@ -237,6 +237,17 @@ def copy_prompts(source_dir: Path, target_dir: Path):
     
     dst_prompts.mkdir(parents=True, exist_ok=True)
     
+    # Remove all existing rdd.* prompts to ensure clean replacement
+    removed = 0
+    if dst_prompts.exists():
+        for old_prompt in dst_prompts.glob("rdd.*.prompt.md"):
+            old_prompt.unlink()
+            removed += 1
+    
+    if removed > 0:
+        print_info(f"Removed {removed} existing RDD prompt file(s)")
+    
+    # Copy new prompts
     copied = 0
     for prompt_file in src_prompts.glob("*.prompt.md"):
         shutil.copy2(prompt_file, dst_prompts / prompt_file.name)
@@ -270,6 +281,15 @@ def copy_rdd_framework(source_dir: Path, target_dir: Path):
         print_info("  Copied user-guide.md to .rdd/")
     else:
         print_warning("  user-guide.md not found in templates/")
+    
+    # Copy RDD-Framework-User-Guide.pdf to .rdd directory
+    src_pdf = source_dir / "RDD-Framework-User-Guide.pdf"
+    if src_pdf.exists():
+        dst_pdf = dst_rdd / "RDD-Framework-User-Guide.pdf"
+        shutil.copy2(src_pdf, dst_pdf)
+        print_info("  Copied RDD-Framework-User-Guide.pdf to .rdd/")
+    else:
+        print_warning("  RDD-Framework-User-Guide.pdf not found in root directory")
     
     print_success("Installed RDD framework")
 
@@ -337,7 +357,7 @@ def copy_rdd_docs_seeds(source_dir: Path, target_dir: Path, local_only: bool = F
     dst_rdd_docs.mkdir(parents=True, exist_ok=True)
     
     # List of seed files to copy
-    seed_files = ["config.json", "data-model.md", "requirements.md", "tech-spec.md", "folder-structure.md"]
+    seed_files = ["config.json", "requirements.md", "tech-spec.md"]
     
     copied = 0
     for seed_file in seed_files:

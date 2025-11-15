@@ -93,10 +93,8 @@ class TestFileCopying:
         
         rdd_docs = build_dir / ".rdd-docs"
         assert (rdd_docs / "config.json").exists()
-        assert (rdd_docs / "data-model.md").exists()
         assert (rdd_docs / "requirements.md").exists()
         assert (rdd_docs / "tech-spec.md").exists()
-        assert (rdd_docs / "folder-structure.md").exists()
     
     def test_copy_rdd_launcher_scripts(self, mock_rdd_project):
         """Test copying RDD launcher scripts (rdd.bat and rdd.sh)"""

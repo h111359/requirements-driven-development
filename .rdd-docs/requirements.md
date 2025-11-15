@@ -22,7 +22,7 @@
 
 - **[FR-03] Flat Workspace Structure**: The system shall store all active workspace files directly in .rdd-docs/workspace/ without enhancement-specific subfolders
 - **[FR-04] [DELETED]
-- **[FR-05] Workspace Initialization**: A script shall initialize workspace with: .rdd.copilot-prompts.md
+- **[FR-05] Workspace Initialization**: A script shall initialize workspace with: work-iteration-prompts.md
 - **[FR-06] Clean Main Branch Workspace**: When on main branch, workspace shall be empty or contain only standard template content to clearly indicate no active development
 - **[FR-07] Clarity Checklist Usage**: The clarification prompt shall use .rdd-docs/workspace/clarity-checklist.md as a checklist to identify unclear requirements
 - **[FR-08] Structured Questioning**: The prompt shall ask questions with predefined answer options (A, B, C, D) while allowing custom "Other" responses
@@ -72,6 +72,7 @@
 - **[FR-52] [DELETED]
 - **[FR-53] Python-Based Installer**: The framework shall provide a cross-platform Python installer (install.py) that automates installation, settings merging, and .gitignore updates
 - **[FR-54] Installation Verification**: Installers shall verify prerequisites (Python version, Git availability), validate target is a Git repository, and test successful installation by running the RDD version command
+- **[FR-99] Prompt Cleanup During Installation**: The installer shall remove all existing RDD prompt files (matching pattern rdd.*.prompt.md) from .github/prompts/ before installing new prompt files to ensure clean replacement and removal of obsolete prompts from previous releases
 - **[FR-55] [DELETED]
 - **[FR-56] Configurable Default Branch**: The framework shall support configuration of the default branch through a config.json file in .rdd-docs/ directory, allowing users to specify custom default branch names beyond main/master
 - **[FR-57] Default Branch Template**: The framework shall provide a config.json template in .rdd/templates/ that is copied to .rdd-docs/ during initialization
@@ -80,7 +81,7 @@
 - **[FR-60] Config-First Default Branch Detection**: The get_default_branch() function shall prioritize reading from config.json before falling back to branch detection logic
 - **[FR-61] Simplified Itteration Creation Input**: The new itteration creation workflow shall only prompt for branch name, not description, streamlining the user input process and eliminating redundant data collection
 - **[FR-62] Implementation File Documentation**: Stand-alone prompt execution shall create implementation markdown files (<PROMPT_ID>-implementation.md) in workspace to document execution details, replacing the need for separate log.jsonl logging
-- **[FR-63] Seed Template Installation**: The build process shall copy one-time seed templates (config.json, data-model.md, requirements.md, tech-spec.md) to .rdd-docs/ directory during installation, not during change creation
+- **[FR-63] Seed Template Installation**: The build process shall copy one-time seed templates (config.json, requirements.md, tech-spec.md) to .rdd-docs/ directory during installation, not during change creation
 - **[FR-64] Seed Template Validation**: The itteration creation process shall validate existence of seed templates in .rdd-docs/ and notify user if missing, indicating installation issue
 - **[FR-65] Template File Organization**: One-time seed templates shall be stored in templates/ directory (not .rdd/templates/) and included in build archives under .rdd-docs/ for direct installation
 - **[FR-66] [DELETED]
@@ -99,8 +100,9 @@
 - **[FR-79] Create Iteration Safety Checks**: The create iteration workflow shall verify user is on default branch and workspace is empty before allowing iteration creation
 - **[FR-80] Complete Iteration Safety Checks**: The complete iteration workflow shall verify user is NOT on default branch and workspace is NOT empty before allowing iteration completion
 - **[FR-81] Iteration Branch Naming**: The create iteration workflow shall prompt for branch name with normalization to kebab-case format, allowing user full control over naming convention without automatic prefixes
-- **[FR-82] Iteration Workspace Initialization**: The create iteration workflow shall initialize workspace with only copilot-prompts.md template, keeping workspace minimal
+- **[FR-82] Iteration Workspace Initialization**: The create iteration workflow shall initialize work-iteration-prompts.md at `.rdd-docs/work-iteration-prompts.md` from template, keeping workspace minimal
 - **[FR-83] Iteration Completion Archiving**: The complete iteration workflow shall archive all workspace files to `.rdd-docs/archive/<sanitized-branch-name>/` with metadata including timestamp, branch, author, and commit info
+- **[FR-100] Work Iteration Prompts Backup and Reset**: During iteration completion, the system shall copy `.rdd-docs/work-iteration-prompts.md` to `.rdd-docs/workspace/` as a backup and then reset the main file from the template to prepare for the next iteration
 - **[FR-84] Iteration Completion Commit**: The complete iteration workflow shall commit all changes with message "Completing work on <branch-name>" after archiving
 - **[FR-85] Iteration Push Prompt**: The complete iteration workflow shall prompt user to push to remote (if not local-only mode) and remind about pull request creation
 - **[FR-86] Iteration Branch Cleanup**: The delete merged branches workflow shall list all branches fully merged into default branch, allow user selection, and delete locally with optional remote deletion
@@ -114,7 +116,30 @@
 - **[FR-94] Launcher Python Detection**: Launcher scripts shall check for both `python` and `python3` commands, provide clear error messages if Python is not found, and include installation guidance
 - **[FR-95] Double-Click Installation**: Windows users shall be able to double-click install.bat to launch the installer without opening a terminal; Linux/macOS users shall be able to run ./install.sh after chmod +x
 - **[FR-96] Simplified Installation Documentation**: The README.md in release archives shall present installation in two clear options: Quick Start (recommended, using launcher scripts) and Direct Python Installation, eliminating verbose manual installation instructions
-- **[FR-97] User Guide Documentation**: The framework shall provide a comprehensive user guide (user-guide.md) that explains the complete workflow, terminal menu options, Copilot prompt usage, best practices, and troubleshooting, installed to .rdd/ directory for easy access
+- **[FR-97] User Guide Documentation**: The framework shall provide a comprehensive user guide (`templates/user-guide.md`) that explains the complete workflow (installation, initial setup, core workflow, creating iterations, working with prompts, special prompts, completing iterations, branch merging), terminal menu options, Copilot prompt usage (including .rdd.execute, .rdd.update, .rdd.analyze), RDD concepts (simplicity, documentation, thoughtfulness, thriftiness, verbosity, incrementality, historicity, agnostic, upgradeability), and best practices/guidelines (inline throughout workflow steps: start new chat per prompt, avoid writing prompts in advance, cite full relative paths, ask Copilot to fix issues alone, be careful with installations, edit .vscode/settings.json for auto-approve), targeting intermediate developers with medium detail level and OS-specific notes inline where relevant, installed to .rdd/ directory for easy runtime access
+- **[FR-98] Consolidated Technical Documentation**: The framework shall maintain all technical documentation in a single tech-spec.md file, with Data Architecture and Project Folder Structure as dedicated sections within tech-spec.md rather than separate files
+- **[FR-101] User Story File Management**: The framework shall provide a user-story.md template that is copied to .rdd-docs/ during iteration creation and backed up to workspace then reset from template during iteration completion
+- **[FR-102] Interactive Configuration Menu**: The framework shall provide an interactive configuration menu accessible from the main menu that allows users to manage version, default branch, and local-only mode settings
+- **[FR-103] Configuration Menu Placement**: The configuration menu shall be accessible as option 5 in the main menu, with the Exit option moved to position 9 to allow for future expansion options (6, 7, 8)
+- **[FR-104] Version Increment Options**: The configuration menu shall provide separate options for incrementing major, minor, and patch version numbers with automatic reset of lower version components (e.g., incrementing major resets minor and patch to 0)
+- **[FR-105] Interactive Branch Selection**: The configuration menu shall display all available git branches and allow users to select a new default branch through numeric selection
+- **[FR-106] Local-Only Toggle**: The configuration menu shall provide a toggle option to enable or disable local-only mode, displaying the current state and updating the configuration file accordingly
+- **[FR-107] User Story State Tracking**: The user-story.md template shall include a State section with 9 distinct states for tracking progress through requirement clarification and execution planning
+- **[FR-108] State-Based Prompt Behavior**: The analyse-and-plan prompt shall detect the current state in user-story.md and adapt its behavior accordingly, performing different actions for each of the 9 states
+- **[FR-109] State Validation**: The analyse-and-plan prompt shall validate that the marked state accurately reflects the actual content in user-story.md and correct misalignments automatically
+- **[FR-110] Single State Enforcement**: The system shall ensure only ONE state is marked with [x] at any time in the user-story.md State section
+- **[FR-111] Main Questions Collection**: The analyse-and-plan prompt shall sequentially collect answers to the four main questions (What is needed, Why and for whom, Acceptance criteria, Other considerations) in States 1-4
+- **[FR-112] Questionnaire Generation**: In State 5, the prompt shall generate a Requirements Questionnaire by analyzing the user story against the clarity checklist and checking for information not already in requirements.md or tech-spec.md
+- **[FR-113] Questionnaire Answer Tracking**: In State 6, the prompt shall track which questionnaire questions have been answered using checkbox markers and inform the user of remaining unanswered questions
+- **[FR-114] Completeness Confirmation**: In State 7, the prompt shall review all questionnaire answers for completeness, identify potential gaps, and ask the user if more questions are needed before proceeding
+- **[FR-115] Execution Plan Generation**: In State 8, the prompt shall generate a detailed execution plan with properly sequenced P IDs starting from the lowest available ID in work-iteration-prompts.md
+- **[FR-116] Plan Detail Confirmation**: The prompt shall ask the user to confirm the execution plan is detailed enough, offering options to revise for more detail, add more questions, or approve the plan
+- **[FR-117] Plan Revision Support**: In State 9, the prompt shall support revising the execution plan by breaking down prompts, combining prompts, or adding more requirement questions based on user feedback
+- **[FR-118] Cross-Reference Existing Documentation**: Before generating questions, the prompt shall check if answers already exist in requirements.md or tech-spec.md to avoid redundant questions
+- **[FR-119] Question Format Compliance**: All generated questions shall follow the format guidelines in questions-formatting.md with multiple choice options (a, b, c, z for "Other")
+- **[FR-120] Data Preservation During Re-execution**: The analyse-and-plan prompt shall preserve all existing user answers, questionnaire content, and execution plan content during re-execution
+- **[FR-121] Clear Next Steps Guidance**: After each state transition, the prompt shall inform the user of the new state, action taken, and what they should do next
+- **[FR-122] User Guide PDF Distribution**: The framework shall include RDD-Framework-User-Guide.pdf in build archives and install it to .rdd/ directory alongside user-guide.md for comprehensive documentation access
 
 # Non-Functional Requirements
 
@@ -186,7 +211,7 @@
 - **[TR-47] Test Isolation**: All tests shall use temporary directories and mock objects to prevent modification of actual project files and ensure test independence
 - **[TR-48] Test Dependencies**: Test dependencies shall be specified in tests/requirements.txt and installed in an isolated virtual environment
 - **[TR-49] Virtual Environment for Tests**: The framework shall provide a scripts/setup-test-env.py script to create and maintain a .venv virtual environment specifically for test execution
-- **[TR-50] Test Fixture Completeness**: Test fixtures shall include all required template files (config.json, data-model.md, requirements.md, tech-spec.md, folder-structure.md) to match production build requirements
+- **[TR-50] Test Fixture Completeness**: Test fixtures shall include all required template files (config.json, requirements.md, tech-spec.md) to match production build requirements
 - **[TR-51] CI/CD Testing**: The framework shall use GitHub Actions to run tests automatically on push and pull request events, executing only the Python test runner
 - **[TR-52] Test Coverage Reporting**: The test framework shall generate code coverage reports for Python code and report coverage metrics in CI/CD pipelines
 - **[TR-53] Colored Test Output**: Test runner scripts shall provide colored output (green for success, red for failure, yellow for warnings) to improve readability

@@ -100,7 +100,6 @@ class TestFileOperations:
         assert (rdd_docs / "config.json").exists()
         assert (rdd_docs / "requirements.md").exists()
         assert (rdd_docs / "tech-spec.md").exists()
-        assert (rdd_docs / "data-model.md").exists()
 
 
 class TestLauncherScriptInstallation:
