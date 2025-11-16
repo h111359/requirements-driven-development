@@ -27,7 +27,7 @@ Requirements-Driven Development (RDD) is a framework for development augmented w
 
 ## 🚀 Installation
 
-### Option 1: From Release (Recommended)
+### **Get the Latest Release**
 
 1. **Download the latest release** from [GitHub Releases](https://github.com/h111359/requirements-driven-development/releases)
    - Download `rdd-v{version}.zip`
@@ -70,42 +70,18 @@ sudo ln -s /usr/bin/python3 /usr/local/bin/python
 ```
 
 
-## 🎯 Quick Start
+## 🎯 Next Steps
 
-### 0. Prerequisites
+### 1. User Guide
 
-- It is assumed you have installed VS Code
-- It is assumed you have GitHub Copilot license
-- It is assumed you have set VS Code with GitHub Copilot using your license
-- Open .rdd-docs/config.json and ensure the setup is what you expect to be
-- Populate the files:
-  - .rdd-docs/requirements.md
-  - .rdd-docs/tech-spec.md
+- When installation is completed, you can find the following documents in `.rdd` folder:
+  - RDD-Framework-User-Guide.pdf for shorter version of the guide
+  - user-guide.md - for more details
+  
+- If you want to read these documents in advance directly from this repo - check the links: 
+  - [RDD-Framework-User-Guide.pdf](https://github.com/h111359/requirements-driven-development/blob/main/templates/RDD-Framework-User-Guide.pdf)
+  - [user-guide.md](https://github.com/h111359/requirements-driven-development/blob/main/templates/user-guide.md)
 
-### 1. Create New Work Iteration
-
-- Run RDD app with terminal menu by executing rdd.bat for Windows or rdd.sh for Linux from the root of the project folder
-- Execute the option "Create new iteration" and follow the process to create itteration.
-
-
-### 2. Define Copilot Prompts
-
-- Open and edit the file `.rdd-docs/work-iteration-prompts.md` by defining new prompts on the placeholders. Prompts should be as detail as possible, telling the agent what you want to achieve
-- After each prompt (or after several prompts defined) - open Copilot chat
-- Choose Agent mode and choose some modern model (Claude Sonne 4.5, GPT-5 or similar as capabilities model)
-- Execute in the chat `/rdd.execute P01` where you should replace P01 with the identifier of the prompt you want the copilot to work on.
-
-### 3. Update Documentation 
-
-- (Optional) You can update your branch with the changes from other developers (if you work simultaneously) from the default branch by running the option "Update from default" in the terminal menu of RDD application.
-- When all prompts in `.rdd-docs/work-iteration-prompts.md` that you want to be executed in this work iteration are done - the user can execute several predefined from the framework prompts to prepare the branch for completion.
-
-### 4. Complete Work Itteration
-
-- Go back to the terminal where the RDD app is running and execute the option "Complete current iteration"
-- If you are connected to github repo - make a pull request if needed (RDD intentionally is not making rull requests)
-- When the current branch is merged to a permanent branch (like dev or main), you can (optionally) execute "Delete merged branches"
-- After completion of the itteration is done, you should be checkouted to the default branch and you can start a new itteration.
 
 
 ## 📄 License
