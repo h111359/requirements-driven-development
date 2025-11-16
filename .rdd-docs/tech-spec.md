@@ -274,7 +274,7 @@ The `.rdd/templates/user-story.md` template includes:
 
 **Main Sections**:
 - What is needed?
-- Why is it needed and for whom?
+- Why is it needed and by whom??
 - What are the acceptance criteria?
 - What other considerations should be taken into account?
 

@@ -66,7 +66,7 @@ When answered:
 #### State 2: "Why is it needed?" not fulfilled
 Ask the user:
 ```
-**Q: Why is it needed and for whom?**
+**Q: Why is it needed and by whom??**
 
 Please explain:
 - What problem this solves
@@ -75,7 +75,7 @@ Please explain:
 ```
 
 When answered:
-- Fill in the "Why is it needed and for whom?" section
+- Fill in the "Why is it needed and by whom??" section
 - Mark State 3 and unmark State 2
 - Save changes to user-story.md
 
