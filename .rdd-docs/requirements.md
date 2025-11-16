@@ -94,8 +94,8 @@
 - **[FR-73] Remote Operation Skipping**: When `localOnly` is set to true, the framework shall skip all remote git operations (fetch, push, pull) while maintaining full functionality for local operations
 - **[FR-74] Local-Only Mode User Feedback**: The framework shall provide clear informational messages when remote operations are skipped due to local-only mode, ensuring users understand the system behavior
 - **[FR-75] Numeric Menu Navigation**: The framework shall provide a simplified numeric menu system where users select options by entering numbers, replacing complex arrow-based navigation for improved reliability
-- **[FR-76] Interactive Version Management in Build**: The build process shall display the current version and prompt users to increment the patch version (last digit) or rebuild with the same version, with automatic config.json updates
-- **[FR-77] Build Version Persistence**: When users choose to increment the version during build, the system shall update `.rdd-docs/config.json` with the new version number before creating release archives
+- **[FR-76] Interactive Version Management in Build**: The build process shall display the current version and prompt users to increment the patch version (last digit) or rebuild with the same version, with automatic about.json updates
+- **[FR-77] Build Version Persistence**: When users choose to increment the version during build, the system shall update `.rdd/about.json` with the new version number before creating release archives
 - **[FR-78] Simplified Iteration Workflow**: The framework shall provide a streamlined 4-option menu (Create new iteration, Update from default, Complete current iteration, Delete merged branches) focused on core development workflow
 - **[FR-79] Create Iteration Safety Checks**: The create iteration workflow shall verify user is on default branch and workspace is empty before allowing iteration creation
 - **[FR-80] Complete Iteration Safety Checks**: The complete iteration workflow shall verify user is NOT on default branch and workspace is NOT empty before allowing iteration completion
@@ -194,11 +194,12 @@
 - **[TR-30] Platform-Agnostic Python Command**: All prompt files and documentation shall use `python` (not `python3`) as the command to invoke Python scripts, ensuring compatibility across Windows, Linux, and macOS platforms
 - **[TR-31] Build Artifact Structure**: Build archives shall follow naming convention `rdd-v{version}.zip` with single cross-platform archive containing nested directory structure preserving original file organization
 - **[TR-32] Checksum Generation**: Build process shall generate SHA256 checksum files (.sha256) for all release archives using format compatible with standard sha256sum verification tools
-- **[TR-33] Version Extraction**: Build system shall extract version information from `.rdd-docs/config.json` and validate it matches semantic versioning format (MAJOR.MINOR.PATCH)
+- **[TR-33] Version Extraction**: Build system shall extract version information from `.rdd/about.json` and validate it matches semantic versioning format (MAJOR.MINOR.PATCH)
 - **[TR-34] Archive Cleanup**: Build process shall remove temporary staging directories after archive creation, keeping only final zip archive and checksum file in build/ directory
 - **[TR-35] Settings Merge Logic**: Installer shall intelligently merge VS Code settings by appending unique array values, merging object keys, and replacing editor-specific settings that require exact RDD configuration
-- **[TR-36] Configuration File Format**: The framework shall use JSON format for configuration files (config.json) containing version, defaultBranch, created, and lastModified fields
+- **[TR-36] Configuration File Format**: The framework shall use JSON format for configuration files (config.json) containing defaultBranch, created, and lastModified fields; version information is stored separately in .rdd/about.json
 - **[TR-37] Configuration File Location**: The config.json file shall be stored in .rdd-docs/ directory as part of project documentation and version-controlled with the repository
+- **[TR-37a] Framework Version File**: The framework version shall be stored in .rdd/about.json file containing a version field using semantic versioning format (MAJOR.MINOR.PATCH)
 - **[TR-38] Curses-Based Interactive Menus**: Interactive menus shall use Python's curses library for visual navigation with fallback to numeric input when curses is unavailable
 - **[TR-39] Config Helper Functions**: The framework shall provide utility functions (get_rdd_config, set_rdd_config, get_rdd_config_path) for reading and writing configuration values
 - **[TR-40] Build Template Management**: Build scripts shall read installer scripts (install.py, install.sh, install.ps1) and README.md from templates/ directory with version placeholder substitution

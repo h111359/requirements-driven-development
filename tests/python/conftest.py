@@ -51,15 +51,21 @@ def rdd_workspace(mock_git_repo):
     (repo / ".rdd-docs" / "workspace").mkdir(parents=True)
     (repo / ".rdd-docs" / "archive").mkdir(parents=True)
     
-    # Create config.json
+    # Create config.json (version moved to about.json)
     config = {
-        "version": "1.0.0",
         "defaultBranch": "main",
         "created": "2025-01-01T00:00:00Z",
         "lastModified": "2025-01-01T00:00:00Z"
     }
     config_path = repo / ".rdd-docs" / "config.json"
     config_path.write_text(json.dumps(config, indent=2))
+    
+    # Create about.json with version
+    about = {
+        "version": "1.0.0"
+    }
+    about_path = repo / ".rdd" / "about.json"
+    about_path.write_text(json.dumps(about, indent=2))
     
     # Create basic documentation files
     (repo / ".rdd-docs" / "requirements.md").write_text("# Requirements\n")

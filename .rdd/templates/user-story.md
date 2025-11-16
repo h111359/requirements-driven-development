@@ -4,11 +4,11 @@
 
 <!-- Mark the current state with [x]. Only ONE state should be marked at a time. -->
 
- - [ ] State 1: Not fulfilled "What is needed?"
- - [ ] State 2: "What is needed?" is fulfilled and not fulfilled "Why is it needed and for whom?"
- - [ ] State 3: "Why is it needed and for whom?" is fulfilled and not fulfilled "What are the acceptance criteria?"
- - [ ] State 4: All the main questions are answered - "What is needed?", "Why is it needed and for whom?", "What are the acceptance criteria?" and "What other considerations should be taken into account?" is not fulfilled
- - [ ] State 5: All the main questions are answered - "What is needed?", "Why is it needed and for whom?", "What are the acceptance criteria?", "What other considerations should be taken into account?" are fulfilled. "Requirements Questionnaire" is not generated
+ - [x] State 1: Not fulfilled "What is needed?"
+ - [ ] State 2: "What is needed?" is fulfilled and not fulfilled "Why is it needed and by whom??"
+ - [ ] State 3: "Why is it needed and by whom??" is fulfilled and not fulfilled "What are the acceptance criteria?"
+ - [ ] State 4: All the main questions are answered - "What is needed?", "Why is it needed and by whom??", "What are the acceptance criteria?" and "What other considerations should be taken into account?" is not fulfilled
+ - [ ] State 5: All the main questions are answered - "What is needed?", "Why is it needed and by whom??", "What are the acceptance criteria?", "What other considerations should be taken into account?" are fulfilled. "Requirements Questionnaire" is not generated
  - [ ] State 6: "Requirements Questionnaire" is generated, but not all questions are answered
  - [ ] State 7: "Requirements Questionnaire" is generated, all questions are answered, still not confirmed that no more questions are needed
  - [ ] State 8: No more questions are needed so the "Execution Plan" is generated, but not confirmed that it is detailed enough
@@ -19,7 +19,7 @@
 <!-- Describe the feature, functionality, or change that needs to be implemented -->
 
 
-## Why is it needed and for whom?
+## Why is it needed and by whom??
 
 <!-- Explain the problem being solved, the value delivered, and who will benefit from this change -->
 
