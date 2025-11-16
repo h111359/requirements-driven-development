@@ -527,7 +527,7 @@ The Python implementation (`rdd_utils.py`) provides utility functions organized 
 ### Build System
 The RDD framework uses a Python-based build system to create release packages:
 
-#### Build Script (scripts/build.py)
+#### Build Script (build/build.py)
 - **Purpose**: Creates cross-platform release archives with all necessary files
 - **Version Management**: Extracts version from `.rdd/about.json` as single source of truth
 - **Interactive Version Control**: Displays current version and prompts user to either increment patch version or rebuild with same version
@@ -921,11 +921,11 @@ repo-root/
 │   └── ...                       # Other project documentation
 ├── .vscode/                      # VS Code workspace settings
 │   └── settings.json             # Editor config, auto-approvals, associations
-├── build/                        # Generated build artifacts (ignored by Git)
+├── build/                        # Build directory with build script and artifacts
+│   ├── build.py                  # Build script for creating releases
 │   ├── rdd-v{version}.zip        # Release archive (created by build.py)
 │   └── rdd-v{version}.zip.sha256 # Checksum file for archive verification
-├── scripts/                      # Build and release automation scripts
-│   ├── build.py                  # Build script for creating releases
+├── scripts/                      # Release and automation scripts
 │   ├── install.py                # Python installer template
 │   ├── install.sh                # Bash installer template
 │   ├── install.ps1               # PowerShell installer template (deprecated)
@@ -941,6 +941,7 @@ repo-root/
 │   ├── settings.json             # VS Code settings template
 │   ├── user-guide.md             # Comprehensive user guide (copied to .rdd/ during install)
 │   ├── RDD-Framework-User-Guide.pdf  # User guide PDF (copied to build root, then to .rdd/ during install)
+│   ├── RDD-Framework-User-Guide.pptx # User guide source presentation
 │   ├── install.sh                # Bash launcher template (Linux/macOS)
 │   └── install.bat               # Batch launcher template (Windows)
 ├── tests/                        # Comprehensive testing suite
@@ -999,8 +1000,8 @@ repo-root/
    - CLI access: `python .rdd/scripts/rdd.py config [show|get|set]`
 
 8. **Build and Release System**
-   - Build script: `scripts/build.py` creates release archives
-   - Build artifacts: Generated in `build/` directory (Git-ignored)
+   - Build script: `build/build.py` creates release archives
+   - Build artifacts: Generated in `build/` directory alongside build script
    - Release format: Single cross-platform `rdd-v{version}.zip` archive
    - Archive contents: Framework files, installation scripts, documentation, templates
    - Verification: SHA256 checksum file generated for each archive

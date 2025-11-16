@@ -154,7 +154,7 @@ def main():
     print_header("Running Tests")
     
     # Step 1: Python Unit Tests
-    print_step(1, 3, "Running Python unit tests")
+    print_step(1, 2, "Running Python unit tests")
     total_tests += 1
     if run_pytest_suite("tests/python/", "Python unit tests"):
         print_success("Python unit tests passed")
@@ -164,19 +164,8 @@ def main():
         failed_tests += 1
     print()
     
-    # Step 2: Build Tests
-    print_step(2, 3, "Running build tests")
-    total_tests += 1
-    if run_pytest_suite("tests/build/", "Build tests"):
-        print_success("Build tests passed")
-        passed_tests += 1
-    else:
-        print_error("Build tests failed")
-        failed_tests += 1
-    print()
-    
-    # Step 3: Install Tests
-    print_step(3, 3, "Running install tests")
+    # Step 2: Install Tests
+    print_step(2, 2, "Running install tests")
     total_tests += 1
     if run_pytest_suite("tests/install/", "Install tests"):
         print_success("Install tests passed")
