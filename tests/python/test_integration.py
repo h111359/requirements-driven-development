@@ -150,18 +150,18 @@ class TestConfigManagement:
         os.chdir(rdd_workspace)
         
         # Read initial value
-        original_version = rdd_utils.get_rdd_config("version")
-        assert original_version == "1.0.0"
+        original_branch = rdd_utils.get_rdd_config("defaultBranch")
+        assert original_branch == "main"
         
         # Update value
-        rdd_utils.set_rdd_config("version", "1.1.0")
+        rdd_utils.set_rdd_config("defaultBranch", "dev")
         
         # Read updated value
-        updated_version = rdd_utils.get_rdd_config("version")
-        assert updated_version == "1.1.0"
+        updated_branch = rdd_utils.get_rdd_config("defaultBranch")
+        assert updated_branch == "dev"
         
         # Restore original
-        rdd_utils.set_rdd_config("version", original_version)
+        rdd_utils.set_rdd_config("defaultBranch", original_branch)
     
     def test_config_default_branch(self, rdd_workspace):
         """Test default branch configuration"""

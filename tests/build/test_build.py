@@ -18,17 +18,17 @@ import build
 
 
 class TestVersionExtraction:
-    """Test version extraction from config.json"""
+    """Test version extraction from about.json"""
     
-    def test_read_version_from_config(self, mock_rdd_project):
-        """Test reading version from config.json"""
+    def test_read_version_from_about(self, mock_rdd_project):
+        """Test reading version from about.json"""
         os.chdir(mock_rdd_project)
-        config_path = mock_rdd_project / ".rdd-docs" / "config.json"
+        about_path = mock_rdd_project / ".rdd" / "about.json"
         
-        with open(config_path) as f:
-            config = json.load(f)
+        with open(about_path) as f:
+            about = json.load(f)
         
-        version = config.get("version")
+        version = about.get("version")
         assert version == "1.0.0"
         assert isinstance(version, str)
 

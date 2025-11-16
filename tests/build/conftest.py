@@ -33,15 +33,21 @@ def mock_rdd_project(temp_build_dir):
     (project_root / "templates").mkdir(parents=True)
     (project_root / "build").mkdir(parents=True)
     
-    # Create config.json with version
+    # Create config.json without version (version moved to about.json)
     config = {
-        "version": "1.0.0",
         "defaultBranch": "main",
         "created": "2025-01-01T00:00:00Z",
         "lastModified": "2025-01-01T00:00:00Z"
     }
     config_path = project_root / ".rdd-docs" / "config.json"
     config_path.write_text(json.dumps(config, indent=2))
+    
+    # Create about.json with version
+    about = {
+        "version": "1.0.0"
+    }
+    about_path = project_root / ".rdd" / "about.json"
+    about_path.write_text(json.dumps(about, indent=2))
     
     # Create mock prompts
     (project_root / ".github" / "prompts" / "test.prompt.md").write_text("# Test Prompt")

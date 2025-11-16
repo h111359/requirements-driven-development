@@ -444,7 +444,7 @@ Features:
 #### Main Entry Point
 - **File**: `.rdd/scripts/rdd.py`
 - **Purpose**: Unified command interface with domain routing
-- **Version Management**: Uses `get_framework_version()` to read version from `.rdd-docs/config.json` instead of hardcoded version variable
+- **Version Management**: Uses `get_framework_version()` to read version from `.rdd/about.json`
 - **Responsibilities**:
   - Parse command-line arguments
   - Route commands to appropriate domain handlers
@@ -529,9 +529,9 @@ The RDD framework uses a Python-based build system to create release packages:
 
 #### Build Script (scripts/build.py)
 - **Purpose**: Creates cross-platform release archives with all necessary files
-- **Version Management**: Extracts version from `.rdd-docs/config.json` as single source of truth (fixed from previous hardcoded version in rdd.py)
+- **Version Management**: Extracts version from `.rdd/about.json` as single source of truth
 - **Interactive Version Control**: Displays current version and prompts user to either increment patch version or rebuild with same version
-- **Version Persistence**: Automatically updates `.rdd-docs/config.json` when user chooses to increment version
+- **Version Persistence**: Automatically updates `.rdd/about.json` when user chooses to increment version
 - **Template Processing**: Reads README.md and installer scripts from templates/ directory with {{VERSION}} placeholder substitution
 - **Archive Creation**: Generates single `rdd-v{version}.zip` file containing:
   - Framework files (.rdd/scripts/, .rdd/templates/)
@@ -544,9 +544,9 @@ The RDD framework uses a Python-based build system to create release packages:
 - **Cleanup**: Removes temporary build directories, keeping only archive and checksum
 
 #### Build Process Steps
-1. Extract version from `.rdd-docs/config.json` and validate SemVer format
+1. Extract version from `.rdd/about.json` and validate SemVer format
 2. Display current version and prompt for version increment (patch only)
-3. Update `.rdd-docs/config.json` with new version if user chooses to increment
+3. Update `.rdd/about.json` with new version if user chooses to increment
 4. Create build directory structure (including .rdd-docs/)
 5. Copy framework files (prompts, scripts, templates, LICENSE)
 6. Copy VS Code settings template to .vscode/settings.json
@@ -795,9 +795,9 @@ Automated testing on push and pull requests:
 
 ### Configuration Files
 
-#### config.json
+#### about.json
 
-**Description**: Framework-wide configuration file storing repository and workflow settings. Located in `.rdd-docs/config.json` and version-controlled with the repository.
+**Description**: Framework version information file. Located in `.rdd/about.json` and version-controlled with the repository.
 
 **Attributes**:
 
@@ -806,7 +806,30 @@ Automated testing on push and pull requests:
   - Mandatory: Yes
   - Data Type: String
   - Format: Semantic versioning (MAJOR.MINOR.PATCH)
-  - Example: "1.0.0"
+  - Example: "1.1.1"
+
+**Example File**:
+```json
+{
+  "version": "1.1.1"
+}
+```
+
+**Location**:
+- File path: `.rdd/about.json`
+- Read by: `get_framework_version()` in rdd.py
+- Updated by: `update_about_version()` in build.py
+
+**Usage**:
+- Read when displaying framework version (`python .rdd/scripts/rdd.py --version`)
+- Updated during build process when user increments version
+- Single source of truth for framework version
+
+#### config.json
+
+**Description**: Framework-wide configuration file storing repository and workflow settings. Located in `.rdd-docs/config.json` and version-controlled with the repository. Note: Version information is stored separately in `.rdd/about.json`.
+
+**Attributes**:
 
 - **defaultBranch**: 
   - Description: Name of the repository's default branch for change management
@@ -841,7 +864,6 @@ Automated testing on push and pull requests:
 **Example File**:
 ```json
 {
-  "version": "1.0.0",
   "defaultBranch": "dev",
   "localOnly": false,
   "created": "2025-11-06T08:00:00Z",
@@ -871,6 +893,7 @@ repo-root/
 │   │   ├── rdd.execute.prompt.md
 │   └── copilot-instructions.md   # Copilot agent behavioral guidelines
 ├── .rdd/                         # RDD framework internals
+│   ├── about.json                # Framework version information
 │   ├── scripts/                  # Python automation scripts
 │   │   ├── rdd.py                # Main entry point for RDD commands
 │   │   ├── rdd_utils.py          # Utility functions for all operations
@@ -882,7 +905,7 @@ repo-root/
 │   │   ├── questions-formatting.md  # Question formatting guidelines
 │   │   ├── requirements-format.md   # Requirements format guidelines
 ├── .rdd-docs/                    # RDD documentation and workspace
-│   ├── config.json               # Framework configuration (defaultBranch, version)
+│   ├── config.json               # Framework configuration (defaultBranch, localOnly, timestamps)
 │   ├── work-iteration-prompts.md # Stand-alone prompts checklist (top level, backed up to workspace on iteration complete)
 │   ├── user-story.md             # User story definition (top level, backed up to workspace on iteration complete)
 │   ├── workspace/                # Active development workspace

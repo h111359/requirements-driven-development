@@ -1351,15 +1351,21 @@ def wrap_up_change() -> bool:
 # ============================================================================
 
 def get_framework_version() -> str:
-    """Get framework version from config.json"""
-    config_path = get_rdd_config_path()
-    if os.path.isfile(config_path):
-        try:
-            with open(config_path, 'r') as f:
-                config = json.load(f)
-                return config.get("version", "unknown")
-        except Exception:
-            pass
+    """Get framework version from .rdd/about.json"""
+    # Get repo root
+    try:
+        repo_root = Path(get_repo_root())
+        about_path = repo_root / ".rdd" / "about.json"
+        
+        if about_path.is_file():
+            try:
+                with open(about_path, 'r') as f:
+                    about = json.load(f)
+                    return about.get("version", "unknown")
+            except Exception:
+                pass
+    except Exception:
+        pass
     return "unknown"
 
 
