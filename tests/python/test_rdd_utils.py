@@ -152,8 +152,8 @@ class TestConfigFunctions:
     
     def test_get_rdd_config_existing_key(self, rdd_workspace):
         os.chdir(rdd_workspace)
-        version = rdd_utils.get_rdd_config("version")
-        assert version == "1.0.0"
+        default_branch = rdd_utils.get_rdd_config("defaultBranch")
+        assert default_branch == "main"
     
     def test_get_rdd_config_missing_key_with_default(self, rdd_workspace):
         os.chdir(rdd_workspace)

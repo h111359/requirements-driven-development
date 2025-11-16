@@ -2,10 +2,14 @@ name: Restrict PRs to main
 
 on:
   pull_request:
+    # Trigger only when the PR target is main
     branches: [ main ]
 
 jobs:
   check-branch:
+    # Prevent this job from appearing in PRs to dev
+    # even if GitHub tries to show “last run”
+    if: github.event.pull_request.base.ref == 'main'  
     runs-on: ubuntu-latest
     steps:
       - name: Ensure PR source branch is dev

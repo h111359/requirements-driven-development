@@ -289,24 +289,15 @@ If these conditions aren't met, the framework will display an error and guide yo
 
 ### After Creation
 
-You're now ready to define work. Open `.rdd-docs/work-iteration-prompts.md` and start adding prompts for Copilot to execute.
-
-Example initial workspace:
-```markdown
-# Work Iteration Prompts
-
-## Prompt Definitions
-
- - [ ] [P01] <Add your first prompt here>
-```
+You're now ready to define work. 
 
 > **Tip**: Don't write all prompts in advance. Execute one prompt, see the results, then add the next prompt. This iterative approach keeps you responsive to what Copilot discovers during implementation.
 
 ---
 
-## 6. Working with Prompts
+## 6. Working with Work Iteration Prompts
 
-The heart of RDD development is the `work-iteration-prompts.md` file where you define specific tasks for GitHub Copilot to execute.
+The heart of RDD development is the `work-iteration-prompts.md` file where you define specific tasks for GitHub Copilot to execute. It is not mandatory to have fulfilled `.rdd-docs/user-story.md` file in order to work with `.rdd-docs/work-iteration-prompts.md`. For fixes the intended approach will be to directly write your prompts in `.rdd-docs/work-iteration-prompts.md` and run the /rdd.execute command.
 
 ### The Prompts File Structure
 
@@ -330,6 +321,20 @@ The heart of RDD development is the `work-iteration-prompts.md` file where you d
 - **Prompt ID**: `[P01]`, `[P02]`, etc. (unique identifier)
 - **Instructions**: Clear, detailed description with file paths
 
+## How to use
+
+Open `.rdd-docs/work-iteration-prompts.md` and add a prompt for Copilot to execute. When you have finished with formulation of the prompt text, save the file and proceed with the chat:
+- Open GitHub Copilot chat
+- Choose Agent mode
+- Choose some of the latest models (preferable the latest versions of Claude Sonnet or ChatGPT)
+- Make sure you have all Tools active (press Configure Tools... button to verify)
+- Optional but recommendable is to close all open files so no erroneous context to be explored by the copilot
+- Write the command `/rdd.execute P01` where P01 is given as an example - replace it with the identifier of the prompt you have just added and press "Send" button.
+- GitHub Copilot starts to execute. During its execution is possible it to ask you for allowing some commands to be executed in the terminal or could ask you questions. As it doesn't follow a deterministic algorithm - here can not be predicted what the dialog could be. It much depends on your prompt. Itterate with it and answer in the best way you think is appropriate
+- When the prompt is executed, the Copilot should write "I am done"
+- You can proceed with writing the next prompt or you can go to the menu and choose "Complete current iteration" option
+
+
 ### Writing Effective Prompts
 
 **Good Prompt Characteristics**:
@@ -337,7 +342,7 @@ The heart of RDD development is the `work-iteration-prompts.md` file where you d
 - ✓ Includes full relative file paths
 - ✓ References existing patterns or files
 - ✓ Has clear expected outcomes
-- ✓ Single responsibility
+- ✓ Single focus and clear responsibility
 
 **Example Good Prompt**:
 ```markdown
@@ -425,35 +430,15 @@ Results:
 - Added input sanitization for SQL injection prevention
 ```
 
-> **Tip**: Ask Copilot to fix issues it encounters on its own. Describe how to reproduce the problem and tell it to iterate until fixed. This leverages Copilot's problem-solving capabilities.
-
-### Prompt Execution Order
-
-You can execute prompts in any order if they're independent:
-
-**Sequential (Dependent)**:
-```markdown
- - [ ] [P01] Create database schema in migrations/001_init.sql
- - [ ] [P02] Create User model in src/models/user.py (depends on P01)
- - [ ] [P03] Create user API in src/api/users.py (depends on P02)
-```
-Execute: P01 → P02 → P03
-
-**Parallel (Independent)**:
-```markdown
- - [ ] [P01] Update frontend styles in static/css/
- - [ ] [P02] Add backend logging in src/utils/logger.py
- - [ ] [P03] Write deployment docs in docs/deploy.md
-```
-Execute: Any order (P01, P02, P03 or P02, P01, P03, etc.)
+> **Tip**: Ask Copilot to fix issues encountered on its own. Describe how to reproduce the problem and tell it to iterate until fixed. This leverages Copilot's problem-solving capabilities.
 
 ---
 
-## 7. Special Prompts
+## 7. Special Commands
 
-The RDD framework includes special-purpose prompts for documentation and planning.
+The RDD framework includes special-purpose commands for documentation and planning.
 
-### The `.rdd.update` Prompt
+### The `.rdd.update` Command
 
 **Purpose**: Update documentation after completing development work
 
@@ -483,7 +468,7 @@ or add as a prompt in your work-iteration-prompts.md:
 
 > **Tip**: Always run `.rdd.update` before completing an iteration to keep your project documentation accurate.
 
-### The `.rdd.analyze` Prompt
+### The `.rdd.analyse-and-plan` Command (Experimental)
 
 **Purpose**: Iterative requirement clarification and execution planning
 
@@ -494,13 +479,25 @@ or add as a prompt in your work-iteration-prompts.md:
 - When requirements are unclear
 - To generate a detailed execution plan
 
+**How to Use**:
+- You can choose to start  without any preliminary input, but usually this is not recommendable. Try to fulfill some initial information
+- Better way is to open `.rdd-docs/user-story.md` file and to fulfill the sections:
+  - What is needed?
+  - Why is it needed and by whom?
+  - What are the acceptance criteria?
+  - What other considerations should be taken into account?
+- Then execute `/rdd.analyse-and-plan` command
+- When the questionnaire is generated, open again `.rdd-docs/user-story.md` and fulfill your answers to the questions and after that issue again `/rdd.analyse-and-plan` command
+- If the copilot generates more questions - repeat the previous step. Otherwise the copilot should have been generated a plan in form of prompts
+- Revise the prompts and use them manully to fulfill the `.rdd-docs/work-iteration-prompts.md` with them (or their modification if you prefer to make some tweeks)
+
 > **⚠️ WARNING**: This prompt is iterative and could consume multiple premium requests. Try to clarify the user story manually or outside VS Code with GitHub Copilot first.
 
 **What It Does**:
 1. Reads your user story from `.rdd-docs/user-story.md`
 2. Guides you through requirement clarification using a state-based workflow
-3. Generates a Requirements Questionnaire with multiple-choice questions
-4. Creates a detailed execution plan with sequenced prompts
+3. Generates a Requirements Questionnaire with multiple-choice questions in the `.rdd-docs/user-story.md` itself
+4. Creates a detailed execution plan with sequenced prompts in the `.rdd-docs/user-story.md` itself
 5. Ensures all clarity criteria are met before implementation
 
 **State-Based Workflow**:
@@ -513,7 +510,7 @@ or add as a prompt in your work-iteration-prompts.md:
 
 ## 8. Completing Iteration
 
-When all prompts are executed and documentation is updated, complete the iteration using menu option 3.
+When all prompts in `.rdd-docs/work-iteration-prompts.md` are executed and documentation is updated, complete the iteration using menu option 3.
 
 ### Using Menu Option 3
 
@@ -627,17 +624,17 @@ After completing an iteration (menu option 3), you should:
 
 ## 10. RDD Concepts
 
-The RDD framework is built on ten core concepts that guide its design and usage.
+The RDD framework is built on the following core concepts that guide its design and usage.
 
 ### 1. Simplicity
 
-**One prompt to rule them all, workspace-based approach**
+**One app and minimal number of commands to rule them all, workspace-based approach**
 
 RDD provides a single entry point (`.rdd/scripts/rdd.py` or launcher scripts) for all operations. Everything happens in the workspace directory, keeping the mental model simple.
 
 - Single menu interface for all operations
 - Single command for prompt execution (`/rdd.execute`)
-- All work contained in `.rdd-docs/` directory
+- All work results contained in `.rdd-docs/` directory
 - No complex configuration files or scattered state
 
 ### 2. Documentation
@@ -710,29 +707,14 @@ When you complete an iteration, the entire workspace is archived with metadata. 
 
 ### 8. Agnostic
 
-**Cross-platform ready (Windows, Linux, macOS)**
+**Cross-platform ready (Windows, Linux)**
 
-The framework works identically on Windows, Linux, and macOS. Python-based implementation ensures consistent behavior across all platforms.
+The framework works identically on Windows and Linux (with some tweeks should be able to run on macOS as well). Python-based implementation ensures consistent behavior across all platforms.
 
 - Same commands work everywhere
 - Launcher scripts for each platform
 - No platform-specific dependencies
 - Consistent file paths and operations
-
-### 9. Upgradeability
-
-**Easy to extend and customize**
-
-The framework is designed to be extended. Add new prompts, customize templates, integrate additional tools—the modular design supports growth.
-
-- Custom prompts in `.github/prompts/`
-- Customizable templates in `.rdd/templates/`
-- Python scripts are readable and modifiable
-- Clear separation of concerns
-
-### 10. (Reserved)
-
-**Space for future concepts as framework evolves**
 
 ---
 
@@ -829,7 +811,7 @@ Copilot, there's a test failure. What should I do?
 **Why**: Package installations can affect your system environment
 
 **Do This**:
-1. Check if you're in a virtual environment (`venv` or `conda`)
+1. Check if you're in a virtual environment (`venv` or `.venv`)
 2. Review what Copilot wants to install
 3. Consider doing installations manually
 
@@ -936,13 +918,9 @@ This auto-approves all RDD framework script executions.
 # Run tests
 pytest tests/
 
-# Check linting
+# Check linting (advanced)
 pylint src/
 flake8 src/
-
-# Verify changes
-git diff
-git status
 
 # Test manually if applicable
 python src/main.py

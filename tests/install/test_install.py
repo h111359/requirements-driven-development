@@ -90,6 +90,8 @@ class TestFileOperations:
         assert (rdd_dir / "templates" / "test.md").exists()
         # Verify user-guide.md is copied (P01 change)
         assert (rdd_dir / "user-guide.md").exists()
+        # Verify RDD-Framework-User-Guide.pdf is copied (P01 change)
+        assert (rdd_dir / "RDD-Framework-User-Guide.pdf").exists()
     
     def test_copy_seed_templates(self, mock_rdd_archive, mock_git_repo_for_install):
         """Test copying seed templates to .rdd-docs"""

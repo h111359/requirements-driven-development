@@ -1,0 +1,7 @@
+{
+  "archivedAt": "2025-11-16T10:59:49Z",
+  "branch": "fix/hh-20251116-1016-build-improving",
+  "archivedBy": "Hristo Hristov <hmhristov@outlook.com>",
+  "lastCommit": "09f76d35adb49af3e66296c472f28c097b9b0c02",
+  "lastCommitMessage": "Update README file - make it more consice. Added RDD Framework User Guide in PDF format with nice look and feel on top of user-guide.md detailed document. Excluded build script from the tracked files."
+}
