@@ -4,7 +4,7 @@
 
 <!-- Mark the current state with [x]. Only ONE state should be marked at a time. -->
 
- - [x] State 1: Not fulfilled "What is needed?"
+ - [ ] State 1: Not fulfilled "What is needed?"
  - [ ] State 2: "What is needed?" is fulfilled and not fulfilled "Why is it needed and by whom??"
  - [ ] State 3: "Why is it needed and by whom??" is fulfilled and not fulfilled "What are the acceptance criteria?"
  - [ ] State 4: All the main questions are answered - "What is needed?", "Why is it needed and by whom??", "What are the acceptance criteria?" and "What other considerations should be taken into account?" is not fulfilled
