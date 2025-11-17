@@ -530,7 +530,12 @@ The RDD framework uses a Python-based build system to create release packages:
 #### Build Script (build/build.py)
 - **Purpose**: Creates cross-platform release archives with all necessary files
 - **Version Management**: Extracts version from `.rdd/about.json` as single source of truth
-- **Interactive Version Control**: Displays current version and prompts user to either increment patch version or rebuild with same version
+- **Conflict Detection**: Checks for existing build artifacts (zip and sha256 files) before starting build
+- **Conflict Resolution**: When artifacts exist, prompts user with three options:
+  1. Stop build process (cancel)
+  2. Increment patch version (with confirmation)
+  3. Overwrite existing files (with confirmation)
+- **Interactive Version Control**: Displays current version and prompts user to either increment patch version or rebuild with same version (only if no conflicts detected)
 - **Version Persistence**: Automatically updates `.rdd/about.json` when user chooses to increment version
 - **Template Processing**: Reads README.md and installer scripts from templates/ directory with {{VERSION}} placeholder substitution
 - **Archive Creation**: Generates single `rdd-v{version}.zip` file containing:
@@ -545,17 +550,25 @@ The RDD framework uses a Python-based build system to create release packages:
 
 #### Build Process Steps
 1. Extract version from `.rdd/about.json` and validate SemVer format
-2. Display current version and prompt for version increment (patch only)
-3. Update `.rdd/about.json` with new version if user chooses to increment
-4. Create build directory structure (including .rdd-docs/)
-5. Copy framework files (prompts, scripts, templates, LICENSE)
-6. Copy VS Code settings template to .vscode/settings.json
-7. Copy seed templates to .rdd-docs/ (config.json, data-model.md, requirements.md, tech-spec.md)
-8. Generate README.md from templates/README.md with version substitution
-9. Generate install.py from scripts/install.py template with version substitution
-10. Create ZIP archive with nested directory structure
-11. Generate SHA256 checksum file
-12. Clean up temporary staging directories
+2. Check for existing build artifacts (rdd-v{version}.zip and .sha256)
+3. IF artifacts exist:
+   - Display conflict warning with list of existing files
+   - Prompt for resolution: stop, increment, or overwrite
+   - If increment chosen: confirm and update `.rdd/about.json`
+   - If overwrite chosen: confirm and proceed
+   - If stop chosen: exit cleanly
+4. ELSE (no conflicts):
+   - Display current version and prompt for version increment (patch only)
+   - Update `.rdd/about.json` if user chooses to increment
+5. Create build directory structure (including .rdd-docs/)
+6. Copy framework files (prompts, scripts, about.json, templates, LICENSE)
+7. Copy VS Code settings template to .vscode/settings.json
+8. Copy seed templates to .rdd-docs/ (config.json, data-model.md, requirements.md, tech-spec.md)
+9. Generate README.md from templates/README.md with version substitution
+10. Generate install.py from scripts/install.py template with version substitution
+11. Create ZIP archive with nested directory structure
+12. Generate SHA256 checksum file
+13. Clean up temporary staging directories
 
 ### Installation System
 The RDD framework provides Python-based cross-platform installation with GUI and command-line options:
@@ -602,6 +615,13 @@ The RDD framework provides Python-based cross-platform installation with GUI and
   - Distinguishes between framework files (overwritten) and user data (preserved)
   - Clear warnings about overwrite behavior
 - **Interactive prompts** for target directory (text or GUI)
+- **Obsolete file archiving** (upgrade scenarios):
+  - Detects obsolete files from previous RDD versions (data-model.md, folder-structure.md)
+  - Reads version from existing `.rdd/about.json` if present
+  - Creates archive directory `.rdd-docs/archive/installation_<version>/`
+  - Moves obsolete files to archive preserving original content
+  - Displays clear message explaining files replaced by tech-spec.md sections
+  - Recommends manual review for important information
 - **Automated file operations**:
   - Copy prompts to `.github/prompts/` (removes all existing `rdd.*.prompt.md` files first to ensure clean replacement)
   - Copy framework to `.rdd/`

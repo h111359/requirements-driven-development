@@ -146,6 +146,64 @@ def detect_existing_installation(target_dir: Path) -> bool:
     print_info("No existing installation found")
     return False
 
+def archive_obsolete_files(target_dir: Path):
+    """Archive obsolete documentation files from previous RDD versions"""
+    print_info("Checking for obsolete files from previous versions...")
+    
+    # Files that are obsolete (replaced by tech-spec.md sections)
+    obsolete_files = [
+        target_dir / ".rdd-docs" / "data-model.md",
+        target_dir / ".rdd-docs" / "folder-structure.md"
+    ]
+    
+    # Check if any obsolete files exist
+    files_to_archive = [f for f in obsolete_files if f.exists()]
+    
+    if not files_to_archive:
+        print_info("No obsolete files found")
+        return
+    
+    # Get version from existing installation
+    about_file = target_dir / ".rdd" / "about.json"
+    version = "unknown"
+    if about_file.exists():
+        try:
+            with open(about_file, 'r') as f:
+                about_data = json.load(f)
+                version = about_data.get('version', 'unknown')
+        except Exception as e:
+            print_warning(f"Could not read version from about.json: {e}")
+    
+    # Create archive directory
+    archive_dir = target_dir / ".rdd-docs" / "archive" / f"installation_{version}"
+    archive_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Move obsolete files to archive
+    archived_count = 0
+    for file_path in files_to_archive:
+        try:
+            dest_path = archive_dir / file_path.name
+            shutil.move(str(file_path), str(dest_path))
+            print_info(f"  Archived: {file_path.name}")
+            archived_count += 1
+        except Exception as e:
+            print_warning(f"  Could not archive {file_path.name}: {e}")
+    
+    if archived_count > 0:
+        print_success(f"Archived {archived_count} obsolete file(s) to {archive_dir}")
+        print()
+        print_warning("IMPORTANT: Obsolete documentation files have been archived:")
+        print(f"  Location: {archive_dir}")
+        print(f"  Files: {', '.join([f.name for f in files_to_archive])}")
+        print()
+        print("These files have been replaced by sections in .rdd-docs/tech-spec.md:")
+        print("  • data-model.md → Data Architecture section")
+        print("  • folder-structure.md → Project Folder Structure section")
+        print()
+        print("Please review the archived files and manually merge any important")
+        print("information into tech-spec.md if needed.")
+        print()
+
 def get_target_directory_gui() -> Optional[Path]:
     """Use Tkinter GUI to select target directory"""
     if not TKINTER_AVAILABLE:
@@ -566,6 +624,9 @@ def main():
     print()
     
     try:
+        # Archive obsolete files from previous versions
+        archive_obsolete_files(target_dir)
+        
         # Install files
         copy_prompts(source_dir, target_dir)
         copy_rdd_framework(source_dir, target_dir)
