@@ -140,6 +140,12 @@
 - **[FR-120] Data Preservation During Re-execution**: The analyse-and-plan prompt shall preserve all existing user answers, questionnaire content, and execution plan content during re-execution
 - **[FR-121] Clear Next Steps Guidance**: After each state transition, the prompt shall inform the user of the new state, action taken, and what they should do next
 - **[FR-122] User Guide PDF Distribution**: The framework shall include RDD-Framework-User-Guide.pdf in build archives and install it to .rdd/ directory alongside user-guide.md for comprehensive documentation access
+- **[FR-123] Framework Version Distribution**: The build process shall copy .rdd/about.json to the release .rdd/ directory, ensuring framework version information is included in all release archives
+- **[FR-124] Obsolete File Archiving During Upgrade**: The installer shall detect and archive obsolete documentation files (data-model.md, folder-structure.md) from previous RDD versions during upgrade, preserving them in .rdd-docs/archive/installation_<version>/ directory
+- **[FR-125] Obsolete File Notification**: The installer shall inform users when obsolete files are archived, explaining that they have been replaced by tech-spec.md sections and recommending manual review for important information
+- **[FR-126] Build Artifact Conflict Detection**: The build process shall detect existing build artifacts (zip and sha256 files) for the current version before starting the build
+- **[FR-127] Build Version Conflict Resolution**: When existing build artifacts are detected, the build process shall prompt users with options to stop, increment patch version, or overwrite existing files
+- **[FR-128] Build Increment Confirmation**: When users choose to increment the version during conflict resolution, the system shall display the new version number and require explicit confirmation before proceeding
 
 # Non-Functional Requirements
 
