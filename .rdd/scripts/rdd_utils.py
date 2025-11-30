@@ -1329,6 +1329,93 @@ def validate_prompt_status(prompt_id: str, journal_file: str = None) -> int:
         return 2
 
 
+def create_files_list(root_dir: str = '.', output_path: str = '.rdd-docs/workspace/files-list.json', exclude_names: List[str] = None) -> bool:
+    """
+    Create a JSON listing of files and directories under `root_dir` and save it to `output_path`.
+
+    - Skips directories whose names start with '.' and any name appearing in `exclude_names` (e.g., 'venv').
+    - For each entry (file or directory) records: type, name, relpath (relative to repo root), mtime (ISO8601 UTC).
+    - Recreates `output_path` if it exists.
+
+    Returns True on success, False on error.
+    """
+    try:
+        if exclude_names is None:
+            exclude_names = ['venv']
+
+        repo_root = get_repo_root()
+
+        # Normalize paths
+        root_dir_abs = os.path.abspath(os.path.join(repo_root, root_dir)) if not os.path.isabs(root_dir) else root_dir
+
+        if not os.path.exists(root_dir_abs):
+            print_error(f"Root directory does not exist: {root_dir_abs}")
+            return False
+
+        ensure_dir(os.path.dirname(output_path))
+
+        items = []
+
+        for dirpath, dirnames, filenames in os.walk(root_dir_abs, topdown=True):
+            # Filter out excluded directories in-place so walk doesn't descend into them
+            dirnames[:] = [d for d in dirnames if not d.startswith('.') and d not in exclude_names]
+
+            # Record the directory itself
+            try:
+                dir_mtime = os.path.getmtime(dirpath)
+                dir_mtime_iso = datetime.fromtimestamp(dir_mtime, timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+            except Exception:
+                dir_mtime_iso = None
+
+            rel_dir = os.path.relpath(dirpath, repo_root)
+            items.append({
+                'type': 'dir',
+                'name': os.path.basename(dirpath),
+                'relpath': rel_dir,
+                'mtime': dir_mtime_iso
+            })
+
+            for fname in filenames:
+                # Skip files that are in dot-folders (already skipped by dirnames) but keep safety
+                if fname.startswith('.'):
+                    continue
+
+                fpath = os.path.join(dirpath, fname)
+
+                try:
+                    f_mtime = os.path.getmtime(fpath)
+                    f_mtime_iso = datetime.fromtimestamp(f_mtime, timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+                except Exception:
+                    f_mtime_iso = None
+
+                rel_file = os.path.relpath(fpath, repo_root)
+                items.append({
+                    'type': 'file',
+                    'name': fname,
+                    'relpath': rel_file,
+                    'mtime': f_mtime_iso
+                })
+
+        # Ensure workspace dir exists for output
+        out_dir = os.path.dirname(output_path)
+        if out_dir:
+            ensure_dir(out_dir)
+
+        payload = {
+            'generatedAt': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+            'root': os.path.relpath(root_dir_abs, repo_root),
+            'items': items
+        }
+
+        # Write file (recreate if exists)
+        with open(output_path, 'w', encoding='utf-8') as f:
+            json.dump(payload, f, indent=2)
+
+        print_success(f"Files list written to: {output_path}")
+        return True
+    except Exception as e:
+        print_error(f"Failed to create files list: {e}")
+        return False
 if __name__ == '__main__':
     # Test the module when run directly
     print_banner("RDD Utils Test", "Testing utility functions")

@@ -479,6 +479,7 @@ The Python implementation (`rdd_utils.py`) provides utility functions organized 
    - Archiving with metadata
    - Backup and restore
    - Complete workspace clearing
+  - Workspace File Listing: `create_files_list(root_dir='.', output_path='.rdd-docs/workspace/files-list.json')` is a utility that recursively enumerates directories and files under the repository/workspace, excluding dot-folders and `venv` by default, and writes a JSON payload containing `type`, `name`, `relpath`, and `mtime` (ISO8601 UTC). It is exposed via the CLI action `python .rdd/scripts/rdd.py workspace list-files`.
 
 5. **Requirements utilities**: Requirements handling
    - Format validation

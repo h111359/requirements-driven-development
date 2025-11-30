@@ -146,6 +146,7 @@
 - **[FR-126] Build Artifact Conflict Detection**: The build process shall detect existing build artifacts (zip and sha256 files) for the current version before starting the build
 - **[FR-127] Build Version Conflict Resolution**: When existing build artifacts are detected, the build process shall prompt users with options to stop, increment patch version, or overwrite existing files
 - **[FR-128] Build Increment Confirmation**: When users choose to increment the version during conflict resolution, the system shall display the new version number and require explicit confirmation before proceeding
+ - **[FR-129] Workspace File Listing**: The framework shall provide a command to generate a JSON listing of files and directories under the repository/workspace and store it at `.rdd-docs/workspace/files-list.json`. The listing shall be recreatable, exclude directories that start with `.` and directories named `venv` by default, and include for each entry: `type` (`file` or `dir`), `name`, `relpath` (relative to repository root), and `mtime` (ISO8601 UTC). The command shall be accessible as `python .rdd/scripts/rdd.py workspace list-files`.
 
 # Non-Functional Requirements
 
