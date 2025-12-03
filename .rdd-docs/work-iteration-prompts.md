@@ -4,7 +4,7 @@
 
  - [x] [P01] Add to `.rdd/scripts/rdd.py` and `.rdd/scripts/rdd_utils.py` functionality which lists all the files, folders and recursively do the same for their subfolders and stores the result in `.rdd-docs/workspace/files-list.json`. If this file exists - recreate it. For each file write its name, relative path and the time of last change. Exclude folders and subfolders which start with "." or folders like "venv". 
   
- - [ ] [P02] Web UI
+ - [x] [P02] Web UI
 
 ### What is needed:
 
