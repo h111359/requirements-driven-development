@@ -59,20 +59,6 @@ def mock_rdd_archive(temp_install_dir):
     (archive_dir / ".rdd" / "templates" / "test.md").write_text('# Template')
     (archive_dir / ".github" / "prompts" / "test.prompt.md").write_text('# Prompt')
     
-    # Create user-guide.md in archive root (matches build.py behavior)
-    (archive_dir / "user-guide.md").write_text(
-        '# RDD Framework User Guide\n\n'
-        'This is a comprehensive user guide for the RDD framework.\n\n'
-        '## Overview\n\n'
-        'The RDD framework provides structured workflows...\n'
-    )
-    
-    # Create RDD-Framework-User-Guide.pdf in archive root (matches build.py behavior)
-    # Use minimal PDF structure for testing
-    (archive_dir / "RDD-Framework-User-Guide.pdf").write_bytes(
-        b'%PDF-1.4\n%Mock PDF for testing\n'
-    )
-    
     # Create seed templates in .rdd-docs
     config = {
         "version": "1.0.0",

@@ -330,25 +330,7 @@ def copy_rdd_framework(source_dir: Path, target_dir: Path):
     if os.name != 'nt':  # Not Windows
         rdd_script = dst_rdd / "scripts" / "rdd.py"
         rdd_script.chmod(0o755)
-    
-    # Copy user-guide.md to .rdd directory
-    src_user_guide = source_dir / "user-guide.md"
-    if src_user_guide.exists():
-        dst_user_guide = dst_rdd / "user-guide.md"
-        shutil.copy2(src_user_guide, dst_user_guide)
-        print_info("  Copied user-guide.md to .rdd/")
-    else:
-        print_warning("  user-guide.md not found in root directory")
-    
-    # Copy RDD-Framework-User-Guide.pdf to .rdd directory
-    src_pdf = source_dir / "RDD-Framework-User-Guide.pdf"
-    if src_pdf.exists():
-        dst_pdf = dst_rdd / "RDD-Framework-User-Guide.pdf"
-        shutil.copy2(src_pdf, dst_pdf)
-        print_info("  Copied RDD-Framework-User-Guide.pdf to .rdd/")
-    else:
-        print_warning("  RDD-Framework-User-Guide.pdf not found in root directory")
-    
+       
     print_success("Installed RDD framework")
 
 def install_launcher_script(source_dir: Path, target_dir: Path):

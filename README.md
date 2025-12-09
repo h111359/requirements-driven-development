@@ -74,14 +74,7 @@ sudo ln -s /usr/bin/python3 /usr/local/bin/python
 
 ### 1. User Guide
 
-- When installation is completed, you can find the following documents in `.rdd` folder:
-  - RDD-Framework-User-Guide.pdf for shorter version of the guide
-  - user-guide.md - for more details
-  
-- If you want to read these documents in advance directly from this repo - check the links: 
-  - [RDD-Framework-User-Guide.pdf](https://github.com/h111359/requirements-driven-development/blob/main/templates/RDD-Framework-User-Guide.pdf)
-  - [user-guide.md](https://github.com/h111359/requirements-driven-development/blob/main/templates/user-guide.md)
-
+- When installation is completed, you can find the user guide in the Web Portal
 
 
 ## 📄 License

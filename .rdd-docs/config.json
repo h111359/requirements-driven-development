@@ -1,6 +1,5 @@
 {
   "defaultBranch": "dev",
-  "created": "2025-10-01T07:22:00.170656+00:00",
-  "lastModified": "2025-11-15T21:56:13.839120+02:00",
-  "localOnly": "false"
+  "gitMode": "remoteGit",
+  "work-iteration-name": ""
 }

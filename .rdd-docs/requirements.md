@@ -1,229 +1,290 @@
-# Overview
-
-<OVERVIEW-PLACEHOLDER>
-
-## Terminology
-
-
-
 # General Functionalities
 
-- **[GF-03] Requirements Clarification Workflow**: The RDD framework shall provide a structured workflow for clarifying requirements through iterative questioning based on a clarity taxonomy
-- **[GF-04] Workspace Management**: The framework shall maintain a workspace directory (.rdd-docs/workspace/) for active development work on enhancements and fixes
-- **[GF-05] [DELETED]
-- **[GF-06] Requirements Merging**: The framework shall support merging clarified requirements from workspace into the main requirements.md file
-- **[GF-07] Workspace Archiving**: The framework shall archive completed workspace content for historical reference
-- **[GF-08] Fix Branch Workflow**: The framework shall provide a guided workflow for creating and documenting git branches, including naming, description, and initialization.
-- **[GF-09] [DELETED]
-- **[GF-10] Requirements Change Detection**: The framework shall provide a workflow for detecting and documenting requirements changes by comparing code with the main branch.
-- **[GF-11] Post-Merge Branch Cleanup**: The framework shall provide a workflow for cleaning up local and remote branches after PR merge, ensuring workspace synchronization with main.
-  
+- [GF-001] The framework shall define RDD (Requirement Driven Development) as a set of prompts, scripts, and workflows enabling a developer to use an LLM-based copilot for software development.
+
+- [GF-002] The framework shall persist all prompts as Markdown files authored through the Web UI to ensure full historical traceability.
+
+- [GF-003] The framework shall maintain a workspace directory (.rdd-docs/workspace/) for active development work on enhancements and fixes.
+
+- [GF-004] The framework shall archive completed workspace content for historical reference.
+
+- [GF-005] The framework shall support merging clarified requirements from the workspace into the main requirements.md file.
+
+- [GF-006] The framework shall load, apply, and update requirements automatically during each prompt execution.
+
+- [GF-007] The framework shall maintain and update the technical design and technical specification in dedicated files as part of prompt execution workflows.
+
+- [GF-008] The framework shall provide a web-based user interface for creating, editing, and managing prompts, questionnaires, implementation plans, technical specifications, file structure, requirements, and workspace/version control operations.
+
+- [GF-009] The framework shall require that all prompts are authored through the Web UI and stored as Markdown files, preventing ad-hoc prompt text in copilot chat from being treated as canonical input.
+
+- [GF-010] The framework shall provide a structured workflow for clarifying requirements through iterative questioning based on a clarity taxonomy.
+
+- [GF-011] The framework shall provide a single command, `execute`, that initiates all copilot-related operations using the `active prompt`.
+
+- [GF-012] The framework shall maintain exactly one `active prompt` file at any given time.
+
+- [GF-013] The framework shall provide all user interactions, except command execution, through a browser-based user interface rather than terminal menus.
+
+- [GF-014] The framework shall operate on both Windows and Linux with all core functionality implemented in Python.
+
+- [GF-015] The framework shall allow visualization and controlled modification of the project folder structure through the Web UI.
+
+- [GF-016] The framework shall support adding new requirements and reverse-engineering requirements from the existing project state.
+
+- [GF-017] The framework shall support git branch creation, updates from the default branch, commits, merges, workspace archiving, and workspace loading through the Web UI.
+
+- [GF-018] The framework shall provide configuration and administrative options through a dedicated administration interface in the Web UI.
+
+- [GF-019] The framework shall maintain a library of predefined framework prompts in the .rdd/prompts directory and allow loading any such prompt into the `active prompt` file.
+
+- [GF-020] The framework shall support operation in three modes—No Git, Local Git Only, and Local Git plus Remote GitHub—and enforce the selected mode across all related operations.
+
+
 # Functional Requirements
 
-- **[FR-03] Flat Workspace Structure**: The system shall store all active workspace files directly in .rdd-docs/workspace/ without enhancement-specific subfolders
-- **[FR-04] [DELETED]
-- **[FR-05] Workspace Initialization**: A script shall initialize workspace with: work-iteration-prompts.md
-- **[FR-06] Clean Main Branch Workspace**: When on main branch, workspace shall be empty or contain only standard template content to clearly indicate no active development
-- **[FR-07] Clarity Checklist Usage**: The clarification prompt shall use .rdd-docs/workspace/clarity-checklist.md as a checklist to identify unclear requirements
-- **[FR-08] Structured Questioning**: The prompt shall ask questions with predefined answer options (A, B, C, D) while allowing custom "Other" responses
-- **[FR-09] Question Formatting Standards**: All prompts shall follow guidelines from .rdd/templates/questions-formatting.md for user-friendly questioning
-- **[FR-10] Open Questions Tracking**: The system shall maintain open-questions.md with status markers: [ ] open, [?] partial, [x] answered
-- **[FR-11] [DELETED]
-- **[FR-12] [DELETED]
-- **[FR-13] [DELETED]
-- **[FR-14] [DELETED]
-- **[FR-15] Script Parameter Execution**: Scripts shall accept parameters for predictable execution from prompts without user interaction
-- **[FR-16] Auto-Approval Configuration**: The .vscode/settings.json shall configure auto-approval for .rdd/scripts/ execution
-- **[FR-17] Multiple Execution Support**: The clarification prompt shall support re-execution, building on previous work without data loss
-- **[FR-18] Workspace Backup**: The system shall create timestamped backups in .rdd-docs/workspace/.backups/ before destructive operations
-- **[FR-19] Backup Restoration**: The system shall support restoring workspace from latest backup
-- **[FR-20] Re-execution Detection**: The prompt shall detect previous sessions by checking existing content in workspace files
-- **[FR-21] [DELETED]
-- **[FR-22] Automatic ID Assignment for ADDED**: The system shall automatically assign IDs to [ADDED] requirements during wrap-up by finding the highest existing ID per section (GF/FR/NFR/TR) and incrementing from there
-- **[FR-23] [DELETED]
-- **[FR-24] [DELETED]
-- **[FR-25] [DELETED]
-- **[FR-26] [DELETED]
-- **[FR-27] [DELETED]
-- **[FR-28] [DELETED]
-- **[FR-29] Auto-Commit Before Sync**: The wrap-up process shall automatically commit all uncommitted changes before syncing with default branch to prevent merge errors
-- **[FR-30] Smart Commit Message**: The auto-commit message shall include the branch name
-- **[FR-31] Main Branch Sync Before Wrap-Up**: The wrap-up process shall fetch and merge the latest state from main branch into the current enhancement branch before merging requirements
-- **[FR-32] Conflict Detection on Sync**: The system shall detect merge conflicts during pre-wrap-up sync and halt the wrap-up process if conflicts exist
-- **[FR-33] User Notification on Conflicts**: The system shall notify the user if merge conflicts are detected and instruct them to resolve conflicts manually before proceeding
-- **[FR-34] Sync Validation**: The system shall validate that the merge from main completed successfully before proceeding with requirements merge
-- **[FR-35] Archive Directory Structure**: The system shall create .rdd-docs/archive/<branch-name-normalized>/ directories for each completed work itteration and branch respectively (each branch is related to a single work itteration)
-- **[FR-36] Complete Workspace Archive**: The system shall archive all workspace files from .rdd-docs/workspace/ preserving the complete state at time of archiving
-- **[FR-37] Archive Metadata**: The system shall create .archive-metadata file with archivedAt timestamp, branch name, archivedBy, lastCommit, and lastCommitMessage fields
-- **[FR-38] Workspace Preservation**: The system shall preserve workspace content during archiving (copy, not move) until explicitly cleared
-- **[FR-39] Branch-Workspace Alignment**: The system shall align workspace content with the current git branch
-- **[FR-40] Main Branch Fetch**: The wrap-up process shall fetch the latest changes from origin default branch before synchronization
-- **[FR-41] Latest Requirements Maintenance**: The .rdd-docs/requirements.md shall always reflect the latest committed state from main branch after wrap-up synchronization
-- **[FR-42] Complete Workspace Clearing**: The system shall remove all files and subdirectories from .rdd-docs/workspace/ when clearing workspace after archiving, ensuring no files remain from previous work
-- **[FR-43] [DELETED]
-- **[FR-44] [DELETED]
-- **[FR-45] [DELETED]
-- **[FR-46] [DELETED]
-- **[FR-47] Python-Based Script Implementation**: All RDD operations shall be implemented in Python (rdd.py) with domain-based command routing, replacing legacy bash scripts which are archived
-- **[FR-48] Cross-Platform Python Command**: All prompt files shall use the `python` command (not `python3`) to execute RDD scripts for cross-platform compatibility with Windows, Linux, and macOS
-- **[FR-49] Python Command Installation Guidance**: The README shall provide clear installation instructions for setting up the `python` command on Linux systems using `python-is-python3` package or equivalent
-- **[FR-50] Build System**: The framework shall provide a Python-based build script (build.py) that creates cross-platform release archives containing all necessary framework files, documentation, and installation scripts
-- **[FR-51] Release Archive Contents**: Release archives shall include framework files (.rdd/, .github/prompts/), VS Code settings template, README.md with installation instructions, LICENSE, and Python installer (install.py)
-- **[FR-52] [DELETED]
-- **[FR-53] Python-Based Installer**: The framework shall provide a cross-platform Python installer (install.py) that automates installation, settings merging, and .gitignore updates
-- **[FR-54] Installation Verification**: Installers shall verify prerequisites (Python version, Git availability), validate target is a Git repository, and test successful installation by running the RDD version command
-- **[FR-99] Prompt Cleanup During Installation**: The installer shall remove all existing RDD prompt files (matching pattern rdd.*.prompt.md) from .github/prompts/ before installing new prompt files to ensure clean replacement and removal of obsolete prompts from previous releases
-- **[FR-55] [DELETED]
-- **[FR-56] Configurable Default Branch**: The framework shall support configuration of the default branch through a config.json file in .rdd-docs/ directory, allowing users to specify custom default branch names beyond main/master
-- **[FR-57] Default Branch Template**: The framework shall provide a config.json template in .rdd/templates/ that is copied to .rdd-docs/ during initialization
-- **[FR-58] Interactive Branch Selection During Installation**: The initialization process shall prompt users to select their default branch through an interactive menu with options for main, dev, or custom entry
-- **[FR-59] Config Management Commands**: The framework shall provide CLI commands for managing configuration (show, get, set) accessible via the config domain
-- **[FR-60] Config-First Default Branch Detection**: The get_default_branch() function shall prioritize reading from config.json before falling back to branch detection logic
-- **[FR-61] Simplified Itteration Creation Input**: The new itteration creation workflow shall only prompt for branch name, not description, streamlining the user input process and eliminating redundant data collection
-- **[FR-62] Implementation File Documentation**: Stand-alone prompt execution shall create implementation markdown files (<PROMPT_ID>-implementation.md) in workspace to document execution details, replacing the need for separate log.jsonl logging
-- **[FR-63] Seed Template Installation**: The build process shall copy one-time seed templates (config.json, requirements.md, tech-spec.md) to .rdd-docs/ directory during installation, not during change creation
-- **[FR-64] Seed Template Validation**: The itteration creation process shall validate existence of seed templates in .rdd-docs/ and notify user if missing, indicating installation issue
-- **[FR-65] Template File Organization**: One-time seed templates shall be stored in templates/ directory (not .rdd/templates/) and included in build archives under .rdd-docs/ for direct installation
-- **[FR-66] [DELETED]
-- **[FR-67] Flexible Branch Name Validation**: Branch name validation shall provide support for spaces and forward slashes, allowing users to include custom prefixes, timestamps, or any naming convention they prefer
-- **[FR-68] [DELETED]
-- **[FR-69] Python-Only Installation**: The framework shall provide only Python-based installation (install.py) without shell or PowerShell wrapper scripts, simplifying the installation process and reducing maintenance overhead
-- **[FR-70] Python Test Runner**: The framework shall provide a Python-based test runner (run-tests.py) that executes all test types (pytest, build tests, install tests) in a unified cross-platform manner without requiring BATS or Pester frameworks
-- **[FR-71] Local-Only Mode Configuration**: The framework shall support local-only mode through a configurable `localOnly` boolean field in config.json, allowing repositories to operate without GitHub remote
-- **[FR-72] Local-Only Mode Installation Prompt**: The installation process shall prompt users to choose between GitHub remote mode (default) and local-only mode, setting the `localOnly` configuration accordingly
-- **[FR-73] Remote Operation Skipping**: When `localOnly` is set to true, the framework shall skip all remote git operations (fetch, push, pull) while maintaining full functionality for local operations
-- **[FR-74] Local-Only Mode User Feedback**: The framework shall provide clear informational messages when remote operations are skipped due to local-only mode, ensuring users understand the system behavior
-- **[FR-75] Numeric Menu Navigation**: The framework shall provide a simplified numeric menu system where users select options by entering numbers, replacing complex arrow-based navigation for improved reliability
-- **[FR-76] Interactive Version Management in Build**: The build process shall display the current version and prompt users to increment the patch version (last digit) or rebuild with the same version, with automatic about.json updates
-- **[FR-77] Build Version Persistence**: When users choose to increment the version during build, the system shall update `.rdd/about.json` with the new version number before creating release archives
-- **[FR-78] Simplified Iteration Workflow**: The framework shall provide a streamlined 4-option menu (Create new iteration, Update from default, Complete current iteration, Delete merged branches) focused on core development workflow
-- **[FR-79] Create Iteration Safety Checks**: The create iteration workflow shall verify user is on default branch and workspace is empty before allowing iteration creation
-- **[FR-80] Complete Iteration Safety Checks**: The complete iteration workflow shall verify user is NOT on default branch and workspace is NOT empty before allowing iteration completion
-- **[FR-81] Iteration Branch Naming**: The create iteration workflow shall prompt for branch name with normalization to kebab-case format, allowing user full control over naming convention without automatic prefixes
-- **[FR-82] Iteration Workspace Initialization**: The create iteration workflow shall initialize work-iteration-prompts.md at `.rdd-docs/work-iteration-prompts.md` from template, keeping workspace minimal
-- **[FR-83] Iteration Completion Archiving**: The complete iteration workflow shall archive all workspace files to `.rdd-docs/archive/<sanitized-branch-name>/` with metadata including timestamp, branch, author, and commit info
-- **[FR-100] Work Iteration Prompts Backup and Reset**: During iteration completion, the system shall copy `.rdd-docs/work-iteration-prompts.md` to `.rdd-docs/workspace/` as a backup and then reset the main file from the template to prepare for the next iteration
-- **[FR-84] Iteration Completion Commit**: The complete iteration workflow shall commit all changes with message "Completing work on <branch-name>" after archiving
-- **[FR-85] Iteration Push Prompt**: The complete iteration workflow shall prompt user to push to remote (if not local-only mode) and remind about pull request creation
-- **[FR-86] Iteration Branch Cleanup**: The delete merged branches workflow shall list all branches fully merged into default branch, allow user selection, and delete locally with optional remote deletion
-- **[FR-87] Protected Branch Exclusion**: The delete merged branches workflow shall exclude protected branches (default, main, master, dev) from deletion lists
-- **[FR-88] Legacy CLI Compatibility**: The framework shall maintain domain-based CLI commands (branch, workspace, change, git, prompt, config) for scripting and advanced users alongside simplified menu
-- **[FR-89] GUI Folder Selection**: The Python installer shall provide a Tkinter-based GUI folder browser option for selecting the installation target directory, with automatic fallback to text input if GUI is unavailable
-- **[FR-90] Installation Method Choice**: The installer shall prompt users to choose between GUI folder browser and manual path entry, defaulting to GUI when available
-- **[FR-91] Installation Description**: The installer shall display a clear description of what it will do (copy files, merge settings, update .gitignore) before prompting for target directory
-- **[FR-92] Enhanced Overwrite Detection**: The installer shall detect existing RDD installations and display detailed warnings listing specific files/directories that will be affected, distinguishing between framework files (overwritten) and user data (.rdd-docs/ preserved)
-- **[FR-93] Cross-Platform Launcher Scripts**: The framework shall provide launcher scripts (install.sh for Linux/macOS, install.bat for Windows) that check for Python availability and execute the Python installer
-- **[FR-94] Launcher Python Detection**: Launcher scripts shall check for both `python` and `python3` commands, provide clear error messages if Python is not found, and include installation guidance
-- **[FR-95] Double-Click Installation**: Windows users shall be able to double-click install.bat to launch the installer without opening a terminal; Linux/macOS users shall be able to run ./install.sh after chmod +x
-- **[FR-96] Simplified Installation Documentation**: The README.md in release archives shall present installation in two clear options: Quick Start (recommended, using launcher scripts) and Direct Python Installation, eliminating verbose manual installation instructions
-- **[FR-97] User Guide Documentation**: The framework shall provide a comprehensive user guide (`templates/user-guide.md`) that explains the complete workflow (installation, initial setup, core workflow, creating iterations, working with prompts, special prompts, completing iterations, branch merging), terminal menu options, Copilot prompt usage (including .rdd.execute, .rdd.update, .rdd.analyze), RDD concepts (simplicity, documentation, thoughtfulness, thriftiness, verbosity, incrementality, historicity, agnostic, upgradeability), and best practices/guidelines (inline throughout workflow steps: start new chat per prompt, avoid writing prompts in advance, cite full relative paths, ask Copilot to fix issues alone, be careful with installations, edit .vscode/settings.json for auto-approve), targeting intermediate developers with medium detail level and OS-specific notes inline where relevant, installed to .rdd/ directory for easy runtime access
-- **[FR-98] Consolidated Technical Documentation**: The framework shall maintain all technical documentation in a single tech-spec.md file, with Data Architecture and Project Folder Structure as dedicated sections within tech-spec.md rather than separate files
-- **[FR-101] User Story File Management**: The framework shall provide a user-story.md template that is copied to .rdd-docs/ during iteration creation and backed up to workspace then reset from template during iteration completion
-- **[FR-102] Interactive Configuration Menu**: The framework shall provide an interactive configuration menu accessible from the main menu that allows users to manage version, default branch, and local-only mode settings
-- **[FR-103] Configuration Menu Placement**: The configuration menu shall be accessible as option 5 in the main menu, with the Exit option moved to position 9 to allow for future expansion options (6, 7, 8)
-- **[FR-104] Version Increment Options**: The configuration menu shall provide separate options for incrementing major, minor, and patch version numbers with automatic reset of lower version components (e.g., incrementing major resets minor and patch to 0)
-- **[FR-105] Interactive Branch Selection**: The configuration menu shall display all available git branches and allow users to select a new default branch through numeric selection
-- **[FR-106] Local-Only Toggle**: The configuration menu shall provide a toggle option to enable or disable local-only mode, displaying the current state and updating the configuration file accordingly
-- **[FR-107] User Story State Tracking**: The user-story.md template shall include a State section with 9 distinct states for tracking progress through requirement clarification and execution planning
-- **[FR-108] State-Based Prompt Behavior**: The analyse-and-plan prompt shall detect the current state in user-story.md and adapt its behavior accordingly, performing different actions for each of the 9 states
-- **[FR-109] State Validation**: The analyse-and-plan prompt shall validate that the marked state accurately reflects the actual content in user-story.md and correct misalignments automatically
-- **[FR-110] Single State Enforcement**: The system shall ensure only ONE state is marked with [x] at any time in the user-story.md State section
-- **[FR-111] Main Questions Collection**: The analyse-and-plan prompt shall sequentially collect answers to the four main questions (What is needed, Why and for whom, Acceptance criteria, Other considerations) in States 1-4
-- **[FR-112] Questionnaire Generation**: In State 5, the prompt shall generate a Requirements Questionnaire by analyzing the user story against the clarity checklist and checking for information not already in requirements.md or tech-spec.md
-- **[FR-113] Questionnaire Answer Tracking**: In State 6, the prompt shall track which questionnaire questions have been answered using checkbox markers and inform the user of remaining unanswered questions
-- **[FR-114] Completeness Confirmation**: In State 7, the prompt shall review all questionnaire answers for completeness, identify potential gaps, and ask the user if more questions are needed before proceeding
-- **[FR-115] Execution Plan Generation**: In State 8, the prompt shall generate a detailed execution plan with properly sequenced P IDs starting from the lowest available ID in work-iteration-prompts.md
-- **[FR-116] Plan Detail Confirmation**: The prompt shall ask the user to confirm the execution plan is detailed enough, offering options to revise for more detail, add more questions, or approve the plan
-- **[FR-117] Plan Revision Support**: In State 9, the prompt shall support revising the execution plan by breaking down prompts, combining prompts, or adding more requirement questions based on user feedback
-- **[FR-118] Cross-Reference Existing Documentation**: Before generating questions, the prompt shall check if answers already exist in requirements.md or tech-spec.md to avoid redundant questions
-- **[FR-119] Question Format Compliance**: All generated questions shall follow the format guidelines in questions-formatting.md with multiple choice options (a, b, c, z for "Other")
-- **[FR-120] Data Preservation During Re-execution**: The analyse-and-plan prompt shall preserve all existing user answers, questionnaire content, and execution plan content during re-execution
-- **[FR-121] Clear Next Steps Guidance**: After each state transition, the prompt shall inform the user of the new state, action taken, and what they should do next
-- **[FR-122] User Guide PDF Distribution**: The framework shall include RDD-Framework-User-Guide.pdf in build archives and install it to .rdd/ directory alongside user-guide.md for comprehensive documentation access
-- **[FR-123] Framework Version Distribution**: The build process shall copy .rdd/about.json to the release .rdd/ directory, ensuring framework version information is included in all release archives
-- **[FR-124] Obsolete File Archiving During Upgrade**: The installer shall detect and archive obsolete documentation files (data-model.md, folder-structure.md) from previous RDD versions during upgrade, preserving them in .rdd-docs/archive/installation_<version>/ directory
-- **[FR-125] Obsolete File Notification**: The installer shall inform users when obsolete files are archived, explaining that they have been replaced by tech-spec.md sections and recommending manual review for important information
-- **[FR-126] Build Artifact Conflict Detection**: The build process shall detect existing build artifacts (zip and sha256 files) for the current version before starting the build
-- **[FR-127] Build Version Conflict Resolution**: When existing build artifacts are detected, the build process shall prompt users with options to stop, increment patch version, or overwrite existing files
-- **[FR-128] Build Increment Confirmation**: When users choose to increment the version during conflict resolution, the system shall display the new version number and require explicit confirmation before proceeding
- - **[FR-129] Workspace File Listing**: The framework shall provide a command to generate a JSON listing of files and directories under the repository/workspace and store it at `.rdd-docs/workspace/files-list.json`. The listing shall be recreatable, exclude directories that start with `.` and directories named `venv` by default, and include for each entry: `type` (`file` or `dir`), `name`, `relpath` (relative to repository root), and `mtime` (ISO8601 UTC). The command shall be accessible as `python .rdd/scripts/rdd.py workspace list-files`.
+- [FR-001] The system shall store all active workspace files in .rdd-docs/workspace/
+
+- [FR-002] The system shall initialize each work iteration by creating a single `active prompt` file located at `.rdd-docs/work-iteration-prompt.md`, containing exactly one prompt to be executed.
+
+- [FR-005] All generated questions shall follow the question-formatting standards defined in `.rdd/templates/questions-formatting.md`.
+
+- [FR-018] The system shall create a dedicated archive directory `.rdd-docs/archive/<work-iteration-name>/` for each completed work iteration.
+
+- [FR-019] The system shall archive all workspace folder files during iteration completion and preserve their complete state prior to workspace reset.
+
+- [FR-021] The system shall preserve workspace folder files during archiving by copying them instead of moving them until a final clearing action is triggered.
+
+- [FR-024] After wrap-up synchronization, the system shall ensure `.rdd-docs/requirements.md` accurately reflects the committed state of the default branch.
+
+- [FR-025] The system shall clear the workspace folder after archiving by removing all files and subdirectories inside `.rdd-docs/workspace/`.
+
+- [FR-026] All RDD framework operations shall be implemented in Python.
+
+- [FR-027] [TO-BE-REUSED]
+
+- [FR-028] The system documentation shall include Linux installation guidance for enabling the `python` command using the appropriate system package.
+
+- [FR-029] The system shall provide a build script that produces cross-platform release archives containing framework files, templates, documentation, and installation scripts.
+
+- [FR-030] Release archives shall include all relevant framework directories, configuration templates, installation scripts, and documentation required for correct setup.
+
+- [FR-031] The system shall include a Python-based installer that automates installation tasks including copying files, merging template settings, and updating .gitignore.
+
+- [FR-032] The installer shall verify prerequisites including Python availability, Git availability (when applicable to mode), and the validity of the installation target.
+
+- [FR-033] The installer shall remove obsolete RDD prompt files from `.github/prompts/` prior to deploying updated prompt templates.
+
+- [FR-035] The initialization process shall copy a default config.json template into `.rdd-docs/` when setting up a new installation.
+
+- [FR-037] The framework shall provide CLI commands on top of the UI interface.
+
+- [FR-040] When executing standalone prompts, the system shall create implementation files in `.rdd-docs/workspace/` that store the prompt, analysis, plan, and other execution-related information.
+
+- [FR-041] The build process shall install one-time template files (config.json, requirements.md, tech-spec.md) to `.rdd-docs/` during installation.
+
+- [FR-042] The work-iteration creation workflow shall validate presence of required seed templates and notify the user if they are missing.
+
+- [FR-044] Branch-name validation shall support spaces and forward slashes to allow custom naming conventions.
+
+- [FR-045] The framework shall depend only on Python-based installation, omitting shell-based or PowerShell-based installers.
+
+- [FR-046] The system shall provide a Python-based test runner capable of executing all test types across platforms without requiring third-party shell testing frameworks.
+
+- [FR-047] The system shall support a local-only mode controlled via `config.json`, suppressing all remote git operations.
+
+- [FR-049] The system shall provide a functionality for creation of a JSON listing of the repository or workspace files via a dedicated command, storing the output in `.rdd-docs/workspace/files-list.json`.
+
+- [FR-050] The system shall treat `.rdd/prompts/` as the authoritative storage location for reusable prompt templates, with `.github/prompts/` containing a single GitHub Copilot default prompt file named `rdd.execute.proimpt.md` which defines the referred in this requirements document `execute command`.
+
+- [FR-051] The `execute command` shall follow an ordered workflow including reading the `active prompt`, generating implementation artifacts, loading documentation, resolving missing context through questionnaires, producing plans, executing those plans, updating documentation, and marking the prompt as completed.
+
+- [FR-052] The Web UI shall provide a Prompt Management page enabling loading, editing, saving, questionnaire interaction, and plan review for the `active prompt`. 
+
+- [FR-053] The Web UI shall provide a Technical Specification page enabling editing of structured technical design JSON `.rdd-docs/specifications/technical-design.md` using a configuration-driven interactive form. 
+
+- [FR-054] The Web UI shall provide a File & Folder Structure page enabling visualization and controlled modification of the project's directory structure documented in `.rdd-docs/specifications/files-and-folders.md`. 
+
+- [FR-055] The Web UI shall provide a Requirements page enabling generation of requirement-creation prompts and reverse engineering of requirements in `.rdd-docs/requirements.md` from project files. 
+
+- [FR-056] The Web UI shall provide a Version Control & Workspace Management page enabling git branch operations, commits, merges, workspace archiving, and workspace loading. 
+
+- [FR-057] The Web UI shall provide an Administration page enabling configuration of framework settings in `.rdd-docs/config.json` including operational mode, and general administrative controls. 
+
+- [FR-058] The Web UI shall provide access to predefined prompt files stored in `.rdd/prompts/`, enabling users to load such prompts into the `active prompt` for execution. 
+
+- [FR-059] When the `execute command` generates a questionnaire, the Web UI shall present the questionnaire with input fields and persist responses back to the implementation file. [TO-BE-CLARIFIED]
+
+- [FR-060] After the e`execute command` generates an implementation plan, the Web UI shall display the plan, allow edits, and provide approval or regeneration options. 
+
+
+- [FR-061] The Web UI shall display technical design, requirements, and file structure content retrieved from their respective JSON or Markdown sources and allow controlled user edits.
+
+- [FR-062] The Web UI shall present implementation plans produced by the `execute  command`, allow editing of these plans, and support approval or regeneration when appropriate.
+
+- [FR-063] The installer shall request user confirmation before performing operations that overwrite existing framework files.
+
+- [FR-064] The installer shall provide a clear explanation of planned actions—including file copying, settings merging, and `.gitignore` updates—before making changes to the target directory.
+
+- [FR-065] The installer shall detect existing RDD installations and display a summary of files and directories that will be overwritten or preserved.
+
+- [FR-066] The installer shall allow the user to select between a GUI folder browser and manual path entry when choosing an installation target directory.
+
+- [FR-067] The installer shall prompt the user to select an operational git mode (`noGit`, `localGit`, or `remoteGit`) and store it in `config.json`.
+
+- [FR-068] The system shall check existing content in `requirements.md` and `tech-spec.md` before generating clarification questions to avoid redundant queries.
+
+
+
 
 # Non-Functional Requirements
 
-- **[NFR-03] Developer Experience**: The framework shall provide smooth developer experience, minimizing technical overhead for requirement clarification
-- **[NFR-04] Visual Clarity**: Scripts shall use color-coded output (info: blue, success: green, warning: yellow, error: red) for clarity
-- **[NFR-05] Progress Indication**: Multi-step processes shall display progress indicators (e.g., "Step 2/3", "Clarification [1/N]")
-- **[NFR-06] Clear Error Messages**: Error messages shall include specific problem description and suggested remediation steps
-- **[NFR-07] [DELETED]
-- **[NFR-08] [DELETED]
-- **[NFR-09] Template-Based Files**: New files shall be generated from templates in .rdd/templates/ for consistency
-- **[NFR-10] Version Documentation**: All prompts shall include version number and last updated date
-- **[NFR-11] Data Preservation**: Re-execution of prompts shall preserve existing data unless explicitly reset by user
-- **[NFR-12] Backup Safety**: All destructive operations shall create backups before proceeding
-- **[NFR-13] Validation Before Action**: Scripts shall validate prerequisites before executing operations
-- **[NFR-14] Graceful Failure**: Scripts shall handle errors gracefully and provide recovery guidance
-- **[NFR-15] Multi-Developer Support**: The framework shall support multiple developers working on different features simultaneously
-- **[NFR-16] Conflict Prevention**: The workspace structure shall minimize merge conflicts between developers
-- **[NFR-17] DELETED
-- **[NFR-18] Fix Documentation Template**: The framework shall provide a template for documenting fixes, including What, Why, and Acceptance Criteria sections, to ensure consistency and traceability.
-- **[NFR-19] Interactive Menu User Experience**: Interactive menus shall provide visual feedback with arrow key navigation, clear selection indicators using Unicode box drawing characters (╔═╗╚╝║╠╣), bold and reverse video for highlighted items, and support for both curses-based and numeric fallback input methods
-- **[NFR-20] Simplified Installation Process**: The installation process shall be straightforward and consistent across platforms, using only Python (install.py) with clear documentation on running the installer from the command line
+- [NFR-001] The framework shall provide smooth developer experience, minimizing technical overhead for requirement clarification
+
+- [NFR-002] Error messages shall include specific problem description and suggested remediation steps
+
+- [NFR-003] New files shall be generated from templates in `.rdd/templates/` for consistency
+
+- [NFR-004] All destructive operations shall create backups before proceeding
+
+- [NFR-005] Scripts shall validate prerequisites before executing operations
+
+- [NFR-006] Scripts shall handle errors gracefully and provide recovery guidance
+
+- [NFR-007] CLI Interactive menus shall provide visual feedback with arrow key navigation, clear selection indicators using Unicode box drawing characters (╔═╗╚╝║╠╣), bold and reverse video for highlighted items, and support for both curses-based and numeric fallback input methods
+
+- [NFR-008] The installation process shall be straightforward and consistent across platforms, using only Python (install.py) 
+
+- [NFR-009] The installation process shall provide clear explanations of the required decisions and actions taken from the system while running the installer from the command line
+
+- [NFR-010] The Web UI shall provide a modern, responsive interface optimized for desktop browsers, with clear navigation between pages, real-time feedback on operations, color-coded status indicators (success: green, error: red, warning: yellow, info: blue), and graceful error handling with user-friendly messages.
+
+- [NFR-011] The framework’s VS Code integration shall recommend RDD prompt file of `execute command` using the `chat.promptFilesRecommendations` setting for improved discoverability.
+
+- [NFR-012] The framework’s VS Code integration shall configure terminal auto-approval for `.rdd/scripts/` using the `chat.tools.terminal.autoApprove` setting.
+
+- [NFR-013] The framework’s VS Code integration shall associate all `*.jsonl` files with the `jsonlines` language for improved editing experience.
+
+- [NFR-014] The Web UI and installers shall provide clear, color-coded feedback for success, error, warning, or informational messages to improve user comprehension.
+
+- [NFR-015] Interactive menus used in CLI components shall support curses-based navigation with fallback to numeric input when curses is not available.
+
+- [NFR-016] The test runner shall provide colored output indicating success, failure, and warnings to improve readability during test execution.
+
+- [NFR-017] The installation process shall provide clear, user-friendly explanations of all required decisions and actions during installation.
+
+- [NFR-018] All Web UI pages shall be optimized for desktop usage, offering clear navigation, real-time feedback on operations, and graceful handling of errors with informative messages.
+
+- [NFR-019] All destructive operations (workspace clearing, iteration completion, overwriting files during installation) shall present warnings to the user before proceeding.
+
+
 
 # Technical Requirements
 
-- **[TR-03] [DELETED]
-- **[TR-04] [DELETED]
-- **[TR-05] [DELETED]
-- **[TR-06] Python Scripts**: All automation scripts shall be implemented in Python for cross-platform compatibility (legacy bash scripts archived)
-- **[TR-07] Exit on Error**: Scripts shall use proper error handling to exit immediately on command failure
-- **[TR-08] JQ Dependency**: Legacy bash scripts used jq for JSON parsing; Python implementation uses native json module
-- **[TR-09] Executable Permissions**: All script files shall have executable permissions (chmod +x)
-- **[TR-10] Templates Location**: All file templates shall be stored in .rdd/templates/
-- **[TR-11] Scripts Location**: All automation scripts shall be stored in .rdd/scripts/
-- **[TR-12] Prompts Location**: All prompt files shall be stored in .github/prompts/
-- **[TR-13] Workspace Location**: Active workspace shall be at .rdd-docs/workspace/
-- **[TR-14] Archive Location**: Completed workspaces shall be archived in .rdd-docs/archive/<branch-name-normalized>/
-- **[TR-15] Prompt Recommendations**: VS Code settings shall configure chat.promptFilesRecommendations for RDD prompts
-- **[TR-16] Terminal Auto-Approve**: VS Code settings shall configure chat.tools.terminal.autoApprove for .rdd/scripts/
-- **[TR-17] JSONL File Association**: VS Code settings shall associate *.jsonl files with jsonlines language
-- **[TR-18] Editor Rulers**: VS Code settings shall configure editor rulers at 80 and 120 characters
-- **[TR-19] Step-Based Structure**: Prompts shall use numbered steps (S01, S02, etc.) for clear execution flow
-- **[TR-20] Script Integration**: Prompts shall call scripts for actions rather than implementing logic directly
-- **[TR-21] Context Section**: Prompts shall include comprehensive context section describing workspace structure and available tools
-- **[TR-22] Rules Section**: Prompts shall define clear rules for behavior and constraints
-- **[TR-23] Error Handling Section**: Prompts shall include specific error handling guidance with examples
-- **[TR-24] Fix Branch Management Script**: The framework shall provide a Bash script to automate fix branch creation, documentation, validation, wrap-up, and cleanup.
-- **[TR-25] Requirements Analysis Script**: The framework shall provide a Bash script to automate requirements analysis, file comparison, and impact detection.
-- **[TR-26] Merged Branch Deletion Tool**: The framework shall provide an interactive Bash script for cleaning up merged git branches, supporting both local and remote deletion.
-- **[TR-27] PowerShell Script Support**: The framework shall provide PowerShell (.ps1) equivalents of all Bash scripts for Windows compatibility, maintaining identical functionality and structure.
-- **[TR-28] Cross-Platform Script Organization**: Linux/Bash scripts shall be stored in `src/linux/.rdd/scripts/` and Windows/PowerShell scripts in `src/windows/.rdd/scripts/`, with parallel folder structures for templates and prompts.
-- **[TR-29] Python 3.7+ Requirement**: The RDD framework shall require Python 3.7 or higher for running all automation scripts
-- **[TR-30] Platform-Agnostic Python Command**: All prompt files and documentation shall use `python` (not `python3`) as the command to invoke Python scripts, ensuring compatibility across Windows, Linux, and macOS platforms
-- **[TR-31] Build Artifact Structure**: Build archives shall follow naming convention `rdd-v{version}.zip` with single cross-platform archive containing nested directory structure preserving original file organization
-- **[TR-32] Checksum Generation**: Build process shall generate SHA256 checksum files (.sha256) for all release archives using format compatible with standard sha256sum verification tools
-- **[TR-33] Version Extraction**: Build system shall extract version information from `.rdd/about.json` and validate it matches semantic versioning format (MAJOR.MINOR.PATCH)
-- **[TR-34] Archive Cleanup**: Build process shall remove temporary staging directories after archive creation, keeping only final zip archive and checksum file in build/ directory
-- **[TR-35] Settings Merge Logic**: Installer shall intelligently merge VS Code settings by appending unique array values, merging object keys, and replacing editor-specific settings that require exact RDD configuration
-- **[TR-36] Configuration File Format**: The framework shall use JSON format for configuration files (config.json) containing defaultBranch, created, and lastModified fields; version information is stored separately in .rdd/about.json
-- **[TR-37] Configuration File Location**: The config.json file shall be stored in .rdd-docs/ directory as part of project documentation and version-controlled with the repository
-- **[TR-37a] Framework Version File**: The framework version shall be stored in .rdd/about.json file containing a version field using semantic versioning format (MAJOR.MINOR.PATCH)
-- **[TR-38] Curses-Based Interactive Menus**: Interactive menus shall use Python's curses library for visual navigation with fallback to numeric input when curses is unavailable
-- **[TR-39] Config Helper Functions**: The framework shall provide utility functions (get_rdd_config, set_rdd_config, get_rdd_config_path) for reading and writing configuration values
-- **[TR-40] Build Template Management**: Build scripts shall read installer scripts (install.py, install.sh, install.ps1) and README.md from templates/ directory with version placeholder substitution
-- **[TR-41] Template Placeholder Format**: Template files in templates/ directory shall use {{VERSION}} as placeholder for version substitution during build process
-- **[TR-42] Seed Templates Directory Structure**: Build archives shall include .rdd-docs/ directory with pre-seeded template files for direct installation to project .rdd-docs/ directory
-- **[TR-43] Testing Framework Structure**: The framework shall maintain tests in a dedicated tests/ directory with subdirectories organized by test type (python/, build/, install/, shell/, powershell/)
-- **[TR-44] Python Test Framework**: The framework shall use pytest as the primary testing framework for Python code with pytest-cov for coverage reporting
-- **[TR-45] Shell Script Testing**: The framework shall use BATS (Bash Automated Testing System) for testing shell scripts on Linux/macOS platforms
-- **[TR-46] PowerShell Testing**: The framework shall use Pester framework for testing PowerShell scripts on Windows platforms
-- **[TR-47] Test Isolation**: All tests shall use temporary directories and mock objects to prevent modification of actual project files and ensure test independence
-- **[TR-48] Test Dependencies**: Test dependencies shall be specified in tests/requirements.txt and installed in an isolated virtual environment
-- **[TR-49] Virtual Environment for Tests**: The framework shall provide a scripts/setup-test-env.py script to create and maintain a .venv virtual environment specifically for test execution
-- **[TR-50] Test Fixture Completeness**: Test fixtures shall include all required template files (config.json, requirements.md, tech-spec.md) to match production build requirements
-- **[TR-51] CI/CD Testing**: The framework shall use GitHub Actions to run tests automatically on push and pull request events, executing only the Python test runner
-- **[TR-52] Test Coverage Reporting**: The test framework shall generate code coverage reports for Python code and report coverage metrics in CI/CD pipelines
-- **[TR-53] Colored Test Output**: Test runner scripts shall provide colored output (green for success, red for failure, yellow for warnings) to improve readability
-- **[TR-54] Flexible Branch Validation for Wrap-Up**: The wrap-up process shall reject only protected branches (default branch from config, "main", or "master") and accept all other branch names regardless of prefix or format
+- [TR-001] The framework shall implement all automation functionality in Python using a domain-based command routing architecture.
 
-```
+- [TR-002] The framework shall use the `python` command (not `python3`) for executing all internal scripts to ensure cross-platform compatibility.
 
+- [TR-003] [TO-BE-REUSED]
+
+- [TR-005] The framework shall implement the active prompt file at `.rdd-docs/work-iteration-prompt.md` as a single-prompt input source whose contents are consumed entirely by the `execute` command.
+
+- [TR-006] The framework shall use `.rdd-docs/specifications/` for storing technical design files. 
+
+- [TR-007] A technical design form JSON config file `.rdd/config/technical-design-form.json` shall define the content of Technical Specification page and should support definition of form elements with predefined options, multi-select fields, free-text values, conditional logic, and a default-answer mechanism. 
+
+- [TR-008] Web UI server shall be implemented using Python standard-library components (such as `http.server`) or equivalent, binding to `127.0.0.1` on an available port and automatically opening the user's default browser. 
+
+- [TR-009] The Web UI server shall expose REST-like JSON endpoints for reading, writing, and updating files in `.rdd-docs/` and for invoking RDD commands.
+
+- [TR-010] The Web UI server shall generate a session token on startup and require it for all operations to prevent unauthorized access. 
+
+- [TR-011] The template files which shall serve to be seeded the .rdd-docs folder (configuration templates, requirements template, technical specification templates) during the installation should be stored in the `templates/` directory and the installation script should copy them to the respective locations under `.rdd-docs/` during installation.
+
+- [TR-012] The installer shall be implemented as a Python script that automates installation steps, including copying framework files, and updating `.gitignore`.
+
+- [TR-013] The installer shall validate prerequisites including Python availability, Git availability when the configured mode requires it, and validity of the installation target directory.
+
+- [TR-014] The installer shall support selecting the installation target directory via a Tkinter folder browser with fallback to manual text entry when GUI mode is unavailable.
+
+- [TR-015] The installer shall warn users when an existing RDD installation is detected and list the files that will be overwritten or preserved.
+
+- [TR-016] The installer shall archive all the files from the existing RDD version folders into `.rdd-docs/archive/replaced_version_files_<timestamp>/` during upgrades. This includes at least folders `.github`, `.rdd`, `.rdd-docs`, `.vscode` (if exists)
+
+- [TR-017] The system shall store the currently installed framework version in `.rdd/config/about.json` using semantic versioning (MAJOR.MINOR.PATCH).
+
+- [TR-018] The system shall implement a build script (`build.py`) that generates cross-platform release zip file following the naming convention `rdd-v{version}.zip`.
+
+- [TR-019] The build script shall generate together with the zip file a SHA256 checksum file for each release archive and ensure compatibility with standard `sha256sum` verification tools.
+
+- [TR-020] The build script shall detect when build artifacts for the same version already exist and allow the user to stop, overwrite, or increment the patch version.
+
+- [TR-021] The build script shall substitute version placeholders (e.g., `{{VERSION}}`) in template files when constructing installation assets.
+
+- [TR-022] The framework shall provide seed template files for `config.json`, `requirements.md`, and `tech-spec.md` in `.rdd-docs/` after installation.
+
+- [TR-023] The framework shall provide a command to generate a JSON listing of repository or workspace files and store it at `.rdd-docs/workspace/files-list.json`, excluding directories beginning with `.` and directories named `venv`, and listing for each entry: `type` (file type - like 'txt', 'md', 'csv', 'xlsx', 'pdf', 'json', 'py', 'html', 'js', 'css' and others), `name` (file name), `relpath` (relative path), and `mtime` (modification time) in ISO8601 UTC format.
+
+- [TR-024] The JSON file-listing command shall be accessible via `python .rdd/scripts/rdd.py workspace list-files`.
+
+- [TR-025] The Web UI shall provide pages for managing prompts, technical specifications, folder structures, requirements, and version-control workflows, backed by the REST endpoints and reflecting the interaction model defined in the Product Requirements Specification.
+
+- [TR-026] The Web UI shall load and save `.rdd-docs/work-iteration-prompt.md`, persist questionnaire responses, and present implementation plans generated by the `execute command`. 
+
+- [TR-027] The framework shall implement safety checks that prevent iteration creation unless the workspace is empty.
+
+- [TR-028] The framework shall archive each completed iteration in `.rdd-docs/archive/<iteration-name>/`.
+
+- [TR-029] The configuration file `.rdd-docs/config.json` shall support a `gitMode` field with the values `noGit`, `localGit`, and `remoteGit`, and all git-related operations shall respect the configured mode.
+
+- [TR-030] The framework shall provide utility functions for reading and updating configuration values, including but not limited to `get_rdd_config`, `set_rdd_config`, and configuration-path helpers.
+
+- [TR-031] The framework shall support extracting and displaying repository file lists, technical design content, and requirements content through Web UI components for visualization and editing.
+
+- [TR-032] The test system shall be implemented entirely in Python using pytest for Python tests with optional coverage reporting, and shall avoid dependencies on shell-based test frameworks.
+
+- [TR-033] The system shall maintain its test fixtures in a `tests/` directory using isolated temporary directories to prevent modification of project files during test execution.
+
+- [TR-034] The testing environment shall be created using a Python script that constructs and manages a dedicated virtual environment for testing.
+
+- [TR-035] The test environment shall install dependencies listed in `tests/requirements.txt` and execute builds and installation tests in isolation from the developer’s system environment.
+
+- [TR-036] All automation scripts shall be stored in the `.rdd/scripts/` directory.
+
+- [TR-037] The framework shall use `.rdd/prompts/` for framework templates and user-created prompts. The Web UI shall look in `.rdd/prompts/` for loading prompt templates.
+
+- [TR-038] CI/CD Testing: The system shall use GitHub Actions to run tests automatically on push and pull request events, executing only the Python test runner. For the purpose shall exist a file `.github/workflows/tests.yml` 
+
+- [TR-039] The CI/CD pipeline shall include a GitHub Actions workflow file `.github/workflows/tests.yaml` configured to run on `pull_request` events targeting the `dev` branch and on manual `workflow_dispatch` triggers.
+
+- [TR-040] The `.github/workflows/tests.yaml` workflow shall define a job `all-tests-linux` that runs on `ubuntu-latest`, checks out the repository, installs Python 3.9 using `actions/setup-python@v5`, installs BATS, sets up the test environment by running `python scripts/setup-test-env.py`, and executes all tests by running `python scripts/run-tests.py`.
+
+- [TR-041] The `all-tests-linux` job in `.github/workflows/tests.yaml` shall generate a Python test coverage report by activating the `.venv` virtual environment, running `pytest tests/python/ --cov=.rdd/scripts --cov=scripts --cov-report=xml --cov-report=term`, and producing a `coverage.xml` file.
+
+- [TR-042] The `all-tests-linux` job in `.github/workflows/tests.yaml` shall upload the generated `coverage.xml` report using `codecov/codecov-action@v4` with appropriate flags and name metadata, and this upload step shall execute even when previous steps fail.
+
+- [TR-043] The `.github/workflows/tests.yaml` workflow shall define a job `all-tests-windows` that runs on `windows-latest`, checks out the repository, installs Python 3.9 using `actions/setup-python@v5`, installs the Pester module using PowerShell, sets up the test environment by running `python scripts/setup-test-env.py`, and executes all tests by running `python scripts/run-tests.py`.
+
+- [TR-044] The `.github/workflows/tests.yaml` workflow shall define a job `test-summary` that runs on `ubuntu-latest`, depends on the completion of `all-tests-linux` and `all-tests-windows`, executes regardless of their success or failure, and prints the final result status of both jobs to the workflow logs.
+
+- [TR-045] The test framework shall generate code coverage reports for Python code and report coverage metrics in CI/CD pipelines
+
+- [TR-046] Test runner scripts shall provide colored output (green for success, red for failure, yellow for warnings) to improve readability
+
+- [TR-047] The system shall provide a config.json template in /templates/ that is copied to .rdd-docs/ during installation
+
+- [TR-048] The system documentation shall provide installation guidance for enabling the `python` command on Linux systems using distribution-appropriate packages such as `python-is-python3`.
+
+- [TR-049] Release archives shall include framework directories, GitHub Copilot prompt templates, VS Code settings templates, the README, LICENSE, and the Python installer script.
+
+- [TR-050] The framework shall include cross-platform installation scripts (`install.sh` for Linux/macOS and `install.bat` for Windows) that check for Python availability and execute the Python installer.
+
+- [TR-051] The build process shall copy `.rdd/config/about.json` into the release archive, ensuring that framework version metadata is included in all builds.
+
+- [TR-052] During upgrades, the installer shall detect obsolete files from previous RDD versions and archive them in `.rdd-docs/archive/installation_<version>/`.
+
+- [TR-053] The installer shall inform the user when obsolete files are archived.
+
+- [TR-054] The build process shall detect existing artifacts (ZIP and checksum files) for the current version before starting a build.
+
+- [TR-055] When existing build artifacts are detected, the build process shall prompt the user to stop, overwrite the artifacts, or increment the patch version.

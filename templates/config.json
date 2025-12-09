@@ -1,6 +1,5 @@
 {
-  "defaultBranch": "main",
-  "localOnly": false,
-  "created": "",
-  "lastModified": ""
+  "defaultBranch": "",
+  "gitMode": "",
+  "work-iteration-name": ""
 }

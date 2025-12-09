@@ -1,7 +1,3 @@
-# Overview
-
-<OVERVIEW-PLACEHOLDER>
-
 # General Functionalities
 
 # Functional Requirements
