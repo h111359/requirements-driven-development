@@ -1,0 +1,2220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>System Architecture Decision Questionnaire</title>
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --sidebar-bg: #1f2933;
+      --sidebar-text: #e5e7eb;
+      --sidebar-accent: #60a5fa;
+      --card-bg: #ffffff;
+      --border: #d1d5db;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --danger: #b91c1c;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    #app {
+      display: flex;
+      width: 100%;
+    }
+
+    /* Sidebar Navigation */
+    #sidebar {
+      width: 260px;
+      background: var(--sidebar-bg);
+      color: var(--sidebar-text);
+      padding: 16px 12px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+      max-height: 100vh;
+      overflow-y: auto;
+    }
+
+    #sidebar h1 {
+      font-size: 18px;
+      margin: 0 0 4px;
+    }
+
+    #sidebar .subtitle {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .nav-group-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #9ca3af;
+      margin: 8px 0 4px;
+    }
+
+    .nav-group {
+      border-top: 1px solid rgba(156, 163, 175, 0.3);
+      padding-top: 8px;
+      margin-top: 4px;
+    }
+
+    .nav-item {
+      font-size: 13px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      margin-bottom: 2px;
+      cursor: pointer;
+      display: block;
+      color: var(--sidebar-text);
+    }
+
+    .nav-item:hover {
+      background: rgba(148, 163, 184, 0.35);
+    }
+
+    .nav-item.active {
+      background: rgba(37, 99, 235, 0.28);
+      color: #f9fafb;
+    }
+
+    .nav-footer {
+      font-size: 11px;
+      margin-top: auto;
+      color: #9ca3af;
+    }
+
+    /* Main Layout */
+    #main {
+      flex: 1;
+      padding: 16px 24px 32px;
+      overflow-y: auto;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .top-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .top-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Actions */
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      font-size: 13px;
+      padding: 6px 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #f9fafb;
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+    }
+
+    .btn:hover {
+      filter: brightness(0.97);
+    }
+
+    .btn span.icon {
+      font-size: 14px;
+    }
+
+    input[type="file"] {
+      font-size: 12px;
+    }
+
+    /* Sections */
+    .section-block {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .section-block summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 14px;
+      background: #f3f4f6;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .section-block summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .section-title {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .section-subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .section-body {
+      padding: 10px 14px 12px;
+      font-size: 13px;
+    }
+
+    .question-group-title {
+      font-weight: 600;
+      margin: 10px 0 6px;
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    .question {
+      margin-bottom: 10px;
+      padding: 8px 8px;
+      border-radius: 6px;
+      background: #f9fafb;
+    }
+
+    .question-label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+
+    .question-helper {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .inline-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .inline-options label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-family: inherit;
+    }
+
+    textarea {
+      min-height: 52px;
+      resize: vertical;
+    }
+
+    .subsection {
+      margin-left: 16px;
+      margin-top: 8px;
+      border-left: 2px solid var(--accent-soft);
+      padding-left: 10px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 900px) {
+      #sidebar {
+        display: none;
+      }
+      #main {
+        padding: 12px 12px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <aside id="sidebar">
+    <div>
+      <h1>Architecture Questionnaire</h1>
+      <div class="subtitle">system-questionnaire.html<br>Offline, no servers.</div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">High-level</div>
+      <a href="#section-project-scale" class="nav-item" data-target-id="section-project-scale">Project scale</a>
+      <a href="#section-product-type" class="nav-item" data-target-id="section-product-type">Product type</a>
+      <a href="#section-criticality" class="nav-item" data-target-id="section-criticality">Criticality</a>
+      <a href="#section-expected-lifetime" class="nav-item" data-target-id="section-expected-lifetime">Expected lifetime</a>
+      <a href="#section-enterprise-constraints" class="nav-item" data-target-id="section-enterprise-constraints">Enterprise constraints</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Architecture</div>
+      <a href="#section-cloud-strategy" class="nav-item" data-target-id="section-cloud-strategy">Cloud strategy</a>
+      <a href="#section-compute" class="nav-item" data-target-id="section-compute">Compute</a>
+      <a href="#section-frontend" class="nav-item" data-target-id="section-frontend">Frontend</a>
+      <a href="#section-backend" class="nav-item" data-target-id="section-backend">Backend</a>
+      <a href="#section-api" class="nav-item" data-target-id="section-api">API</a>
+      <a href="#section-mobile" class="nav-item" data-target-id="section-mobile">Mobile</a>
+      <a href="#section-data-analytics" class="nav-item" data-target-id="section-data-analytics">Data & analytics</a>
+      <a href="#section-aiml" class="nav-item" data-target-id="section-aiml">AI / ML</a>
+      <a href="#section-security-iam" class="nav-item" data-target-id="section-security-iam">Security & IAM</a>
+      <a href="#section-networking" class="nav-item" data-target-id="section-networking">Networking</a>
+      <a href="#section-cicd-devops" class="nav-item" data-target-id="section-cicd-devops">CI/CD & DevOps</a>
+      <a href="#section-observability" class="nav-item" data-target-id="section-observability">Observability</a>
+      <a href="#section-compliance" class="nav-item" data-target-id="section-compliance">Compliance & governance</a>
+      <a href="#section-disaster-recovery" class="nav-item" data-target-id="section-disaster-recovery">Disaster recovery</a>
+      <a href="#section-operational-model" class="nav-item" data-target-id="section-operational-model">Operational model</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Extended</div>
+      <a href="#section-development-process" class="nav-item" data-target-id="section-development-process">Development process</a>
+      <a href="#section-expanded-security" class="nav-item" data-target-id="section-expanded-security">Expanded security</a>
+      <a href="#section-expanded-data" class="nav-item" data-target-id="section-expanded-data">Expanded data</a>
+      <a href="#section-data-visualization" class="nav-item" data-target-id="section-data-visualization">Data visualization</a>
+      <a href="#section-deep-dr" class="nav-item" data-target-id="section-deep-dr">Deep disaster recovery</a>
+      <a href="#section-integration-architecture" class="nav-item" data-target-id="section-integration-architecture">Integration architecture</a>
+      <a href="#section-performance-scalability" class="nav-item" data-target-id="section-performance-scalability">Performance & scalability</a>
+      <a href="#section-non-functional" class="nav-item" data-target-id="section-non-functional">Non-functional requirements</a>
+      <a href="#section-environment-strategy" class="nav-item" data-target-id="section-environment-strategy">Environment strategy</a>
+      <a href="#section-deployment-strategy" class="nav-item" data-target-id="section-deployment-strategy">Deployment strategy</a>
+      <a href="#section-data-lifecycle" class="nav-item" data-target-id="section-data-lifecycle">Data lifecycle & retention</a>
+      <a href="#section-support-sla" class="nav-item" data-target-id="section-support-sla">Support hours & SLAs</a>
+      <a href="#section-monitoring-metrics" class="nav-item" data-target-id="section-monitoring-metrics">Monitoring metrics</a>
+      <a href="#section-logging" class="nav-item" data-target-id="section-logging">Logging</a>
+    </div>
+
+    <div class="nav-footer">
+      Export to JSON / Markdown from the top bar in the main view.
+    </div>
+  </aside>
+
+  <main id="main">
+    <div class="top-bar">
+      <div>
+        <div class="top-title">System Architecture Decision Questionnaire</div>
+        <div class="top-subtitle">
+          Fill offline. Use Import/Export to move data between machines and tools.
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary" id="exportJsonBtn">
+          <span class="icon">⬇</span> Export JSON
+        </button>
+        <button class="btn btn-secondary" id="exportMarkdownBtn">
+          <span class="icon">⬇</span> Export Markdown
+        </button>
+        <label class="btn btn-secondary" for="importJsonInput">
+          <span class="icon">⬆</span> Import JSON
+        </label>
+        <input type="file" id="importJsonInput" accept="application/json" style="display:none;" />
+      </div>
+    </div>
+
+    <!-- ===================== HIGH-LEVEL SECTIONS ===================== -->
+
+    <details id="section-project-scale" class="section-block" open data-section-key="ProjectScale">
+      <summary>
+        <span class="section-title">Project scale</span>
+        <span class="section-subtitle">Size, users, and organizational impact</span>
+      </summary>
+      <div class="section-body">
+        <div class="question-group-title">Project scope & reach</div>
+
+        <div class="question"
+             data-section-key="ProjectScale"
+             data-question-key="ProjectScale_OverallScaleCategory"
+             data-question-label="Project Scale – Overall scale category">
+          <label class="question-label">
+            Overall project scale (business perception)
+          </label>
+          <div class="inline-options">
+            <label>
+              <input type="radio" name="ProjectScale_OverallScaleCategory" value="Small internal tool"
+                     data-toggle-target="ProjectScale_Subsection_Small"
+              />
+              Small internal tool
+            </label>
+            <label>
+              <input type="radio" name="ProjectScale_OverallScaleCategory" value="Department-level solution"
+                     data-toggle-target="ProjectScale_Subsection_Department"
+              />
+              Department-level solution
+            </label>
+            <label>
+              <input type="radio" name="ProjectScale_OverallScaleCategory" value="Enterprise-wide platform"
+                     data-toggle-target="ProjectScale_Subsection_Enterprise"
+              />
+              Enterprise-wide platform
+            </label>
+            <label>
+              <input type="radio" name="ProjectScale_OverallScaleCategory" value="External customer-facing product"
+                     data-toggle-target="ProjectScale_Subsection_External"
+              />
+              External customer-facing product
+            </label>
+          </div>
+          <div class="question-helper">
+            Example: Enterprise-wide platform
+          </div>
+        </div>
+
+        <div id="ProjectScale_Subsection_Small" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="ProjectScale"
+               data-question-key="ProjectScale_SmallTool_TeamSize"
+               data-question-label="Project Scale – Small internal tool team size">
+            <label class="question-label">
+              Answer only if <strong>Small internal tool</strong> is selected – delivery team size (FTE)
+            </label>
+            <input type="number" min="1" placeholder="e.g. 3" />
+            <div class="question-helper">Example: 3</div>
+          </div>
+        </div>
+
+        <div id="ProjectScale_Subsection_Department" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="ProjectScale"
+               data-question-key="ProjectScale_Department_UsersEstimate"
+               data-question-label="Project Scale – Department users estimate">
+            <label class="question-label">
+              Answer only if <strong>Department-level solution</strong> is selected – estimated active users
+            </label>
+            <input type="text" placeholder="e.g. 50–200 internal users" />
+            <div class="question-helper">Example: 120 internal users</div>
+          </div>
+        </div>
+
+        <div id="ProjectScale_Subsection_Enterprise" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="ProjectScale"
+               data-question-key="ProjectScale_Enterprise_GlobalRegions"
+               data-question-label="Project Scale – Enterprise regions involved">
+            <label class="question-label">
+              Answer only if <strong>Enterprise-wide platform</strong> is selected – main regions involved
+            </label>
+            <input type="text" placeholder="e.g. EMEA, NA, LATAM" />
+            <div class="question-helper">Example: EMEA and NA</div>
+          </div>
+        </div>
+
+        <div id="ProjectScale_Subsection_External" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="ProjectScale"
+               data-question-key="ProjectScale_External_EstimatedExternalUsers"
+               data-question-label="Project Scale – Estimated number of external users">
+            <label class="question-label">
+              Answer only if <strong>External customer-facing product</strong> is selected – estimated number of external users
+            </label>
+            <input type="text" placeholder="e.g. 10k MAU in year 1" />
+            <div class="question-helper">Example: 5k monthly active users</div>
+          </div>
+        </div>
+
+        <div class="question"
+             data-section-key="ProjectScale"
+             data-question-key="ProjectScale_KeyBusinessUnitsInScope"
+             data-question-label="Project Scale – Key business units in scope">
+          <label class="question-label">
+            Key business units or departments in scope
+          </label>
+          <textarea placeholder="e.g. Sales, Finance, Data & Analytics"></textarea>
+          <div class="question-helper">Example: Commercial Excellence, Finance, Supply Chain Analytics</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-product-type" class="section-block" data-section-key="ProductType">
+      <summary>
+        <span class="section-title">Product type</span>
+        <span class="section-subtitle">Nature of the solution being delivered</span>
+      </summary>
+      <div class="section-body">
+        <div class="question-group-title">Product characteristics</div>
+
+        <!-- CONVERTED TO MULTI-SELECT CHECKBOXES + OTHER -->
+        <div class="question"
+             data-section-key="ProductType"
+             data-question-key="ProductType_PrimaryProductCategory"
+             data-question-label="Product Type – Product categories in scope">
+          <label class="question-label">
+            Product categories in scope (select all that apply)
+          </label>
+          <div class="inline-options">
+            <label>
+              <input type="checkbox" name="ProductType_PrimaryProductCategory"
+                     value="Internal line-of-business application"
+                     data-toggle-target="ProductType_Subsection_InternalLOB"
+              />
+              Internal line-of-business application
+            </label>
+            <label>
+              <input type="checkbox" name="ProductType_PrimaryProductCategory"
+                     value="Analytics / BI platform"
+                     data-toggle-target="ProductType_Subsection_Analytics"
+              />
+              Analytics / BI platform
+            </label>
+            <label>
+              <input type="checkbox" name="ProductType_PrimaryProductCategory"
+                     value="Data platform / data mesh component"
+                     data-toggle-target="ProductType_Subsection_DataPlatform"
+              />
+              Data platform / data mesh component
+            </label>
+            <label>
+              <input type="checkbox" name="ProductType_PrimaryProductCategory"
+                     value="External SaaS-like product"
+                     data-toggle-target="ProductType_Subsection_ExternalSaaS"
+              />
+              External SaaS-like product
+            </label>
+          </div>
+          <div class="question-helper">
+            Example: Analytics / BI platform; Data platform / data mesh component
+          </div>
+          <div class="question-helper">
+            Other product category (free text):
+            <input type="text" data-role="other-option"
+                   placeholder="e.g. Data marketplace, integration hub" />
+          </div>
+        </div>
+
+        <div id="ProductType_Subsection_InternalLOB" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="ProductType"
+               data-question-key="ProductType_InternalLOB_PrimaryBusinessProcess"
+               data-question-label="Product Type – Internal LOB primary business process">
+            <label class="question-label">
+              Answer only if <strong>Internal line-of-business application</strong> is selected – primary business process supported
+            </label>
+            <input type="text" placeholder="e.g. Trade promotion planning" />
+            <div class="question-helper">Example: Order-to-cash workflow automation</div>
+          </div>
+        </div>
+
+        <div id="ProductType_Subsection_Analytics" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="ProductType"
+               data-question-key="ProductType_Analytics_MainConsumersRoles"
+               data-question-label="Product Type – Analytics main consumer roles">
+            <label class="question-label">
+              Answer only if <strong>Analytics / BI platform</strong> is selected – main consumer roles
+            </label>
+            <input type="text" placeholder="e.g. Country managers, Finance controllers" />
+            <div class="question-helper">Example: Sales directors, revenue management analysts</div>
+          </div>
+        </div>
+
+        <div id="ProductType_Subsection_DataPlatform" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="ProductType"
+               data-question-key="ProductType_DataPlatform_PrimaryDataDomains"
+               data-question-label="Product Type – Data platform primary domains">
+            <label class="question-label">
+              Answer only if <strong>Data platform / data mesh component</strong> is selected – primary data domains
+            </label>
+            <input type="text" placeholder="e.g. Customer, Product, Finance" />
+            <div class="question-helper">Example: Customer 360, product catalog, pricing</div>
+          </div>
+        </div>
+
+        <div id="ProductType_Subsection_ExternalSaaS" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="ProductType"
+               data-question-key="ProductType_ExternalSaaS_MarketSegment"
+               data-question-label="Product Type – External SaaS target market segment">
+            <label class="question-label">
+              Answer only if <strong>External SaaS-like product</strong> is selected – target market segment
+            </label>
+            <input type="text" placeholder="e.g. SMB retail chains" />
+            <div class="question-helper">Example: National retailers (Tier 1)</div>
+          </div>
+        </div>
+
+        <div class="question"
+             data-section-key="ProductType"
+             data-question-key="ProductType_DeploymentModel"
+             data-question-label="Product Type – Deployment model description">
+          <label class="question-label">
+            Deployment model description (single-tenant, multi-tenant, project-based, etc.)
+          </label>
+          <textarea placeholder="e.g. Single-tenant per country, shared data platform"></textarea>
+          <div class="question-helper">Example: Multi-tenant analytics workspace with country-level RBAC</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-criticality" class="section-block" data-section-key="Criticality">
+      <summary>
+        <span class="section-title">Criticality</span>
+        <span class="section-subtitle">Business impact and availability expectations</span>
+      </summary>
+      <div class="section-body">
+        <div class="question-group-title">Business impact</div>
+
+        <div class="question"
+             data-section-key="Criticality"
+             data-question-key="Criticality_BusinessImpactCategory"
+             data-question-label="Criticality – Business impact category">
+          <label class="question-label">
+            Business criticality category
+          </label>
+          <div class="inline-options">
+            <label>
+              <input type="radio" name="Criticality_BusinessImpactCategory" value="Informational / nice-to-have" />
+              Informational / nice-to-have
+            </label>
+            <label>
+              <input type="radio" name="Criticality_BusinessImpactCategory" value="Important but not mission-critical" />
+              Important but not mission-critical
+            </label>
+            <label>
+              <input type="radio" name="Criticality_BusinessImpactCategory" value="Mission-critical / high financial impact" />
+              Mission-critical / high financial impact
+            </label>
+            <label>
+              <input type="radio" name="Criticality_BusinessImpactCategory" value="Safety / regulatory critical" />
+              Safety / regulatory critical
+            </label>
+          </div>
+          <div class="question-helper">Example: Mission-critical / high financial impact</div>
+        </div>
+
+        <div class="question"
+             data-section-key="Criticality"
+             data-question-key="Criticality_TargetAvailabilityPercentage"
+             data-question-label="Criticality – Target availability percentage">
+          <label class="question-label">
+            Target availability (percentage, per year)
+          </label>
+          <input type="text" placeholder="e.g. 99.5%, 99.9%, 99.99%" />
+          <div class="question-helper">Example: 99.9%</div>
+        </div>
+
+        <div class="question"
+             data-section-key="Criticality"
+             data-question-key="Criticality_RTO_TargetRecoveryTimeObjective"
+             data-question-label="Criticality – Target RTO (Recovery Time Objective)">
+          <label class="question-label">
+            Target Recovery Time Objective (RTO)
+          </label>
+          <input type="text" placeholder="e.g. 4 hours" />
+          <div class="question-helper">Example: 2 hours</div>
+        </div>
+
+        <div class="question"
+             data-section-key="Criticality"
+             data-question-key="Criticality_RPO_TargetRecoveryPointObjective"
+             data-question-label="Criticality – Target RPO (Recovery Point Objective)">
+          <label class="question-label">
+            Target Recovery Point Objective (RPO)
+          </label>
+          <input type="text" placeholder="e.g. 15 minutes, 1 hour" />
+          <div class="question-helper">Example: 30 minutes</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-expected-lifetime" class="section-block" data-section-key="ExpectedLifetime">
+      <summary>
+        <span class="section-title">Expected lifetime</span>
+        <span class="section-subtitle">How long the solution is expected to run</span>
+      </summary>
+      <div class="section-body">
+        <div class="question-group-title">Lifecycle expectations</div>
+
+        <div class="question"
+             data-section-key="ExpectedLifetime"
+             data-question-key="ExpectedLifetime_PlannedHorizonYears"
+             data-question-label="Expected Lifetime – Planned lifetime in years">
+          <label class="question-label">
+            Planned lifetime of the solution (years)
+          </label>
+          <input type="text" placeholder="e.g. 3–5 years" />
+          <div class="question-helper">Example: 5 years</div>
+        </div>
+
+        <div class="question"
+             data-section-key="ExpectedLifetime"
+             data-question-key="ExpectedLifetime_MajorRearchitectureExpected"
+             data-question-label="Expected Lifetime – Expected major re-architecture events">
+          <label class="question-label">
+            Expected major re-architecture or rewrite events
+          </label>
+          <textarea placeholder="e.g. Migration to new ERP in year 3"></textarea>
+          <div class="question-helper">Example: Major platform consolidation planned after 4 years</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-enterprise-constraints" class="section-block" data-section-key="EnterpriseConstraints">
+      <summary>
+        <span class="section-title">Enterprise constraints</span>
+        <span class="section-subtitle">Policies, standards, and mandatory platforms</span>
+      </summary>
+      <div class="section-body">
+        <div class="question-group-title">Enterprise guardrails</div>
+
+        <div class="question"
+             data-section-key="EnterpriseConstraints"
+             data-question-key="EnterpriseConstraints_MandatoryCloudProvider"
+             data-question-label="Enterprise Constraints – Mandatory primary cloud provider">
+          <label class="question-label">
+            Mandatory primary cloud provider (if any)
+          </label>
+          <div class="inline-options">
+            <label>
+              <input type="radio" name="EnterpriseConstraints_MandatoryCloudProvider" value="Azure" />
+              Azure
+            </label>
+            <label>
+              <input type="radio" name="EnterpriseConstraints_MandatoryCloudProvider" value="AWS" />
+              AWS
+            </label>
+            <label>
+              <input type="radio" name="EnterpriseConstraints_MandatoryCloudProvider" value="GCP" />
+              GCP
+            </label>
+            <label>
+              <input type="radio" name="EnterpriseConstraints_MandatoryCloudProvider" value="No mandatory provider" />
+              No mandatory provider
+            </label>
+          </div>
+          <div class="question-helper">Example: Azure</div>
+        </div>
+
+        <div class="question"
+             data-section-key="EnterpriseConstraints"
+             data-question-key="EnterpriseConstraints_MandatoryDataPlatforms"
+             data-question-label="Enterprise Constraints – Mandatory data platforms and tools">
+          <label class="question-label">
+            Mandatory data platforms or tools (enterprise standard)
+          </label>
+          <textarea placeholder="e.g. Azure Data Lake, Synapse, Power BI"></textarea>
+          <div class="question-helper">Example: Azure Data Lake Gen2, Azure SQL Managed Instance, Power BI</div>
+        </div>
+
+        <div class="question"
+             data-section-key="EnterpriseConstraints"
+             data-question-key="EnterpriseConstraints_KeyArchitectureRestrictions"
+             data-question-label="Enterprise Constraints – Key technical architecture restrictions">
+          <label class="question-label">
+            Key technical architecture restrictions
+          </label>
+          <textarea placeholder="e.g. No public IPs; only private endpoints; no open-source DBs outside allowed list"></textarea>
+          <div class="question-helper">Example: All PaaS resources must be in approved landing zone subscriptions</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- ===================== ARCHITECTURE SECTIONS ===================== -->
+
+    <details id="section-cloud-strategy" class="section-block" data-section-key="CloudStrategy">
+      <summary>
+        <span class="section-title">Cloud strategy</span>
+        <span class="section-subtitle">Overall cloud model and provider decisions</span>
+      </summary>
+      <div class="section-body">
+        <div class="question-group-title">Cloud model and providers</div>
+
+        <div class="question"
+             data-section-key="CloudStrategy"
+             data-question-key="CloudStrategy_CloudModelChoice"
+             data-question-label="Cloud Strategy – Chosen cloud model">
+          <label class="question-label">
+            Chosen cloud model
+          </label>
+          <div class="inline-options">
+            <label>
+              <input type="radio" name="CloudStrategy_CloudModelChoice" value="Public cloud only"
+                     data-toggle-target="CloudStrategy_Subsection_Public"
+              />
+              Public cloud only
+            </label>
+            <label>
+              <input type="radio" name="CloudStrategy_CloudModelChoice" value="Hybrid (on-prem + cloud)"
+                     data-toggle-target="CloudStrategy_Subsection_Hybrid"
+              />
+              Hybrid (on-prem + cloud)
+            </label>
+            <label>
+              <input type="radio" name="CloudStrategy_CloudModelChoice" value="Multi-cloud"
+                     data-toggle-target="CloudStrategy_Subsection_Multicloud"
+              />
+              Multi-cloud
+            </label>
+            <label>
+              <input type="radio" name="CloudStrategy_CloudModelChoice" value="No cloud"
+                     data-toggle-target="CloudStrategy_Subsection_NoCloud"
+              />
+              No cloud
+            </label>
+          </div>
+          <div class="question-helper">Example: Public cloud only</div>
+        </div>
+
+        <div id="CloudStrategy_Subsection_Public" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="CloudStrategy"
+               data-question-key="CloudStrategy_Public_ChosenCloudProvider"
+               data-question-label="Cloud Strategy – Chosen public cloud provider">
+            <label class="question-label">
+              Answer only if <strong>Public cloud only</strong> is selected – chosen public cloud provider
+            </label>
+            <div class="inline-options">
+              <label><input type="radio" name="CloudStrategy_Public_ChosenCloudProvider" value="Azure" /> Azure</label>
+              <label><input type="radio" name="CloudStrategy_Public_ChosenCloudProvider" value="AWS" /> AWS</label>
+              <label><input type="radio" name="CloudStrategy_Public_ChosenCloudProvider" value="GCP" /> GCP</label>
+              <label><input type="radio" name="CloudStrategy_Public_ChosenCloudProvider" value="Other" /> Other</label>
+            </div>
+            <div class="question-helper">Example: Azure</div>
+          </div>
+        </div>
+
+        <div id="CloudStrategy_Subsection_Hybrid" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="CloudStrategy"
+               data-question-key="CloudStrategy_Hybrid_ConnectivityModelDescription"
+               data-question-label="Cloud Strategy – Hybrid connectivity model description">
+            <label class="question-label">
+              Answer only if <strong>Hybrid</strong> is selected – hybrid connectivity model
+            </label>
+            <textarea placeholder="e.g. ExpressRoute from on-prem DC to Azure hub VNet"></textarea>
+            <div class="question-helper">Example: Site-to-site VPN plus ExpressRoute for production</div>
+          </div>
+        </div>
+
+        <div id="CloudStrategy_Subsection_Multicloud" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="CloudStrategy"
+               data-question-key="CloudStrategy_Multicloud_PrimaryAndSecondaryProviders"
+               data-question-label="Cloud Strategy – Multi-cloud primary and secondary providers">
+            <label class="question-label">
+              Answer only if <strong>Multi-cloud</strong> is selected – primary and secondary providers
+            </label>
+            <input type="text" placeholder="e.g. Primary: Azure, Secondary: AWS" />
+            <div class="question-helper">Example: Primary Azure, secondary GCP</div>
+          </div>
+        </div>
+
+        <div id="CloudStrategy_Subsection_NoCloud" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="CloudStrategy"
+               data-question-key="CloudStrategy_NoCloud_ReasonDescription"
+               data-question-label="Cloud Strategy – Reason for no cloud choice">
+            <label class="question-label">
+              Answer only if <strong>No cloud</strong> is selected – primary reasons
+            </label>
+            <textarea placeholder="e.g. Regulatory constraints, network isolation policies"></textarea>
+            <div class="question-helper">Example: Strict on-premise isolation requirement from regulator</div>
+          </div>
+        </div>
+
+        <div class="question"
+             data-section-key="CloudStrategy"
+             data-question-key="CloudStrategy_ChosenRegionsList"
+             data-question-label="Cloud Strategy – Chosen regions list">
+          <label class="question-label">
+            Chosen primary cloud regions
+          </label>
+          <input type="text" placeholder="e.g. West Europe, North Europe, East US" />
+          <div class="question-helper">Example: West Europe, North Europe</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-compute" class="section-block" data-section-key="Compute">
+      <summary>
+        <span class="section-title">Compute</span>
+        <span class="section-subtitle">Execution model and hosting choices</span>
+      </summary>
+      <div class="section-body">
+        <div class="question-group-title">Compute model</div>
+
+        <!-- CONVERTED TO MULTI-SELECT CHECKBOXES + OTHER -->
+        <div class="question"
+             data-section-key="Compute"
+             data-question-key="Compute_PrimaryExecutionModel"
+             data-question-label="Compute – Compute execution models used">
+          <label class="question-label">
+            Compute execution models used (select all that apply)
+          </label>
+          <div class="inline-options">
+            <label>
+              <input type="checkbox" name="Compute_PrimaryExecutionModel" value="Serverless functions"
+                     data-toggle-target="Compute_Subsection_Serverless"
+              />
+              Serverless functions
+            </label>
+            <label>
+              <input type="checkbox" name="Compute_PrimaryExecutionModel" value="Containers (orchestration)"
+                     data-toggle-target="Compute_Subsection_Containers"
+              />
+              Containers (orchestration)
+            </label>
+            <label>
+              <input type="checkbox" name="Compute_PrimaryExecutionModel" value="Virtual machines"
+                     data-toggle-target="Compute_Subsection_VMs"
+              />
+              Virtual machines
+            </label>
+            <label>
+              <input type="checkbox" name="Compute_PrimaryExecutionModel" value="PaaS app services"
+                     data-toggle-target="Compute_Subsection_PaaSApps"
+              />
+              PaaS app services
+            </label>
+          </div>
+          <div class="question-helper">
+            Example: Containers (orchestration); Serverless functions
+          </div>
+          <div class="question-helper">
+            Other compute model (free text):
+            <input type="text" data-role="other-option"
+                   placeholder="e.g. Batch workloads, HPC nodes" />
+          </div>
+        </div>
+
+        <div id="Compute_Subsection_Serverless" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="Compute"
+               data-question-key="Compute_Serverless_PlatformDetails"
+               data-question-label="Compute – Serverless platform details">
+            <label class="question-label">
+              Answer only if <strong>Serverless functions</strong> is selected – platform details
+            </label>
+            <input type="text" placeholder="e.g. Azure Functions, consumption plan" />
+            <div class="question-helper">Example: Azure Functions on premium plan</div>
+          </div>
+        </div>
+
+        <div id="Compute_Subsection_Containers" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="Compute"
+               data-question-key="Compute_Containers_OrchestrationPlatform"
+               data-question-label="Compute – Container orchestration platform">
+            <label class="question-label">
+              Answer only if <strong>Containers</strong> is selected – container orchestration platform
+            </label>
+            <input type="text" placeholder="e.g. Azure Kubernetes Service (AKS)" />
+            <div class="question-helper">Example: AKS with 3 node pools</div>
+          </div>
+        </div>
+
+        <div id="Compute_Subsection_VMs" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="Compute"
+               data-question-key="Compute_VirtualMachines_UsageDescription"
+               data-question-label="Compute – Virtual machine usage description">
+            <label class="question-label">
+              Answer only if <strong>Virtual machines</strong> is selected – main usage
+            </label>
+            <textarea placeholder="e.g. Legacy components, custom DB engines"></textarea>
+            <div class="question-helper">Example: Hosting legacy ETL engine that cannot run in PaaS</div>
+          </div>
+        </div>
+
+        <div id="Compute_Subsection_PaaSApps" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="Compute"
+               data-question-key="Compute_PaaSApps_AppServicePlanDetails"
+               data-question-label="Compute – PaaS app service plan details">
+            <label class="question-label">
+              Answer only if <strong>PaaS app services</strong> is selected – app service plan details
+            </label>
+            <input type="text" placeholder="e.g. Azure App Service, P1v3 plan" />
+            <div class="question-helper">Example: 2x App Service plans across 2 regions</div>
+          </div>
+        </div>
+
+        <div class="question"
+             data-section-key="Compute"
+             data-question-key="Compute_AutoscalingStrategySummary"
+             data-question-label="Compute – Autoscaling strategy summary">
+          <label class="question-label">
+            Autoscaling strategy summary
+          </label>
+          <textarea placeholder="e.g. CPU and queue length based autoscale, min/max instances"></textarea>
+          <div class="question-helper">Example: Scale AKS node pool from 3 to 10 nodes based on CPU and pending pods</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-frontend" class="section-block" data-section-key="Frontend">
+      <summary>
+        <span class="section-title">Frontend</span>
+        <span class="section-subtitle">User interfaces and delivery channels</span>
+      </summary>
+      <div class="section-body">
+        <div class="question-group-title">UI channels</div>
+
+        <!-- CONVERTED TO MULTI-SELECT CHECKBOXES + OTHER -->
+        <div class="question"
+             data-section-key="Frontend"
+             data-question-key="Frontend_PrimaryInterfaceType"
+             data-question-label="Frontend – User interface types in scope">
+          <label class="question-label">
+            User interface types in scope (select all that apply)
+          </label>
+          <div class="inline-options">
+            <label>
+              <input type="checkbox" name="Frontend_PrimaryInterfaceType"
+                     value="Web application"
+                     data-toggle-target="Frontend_Subsection_WebApp"
+              />
+              Web application
+            </label>
+            <label>
+              <input type="checkbox" name="Frontend_PrimaryInterfaceType"
+                     value="Desktop application"
+                     data-toggle-target="Frontend_Subsection_Desktop"
+              />
+              Desktop application
+            </label>
+            <label>
+              <input type="checkbox" name="Frontend_PrimaryInterfaceType"
+                     value="No user-facing UI"
+                     data-toggle-target="Frontend_Subsection_NoUI"
+              />
+              No user-facing UI
+            </label>
+          </div>
+          <div class="question-helper">
+            Example: Web application; Desktop application
+          </div>
+          <div class="question-helper">
+            Other UI channel (free text):
+            <input type="text" data-role="other-option"
+                   placeholder="e.g. Kiosk, TV app, embedded UI" />
+          </div>
+        </div>
+
+        <div id="Frontend_Subsection_WebApp" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="Frontend"
+               data-question-key="Frontend_WebApp_TechnologyStack"
+               data-question-label="Frontend – Web application technology stack">
+            <label class="question-label">
+              Answer only if <strong>Web application</strong> is selected – main technology stack
+            </label>
+            <input type="text" placeholder="e.g. React SPA, served via Azure Front Door" />
+            <div class="question-helper">Example: React SPA + TypeScript + Azure Static Web Apps</div>
+          </div>
+        </div>
+
+        <div id="Frontend_Subsection_Desktop" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="Frontend"
+               data-question-key="Frontend_Desktop_TechnologyStack"
+               data-question-label="Frontend – Desktop application technology stack">
+            <label class="question-label">
+              Answer only if <strong>Desktop application</strong> is selected – main technology stack
+            </label>
+            <input type="text" placeholder="e.g. Electron, WPF" />
+            <div class="question-helper">Example: Electron app distributed via enterprise app store</div>
+          </div>
+        </div>
+
+        <div id="Frontend_Subsection_NoUI" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="Frontend"
+               data-question-key="Frontend_NoUI_ReasonDescription"
+               data-question-label="Frontend – Reason for no user-facing UI">
+            <label class="question-label">
+              Answer only if <strong>No user-facing UI</strong> is selected – explanation
+            </label>
+            <textarea placeholder="e.g. System is a pure backend / data pipeline"></textarea>
+            <div class="question-helper">Example: Batch-only data pipeline triggered by scheduler</div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-backend" class="section-block" data-section-key="Backend">
+      <summary>
+        <span class="section-title">Backend</span>
+        <span class="section-subtitle">Business services and runtime architecture</span>
+      </summary>
+      <div class="section-body">
+        <div class="question-group-title">Service architecture</div>
+
+        <!-- CONVERTED TO MULTI-SELECT CHECKBOXES + OTHER -->
+        <div class="question"
+             data-section-key="Backend"
+             data-question-key="Backend_ArchitectureStyle"
+             data-question-label="Backend – Architecture styles used">
+          <label class="question-label">
+            Backend architecture styles used (select all that apply)
+          </label>
+          <div class="inline-options">
+            <label>
+              <input type="checkbox" name="Backend_ArchitectureStyle" value="Monolith" />
+              Monolith
+            </label>
+            <label>
+              <input type="checkbox" name="Backend_ArchitectureStyle" value="Modular monolith" />
+              Modular monolith
+            </label>
+            <label>
+              <input type="checkbox" name="Backend_ArchitectureStyle" value="Microservices" />
+              Microservices
+            </label>
+            <label>
+              <input type="checkbox" name="Backend_ArchitectureStyle" value="Event-driven / streaming centric" />
+              Event-driven / streaming centric
+            </label>
+          </div>
+          <div class="question-helper">Example: Microservices; Event-driven / streaming centric</div>
+          <div class="question-helper">
+            Other architecture style (free text):
+            <input type="text" data-role="other-option"
+                   placeholder="e.g. Serverless-first, CQRS" />
+          </div>
+        </div>
+
+        <div class="question"
+             data-section-key="Backend"
+             data-question-key="Backend_PrimaryImplementationLanguages"
+             data-question-label="Backend – Primary implementation languages">
+          <label class="question-label">
+            Primary implementation language(s)
+          </label>
+          <input type="text" placeholder="e.g. C#, Python" />
+          <div class="question-helper">Example: C# for APIs, Python for data services</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-api" class="section-block" data-section-key="API">
+      <summary>
+        <span class="section-title">API</span>
+        <span class="section-subtitle">External and internal interfaces</span>
+      </summary>
+      <div class="section-body">
+        <div class="question-group-title">API exposure</div>
+
+        <!-- CONVERTED TO MULTI-SELECT CHECKBOXES + OTHER -->
+        <div class="question"
+             data-section-key="API"
+             data-question-key="API_PrimaryApiStyle"
+             data-question-label="API – API styles supported">
+          <label class="question-label">
+            API styles supported (select all that apply)
+          </label>
+          <div class="inline-options">
+            <label><input type="checkbox" name="API_PrimaryApiStyle" value="REST" /> REST</label>
+            <label><input type="checkbox" name="API_PrimaryApiStyle" value="GraphQL" /> GraphQL</label>
+            <label><input type="checkbox" name="API_PrimaryApiStyle" value="gRPC" /> gRPC</label>
+            <label><input type="checkbox" name="API_PrimaryApiStyle" value="Event / message based" /> Event / message based</label>
+          </div>
+          <div class="question-helper">Example: REST; Event / message based</div>
+          <div class="question-helper">
+            Other API style (free text):
+            <input type="text" data-role="other-option"
+                   placeholder="e.g. SOAP, custom binary protocol" />
+          </div>
+        </div>
+
+        <div class="question"
+             data-section-key="API"
+             data-question-key="API_GatewayOrManagementDetails"
+             data-question-label="API – Gateway or API management details">
+          <label class="question-label">
+            API gateway or management solution (if any)
+          </label>
+          <input type="text" placeholder="e.g. Azure API Management" />
+          <div class="question-helper">Example: Azure API Management (Premium tier) in shared gateway</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-mobile" class="section-block" data-section-key="Mobile">
+      <summary>
+        <span class="section-title">Mobile</span>
+        <span class="section-subtitle">Mobile applications and device access</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="Mobile"
+             data-question-key="Mobile_MobileClientInScope"
+             data-question-label="Mobile – Mobile clients in scope">
+          <label class="question-label">
+            Are mobile clients in scope?
+          </label>
+          <div class="inline-options">
+            <label>
+              <input type="radio" name="Mobile_MobileClientInScope" value="Yes"
+                     data-toggle-target="Mobile_Subsection_InScope"
+              />
+              Yes
+            </label>
+            <label>
+              <input type="radio" name="Mobile_MobileClientInScope" value="No"
+                     data-toggle-target="Mobile_Subsection_NotInScope"
+              />
+              No
+            </label>
+          </div>
+          <div class="question-helper">Example: Yes</div>
+        </div>
+
+        <div id="Mobile_Subsection_InScope" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="Mobile"
+               data-question-key="Mobile_InScope_Platforms"
+               data-question-label="Mobile – Platforms in scope">
+            <label class="question-label">
+              Answer only if <strong>Yes</strong> is selected – mobile platforms
+            </label>
+            <input type="text" placeholder="e.g. iOS, Android, responsive web" />
+            <div class="question-helper">Example: Native iOS + Android using MAUI</div>
+          </div>
+        </div>
+
+        <div id="Mobile_Subsection_NotInScope" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="Mobile"
+               data-question-key="Mobile_NotInScope_ReasonDescription"
+               data-question-label="Mobile – Reason mobile is not in scope">
+            <label class="question-label">
+              Answer only if <strong>No</strong> is selected – reason mobile is not in scope
+            </label>
+            <textarea placeholder="e.g. Only desktop users; mobile access not required"></textarea>
+            <div class="question-helper">Example: All users are office-based</div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-data-analytics" class="section-block" data-section-key="DataAnalytics">
+      <summary>
+        <span class="section-title">Data & analytics</span>
+        <span class="section-subtitle">Data storage, processing, and analytics</span>
+      </summary>
+      <div class="section-body">
+        <div class="question-group-title">Data platform</div>
+
+        <!-- CONVERTED TO MULTI-SELECT CHECKBOXES + OTHER -->
+        <div class="question"
+             data-section-key="DataAnalytics"
+             data-question-key="DataAnalytics_PrimaryDataPlatformType"
+             data-question-label="Data & Analytics – Data platform types used">
+          <label class="question-label">
+            Data platform types used (select all that apply)
+          </label>
+          <div class="inline-options">
+            <label><input type="checkbox" name="DataAnalytics_PrimaryDataPlatformType" value="Data warehouse" /> Data warehouse</label>
+            <label><input type="checkbox" name="DataAnalytics_PrimaryDataPlatformType" value="Data lake" /> Data lake</label>
+            <label><input type="checkbox" name="DataAnalytics_PrimaryDataPlatformType" value="Lakehouse" /> Lakehouse</label>
+            <label><input type="checkbox" name="DataAnalytics_PrimaryDataPlatformType" value="Operational reporting only" /> Operational reporting only</label>
+          </div>
+          <div class="question-helper">Example: Lakehouse; Data warehouse</div>
+          <div class="question-helper">
+            Other data platform type (free text):
+            <input type="text" data-role="other-option"
+                   placeholder="e.g. Data mesh nodes, streaming DB" />
+          </div>
+        </div>
+
+        <div class="question"
+             data-section-key="DataAnalytics"
+             data-question-key="DataAnalytics_CoreTechnologiesList"
+             data-question-label="Data & Analytics – Core technologies">
+          <label class="question-label">
+            Core data technologies (storage + compute)
+          </label>
+          <textarea placeholder="e.g. Azure Data Lake Gen2, Synapse, Databricks"></textarea>
+          <div class="question-helper">Example: ADLS Gen2, Azure Synapse serverless, Power BI</div>
+        </div>
+
+        <div class="question"
+             data-section-key="DataAnalytics"
+             data-question-key="DataAnalytics_MainDataSourcesSummary"
+             data-question-label="Data & Analytics – Main data sources summary">
+          <label class="question-label">
+            Main data sources (summary)
+          </label>
+          <textarea placeholder="e.g. SAP, CRM, web analytics, 3rd party market data"></textarea>
+          <div class="question-helper">Example: SAP SD, Salesforce, Nielsen, Google Analytics</div>
+        </div>
+
+        <div class="question"
+             data-section-key="DataAnalytics"
+             data-question-key="DataAnalytics_DataFreshnessAndLatencyTargets"
+             data-question-label="Data & Analytics – Data freshness and latency targets">
+          <label class="question-label">
+            Data freshness and latency targets
+          </label>
+          <textarea placeholder="e.g. Near-real-time for sales; daily batch for finance"></textarea>
+          <div class="question-helper">Example: Sales data near-real-time (≤5 minutes), finance daily</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-aiml" class="section-block" data-section-key="AIML">
+      <summary>
+        <span class="section-title">AI / ML</span>
+        <span class="section-subtitle">Machine learning and AI components</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="AIML"
+             data-question-key="AIML_MLComponentsInScope"
+             data-question-label="AI / ML – ML components in scope">
+          <label class="question-label">
+            Are AI / ML components in scope?
+          </label>
+          <div class="inline-options">
+            <label>
+              <input type="radio" name="AIML_MLComponentsInScope" value="Yes"
+                     data-toggle-target="AIML_Subsection_InScope"
+              />
+              Yes
+            </label>
+            <label>
+              <input type="radio" name="AIML_MLComponentsInScope" value="No"
+                     data-toggle-target="AIML_Subsection_NotInScope"
+              />
+              No
+            </label>
+          </div>
+          <div class="question-helper">Example: Yes</div>
+        </div>
+
+        <div id="AIML_Subsection_InScope" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="AIML"
+               data-question-key="AIML_InScope_TypesOfModels"
+               data-question-label="AI / ML – Types of models in scope">
+            <label class="question-label">
+              Answer only if <strong>Yes</strong> is selected – types of models in scope
+            </label>
+            <input type="text" placeholder="e.g. Forecasting, recommendations, anomaly detection" />
+            <div class="question-helper">Example: Sales forecasting and anomaly detection on transactions</div>
+          </div>
+
+          <div class="question"
+               data-section-key="AIML"
+               data-question-key="AIML_InScope_RuntimePlatform"
+               data-question-label="AI / ML – Runtime platform">
+            <label class="question-label">
+              AI / ML runtime platform
+            </label>
+            <input type="text" placeholder="e.g. Azure Machine Learning, Databricks" />
+            <div class="question-helper">Example: Azure Machine Learning managed online endpoints</div>
+          </div>
+        </div>
+
+        <div id="AIML_Subsection_NotInScope" class="subsection conditional-block hidden">
+          <div class="question"
+               data-section-key="AIML"
+               data-question-key="AIML_NotInScope_ReasonDescription"
+               data-question-label="AI / ML – Reason AI/ML is not in scope">
+            <label class="question-label">
+              Answer only if <strong>No</strong> is selected – reason AI / ML is not in scope
+            </label>
+            <textarea placeholder="e.g. First phase delivers only descriptive analytics"></textarea>
+            <div class="question-helper">Example: ML planned for later phase</div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-security-iam" class="section-block" data-section-key="SecurityIAM">
+      <summary>
+        <span class="section-title">Security & IAM</span>
+        <span class="section-subtitle">Identity, access, and security posture</span>
+      </summary>
+      <div class="section-body">
+        <div class="question-group-title">Access and identities</div>
+
+        <div class="question"
+             data-section-key="SecurityIAM"
+             data-question-key="SecurityIAM_PrimaryIdentityProvider"
+             data-question-label="Security & IAM – Primary identity provider">
+          <label class="question-label">
+            Primary identity provider
+          </label>
+          <input type="text" placeholder="e.g. Azure AD / Entra ID" />
+          <div class="question-helper">Example: Microsoft Entra ID</div>
+        </div>
+
+        <div class="question"
+             data-section-key="SecurityIAM"
+             data-question-key="SecurityIAM_MainAccessControlModel"
+             data-question-label="Security & IAM – Main access control model">
+          <label class="question-label">
+            Main access control model (RBAC, ABAC, custom)
+          </label>
+          <input type="text" placeholder="e.g. RBAC at workspace and dataset level" />
+          <div class="question-helper">Example: RBAC per role and country</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-networking" class="section-block" data-section-key="Networking">
+      <summary>
+        <span class="section-title">Networking</span>
+        <span class="section-subtitle">Connectivity and network segmentation</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="Networking"
+             data-question-key="Networking_NetworkIsolationLevel"
+             data-question-label="Networking – Network isolation level">
+          <label class="question-label">
+            Network isolation level
+          </label>
+          <textarea placeholder="e.g. Private endpoints only, hub-spoke topology"></textarea>
+          <div class="question-helper">Example: Hub-spoke VNet with private endpoints only</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-cicd-devops" class="section-block" data-section-key="CICDDevOps">
+      <summary>
+        <span class="section-title">CI/CD & DevOps</span>
+        <span class="section-subtitle">Build, release, and automation</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="CICDDevOps"
+             data-question-key="CICDDevOps_PrimaryPipelinePlatform"
+             data-question-label="CI/CD & DevOps – Primary pipeline platform">
+          <label class="question-label">
+            Primary CI/CD platform
+          </label>
+          <input type="text" placeholder="e.g. Azure DevOps Pipelines, GitHub Actions" />
+          <div class="question-helper">Example: Azure DevOps YAML pipelines</div>
+        </div>
+
+        <div class="question"
+             data-section-key="CICDDevOps"
+             data-question-key="CICDDevOps_DeploymentAutomationCoverage"
+             data-question-label="CI/CD & DevOps – Deployment automation coverage">
+          <label class="question-label">
+            Deployment automation coverage (what is automated)
+          </label>
+          <textarea placeholder="e.g. Infra as code + application deploy + data pipelines"></textarea>
+          <div class="question-helper">Example: All environments deployed from IaC and pipelines</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-observability" class="section-block" data-section-key="Observability">
+      <summary>
+        <span class="section-title">Observability</span>
+        <span class="section-subtitle">Monitoring, tracing, and alerting</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="Observability"
+             data-question-key="Observability_PrimaryMonitoringPlatform"
+             data-question-label="Observability – Primary monitoring platform">
+          <label class="question-label">
+            Primary monitoring / observability platform
+          </label>
+          <input type="text" placeholder="e.g. Azure Monitor, Application Insights" />
+          <div class="question-helper">Example: Azure Monitor + Application Insights</div>
+        </div>
+
+        <div class="question"
+             data-section-key="Observability"
+             data-question-key="Observability_KeyAlertingScenarios"
+             data-question-label="Observability – Key alerting scenarios">
+          <label class="question-label">
+            Key alerting scenarios
+          </label>
+          <textarea placeholder="e.g. API failures, pipeline failures, latency thresholds"></textarea>
+          <div class="question-helper">Example: Pipeline failure alerts to on-call team</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-compliance" class="section-block" data-section-key="ComplianceGovernance">
+      <summary>
+        <span class="section-title">Compliance & governance</span>
+        <span class="section-subtitle">Regulations, standards, and policies</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="ComplianceGovernance"
+             data-question-key="ComplianceGovernance_PrimaryRegulatoryRequirements"
+             data-question-label="Compliance & Governance – Primary regulatory requirements">
+          <label class="question-label">
+            Primary regulatory / compliance requirements
+          </label>
+          <textarea placeholder="e.g. GDPR, SOX, HIPAA"></textarea>
+          <div class="question-helper">Example: GDPR and internal data protection policy</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-disaster-recovery" class="section-block" data-section-key="DisasterRecovery">
+      <summary>
+        <span class="section-title">Disaster recovery</span>
+        <span class="section-subtitle">Recovery strategy and capabilities</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="DisasterRecovery"
+             data-question-key="DisasterRecovery_OverallStrategySummary"
+             data-question-label="Disaster Recovery – Overall DR strategy summary">
+          <label class="question-label">
+            Overall disaster recovery strategy (summary)
+          </label>
+          <textarea placeholder="e.g. Region-level failover with active-passive deployment"></textarea>
+          <div class="question-helper">Example: Primary region + warm standby in secondary region</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-operational-model" class="section-block" data-section-key="OperationalModel">
+      <summary>
+        <span class="section-title">Operational model</span>
+        <span class="section-subtitle">Ownership, run, and support model</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="OperationalModel"
+             data-question-key="OperationalModel_WhoRunsTheSolution"
+             data-question-label="Operational Model – Who runs the solution">
+          <label class="question-label">
+            Who runs the solution (team / function)
+          </label>
+          <input type="text" placeholder="e.g. Central data platform team; local IT" />
+          <div class="question-helper">Example: Central data operations team</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- ===================== EXTENDED SECTIONS ===================== -->
+
+    <details id="section-development-process" class="section-block" data-section-key="DevelopmentProcess">
+      <summary>
+        <span class="section-title">Development process</span>
+        <span class="section-subtitle">Delivery model and ways of working</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="DevelopmentProcess"
+             data-question-key="DevelopmentProcess_Methodology"
+             data-question-label="Development Process – Methodology">
+          <label class="question-label">
+            Development methodology
+          </label>
+          <input type="text" placeholder="e.g. Scrum, Kanban, hybrid" />
+          <div class="question-helper">Example: Scrum with 2-week sprints</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-expanded-security" class="section-block" data-section-key="ExpandedSecurity">
+      <summary>
+        <span class="section-title">Expanded security</span>
+        <span class="section-subtitle">Auth, authz, scanning, secrets, vulnerabilities</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="ExpandedSecurity"
+             data-question-key="ExpandedSecurity_AuthenticationMechanismsSummary"
+             data-question-label="Expanded Security – Authentication mechanisms summary">
+          <label class="question-label">
+            Authentication mechanisms (summary)
+          </label>
+          <textarea placeholder="e.g. OAuth2 / OIDC via Entra ID; SSO with corporate identity"></textarea>
+          <div class="question-helper">Example: OpenID Connect with Entra ID</div>
+        </div>
+
+        <div class="question"
+             data-section-key="ExpandedSecurity"
+             data-question-key="ExpandedSecurity_SecretsManagementApproach"
+             data-question-label="Expanded Security – Secrets management approach">
+          <label class="question-label">
+            Secrets management approach
+          </label>
+          <input type="text" placeholder="e.g. Azure Key Vault" />
+          <div class="question-helper">Example: All secrets stored in Azure Key Vault with RBAC</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-expanded-data" class="section-block" data-section-key="ExpandedData">
+      <summary>
+        <span class="section-title">Expanded data</span>
+        <span class="section-subtitle">Sources, ingestion, models, quality, lineage, PII, metrics</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="ExpandedData"
+             data-question-key="ExpandedData_IngestionPatternsSummary"
+             data-question-label="Expanded Data – Ingestion patterns summary">
+          <label class="question-label">
+            Data ingestion patterns (batch, streaming, CDC, etc.)
+          </label>
+          <textarea placeholder="e.g. Daily batch from SAP; streaming from web events"></textarea>
+          <div class="question-helper">Example: CDC from ERP + batch from 3rd party</div>
+        </div>
+
+        <div class="question"
+             data-section-key="ExpandedData"
+             data-question-key="ExpandedData_DataQualityAndValidationApproach"
+             data-question-label="Expanded Data – Data quality and validation approach">
+          <label class="question-label">
+            Data quality and validation approach
+          </label>
+          <textarea placeholder="e.g. Rules-based checks, anomaly detection, completeness metrics"></textarea>
+          <div class="question-helper">Example: Quality rules executed in data pipelines with alerts</div>
+        </div>
+
+        <div class="question"
+             data-section-key="ExpandedData"
+             data-question-key="ExpandedData_PIIAndSensitiveDataHandling"
+             data-question-label="Expanded Data – PII and sensitive data handling">
+          <label class="question-label">
+            How PII and sensitive data are handled
+          </label>
+          <textarea placeholder="e.g. Tokenization, masking, encryption at rest and in transit"></textarea>
+          <div class="question-helper">Example: Pseudonymization and restricted access to raw PII</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-data-visualization" class="section-block" data-section-key="DataVisualization">
+      <summary>
+        <span class="section-title">Data visualization</span>
+        <span class="section-subtitle">Reports, dashboards, and access</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="DataVisualization"
+             data-question-key="DataVisualization_PrimaryBIPlatform"
+             data-question-label="Data Visualization – Primary BI platform">
+          <label class="question-label">
+            Primary BI / visualization platform
+          </label>
+          <input type="text" placeholder="e.g. Power BI" />
+          <div class="question-helper">Example: Power BI Premium</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-deep-dr" class="section-block" data-section-key="DeepDisasterRecovery">
+      <summary>
+        <span class="section-title">Deep disaster recovery</span>
+        <span class="section-subtitle">Backup, restore, geo-redundancy, testing</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="DeepDisasterRecovery"
+             data-question-key="DeepDR_BackupStrategySummary"
+             data-question-label="Deep DR – Backup strategy summary">
+          <label class="question-label">
+            Backup strategy summary
+          </label>
+          <textarea placeholder="e.g. Daily full + hourly log backups for critical DBs"></textarea>
+          <div class="question-helper">Example: Daily full + 15-min log backups</div>
+        </div>
+
+        <div class="question"
+             data-section-key="DeepDisasterRecovery"
+             data-question-key="DeepDR_GeoRedundancyImplementation"
+             data-question-label="Deep DR – Geo-redundancy implementation">
+          <label class="question-label">
+            Geo-redundancy implementation
+          </label>
+          <textarea placeholder="e.g. GRS storage, multi-region database replicas"></textarea>
+          <div class="question-helper">Example: GRS storage + secondary read-only DB replica</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-integration-architecture" class="section-block" data-section-key="IntegrationArchitecture">
+      <summary>
+        <span class="section-title">Integration architecture</span>
+        <span class="section-subtitle">How systems integrate and exchange data</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="IntegrationArchitecture"
+             data-question-key="IntegrationArchitecture_IntegrationPatternsSummary"
+             data-question-label="Integration Architecture – Integration patterns summary">
+          <label class="question-label">
+            Main integration patterns
+          </label>
+          <textarea placeholder="e.g. Event-driven via Service Bus; scheduled file transfers"></textarea>
+          <div class="question-helper">Example: Service Bus queues for async integration</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-performance-scalability" class="section-block" data-section-key="PerformanceScalability">
+      <summary>
+        <span class="section-title">Performance & scalability</span>
+        <span class="section-subtitle">Expected load, performance targets, and scaling</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="PerformanceScalability"
+             data-question-key="PerformanceScalability_KeyPerformanceTargets"
+             data-question-label="Performance & Scalability – Key performance targets">
+          <label class="question-label">
+            Key performance targets
+          </label>
+          <textarea placeholder="e.g. API response &lt; 300 ms for 95th percentile; handle 100 RPS"></textarea>
+          <div class="question-helper">Example: &lt; 500 ms P95 for read APIs</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-non-functional" class="section-block" data-section-key="NonFunctionalRequirements">
+      <summary>
+        <span class="section-title">Non-functional requirements</span>
+        <span class="section-subtitle">Cross-cutting quality attributes</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="NonFunctionalRequirements"
+             data-question-key="NonFunctionalRequirements_KeyNonFunctionalConcerns"
+             data-question-label="Non-Functional Requirements – Key non-functional concerns">
+          <label class="question-label">
+            Key non-functional requirements (summary)
+          </label>
+          <textarea placeholder="e.g. Security, performance, scalability, maintainability"></textarea>
+          <div class="question-helper">Example: High scalability and high maintainability</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-environment-strategy" class="section-block" data-section-key="EnvironmentStrategy">
+      <summary>
+        <span class="section-title">Environment strategy</span>
+        <span class="section-subtitle">Environments and isolation strategy</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="EnvironmentStrategy"
+             data-question-key="EnvironmentStrategy_EnvironmentsList"
+             data-question-label="Environment Strategy – Environments list">
+          <label class="question-label">
+            Environments (DEV, TEST, UAT, PROD, etc.)
+          </label>
+          <input type="text" placeholder="e.g. DEV, TEST, UAT, PROD" />
+          <div class="question-helper">Example: DEV, TEST, UAT, PREPROD, PROD</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-deployment-strategy" class="section-block" data-section-key="DeploymentStrategy">
+      <summary>
+        <span class="section-title">Deployment strategy</span>
+        <span class="section-subtitle">How new versions are released</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="DeploymentStrategy"
+             data-question-key="DeploymentStrategy_ReleaseApproach"
+             data-question-label="Deployment Strategy – Release approach">
+          <label class="question-label">
+            Release approach (blue-green, rolling, etc.)
+          </label>
+          <input type="text" placeholder="e.g. Blue-green deployments for APIs" />
+          <div class="question-helper">Example: Rolling deployment with health probes</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-data-lifecycle" class="section-block" data-section-key="DataLifecycleRetention">
+      <summary>
+        <span class="section-title">Data lifecycle & retention</span>
+        <span class="section-subtitle">How data is retained, archived, and deleted</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="DataLifecycleRetention"
+             data-question-key="DataLifecycleRetention_RetentionPoliciesSummary"
+             data-question-label="Data Lifecycle & Retention – Retention policies summary">
+          <label class="question-label">
+            Data retention policies (summary)
+          </label>
+          <textarea placeholder="e.g. 7 years for financial data; 2 years for detailed events"></textarea>
+          <div class="question-helper">Example: 5 years retention for detailed transactions</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-support-sla" class="section-block" data-section-key="SupportSLAs">
+      <summary>
+        <span class="section-title">Support hours & SLAs</span>
+        <span class="section-subtitle">Support coverage and commitments</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="SupportSLAs"
+             data-question-key="SupportSLAs_SupportHoursCoverage"
+             data-question-label="Support Hours & SLAs – Support hours coverage">
+          <label class="question-label">
+            Support hours coverage
+          </label>
+          <input type="text" placeholder="e.g. 8x5, 24x7" />
+          <div class="question-helper">Example: 24x7 for production, 8x5 for non-production</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-monitoring-metrics" class="section-block" data-section-key="MonitoringMetrics">
+      <summary>
+        <span class="section-title">Monitoring metrics</span>
+        <span class="section-subtitle">Key business and technical metrics</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="MonitoringMetrics"
+             data-question-key="MonitoringMetrics_KeyMetricsList"
+             data-question-label="Monitoring Metrics – Key metrics list">
+          <label class="question-label">
+            Key metrics to monitor (business and technical)
+          </label>
+          <textarea placeholder="e.g. Successful orders, failed API calls, pipeline run duration"></textarea>
+          <div class="question-helper">Example: Daily active users, failed jobs, latency</div>
+        </div>
+      </div>
+    </details>
+
+    <details id="section-logging" class="section-block" data-section-key="Logging">
+      <summary>
+        <span class="section-title">Logging</span>
+        <span class="section-subtitle">Logs, retention, and log access</span>
+      </summary>
+      <div class="section-body">
+        <div class="question"
+             data-section-key="Logging"
+             data-question-key="Logging_LoggingStrategySummary"
+             data-question-label="Logging – Logging strategy summary">
+          <label class="question-label">
+            Logging strategy (what is logged and where)
+          </label>
+          <textarea placeholder="e.g. Centralized logging to Log Analytics; structured logs"></textarea>
+          <div class="question-helper">Example: Structured logs with correlation IDs in Log Analytics</div>
+        </div>
+      </div>
+    </details>
+
+  </main>
+</div>
+
+<script>
+(function () {
+  // Utility: clear all inputs inside an element
+  function clearInputs(container) {
+    if (!container) return;
+    var inputs = container.querySelectorAll("input, textarea, select");
+    inputs.forEach(function (el) {
+      if (el.type === "radio" || el.type === "checkbox") {
+        el.checked = false;
+      } else {
+        el.value = "";
+      }
+    });
+  }
+
+  // Conditional logic: radio + checkbox toggles
+  function setupConditionalLogic() {
+    // Radios controlling subsections (mutually exclusive)
+    var radios = document.querySelectorAll("input[type=radio][data-toggle-target]");
+    radios.forEach(function (radio) {
+      radio.addEventListener("change", function () {
+        var groupName = radio.name;
+        var groupRadios = document.querySelectorAll("input[type=radio][name='" + groupName + "']");
+        // Hide and clear all conditional blocks of this group
+        groupRadios.forEach(function (r) {
+          var targetId = r.getAttribute("data-toggle-target");
+          if (targetId) {
+            var block = document.getElementById(targetId);
+            if (block) {
+              block.classList.add("hidden");
+              clearInputs(block);
+            }
+          }
+        });
+        // Show selected block
+        if (radio.checked) {
+          var targetId = radio.getAttribute("data-toggle-target");
+          if (targetId) {
+            var block = document.getElementById(targetId);
+            if (block) {
+              block.classList.remove("hidden");
+            }
+          }
+        }
+      });
+    });
+
+    // Checkboxes controlling subsections (independent toggles)
+    var checkboxes = document.querySelectorAll("input[type=checkbox][data-toggle-target]");
+    checkboxes.forEach(function (cb) {
+      cb.addEventListener("change", function () {
+        var targetId = cb.getAttribute("data-toggle-target");
+        if (!targetId) return;
+        var block = document.getElementById(targetId);
+        if (!block) return;
+        if (cb.checked) {
+          block.classList.remove("hidden");
+        } else {
+          block.classList.add("hidden");
+          clearInputs(block);
+        }
+      });
+    });
+  }
+
+  // Navigation click / smooth scroll
+  function setupNavigation() {
+    var navItems = document.querySelectorAll(".nav-item");
+    navItems.forEach(function (item) {
+      item.addEventListener("click", function (e) {
+        e.preventDefault();
+        var targetId = item.getAttribute("data-target-id");
+        if (!targetId) return;
+        var section = document.getElementById(targetId);
+        if (section) {
+          section.scrollIntoView({ behavior: "smooth", block: "start" });
+          try {
+            section.open = true;
+          } catch (err) {}
+        }
+      });
+    });
+  }
+
+  // Collect data from questionnaire into JSON object
+  function collectFormData() {
+    var result = {};
+    var questions = document.querySelectorAll(".question");
+    questions.forEach(function (q) {
+      var sectionKey = q.getAttribute("data-section-key");
+      var questionKey = q.getAttribute("data-question-key");
+      if (!sectionKey || !questionKey) return;
+      if (!result[sectionKey]) result[sectionKey] = {};
+
+      var value = null;
+      var radios = q.querySelectorAll("input[type=radio]");
+      var checkboxes = q.querySelectorAll("input[type=checkbox]");
+      var textInputs = q.querySelectorAll("input[type=text], input[type=number]");
+      var textareas = q.querySelectorAll("textarea");
+      var selects = q.querySelectorAll("select");
+
+      // 1) Radio group (single-choice)
+      if (radios.length > 0) {
+        radios.forEach(function (r) {
+          if (r.checked) {
+            value = r.value;
+          }
+        });
+      }
+      // 2) Multi-checkbox group (multi-choice)
+      else if (checkboxes.length > 1) {
+        var arr = [];
+        checkboxes.forEach(function (cb) {
+          if (cb.checked) {
+            arr.push(cb.value);
+          }
+        });
+        var otherInput = q.querySelector("input[type=text][data-role='other-option']");
+        if (otherInput && otherInput.value.trim() !== "") {
+          arr.push(otherInput.value.trim());
+        }
+        if (arr.length > 0) {
+          value = arr;
+        }
+      }
+      // 3) Single checkbox acting as a flag
+      else if (checkboxes.length === 1 && textInputs.length === 0 && textareas.length === 0 && selects.length === 0) {
+        value = checkboxes[0].checked ? "true" : "";
+      }
+      // 4) Text inputs (single value)
+      else if (textInputs.length > 0) {
+        // For questions with "other-option" we already handle in multi-checkbox branch above
+        value = textInputs[0].value.trim();
+      }
+      // 5) Textarea
+      else if (textareas.length > 0) {
+        value = textareas[0].value.trim();
+      }
+      // 6) Select
+      else if (selects.length > 0) {
+        value = selects[0].value;
+      }
+
+      if (value !== null && value !== "" && !(Array.isArray(value) && value.length === 0)) {
+        result[sectionKey][questionKey] = value;
+      }
+    });
+    return result;
+  }
+
+  // Fill questionnaire from JSON data
+  function populateFormFromData(data) {
+    if (!data || typeof data !== "object") return;
+    var questions = document.querySelectorAll(".question");
+
+    // Map for quick lookup
+    var questionMap = {};
+    questions.forEach(function (q) {
+      var sectionKey = q.getAttribute("data-section-key");
+      var questionKey = q.getAttribute("data-question-key");
+      if (!sectionKey || !questionKey) return;
+      var fullKey = sectionKey + "::" + questionKey;
+      questionMap[fullKey] = q;
+    });
+
+    Object.keys(data).forEach(function (sectionKey) {
+      var sectionObj = data[sectionKey];
+      if (!sectionObj || typeof sectionObj !== "object") return;
+
+      Object.keys(sectionObj).forEach(function (questionKey) {
+        var fullKey = sectionKey + "::" + questionKey;
+        var q = questionMap[fullKey];
+        if (!q) return;
+        var value = sectionObj[questionKey];
+
+        var radios = q.querySelectorAll("input[type=radio]");
+        var checkboxes = q.querySelectorAll("input[type=checkbox]");
+        var textInputs = q.querySelectorAll("input[type=text], input[type=number]");
+        var textareas = q.querySelectorAll("textarea");
+        var selects = q.querySelectorAll("select");
+
+        // Radio group
+        if (radios.length > 0) {
+          radios.forEach(function (r) {
+            r.checked = (r.value === value);
+            if (r.checked) {
+              // trigger change to open conditional blocks
+              r.dispatchEvent(new Event("change", { bubbles: true }));
+            }
+          });
+        }
+        // Multi-checkbox group
+        else if (checkboxes.length > 1) {
+          var selectedValues = [];
+          if (Array.isArray(value)) {
+            selectedValues = value.slice();
+          } else if (typeof value === "string") {
+            selectedValues = [value];
+          }
+          var unmatched = selectedValues.slice();
+
+          checkboxes.forEach(function (cb) {
+            var idx = selectedValues.indexOf(cb.value);
+            if (idx !== -1) {
+              cb.checked = true;
+              cb.dispatchEvent(new Event("change", { bubbles: true }));
+              // remove from unmatched
+              unmatched.splice(unmatched.indexOf(cb.value), 1);
+            } else {
+              cb.checked = false;
+            }
+          });
+
+          var otherInput = q.querySelector("input[type=text][data-role='other-option']");
+          if (otherInput) {
+            otherInput.value = unmatched.join("; ");
+          }
+        }
+        // Single checkbox
+        else if (checkboxes.length === 1 && textInputs.length === 0 && textareas.length === 0 && selects.length === 0) {
+          var checked = (value === true || value === "true" || value === "yes" || value === "1");
+          checkboxes[0].checked = checked;
+          checkboxes[0].dispatchEvent(new Event("change", { bubbles: true }));
+        }
+        // Text input
+        else if (textInputs.length > 0) {
+          textInputs[0].value = value;
+        }
+        // Textarea
+        else if (textareas.length > 0) {
+          textareas[0].value = value;
+        }
+        // Select
+        else if (selects.length > 0) {
+          selects[0].value = value;
+        }
+      });
+    });
+  }
+
+  // Export JSON: download as technical-design.json
+  function exportJson() {
+    var data = collectFormData();
+    var json = JSON.stringify(data, null, 2);
+    var blob = new Blob([json], { type: "application/json" });
+    var link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "technical-design.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // Export Markdown
+  function exportMarkdown() {
+    var data = collectFormData();
+    var lines = [];
+
+    // Maintain an order of sections based on appearance in the DOM
+    var sectionBlocks = document.querySelectorAll(".section-block");
+    sectionBlocks.forEach(function (section) {
+      var sectionKey = section.getAttribute("data-section-key");
+      if (!sectionKey) return;
+      var sectionTitleElem = section.querySelector(".section-title");
+      var sectionTitle = sectionTitleElem ? sectionTitleElem.textContent.trim() : sectionKey;
+      if (!data[sectionKey] || Object.keys(data[sectionKey]).length === 0) {
+        return; // no answered questions in this section
+      }
+
+      lines.push("# " + sectionTitle);
+
+      // For each question element, in DOM order, output answered ones
+      var questions = section.querySelectorAll(".question");
+      questions.forEach(function (q) {
+        var qSectionKey = q.getAttribute("data-section-key");
+        var questionKey = q.getAttribute("data-question-key");
+        if (qSectionKey !== sectionKey) return;
+        var questionLabel = q.getAttribute("data-question-label") || questionKey;
+        var sectionObj = data[sectionKey] || {};
+        if (!sectionObj.hasOwnProperty(questionKey)) return;
+        var answer = sectionObj[questionKey];
+
+        // Convert arrays to comma-separated strings for Markdown
+        var answerText = Array.isArray(answer) ? answer.join(", ") : String(answer);
+
+        lines.push("");
+        lines.push("## " + questionLabel);
+        lines.push(answerText);
+      });
+
+      lines.push("");
+    });
+
+    var md = lines.join("\n");
+    var blob = new Blob([md], { type: "text/markdown" });
+    var link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "technical-design.md";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // Import JSON
+  function importJson(file) {
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      try {
+        var data = JSON.parse(e.target.result);
+        populateFormFromData(data);
+      } catch (err) {
+        alert("Failed to parse JSON file. Please ensure it is valid JSON.");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // Setup event handlers on DOM ready
+  document.addEventListener("DOMContentLoaded", function () {
+    setupConditionalLogic();
+    setupNavigation();
+
+    var exportJsonBtn = document.getElementById("exportJsonBtn");
+    var exportMarkdownBtn = document.getElementById("exportMarkdownBtn");
+    var importJsonInput = document.getElementById("importJsonInput");
+
+    if (exportJsonBtn) {
+      exportJsonBtn.addEventListener("click", function () {
+        exportJson();
+      });
+    }
+
+    if (exportMarkdownBtn) {
+      exportMarkdownBtn.addEventListener("click", function () {
+        exportMarkdown();
+      });
+    }
+
+    if (importJsonInput) {
+      importJsonInput.addEventListener("change", function (e) {
+        var file = e.target.files[0];
+        if (file) {
+          importJson(file);
+        }
+        // reset input so same file can be selected again if needed
+        importJsonInput.value = "";
+      });
+    }
+  });
+})();
+</script>
+</body>
+</html>
