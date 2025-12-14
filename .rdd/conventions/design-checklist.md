@@ -12,7 +12,7 @@
 
 ### Data
 
-- [ ] Domain Model & Data Model are defined in '.rdd-docs/data-model.md' - (entities, aggregates, relationships, metadata)
+- [ ] Domain Model & Data Model are defined in '.rdd-instance/data-model.md' - (entities, aggregates, relationships, metadata)
 
 - [ ] Data Flows & Integration Contracts (sync/async, protocols, schemas) are defined
 

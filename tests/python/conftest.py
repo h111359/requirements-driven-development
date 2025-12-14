@@ -48,8 +48,8 @@ def rdd_workspace(mock_git_repo):
     (repo / ".rdd" / "scripts").mkdir(parents=True)
     (repo / ".rdd" / "templates").mkdir(parents=True)
     (repo / ".github" / "prompts").mkdir(parents=True)
-    (repo / ".rdd-docs" / "workspace").mkdir(parents=True)
-    (repo / ".rdd-docs" / "archive").mkdir(parents=True)
+    (repo / ".rdd-instance" / "workspace").mkdir(parents=True)
+    (repo / ".rdd-instance" / "archive").mkdir(parents=True)
     
     # Create config.json (version moved to about.json)
     config = {
@@ -57,7 +57,7 @@ def rdd_workspace(mock_git_repo):
         "created": "2025-01-01T00:00:00Z",
         "lastModified": "2025-01-01T00:00:00Z"
     }
-    config_path = repo / ".rdd-docs" / "config.json"
+    config_path = repo / ".rdd-instance" / "config.json"
     config_path.write_text(json.dumps(config, indent=2))
     
     # Create about.json with version
@@ -68,8 +68,7 @@ def rdd_workspace(mock_git_repo):
     about_path.write_text(json.dumps(about, indent=2))
     
     # Create basic documentation files
-    (repo / ".rdd-docs" / "requirements.md").write_text("# Requirements\n")
-    (repo / ".rdd-docs" / "tech-spec.md").write_text("# Technical Specification\n\n## Data Architecture\n\n## Project Folder Structure\n")
+    (repo / ".rdd-instance" / "requirements.md").write_text("# Requirements\n")
     
     yield repo
 

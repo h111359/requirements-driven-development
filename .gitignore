@@ -5,7 +5,7 @@
 # .github/ - GitHub workflows and Copilot instructions
 # .vscode/ - VS Code settings
 # .rdd/ - RDD framework scripts and templates
-# .rdd-docs/ - RDD documentation and workspace
+# .rdd-instance/ - RDD documentation and workspace
 
 
 # Temporary and backup files
@@ -14,7 +14,7 @@
 # Working directories and build artifacts
 dist/
 /build/
-.rdd-docs/workspace/
+.rdd-instance/workdir/
 
 # Python
 __pycache__/

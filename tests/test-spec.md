@@ -234,7 +234,7 @@ Tests for utility functions in `rdd_utils.py`.
 **test_get_rdd_config_path**
 - **Purpose:** Verifies config file path construction
 - **How:** Calls get_rdd_config_path()
-- **Asserts:** Returns correct path ending with .rdd-docs/config.json
+- **Asserts:** Returns correct path ending with .rdd-instance/config.json
 
 #### TestWorkspaceUtilities (2 tests)
 

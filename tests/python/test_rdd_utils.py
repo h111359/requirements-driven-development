@@ -165,7 +165,7 @@ class TestConfigFunctions:
         rdd_utils.set_rdd_config("testKey", "testValue")
         
         # Read config and verify
-        config_path = rdd_workspace / ".rdd-docs" / "config.json"
+        config_path = rdd_workspace / ".rdd-instance" / "config.json"
         with open(config_path) as f:
             config = json.load(f)
         assert config["testKey"] == "testValue"
@@ -174,7 +174,7 @@ class TestConfigFunctions:
     def test_get_rdd_config_path(self, rdd_workspace):
         os.chdir(rdd_workspace)
         config_path = rdd_utils.get_rdd_config_path()
-        expected = rdd_workspace / ".rdd-docs" / "config.json"
+        expected = rdd_workspace / ".rdd-instance" / "config.json"
         # Use resolve() to normalize paths on Windows (handles shortnames like RUNNER~1)
         assert Path(config_path).resolve() == expected.resolve()
 
@@ -201,7 +201,7 @@ class TestPromptFunctions:
         os.chdir(rdd_workspace)
         
         # Create prompts file with unchecked prompt
-        prompts_file = rdd_workspace / ".rdd-docs" / "work-iteration-prompts.md"
+        prompts_file = rdd_workspace / ".rdd-instance" / "work-iteration-prompts.md"
         prompts_file.write_text("""## Stand Alone Prompts
 
  - [ ] [P01] Test prompt description

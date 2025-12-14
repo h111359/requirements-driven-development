@@ -1,0 +1,22 @@
+{
+    "PROMPT-ID": "",
+    "PROMPT-NAME": "",
+    "mode": "prompt",
+    "context": {
+        "state": "not-started",
+        "file": ""
+    },
+    "clarity": {
+        "state": "not-started",
+        "file": ""
+    },
+    "plan": {
+        "state": "not-started",
+        "file": ""
+    },
+    "implementation": {
+        "state": "not-started",
+        "approved": false,
+        "file": ""
+    }
+}

@@ -9,7 +9,7 @@ This prompt template helps synchronize the project folder structure with the doc
 This is a placeholder for the folder structure sync prompt template.
 
 ## Expected Outcomes
-- Updated folder structure documentation in tech-spec.md
+- Updated folder structure documentation
 - Validation that all directories exist as documented
 - List of discrepancies between actual and documented structure
 

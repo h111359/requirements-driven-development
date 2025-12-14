@@ -90,15 +90,13 @@ class TestFileOperations:
         assert (rdd_dir / "templates" / "test.md").exists()
     
     def test_copy_seed_templates(self, mock_rdd_archive, mock_git_repo_for_install):
-        """Test copying seed templates to .rdd-docs"""
+        """Test copying seed templates to .rdd-instance"""
         install.copy_rdd_docs_seeds(mock_rdd_archive, mock_git_repo_for_install)
         
-        rdd_docs = mock_git_repo_for_install / ".rdd-docs"
+        rdd_docs = mock_git_repo_for_install / ".rdd-instance"
         assert rdd_docs.exists()
         assert (rdd_docs / "config.json").exists()
         assert (rdd_docs / "requirements.md").exists()
-        assert (rdd_docs / "tech-spec.md").exists()
-
 
 class TestLauncherScriptInstallation:
     """Test launcher script installation based on OS"""
@@ -214,7 +212,7 @@ class TestGitignoreUpdate:
         assert gitignore.exists()
         
         content = gitignore.read_text()
-        assert ".rdd-docs/workspace/" in content
+        assert ".rdd-instance/workdir/" in content
     
     def test_update_gitignore_existing_file(self, mock_git_repo_for_install):
         """Test updating existing .gitignore"""
@@ -225,18 +223,18 @@ class TestGitignoreUpdate:
         
         content = gitignore.read_text()
         assert "*.log" in content  # Preserved existing
-        assert ".rdd-docs/workspace/" in content  # Added new
+        assert ".rdd-instance/workdir/" in content  # Added new
     
     def test_update_gitignore_already_present(self, mock_git_repo_for_install):
         """Test .gitignore when workspace rule already exists"""
         gitignore = mock_git_repo_for_install / ".gitignore"
-        gitignore.write_text(".rdd-docs/workspace/\n")
+        gitignore.write_text(".rdd-instance/workdir/\n")
         
         install.update_gitignore(mock_git_repo_for_install)
         
         content = gitignore.read_text()
         # Should not duplicate
-        assert content.count(".rdd-docs/workspace/") == 1
+        assert content.count(".rdd-instance/workdir/") == 1
 
 
 class TestVerification:

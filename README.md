@@ -95,7 +95,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### Getting Help
 
-1. **Check the documentation** in `.rdd-docs/` after installation
+1. **Check the documentation** in `.rdd-instance/` after installation
 2. **Use `--help` flag** for command usage: `python .rdd/scripts/rdd.py --help`
 3. **Search existing issues** on GitHub
 4. **Create a new issue** with detailed description and error messages

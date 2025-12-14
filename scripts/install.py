@@ -57,7 +57,7 @@ def print_installation_description():
     print("This installer will:")
     print("  • Copy RDD framework files (.rdd/ directory)")
     print("  • Copy GitHub prompts (.github/prompts/)")
-    print("  • Copy seed templates to .rdd-docs/")
+    print("  • Copy seed templates to .rdd-instance/")
     print("  • Merge VS Code settings")
     print("  • Update .gitignore")
     print("  • Verify installation")
@@ -124,7 +124,7 @@ def detect_existing_installation(target_dir: Path) -> bool:
     rdd_dir = target_dir / ".rdd"
     rdd_script = target_dir / ".rdd" / "scripts" / "rdd.py"
     prompts_dir = target_dir / ".github" / "prompts"
-    rdd_docs_dir = target_dir / ".rdd-docs"
+    rdd_docs_dir = target_dir / ".rdd-instance"
     
     has_scripts = rdd_script.exists()
     has_prompts = prompts_dir.exists() and any(prompts_dir.glob("rdd.*.prompt.md"))
@@ -138,9 +138,9 @@ def detect_existing_installation(target_dir: Path) -> bool:
         if has_prompts:
             print(f"  • RDD prompt files found in .github/prompts/")
         if has_docs:
-            print(f"  • .rdd-docs/ directory exists (contains your project data)")
+            print(f"  • .rdd-instance/ directory exists (contains your project data)")
         print()
-        print_warning("Installation will OVERWRITE framework files but preserve .rdd-docs/ content")
+        print_warning("Installation will OVERWRITE framework files but preserve .rdd-instance/ content")
         return True
     
     print_info("No existing installation found")
@@ -152,8 +152,8 @@ def archive_obsolete_files(target_dir: Path):
     
     # Files that are obsolete (replaced by tech-spec.md sections)
     obsolete_files = [
-        target_dir / ".rdd-docs" / "data-model.md",
-        target_dir / ".rdd-docs" / "folder-structure.md"
+        target_dir / ".rdd-instance" / "data-model.md",
+        target_dir / ".rdd-instance" / "folder-structure.md"
     ]
     
     # Check if any obsolete files exist
@@ -175,7 +175,7 @@ def archive_obsolete_files(target_dir: Path):
             print_warning(f"Could not read version from about.json: {e}")
     
     # Create archive directory
-    archive_dir = target_dir / ".rdd-docs" / "archive" / f"installation_{version}"
+    archive_dir = target_dir / ".rdd-instance" / "archive" / f"installation_{version}"
     archive_dir.mkdir(parents=True, exist_ok=True)
     
     # Move obsolete files to archive
@@ -196,7 +196,7 @@ def archive_obsolete_files(target_dir: Path):
         print(f"  Location: {archive_dir}")
         print(f"  Files: {', '.join([f.name for f in files_to_archive])}")
         print()
-        print("These files have been replaced by sections in .rdd-docs/tech-spec.md:")
+        print("These files have been replaced by sections in .rdd-instance/tech-spec.md:")
         print("  • data-model.md → Data Architecture section")
         print("  • folder-structure.md → Project Folder Structure section")
         print()
@@ -387,17 +387,17 @@ def ask_local_only_mode() -> bool:
 
 
 def copy_rdd_docs_seeds(source_dir: Path, target_dir: Path, local_only: bool = False):
-    """Copy seed template files from .rdd-docs in source to target"""
-    print_info("Installing .rdd-docs seed templates...")
+    """Copy seed template files from .rdd-instance in source to target"""
+    print_info("Installing .rdd-instance seed templates...")
     
-    src_rdd_docs = source_dir / ".rdd-docs" 
-    dst_rdd_docs = target_dir / ".rdd-docs"
+    src_rdd_docs = source_dir / ".rdd-instance" 
+    dst_rdd_docs = target_dir / ".rdd-instance"
     
-    # Create .rdd-docs directory if it doesn't exist
+    # Create .rdd-instance directory if it doesn't exist
     dst_rdd_docs.mkdir(parents=True, exist_ok=True)
     
     # List of seed files to copy
-    seed_files = ["config.json", "requirements.md", "tech-spec.md"]
+    seed_files = ["config.json", "requirements.md"]
     
     copied = 0
     for seed_file in seed_files:
@@ -511,7 +511,7 @@ def update_gitignore(target_dir: Path):
     print_info("Updating .gitignore...")
     
     gitignore_path = target_dir / ".gitignore"
-    workspace_entry = ".rdd-docs/workspace/"
+    workspace_entry = ".rdd-instance/workdir/"
     
     # Read existing or create empty
     if gitignore_path.exists():
@@ -521,9 +521,9 @@ def update_gitignore(target_dir: Path):
     
     # Check if already present
     patterns = [
-        '.rdd-docs/workspace/',
-        '.rdd-docs/workspace',
-        '.rdd-docs/workspace/*',
+        '.rdd-instance/workdir/',
+        '.rdd-instance/workdir',
+        '.rdd-instance/workdir/*',
     ]
     
     for line in lines:

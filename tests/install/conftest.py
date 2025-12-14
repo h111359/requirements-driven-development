@@ -49,7 +49,7 @@ def mock_rdd_archive(temp_install_dir):
     (archive_dir / ".github" / "prompts").mkdir(parents=True)
     (archive_dir / ".rdd" / "scripts").mkdir(parents=True)
     (archive_dir / ".rdd" / "templates").mkdir(parents=True)
-    (archive_dir / ".rdd-docs").mkdir(parents=True)
+    (archive_dir / ".rdd-instance").mkdir(parents=True)
     (archive_dir / ".vscode").mkdir(parents=True)
     (archive_dir / "templates").mkdir(parents=True)
     
@@ -59,17 +59,16 @@ def mock_rdd_archive(temp_install_dir):
     (archive_dir / ".rdd" / "templates" / "test.md").write_text('# Template')
     (archive_dir / ".github" / "prompts" / "test.prompt.md").write_text('# Prompt')
     
-    # Create seed templates in .rdd-docs
+    # Create seed templates in .rdd-instance
     config = {
         "version": "1.0.0",
         "defaultBranch": "main",
         "created": "2025-01-01T00:00:00Z",
         "lastModified": "2025-01-01T00:00:00Z"
     }
-    (archive_dir / ".rdd-docs" / "config.json").write_text(json.dumps(config, indent=2))
-    (archive_dir / ".rdd-docs" / "requirements.md").write_text('# Requirements')
-    (archive_dir / ".rdd-docs" / "tech-spec.md").write_text('# Tech Spec')
-    (archive_dir / ".rdd-docs" / "data-model.md").write_text('# Data Model')
+    (archive_dir / ".rdd-instance" / "config.json").write_text(json.dumps(config, indent=2))
+    (archive_dir / ".rdd-instance" / "requirements.md").write_text('# Requirements')
+    (archive_dir / ".rdd-instance" / "data-model.md").write_text('# Data Model')
     
     # VS Code settings
     settings = {

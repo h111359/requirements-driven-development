@@ -9,7 +9,7 @@ This prompt template helps revise and update existing requirements in the RDD fr
 This is a placeholder for the requirement revision prompt template. 
 
 ## Expected Outcomes
-- Updated requirements in `.rdd-docs/requirements.md`
+- Updated requirements in `.rdd-instance/requirements.md`
 - Validation of requirement ID sequences
 - Documentation of changes made
 

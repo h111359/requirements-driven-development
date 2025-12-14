@@ -1,0 +1,208 @@
+{
+  "schemaVersion": "1.0.0",
+  "manifestType": "rdd.framework",
+  "generatedBy": "RDD build system",
+
+  "framework": {
+    "name": "RDD Framework",
+    "version": "1.2.0",
+    "semver": true,
+    "description": "Requirements-Driven Development framework installed into a repository; framework assets live under .rdd and repo-specific state and documentation live under .rdd-instance.",
+    "supportedPlatforms": ["windows", "linux"],
+    "runtime": {
+      "language": "python",
+      "pythonCommand": "python"
+    }
+  },
+
+  "canonicalRoots": {
+    "frameworkRoot": ".rdd",
+    "instanceRoot": ".rdd-instance",
+    "githubRoot": ".github",
+    "vscodeRoot": ".vscode"
+  },
+
+  "components": [
+    {
+      "id": "framework.core",
+      "root": ".rdd",
+      "description": "Framework static assets: conventions, docs, prompts, scripts, templates, config.",
+      "required": true
+    },
+    {
+      "id": "instance.repo",
+      "root": ".rdd-instance",
+      "description": "Repo-specific configuration, requirements, specifications, workspace, archive.",
+      "required": true
+    },
+    {
+      "id": "copilot.executePrompt",
+      "root": ".github/prompts",
+      "description": "Single GitHub Copilot prompt file used as the execute command entry point.",
+      "required": true
+    }
+  ],
+
+  "ownership": {
+    "rules": [
+      {
+        "label": "frameworkManaged",
+        "paths": [".rdd/**"],
+        "policy": "overwriteOnUpgrade"
+      },
+      {
+        "label": "copilotPromptManaged",
+        "paths": [".github/prompts/rdd.execute.prompt.md"],
+        "policy": "overwriteOnUpgrade"
+      },
+      {
+        "label": "instanceConfigAndDocs",
+        "paths": [
+          ".rdd-instance/config.json",
+          ".rdd-instance/requirements.md",
+          ".rdd-instance/specifications/**"
+        ],
+        "policy": "preserveOnUpgrade"
+      },
+      {
+        "label": "instanceRuntimeState",
+        "paths": [
+          ".rdd-instance/workdir/**",
+          ".rdd-instance/archive/**"
+        ],
+        "policy": "preserveAndArchiveOnUpgrade"
+      }
+    ]
+  },
+
+  "requiredPaths": {
+    "framework": [
+      ".rdd/conventions/",
+      ".rdd/docs/",
+      ".rdd/scripts/",
+      ".rdd/templates/",
+      ".rdd/prompt-snippets/",      
+      ".rdd/prompt-templates/",
+      ".rdd/config/"
+    ],
+    "instance": [
+      ".rdd-instance/",
+      ".rdd-instance/specifications/",
+      ".rdd-instance/workdir/",
+      ".rdd-instance/archive/"
+    ],
+    "copilot": [
+      ".github/prompts/",
+      ".github/prompts/rdd.execute.prompt.md"
+    ]
+  },
+
+  "requiredFiles": [
+    {
+      "path": ".github/prompts/rdd.execute.prompt.md",
+      "role": "executeCommandEntryPoint",
+      "required": true,
+      "singleInstance": true
+    },
+    {
+      "path": ".rdd-instance/workdir/work-iteration-prompt.md",
+      "role": "activePrompt",
+      "required": true,
+      "singleInstance": true
+    },
+    {
+      "path": ".rdd-instance/workdir/work-iteration-registry.json",
+      "role": "workIterationRegistry",
+      "required": true
+    },
+    {
+      "path": ".rdd-instance/requirements.md",
+      "role": "requirements",
+      "required": true
+    },
+    {
+      "path": ".rdd-instance/config.json",
+      "role": "instanceConfig",
+      "required": true,
+      "expectedFields": {
+        "gitMode": ["noGit", "localGit", "remoteGit"]
+      }
+    },
+    {
+      "path": ".rdd/config/technical-design-form.json",
+      "role": "technicalDesignFormDefinition",
+      "required": true
+    }
+  ],
+
+  "templateSeeding": {
+    "sourceRoot": ".rdd/templates",
+    "targets": [
+      {
+        "source": "config.json",
+        "destination": ".rdd-instance/config.json",
+        "mode": "copyIfMissingOrMerge",
+        "mergeStrategy": "preserveExistingKeys"
+      },
+      {
+        "source": "requirements.md",
+        "destination": ".rdd-instance/requirements.md",
+        "mode": "copyIfMissing"
+      },
+      {
+        "source": "specifications/",
+        "destination": ".rdd-instance/specifications/",
+        "mode": "copyIfMissing"
+      }
+    ]
+  },
+
+  "workspaceModel": {
+    "workspaceRoot": ".rdd-instance/workdir",
+    "archiveRoot": ".rdd-instance/archive",
+    "iterationArchivePattern": ".rdd-instance/archive/<work-iteration-name>/",
+    "archiveOnCompletion": true,
+    "clearWorkspaceAfterArchive": true,
+    "archiveCopyNotMove": true
+  },
+
+  "upgradePolicy": {
+    "default": "preserve",
+    "rules": [
+      { "path": ".rdd/**", "action": "overwrite" },
+      { "path": ".github/prompts/rdd.execute.prompt.md", "action": "overwrite" },
+      { "path": ".rdd-instance/config.json", "action": "mergePreserveExisting" },
+      { "path": ".rdd-instance/requirements.md", "action": "preserve" },
+      { "path": ".rdd-instance/specifications/**", "action": "preserve" },
+      {
+        "path": ".rdd-instance/workdir/**",
+        "action": "preserve",
+        "alsoArchiveToPattern": ".rdd-instance/archive/replaced_version_files_<timestamp>/workspace/"
+      },
+      {
+        "path": ".rdd-instance/archive/**",
+        "action": "preserve"
+      }
+    ]
+  },
+
+  "validation": {
+    "mustExist": [
+      ".rdd",
+      ".rdd/scripts",
+      ".rdd/templates",
+      ".rdd/prompt-snippets/",      
+      ".rdd/prompt-templates/",
+      ".rdd-instance",
+      ".rdd-instance/workdir",
+      ".rdd-instance/archive",
+      ".rdd-instance/specifications",
+      ".github/prompts",
+      ".github/prompts/rdd.execute.prompt.md"
+    ],
+    "mustBeSingleInstance": [
+      ".github/prompts/rdd.execute.prompt.md",
+      ".rdd-instance/workdir/work-iteration-prompt.md"
+    ]
+  }
+}

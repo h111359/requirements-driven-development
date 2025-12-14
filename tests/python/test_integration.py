@@ -30,7 +30,7 @@ class TestChangeWorkflow:
         subprocess.run(["git", "checkout", "-b", branch_name], check=True, capture_output=True)
         
         # Initialize workspace
-        workspace = rdd_workspace / ".rdd-docs" / "workspace"
+        workspace = rdd_workspace / ".rdd-instance" / "workspace"
         
         # Create config file
         config = {
@@ -60,7 +60,7 @@ class TestRequirementsManagement:
         """Test requirements changes file format"""
         os.chdir(rdd_workspace)
         
-        workspace = rdd_workspace / ".rdd-docs" / "workspace"
+        workspace = rdd_workspace / ".rdd-instance" / "workspace"
         changes_file = workspace / "requirements-changes.md"
         changes_file.write_text(sample_requirements_changes)
         
@@ -79,7 +79,7 @@ class TestWorkspaceArchiving:
         """Test creating workspace backup"""
         os.chdir(rdd_workspace)
         
-        workspace = rdd_workspace / ".rdd-docs" / "workspace"
+        workspace = rdd_workspace / ".rdd-instance" / "workspace"
         backups_dir = workspace / ".backups"
         backups_dir.mkdir(parents=True, exist_ok=True)
         

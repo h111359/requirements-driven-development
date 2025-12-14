@@ -1,0 +1,62 @@
+{
+  "defaultBranch": "dev",
+  "gitMode": "remoteGit",
+  "specifications": {
+    "work-iteration-prompt": {
+      "enabled": true,
+      "path": ".rdd-instance\\workspace\\work-iteration-prompt.md",
+      "conventions-file": ".rdd\\conventions\\work-iteration-prompt-format.md"
+    },
+    "work-iteration-registry": {
+      "enabled": true,
+      "path": ".rdd-instance\\workspace\\work-iteration-registry.md",
+      "conventions-file": ".rdd\\conventions\\work-iteration-registry-format.md"
+    },
+    "requirements": {
+      "enabled": true,
+      "path": ".rdd-instance\\requirements.md",
+      "conventions-file": ".rdd\\conventions\\requirements-format.md"
+    },
+    "concepts": {
+      "enabled": true,
+      "path": ".rdd-instance\\concepts.md",
+      "conventions-file": ".rdd\\conventions\\concepts-format.md"
+    },
+    "arcitecture-decision-record": {
+      "enabled": true,
+      "path": ".rdd-instance\\specifications\\architecture-decision-records.md"
+    },
+    "components": {
+      "enabled": true,
+      "path": ".rdd-instance\\specifications\\components.md"
+    },
+    "data": {
+      "enabled": false,
+      "path": ".rdd-instance\\specifications\\data.md"
+    },
+    "deployment": {
+      "enabled": false,
+      "path": ".rdd-instance\\specifications\\deployment.md"
+    },
+    "files-and-folders": {
+      "enabled": true,
+      "path": ".rdd-instance\\specifications\\files-and-folders.md"
+    },
+    "front-end": {
+      "enabled": true,
+      "path": ".rdd-instance\\specifications\\front-end.md"
+    },
+    "infrastructure": {
+      "enabled": true,
+      "path": ".rdd-instance\\specifications\\infrastructure.md"
+    },
+    "quality-assurance": {
+      "enabled": false,
+      "path": ".rdd-instance\\specifications\\quality-assurance.md"
+    },
+    "security": {
+      "enabled": true,
+      "path": ".rdd-instance\\specifications\\security.md"
+    }
+  }
+}
