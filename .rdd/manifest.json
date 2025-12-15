@@ -48,7 +48,7 @@
       {
         "label": "frameworkManaged",
         "paths": [".rdd/**"],
-        "policy": "preserveOnUpgrade"
+        "policy": "overwriteOnUpgrade"
       },
       {
         "label": "copilotPromptManaged",
@@ -67,15 +67,21 @@
         "paths": [
           ".rdd-instance/specifications/**"
         ],
-        "policy": "overwriteOnUpgrade"
+        "policy": "preserveOnUpgrade"
+      },
+      {
+        "label": "instanceArchive",
+        "paths": [
+          ".rdd-instance/archive/**"
+        ],
+        "policy": "preserveOnUpgrade"
       },
       {
         "label": "instanceRuntimeState",
         "paths": [
-          ".rdd-instance/workdir/**",
-          ".rdd-instance/archive/**"
+          ".rdd-instance/workdir/**"
         ],
-        "policy": "preserveAndArchiveOnUpgrade"
+        "policy": "overwriteOnUpgrade"
       }
     ]
   },
@@ -106,12 +112,6 @@
     {
       "path": ".github/prompts/rdd.execute.prompt.md",
       "role": "executeCommandEntryPoint",
-      "required": true,
-      "singleInstance": true
-    },
-    {
-      "path": ".rdd-instance/workdir/work-iteration-prompt.md",
-      "role": "activePrompt",
       "required": true,
       "singleInstance": true
     },
@@ -179,14 +179,8 @@
       { "path": ".rdd-instance/config.json", "action": "mergePreserveExisting" },
       { "path": ".rdd-instance/requirements.md", "action": "preserve" },
       { "path": ".rdd-instance/specifications/**", "action": "preserve" },
-      {
-        "path": ".rdd-instance/workdir/**",
-        "action": "preserve",
-        "alsoArchiveToPattern": ".rdd-instance/archive/<timestamp>/"
-      },
-      {
-        "path": ".rdd-instance/archive/**",
-        "action": "preserve"
+      { "path": ".rdd-instance/workdir/**", "action": "overwrite"},
+      { "path": ".rdd-instance/archive/**", "action": "preserve"}
       }
     ]
   },
@@ -206,8 +200,7 @@
       ".github/prompts/rdd.execute.prompt.md"
     ],
     "mustBeSingleInstance": [
-      ".github/prompts/rdd.execute.prompt.md",
-      ".rdd-instance/workdir/work-iteration-prompt.md"
+      ".github/prompts/rdd.execute.prompt.md"
     ]
   }
 }
