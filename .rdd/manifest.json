@@ -32,7 +32,7 @@
     {
       "id": "instance.repo",
       "root": ".rdd-instance",
-      "description": "Repo-specific configuration, requirements, specifications, workspace, archive.",
+      "description": "Repo-specific configuration, requirements, specifications, workdir, archive.",
       "required": true
     },
     {
@@ -48,7 +48,7 @@
       {
         "label": "frameworkManaged",
         "paths": [".rdd/**"],
-        "policy": "overwriteOnUpgrade"
+        "policy": "preserveOnUpgrade"
       },
       {
         "label": "copilotPromptManaged",
@@ -56,13 +56,18 @@
         "policy": "overwriteOnUpgrade"
       },
       {
-        "label": "instanceConfigAndDocs",
+        "label": "instanceConfig",
         "paths": [
-          ".rdd-instance/config.json",
-          ".rdd-instance/requirements.md",
-          ".rdd-instance/specifications/**"
+          ".rdd-instance/config.json"
         ],
         "policy": "preserveOnUpgrade"
+      },
+            {
+        "label": "instanceDocs",
+        "paths": [
+          ".rdd-instance/specifications/**"
+        ],
+        "policy": "overwriteOnUpgrade"
       },
       {
         "label": "instanceRuntimeState",
@@ -157,12 +162,12 @@
     ]
   },
 
-  "workspaceModel": {
-    "workspaceRoot": ".rdd-instance/workdir",
+  "workdirModel": {
+    "workdirRoot": ".rdd-instance/workdir",
     "archiveRoot": ".rdd-instance/archive",
     "iterationArchivePattern": ".rdd-instance/archive/<work-iteration-name>/",
     "archiveOnCompletion": true,
-    "clearWorkspaceAfterArchive": true,
+    "clearworkdirAfterArchive": true,
     "archiveCopyNotMove": true
   },
 
@@ -177,7 +182,7 @@
       {
         "path": ".rdd-instance/workdir/**",
         "action": "preserve",
-        "alsoArchiveToPattern": ".rdd-instance/archive/replaced_version_files_<timestamp>/workspace/"
+        "alsoArchiveToPattern": ".rdd-instance/archive/<timestamp>/"
       },
       {
         "path": ".rdd-instance/archive/**",

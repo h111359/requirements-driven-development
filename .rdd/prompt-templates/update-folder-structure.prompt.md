@@ -1,10 +1,6 @@
 ## Instructions
 
-1. Run the script
-   `python .rdd/scripts/rdd.py workspace list-files` which lists all the file, folders and recursively their subfolders and stores the result in `.rdd-instance/workdir/files-list.md` excluding folders and subfolders which start with "." or folders like "venv" in a terminal by running the script:
-     ```python
-     python .rdd/scripts/rdd.py workspace list-files    
-     ```
+1. Run a python script which lists all the file, folders and recursively their subfolders and stores the result in `.rdd-instance/workdir/files-list.md` excluding folders and subfolders which start with "." or folders like "venv" in a terminal .
    
 2. Create (or revise if exists) the file `.rdd-instance/workdir/files-analysis.md` and check if there are files in `.rdd-instance/workdir/files-list.md` which are missing or are with newer timestapm of the last change. For those - open the file, read it and add a short summary in `.rdd-instance/workdir/files-analysis.md` containing the relative path, type and only if it is readable - short summary of its content. Group the file entries and order them per folder they are in (same for the folders).
 

@@ -40,15 +40,15 @@ def mock_git_repo(temp_dir):
 
 
 @pytest.fixture
-def rdd_workspace(mock_git_repo):
-    """Create a mock RDD workspace structure"""
+def rdd_workdir(mock_git_repo):
+    """Create a mock RDD workdir structure"""
     repo = mock_git_repo
     
     # Create RDD directories
     (repo / ".rdd" / "scripts").mkdir(parents=True)
     (repo / ".rdd" / "templates").mkdir(parents=True)
     (repo / ".github" / "prompts").mkdir(parents=True)
-    (repo / ".rdd-instance" / "workspace").mkdir(parents=True)
+    (repo / ".rdd-instance" / "workdir").mkdir(parents=True)
     (repo / ".rdd-instance" / "archive").mkdir(parents=True)
     
     # Create config.json (version moved to about.json)

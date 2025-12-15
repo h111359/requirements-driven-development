@@ -14,7 +14,7 @@
 ### Data Protection
 - All data stored in git repository
 - No external service dependencies
-- Workspace files cleared after archiving (no sensitive data retention)
+- workdir files cleared after archiving (no sensitive data retention)
 
 ### Access Control
 - Relies on OS-level file permissions

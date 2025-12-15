@@ -21,16 +21,16 @@ import rdd_utils
 class TestChangeWorkflow:
     """Test complete change workflow"""
     
-    def test_fix_branch_workflow(self, rdd_workspace):
-        """Test creating a fix branch and initializing workspace"""
-        os.chdir(rdd_workspace)
+    def test_fix_branch_workflow(self, rdd_workdir):
+        """Test creating a fix branch and initializing workdir"""
+        os.chdir(rdd_workdir)
         
         # Create fix branch
         branch_name = "fix/test-bug"
         subprocess.run(["git", "checkout", "-b", branch_name], check=True, capture_output=True)
         
-        # Initialize workspace
-        workspace = rdd_workspace / ".rdd-instance" / "workspace"
+        # Initialize workdir
+        workdir = rdd_workdir / ".rdd-instance" / "workdir"
         
         # Create config file
         config = {
@@ -40,12 +40,12 @@ class TestChangeWorkflow:
             "created": rdd_utils.get_timestamp(),
             "author": "test@example.com"
         }
-        config_file = workspace / f".rdd.fix.{branch_name.replace('/', '-')}"
+        config_file = workdir / f".rdd.fix.{branch_name.replace('/', '-')}"
         config_file.write_text(json.dumps(config, indent=2))
         
-        # Verify workspace initialized
+        # Verify workdir initialized
         assert config_file.exists()
-        assert workspace.exists()
+        assert workdir.exists()
         
         # Verify we can find the config
         found_config = rdd_utils.find_change_config()
@@ -56,12 +56,12 @@ class TestChangeWorkflow:
 class TestRequirementsManagement:
     """Test requirements management workflow"""
     
-    def test_requirements_changes_format(self, rdd_workspace, sample_requirements_changes):
+    def test_requirements_changes_format(self, rdd_workdir, sample_requirements_changes):
         """Test requirements changes file format"""
-        os.chdir(rdd_workspace)
+        os.chdir(rdd_workdir)
         
-        workspace = rdd_workspace / ".rdd-instance" / "workspace"
-        changes_file = workspace / "requirements-changes.md"
+        workdir = rdd_workdir / ".rdd-instance" / "workdir"
+        changes_file = workdir / "requirements-changes.md"
         changes_file.write_text(sample_requirements_changes)
         
         # Read and validate format
@@ -72,28 +72,28 @@ class TestRequirementsManagement:
 
 
 @pytest.mark.integration
-class TestWorkspaceArchiving:
-    """Test workspace archiving workflow"""
+class TestworkdirArchiving:
+    """Test workdir archiving workflow"""
     
-    def test_workspace_backup_creation(self, rdd_workspace):
-        """Test creating workspace backup"""
-        os.chdir(rdd_workspace)
+    def test_workdir_backup_creation(self, rdd_workdir):
+        """Test creating workdir backup"""
+        os.chdir(rdd_workdir)
         
-        workspace = rdd_workspace / ".rdd-instance" / "workspace"
-        backups_dir = workspace / ".backups"
+        workdir = rdd_workdir / ".rdd-instance" / "workdir"
+        backups_dir = workdir / ".backups"
         backups_dir.mkdir(parents=True, exist_ok=True)
         
-        # Create some workspace files
-        (workspace / "test-file.md").write_text("Test content")
+        # Create some workdir files
+        (workdir / "test-file.md").write_text("Test content")
         
         # Create backup
         timestamp = rdd_utils.get_timestamp_filename()
         backup_dir = backups_dir / timestamp
         backup_dir.mkdir(parents=True)
         
-        # Copy workspace files
+        # Copy workdir files
         import shutil
-        for item in workspace.iterdir():
+        for item in workdir.iterdir():
             if item.name != ".backups" and item.is_file():
                 shutil.copy2(item, backup_dir / item.name)
         
@@ -145,9 +145,9 @@ class TestGitIntegration:
 class TestConfigManagement:
     """Test configuration management"""
     
-    def test_config_read_write_cycle(self, rdd_workspace):
+    def test_config_read_write_cycle(self, rdd_workdir):
         """Test reading and writing configuration"""
-        os.chdir(rdd_workspace)
+        os.chdir(rdd_workdir)
         
         # Read initial value
         original_branch = rdd_utils.get_rdd_config("defaultBranch")
@@ -163,9 +163,9 @@ class TestConfigManagement:
         # Restore original
         rdd_utils.set_rdd_config("defaultBranch", original_branch)
     
-    def test_config_default_branch(self, rdd_workspace):
+    def test_config_default_branch(self, rdd_workdir):
         """Test default branch configuration"""
-        os.chdir(rdd_workspace)
+        os.chdir(rdd_workdir)
         
         # Read default branch from config
         default_branch = rdd_utils.get_default_branch()

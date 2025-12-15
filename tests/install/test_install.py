@@ -226,7 +226,7 @@ class TestGitignoreUpdate:
         assert ".rdd-instance/workdir/" in content  # Added new
     
     def test_update_gitignore_already_present(self, mock_git_repo_for_install):
-        """Test .gitignore when workspace rule already exists"""
+        """Test .gitignore when workdir rule already exists"""
         gitignore = mock_git_repo_for_install / ".gitignore"
         gitignore.write_text(".rdd-instance/workdir/\n")
         

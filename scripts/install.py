@@ -507,11 +507,11 @@ def merge_settings(source: Dict[str, Any], target: Dict[str, Any]) -> Dict[str, 
     return merged
 
 def update_gitignore(target_dir: Path):
-    """Update .gitignore to exclude workspace"""
+    """Update .gitignore to exclude workdir"""
     print_info("Updating .gitignore...")
     
     gitignore_path = target_dir / ".gitignore"
-    workspace_entry = ".rdd-instance/workdir/"
+    workdir_entry = ".rdd-instance/workdir/"
     
     # Read existing or create empty
     if gitignore_path.exists():
@@ -528,14 +528,14 @@ def update_gitignore(target_dir: Path):
     
     for line in lines:
         if any(pattern in line for pattern in patterns):
-            print_info(".gitignore already contains workspace exclusion")
+            print_info(".gitignore already contains workdir exclusion")
             return
     
     # Add entry
     if lines and lines[-1].strip():  # Add blank line if needed
         lines.append('')
-    lines.append('# RDD framework workspace (auto-generated)')
-    lines.append(workspace_entry)
+    lines.append('# RDD framework workdir (auto-generated)')
+    lines.append(workdir_entry)
     
     # Write back
     gitignore_path.write_text('\n'.join(lines) + '\n')

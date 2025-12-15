@@ -17,21 +17,21 @@ repo-root/
 │   │   ├── design-checklist.md   # Design checklist template
 │   │   ├── questions-formatting.md  # Question formatting guidelines
 │   │   ├── requirements-format.md   # Requirements format guidelines
-├── .rdd-instance/                    # RDD documentation and workspace
+├── .rdd-instance/                    # RDD documentation and workdir
 │   ├── config.json               # Framework configuration (defaultBranch, localOnly, timestamps)
-│   ├── work-iteration-prompts.md # Stand-alone prompts checklist (top level, backed up to workspace on iteration complete)
-│   ├── user-story.md             # User story definition (top level, backed up to workspace on iteration complete)
-│   ├── workspace/                # Active development workspace
-│   │   ├── .rdd.[fix|enh].[branch-name]  # Change config file (one per workspace)
+│   ├── work-iteration-prompts.md # Stand-alone prompts checklist (top level, backed up to workdir on iteration complete)
+│   ├── user-story.md             # User story definition (top level, backed up to workdir on iteration complete)
+│   ├── workdir/                # Active development workdir
+│   │   ├── .rdd.[fix|enh].[branch-name]  # Change config file (one per workdir)
 │   │   ├── log.jsonl                      # Execution log
 │   │   └── ...                            # Other workflow files (work-iteration-prompts.md, user-story.md backed up here during completion)
 │   ├── archive/                  # Archived completed changes
 │   │   └── [sanitized-branch-name]/      # One directory per archived change
 │   │       ├── .archive-metadata          # Archive metadata (JSON)
-│   │       └── ...                        # Archived workspace files
+│   │       └── ...                        # Archived workdir files
 │   ├── requirements.md           # Main requirements document
 │   └── ...                       # Other project documentation
-├── .vscode/                      # VS Code workspace settings
+├── .vscode/                      # VS Code workdir settings
 │   └── settings.json             # Editor config, auto-approvals, associations
 ├── build/                        # Build directory with build script and artifacts
 │   ├── build.py                  # Build script for creating releases
@@ -68,41 +68,9 @@ repo-root/
 
 ## System Files
 
-### about.json
-
-**Description**: Framework version information file. Located in `.rdd/about.json` and version-controlled with the repository.
-
-**Attributes**:
-
-- **version**: 
-  - Description: RDD framework version using semantic versioning
-  - Mandatory: Yes
-  - Data Type: String
-  - Format: Semantic versioning (MAJOR.MINOR.PATCH)
-  - Example: "1.1.1"
-
-**Example File**:
-```json
-{
-  "version": "1.1.1"
-}
-```
-
-**Location**:
-- File path: `.rdd/about.json`
-- Read by: `get_framework_version()` in rdd.py
-- Updated by: `update_about_version()` in build.py
-
-**Usage**:
-- Read when displaying framework version (`python .rdd/scripts/rdd.py --version`)
-- Updated during build process when user increments version
-- Single source of truth for framework version
-
-
-
 ### config.json
 
-**Description**: Framework-wide configuration file storing repository and workflow settings. Located in `.rdd-instance/config.json` and version-controlled with the repository. Note: Version information is stored separately in `.rdd/about.json`.
+**Description**: Framework-wide configuration file storing repository and workflow settings. Located in `.rdd-instance/config.json` and version-controlled with the repository. 
 
 **Attributes**:
 
@@ -152,7 +120,7 @@ repo-root/
 - Access functions: `get_rdd_config(key, default)`, `set_rdd_config(key, value)`, `get_rdd_config_path()`
 
 **Usage**:
-- Created during workspace initialization via interactive branch selection
+- Created during workdir initialization via interactive branch selection
 - Updated via `python .rdd/scripts/rdd.py config set <key> <value>`
 - Read by `get_default_branch()` function for branch management
 - Displayed via `python .rdd/scripts/rdd.py config show`

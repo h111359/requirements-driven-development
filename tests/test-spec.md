@@ -69,10 +69,10 @@ Tests for the main entry point (`rdd.py`) covering CLI routing and menu interact
 - **How:** Mocks sys.argv and route_config function, verifies routing
 - **Asserts:** route_config is called once, returns 0
 
-**test_workspace_init_routing**
-- **Purpose:** Verifies that `workspace init` command routes correctly
-- **How:** Mocks sys.argv and route_workspace function, verifies routing
-- **Asserts:** route_workspace is called once, returns 0
+**test_workdir_init_routing**
+- **Purpose:** Verifies that `workdir init` command routes correctly
+- **How:** Mocks sys.argv and route_workdir function, verifies routing
+- **Asserts:** route_workdir is called once, returns 0
 
 #### TestChangeCommands (1 test)
 
@@ -236,7 +236,7 @@ Tests for utility functions in `rdd_utils.py`.
 - **How:** Calls get_rdd_config_path()
 - **Asserts:** Returns correct path ending with .rdd-instance/config.json
 
-#### TestWorkspaceUtilities (2 tests)
+#### TestworkdirUtilities (2 tests)
 
 **test_ensure_dir_creates_directory**
 - **Purpose:** Verifies directory creation
@@ -270,8 +270,8 @@ Integration tests covering end-to-end workflows.
 
 **test_fix_branch_workflow**
 - **Purpose:** Tests complete fix branch creation workflow
-- **How:** Creates temp git repo, runs branch creation, verifies workspace
-- **Asserts:** Branch created, workspace initialized correctly
+- **How:** Creates temp git repo, runs branch creation, verifies workdir
+- **Asserts:** Branch created, workdir initialized correctly
 
 #### TestRequirementsManagement (1 test)
 
@@ -280,11 +280,11 @@ Integration tests covering end-to-end workflows.
 - **How:** Creates mock requirements-changes.md with various formats
 - **Asserts:** Valid formats accepted, invalid rejected
 
-#### TestWorkspaceArchiving (1 test)
+#### TestworkdirArchiving (1 test)
 
-**test_workspace_backup_creation**
-- **Purpose:** Tests workspace backup functionality
-- **How:** Creates workspace files, triggers backup
+**test_workdir_backup_creation**
+- **Purpose:** Tests workdir backup functionality
+- **How:** Creates workdir files, triggers backup
 - **Asserts:** Backup directory created with all files
 
 #### TestGitIntegration (2 tests)
@@ -456,7 +456,7 @@ Tests use fixtures defined in `conftest.py` files:
 
 **Python Tests (`tests/python/conftest.py`):**
 - `temp_git_repo` - Creates temporary git repository
-- `temp_workspace` - Creates temporary workspace directory
+- `temp_workdir` - Creates temporary workdir directory
 - `mock_config` - Provides mock configuration
 
 **Build Tests (`tests/build/conftest.py`):**
@@ -511,7 +511,7 @@ Tests run automatically on GitHub Actions:
 
 **Example:**
 ```python
-def test_my_function(temp_workspace):
+def test_my_function(temp_workdir):
     """Test my_function does what it should."""
     result = my_function("input")
     assert result == "expected"

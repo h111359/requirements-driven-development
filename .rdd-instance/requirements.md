@@ -4,7 +4,7 @@ RDD Framework
 
 # Product Overview
 
-The the product is a system that seves to be installed the RDD framework in a software code repository (with or without git versioning).
+The product is a system that seves to be installed the RDD framework in a software code repository (with or without git versioning).
 
 The RDD framework aims to standardize execution of user defined tasks to GitHub copilot in form of prompts, maintain full traceability of prompt history, and provide a simplified developer experience through a unified execution model and a web-based interface. 
 
@@ -24,7 +24,7 @@ The framework enables:
 * **Prompt** – A developer-issued instruction for the copilot
 * **Technical Design** – Structured JSON defining architectural decisions
 * **Questionnaire** – A set of questions generated to clarify missing or ambiguous information
-* **execute command** - A github prompt, which is the only prompt exexuted in GitHub Copilot chat window and which includes instructions how the copilot to understant the needed context and actions.
+* **execute command** - A github prompt, which is the only prompt executed in GitHub Copilot chat window and which includes instructions how the copilot to understand the needed context and actions.
 
 # Design principles
 
@@ -36,7 +36,7 @@ The framework enables:
 
 - [DP-004] for developer Convenience a browser-based UI must support all user interactions except the actual execution of the `execute command`.
 
-- [DP-005] The framework must operate on both Windows and Linux, with functionality implemented primarely in Python, vanila JavaScript, HTML, CSS.
+- [DP-005] The framework must operate on both Windows and Linux, with functionality implemented primarely in Python, vanilla JavaScript, HTML, CSS.
 
 - [DP-006] Prompts shall call scripts for actions rather than implementing logic directly
 
@@ -46,17 +46,17 @@ The framework enables:
 
 - [GF-002] The framework shall persist all prompts as Markdown files authored through the Web UI to ensure full historical traceability.
 
-- [GF-003] The framework shall maintain a workspace directory (.rdd-instance/workdir/) for active development work on enhancements and fixes.
+- [GF-003] The framework shall maintain a workdir directory (.rdd-instance/workdir/) for active development work on enhancements and fixes.
 
-- [GF-004] The framework shall archive completed workspace content for historical reference.
+- [GF-004] The framework shall archive completed workdir content for historical reference.
 
-- [GF-005] The framework shall support merging clarified requirements from the workspace into the main requirements.md file.
+- [GF-005] The framework shall support merging clarified requirements from the workdir into the main requirements.md file.
 
 - [GF-006] The framework shall load, apply, and update requirements automatically during each prompt execution.
 
 - [GF-007] The framework shall maintain and update the technical design and technical specification in dedicated files as part of prompt execution workflows.
 
-- [GF-008] The framework shall provide a web-based user interface for creating, editing, and managing prompts, questionnaires, implementation plans, technical specifications, file structure, requirements, and workspace/version control operations.
+- [GF-008] The framework shall provide a web-based user interface for creating, editing, and managing prompts, questionnaires, implementation plans, technical specifications, file structure, requirements, and workdir/version control operations.
 
 - [GF-009] The framework shall require that all prompts are authored through the Web UI and stored as Markdown files, preventing ad-hoc prompt text in copilot chat from being treated as canonical input.
 
@@ -74,7 +74,7 @@ The framework enables:
 
 - [GF-016] The framework shall support adding new requirements and reverse-engineering requirements from the existing project state.
 
-- [GF-017] The framework shall support git branch creation, updates from the default branch, commits, merges, workspace archiving, and workspace loading through the Web UI.
+- [GF-017] The framework shall support git branch creation, updates from the default branch, commits, merges, workdir archiving, and workdir loading through the Web UI.
 
 - [GF-018] The framework shall provide configuration and administrative options through a dedicated administration interface in the Web UI.
 
@@ -85,21 +85,21 @@ The framework enables:
 
 # Functional Requirements
 
-- [FR-001] The system shall store all active workspace files in .rdd-instance/workdir/
+- [FR-001] The system shall store all active workdir files in .rdd-instance/workdir/
 
-- [FR-002] The system shall initialize each work iteration by creating a single `active prompt` file located at `.rdd-instance/workdir/work-iteration-prompt.md`, containing exactly one prompt to be executed.
+- [FR-002] The system shall support defining multiple User Stories in `.rdd-instance/workdir/work-iteration-registry.json`, where each User Story has its own `prompt-file` and its own stage tracking (`context`, `clarity`, `plan`, `implementation`), and where `tasks` remain a separate, top-level queue that can be executed independently from User Stories.
 
 - [FR-005] All generated questions shall follow the question-formatting standards defined in `.rdd/conventions/questions-formatting.md`.
 
 - [FR-018] The system shall create a dedicated archive directory `.rdd-instance/archive/<work-iteration-name>/` for each completed work iteration.
 
-- [FR-019] The system shall archive all workspace folder files during iteration completion and preserve their complete state prior to workspace reset.
+- [FR-019] The system shall archive all workdir folder files during iteration completion and preserve their complete state prior to workdir reset.
 
-- [FR-021] The system shall preserve workspace folder files during archiving by copying them instead of moving them until a final clearing action is triggered.
+- [FR-021] The system shall preserve workdir folder files during archiving by copying them instead of moving them until a final clearing action is triggered.
 
 - [FR-024] After wrap-up synchronization, the system shall ensure `.rdd-instance/requirements.md` accurately reflects the committed state of the default branch.
 
-- [FR-025] The system shall clear the workspace folder after archiving by removing all files and subdirectories inside `.rdd-instance/workdir/`.
+- [FR-025] The system shall clear the workdir folder after archiving by removing all files and subdirectories inside `.rdd-instance/workdir/`.
 
 - [FR-026] All RDD framework operations shall be implemented in Python.
 
@@ -135,7 +135,7 @@ The framework enables:
 
 - [FR-047] The system shall support a local-only mode controlled via `config.json`, suppressing all remote git operations.
 
-- [FR-049] The system shall provide a functionality for creation of a JSON listing of the repository or workspace files via a dedicated command, storing the output in `.rdd-instance/workdir/files-list.json`.
+- [FR-049] The system shall provide a functionality for creation of a JSON listing of the repository or workdir files via a dedicated command, storing the output in `.rdd-instance/workdir/files-list.json`.
 
 - [FR-050] The system shall treat `.rdd/prompt-templates/` as a storage location for reusable prompt templates, `.rdd/prompt-snippets/` as a storage location for reusable prompt snippets and `.github/prompts/` containing a single GitHub Copilot default prompt file named `rdd.execute.prompt.md` which defines the referred in this requirements document `execute command`.
 
@@ -149,7 +149,7 @@ The framework enables:
 
 - [FR-055] The Web UI shall provide a Requirements page enabling generation of requirement-creation prompts and reverse engineering of requirements in `.rdd-instance/requirements.md` from project files. 
 
-- [FR-056] The Web UI shall provide a Version Control & Workspace Management page enabling git branch operations, commits, merges, workspace archiving, and workspace loading. 
+- [FR-056] The Web UI shall provide a Version Control & workdir Management page enabling git branch operations, commits, merges, workdir archiving, and workdir loading. 
 
 - [FR-057] The Web UI shall provide an Administration page enabling configuration of framework settings in `.rdd-instance/config.json` including operational mode, and general administrative controls. 
 
@@ -176,7 +176,7 @@ The framework enables:
 
 - [FR-068] The system shall check existing content in `requirements.md`  before generating clarification questions to avoid redundant queries.
 
-- [FR-069] The system shall treat the file `.rdd-instance/workdir/work-iteration-prompt.md` as the single authoritative and complete definition of the task to be executed, and the `execute command` shall consume its entire content verbatim when performing an execution.
+- [FR-069] The system shall treat the `prompt-file` referenced by the active User Story in `.rdd-instance/workdir/work-iteration-registry.json` as the single authoritative and complete definition of the work to be executed, and the `execute command` shall consume the selected `prompt-file` content verbatim when performing an execution in `userStory` mode.
 
 - [FR-070] Technical design content shall be strictly separated from requirements and shall not be embedded directly within `requirements.md`, but instead stored exclusively in dedicated technical specification files under `.rdd-instance/specifications/`.
 
@@ -223,7 +223,7 @@ The framework enables:
 
 - [NFR-018] All Web UI pages shall be optimized for desktop usage, offering clear navigation, real-time feedback on operations, and graceful handling of errors with informative messages.
 
-- [NFR-019] All destructive operations (workspace clearing, iteration completion, overwriting files during installation) shall present warnings to the user before proceeding.
+- [NFR-019] All destructive operations (workdir clearing, iteration completion, overwriting files during installation) shall present warnings to the user before proceeding.
 
 
 
@@ -235,7 +235,7 @@ The framework enables:
 
 - [TR-003] [TO-BE-REUSED]
 
-- [TR-005] The framework shall implement the active prompt file at `.rdd-instance/workdir/work-iteration-prompt.md` as a single-prompt input source whose contents are consumed entirely by the `execute` command.
+- [TR-005] The framework shall implement User Story prompts as Markdown files referenced by `userStories[].prompt-file` in `.rdd-instance/workdir/work-iteration-registry.json`, and the selected User Story prompt contents shall be consumed entirely by the `execute` command when running in `userStory` mode.
 
 - [TR-006] The framework shall use `.rdd-instance/specifications/` for storing technical design files. 
 
@@ -271,15 +271,15 @@ The framework enables:
 
 - [TR-022] The framework shall provide seed template files for `config.json`, `requirements.md` in `.rdd-instance/` after installation.
 
-- [TR-023] The framework shall provide a command to generate a JSON listing of repository or workspace files and store it at `.rdd-instance/workdir/files-list.json`, excluding directories beginning with `.` and directories named `venv`, and listing for each entry: `type` (file type - like 'txt', 'md', 'csv', 'xlsx', 'pdf', 'json', 'py', 'html', 'js', 'css' and others), `name` (file name), `relpath` (relative path), and `mtime` (modification time) in ISO8601 UTC format.
+- [TR-023] The framework shall provide a command to generate a JSON listing of repository or workdir files and store it at `.rdd-instance/workdir/files-list.json`, excluding directories beginning with `.` and directories named `venv`, and listing for each entry: `type` (file type - like 'txt', 'md', 'csv', 'xlsx', 'pdf', 'json', 'py', 'html', 'js', 'css' and others), `name` (file name), `relpath` (relative path), and `mtime` (modification time) in ISO8601 UTC format.
 
-- [TR-024] The JSON file-listing command shall be accessible via `python .rdd/scripts/rdd.py workspace list-files`.
+- [TR-024] The JSON file-listing command shall be accessible via `python .rdd/scripts/rdd.py workdir list-files`.
 
 - [TR-025] The Web UI shall provide pages for managing prompts, technical specifications, folder structures, requirements, and version-control workflows, backed by the REST endpoints and reflecting the interaction model defined in the Product Requirements Specification.
 
-- [TR-026] The Web UI shall load and save `.rdd-instance/workdir/work-iteration-prompt.md`, persist questionnaire responses, and present implementation plans generated by the `execute command`. 
+- [TR-026] The Web UI shall load and save User Story prompt files referenced by `.rdd-instance/workdir/work-iteration-registry.json` (`userStories[].prompt-file`), persist questionnaire responses for the active User Story, and present implementation plans generated by the `execute command`.
 
-- [TR-027] The framework shall implement safety checks that prevent iteration creation unless the workspace is empty.
+- [TR-027] The framework shall implement safety checks that prevent iteration creation unless the workdir is empty.
 
 - [TR-028] The framework shall archive each completed iteration in `.rdd-instance/archive/<iteration-name>/`.
 
@@ -327,7 +327,7 @@ The framework enables:
 
 - [TR-050] The framework shall include cross-platform installation scripts (`install.sh` for Linux/macOS and `install.bat` for Windows) that check for Python availability and execute the Python installer.
 
-- [TR-051] [ELETED]
+- [TR-051] [DELETED]
 
 - [TR-052] During upgrades, the installer shall detect obsolete files from previous RDD versions and archive them in `.rdd-instance/archive/installation_<version>/`.
 

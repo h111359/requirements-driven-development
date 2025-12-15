@@ -15,20 +15,20 @@ Context Gathering
 
 ## Execution Step Instructions
 
-- Create [CONTEXT-ANALYSIS-FILE] (if it does not exist, otherwise - reuse the existing file).  
+- Create [CONTEXT-ANALYSIS-FILE] (if it does not exist; otherwise reuse the existing file).
 
-- The `specifications` object in `.rdd-instance\config.json` contains list with the possible specifications. Each specification has attribute "enabled" which could be "true" or "false. Determine those specifications which has "enabled" attribute set to true. For these specifications find their attribute "path" which value defines the file which contains the respective specification. Add (or update) in the [CONTEXT-ANALYSIS-FILE] short summary for each of the enabled specifications of the relevant information for execution of prompt [PROMPT-TEXT]. 
+- The `specifications` object in `.rdd-instance/config.json` contains a list of possible specifications. Each specification has an "enabled" attribute which can be "true" or "false". Determine which specifications have the "enabled" attribute set to "true". For these specifications, find their "path" attribute whose value is the file that contains the respective specification. Add (or update) in the [CONTEXT-ANALYSIS-FILE] a short summary for each enabled specification with the relevant information needed to execute the prompt [PROMPT-TEXT].
 
-- For each of the files reffered in [PROMPT-TEXT] - read its file and add (or update) in the [CONTEXT-ANALYSIS-FILE] short summary of relevant information for execution of prompt [PROMPT-TEXT]. 
+- For each file referred to in [PROMPT-TEXT], read that file and add (or update) in the [CONTEXT-ANALYSIS-FILE] a short summary of relevant information for executing the prompt [PROMPT-TEXT].
 
-- Readn the files descriptions in `.rdd-instance/specifications/files-and-folders.md` and for each file which description is related to [PROMPT-TEXT] - read its file and add (or update) in the [CONTEXT-ANALYSIS-FILE] short summary of relevant information for execution of prompt [PROMPT-TEXT]. 
+- Read the file descriptions in `.rdd-instance/specifications/files-and-folders.md` and, for each file whose description is related to [PROMPT-TEXT], read that file and add (or update) in the [CONTEXT-ANALYSIS-FILE] a short summary of relevant information for executing the prompt [PROMPT-TEXT].
 
-- After you finish with generation or update of the content of [CONTEXT-ANALYSIS-FILE]: 
+- After you finish generating or updating the content of [CONTEXT-ANALYSIS-FILE]:
     * set the attribute "context.state" in [WI-REGISTRY] to "done"
-    * set in the attribute "context.file" the relative path to [CONTEXT-ANALYSIS-FILE]
-    * set "clarity.state" attribute in [WI-REGISTRY] to "ready-to-start" 
+    * set the attribute "context.file" to the relative path of [CONTEXT-ANALYSIS-FILE]
+    * set the "clarity.state" attribute in [WI-REGISTRY] to "ready-to-start"
 
 ## Execution Step Rules
 
-- Write the summary in consise and clear style without ommition of information  
+- Write the summary in a concise and clear style without omission of information
 

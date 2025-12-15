@@ -4,12 +4,12 @@
   "specifications": {
     "work-iteration-prompt": {
       "enabled": true,
-      "path": ".rdd-instance\\workspace\\work-iteration-prompt.md",
+      "path": ".rdd-instance\\workdir\\work-iteration-prompt.md",
       "conventions-file": ".rdd\\conventions\\work-iteration-prompt-format.md"
     },
     "work-iteration-registry": {
       "enabled": true,
-      "path": ".rdd-instance\\workspace\\work-iteration-registry.md",
+      "path": ".rdd-instance\\workdir\\work-iteration-registry.md",
       "conventions-file": ".rdd\\conventions\\work-iteration-registry-format.md"
     },
     "requirements": {

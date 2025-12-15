@@ -100,8 +100,8 @@ class TestGitFunctions:
         assert rdd_utils.get_current_branch() == "main"
     
     @patch('subprocess.run')
-    def test_get_default_branch_from_config(self, mock_run, rdd_workspace):
-        os.chdir(rdd_workspace)
+    def test_get_default_branch_from_config(self, mock_run, rdd_workdir):
+        os.chdir(rdd_workdir)
         # Config has defaultBranch: "main"
         assert rdd_utils.get_default_branch() == "main"
     
@@ -150,37 +150,37 @@ class TestTimestampFunctions:
 class TestConfigFunctions:
     """Test configuration management functions"""
     
-    def test_get_rdd_config_existing_key(self, rdd_workspace):
-        os.chdir(rdd_workspace)
+    def test_get_rdd_config_existing_key(self, rdd_workdir):
+        os.chdir(rdd_workdir)
         default_branch = rdd_utils.get_rdd_config("defaultBranch")
         assert default_branch == "main"
     
-    def test_get_rdd_config_missing_key_with_default(self, rdd_workspace):
-        os.chdir(rdd_workspace)
+    def test_get_rdd_config_missing_key_with_default(self, rdd_workdir):
+        os.chdir(rdd_workdir)
         value = rdd_utils.get_rdd_config("nonexistent", default="default_value")
         assert value == "default_value"
     
-    def test_set_rdd_config(self, rdd_workspace):
-        os.chdir(rdd_workspace)
+    def test_set_rdd_config(self, rdd_workdir):
+        os.chdir(rdd_workdir)
         rdd_utils.set_rdd_config("testKey", "testValue")
         
         # Read config and verify
-        config_path = rdd_workspace / ".rdd-instance" / "config.json"
+        config_path = rdd_workdir / ".rdd-instance" / "config.json"
         with open(config_path) as f:
             config = json.load(f)
         assert config["testKey"] == "testValue"
         assert "lastModified" in config
     
-    def test_get_rdd_config_path(self, rdd_workspace):
-        os.chdir(rdd_workspace)
+    def test_get_rdd_config_path(self, rdd_workdir):
+        os.chdir(rdd_workdir)
         config_path = rdd_utils.get_rdd_config_path()
-        expected = rdd_workspace / ".rdd-instance" / "config.json"
+        expected = rdd_workdir / ".rdd-instance" / "config.json"
         # Use resolve() to normalize paths on Windows (handles shortnames like RUNNER~1)
         assert Path(config_path).resolve() == expected.resolve()
 
 
-class TestWorkspaceUtilities:
-    """Test workspace management utilities"""
+class TestworkdirUtilities:
+    """Test workdir management utilities"""
     
     def test_ensure_dir_creates_directory(self, temp_dir):
         test_dir = temp_dir / "new_dir" / "nested"
@@ -197,11 +197,11 @@ class TestWorkspaceUtilities:
 class TestPromptFunctions:
     """Test prompt management functions"""
     
-    def test_mark_prompt_completed(self, rdd_workspace):
-        os.chdir(rdd_workspace)
+    def test_mark_prompt_completed(self, rdd_workdir):
+        os.chdir(rdd_workdir)
         
         # Create prompts file with unchecked prompt
-        prompts_file = rdd_workspace / ".rdd-instance" / "work-iteration-prompts.md"
+        prompts_file = rdd_workdir / ".rdd-instance" / "work-iteration-prompts.md"
         prompts_file.write_text("""## Stand Alone Prompts
 
  - [ ] [P01] Test prompt description

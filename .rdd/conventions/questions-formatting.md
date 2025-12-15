@@ -96,11 +96,11 @@ What do you want to do with the files?
 ```markdown
 **ℹ️ File Organization Decision**
 
-**Context:** The workspace currently has files scattered across subdirectories. We need to decide on the structure for better maintainability.
+**Context:** The workdir currently has files scattered across subdirectories. We need to decide on the structure for better maintainability.
 
-**Q: How should we organize the workspace files?**
+**Q: How should we organize the workdir files?**
 
-- [ ] **A)** Flat structure - All files directly in workspace/ folder
+- [ ] **A)** Flat structure - All files directly in workdir/ folder
   - **Pros:** Simple, easy to access
   - **Cons:** Can become cluttered with many files
   

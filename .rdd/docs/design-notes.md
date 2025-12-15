@@ -17,9 +17,9 @@ repo-root/
 │   ├── templates/                 # Seed files to be copy-pasted
 │   └── README.md                  # Overview of RDD
 └── .rdd-instance/                     # RDD files related to the specific repo
-    ├── archive/                   # Previous iterations workspace content archives
+    ├── archive/                   # Previous iterations workdir content archives
     ├── specifications/            # Domain specific detailed specifications
-    ├── workspace/                 # Current iteration work files
+    ├── workdir/                 # Current iteration work files
     ├── config.json                # RDD configuration for the current repo
     └── requirements.md            # Current repo requirements file
 
@@ -44,10 +44,10 @@ repo-root/
     ├── security.md                       # Authentication and authorization, protection ...
     └── technical-design.json             # Main technical parameters of the product
 
-### Workspace Folder
+### workdir Folder
 
 /repo-root/.rdd-instance/
-└── workspace/ 
+└── workdir/ 
     ├── work-iteration-prompt.md      # Text of the promt which should be executed
     └── work-iteration-registry.json  # Parameters for execution of the iteration prompt
 

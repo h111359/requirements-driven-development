@@ -1,6 +1,6 @@
 ### Web UI Architecture
 
-The framework provides a browser-based interface for prompt management, technical specification editing, requirements management, and workspace operations.
+The framework provides a browser-based interface for prompt management, technical specification editing, requirements management, and workdir operations.
 
 #### Web Server Implementation
 - **Technology**: Python's built-in `http.server.ThreadingHTTPServer` or equivalent stdlib component
@@ -37,9 +37,9 @@ The Web UI consists of six main pages, each served by a dedicated route:
    - Button: Reverse-Engineer Requirements
    - Displays generated prompts for review before copying to `work-iteration-prompt.md`
 
-4. **`/vcs`** - Version Control & Workspace Management Page
+4. **`/vcs`** - Version Control & workdir Management Page
    - Buttons: Create Branch, Update from Default, Commit Changes, Switch to Default, Merge Branch
-   - Buttons: Archive Workspace, Load Archived Workspace
+   - Buttons: Archive workdir, Load Archived workdir
    - Displays git status, branch info, and operation results
 
 5. **`/admin`** - Administration Page
@@ -78,5 +78,5 @@ The Web UI consists of six main pages, each served by a dedicated route:
 **Legacy Implementation**: Bash and PowerShell scripts (archived)
 - Previously maintained separate implementations for Linux (bash) and Windows (PowerShell)
 - Located in `src/linux/.rdd/scripts/` and `src/windows/.rdd/scripts/`
-- Bash scripts from `.rdd/scripts/` archived to workspace during Python migration
+- Bash scripts from `.rdd/scripts/` archived to workdir during Python migration
 

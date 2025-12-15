@@ -5,7 +5,7 @@
 # .github/ - GitHub workflows and Copilot instructions
 # .vscode/ - VS Code settings
 # .rdd/ - RDD framework scripts and templates
-# .rdd-instance/ - RDD documentation and workspace
+# .rdd-instance/ - RDD documentation and workdir
 
 
 # Temporary and backup files

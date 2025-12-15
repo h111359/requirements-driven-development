@@ -36,7 +36,7 @@ repo-root/
 └── .rdd-instance/                     # RDD files related to the specific repo
     ├── archive/                   # Previous iterations
     ├── specifications/            # Domain specific detailed specifications
-    ├── workspace/                 # Current iteration work files
+    ├── workdir/                 # Current iteration work files
     ├── config.json                # RDD configuration for the current repo
     └── requirements.md            # Current repo requirements file
 
@@ -73,7 +73,7 @@ repo-root/.rdd-instance/
 ```
 # Architecture Decision Records
 
-[ADR-001] An empty workspace folder `.rdd-instance/workdir` should exist at the start of each new work iteration
+[ADR-001] An empty workdir folder `.rdd-instance/workdir` should exist at the start of each new work iteration
 
-[ADR-002] During active work, files are freely added or modified within the workspace folder.
+[ADR-002] During active work, files are freely added or modified within the workdir folder.
 ```

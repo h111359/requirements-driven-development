@@ -49,13 +49,13 @@ class TestDomainRouting:
         assert result == 0
         mock_route_config.assert_called_once()
     
-    @patch('sys.argv', ['rdd.py', 'workspace', 'init'])
-    @patch('rdd.route_workspace')
-    def test_workspace_init_routing(self, mock_route_workspace):
-        mock_route_workspace.return_value = 0
+    @patch('sys.argv', ['rdd.py', 'workdir', 'init'])
+    @patch('rdd.route_workdir')
+    def test_workdir_init_routing(self, mock_route_workdir):
+        mock_route_workdir.return_value = 0
         result = rdd.main()
         assert result == 0
-        mock_route_workspace.assert_called_once()
+        mock_route_workdir.assert_called_once()
 
 
 class TestChangeCommands:

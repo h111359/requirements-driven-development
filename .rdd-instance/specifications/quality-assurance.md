@@ -78,7 +78,7 @@ Automated testing on push and pull requests:
 
 **Current Coverage**:
 - **rdd.py**: CLI routing, domain handlers, interactive menus
-- **rdd_utils.py**: All utility functions (git, branch, workspace, config)
+- **rdd_utils.py**: All utility functions (git, branch, workdir, config)
 - **build.py**: Version extraction, archive creation, checksums
 - **install.py**: Pre-flight checks, file operations, settings merge
 - **run-tests.py**: Test runner, virtual environment activation, cross-platform execution
