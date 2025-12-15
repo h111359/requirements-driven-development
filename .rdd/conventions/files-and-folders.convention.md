@@ -15,6 +15,7 @@
 - Use the following symbols to depict the identation in the ASCII diagram of the folder structure:
 ├ ─ └ │
 
+- After each ASCII diagram make a summarized description of each file in the described folder. Do not describe the files in subfolders - they will be described in the respective subfolder part.
 
 ## Examples
 
@@ -59,3 +60,20 @@ repo-root/.rdd-instance/
     ├── quality-assurance.md              # Tests, quality benchmarks, governance 
     ├── security.md                       # Authentication and authorization, protection ...
     └── technical-design.json             # Main technical parameters of the product
+
+
+ ### Example of file description
+
+**File name**: architecture-decision-records.md
+**Path**: `repo-root/.rdd-instance/specifications/architecture-decision-records.md`
+**Type**: markdown
+**Last reviewed**: `20251215-0955`
+**Description**: Architecture design records catalogue. Contains list of the architectural and system design decisions, each preceeded with unique ADR identifier for easier reference.
+**Sample - head of the file**:
+```
+# Architecture Decision Records
+
+[ADR-001] An empty workspace folder `.rdd-instance/workdir` should exist at the start of each new work iteration
+
+[ADR-002] During active work, files are freely added or modified within the workspace folder.
+```
