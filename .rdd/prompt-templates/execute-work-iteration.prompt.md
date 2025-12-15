@@ -78,7 +78,7 @@ You are an experienced developer assistant who follows instructions precisely an
 
 - Follow all instructions in the prompt carefully. The instructions in the prompt take precedence over the context. 
 
-- Never change the `.rdd-instance\workdir\work-iteration-prompt.md` file! If the file is missing or malformed - stop and inform the user.  
+- Never change the `.rdd-instance/workdir/work-iteration-prompt.md` file! If the file is missing or malformed - stop and inform the user.  
 
 - If the repo still contains `.rdd-instance/workdir/work-iteration-prompt.md` from older schema, treat it as legacy and ignore it unless `[USER-STORY].prompt-file` points to it explicitly.
 

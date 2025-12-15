@@ -1,8 +1,15 @@
-# General Functionalities
+## Product Name
 
-# Functional Requirements
+## Product Overview
 
-# Non-Functional Requirements
+## Definitions, Acronyms, and Abbreviations
 
-# Technical Requirements
+## Design principles
 
+## General Functionalities
+
+## Functional Requirements
+
+## Non-Functional Requirements
+
+## Technical Requirements

@@ -27,16 +27,16 @@ repo-root/
 │   └── prompts/                   # GitHub prompt files
 ├── .rdd                           # RDD framework folder
 │   ├── conventions/               # Format and meaning definitions
-│   ├── documentation/             # User guides 
+│   ├── docs/                      # User guides 
 │   ├── prompt-snippets/           # Building blocks for AI prompts
 │   ├── prompt-templates/          # Whole well formed prompts
 │   ├── scripts/                   # Python, shell and other code
 │   ├── templates/                 # Seed iles to be copy-pasted
 │   └── README.md                  # Overview of RDD
-└── .rdd-instance/                     # RDD files related to the specific repo
+└── .rdd-instance/                 # RDD files related to the specific repo
     ├── archive/                   # Previous iterations
     ├── specifications/            # Domain specific detailed specifications
-    ├── workdir/                 # Current iteration work files
+    ├── workdir/                   # Current iteration work files
     ├── config.json                # RDD configuration for the current repo
     └── requirements.md            # Current repo requirements file
 

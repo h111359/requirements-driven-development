@@ -6,11 +6,11 @@ Context Gathering
 
 - [WI-REGISTRY] is the file `.rdd-instance/workdir/work-iteration-registry.json`
 
-- [PROMPT-ID] is the value of the attribute "PROMPT-ID" in the file `.rdd-instance/workdir/work-iteration-registry.json`
+- [USER-STORY-ID] is the value of the attribute "active.active-user-story-id" in the file `.rdd-instance/workdir/work-iteration-registry.json`
 
-- [CONTEXT-ANALYSIS-FILE] is a file, containing the context information needed for proper execution of the current work. The file location is in folder `.rdd-instance/workdir/`. The file name convention is `[PROMPT-ID]-context-analysis.md`, where [PROMPT-ID] should be replaced with the respective [PROMPT-ID] value.
+- [CONTEXT-ANALYSIS-FILE] is a file, containing the context information needed for proper execution of the current work. The file location is in folder `.rdd-instance/workdir/`. The file name convention is `[USER-STORY-ID]-context-analysis.md`, where [USER-STORY-ID] should be replaced with the respective [USER-STORY-ID] value.
 
-- [PROMPT-TEXT] is the content of the file `.rdd-instance/workdir/work-iteration-prompt.md`
+- [PROMPT-TEXT] is the content of the file in the attribute prompt-file in the respective object under userStories key with id equal to [USER-STORY-ID] 
 
 
 ## Execution Step Instructions

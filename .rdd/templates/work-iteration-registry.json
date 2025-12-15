@@ -1,22 +1,43 @@
 {
-    "PROMPT-ID": "",
-    "PROMPT-NAME": "",
-    "mode": "prompt",
-    "context": {
-        "state": "not-started",
-        "file": ""
+    "mode": "userStory",
+    "active": {
+        "active-user-story-id": "US001",
+        "active-task-id": ""
     },
-    "clarity": {
-        "state": "not-started",
-        "file": ""
-    },
-    "plan": {
-        "state": "not-started",
-        "file": ""
-    },
-    "implementation": {
-        "state": "not-started",
-        "approved": false,
-        "file": ""
+    "userStories": [
+        {
+            "user-story-id": "US001",
+            "name": "",
+            "prompt-file": ".rdd-instance/workdir/user-story-US001.prompt.md",
+            "context": {
+                "state": "not-started",
+                "file": ""
+            },
+            "clarity": {
+                "state": "not-started",
+                "file": ""
+            },
+            "plan": {
+                "state": "not-started",
+                "file": ""
+            },
+            "implementation": {
+                "state": "not-started",
+                "approved": false,
+                "file": ""
+            }
+        }
+    ],
+    "tasks": {
+        "Next-Task-For-Execution": "T001",
+        "Next-Unused-Task-ID": "T002",
+        "Tasks-List": [
+            {
+                "task-id": "T001",
+                "description": "",
+                "status": "not-started",
+                "implementation-file": ""
+            }
+        ]
     }
 }

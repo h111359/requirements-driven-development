@@ -18,7 +18,7 @@ Plan the prompt
 
 ## Execution Step Instructions
 
-- If **ALL** the questions in [QUESTIONNAIRE] are answered - set "clarity.state" attribute in [WI-REGISTRY] to "answered", otherwise - stop the execution and aks the user to answer the questions.
+- If **ALL** the questions in [QUESTIONNAIRE] are answered - set "clarity.state" attribute in [WI-REGISTRY] to "answered", otherwise - stop the execution and ask the user to answer the questions.
 
 - based on [PROMPT-TEXT], [WI-REGISTRY], [CONTEXT-ANALYSIS-FILE], [QUESTIONNAIRE], create in [PLAN] a detailed plan how you will achieve the result asked in the prompt. 
 
@@ -38,7 +38,7 @@ Plan the prompt
 
 - Describe for each step clearly what exactly will be done in that step. 
 
-- Assign sequentia number to each step
+- Assign sequential number to each step
 
 - Cover all the requirements of [PROMPT-TEXT], [WI-REGISTRY], [CONTEXT-ANALYSIS-FILE], [QUESTIONNAIRE]. 
 

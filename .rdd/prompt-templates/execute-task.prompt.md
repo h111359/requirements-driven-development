@@ -16,7 +16,7 @@ You are an experienced developer assistant who follows instructions precisely an
 
 - Instead of [PROMPT-TEXT] shall be written the actual prompt text with all the instructions that should be executed - consider it as a value of the variable [PROMPT-TEXT] in the following instructions.  
 
-- [WI-REGISTRY] contains the registry of the current work iteration prompt execution - see `.rdd/conventions/work-iteration-registry-format.md` for details about its format and attributes. There are some attributes in the registry file which track the progress of the execution of the prompt. Use them to decide which steps should be executed and which should be skipped. Update the attributes accordingly after each step is completed.   
+- [WI-REGISTRY] contains the registry of the current work iteration prompt execution - see `.rdd/conventions/work-iteration-registry.convention.md` for details about its format and attributes. There are some attributes in the registry file which track the progress of the execution of the prompt. Use them to decide which steps should be executed and which should be skipped. Update the attributes accordingly after each step is completed.   
 
 
 ## Instructions - Follow these steps exactly:  
@@ -25,7 +25,7 @@ You are an experienced developer assistant who follows instructions precisely an
 
 2. **Identify the prompt registry parameters**: 
 
-- Find the values of the parameters "PROMPT-ID" and "PROMPT-NAME" from `.rdd-instance\workdir\work-iteration-registry.json` registry file.  
+- Find the values of the parameters "PROMPT-ID" and "PROMPT-NAME" from `.rdd-instance/workdir/work-iteration-registry.json` registry file.  
 
 3. **Gather the context**: 
 
@@ -54,7 +54,7 @@ You are an experienced developer assistant who follows instructions precisely an
 
 - Follow all instructions in the prompt carefully. The instructions in the prompt take precedence over the context. 
 
-- Never change the `.rdd-instance\workdir\work-iteration-prompt.md` file! If the file is missing or malformed - stop and inform the user.  
+- Never change the `.rdd-instance/workdir/work-iteration-prompt.md` file! If the file is missing or malformed - stop and inform the user.  
 
 - **Be verbose in files**: When writing to files in `.rdd-instance/workdir/` folder, provide detailed explanations, reasoning, and context to ensure clarity for future reference. 
 

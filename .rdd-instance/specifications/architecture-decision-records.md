@@ -14,7 +14,7 @@
 
 [ADR-008] The primary script for all operations is `rdd.py`, with helper utilities in `rdd_utils.py`.
 
-[ADR-009] Prompt templates provided by the framework and user are stored in `.rdd/prompts/`.
+[ADR-009] Prompt templates provided by the framework and user are stored in `.rdd/prompts-templates`.
 
 [ADR-010] GitHub-specific Copilot prompt integrations reside in `.github/prompts/`.
 

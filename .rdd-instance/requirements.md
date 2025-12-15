@@ -4,7 +4,7 @@ RDD Framework
 
 # Product Overview
 
-The product is a system that seves to be installed the RDD framework in a software code repository (with or without git versioning).
+The product is a system that serves to be installed the RDD framework in a software code repository (with or without git versioning).
 
 The RDD framework aims to standardize execution of user defined tasks to GitHub copilot in form of prompts, maintain full traceability of prompt history, and provide a simplified developer experience through a unified execution model and a web-based interface. 
 
@@ -36,7 +36,7 @@ The framework enables:
 
 - [DP-004] for developer Convenience a browser-based UI must support all user interactions except the actual execution of the `execute command`.
 
-- [DP-005] The framework must operate on both Windows and Linux, with functionality implemented primarely in Python, vanilla JavaScript, HTML, CSS.
+- [DP-005] The framework must operate on both Windows and Linux, with functionality implemented primerely in Python, vanilla JavaScript, HTML, CSS.
 
 - [DP-006] Prompts shall call scripts for actions rather than implementing logic directly
 
@@ -101,7 +101,7 @@ The framework enables:
 
 - [FR-025] The system shall clear the workdir folder after archiving by removing all files and subdirectories inside `.rdd-instance/workdir/`.
 
-- [FR-026] All RDD framework operations shall be implemented in Python.
+- [FR-026] [TO-BE-REUSED]
 
 - [FR-027] [TO-BE-REUSED]
 
@@ -129,7 +129,7 @@ The framework enables:
 
 - [FR-044] Branch-name validation shall support spaces and forward slashes to allow custom naming conventions.
 
-- [FR-045] The framework shall depend only on Python-based installation, omitting shell-based or PowerShell-based installers.
+- [FR-045] The framework shall depend on Python-based installation, omitting shell-based or PowerShell-based installers.
 
 - [FR-046] The system shall provide a Python-based test runner capable of executing all test types across platforms without requiring third-party shell testing frameworks.
 
@@ -157,7 +157,7 @@ The framework enables:
 
 - [FR-059] When the `execute command` generates a questionnaire, the Web UI shall present the questionnaire with input fields and persist responses back to the implementation file. [TO-BE-CLARIFIED]
 
-- [FR-060] After the e`execute command` generates an implementation plan, the Web UI shall display the plan, allow edits, and provide approval or regeneration options. 
+- [FR-060] After the `execute command` generates an implementation plan, the Web UI shall display the plan, allow edits, and provide approval or regeneration options. 
 
 
 - [FR-061] The Web UI shall display technical design, requirements, and file structure content retrieved from their respective JSON or Markdown sources and allow controlled user edits.

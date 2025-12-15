@@ -8,10 +8,14 @@ This document describes the format for writing requirements in the RDD framework
 
 Requirements are organized into four main sections:
 
-1. **General Functionalities** (GF)
-2. **Functional Requirements** (FR)
-3. **Non-Functional Requirements** (NFR)
-4. **Technical Requirements** (TR)
+## Product Name
+## Product Overview
+## Definitions, Acronyms, and Abbreviations
+## Design principles
+## General Functionalities
+## Functional Requirements
+## Non-Functional Requirements
+## Technical Requirements
 
 ## Requirement Format
 
@@ -23,13 +27,33 @@ Each requirement follows this format:
 
 ### Components:
 
-- **Prefix**: Section identifier (GF, FR, NFR, or TR)
+- **Prefix**: Section identifier (DP, GF, FR, NFR, or TR)
 - **ID**: Sequential number (001, 002, 003, etc.)
 - **Description**: Complete requirement statement using "shall" language
 
 
-
 ## Section Categories
+
+### Design principles (DP)
+High-level principles for design of the system.
+
+**Examples:**
+- Modularity and separation of concerns
+- Security by default and least privilege
+- Scalability and performance-minded design
+- Observability and operational transparency
+- Resilience and fault tolerance
+- Simplicity and maintainability
+- Interoperability and adherence to standards
+- Privacy and data protection by design
+- Accessibility and inclusive design
+
+```markdown
+- [DP-001] The system shall follow a modular architecture with clear separation of concerns and well-defined interfaces
+- [DP-002] The system shall adopt secure-by-default principles, enforcing least privilege and safe defaults
+- [DP-003] The system shall be designed to scale horizontally and vertically without requiring major architectural changes
+- [DP-004] The system shall be observable, providing structured logs, metrics, and distributed traces for debugging and monitoring
+```
 
 ### General Functionalities (GF)
 High-level capabilities and features of the system.
