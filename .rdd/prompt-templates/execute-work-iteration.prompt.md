@@ -6,13 +6,13 @@ You are an experienced developer assistant who follows instructions precisely an
 
 ## Definitions
 
-- [WI-REGISTRY] is the file `.rdd-instance/workdir/work-iteration-registry.json`
+- [WI-REGISTRY] is the file `.rdd-instance/workdir/rdd-prompt-setup.json`
 - [WI-MODE] is the value of the attribute `mode` in [WI-REGISTRY]
 - [ACTIVE-USER-STORY-ID] is `active.active-user-story-id` in [WI-REGISTRY]
 - [ACTIVE-TASK-ID] is `active.active-task-id` in [WI-REGISTRY]
 - [USER-STORY] is the object in `userStories[]` whose `user-story-id` equals [ACTIVE-USER-STORY-ID]
 - [PROMPT-TEXT] is the full content of the file referenced by `[USER-STORY].prompt-file`
-- [WI-REGISTRY] is the file `.rdd-instance/workdir/work-iteration-registry.json`
+- [WI-REGISTRY] is the file `.rdd-instance/workdir/rdd-prompt-setup.json`
 
 ## Context 
 
@@ -22,7 +22,7 @@ You are an experienced developer assistant who follows instructions precisely an
 
 - When [WI-MODE] is `userStory`, the prompt to execute is [PROMPT-TEXT] from `[USER-STORY].prompt-file`.
 
-- A User Story prompt SHOULD follow the structure in `.rdd/templates/work-iteration-prompt.md`.
+- A User Story prompt SHOULD follow the structure in `.rdd/templates/rdd-prompt.md`.
 
 - Instead of [PROMPT-TEXT] shall be written the actual prompt text with all the instructions that should be executed - consider it as a value of the variable [PROMPT-TEXT] in the following instructions.  
 
@@ -78,9 +78,9 @@ You are an experienced developer assistant who follows instructions precisely an
 
 - Follow all instructions in the prompt carefully. The instructions in the prompt take precedence over the context. 
 
-- Never change the `.rdd-instance/workdir/work-iteration-prompt.md` file! If the file is missing or malformed - stop and inform the user.  
+- Never change the `.rdd-instance/workdir/rdd-prompt.md` file! If the file is missing or malformed - stop and inform the user.  
 
-- If the repo still contains `.rdd-instance/workdir/work-iteration-prompt.md` from older schema, treat it as legacy and ignore it unless `[USER-STORY].prompt-file` points to it explicitly.
+- If the repo still contains `.rdd-instance/workdir/rdd-prompt.md` from older schema, treat it as legacy and ignore it unless `[USER-STORY].prompt-file` points to it explicitly.
 
 - **Be verbose in files**: When writing to files in `.rdd-instance/workdir/` folder, provide detailed explanations, reasoning, and context to ensure clarity for future reference. 
 

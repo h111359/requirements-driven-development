@@ -4,7 +4,7 @@ Ensure questionnaire is answered
 
 ## Execution Step Definitions
 
-- [WI-REGISTRY] is the file `.rdd-instance/workdir/work-iteration-registry.json`
+- [WI-REGISTRY] is the file `.rdd-instance/workdir/rdd-prompt-setup.json`
 
 - [QUESTIONNAIRE] is file set in "clarity.file" attribute of [WI-REGISTRY]
 

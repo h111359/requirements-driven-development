@@ -1,6 +1,6 @@
 ## Definitions
 
-- [WI-REGISTRY] is the file `.rdd-instance/workdir/work-iteration-registry.json`
+- [WI-REGISTRY] is the file `.rdd-instance/workdir/rdd-prompt-setup.json`
 
 ## Instructions - Follow these steps exactly:  
 

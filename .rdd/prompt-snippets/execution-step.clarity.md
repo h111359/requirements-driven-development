@@ -4,13 +4,13 @@ Ensure clarity
 
 ## Execution Step Definitions
 
-- [WI-REGISTRY] is the file `.rdd-instance/workdir/work-iteration-registry.json`
+- [WI-REGISTRY] is the file `.rdd-instance/workdir/rdd-prompt-setup.json`
 
 - [PROMPT-ID] is the value of the attribute "PROMPT-ID" in the file [WI-REGISTRY]
 
 - [CONTEXT-ANALYSIS-FILE] is the file set in "context.file" attribute of [WI-REGISTRY].
 
-- [PROMPT-TEXT] is the content of the file `.rdd-instance/workdir/work-iteration-prompt.md`
+- [PROMPT-TEXT] is the content of the file `.rdd-instance/workdir/rdd-prompt.md`
 
 - [PROMPT-STATEMENT] is any part of the [PROMPT-TEXT] or [CONTEXT-ANALYSIS-FILE] text defining some aspect of the results needed to be achieved. 
 

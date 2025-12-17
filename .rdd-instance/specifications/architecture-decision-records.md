@@ -18,7 +18,7 @@
 
 [ADR-010] GitHub-specific Copilot prompt integrations reside in `.github/prompts/`.
 
-[ADR-011] The work-iteration registry `.rdd-instance/workdir/work-iteration-registry.json` may define multiple User Stories, and each User Story has its own active prompt file (`prompt-file`). The registry selects what to execute via `mode` (`userStory` or `task`) and `active` pointers.
+[ADR-011] The work-iteration registry `.rdd-instance/workdir/rdd-prompt-setup.json` may define multiple User Stories, and each User Story has its own active prompt file (`prompt-file`). The registry selects what to execute via `mode` (`userStory` or `task`) and `active` pointers.
 
 [ADR-012] RDD framework web interface is initiated through the command: `python .rdd/scripts/rdd.py`.
 

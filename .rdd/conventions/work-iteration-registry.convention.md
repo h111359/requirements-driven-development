@@ -2,7 +2,7 @@
 
 This document defines the required structure and content conventions for the file:
 
-- `.rdd-instance/workdir/work-iteration-registry.json`
+- `.rdd-instance/workdir/rdd-prompt-setup.json`
 
 The registry is the single source of truth for the current work-iteration’s progress and task queue.
 

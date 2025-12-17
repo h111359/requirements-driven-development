@@ -53,7 +53,6 @@ repo-root/.rdd-instance/
     ├── architecture-decision-records.md  # Architecture design records catalogue
     ├── components.md                     # Product components and dependencies
     ├── data.md                           # Data structures and worklow
-    ├── deployment.md                     # Depoloyement artefacts, CI/CD process
     ├── files-and-folders.md              # Description of the repo organization
     ├── front-end.md                      # User interfaces and visualizations
     ├── infrastructure.md                 # Services, compute, storage, network ...

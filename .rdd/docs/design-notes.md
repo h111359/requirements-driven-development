@@ -36,7 +36,6 @@ repo-root/
     ├── architecture-decision-records.md  # Architecture design records catalogue
     ├── components.md                     # Product components and dependencies
     ├── data.md                           # Data structures and worklow
-    ├── deployment.md                     # Depoloyement artefacts, CI/CD process
     ├── files-and-folders.md              # Description of the repo organization
     ├── front-end.md                      # User interfaces and visualizations
     ├── infrastructure.md                 # Services, compute, storage, network ...
@@ -48,7 +47,7 @@ repo-root/
 
 /repo-root/.rdd-instance/
 └── workdir/ 
-    ├── work-iteration-prompt.md      # Text of the promt which should be executed
-    └── work-iteration-registry.json  # Parameters for execution of the iteration prompt
+    ├── rdd-prompt.md      # Text of the promt which should be executed
+    └── rdd-prompt-setup.json  # Parameters for execution of the iteration prompt
 
 The aim is to be achieve the most appropriate folder structure both for RDD as a system and RDD as a framework, which is installed and working on other products. Currently RDD has a folder .rdd, where are the static files of the framework and .rdd-instance, where are the current project setup, requirements and conventions, prompts, and archive. One advantage of separation on .rdd and .rdd-instance folder is that during install the folder .rdd is set as just copy-paste from the build file and .rdd-instance is created from templates in .rdd.

@@ -18,8 +18,7 @@
   "canonicalRoots": {
     "frameworkRoot": ".rdd",
     "instanceRoot": ".rdd-instance",
-    "githubRoot": ".github",
-    "vscodeRoot": ".vscode"
+    "githubRoot": ".github"
   },
 
   "components": [
@@ -81,7 +80,7 @@
         "paths": [
           ".rdd-instance/workdir/**"
         ],
-        "policy": "overwriteOnUpgrade"
+        "policy": "preserveOnUpgrade"
       }
     ]
   },
@@ -116,7 +115,7 @@
       "singleInstance": true
     },
     {
-      "path": ".rdd-instance/workdir/work-iteration-registry.json",
+      "path": ".rdd-instance/workdir/rdd-prompt-setup.json",
       "role": "workIterationRegistry",
       "required": true
     },
@@ -179,9 +178,8 @@
       { "path": ".rdd-instance/config.json", "action": "mergePreserveExisting" },
       { "path": ".rdd-instance/requirements.md", "action": "preserve" },
       { "path": ".rdd-instance/specifications/**", "action": "preserve" },
-      { "path": ".rdd-instance/workdir/**", "action": "overwrite"},
+      { "path": ".rdd-instance/workdir/**", "action": "preserve"},
       { "path": ".rdd-instance/archive/**", "action": "preserve"}
-      }
     ]
   },
 

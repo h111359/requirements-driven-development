@@ -1,3 +1,0 @@
-# Prompt 
-
-[PROMPT-TEXT] 

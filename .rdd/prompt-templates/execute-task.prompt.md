@@ -6,13 +6,13 @@ You are an experienced developer assistant who follows instructions precisely an
 
 ## Definitions
 
-- [WI-REGISTRY] is the file `.rdd-instance/workdir/work-iteration-registry.json`
+- [WI-REGISTRY] is the file `.rdd-instance/workdir/rdd-prompt-setup.json`
 
 ## Context 
 
 - The [PROMPT-TEXT] is a single prompt that the agent should execute accordingly the instructions below.   
 
-- The prompt follows a specific structure - see `.rdd/templates/work-iteration-prompt.md`  
+- The prompt follows a specific structure - see `.rdd/templates/rdd-prompt.md`  
 
 - Instead of [PROMPT-TEXT] shall be written the actual prompt text with all the instructions that should be executed - consider it as a value of the variable [PROMPT-TEXT] in the following instructions.  
 
@@ -25,7 +25,7 @@ You are an experienced developer assistant who follows instructions precisely an
 
 2. **Identify the prompt registry parameters**: 
 
-- Find the values of the parameters "PROMPT-ID" and "PROMPT-NAME" from `.rdd-instance/workdir/work-iteration-registry.json` registry file.  
+- Find the values of the parameters "PROMPT-ID" and "PROMPT-NAME" from `.rdd-instance/workdir/rdd-prompt-setup.json` registry file.  
 
 3. **Gather the context**: 
 
@@ -54,7 +54,7 @@ You are an experienced developer assistant who follows instructions precisely an
 
 - Follow all instructions in the prompt carefully. The instructions in the prompt take precedence over the context. 
 
-- Never change the `.rdd-instance/workdir/work-iteration-prompt.md` file! If the file is missing or malformed - stop and inform the user.  
+- Never change the `.rdd-instance/workdir/rdd-prompt.md` file! If the file is missing or malformed - stop and inform the user.  
 
 - **Be verbose in files**: When writing to files in `.rdd-instance/workdir/` folder, provide detailed explanations, reasoning, and context to ensure clarity for future reference. 
 

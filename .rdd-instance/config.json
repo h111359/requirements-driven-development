@@ -4,12 +4,12 @@
   "specifications": {
     "work-iteration-prompt": {
       "enabled": true,
-      "path": ".rdd-instance/workdir/work-iteration-prompt.md",
+      "path": ".rdd-instance/workdir/rdd-prompt.md",
       "conventions-file": ""
     },
     "work-iteration-registry": {
       "enabled": true,
-      "path": ".rdd-instance/workdir/work-iteration-registry.json",
+      "path": ".rdd-instance/workdir/rdd-prompt-setup.json",
       "conventions-file": ".rdd/conventions/work-iteration-registry.convention.md"
     },
     "requirements": {
@@ -28,10 +28,6 @@
     "data": {
       "enabled": false,
       "path": ".rdd-instance/specifications/data.md"
-    },
-    "deployment": {
-      "enabled": false,
-      "path": ".rdd-instance/specifications/deployment.md"
     },
     "files-and-folders": {
       "enabled": true,
