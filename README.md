@@ -21,9 +21,12 @@ Requirements-Driven Development (RDD) is a framework for development augmented w
 ## 📋 System Requirements
 
 - **Python 3.7+** - Cross-platform runtime for RDD scripts
+- **AI assistant** - (optionally to be GitHub Copilot but recommended)
+
+## Recommended  
+
 - **Git 2.23+** - Version control operations
 - **VS Code** - Recommended editor (optional but enhances experience)
-- **GitHub Copilot** - AI assistant (optional but recommended)
 
 ## 🚀 Installation
 
@@ -34,15 +37,7 @@ Requirements-Driven Development (RDD) is a framework for development augmented w
    - Verify with `rdd-v{version}.zip.sha256` (optional)
 
 2. **Extract the archive**
-   Extract the archive in a folder
-
-3. **Run the install scripts**
-   
-   - For Linux - run install.sh
-   - For Windows - run install.bat
-
-4. **Choose target folder**
-   Follow the instructions to install RDD in the desired destination
+   Extract the folder `.rdd` from the archive in your repo folder
 
 ### Python Command Setup for Linux
 
@@ -69,8 +64,23 @@ source ~/.bashrc
 sudo ln -s /usr/bin/python3 /usr/local/bin/python
 ```
 
-### Recommended .vscode/settings.json entries
+### Recommended setup for GitHub
 
+The following steps are not included in the installation. They add additional convinience in case you are using GitHub Copilot in Visual Studio Code, but are not mandatory so RDD to work.
+
+#### GitHub execute prompt
+
+For convenience (if you work with GitHub copilot) you can create a file `.github/prompts/rdd.execute.promppt.md` with the following content:
+
+```
+Follow the instructions in `.rdd/prompt-snippets/execution.md`
+```
+
+#### VSCode shortcuts and script autoapprove
+
+Add in `.vscode/settings.json` the following entries (if not exist already):
+
+```
 {
   "chat.promptFilesRecommendations": {
     "rdd.execute": true
@@ -79,10 +89,27 @@ sudo ln -s /usr/bin/python3 /usr/local/bin/python
     "python .rdd/scripts/": true
   }
 }
+```
 
-## 🎯 Next Steps
 
-### 1. User Guide
+## 🎯 Start RDD
+
+- Start the application running (from the root folder of the repo) 
+```
+python .rdd/scripts/rdd.py
+```
+
+Alternatively you can run:
+
+Windows:
+```
+.rdd/scripts/rdd.bat
+```
+
+Linux:
+```
+.rdd/scripts/rdd.bat
+```
 
 - When you start the application, a Web UI will be opened in your browser. You can find the user guide in the menu of the Web UI.
 

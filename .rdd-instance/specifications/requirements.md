@@ -228,7 +228,7 @@ The framework enables:
 
 - [DP-002] The framework must maintain a requirements file and automatically update it after each prompt execution. During each execution, the framework must also load and apply the existing requirements.
 
-- [DP-003] A single command, `execute`, is used to initiate all copilot operations. The command operates based on github prompt defined as `.github/prompts/rdd.execute.prompt.md` which is instructed to further read the rest of the context defined in framework files.
+- [DP-003] A single command, `execute`, is used to initiate all copilot operations. The command operates based on prompt defined as `.rdd/prompt-snippets/execution.md` which is instructed to further read the rest of the context defined in framework files.
 
 - [DP-004] for developer Convenience a browser-based UI must support all user interactions except the actual execution of the `execute command`.
 
