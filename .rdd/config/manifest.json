@@ -25,7 +25,7 @@
     {
       "id": "framework.core",
       "root": ".rdd",
-      "description": "Framework static assets: conventions, docs, prompts, scripts, templates, config.",
+      "description": "Framework static assets: conventions, docs, prompts, scripts, config.",
       "required": true
     },
     {
@@ -54,14 +54,7 @@
         "paths": [".github/prompts/rdd.execute.prompt.md"],
         "policy": "overwriteOnUpgrade"
       },
-      {
-        "label": "instanceConfig",
-        "paths": [
-          ".rdd-instance/config.json"
-        ],
-        "policy": "preserveOnUpgrade"
-      },
-            {
+     {
         "label": "instanceDocs",
         "paths": [
           ".rdd-instance/specifications/**"
@@ -90,7 +83,6 @@
       ".rdd/conventions/",
       ".rdd/docs/",
       ".rdd/scripts/",
-      ".rdd/templates/",
       ".rdd/prompt-snippets/",      
       ".rdd/prompt-templates/",
       ".rdd/config/"
@@ -115,50 +107,26 @@
       "singleInstance": true
     },
     {
-      "path": ".rdd-instance/workdir/rdd-prompt-setup.json",
+      "path": ".rdd-instance/workdir/work-iteration-registry.json",
       "role": "workIterationRegistry",
       "required": true
     },
     {
-      "path": ".rdd-instance/requirements.md",
+      "path": ".rdd-instance/workdir/prompts-registry.md",
+      "role": "promptsRegistry",
+      "required": true
+    },    
+    {
+      "path": ".rdd-instance/specifications/requirements.md",
       "role": "requirements",
       "required": true
-    },
-    {
-      "path": ".rdd-instance/config.json",
-      "role": "instanceConfig",
-      "required": true,
-      "expectedFields": {
-        "gitMode": ["noGit", "localGit", "remoteGit"]
-      }
     },
     {
       "path": ".rdd/config/technical-design-form.json",
       "role": "technicalDesignFormDefinition",
       "required": true
     }
-  ],
-
-  "templateSeeding": {
-    "sourceRoot": ".rdd/templates",
-    "targets": [
-      {
-        "source": "config.json",
-        "destination": ".rdd-instance/config.json",
-        "mode": "copyIfMissingOrMerge",
-        "mergeStrategy": "preserveExistingKeys"
-      },
-      {
-        "source": "requirements.md",
-        "destination": ".rdd-instance/requirements.md",
-        "mode": "copyIfMissing"
-      },
-      {
-        "source": "specifications/",
-        "destination": ".rdd-instance/specifications/",
-        "mode": "copyIfMissing"
-      }
-    ]
+  ]
   },
 
   "workdirModel": {
@@ -175,8 +143,6 @@
     "rules": [
       { "path": ".rdd/**", "action": "overwrite" },
       { "path": ".github/prompts/rdd.execute.prompt.md", "action": "overwrite" },
-      { "path": ".rdd-instance/config.json", "action": "mergePreserveExisting" },
-      { "path": ".rdd-instance/requirements.md", "action": "preserve" },
       { "path": ".rdd-instance/specifications/**", "action": "preserve" },
       { "path": ".rdd-instance/workdir/**", "action": "preserve"},
       { "path": ".rdd-instance/archive/**", "action": "preserve"}
@@ -187,7 +153,6 @@
     "mustExist": [
       ".rdd",
       ".rdd/scripts",
-      ".rdd/templates",
       ".rdd/prompt-snippets/",      
       ".rdd/prompt-templates/",
       ".rdd-instance",

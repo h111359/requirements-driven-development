@@ -16,12 +16,10 @@ repo-root/
 │   ├── scripts/                   # Python, shell and other code
 │   ├── templates/                 # Seed files to be copy-pasted
 │   └── README.md                  # Overview of RDD
-└── .rdd-instance/                     # RDD files related to the specific repo
+└── .rdd-instance/                 # RDD files related to the specific repo
     ├── archive/                   # Previous iterations workdir content archives
     ├── specifications/            # Domain specific detailed specifications
-    ├── workdir/                 # Current iteration work files
-    ├── config.json                # RDD configuration for the current repo
-    └── requirements.md            # Current repo requirements file
+    ├── workdir/                   # Current iteration work files
 
 ### GitHub Prompts Folder
 
@@ -33,14 +31,7 @@ repo-root/
 
 /repo-root/.rdd-instance/
 └── specifications/                       
-    ├── architecture-decision-records.md  # Architecture design records catalogue
-    ├── components.md                     # Product components and dependencies
-    ├── data.md                           # Data structures and worklow
     ├── files-and-folders.md              # Description of the repo organization
-    ├── front-end.md                      # User interfaces and visualizations
-    ├── infrastructure.md                 # Services, compute, storage, network ...
-    ├── quality-assurance.md              # Tests, quality benchmarks, governance 
-    ├── security.md                       # Authentication and authorization, protection ...
     └── technical-design.json             # Main technical parameters of the product
 
 ### workdir Folder

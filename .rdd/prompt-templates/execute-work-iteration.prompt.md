@@ -93,13 +93,13 @@ You are an experienced developer assistant who follows instructions precisely an
  
 - At the end of the execution - verify you have followed all the steps in the implementation plan. 
 
-- Never delete already added requirements rows in `.rdd-instance/requirements.md`. If the entire requirement is already obsolete and nothing shall be left from it - replace its text (after the ID) with "[DELETED]".  
+- Never delete already added requirements rows in `.rdd-instance/specifications/requirements.md`. If the entire requirement is already obsolete and nothing shall be left from it - replace its text (after the ID) with "[DELETED]".  
 
-- Preserve ID sequences in `.rdd-instance/requirements.md` (never renumber existing IDs).  
+- Preserve ID sequences in `.rdd-instance/specifications/requirements.md` (never renumber existing IDs).  
 
-- When adding requirements in `.rdd-instance/requirements.md`, first read the convention in `.rdd/conventions/requirements-format.md` and then decide in which section to add them, then continue the sequence from highest existing ID in that section. Inform the user in case of deviations from the convention. 
+- When adding requirements in `.rdd-instance/specifications/requirements.md`, first read the convention in `.rdd/conventions/requirements.convention.md` and then decide in which section to add them, then continue the sequence from highest existing ID in that section. Inform the user in case of deviations from the convention. 
 
-- Maintain existing structure and formatting of `.rdd-instance/requirements.md` - it should be accordingly the convention in `.rdd/conventions/requirements-format.md` - always observe the rules in it. 
+- Maintain existing structure and formatting of `.rdd-instance/specifications/requirements.md` - it should be accordingly the convention in `.rdd/conventions/requirements.convention.md` - always observe the rules in it. 
 
 - **Error Handling**: At each step, if an error occurs, log error to implementation file, return error response to caller in the chat, preserve partial work (don't delete implementation file or undo changes), provide recovery guidance (re-run with fixes, manual intervention, rollback options) 
 

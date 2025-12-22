@@ -17,7 +17,7 @@ Context Gathering
 
 - Create [CONTEXT-ANALYSIS-FILE] (if it does not exist; otherwise reuse the existing file).
 
-- The `specifications` object in `.rdd-instance/config.json` contains a list of possible specifications. Each specification has an "enabled" attribute which can be "true" or "false". Determine which specifications have the "enabled" attribute set to "true". For these specifications, find their "path" attribute whose value is the file that contains the respective specification. Add (or update) in the [CONTEXT-ANALYSIS-FILE] a short summary for each enabled specification with the relevant information needed to execute the prompt [PROMPT-TEXT].
+- Add (or update) in the [CONTEXT-ANALYSIS-FILE] a short summary of specifications in `.rdd-instance/specifications` with the relevant information needed to execute the prompt [PROMPT-TEXT].
 
 - For each file referred to in [PROMPT-TEXT], read that file and add (or update) in the [CONTEXT-ANALYSIS-FILE] a short summary of relevant information for executing the prompt [PROMPT-TEXT].
 

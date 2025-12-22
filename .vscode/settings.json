@@ -3,7 +3,7 @@
     "rdd.execute": true
   },
   "chat.tools.terminal.autoApprove": {
-    "python .rdd/scripts/rdd.py": true,       
+    "python .rdd/scripts/": true,       
   },
   "files.associations": {
     "*.jsonl": "jsonlines"

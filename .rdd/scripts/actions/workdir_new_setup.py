@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
-"""Create a timestamped copy of the RDD prompt setup template in the workdir.
+"""Create a work iteration registry in the workdir.
 
 Behavior:
   1) Calls `.rdd/scripts/actions/print_timestamp.py` to obtain a timestamp in
-     format: YYYYMMDD-hhmiss
-  2) Reads `.rdd/templates/rdd-workdir-setup.json`
-  3) Writes a copy into `.rdd-instance/workdir/` named:
-       rdd-workdir-setup.json
-  4) Sets JSON key `prompt-id` to `<timestamp>`
-  5) Creates an empty prompt file in `.rdd-instance/workdir/` named:
-      rdd-prompt-<timestamp>.md
+     format: YYYYMMDD-HHmiss
+  2) Generates content for work-iteration-registry.json according to
+     `.rdd/conventions/work-iteration-registry.convention.md`
+  3) Writes the generated content into `.rdd-instance/workdir/` named:
+       work-iteration-registry.json
+  4) Sets JSON key `iteration-id` to `ITR-<timestamp>`
+  5) Sets JSON key `iteration-name` to the value passed as command-line argument
 
 This script is intentionally deterministic and non-interactive.
+
+Usage:
+  workdir_new_setup.py name="<iteration-name>"
 """
 
 from __future__ import annotations
@@ -47,17 +50,27 @@ def _get_timestamp(repo_root: Path) -> str:
 
 
 def main() -> int:
+    # Parse named parameters from command line
+    params = {}
+    for arg in sys.argv[1:]:
+        if "=" in arg:
+            key, value = arg.split("=", 1)
+            params[key] = value
+    
+    if "name" not in params:
+        print("ERROR: 'name' parameter required", file=sys.stderr)
+        print('Usage: workdir_new_setup.py name="<iteration-name>"', file=sys.stderr)
+        return 1
+    
+    iteration_name = params["name"]
+    
     repo_root = _repo_root()
 
     timestamp = _get_timestamp(repo_root)
 
-    template_path = repo_root / ".rdd" / "templates" / "rdd-workdir-setup.json"
     workdir = repo_root / ".rdd-instance" / "workdir"
-    dest_path = workdir / f"rdd-workdir-setup.json"
-    prompt_path = workdir / f"rdd-prompt-{timestamp}.md"
+    dest_path = workdir / "work-iteration-registry.json"
 
-    if not template_path.is_file():
-        raise FileNotFoundError(f"Template not found: {template_path}")
     workdir.mkdir(parents=True, exist_ok=True)
 
     # Safety guard: initialize only on an empty workdir to avoid clobbering
@@ -66,20 +79,17 @@ def main() -> int:
         print(f"Workdir is not empty - setup is stopped.")
         return 0
 
-    with template_path.open("r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    if not isinstance(data, dict):
-        raise ValueError(f"Template JSON must be an object: {template_path}")
-
-    data["prompt-id"] = timestamp
+    # Generate JSON content according to .rdd/conventions/work-iteration-registry.convention.md
+    data = {
+        "iteration-id": f"ITR-{timestamp}",
+        "iteration-name": iteration_name,
+        "prompt-id-sequence-next-value": 1,
+        "prompts": []
+    }
 
     with dest_path.open("w", encoding="utf-8") as f:
         json.dump(data, f, indent=4)
         f.write("\n")
-
-    # Create (or truncate) the prompt file.
-    prompt_path.write_text("", encoding="utf-8")
 
     # Keep stdout single-line and agent-friendly.
     print(str(dest_path))

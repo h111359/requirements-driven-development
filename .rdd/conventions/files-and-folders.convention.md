@@ -36,9 +36,7 @@ repo-root/
 └── .rdd-instance/                 # RDD files related to the specific repo
     ├── archive/                   # Previous iterations
     ├── specifications/            # Domain specific detailed specifications
-    ├── workdir/                   # Current iteration work files
-    ├── config.json                # RDD configuration for the current repo
-    └── requirements.md            # Current repo requirements file
+    └── workdir/                   # Current iteration work files
 
 
 ### Examples for Subfolder Structure
@@ -50,29 +48,14 @@ repo-root/.github/
 
 repo-root/.rdd-instance/
 └── specifications/                       
-    ├── architecture-decision-records.md  # Architecture design records catalogue
-    ├── components.md                     # Product components and dependencies
-    ├── data.md                           # Data structures and worklow
     ├── files-and-folders.md              # Description of the repo organization
-    ├── front-end.md                      # User interfaces and visualizations
-    ├── infrastructure.md                 # Services, compute, storage, network ...
-    ├── quality-assurance.md              # Tests, quality benchmarks, governance 
-    ├── security.md                       # Authentication and authorization, protection ...
     └── technical-design.json             # Main technical parameters of the product
 
 
  ### Example of file description
 
-**File name**: architecture-decision-records.md
-**Path**: `repo-root/.rdd-instance/specifications/architecture-decision-records.md`
+**File name**: files-and-folders.md
+**Path**: `repo-root/.rdd-instance/specifications/files-and-folders.md`
 **Type**: markdown
 **Last reviewed**: `20251215-0955`
-**Description**: Architecture design records catalogue. Contains list of the architectural and system design decisions, each preceeded with unique ADR identifier for easier reference.
-**Sample - head of the file**:
-```
-# Architecture Decision Records
-
-[ADR-001] An empty workdir folder `.rdd-instance/workdir` should exist at the start of each new work iteration
-
-[ADR-002] During active work, files are freely added or modified within the workdir folder.
-```
+**Description**: A catalogue of the fies and folders in the repository and their descriptions.

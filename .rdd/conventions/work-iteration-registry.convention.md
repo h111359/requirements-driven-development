@@ -2,155 +2,99 @@
 
 This document defines the required structure and content conventions for the file:
 
-- `.rdd-instance/workdir/rdd-prompt-setup.json`
+- `.rdd-instance/workdir/work-iteration-registry.json`
 
-The registry is the single source of truth for the current work-iteration’s progress and task queue.
+The work-iteration-registry is the single source of truth for the current work-iteration’s progress and prompts queue. Every prompt id in work registry exists in prompts registry. In case of inconsistency between this file and `.rdd-instance/workdir/prompts-registry.md`, the execution should stop and the user should be informed to fix the errors.
 
 ## File format
 
 - **Format:** JSON object (UTF-8)
 - **Top-level type:** object
 - **Key style:**
-  - Top-level metadata uses **UPPER-KEBAB-CASE** for prompt identifiers (`PROMPT-ID`, `PROMPT-NAME`).
-  - Workflow stage keys use **lowercase** (`context`, `clarity`, `plan`, `implementation`, `tasks`).
-  - Task-list item fields use **lower-kebab-case** (`task-id`, `implementation-file`).
+- JSON keys use **lower-kebab-case** (e.g., `iteration-id`, `parent-id`).
+- **Prompt IDs:** use `P-###` format (stored in `id` fields, not as keys).
 
 ## Top-level schema
 
 The JSON file MUST be an object with the following keys:
 
-### `mode` (string)
-
+### `iteration-id` (string)
 - **Required:** yes
 - **Allowed values:**
-  - `userStory`, `task`
-- **Meaning:** Declares the operating mode for the iteration.
-  - `userStory`: execute a selected user story (with its own prompt and stage tracking).
-  - `task`: execute a selected task from the independent `tasks` queue.
+  - Text in format "ITR-YYYYMMDD-HHmiss" where YYYY -> year, MM -> month, DD -> day, HH -> 24 hour formatted hour, mi -> minutes, ss -> seconds)
+- **Meaning:** Unique identifier of the iteration based on the time when the iteration was created
+- **Example:** "ITR-20251220-224913"
 
-### `userStories` (array)
-
+### `iteration-name` (string)
 - **Required:** yes
-- **Type:** array of **User Story** objects
-- **Meaning:** Ordered list of user stories for the iteration. Each user story has its own prompt and its own stage-tracking fields.
+- **Allowed values:**
+  - Free text up to 64 symbols
+- **Meaning:** Declares the name to be used for reference to the workdir content
 
-#### User Story object schema
-
-Each user story entry MUST be an object with these keys:
-
-- `user-story-id` (string)
-  - **Required:** yes
-  - **Convention:** `US###` format (e.g., `US001`).
-- `name` (string)
-  - **Required:** yes
-  - **Meaning:** Human-friendly name/title.
-- `prompt-file` (string)
-  - **Required:** yes
-  - **Meaning:** Path to the prompt file for this user story (typically under `.rdd-instance/workdir/`).
-  - **Convention:** Empty string means “not set yet”.
-- Stage sections: `context`, `clarity`, `plan`, `implementation`
-  - **Required:** yes
-  - **Meaning:** Per-user-story execution progress and artifact pointers.
-
-##### Stage section schema (per user story)
-
-Each stage section MUST be an object describing completion state and associated artifact(s).
-
-Shared fields:
-
-- `state` (string)
-  - **Required:** yes
-  - **Allowed values:**
-    - `not-started`
-    - (Other values may be introduced by the RDD workflow; keep backward compatibility.)
-  - **Meaning:** Current state of that stage.
-
-- `file` (string)
-  - **Required:** yes
-  - **Meaning:** Path to the stage’s primary artifact file (relative or absolute, as used by the tooling).
-  - **Convention:** Empty string means “no artifact file yet”.
-
-`implementation` extra fields:
-
-- `approved` (boolean)
-  - **Required:** yes (for `implementation`)
-  - **Meaning:** Whether the implementation output has been explicitly approved.
-  - **Convention:** Defaults to `false`.
-
-### `active` (object)
-
+### `prompt-id-sequence-next-value` (number)
 - **Required:** yes
-- **Meaning:** Pointers for what should be executed next.
+- **Allowed values:**
+  - Integer with minimal value 1 
+- **Meaning:** What should be the id of the next created prompt. New prompt IDs MUST be allocated using prompt-id-sequence-next-value. Increment with 1 when a prompt with the current value is created
 
-Fields:
+### `prompts` (array)
 
-- `active-user-story-id` (string)
-  - **Required:** yes
-  - **Meaning:** Selected user story for execution when `mode` is `userStory`.
-  - **Convention:** Empty string means “not selected”.
-- `active-task-id` (string)
-  - **Required:** yes
-  - **Meaning:** Selected task for execution when `mode` is `task`.
-  - **Convention:** Empty string means “not selected”.
+* **Required:** yes
+* **Meaning:** Registry-owned **prompt definitions** for the current iteration, used by tooling (JS app, scripts, Copilot) to:
 
-### `tasks` (object)
+  * list of `prompt-definition` objects
+  * resolve parent chains
+  * map prompt IDs to prompt text in the '.rdd-instance/workdir/prompts-registry.md` file
+  * associate questionnaire references (without embedding questionnaire content)
+  * define capabilities/default execution semantics per prompt
+* **Type:** array of `prompt-definition` objects
+* **Uniqueness constraint:** each `id` MUST be unique within the array
+* **Ordering:** recommended topological (roots first), but not required if `parent-id` is resolvable
 
-The `tasks` object MUST exist and MUST contain the task queue and ID counters.
 
-Tasks are **independent** from `userStories`:
+### `prompt-definition` (object)
 
-- Tasks DO NOT belong to a specific user story by default.
-- A task may optionally reference a user story (e.g., via a `related-user-story-id` field), but this is not required.
-- Tasks MUST be executable without executing any user story.
+#### Required keys
 
-#### `Next-Task-For-Execution` (string)
+* `id` (string)
+  * Format: `P-` followed by digits (regex: `^P-[0-9]{3,}$`) - at least 3 digits, left-pad to 3 for <1000.
+  * Example: `"P-003"`
 
-- **Required:** yes
-- **Meaning:** The next task ID to execute.
-- **Convention:** Uses the `T###` format (e.g., `T001`).
+* `title` (string)
+  * Free text up to 128 chars
+  * In case of difference of titles of same prompt id in comparison with `.rdd-instance/workdir/prompts-registry.md`, the title in `.rdd-instance/workdir/work-iteration-registry.json` shall be treated as the source of truth
 
-#### `Next-Unused-Task-ID` (string)
+* `type` (string)
+  * **Meaning** - Defines if the prompt is from type `main` or `modification`
+  * Possible values: ["main" | "modification"]
 
-- **Required:** yes
-- **Meaning:** The next unused task ID to allocate when creating a new task.
-- **Convention:** Uses the `T###` format and MUST be greater than any existing task ID in `Tasks-List`.
+* `state` (string)
+  * **Meaning** - Defines if the prompt is still a draft, if it is planned for execution, in progress or completed. Only one prompt could be in a state "planned" or "in-progress" at a given time and this it the prompt which `execute command` (as defined in `.rdd-instance/specifications/requirements.md`) will run.
+  * Possible values: ["draft" | "planned" | "in-progress" | "completed"]  
 
-#### `Tasks-List` (array)
+* `parent-id` (string | null)
+  * **Meaning** - The prompts could be type `main` or type `modification`. When the type is `main`, it does not rely on other prompts for its definition. The definition of the `modification` prompts is always a union of `main` prompt + previously executed `modification` prompts referred tp the same `main` prompt and the current modification own definition.
+  * `null` for `main` prompts (not dependent)
+  * Otherwise must reference a `main` prompt `id` in the same `prompts` array
 
-- **Required:** yes
-- **Type:** array of task objects
-- **Meaning:** Ordered list of tasks for the iteration.
+* `analysis` (object)
+  * **Meaning:**: Each prompt will generate a file `analysis.md` where will be stored the results of analysis of the prompt, the related requirements, found additional information, etc. Two keys manage the behavior of the execution - will the user be waited to approve the analysis or to proceed automatically.
+  * Keys: 
+    * `approval` (boolean) - false mean no approval is needed, the framework will create the file and will use it. true means the framework will create the file and will wait for approval from the user to continue based on its content.
+    * `state` (strings) - the state in which the generation of the file is. Possible values are `not-started` -> `waiting-approval` -> `approved` -> `completed` (or in case `approval` is false: `not-started` -> `completed`)
 
-##### Task object schema
+* `questionnaire` (object)
+  * **Meaning:**: Each prompt will generate a file `questionnaire.md` where will be stored the questions for additional clarifications. Two keys manage the behavior of the execution - will the user be waited to approve the questionnaire answers or to proceed automatically.
+  * Keys: 
+    * `approval` (boolean) - false mean no approval is needed, the framework will create the file and will use it. true means the framework will create the file and will wait for approval from the user to continue based on its content.
+    * `state` (strings) - the state in which the generation of the file is. Possible values are `not-started` -> `waiting-approval` -> `approved` -> `completed` (or in case `approval` is false: `not-started` -> `completed`)
 
-Each task entry MUST be an object with these keys:
+* `plan` (object)
+  * **Meaning:**: Each prompt will generate a file `plan.md` where will be stored the plan for implementation of the prompt, the steps that will be executed, files to be changed, etc. Two keys manage the behavior of the execution - will the user be waited to approve the plan before implementation or to proceed automatically.
+  * Keys: 
+    * `approval` (boolean) - false mean no approval is needed, the framework will create the file and will use it. true means the framework will create the file and will wait for approval from the user to continue based on its content.
+    * `state` (strings) - the state in which the generation of the file is. Possible values are `not-started` -> `waiting-approval` -> `approved` -> `completed` (or in case `approval` is false: `not-started` -> `completed`)
 
-- `task-id` (string)
-  - **Required:** yes
-  - **Convention:** `T###` format (e.g., `T001`).
-- `description` (string)
-  - **Required:** yes
-  - **Meaning:** Human-readable task description.
-- `status` (string)
-  - **Required:** yes
-  - **Allowed values:**
-    - `not-started`
-    - (Other values may be introduced by the RDD workflow.)
-- `implementation-file` (string)
-  - **Required:** yes
-  - **Meaning:** File where the task’s implementation lives (if any).
-  - **Convention:** Empty string means “not implemented / no file yet”.
-
-## Invariants and consistency rules
-
-Tooling that writes this file SHOULD maintain the following invariants:
-
-1. **Task ID uniqueness**: every `task-id` in `Tasks-List` is unique.
-2. **Counters are consistent**:
-   - `Next-Unused-Task-ID` MUST NOT collide with any existing `task-id`.
-   - `Next-Task-For-Execution` SHOULD refer to an existing task in `Tasks-List` (unless the workflow supports “no next task” semantics).
-3. **Stage artifact pointers**:
-   - When a stage `state` is not `not-started`, the stage `file` SHOULD typically be set to a non-empty value.
 
 ## Canonical example
 
@@ -158,33 +102,50 @@ The following is the canonical baseline structure (values may be empty during in
 
 ```json
 {
-  "mode": "userStory",
-  "active": {
-    "active-user-story-id": "US001",
-    "active-task-id": ""
-  },
-  "userStories": [
+  "iteration-id": "ITR-20251220-224900",
+  "iteration-name": "Prompt prompts-registry + state wiring",
+  "prompt-id-sequence-next-value": 5,
+  "prompts": [
     {
-      "user-story-id": "US001",
-      "name": "Example user story",
-      "prompt-file": ".rdd-instance/workdir/user-story-US001.prompt.md",
-      "context": { "state": "not-started", "file": "" },
-      "clarity": { "state": "not-started", "file": "" },
-      "plan": { "state": "not-started", "file": "" },
-      "implementation": { "state": "not-started", "approved": false, "file": "" }
-    }
-  ],
-  "tasks": {
-    "Next-Task-For-Execution": "T001",
-    "Next-Unused-Task-ID": "T002",
-    "Tasks-List": [
-      {
-        "task-id": "T001",
-        "description": "",
-        "status": "not-started",
-        "implementation-file": ""
-      }
-    ]
-  }
+      "id": "P-001",
+      "title": "Baseline problem statement",
+      "type": "main",
+      "state": "completed",      
+      "parent-id": null,
+      "analysis": {"approval": true, "state": "completed"},
+      "questionnaire": {"approval": true, "state": "completed"},
+      "plan": {"approval": true, "state": "completed"}
+    },
+    {
+      "id": "P-002",
+      "title": "Add architectural constraints",
+      "type": "modification",      
+      "state": "completed",         
+      "parent-id": "P-001",
+      "analysis": {"approval": false, "state": "completed"},
+      "questionnaire": {"approval": false, "state": "completed"},
+      "plan": {"approval": true, "state": "approved"}
+    },
+    {
+      "id": "P-003",
+      "title": "Decision-oriented output",
+      "type": "modification",        
+      "state": "in-progress",             
+      "parent-id": "P-001",
+      "analysis": {"approval": false, "state": "completed"},
+      "questionnaire": {"approval": true, "state": "approved"},
+      "plan": {"approval": true, "state": "waiting-approval"}
+    },
+    {
+      "id": "P-004",
+      "title": "Add logging",
+      "type": "main",     
+      "state": "draft",               
+      "parent-id": null,
+      "analysis": {"approval": false, "state": "not-started"},
+      "questionnaire": {"approval": true, "state": "not-started"},
+      "plan": {"approval": false, "state": "not-started"}
+    }    
+  ]
 }
 ```

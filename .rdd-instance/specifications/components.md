@@ -1,4 +1,0 @@
-## Component Architecture
-
-
-

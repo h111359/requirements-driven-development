@@ -4,12 +4,12 @@
 
 ## Definitions, Acronyms, and Abbreviations
 
-## Design principles
-
 ## General Functionalities
 
 ## Functional Requirements
 
 ## Non-Functional Requirements
+
+## Design principles
 
 ## Technical Requirements

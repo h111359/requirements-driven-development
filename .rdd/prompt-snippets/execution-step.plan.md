@@ -22,11 +22,11 @@ Plan the prompt
 
 - based on [PROMPT-TEXT], [WI-REGISTRY], [CONTEXT-ANALYSIS-FILE], [QUESTIONNAIRE], create in [PLAN] a detailed plan how you will achieve the result asked in the prompt. 
 
-- For each of the requirements in `.rdd-instance/requirements.md`, check if it is already observed by the plan you have created in the previous step. If some requirement is not followed and there is no overwriting statement of this requirements in [PROMPT-TEXT], [WI-REGISTRY], [CONTEXT-ANALYSIS-FILE] or [QUESTIONNAIRE], change the plan accordingly to ensure all requirements will be fulfilled during the execution of the prompt. 
+- For each of the requirements in `.rdd-instance/specifications/requirements.md`, check if it is already observed by the plan you have created in the previous step. If some requirement is not followed and there is no overwriting statement of this requirements in [PROMPT-TEXT], [WI-REGISTRY], [CONTEXT-ANALYSIS-FILE] or [QUESTIONNAIRE], change the plan accordingly to ensure all requirements will be fulfilled during the execution of the prompt. 
 
-- Add in the plan the exact updates that should be made in `.rdd-instance/requirements.md` as adding new requirements rows in it or modifying requirement rows. Follow the conventions defined in `.rdd/conventions/requirements-format.md` for that. Do not apply changes directly in `.rdd-instance/requirements.md` yet (it will be done in the execution step) - only describe them in the plan. 
+- Add in the plan the exact updates that should be made in `.rdd-instance/specifications/requirements.md` as adding new requirements rows in it or modifying requirement rows. Follow the conventions defined in `.rdd/conventions/requirements.convention.md` for that. Do not apply changes directly in `.rdd-instance/specifications/requirements.md` yet (it will be done in the execution step) - only describe them in the plan. 
 
-- Add in the plan the exact updates that should be made in the specification statements and the specification files defined in `.rdd-instance/config.json` as adding new technical specification rows in it or modifying technical specification rows. Do not apply changes directly in the files yet (it will be done in the execution step) - only describe them in the plan. 
+- Add in the plan the exact updates that should be made in the specification statements and the specification files defined in `.rdd-instance/specifications/` as adding new technical specification rows in it or modifying technical specification rows. Do not apply changes directly in the files yet (it will be done in the execution step) - only describe them in the plan. 
 
 - Update the value of the attribute "plan.state" in [WI-REGISTRY] to "done".
 

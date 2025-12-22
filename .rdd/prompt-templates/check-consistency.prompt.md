@@ -25,9 +25,9 @@ Folders (recursive):
 - `.rdd/docs/`
 
 Individual files:
-- `.rdd-instance/requirements.md`
+- `.rdd-instance/specifications/requirements.md`
 - `.github/prompts/rdd.execute.prompt.md`
-- `.rdd/manifest.json`
+- `.rdd/config/manifest.json`
 
 ### Goal
 
@@ -97,7 +97,7 @@ Perform the following steps in order.
    - Identify missing definitions or definitions that contradict how terms are used.
 
 5. **Check requirements & specifications alignment**
-   - Verify that `.rdd-instance/requirements.md` is supported by the conventions and matches the framework’s workflow.
+   - Verify that `.rdd-instance/specifications/requirements.md` is supported by the conventions and matches the framework’s workflow.
    - Verify that `.rdd-instance/specifications/` does not conflict with requirements, templates, or conventions.
    - Flag redundancy: requirements duplicated as specs (or vice versa) without clear purpose.
 

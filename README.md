@@ -69,12 +69,22 @@ source ~/.bashrc
 sudo ln -s /usr/bin/python3 /usr/local/bin/python
 ```
 
+### Recommended .vscode/settings.json entries
+
+{
+  "chat.promptFilesRecommendations": {
+    "rdd.execute": true
+  },
+  "chat.tools.terminal.autoApprove": {
+    "python .rdd/scripts/": true
+  }
+}
 
 ## 🎯 Next Steps
 
 ### 1. User Guide
 
-- When installation is completed, you can find the user guide in the Web Portal
+- When you start the application, a Web UI will be opened in your browser. You can find the user guide in the menu of the Web UI.
 
 
 ## 📄 License
@@ -95,10 +105,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### Getting Help
 
-1. **Check the documentation** in `.rdd-instance/` after installation
-2. **Use `--help` flag** for command usage: `python .rdd/scripts/rdd.py --help`
-3. **Search existing issues** on GitHub
-4. **Create a new issue** with detailed description and error messages
+TBD
 
 ## 🙏 Acknowledgments
 
@@ -108,10 +115,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-<div align="center">
-
 **⭐ Star this repo if you find it useful!**
 
-Made with ❤️ for developers who value clear requirements and maintainable code
 
-</div>
