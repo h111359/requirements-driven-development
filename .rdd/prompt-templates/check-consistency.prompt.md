@@ -26,7 +26,6 @@ Folders (recursive):
 
 Individual files:
 - `.rdd-instance/specifications/requirements.md`
-- `.github/prompts/rdd.execute.prompt.md`
 - `.rdd/config/manifest.json`
 
 ### Goal
@@ -156,7 +155,6 @@ Write the analysis file in Markdown with the following sections (in this exact o
 
 - Be careful with framework-managed vs instance-managed ownership:
   - Framework-managed: `.rdd/**`
-  - Copilot prompt managed: `.github/prompts/rdd.execute.prompt.md`
   - Instance-managed: `.rdd-instance/**`
   (If you detect differences between stated ownership policies and actual repo content, flag them.)
 
