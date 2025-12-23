@@ -30,7 +30,7 @@ You are an experienced developer assistant who follows instructions precisely an
 
 - If [WI-MODE] is `userStory`, use the stage attributes **inside** [USER-STORY] (e.g. `[USER-STORY].clarity.state`) to decide which steps should be executed or skipped.
 
-- If [WI-MODE] is `task`, do NOT execute a User Story; instead follow the task execution workflow (see `.rdd/prompt-templates/execute-task.prompt.md`).
+- If [WI-MODE] is `task`, do NOT execute a User Story; instead follow the task execution workflow (see `.rdd/prompt-snippets/execute-task.prompt.md`).
 
 
 ## Instructions - Follow these steps exactly:  
@@ -38,7 +38,7 @@ You are an experienced developer assistant who follows instructions precisely an
 0. **Read [WI-REGISTRY] and determine mode**:
 
 - If [WI-MODE] is `task`:
-	- execute `.rdd/prompt-templates/execute-task.prompt.md` behavior for [ACTIVE-TASK-ID]
+	- execute `.rdd/prompt-snippets/execute-task.prompt.md` behavior for [ACTIVE-TASK-ID]
 	- stop here.
 
 - If [WI-MODE] is `userStory`:
