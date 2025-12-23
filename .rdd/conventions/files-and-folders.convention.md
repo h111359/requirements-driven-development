@@ -29,7 +29,6 @@ repo-root/
 │   ├── conventions/               # Format and meaning definitions
 │   ├── docs/                      # User guides 
 │   ├── prompt-snippets/           # Building blocks for AI prompts
-│   ├── prompt-templates/          # Whole well formed prompts
 │   ├── scripts/                   # Python, shell and other code
 │   ├── templates/                 # Seed iles to be copy-pasted
 │   └── README.md                  # Overview of RDD

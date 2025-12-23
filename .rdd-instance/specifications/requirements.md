@@ -73,7 +73,7 @@ The framework enables:
 
 - [GF-018] The framework shall provide configuration and administrative options through a dedicated administration interface in the Web UI.
 
-- [GF-019] The framework shall maintain a library of predefined framework prompts in the .rdd/prompt-templates directory and allow loading any such prompt into the `active prompt` file.
+- [GF-019] The framework shall maintain a library of predefined framework prompt parts in the .rdd/prompt-snippets directory.
 
 - [GF-020] The framework shall support operation in three modes—No Git, Local Git Only, and Local Git plus Remote GitHub—and enforce the selected mode across all related operations.
 
@@ -132,7 +132,7 @@ The framework enables:
 
 - [FR-049] The system shall provide a functionality for creation of a JSON listing of the repository or workdir files via a dedicated command, storing the output in `.rdd-instance/workdir/files-list.json`.
 
-- [FR-050] The system shall treat `.rdd/prompt-templates/` as a storage location for reusable prompt templates, `.rdd/prompt-snippets/` as a storage location for reusable prompt snippets and `.github/prompts/` containing a single GitHub Copilot default prompt file named `rdd.execute.prompt.md` which defines the referred in this requirements document `execute command`.
+- [FR-050] The system shall treat `.rdd/prompt-snippets/` as a storage location for reusable prompt snippets and `.github/prompts/` containing a single GitHub Copilot default prompt file named `rdd.execute.prompt.md` which defines the referred in this requirements document `execute command`.
 
 - [FR-051] The `execute command` shall follow an ordered workflow including reading the `active prompt`, generating implementation artifacts, loading documentation, resolving missing context through questionnaires, producing plans, executing those plans, updating documentation, and marking the prompt as completed.
 
@@ -148,7 +148,7 @@ The framework enables:
 
 - [FR-057] [DELETED]
 
-- [FR-058] The Web UI shall provide access to predefined prompt files stored in `.rdd/prompt-templates/`, enabling users to load such prompts into the `active prompt` for execution. 
+- [FR-058] [DELETED]
 
 - [FR-059] When the `execute command` generates a questionnaire, the Web UI shall present the questionnaire with input fields and persist responses back to the questionnaire file.
 
@@ -236,14 +236,6 @@ The framework enables:
 
 - [DP-006] Prompts shall call scripts for actions rather than implementing logic directly
 
-- [DP-007] Prompt templates provided by the framework and user are stored in `.rdd/prompt-templates`.
-
-- [DP-008] GitHub-specific Copilot prompt integrations reside in `.github/prompts/`.
-
-- [DP-009] Archived workdirs are stored in `.rdd-instance/archive/`.
-
-- [DP-010] No database is used; all data is stored in Markdown, JSON, or JSONL files.
-
 
 
 
@@ -253,9 +245,11 @@ The framework enables:
 
 - [TR-002] The framework shall use the `python` command (not `python3`) for executing all internal scripts to ensure cross-platform compatibility.
 
-- [TR-003] [TO-BE-REUSED]
+- [TR-003] No database is used; all data is stored in Markdown, JSON, or JSONL files.
 
-- [TR-005] [DELETED].
+- [TR-004] Archived workdirs are stored in `.rdd-instance/archive/`.
+
+- [TR-005] Prompt templates provided by the framework are stored in `.rdd/prompt-snippets`.
 
 - [TR-006] The framework shall use `.rdd-instance/specifications/` for storing technical design files. 
 
@@ -317,7 +311,7 @@ The framework enables:
 
 - [TR-036] All automation scripts shall be stored in the `.rdd/scripts/` directory.
 
-- [TR-037] The framework shall use `.rdd/prompt-templates/` for framework templates and user-created prompts. The Web UI shall look in `.rdd/prompt-templates/` for loading prompt templates.
+- [TR-037] [DELETED]
 
 - [TR-038] CI/CD Testing: The system shall use GitHub Actions to run tests automatically on push and pull request events, executing only the Python test runner. For the purpose shall exist a file `.github/workflows/tests.yaml` 
 

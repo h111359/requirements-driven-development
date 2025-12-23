@@ -37,8 +37,7 @@
       ".rdd/config/",
       ".rdd/conventions/",
       ".rdd/docs/",
-      ".rdd/prompt-snippets/",      
-      ".rdd/prompt-templates/",
+      ".rdd/prompt-snippets/",
       ".rdd/scripts/"
     ],
     "instance": [
