@@ -21,7 +21,7 @@ Requirements-Driven Development (RDD) is a structured workflow automation framew
 
 3. **Run the install scripts**
    
-'python .rdd/scripts/install.py'
+'python .rdd/src/install.py'
 
 4. **Choose target folder**
    Follow the instructions to install RDD in the desired destination

@@ -2,7 +2,7 @@
 """Create a work iteration registry in the workdir.
 
 Behavior:
-  1) Calls `.rdd/scripts/actions/print_timestamp.py` to obtain a timestamp in
+  1) Calls `.rdd/src/actions/print_timestamp.py` to obtain a timestamp in
      format: YYYYMMDD-HHmiss
   2) Generates content for work-iteration-registry.json according to
      `.rdd/conventions/work-iteration-registry.convention.md`
@@ -26,7 +26,7 @@ from pathlib import Path
 
 
 def _repo_root() -> Path:
-    # This file lives at: <repo>/.rdd/scripts/actions/copy_prompt_setup.py
+    # This file lives at: <repo>/.rdd/src/actions/copy_prompt_setup.py
     return Path(__file__).resolve().parents[3]
 
 

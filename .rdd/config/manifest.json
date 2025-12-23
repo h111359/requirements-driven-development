@@ -38,7 +38,7 @@
       ".rdd/conventions/",
       ".rdd/docs/",
       ".rdd/prompt-snippets/",
-      ".rdd/scripts/"
+      ".rdd/src/"
     ],
     "instance": [
       ".rdd-instance/",

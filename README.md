@@ -86,7 +86,7 @@ Add in `.vscode/settings.json` the following entries (if not exist already):
     "rdd.execute": true
   },
   "chat.tools.terminal.autoApprove": {
-    "python .rdd/scripts/": true
+    "python .rdd/src/": true
   }
 }
 ```
@@ -96,19 +96,19 @@ Add in `.vscode/settings.json` the following entries (if not exist already):
 
 - Start the application running (from the root folder of the repo) 
 ```
-python .rdd/scripts/rdd.py
+python .rdd/src/rdd.py
 ```
 
 Alternatively you can run:
 
 Windows:
 ```
-.rdd/scripts/rdd.bat
+.rdd/src/rdd.bat
 ```
 
 Linux:
 ```
-.rdd/scripts/rdd.bat
+.rdd/src/rdd.bat
 ```
 
 - When you start the application, a Web UI will be opened in your browser. You can find the user guide in the menu of the Web UI.

@@ -82,7 +82,7 @@ The framework enables:
 
 - [FR-001] The system shall store all active workdir files in .rdd-instance/workdir/
 
-- [FR-002] `.rdd-instance/workdir/prompts-registry.md` shall contain prompts texts. All other operational state of the prompt is maintained in `.rdd-instance/workdir/work-iteration-registry.json`. The consistency between those two files will be maintained by the scripts in `.rdd/scripts/`.
+- [FR-002] `.rdd-instance/workdir/prompts-registry.md` shall contain prompts texts. All other operational state of the prompt is maintained in `.rdd-instance/workdir/work-iteration-registry.json`. The consistency between those two files will be maintained by the scripts in `.rdd/src/`.
 
 - [FR-005] All generated questions shall follow the question-formatting standards defined in `.rdd/conventions/questions-formatting.md`.
 
@@ -204,7 +204,7 @@ The framework enables:
 
 - [NFR-011] The framework’s VS Code integration shall recommend RDD prompt file of `execute command` using the `chat.promptFilesRecommendations` setting for improved discoverability.
 
-- [NFR-012] The framework’s VS Code integration shall configure terminal auto-approval for `.rdd/scripts/` using the `chat.tools.terminal.autoApprove` setting.
+- [NFR-012] The framework’s VS Code integration shall configure terminal auto-approval for `.rdd/src/` using the `chat.tools.terminal.autoApprove` setting.
 
 - [NFR-013] The framework’s VS Code integration shall associate all `*.jsonl` files with the `jsonlines` language for improved editing experience.
 
@@ -309,7 +309,7 @@ The framework enables:
 
 - [TR-035] The test environment shall install dependencies listed in `tests/requirements.txt` and execute builds and installation tests in isolation from the developer’s system environment.
 
-- [TR-036] All automation scripts shall be stored in the `.rdd/scripts/` directory.
+- [TR-036] All automation scripts shall be stored in the `.rdd/src/` directory.
 
 - [TR-037] [DELETED]
 
@@ -317,13 +317,13 @@ The framework enables:
 
 - [TR-039] The CI/CD pipeline shall include a GitHub Actions workflow file `.github/workflows/tests.yaml` configured to run on `pull_request` events targeting the `dev` branch and on manual `workflow_dispatch` triggers.
 
-- [TR-040] The `.github/workflows/tests.yaml` workflow shall define a job `all-tests-linux` that runs on `ubuntu-latest`, checks out the repository, installs Python 3.9 using `actions/setup-python@v5`, installs BATS, sets up the test environment by running `python .rdd/scripts/setup-test-env.py`, and executes all tests by running `python .rdd/scripts/run-tests.py`.
+- [TR-040] The `.github/workflows/tests.yaml` workflow shall define a job `all-tests-linux` that runs on `ubuntu-latest`, checks out the repository, installs Python 3.9 using `actions/setup-python@v5`, installs BATS, sets up the test environment by running `python .rdd/src/setup-test-env.py`, and executes all tests by running `python .rdd/src/run-tests.py`.
 
-- [TR-041] The `all-tests-linux` job in `.github/workflows/tests.yaml` shall generate a Python test coverage report by activating the `.venv` virtual environment, running `pytest tests/python/ --cov=.rdd/scripts --cov=scripts --cov-report=xml --cov-report=term`, and producing a `coverage.xml` file.
+- [TR-041] The `all-tests-linux` job in `.github/workflows/tests.yaml` shall generate a Python test coverage report by activating the `.venv` virtual environment, running `pytest tests/python/ --cov=.rdd/src --cov=scripts --cov-report=xml --cov-report=term`, and producing a `coverage.xml` file.
 
 - [TR-042] The `all-tests-linux` job in `.github/workflows/tests.yaml` shall upload the generated `coverage.xml` report using `codecov/codecov-action@v4` with appropriate flags and name metadata, and this upload step shall execute even when previous steps fail.
 
-- [TR-043] The `.github/workflows/tests.yaml` workflow shall define a job `all-tests-windows` that runs on `windows-latest`, checks out the repository, installs Python 3.9 using `actions/setup-python@v5`, installs the Pester module using PowerShell, sets up the test environment by running `python .rdd/scripts/setup-test-env.py`, and executes all tests by running `python .rdd/scripts/run-tests.py`.
+- [TR-043] The `.github/workflows/tests.yaml` workflow shall define a job `all-tests-windows` that runs on `windows-latest`, checks out the repository, installs Python 3.9 using `actions/setup-python@v5`, installs the Pester module using PowerShell, sets up the test environment by running `python .rdd/src/setup-test-env.py`, and executes all tests by running `python .rdd/src/run-tests.py`.
 
 - [TR-044] The `.github/workflows/tests.yaml` workflow shall define a job `test-summary` that runs on `ubuntu-latest`, depends on the completion of `all-tests-linux` and `all-tests-windows`, executes regardless of their success or failure, and prints the final result status of both jobs to the workflow logs.
 

@@ -23,7 +23,7 @@ from pathlib import Path
 
 
 def _repo_root() -> Path:
-    # This file lives at: <repo>/.rdd/scripts/actions/workdir-archive.py
+    # This file lives at: <repo>/.rdd/src/actions/workdir-archive.py
     return Path(__file__).resolve().parents[3]
 
 
