@@ -3,19 +3,27 @@
 This document describes the format for writing requirements in the RDD framework.
 
 
-
 ## File Structure
 
-Requirements are organized into four main sections:
+Requirements are organized into the following sections:
 
-## Product Name
-## Product Overview
-## Definitions, Acronyms, and Abbreviations
-## Design principles
-## General Functionalities
-## Functional Requirements
-## Non-Functional Requirements
-## Technical Requirements
+* Product Name - the official name of the product
+
+* Product Overview - short description of the product
+
+* Definitions, Acronyms, and Abbreviations - all important and used further terms, acronyms, etc.
+
+* General Functionalities - 
+
+* Functional Requirements
+
+* Non-Functional Requirements
+
+* Design principles
+
+* Technical Requirements
+
+
 
 ## Requirement Format
 
@@ -27,33 +35,12 @@ Each requirement follows this format:
 
 ### Components:
 
-- **Prefix**: Section identifier (DP, GF, FR, NFR, or TR)
+- **Prefix**: Section identifier (GF, FR, NFR, DP or TR)
 - **ID**: Sequential number (001, 002, 003, etc.)
 - **Description**: Complete requirement statement using "shall" language
 
 
 ## Section Categories
-
-### Design principles (DP)
-High-level principles for design of the system.
-
-**Examples:**
-- Modularity and separation of concerns
-- Security by default and least privilege
-- Scalability and performance-minded design
-- Observability and operational transparency
-- Resilience and fault tolerance
-- Simplicity and maintainability
-- Interoperability and adherence to standards
-- Privacy and data protection by design
-- Accessibility and inclusive design
-
-```markdown
-- [DP-001] The system shall follow a modular architecture with clear separation of concerns and well-defined interfaces
-- [DP-002] The system shall adopt secure-by-default principles, enforcing least privilege and safe defaults
-- [DP-003] The system shall be designed to scale horizontally and vertically without requiring major architectural changes
-- [DP-004] The system shall be observable, providing structured logs, metrics, and distributed traces for debugging and monitoring
-```
 
 ### General Functionalities (GF)
 High-level capabilities and features of the system.
@@ -95,6 +82,27 @@ Quality attributes and constraints.
 ```markdown
 - [NFR-001] The system shall respond to user requests within 2 seconds
 - [NFR-002] The framework shall support up to 10,000 concurrent users
+```
+
+### Design principles (DP)
+High-level principles for design of the system.
+
+**Examples:**
+- Modularity and separation of concerns
+- Security by default and least privilege
+- Scalability and performance-minded design
+- Observability and operational transparency
+- Resilience and fault tolerance
+- Simplicity and maintainability
+- Interoperability and adherence to standards
+- Privacy and data protection by design
+- Accessibility and inclusive design
+
+```markdown
+- [DP-001] The system shall follow a modular architecture with clear separation of concerns and well-defined interfaces
+- [DP-002] The system shall adopt secure-by-default principles, enforcing least privilege and safe defaults
+- [DP-003] The system shall be designed to scale horizontally and vertically without requiring major architectural changes
+- [DP-004] The system shall be observable, providing structured logs, metrics, and distributed traces for debugging and monitoring
 ```
 
 ### Technical Requirements (TR)
