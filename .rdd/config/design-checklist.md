@@ -53,7 +53,6 @@
 
 - [ ] Resilience & Fault Tolerance (circuit breakers, retries, backoff, bulkheads) is defined
 
-
 - [ ] State Management & Caching Strategy strategy (layers, invalidation, TTL) are defined
 
 ### Observability
@@ -86,21 +85,4 @@
 
 - [ ] Cost Optimization & Resource Efficiency strategy (utilization, scaling thresholds) is defined
 
-
-  
-
-
-
-
-
-
-- [ ] AI/ML Model Lifecycle & MLOps (training, drift detection, rollback)
-
-- [ ] Knowledge Management & Documentation (KB curation, feedback loop)
-
-- [ ] User Training & Adoption (enablement plan, competency tracking)
-
-- [ ] Onboarding & Offboarding Automation (accounts, access revocation)
-
-- [ ] Secret & Credential Scanning (repository monitoring, rotation triggers)
 
