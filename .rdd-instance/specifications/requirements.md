@@ -24,6 +24,8 @@ The framework enables:
 
 * **Framework** - In the context of the current document and code repository - the set of files and principles for realization of RDD development
 
+* **RDD instance** - A folder holding the RDD related files specific for the current product
+
 * **Prompt** – A developer-issued instruction for the copilot
 
 * **Technical Design** – Structured JSON defining architectural decisions
@@ -34,214 +36,98 @@ The framework enables:
 
 * **active prompt** - The prompt in `.rdd-instance/workdir/work-iteration-registry.json` which is with status `planned` or `in-progress`. The framework allows only one prompt to be in some of those statuses and this prompt is considered to be the `active prompt`
 
+* **requirements file** - The file `.rdd-instance/specifications/requirements.md` which contains user and technical requirements and is formatted accordingly `.rdd/conventions/requirements.convention.md`
 
-# General Functionalities
+* **working directory** - The framework shall maintain a working directory `.rdd-instance/workdir` for active development work files.
 
-- [GF-001] The framework shall define RDD (Requirement Driven Development) as a set of prompts, scripts, and workflows enabling a developer to use an LLM-based copilot for software development.
+* **prompt-snippets** - Reusable prompt snippets or whole prompts stored in `.rdd/prompt-snippets/`.
 
-- [GF-002] The framework shall persist all prompts as Markdown files authored through the Web UI to ensure full historical traceability.
+* **technical-design** - A file providin technical specificationa and constraints in a structured JSON format located in `.rdd-instance/specifications/technical-design.json`
 
-- [GF-003] The framework shall maintain a workdir directory (.rdd-instance/workdir/) for active development work on enhancements and fixes.
+* **files-and-folders** - The product files and folders structure documented in `.rdd-instance/specifications/files-and-folders.md`
 
-- [GF-004] The framework shall archive completed workdir content for historical reference.
+* **prompt-implementation-plan** - A file with the exact steps which the copilot should execute
 
-- [GF-005] The framework shall support update of `.rdd-instance/specifications/requirements.md` file according the `execute command` work.
-
-- [GF-006] The framework shall load, apply, and update requirements automatically during each prompt execution.
-
-- [GF-007] The framework shall maintain and update the technical design and technical specification in dedicated files as part of prompt execution workflows.
-
-- [GF-008] The framework shall provide a web-based user interface for creating, editing, and managing prompts, questionnaires, implementation plans, technical specifications, file structure, requirements, and workdir/version control operations.
-
-- [GF-009] The framework shall require that all prompts are authored through the Web UI and stored in a Markdown file, preventing ad-hoc prompt text in copilot chat from being treated as canonical input.
-
-- [GF-010] The framework shall provide a structured workflow for clarifying requirements through iterative questioning based on a clarity taxonomy.
-
-- [GF-011] The framework shall provide a single command, `execute`, that initiates all copilot-related operations using the `active prompt`. 
-
-- [GF-012] [DELETED]
-
-- [GF-013] The framework shall provide all user interactions, except command execution, through a browser-based user interface rather than terminal menus.
-
-- [GF-014] The framework shall operate on both Windows and Linux.
-
-- [GF-015] The framework shall allow visualization and controlled modification of the project folder structure through the Web UI.
-
-- [GF-016] The framework shall support adding new requirements and reverse-engineering requirements from the existing project state.
-
-- [GF-017] The framework shall support git branch creation, updates from the default branch, commits, merges, workdir archiving, and workdir loading through the Web UI.
-
-- [GF-018] The framework shall provide configuration and administrative options through a dedicated administration interface in the Web UI.
-
-- [GF-019] The framework shall maintain a library of predefined framework prompt parts in the .rdd/prompt-snippets directory.
-
-- [GF-020] The framework shall support operation in three modes—No Git, Local Git Only, and Local Git plus Remote GitHub—and enforce the selected mode across all related operations.
 
 
 # Functional Requirements
 
-- [FR-001] The system shall store all active workdir files in .rdd-instance/workdir/
+- [UR-001] The framework shall define RDD (Requirement Driven Development) as a set of prompts, scripts, and workflows enabling a developer to use an LLM-based copilot for software development.
 
-- [FR-002] `.rdd-instance/workdir/prompts-registry.md` shall contain prompts texts. All other operational state of the prompt is maintained in `.rdd-instance/workdir/work-iteration-registry.json`. The consistency between those two files will be maintained by the scripts in `.rdd/src/`.
+- [UR-002] The framework shall maintain a library of predefined framework prompt parts. The framework shall persist all prompts as Markdown files authored through the Web UI to ensure full historical traceability.
 
-- [FR-005] All generated questions shall follow the question-formatting standards defined in `.rdd/conventions/questions-formatting.md`.
+- [UR-003] The framework shall load, apply, and update `requirements file` automatically during each prompt execution.
 
-- [FR-018] The system shall create a dedicated archive directory during the work iteration archiving.
+- [UR-004] The framework shall provide a web-based user interface for creating, editing, and managing prompts, questionnaires, implementation plans, technical specifications, file structure, requirements, and working directory control operations. The Web UI shall provide a modern, responsive interface optimized for desktop browsers, with clear navigation between pages, real-time feedback on operations, color-coded status indicators (success: green, error: red, warning: yellow, info: blue), and graceful error handling with user-friendly messages.
 
-- [FR-019] [DELETED]
+- [UR-005] The framework shall provide a single prompt implementing the `execute command`, that initiates all copilot-related operations using the `active prompt`. 
 
-- [FR-021] The system shall preserve workdir folder files during archiving by copying them instead of moving them until a final clearing action is triggered.
+- [UR-006] The framework shall operate on both Windows and Linux.
 
-- [FR-024] After wrap-up synchronization, the system shall ensure `.rdd-instance/specifications/requirements.md` accurately reflects the committed state of the default branch.
+- [UR-007] The framework shall provide visualization and controlled modification of the `rdd instance` files through the Web UI.
 
-- [FR-025] The system shall clear the workdir folder after archiving by removing all files and subdirectories inside `.rdd-instance/workdir/`.
+- [UR-008] The framework shall support reverse-engineering requirements from the existing product state.
 
-- [FR-026] [TO-BE-REUSED]
+- [UR-009] The framework shall archive `working directory` content at the end of the current iteration for historical reference. The system shall create a dedicated archive directory during the work iteration archiving.
 
-- [FR-027] [TO-BE-REUSED]
+- [UR-010] Prompts shall call scripts for file and folder modifications or other deterministic actions rather than the copilot to implementing the logic.
 
-- [FR-028] The system documentation shall include Linux installation guidance for enabling the `python` command using the appropriate system package.
+- [UR-011] The system shall clear the workdir folder after archiving by removing all files and subdirectories inside `working directory`.
 
-- [FR-029] The system shall provide a build script that produces cross-platform release archives containing framework files, templates, documentation, and installation scripts.
+- [UR-012] The framework must maintain a `requirements file` and automatically update it after each prompt execution. During each execution, the framework must also load and apply the existing requirements.
 
-- [FR-030] Release archives shall include all relevant framework directories, configuration templates, installation scripts, and documentation required for correct setup.
+- [UR-013] The system documentation shall include Linux installation guidance for enabling the `python` command using the appropriate system package.
 
-- [FR-031] The system shall include a Python-based installer that automates installation tasks including copying files, merging template settings, and updating .gitignore.
+- [UR-014] The framework shall provide CLI commands on top of the UI interface.
 
-- [FR-032] The installer shall verify prerequisites including Python availability, Git availability (when applicable to mode), and the validity of the installation target.
+- [UR-015] The system shall provide a Python-based test runner capable of executing all test types across platforms without requiring third-party shell testing frameworks.
 
-- [FR-033] The installer shall remove obsolete RDD prompt files from `.github/prompts/` prior to deploying updated prompt templates.
+- [UR-016] The system shall provide a functionality for creation of a JSON listing of the repository or workdir files via a dedicated command.
 
-- [FR-035] [DELETED]
+- [UR-017] The Web UI shall provide a Prompt Management page enabling loading, editing, saving, questionnaire interaction, and plan review for the `active prompt`. 
 
-- [FR-037] The framework shall provide CLI commands on top of the UI interface.
+- [UR-018] The Web UI shall provide a Technical Specification page enabling editing of `technical-design` using a configuration-driven interactive form. 
 
-- [FR-040] [DELETED].
+- [UR-019] The Web UI shall provide a File & Folder Structure page enabling visualization and controlled modification of the product's `files-and-folders`. 
 
-- [FR-041] The build process shall copy template files (requirements.md, files-and-folders.md, technical-design.json) to `.rdd-instance/` during installation.
+- [UR-020] When the `execute command` generates a questionnaire, the Web UI shall present the questionnaire with input fields and persist responses back to the questionnaire file.
 
-- [FR-042] The work-iteration creation workflow shall validate presence of required seed templates and notify the user if they are missing.
+- [UR-021] The Web UI shall be able to display the `prompt-implementation-plan`, allow edits, and provide approval or regeneration options. 
 
-- [FR-044] [DELETED]
+- [UR-022] The Web UI shall display technical design, requirements, and file structure content and allow controlled user edits.
 
-- [FR-045] The framework shall depend on Python-based installation, and using shell-based or PowerShell-based scripts to run the Python-based installer.
+- [UR-023] The system shall check existing content in `requirements file`  before generating clarification questions to avoid redundant queries.
 
-- [FR-046] The system shall provide a Python-based test runner capable of executing all test types across platforms without requiring third-party shell testing frameworks.
+- [UR-024] The `technical-design` configuration JSON shall support conditional and hierarchical logic, enabling form fields to appear or change behavior based on previously selected answers.
 
-- [FR-047] [DELETED]
+- [UR-025] The Web UI should provide a Technical Specification page for editing of `technical-design`. It shall provide a “Set Default Answers” function that automatically populates all unanswered design fields with their configured default values.
 
-- [FR-049] The system shall provide a functionality for creation of a JSON listing of the repository or workdir files via a dedicated command, storing the output in `.rdd-instance/workdir/files-list.json`.
+- [UR-026] The framework shall provide smooth developer experience, minimizing technical overhead for requirement clarification
 
-- [FR-050] The system shall treat `.rdd/prompt-snippets/` as a storage location for reusable prompt snippets and `.github/prompts/` containing a single GitHub Copilot default prompt file named `rdd.execute.prompt.md` which defines the referred in this requirements document `execute command`.
+- [UR-027] Error messages shall include specific problem description and suggested remediation steps
 
-- [FR-051] The `execute command` shall follow an ordered workflow including reading the `active prompt`, generating implementation artifacts, loading documentation, resolving missing context through questionnaires, producing plans, executing those plans, updating documentation, and marking the prompt as completed.
+- [UR-028] All destructive operations shall create backups before proceeding
 
-- [FR-052] The Web UI shall provide a Prompt Management page enabling loading, editing, saving, questionnaire interaction, and plan review for the `active prompt`. 
+- [UR-029] Scripts shall validate prerequisites before executing operations
 
-- [FR-053] The Web UI shall provide a Technical Specification page enabling editing of structured technical design JSON `.rdd-instance/specifications/technical-design.json` using a configuration-driven interactive form. 
+- [UR-030] Scripts shall handle errors gracefully and provide recovery guidance
 
-- [FR-054] The Web UI shall provide a File & Folder Structure page enabling visualization and controlled modification of the project's directory structure documented in `.rdd-instance/specifications/files-and-folders.md`. 
+- [UR-031] The Web UI and installers shall provide clear, color-coded feedback for success, error, warning, or informational messages to improve user comprehension.
 
-- [FR-055] The Web UI shall provide a Requirements page enabling generation of requirement-creation prompts and reverse engineering of requirements in `.rdd-instance/specifications/requirements.md` from project files. 
+- [UR-032] Interactive menus used in CLI components shall support curses-based navigation with fallback to numeric input when curses is not available.
 
-- [FR-056] The Web UI shall provide a Version Control & workdir Management page enabling git branch operations, commits, merges, workdir archiving, and workdir loading. 
+- [UR-033] The test runner shall provide colored output indicating success, failure, and warnings to improve readability during test execution.
 
-- [FR-057] [DELETED]
+- [UR-034] The installation process shall provide clear, user-friendly explanations of all required decisions and actions during installation.
 
-- [FR-058] [DELETED]
-
-- [FR-059] When the `execute command` generates a questionnaire, the Web UI shall present the questionnaire with input fields and persist responses back to the questionnaire file.
-
-- [FR-060] After the `execute command` generates an implementation plan, the Web UI shall display the plan, allow edits, and provide approval or regeneration options. 
-
-
-- [FR-061] The Web UI shall display technical design, requirements, and file structure content retrieved from their respective JSON or Markdown sources and allow controlled user edits.
-
-- [FR-062] The Web UI shall present implementation plans produced by the `execute  command`, allow editing of these plans, and support approval or regeneration when appropriate.
-
-- [FR-063] The installer shall request user confirmation before performing operations that overwrite existing framework files.
-
-- [FR-064] The installer shall provide a clear explanation of planned actions—including file copying, settings merging, and `.gitignore` updates—before making changes to the target directory.
-
-- [FR-065] The installer shall detect existing RDD installations and display a summary of files and directories that will be overwritten or preserved.
-
-- [FR-066] The installer shall allow the user to select between a GUI folder browser and manual path entry when choosing an installation target directory.
-
-- [FR-067] [DELETED]
-
-- [FR-068] The system shall check existing content in `requirements.md`  before generating clarification questions to avoid redundant queries.
-
-- [FR-069] [DELETED]
-
-- [FR-070] Technical design content shall be strictly separated from requirements and shall not be embedded directly within `requirements.md`, but instead stored exclusively in dedicated technical specification files under `.rdd-instance/specifications/`.
-
-- [FR-071] The technical design configuration JSON shall support conditional and hierarchical logic, enabling form fields to appear or change behavior based on previously selected answers.
-
-- [FR-072] The Technical Specification page shall provide a “Set Default Answers” function that automatically populates all unanswered design fields with their configured default values.
-
-
-# Non-Functional Requirements
-
-- [NFR-001] The framework shall provide smooth developer experience, minimizing technical overhead for requirement clarification
-
-- [NFR-002] Error messages shall include specific problem description and suggested remediation steps
-
-- [NFR-003] New files shall be generated from templates in `.rdd/templates/` for consistency
-
-- [NFR-004] All destructive operations shall create backups before proceeding
-
-- [NFR-005] Scripts shall validate prerequisites before executing operations
-
-- [NFR-006] Scripts shall handle errors gracefully and provide recovery guidance
-
-- [NFR-007] CLI Interactive menus shall provide visual feedback with arrow key navigation, clear selection indicators using Unicode box drawing characters (╔═╗╚╝║╠╣), bold and reverse video for highlighted items, and support for both curses-based and numeric fallback input methods
-
-- [NFR-008] The installation process shall be straightforward and consistent across platforms, using only Python (install.py) 
-
-- [NFR-009] The installation process shall provide clear explanations of the required decisions and actions taken from the system while running the installer from the command line
-
-- [NFR-010] The Web UI shall provide a modern, responsive interface optimized for desktop browsers, with clear navigation between pages, real-time feedback on operations, color-coded status indicators (success: green, error: red, warning: yellow, info: blue), and graceful error handling with user-friendly messages.
-
-- [NFR-011] The framework’s VS Code integration shall recommend RDD prompt file of `execute command` using the `chat.promptFilesRecommendations` setting for improved discoverability.
-
-- [NFR-012] The framework’s VS Code integration shall configure terminal auto-approval for `.rdd/src/` using the `chat.tools.terminal.autoApprove` setting.
-
-- [NFR-013] The framework’s VS Code integration shall associate all `*.jsonl` files with the `jsonlines` language for improved editing experience.
-
-- [NFR-014] The Web UI and installers shall provide clear, color-coded feedback for success, error, warning, or informational messages to improve user comprehension.
-
-- [NFR-015] Interactive menus used in CLI components shall support curses-based navigation with fallback to numeric input when curses is not available.
-
-- [NFR-016] The test runner shall provide colored output indicating success, failure, and warnings to improve readability during test execution.
-
-- [NFR-017] The installation process shall provide clear, user-friendly explanations of all required decisions and actions during installation.
-
-- [NFR-018] All Web UI pages shall be optimized for desktop usage, offering clear navigation, real-time feedback on operations, and graceful handling of errors with informative messages.
-
-- [NFR-019] All destructive operations (workdir clearing, iteration completion, overwriting files during installation) shall present warnings to the user before proceeding.
-
-
-
-# Design principles
-
-- [DP-001] Prompts must be authored in a Web UI and saved in Markdown files rather than typed directly into the copilot chat, ensuring a permanent and auditable history of all executed prompts.
-
-- [DP-002] The framework must maintain a requirements file and automatically update it after each prompt execution. During each execution, the framework must also load and apply the existing requirements.
-
-- [DP-003] A single command, `execute`, is used to initiate all copilot operations. The command operates based on prompt defined as `.rdd/prompt-snippets/execution.md` which is instructed to further read the rest of the context defined in framework files.
-
-- [DP-004] for developer Convenience a browser-based UI must support all user interactions except the actual execution of the `execute command`.
-
-- [DP-005] The framework must operate on both Windows and Linux, with functionality implemented primerely in Python, vanilla JavaScript, HTML, CSS.
-
-- [DP-006] Prompts shall call scripts for actions rather than implementing logic directly
+- [UR-035] All Web UI pages shall be optimized for desktop usage, offering clear navigation, real-time feedback on operations, and graceful handling of errors with informative messages.
 
 
 
 
 # Technical Requirements
 
-- [TR-001] The framework shall implement all automation functionality in Python using a domain-based command routing architecture.
+- [TR-001] The framework shall implement all automation functionality in Python using a domain-based command routing architecture and for the user interface shall use only vanilla JavaScript, HTML, CSS.
 
 - [TR-002] The framework shall use the `python` command (not `python3`) for executing all internal scripts to ensure cross-platform compatibility.
 
@@ -261,7 +147,7 @@ The framework enables:
 
 - [TR-010] The Web UI server shall generate a session token on startup and require it for all operations to prevent unauthorized access. 
 
-- [TR-011] The template files which shall serve to be seeded the .rdd-instance folder (configuration templates, requirements template, technical specification templates) during the installation should be stored in the `.rdd/templates/` directory and the installation script should copy them to the respective locations under `.rdd-instance/` during installation.
+- [TR-011] [DELETED]
 
 - [TR-012] The installer shall be implemented as a Python script that automates installation steps, including copying framework files, and updating `.gitignore`.
 
@@ -283,19 +169,19 @@ The framework enables:
 
 - [TR-021] The build script shall substitute version placeholders (e.g., `{{VERSION}}`) in template files when constructing installation assets.
 
-- [TR-022] [DELETED]
+- [TR-022] The system shall store all active workdir files in .rdd-instance/workdir/
 
 - [TR-023] The framework shall provide a command to generate a JSON listing of repository or workdir files and store it at `.rdd-instance/workdir/files-list.json`, excluding directories beginning with `.` and directories named `venv`, and listing for each entry: `type` (file type - like 'txt', 'md', 'csv', 'xlsx', 'pdf', 'json', 'py', 'html', 'js', 'css' and others), `name` (file name), `relpath` (relative path), and `mtime` (modification time) in ISO8601 UTC format.
 
 - [TR-025] The Web UI shall provide pages for managing prompts, technical specifications, folder structures, requirements, and version-control workflows, backed by the REST endpoints and reflecting the interaction model defined in the Product Requirements Specification.
 
-- [TR-026] [DELETED]
+- [TR-026] `.rdd-instance/workdir/prompts-registry.md` shall contain prompts texts. All other operational state of the prompt is maintained in `.rdd-instance/workdir/work-iteration-registry.json`. The consistency between those two files will be maintained by the scripts in `.rdd/src/`.
 
 - [TR-027] The framework shall implement safety checks that prevent iteration creation unless the workdir is empty.
 
 - [TR-028] The framework shall archive each completed iteration in `.rdd-instance/archive/<iteration-name>/`.
 
-- [TR-029] [DELETED]
+- [TR-029] All generated questions shall follow the question-formatting standards defined in `.rdd/conventions/questions-formatting.md`.
 
 - [TR-030] The framework shall provide utility functions for reading and updating configuration values, including but not limited to `get_rdd_config`, `set_rdd_config`, and configuration-path helpers.
 
@@ -303,7 +189,7 @@ The framework enables:
 
 - [TR-032] The test system shall be implemented entirely in Python using pytest for Python tests with optional coverage reporting, and shall avoid dependencies on shell-based test frameworks.
 
-- [TR-033] The system shall maintain its test fixtures in a `tests/` directory using isolated temporary directories to prevent modification of project files during test execution.
+- [TR-033] The system shall maintain its test fixtures in a `tests/` directory using isolated temporary directories to prevent modification of product files during test execution.
 
 - [TR-034] The testing environment shall be created using a Python script that constructs and manages a dedicated virtual environment for testing.
 

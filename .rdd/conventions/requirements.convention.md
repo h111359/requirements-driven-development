@@ -13,13 +13,7 @@ Requirements are organized into the following sections:
 
 * Definitions, Acronyms, and Abbreviations - all important and used further terms, acronyms, etc.
 
-* General Functionalities - 
-
-* Functional Requirements
-
-* Non-Functional Requirements
-
-* Design principles
+* User Requirements
 
 * Technical Requirements
 
@@ -30,90 +24,33 @@ Requirements are organized into the following sections:
 Each requirement follows this format:
 
 ```markdown
-- [PREFIX-ID] Detailed description of the requirement
+- [<Prefix>-<ID>] <Description>
 ```
 
 ### Components:
 
-- **Prefix**: Section identifier (GF, FR, NFR, DP or TR)
+- **Prefix**: Section identifier (UR, TR)
 - **ID**: Sequential number (001, 002, 003, etc.)
-- **Description**: Complete requirement statement using "shall" language
+- **Description**: Detailed description of the requirement. Complete requirement statement using "shall" language
 
 
 ## Section Categories
 
-### General Functionalities (GF)
-High-level capabilities and features of the system.
+### User Requirements (UR)
+User perspective requirements. High-level capabilities and features of the system as well as specific behaviors and functions the system must perform. No technical constraints. No technical language.
 
 **Examples:**
-- User management
-- Data import/export
-- Reporting capabilities
-- Integration features
 
 ```markdown
-- [GF-001] The system shall provide OAuth2-based user authentication
-- [GF-002] The framework shall store all data in a local database
+- [UR-001] The system shall allow users to upload files up to 100MB
+- [UR-002] The system shall export data in CSV format with UTF-8 encoding
 ```
 
-### Functional Requirements (FR)
-Specific behaviors and functions the system must perform.
-
-**Examples:**
-- Input validation rules
-- Calculation algorithms
-- Workflow steps
-- Data transformations
-
-```markdown
-- [FR-001] The system shall allow users to upload files up to 100MB
-- [FR-002] The system shall export data in CSV format with UTF-8 encoding
-```
-
-### Non-Functional Requirements (NFR)
-Quality attributes and constraints.
-
-**Examples:**
-- Performance (response time, throughput)
-- Reliability (uptime, error rates)
-- Usability (accessibility, user experience)
-- Maintainability (code quality, documentation)
-
-```markdown
-- [NFR-001] The system shall respond to user requests within 2 seconds
-- [NFR-002] The framework shall support up to 10,000 concurrent users
-```
-
-### Design principles (DP)
-High-level principles for design of the system.
-
-**Examples:**
-- Modularity and separation of concerns
-- Security by default and least privilege
-- Scalability and performance-minded design
-- Observability and operational transparency
-- Resilience and fault tolerance
-- Simplicity and maintainability
-- Interoperability and adherence to standards
-- Privacy and data protection by design
-- Accessibility and inclusive design
-
-```markdown
-- [DP-001] The system shall follow a modular architecture with clear separation of concerns and well-defined interfaces
-- [DP-002] The system shall adopt secure-by-default principles, enforcing least privilege and safe defaults
-- [DP-003] The system shall be designed to scale horizontally and vertically without requiring major architectural changes
-- [DP-004] The system shall be observable, providing structured logs, metrics, and distributed traces for debugging and monitoring
-```
 
 ### Technical Requirements (TR)
-Technology stack and implementation specifications.
+High-level principles for design of the system as well as technology stack and implementation specifications.
 
 **Examples:**
-- Programming languages and versions
-- Frameworks and libraries
-- Database systems
-- API specifications
-- File formats and protocols
 
 ```markdown
 - [TR-001] The system shall use Python 3.11 or higher
@@ -137,22 +74,22 @@ Technology stack and implementation specifications.
 ### 3. One Requirement Per Line
 
 ✅ **Good:** 
-- `[FR-001] Max 100MB`
-- `[FR-002] Accept PDF, DOC, DOCX only`
+- `[UR-001] Max 100MB`
+- `[UR-002] Accept PDF, DOC, DOCX only`
 
 ❌ **Bad:**
-- `[FR-001] Max 100MB, PDF/DOC/DOCX only`
+- `[UR-001] Max 100MB, PDF/DOC/DOCX only`
 
 ### 4. Avoid Implementation Details in FR/NFR
 
 Implementation belongs in Technical Requirements (TR).
 
 ✅ **Good:**
-- `[FR-001] Export data in structured format`
+- `[UR-001] Export data in structured format`
 - `[TR-001] Use JSON serialization with UTF-8 encoding`
 
 ❌ **Bad:**
-- `[FR-001] Export data using JSON serialization`
+- `[UR-001] Export data using JSON serialization`
 
 
 
@@ -173,5 +110,5 @@ In `requirements.md`, use these prefixes:
 ### [DELETED]
 Remove existing requirement (must include existing ID). Example:
 ```markdown
-- [FR-012] [DELETED] 
+- [UR-012] [DELETED] 
 ```
