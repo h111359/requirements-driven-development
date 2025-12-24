@@ -20,7 +20,6 @@ Folders (recursive):
 - `.rdd-instance/specifications/`
 - `.rdd/conventions/`
 - `.rdd/prompt-snippets/`
-- `.rdd/templates/`
 - `.rdd/docs/`
 
 Individual files:

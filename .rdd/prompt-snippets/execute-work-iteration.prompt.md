@@ -22,8 +22,6 @@ You are an experienced developer assistant who follows instructions precisely an
 
 - When [WI-MODE] is `userStory`, the prompt to execute is [PROMPT-TEXT] from `[USER-STORY].prompt-file`.
 
-- A User Story prompt SHOULD follow the structure in `.rdd/templates/rdd-prompt.md`.
-
 - Instead of [PROMPT-TEXT] shall be written the actual prompt text with all the instructions that should be executed - consider it as a value of the variable [PROMPT-TEXT] in the following instructions.  
 
 - [WI-REGISTRY] contains the registry of the current work iteration execution - see `.rdd/conventions/work-iteration-registry.convention.md` for details about its format and attributes.
