@@ -1,6 +1,6 @@
 ## Purpose
 
-`prompts-registry.md` is the canonical, repository-friendly registry of prompt texts for an RDG/RDD work iteration.
+`prompts-registry.md` is the canonical, repository-friendly registry of prompt texts for an RDD work iteration.
 
 It must satisfy all of the following:
 - Be human-readable and code-review friendly (Git).

@@ -38,7 +38,7 @@ The framework enables:
 
 * **execute command** - A github prompt, which is the only prompt executed in GitHub Copilot chat window and which includes instructions how the copilot to understand the needed context and actions.
 
-* **active prompt** - The prompt in `.rdd-instance/workdir/work-iteration-registry.json` which is with status `planned` or `in-progress`. The framework allows only one prompt to be in some of those statuses and this prompt is considered to be the `active prompt`
+* **active prompt** - The prompt in `.rdd-instance/workdir/work-iteration-registry.json` which is with state `planned` or `in-progress`. The framework allows only one prompt to be in some of those states and this prompt is considered to be the `active prompt`
 
 * **requirements file** - The file `.rdd-instance/specifications/requirements.md` which contains user and technical requirements and is formatted accordingly `.rdd/conventions/requirements.convention.md`
 
