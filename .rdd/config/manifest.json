@@ -41,14 +41,13 @@
       ".rdd/src/"
     ],
     "instance": [
-      ".rdd-instance/",
+      ".rdd-instance/archive/",
       ".rdd-instance/specifications/",
-      ".rdd-instance/workdir/",
-      ".rdd-instance/archive/"
+      ".rdd-instance/workdir/"
     ]
   },
 
-  "requiredFiles": [
+  "requiredInstanceFiles": [
     {
       "path": ".rdd-instance/workdir/work-iteration-registry.json",
       "role": "workIterationRegistry",
@@ -60,13 +59,18 @@
       "required": true
     },    
     {
+      "path": ".rdd-instance/specifications/files-and-folders.md",
+      "role": "requirements",
+      "required": true
+    },   
+    {
       "path": ".rdd-instance/specifications/requirements.md",
       "role": "requirements",
       "required": true
-    },
+    },    
     {
-      "path": ".rdd/config/technical-design-form.json",
-      "role": "technicalDesignFormDefinition",
+      "path": ".rdd-instance/specifications/technical-design.md",
+      "role": "requirements",
       "required": true
     }
   ],

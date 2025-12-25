@@ -7,16 +7,17 @@ This document describes the format for writing requirements in the RDD framework
 
 Requirements are organized into the following sections:
 
-* Product Name - the official name of the product
+* Product Name - the official name of the product. The section should start with line - exactly `## Product Name`
 
-* Product Overview - short description of the product
+* Product Overview - short description of the product. The section should start with line - exactly `## Product Overview`
 
-* Definitions, Acronyms, and Abbreviations - all important and used further terms, acronyms, etc.
+* Definitions - labels and explanations of concepts used in this and other specifications. The section should start with line - exactly `## Definitions`
 
-* User Requirements
+* User Requirements - statements from user point of view defining what is needed. No limitations how it should be achieved or technical terminology here. The section should start with line - exactly `## User Requirements`
 
-* Technical Requirements
+* Technical Requirements - technical specifications, definitions how to be realized a part of the product. The section should start with line - exactly `## Technical Requirements`
 
+Keep at least 3 empty lines between sections as separator
 
 
 ## Requirement Format
@@ -30,7 +31,7 @@ Each requirement follows this format:
 ### Components:
 
 - **Prefix**: Section identifier (UR, TR)
-- **ID**: Sequential number (001, 002, 003, etc.)
+- **ID**: The timestamp of creation of the requirement entry in format YYYYMMDD-HHmm whre YYYY is the year, MM - month, DD - day, HH - 24 format hour, mm - minutes. Example 20251224-0913
 - **Description**: Detailed description of the requirement. Complete requirement statement using "shall" language
 
 
@@ -42,8 +43,8 @@ User perspective requirements. High-level capabilities and features of the syste
 **Examples:**
 
 ```markdown
-- [UR-001] The system shall allow users to upload files up to 100MB
-- [UR-002] The system shall export data in CSV format with UTF-8 encoding
+- [UR-20251224-0901] The system shall allow users to upload files up to 100MB
+- [UR-20251224-0902] The system shall export data in CSV format with UTF-8 encoding
 ```
 
 
@@ -53,8 +54,8 @@ High-level principles for design of the system as well as technology stack and i
 **Examples:**
 
 ```markdown
-- [TR-001] The system shall use Python 3.11 or higher
-- [TR-002] The framework shall use PostgreSQL 15+ as the database
+- [TR-20251224-0901] The system shall use Python 3.11 or higher
+- [TR-20251224-0902] The framework shall use PostgreSQL 15+ as the database
 ```
 
 
@@ -74,33 +75,32 @@ High-level principles for design of the system as well as technology stack and i
 ### 3. One Requirement Per Line
 
 ✅ **Good:** 
-- `[UR-001] Max 100MB`
-- `[UR-002] Accept PDF, DOC, DOCX only`
+- `[UR-20251224-0901] Max 100MB`
+- `[UR-20251224-0902] Accept PDF, DOC, DOCX only`
 
 ❌ **Bad:**
-- `[UR-001] Max 100MB, PDF/DOC/DOCX only`
+- `[UR-20251224-0901] Max 100MB, PDF/DOC/DOCX only`
 
-### 4. Avoid Implementation Details in FR/NFR
+### 4. Avoid Implementation Details in UR
 
 Implementation belongs in Technical Requirements (TR).
 
 ✅ **Good:**
-- `[UR-001] Export data in structured format`
-- `[TR-001] Use JSON serialization with UTF-8 encoding`
+- `[UR-20251224-0901] Export data in structured format`
+- `[TR-20251224-0901] Use JSON serialization with UTF-8 encoding`
 
 ❌ **Bad:**
-- `[UR-001] Export data using JSON serialization`
+- `[UR-20251224-0901] Export data using JSON serialization`
 
 
 
 ## Best Practices
 
-1. **Start broad, get specific**: GF → FR → NFR → TR
-3. **Write complete sentences**: Full requirement statements
-4. **Use consistent terminology**: Same terms throughout
-5. **Avoid ambiguity**: Be precise and measurable
-6. **Review for completeness**: Each requirement should be independently testable
-
+1. **Write complete sentences**: Full requirement statements
+2. **Use definition labels**: Same terms throughout
+3. **Avoid ambiguity**: Be precise and measurable
+4. **Review for completeness**: Each requirement should be independently testable
+5. **Requirement 
 
 
 ## Modification Markers
@@ -110,5 +110,5 @@ In `requirements.md`, use these prefixes:
 ### [DELETED]
 Remove existing requirement (must include existing ID). Example:
 ```markdown
-- [UR-012] [DELETED] 
+- [UR-20251224-0912] [DELETED] 
 ```
