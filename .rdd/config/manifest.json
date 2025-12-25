@@ -3,7 +3,6 @@
   "framework": {
     "name": "RDD Framework",
     "version": "1.2.0",
-    "semver": true,
     "description": "Requirements-Driven Development framework installed into a repository; framework assets live under .rdd and repo-specific state and documentation live under .rdd-instance.",
     "supportedPlatforms": ["windows", "linux"],
     "runtime": {

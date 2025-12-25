@@ -17,7 +17,7 @@ Requirements are organized into the following sections:
 
 * Technical Requirements - technical specifications, definitions how to be realized a part of the product. The section should start with line - exactly `## Technical Requirements`
 
-Keep at least 3 empty lines between sections as separator
+Keep at least 3 empty lines between sections as separator. Tools MUST parse by headings (## ...) and requirement line pattern, not by blank-line counting; the 3-blank-line rule is style-only.
 
 
 ## Requirement Format

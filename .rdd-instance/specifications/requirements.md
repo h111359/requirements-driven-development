@@ -58,7 +58,7 @@ The framework enables:
 
 - [UR-20251224-0901] The framework shall define RDD (Requirement Driven Development) as a set of prompts, scripts, and workflows enabling a developer to use an LLM-based copilot for software development.
 
-- [UR-20251224-0902] The framework shall maintain a library of predefined framework prompt parts. The framework shall persist all prompts as Markdown files authored through the Web UI to ensure full historical traceability.
+- [UR-20251224-0902] The framework shall maintain a library of predefined framework prompt snippets. The framework shall persist all composed prompts in a Markdown file authored through the Web UI to ensure full historical traceability.
 
 - [UR-20251224-0903] The framework shall load, apply, and update `requirements file` automatically during each prompt execution.
 

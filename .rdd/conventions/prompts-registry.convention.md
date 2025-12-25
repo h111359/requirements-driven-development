@@ -40,7 +40,7 @@ Operational execution state (e.g., active prompt, run status, questionnaire stat
 ### Title
 - Required.
 - Must be enclosed in double quotes on the start sentinel line.
-- Titles are informational for humans and UIs; tools MUST NOT depend on title uniqueness.
+- Title is informational but must match the JSON registry; if not, tooling must rewrite it.
 
 ---
 
