@@ -50,7 +50,7 @@ The framework enables:
 
 * **files-and-folders** - The product files and folders structure documented in `.rdd-instance/specifications/files-and-folders.md`
 
-* **prompt-implementation-plan** - A file with the exact steps which the copilot should execute
+* **prompt-implementation-plan** - A file with the exact steps which the copilot should execute. This is the per-prompt plan artifact stored as plan.md
 
 
 
