@@ -42,17 +42,17 @@ The JSON file MUST be an object with the following keys:
 * **Required:** yes
 * **Meaning:** Registry-owned **prompt definitions** for the current iteration, used by tooling (JS app, scripts, Copilot) to:
 
-  * list of `prompt-definition` objects
+  * list of `prompt-metadata` objects
   * resolve parent chains
   * map prompt IDs to prompt text in the '.rdd-instance/workdir/prompts-registry.md` file
   * associate questionnaire references (without embedding questionnaire content)
   * define capabilities/default execution semantics per prompt
-* **Type:** array of `prompt-definition` objects
+* **Type:** array of `prompt-metadata` objects
 * **Uniqueness constraint:** each `id` MUST be unique within the array
 * **Ordering:** recommended topological (roots first), but not required if `parent-id` is resolvable
 
 
-### `prompt-definition` (object)
+### `prompt-metadata` (object)
 
 #### Required keys
 

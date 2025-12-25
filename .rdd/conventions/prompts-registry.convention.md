@@ -49,7 +49,7 @@ Operational execution state (e.g., active prompt, run status, questionnaire stat
 Given a target ID `<ID>`, a parser MUST:
 
 1. Scan the file linearly to find a line matching:
-   - `%%PROMPT <ID>`
+   - `%%PROMPT <ID> "<TITLE>"`
 2. From the next line starts the prompt text 
 4. Stop parsing the record at `%%ENDPROMPT`.
 5. Return the captured lines as the prompt text.

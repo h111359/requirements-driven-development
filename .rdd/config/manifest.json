@@ -49,29 +49,19 @@
 
   "requiredInstanceFiles": [
     {
-      "path": ".rdd-instance/workdir/work-iteration-registry.json",
-      "role": "workIterationRegistry",
-      "required": true
+      "path": ".rdd-instance/workdir/work-iteration-registry.json"
     },
     {
-      "path": ".rdd-instance/workdir/prompts-registry.md",
-      "role": "promptsRegistry",
-      "required": true
+      "path": ".rdd-instance/workdir/prompts-registry.md"
     },    
     {
-      "path": ".rdd-instance/specifications/files-and-folders.md",
-      "role": "requirements",
-      "required": true
+      "path": ".rdd-instance/specifications/files-and-folders.md"
     },   
     {
-      "path": ".rdd-instance/specifications/requirements.md",
-      "role": "requirements",
-      "required": true
+      "path": ".rdd-instance/specifications/requirements.md"
     },    
     {
-      "path": ".rdd-instance/specifications/technical-design.md",
-      "role": "requirements",
-      "required": true
+      "path": ".rdd-instance/specifications/technical-design.json"
     }
   ],
 
