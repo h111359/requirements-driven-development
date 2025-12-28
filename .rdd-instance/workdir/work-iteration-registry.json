@@ -1,0 +1,26 @@
+{
+    "iteration-id": "ITR-20251222-060042",
+    "iteration-name": "Experimental 3",
+    "prompt-id-sequence-next-value": 2,
+    "prompts": [
+        {
+            "id": "P-001",
+            "title": "Baseline problem statement",
+            "type": "main",
+            "state": "draft",
+            "parent-id": null,
+            "analysis": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "questionnaire": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "plan": {
+                "approval": false,
+                "state": "not-started"
+            }
+        }
+    ]
+}
