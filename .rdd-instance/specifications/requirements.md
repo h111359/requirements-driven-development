@@ -165,7 +165,7 @@ The framework enables:
 
 - [TR-20251224-0924] The Web UI shall provide pages for managing prompts, technical specifications, folder structures, requirements, and version-control workflows, backed by the REST endpoints and reflecting the interaction model defined in the Product Requirements Specification.
 
-- [TR-20251224-0925] `.rdd-instance/workdir/prompts-registry.md` shall contain prompts texts. All other operational state of the prompt is maintained in `.rdd-instance/workdir/work-iteration-registry.json`. The consistency between those two files will be maintained by the scripts in `.rdd/src/`.
+- [TR-20251224-0925] `.rdd-instance/workdir/prompts-registry.md` shall contain completed prompts texts. All other operational state of the prompt is maintained in `.rdd-instance/workdir/work-iteration-registry.json`. The consistency between those two files will be maintained by the scripts in `.rdd/src/`.
 
 - [TR-20251224-0926] The framework shall implement safety checks that prevent iteration creation unless the workdir is empty.
 
