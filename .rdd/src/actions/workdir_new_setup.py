@@ -31,7 +31,7 @@ def _repo_root() -> Path:
 
 
 def _get_timestamp(repo_root: Path) -> str:
-    ts_script = repo_root / ".rdd" / "scripts" / "actions" / "print_timestamp.py"
+    ts_script = repo_root / ".rdd" / "src" / "actions" / "print_timestamp.py"
     try:
         result = subprocess.run(
             [sys.executable, str(ts_script)],
