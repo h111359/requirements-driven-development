@@ -16,6 +16,7 @@
 
 3. Identify the [active-prompt] in [PROMPT-REGISTRY] and execute its instructions.
 
+4. Update `.rdd-instance/specifications/requirements.md` following the instructions in `.rdd/conventions/requirements.convention.md` so to reflect precisely the changes from the prompt (if not reflected already). If reflected - do not duplicate.
 
 
 ## Mandatory Rules:  
