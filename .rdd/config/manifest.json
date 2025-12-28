@@ -18,13 +18,13 @@
 
   "components": [
     {
-      "id": "framework",
+      "component-id": "framework",
       "root": ".rdd",
       "description": "Framework static assets: conventions, docs, prompts, scripts, config.",
       "required": true
     },
     {
-      "id": "instance",
+      "component-id": "instance",
       "root": ".rdd-instance",
       "description": "Repo-specific configuration, requirements, specifications, workdir, archive.",
       "required": true

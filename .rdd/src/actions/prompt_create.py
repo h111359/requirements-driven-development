@@ -192,10 +192,10 @@ def main() -> int:
         raise ValueError(f"Missing or invalid 'prompts' array in {registry_path}")
 
     existing_ids = {
-        p.get("id") for p in prompts if isinstance(p, dict) and isinstance(p.get("id"), str)
+        p.get("prompt-id") for p in prompts if isinstance(p, dict) and isinstance(p.get("prompt-id"), str)
     }
 
-    explicit_id = _get_param(params, "id")
+    explicit_id = _get_param(params, "prompt-id")
     if explicit_id is not None:
         prompt_id = explicit_id.strip()
         _validate_prompt_id(prompt_id)
@@ -233,7 +233,7 @@ def main() -> int:
         if parent_id not in existing_ids:
             raise ValueError(f"'parent-id' must reference an existing main prompt id: {parent_id}")
         parent_obj = next(
-            (p for p in prompts if isinstance(p, dict) and p.get("id") == parent_id), None
+            (p for p in prompts if isinstance(p, dict) and p.get("prompt-id") == parent_id), None
         )
         if not isinstance(parent_obj, dict) or parent_obj.get("type") != "main":
             raise ValueError(f"'parent-id' must reference a prompt with type=main: {parent_id}")
@@ -243,7 +243,7 @@ def main() -> int:
     plan = _artifact_block(params, "plan")
 
     prompt_metadata: Dict[str, Any] = {
-        "id": prompt_id,
+        "prompt-id": prompt_id,
         "title": title,
         "type": prompt_type,
         "state": state,

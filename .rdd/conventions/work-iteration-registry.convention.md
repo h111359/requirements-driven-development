@@ -74,11 +74,11 @@ The JSON file MUST be an object with the following keys:
 
 #### Required keys
 
-* `id` (string)
+* `prompt-id` (string)
   * Format: `P-` followed by digits (regex: `^P-[0-9]{3,}$`) - at least 3 digits, left-pad to 3 for <1000.
   * Example: `"P-003"`
 
-* `title` (string)
+* `prompt-title` (string)
   * Free text up to 128 chars
   * In case of difference of titles of same prompt id in comparison with `.rdd-instance/workdir/prompts-registry.md`, the title in `.rdd-instance/workdir/work-iteration-registry.json` shall be treated as the source of truth
 
@@ -125,8 +125,8 @@ The following is the canonical baseline structure (values may be empty during in
   "prompt-id-sequence-next-value": 5,
   "prompts": [
     {
-      "id": "P-001",
-      "title": "Baseline problem statement",
+      "prompt-id": "P-001",
+      "prompt-title": "Baseline problem statement",
       "type": "main",
       "state": "completed",      
       "parent-id": null,
@@ -135,8 +135,8 @@ The following is the canonical baseline structure (values may be empty during in
       "plan": {"approval": true, "state": "completed"}
     },
     {
-      "id": "P-002",
-      "title": "Add architectural constraints",
+      "prompt-id": "P-002",
+      "prompt-title": "Add architectural constraints",
       "type": "modification",      
       "state": "completed",         
       "parent-id": "P-001",
@@ -145,8 +145,8 @@ The following is the canonical baseline structure (values may be empty during in
       "plan": {"approval": true, "state": "approved"}
     },
     {
-      "id": "P-003",
-      "title": "Decision-oriented output",
+      "prompt-id": "P-003",
+      "prompt-title": "Decision-oriented output",
       "type": "modification",        
       "state": "in-progress",             
       "parent-id": "P-001",
@@ -155,8 +155,8 @@ The following is the canonical baseline structure (values may be empty during in
       "plan": {"approval": true, "state": "waiting-approval"}
     },
     {
-      "id": "P-004",
-      "title": "Add logging",
+      "prompt-id": "P-004",
+      "prompt-title": "Add logging",
       "type": "main",     
       "state": "draft",               
       "parent-id": null,
