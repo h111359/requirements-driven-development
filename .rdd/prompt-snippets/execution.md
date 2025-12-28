@@ -4,19 +4,25 @@
   
 - [PROMPT-REGISTRY] is the file `.rdd-instance/workdir/prompts-registry.md`
 
-* [active-prompt] - The prompt in `.rdd-instance/workdir/work-iteration-registry.json` which is with state `planned` or `in-progress`. The framework allows only one prompt to be in some of those states and this prompt is considered to be the `active prompt`
+- [active-prompt] - The prompt in `.rdd-instance/workdir/work-iteration-registry.json` which is with state `planned` or `in-progress`. The framework allows only one prompt to be in some of those states and this prompt is considered to be the `active prompt`
+
+- [active-prompt-folder] - A folder in `.rdd-instance/workdir` with format <prompt-id>_<prompt-title>
 
 
 
 ## Instructions - Follow these steps exactly:  
 
 1. **Read the registry**: Open and read the [WI-REGISTRY] file.
-   
+      
 2. Identify the ID of the [active-prompt].
 
-3. Identify the [active-prompt] in [PROMPT-REGISTRY] and execute its instructions.
+3. Identify the  under in [active-prompt-folder]
+   
+4. Read all the files in [active-prompt-folder]
 
-4. Update `.rdd-instance/specifications/requirements.md` following the instructions in `.rdd/conventions/requirements.convention.md` so to reflect precisely the changes from the prompt (if not reflected already). If reflected - do not duplicate.
+4. Execute the instructions in the file `prompt.md` in it, following the plan `.rdd-instance/workdir/P-002_prompt-set-state/plan.md` (if any) and observing the answers in `.rdd-instance/workdir/P-002_prompt-set-state/questionnaire.md`. Along with the execution add continuously information for the implementation details in the [active-prompt-folder] file `implementation.md` on each step. Especially take care of adding the commands you run in a terminal! Do not log the content of the changed files. 
+
+5. Update `.rdd-instance/specifications/requirements.md` following the instructions in `.rdd/conventions/requirements.convention.md` so to reflect precisely the changes from the prompt (if not reflected already). If reflected - do not duplicate.
 
 
 ## Mandatory Rules:  
