@@ -6,6 +6,24 @@ This document defines the required structure and content conventions for the fil
 
 The work-iteration-registry is the single source of truth for the current work-iteration’s progress and prompts queue. Every prompt id in work registry exists in prompts registry. In case of inconsistency between this file and `.rdd-instance/workdir/prompts-registry.md`, the execution should stop and the user should be informed to fix the errors.
 
+## Prompt registration (normative)
+
+Tools that create prompts (scripts / Web UI) MUST treat `.rdd-instance/workdir/work-iteration-registry.json` as the source of truth for prompt metadata.
+
+When a new prompt is created:
+
+1. The tool MUST allocate a new prompt ID using `prompt-id-sequence-next-value` unless the tool is explicitly instructed to use a specific ID.
+2. If the tool allocates an ID using `prompt-id-sequence-next-value`, it MUST increment the value by 1 and persist it.
+3. The tool MUST append a new `prompt-metadata` object to the `prompts` array.
+4. The tool MUST also ensure a matching prompt text record exists in `.rdd-instance/workdir/prompts-registry.md` (see `.rdd/conventions/prompts-registry.convention.md`).
+5. Prompt IDs MUST remain unique across both registries.
+
+Validation rules during prompt creation:
+
+- If creating a prompt with state `planned` or `in-progress`, the tool MUST validate that no other prompt currently has state `planned` or `in-progress`.
+- If `type` is `main`, then `parent-id` MUST be `null`.
+- If `type` is `modification`, then `parent-id` MUST reference an existing prompt in `prompts` with `type` = `main`.
+
 ## File format
 
 - **Format:** JSON object (UTF-8)

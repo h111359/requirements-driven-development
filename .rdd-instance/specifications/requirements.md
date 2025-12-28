@@ -214,3 +214,5 @@ The framework enables:
 - [TR-20251224-0958] Build artifacts are generated in the `build/` directory.
 
 - [TR-20251224-0959] Releases are distributed as a single cross-platform archive named `rdd-v{version}.zip`. The release zip file includes framework code, installation scripts, templates, and documentation.
+
+- [TR-20251225-0350] The framework shall provide a deterministic script `.rdd/src/actions/prompt_create.py` that creates a new prompt by appending a `prompt-metadata` record to `.rdd-instance/workdir/work-iteration-registry.json` and ensuring a corresponding stub record exists in `.rdd-instance/workdir/prompts-registry.md` (creating the file if missing). The created prompt text record shall be a placeholder (e.g., `TBD`) until populated by other tooling.
