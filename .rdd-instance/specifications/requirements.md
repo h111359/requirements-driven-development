@@ -84,7 +84,7 @@ The framework enables:
 
 - [UR-20251224-0914] The framework shall provide CLI commands on top of the UI interface.
 
-- [UR-20251224-0915] The system shall provide a Python-based test runner capable of executing all test types across platforms without requiring third-party shell testing frameworks.
+- [UR-20251224-0915] The system shall provide a Python-based test runner capable of executing all test types across platforms.
 
 - [UR-20251224-0916] The system shall provide a functionality for creation of a JSON listing of the repository or workdir files via a dedicated command.
 
@@ -169,13 +169,13 @@ The framework enables:
 
 - [TR-20251224-0926] The framework shall implement safety checks that prevent iteration creation unless the workdir is empty.
 
-- [TR-20251224-0927] The framework shall archive each completed iteration in `.rdd-instance/archive/<iteration-name>/`.
+- [TR-20251224-0927] The framework shall archive each completed iteration in `.rdd-instance/archive/<iteration-id>_<iteration-name>/`.
 
 - [TR-20251224-0928] All generated questions shall follow the question-formatting standards defined in `.rdd/conventions/questions-formatting.md`.
 
 - [TR-20251224-0931] The framework shall support extracting and displaying repository file lists, technical design content, and requirements content through Web UI components for visualization and editing.
 
-- [TR-20251224-0932] The test system shall be implemented entirely in Python using pytest for Python tests with optional coverage reporting, and shall avoid dependencies on shell-based test frameworks.
+- [TR-20251224-0932] The test system shall be implemented entirely in Python using pytest for Python tests with optional coverage reporting.
 
 - [TR-20251224-0933] The system shall maintain its test fixtures in a `tests/` directory using isolated temporary directories to prevent modification of product files during test execution.
 
