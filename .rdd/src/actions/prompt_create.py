@@ -125,6 +125,27 @@ def _ensure_prompts_registry_record(
     prompts_registry_path.write_text(prefix + record, encoding="utf-8")
 
 
+def _sanitize_title_for_path_component(title: str) -> str:
+    # Keep the folder name human-readable, but prevent path traversal / separators.
+    # Spaces are allowed on all supported OSes; we only replace characters that
+    # would break path semantics.
+    sanitized = title.replace("/", "_").replace("\\", "_")
+    sanitized = sanitized.strip()
+    return sanitized
+
+
+def _ensure_prompt_workdir_artifacts(workdir: Path, prompt_id: str, title: str) -> Path:
+    prompt_dir = workdir / f"{prompt_id}_{_sanitize_title_for_path_component(title)}"
+    prompt_dir.mkdir(parents=True, exist_ok=True)
+
+    for name in ("prompt.md", "plan.md", "implementation.md"):
+        p = prompt_dir / name
+        if not p.exists():
+            p.write_text("", encoding="utf-8")
+
+    return prompt_dir
+
+
 def _artifact_block(
     params: Dict[str, str],
     name: str,
@@ -258,6 +279,7 @@ def main() -> int:
     # Write JSON first (allocates IDs deterministically), then append prompts registry.
     _dump_json(registry_path, registry)
     _ensure_prompts_registry_record(prompts_registry_path, prompt_id, title)
+    _ensure_prompt_workdir_artifacts(workdir, prompt_id, title)
 
     print(prompt_id)
     return 0
