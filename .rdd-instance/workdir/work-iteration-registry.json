@@ -1,13 +1,32 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 2,
+    "prompt-id-sequence-next-value": 3,
     "prompts": [
         {
             "prompt-id": "P-001",
             "prompt-title": "Baseline problem statement",
             "type": "main",
-            "state": "planned",
+            "state": "completed",
+            "parent-id": null,
+            "analysis": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "questionnaire": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "plan": {
+                "approval": false,
+                "state": "not-started"
+            }
+        },
+        {
+            "prompt-id": "P-002",
+            "title": "prompt-set-state",
+            "type": "main",
+            "state": "completed",
             "parent-id": null,
             "analysis": {
                 "approval": false,
