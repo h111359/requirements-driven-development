@@ -2,27 +2,29 @@
 
 Ensure clarity
 
-## Execution Step Definitions
+## Definitions
 
-- [WI-REGISTRY] is the file `.rdd-instance/workdir/rdd-prompt-setup.json`
-
-- [PROMPT-ID] is the value of the attribute "PROMPT-ID" in the file [WI-REGISTRY]
-
-- [CONTEXT-ANALYSIS-FILE] is the file set in "context.file" attribute of [WI-REGISTRY].
-
-- [PROMPT-TEXT] is the content of the file `.rdd-instance/workdir/rdd-prompt.md`
-
-- [PROMPT-STATEMENT] is any part of the [PROMPT-TEXT] or [CONTEXT-ANALYSIS-FILE] text defining some aspect of the results needed to be achieved. 
-
-- [QUESTIONNAIRE] is a file containing questions to the user. The file location is in folder `.rdd-instance/workdir/`. The file name convention is `[PROMPT-ID]-questionnaire.md`, where [PROMPT-ID] should be replaced with the respective [PROMPT-ID] value.
+- [QUESTIONNAIRE] is a file containing questions to the user. The file location is in folder `.rdd-instance/workdir/<prompt-id>_<prompt-title>`. The file name convention is `questionnaire.md`.
 
 - [QUESTIONNAIRE-CONVENTION] is the file `.rdd/conventions/questions-formatting.md`
 
-## Execution Step Instructions
+- [WI-REGISTRY] is the file `.rdd-instance/workdir/work-iteration-registry.json`
+  
+- [PROMPT-REGISTRY] is the file `.rdd-instance/workdir/prompts-registry.md`
 
-1. For each [PROMPT-STATEMENT] parts for which there are multiple different interpretations and multiple options the required result to be understood - generate multiple-choice question with up to 5 most probable preferences in [QUESTIONNAIRE] following the conventions in [QUESTIONNAIRE-CONVENTION].
+* [active-prompt] - The prompt in `.rdd-instance/workdir/work-iteration-registry.json` which is with state `planned` or `in-progress`. The framework allows only one prompt to be in some of those states and this prompt is considered to be the `active prompt`
 
-2. Set "clarity.state" attribute in [WI-REGISTRY] to "generated". Set "clarity.file" state to the relative path to [QUESTIONNAIRE]
+
+
+## Instructions - Follow these steps exactly:  
+
+1. **Read the registry**: Open and read the [WI-REGISTRY] file.
+   
+2. Identify the ID of the [active-prompt].
+
+3. Identify the [active-prompt] in [PROMPT-REGISTRY] and execute its instructions.
+
+4. For each [active-prompt] parts for which there are multiple different interpretations and multiple options the required result to be understood - generate multiple-choice question with up to 5 most probable preferences in [QUESTIONNAIRE] following the conventions in [QUESTIONNAIRE-CONVENTION].
 
  ## Execution Step Rules
 
