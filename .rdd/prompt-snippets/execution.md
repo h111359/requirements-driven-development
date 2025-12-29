@@ -30,13 +30,17 @@
       
 2. Identify the [ACTIVE-PROMPT-ID], [ACTIVE-PROMPT-FOLDER], [ACTIVE-PROMPT].
 
-3. If the user has added a [MODIFIER]
+3. Check if the [PLAN] is fulfilled. If it is, you shall observe it in the next steps. Do not skip any of the steps in the plan. Do not stop the implementation until the entire plan is completed. 
+   
+4. Check if there are questions and answers in the [QUESTIONNAIRE]. If there are, you shall comply with the chosen answers in the next steps.
+
+5. If the user has added a [MODIFIER]
    
    * analyze:
      *  Write in the chat "Analyze mode" 
      *  then follow the instructions in `.rdd/prompt-snippets/execution-step.analyze.md` and stop (do not continue with the next instructions here)
 
-4. If there is no modifier detected - 
+6. If there is no modifier detected - 
    * Write in the chat "No modifiers detected"
    * then follow the instructions in `.rdd/prompt-snippets/execution-step.implementation.md`
 

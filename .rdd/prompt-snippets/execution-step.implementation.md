@@ -6,13 +6,9 @@ See the definitions in `.rdd/prompt-snippets/execution.md`
 
 ## Execution Step Instructions
 
-1. Check if the [PLAN] is fulfilled. If it is, you shall observe it in the next steps. Do not skip any of the steps in the plan. Do not stop the implementation until the entire plan is completed. 
-   
-2. Check if there are questions and answers in the [QUESTIONNAIRE]. If there are, you shall comply with the chosen answers in the next steps.
-   
-3. Execute the instructions in [ACTIVE-PROMPT]. Along with the execution add continuously information for the implementation details in [IMPLEMENTATION] on each step. Especially take care of adding the commands you run in a terminal! Do not log the content of the changed files. 
+1. Execute the instructions in [ACTIVE-PROMPT]. Along with the execution add continuously information for the implementation details in [IMPLEMENTATION] on each step. Especially take care of adding the commands you run in a terminal! Do not log the content of the changed files. 
 
-4.  Update `.rdd-instance/specifications/requirements.md` following the instructions in `.rdd/conventions/requirements.convention.md` so to reflect precisely the changes from the prompt (if not reflected already). If reflected - do not duplicate.
+2.  Update `.rdd-instance/specifications/requirements.md` following the instructions in `.rdd/conventions/requirements.convention.md` so to reflect precisely the changes from the prompt (if not reflected already). If reflected - do not duplicate.
 
 
 
