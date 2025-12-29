@@ -1,39 +1,26 @@
-## Execution Step Name
+## Definitions
 
-Implement the prompt
+See the definitions in `.rdd/prompt-snippets/execution.md`
 
-## Execution Step Definitions
 
-- [WI-REGISTRY] is the file `.rdd-instance/workdir/rdd-prompt-setup.json`
-
-- [PROMPT-ID] is the value of the attribute "PROMPT-ID" in the file [WI-REGISTRY]
-
-- [CONTEXT-ANALYSIS-FILE] is the file set in "context.file" attribute of [WI-REGISTRY].
-
-- [PROMPT-TEXT] is the content of the file `.rdd-instance/workdir/rdd-prompt.md`
-
-- [QUESTIONNAIRE] is file set in "clarity.file" attribute of [WI-REGISTRY]
-
-- [PLAN] is the file `.rdd-instance/workdir/[PROMPT-ID]-plan.md`
 
 ## Execution Step Instructions
 
-- based on [PROMPT-TEXT], [WI-REGISTRY], [CONTEXT-ANALYSIS-FILE], [QUESTIONNAIRE] and [PLAN] - follow the plan in [PLAN] and impement the plan. 
+1. Check if the [PLAN] is fulfilled. If it is, you shall observe it in the next steps. Do not skip any of the steps in the plan. Do not stop the implementation until the entire plan is completed. 
+   
+2. Check if there are questions and answers in the [QUESTIONNAIRE]. If there are, you shall comply with the chosen answers in the next steps.
+   
+3. Execute the instructions in [ACTIVE-PROMPT]. Along with the execution add continuously information for the implementation details in [IMPLEMENTATION] on each step. Especially take care of adding the commands you run in a terminal! Do not log the content of the changed files. 
 
-- Along with implementation add continuously information for the implementation details in file `.rdd-instance/workdir/[PROMPT-ID]-implementation.md` on each step. Especially take care of adding the commands you run in a terminal! Do not log the content of the changed files. 
+4.  Update `.rdd-instance/specifications/requirements.md` following the instructions in `.rdd/conventions/requirements.convention.md` so to reflect precisely the changes from the prompt (if not reflected already). If reflected - do not duplicate.
 
-- If you are asked to make an analysis, create a research, advice, recommend, find best-practice, review or similar - enter your findings in the file `.rdd-instance/workdir/[PROMPT-ID]-implementation.md`. In those cases you are encouraged to make a deep research in Internet (make your best effort to do that) for finding the best possible answer. 
 
-- Set "implementation.state" attribute in [WI-REGISTRY] to "done".
 
-## Execution Step Rules
+## Rules
 
-- Do not skip any of the steps in the plan 
+- Execute the instructions in the prompt exactly as if the user had entered them directly in the chat.     
 
-- Do not stop the implementation until the entire plan is completed. 
-
-- Cover all the requirements of [PROMPT-TEXT], [WI-REGISTRY], [CONTEXT-ANALYSIS-FILE], [QUESTIONNAIRE] and [PLAN]. 
-
+- Follow all instructions in the prompt carefully. The instructions in the prompt take precedence over the context. 
 
 
 

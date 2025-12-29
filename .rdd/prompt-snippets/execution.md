@@ -4,9 +4,23 @@
   
 - [PROMPT-REGISTRY] is the file `.rdd-instance/workdir/prompts-registry.md`
 
-- [active-prompt] - The prompt in `.rdd-instance/workdir/work-iteration-registry.json` which is with state `planned` or `in-progress`. The framework allows only one prompt to be in some of those states and this prompt is considered to be the `active prompt`
+- [ACTIVE-PROMPT-ID] is the prompt-id of the prompt entry in `.rdd-instance/workdir/work-iteration-registry.json` which is with state `planned` or `in-progress`. The framework allows only one prompt to be in some of those states.
 
-- [active-prompt-folder] - A folder in `.rdd-instance/workdir` with format <prompt-id>_<prompt-title>
+- [ACTIVE-PROMPT-FOLDER] is a folder in `.rdd-instance/workdir` with format 
+  `<[ACTIVE-PROMPT-ID]>_<prompt-title>`
+
+- [ACTIVE-PROMPT] is the file `prompt.md` in [ACTIVE-PROMPT-FOLDER]
+
+- [PLAN] is the file `plan.md` in [ACTIVE-PROMPT-FOLDER]
+
+- [IMPLEMENTATION] is the file `implementation.md` in [ACTIVE-PROMPT-FOLDER]
+
+- [QUESTIONNAIRE-CONVENTION] is the file `.rdd/conventions/questions-formatting.md`
+  
+- [QUESTIONNAIRE] is a file containing questions to the user. The file location is in [active-prompt-folder]. The file name convention is `questionnaire.md`.
+
+- [MODIFIER] is a key word written in the chat after the prompt file. The MODIFIER could be:
+  * analyse
 
 
 
@@ -14,26 +28,21 @@
 
 1. **Read the registry**: Open and read the [WI-REGISTRY] file.
       
-2. Identify the ID of the [active-prompt].
+2. Identify the [ACTIVE-PROMPT-ID], [ACTIVE-PROMPT-FOLDER], [ACTIVE-PROMPT].
 
-3. Identify the  under in [active-prompt-folder]
+3. If the user has added a [MODIFIER]
    
-4. Read all the files in [active-prompt-folder]
+   * analyse:
+     *  Write in the chat "Analyze mode" 
+     *  then follow the instructions in `.rdd/prompt-snippets/execution-step.analyse.md` and stop (do not continue with the next instructions here)
 
-5. Check if the plan in `.rdd-instance/workdir/P-002_prompt-set-state/plan.md` is fulfilled. If it is, you shall observe it in the next steps.
-   
-6. Check if there are questions and answers in `.rdd-instance/workdir/P-002_prompt-set-state/questionnaire.md` (if exists). If there are, you shall comply with the chosen answers in the next steps.
-   
-7. Execute the instructions in the file `prompt.md`. Along with the execution add continuously information for the implementation details in the [active-prompt-folder] file `implementation.md` on each step. Especially take care of adding the commands you run in a terminal! Do not log the content of the changed files. 
+4. If there is no modifier detected - 
+   * Write in the chat "No modifiers detected"
+   * then follow the instructions in `.rdd/prompt-snippets/execution-step.implementation.md`
 
-8. Update `.rdd-instance/specifications/requirements.md` following the instructions in `.rdd/conventions/requirements.convention.md` so to reflect precisely the changes from the prompt (if not reflected already). If reflected - do not duplicate.
 
 
 ## Mandatory Rules:  
-
-- Execute the instructions in the prompt exactly as if the user had entered them directly in the chat.     
-
-- Follow all instructions in the prompt carefully. The instructions in the prompt take precedence over the context. 
 
 - **Be verbose in files**: When writing to files in `.rdd-instance/workdir/` folder, provide detailed explanations, reasoning, and context to ensure clarity for future reference. 
 
@@ -41,7 +50,7 @@
 
 - It is not supposed the steps to be executed in parallel - always follow the order of the steps as they are defined in the instructions above. Steps depend on the results of the previous steps! 
 
-- At the end of the execution - verify you have followed all the steps in the implementation plan. 
+- At the end of the execution - verify you have followed all the steps. 
 
 - Always read `.rdd-instance/specifications/requirements.md` and comply with it, unless the active prompt provides different instructions; in that case, the active prompt overrides `requirements.md`.
 
