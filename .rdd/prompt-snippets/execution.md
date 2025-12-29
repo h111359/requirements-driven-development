@@ -20,9 +20,13 @@
    
 4. Read all the files in [active-prompt-folder]
 
-4. Execute the instructions in the file `prompt.md` in it, following the plan `.rdd-instance/workdir/P-002_prompt-set-state/plan.md` (if any) and observing the answers in `.rdd-instance/workdir/P-002_prompt-set-state/questionnaire.md`. Along with the execution add continuously information for the implementation details in the [active-prompt-folder] file `implementation.md` on each step. Especially take care of adding the commands you run in a terminal! Do not log the content of the changed files. 
+5. Check if the plan in `.rdd-instance/workdir/P-002_prompt-set-state/plan.md` is fulfilled. If it is, you shall observe it in the next steps.
+   
+6. Check if there are questions and answers in `.rdd-instance/workdir/P-002_prompt-set-state/questionnaire.md` (if exists). If there are, you shall comply with the chosen answers in the next steps.
+   
+7. Execute the instructions in the file `prompt.md`. Along with the execution add continuously information for the implementation details in the [active-prompt-folder] file `implementation.md` on each step. Especially take care of adding the commands you run in a terminal! Do not log the content of the changed files. 
 
-5. Update `.rdd-instance/specifications/requirements.md` following the instructions in `.rdd/conventions/requirements.convention.md` so to reflect precisely the changes from the prompt (if not reflected already). If reflected - do not duplicate.
+8. Update `.rdd-instance/specifications/requirements.md` following the instructions in `.rdd/conventions/requirements.convention.md` so to reflect precisely the changes from the prompt (if not reflected already). If reflected - do not duplicate.
 
 
 ## Mandatory Rules:  
@@ -38,6 +42,8 @@
 - It is not supposed the steps to be executed in parallel - always follow the order of the steps as they are defined in the instructions above. Steps depend on the results of the previous steps! 
 
 - At the end of the execution - verify you have followed all the steps in the implementation plan. 
+
+- Always read `.rdd-instance/specifications/requirements.md` and comply with it, unless the active prompt provides different instructions; in that case, the active prompt overrides `requirements.md`.
 
 - Never delete already added requirements rows in `.rdd-instance/specifications/requirements.md`. If the entire requirement is already obsolete and nothing shall be left from it - replace its text (after the ID) with "[DELETED]".  
 

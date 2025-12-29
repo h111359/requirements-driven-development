@@ -5,3 +5,7 @@ Make changes so `.rdd/src/actions/prompt_create.py` to add a folder in `.rdd-ins
 %%PROMPT P-002 "prompt-set-state"
 TBD
 %%ENDPROMPT
+
+%%PROMPT P-003 "CLI"
+TBD
+%%ENDPROMPT

@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 3,
+    "prompt-id-sequence-next-value": 4,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -25,6 +25,25 @@
         {
             "prompt-id": "P-002",
             "title": "prompt-set-state",
+            "type": "main",
+            "state": "completed",
+            "parent-id": null,
+            "analysis": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "questionnaire": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "plan": {
+                "approval": false,
+                "state": "not-started"
+            }
+        },
+        {
+            "prompt-id": "P-003",
+            "title": "CLI",
             "type": "main",
             "state": "completed",
             "parent-id": null,

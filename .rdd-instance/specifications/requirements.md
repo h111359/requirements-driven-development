@@ -220,3 +220,23 @@ The framework enables:
 - [TR-20251228-1537] The framework shall create a per-prompt working folder under `.rdd-instance/workdir/` named `<prompt-id>_<prompt-title>` and in it shall create empty files `prompt.md`, `plan.md`, and `implementation.md` when a new prompt is created.
 
 - [TR-20251228-1727] The framework shall provide a deterministic script `.rdd/src/actions/prompt_set_state.py` that updates the `state` field of a prompt record in `.rdd-instance/workdir/work-iteration-registry.json`. The script shall accept `state=` (required, one of `draft|planned|in-progress|completed`) and optional `prompt-id=` parameters. When `prompt-id=` is omitted, the script shall default to the currently active prompt (the one in `planned` or `in-progress` state). The script shall enforce the "single active prompt" invariant by failing with a clear error if attempting to set a prompt to `planned` or `in-progress` when another prompt is already in one of those states.
+  
+- [TR-20251229-1352] The framework shall provide a main CLI entry point at `.rdd/src/rdd.py` that implements domain-based command routing with support for `prompt` and `workdir` domains.
+
+- [TR-20251229-1353] The CLI shall support three execution modes: interactive menu mode (no arguments), domain menu mode (single domain argument), and direct action execution mode (domain and action arguments).
+
+- [TR-20251229-1354] The CLI shall provide interactive menus using the curses library for terminal-based navigation with arrow keys, Enter to select, and Q to quit.
+
+- [TR-20251229-1355] The CLI shall implement a numeric fallback menu system that activates when curses is unavailable or fails, accepting numeric input (1-N) or 'q' to quit.
+
+- [TR-20251229-1356] The CLI shall route domain actions to Python scripts in `.rdd/src/actions/` following the naming convention `<domain>_<action>.py` where action names use underscores instead of hyphens.
+
+- [TR-20251229-1357] The framework shall provide wrapper scripts `.rdd/src/rdd.sh` (Linux/macOS) and `.rdd/src/rdd.bat` (Windows) that execute `rdd.py` using the `python` command and forward all arguments.
+
+- [TR-20251229-1358] The CLI shall provide a `--help` flag that displays usage documentation including available domains, execution modes, and usage examples.
+
+- [TR-20251229-1359] The framework shall provide a script `.rdd/src/actions/prompt_list.py` that displays all prompts from the work iteration registry in a formatted table showing prompt ID, title, state, and type.
+
+- [TR-20251229-1360] All CLI error messages shall include both a specific problem description and suggested remediation steps.
+
+- [TR-20251229-1361] All Python functions in the CLI implementation shall include comprehensive docstrings describing purpose, parameters, return values, and any exceptions raised.
