@@ -9,3 +9,7 @@ TBD
 %%PROMPT P-003 "CLI"
 TBD
 %%ENDPROMPT
+
+%%PROMPT P-004 "Add prompt completion with commit command"
+TBD
+%%ENDPROMPT

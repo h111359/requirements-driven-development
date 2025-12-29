@@ -1,0 +1,1 @@
+A new user requirement: Need to be added action for making a git commit with the changes during the current prompt. The message of the git commit should be the iteration-id + underscore + prompt id + underscore + prompt title. The action will be executed by the user manually and independently from the other actions.

@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 4,
+    "prompt-id-sequence-next-value": 5,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -46,6 +46,25 @@
             "title": "CLI",
             "type": "main",
             "state": "completed",
+            "parent-id": null,
+            "analysis": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "questionnaire": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "plan": {
+                "approval": false,
+                "state": "not-started"
+            }
+        },
+        {
+            "prompt-id": "P-004",
+            "title": "Add prompt completion with commit command",
+            "type": "main",
+            "state": "planned",
             "parent-id": null,
             "analysis": {
                 "approval": false,

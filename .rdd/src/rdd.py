@@ -8,6 +8,7 @@ with support for interactive menus and direct command execution.
 Domains:
   - prompt: Operations related to prompt management (create, set-state, list)
   - workdir: Operations related to working directory management (new-setup, archive)
+  - git: Operations related to version control (commit)
 
 Usage:
   python rdd.py                    # Interactive menu mode
@@ -19,6 +20,7 @@ Examples:
   python rdd.py prompt                  # Show prompt domain menu
   python rdd.py prompt create           # Create a new prompt
   python rdd.py workdir new-setup       # Setup new work iteration
+  python rdd.py git commit              # Commit changes for active prompt
 """
 
 from __future__ import annotations
@@ -259,6 +261,24 @@ def _workdir_domain_menu() -> int:
     return _execute_action("workdir", choice, [])
 
 
+def _git_domain_menu() -> int:
+    """Show git domain menu and execute selected action.
+    
+    Returns:
+        Exit code (0 for success, non-zero for error).
+    """
+    options = [
+        {"key": "commit", "desc": "Commit changes for active prompt"},
+    ]
+    
+    choice = _show_menu("RDD - Git Domain", options)
+    
+    if choice is None:
+        return 0
+    
+    return _execute_action("git", choice, [])
+
+
 def _main_menu() -> int:
     """Show main domain menu and route to selected domain.
     
@@ -268,6 +288,7 @@ def _main_menu() -> int:
     options = [
         {"key": "prompt", "desc": "Prompt management (create, set-state, list)"},
         {"key": "workdir", "desc": "Working directory management (new-setup, archive)"},
+        {"key": "git", "desc": "Version control operations (commit)"},
     ]
     
     choice = _show_menu("RDD Framework - Main Menu", options)
@@ -279,6 +300,8 @@ def _main_menu() -> int:
         return _prompt_domain_menu()
     elif choice == "workdir":
         return _workdir_domain_menu()
+    elif choice == "git":
+        return _git_domain_menu()
     
     return 0
 
@@ -303,9 +326,6 @@ def main(argv: List[str]) -> int:
         return 0
     
     # No arguments: show main menu
-    if not argv:
-        return _main_menu()
-    
     # Single argument: domain menu
     if len(argv) == 1:
         domain = argv[0]
@@ -314,20 +334,25 @@ def main(argv: List[str]) -> int:
             return _prompt_domain_menu()
         elif domain == "workdir":
             return _workdir_domain_menu()
+        elif domain == "git":
+            return _git_domain_menu()
         else:
             print(f"Error: Unknown domain '{domain}'", file=sys.stderr)
-            print(f"Remediation: Valid domains are 'prompt' and 'workdir'. Use --help for more info.", file=sys.stderr)
+            print(f"Remediation: Valid domains are 'prompt', 'workdir', and 'git'. Use --help for more info.", file=sys.stderr)
             return 1
-    
+            print(f"Error: Unknown domain '{domain}'", file=sys.stderr)
+            print(f"Remediation: Valid domains are 'prompt' and 'workdir'. Use --help for more info.", file=sys.stderr)
     # Two or more arguments: direct action execution
     domain = argv[0]
     action = argv[1]
     args = argv[2:]
     
-    if domain not in ("prompt", "workdir"):
+    if domain not in ("prompt", "workdir", "git"):
         print(f"Error: Unknown domain '{domain}'", file=sys.stderr)
-        print(f"Remediation: Valid domains are 'prompt' and 'workdir'. Use --help for more info.", file=sys.stderr)
+        print(f"Remediation: Valid domains are 'prompt', 'workdir', and 'git'. Use --help for more info.", file=sys.stderr)
         return 1
+    
+    return _execute_action(domain, action, args)
     
     return _execute_action(domain, action, args)
 
