@@ -64,7 +64,7 @@
             "prompt-id": "P-004",
             "title": "Add prompt completion with commit command",
             "type": "main",
-            "state": "in-progress",
+            "state": "completed",
             "parent-id": null,
             "analysis": {
                 "approval": false,
