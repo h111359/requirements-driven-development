@@ -126,6 +126,13 @@ The framework enables:
 
 - [UR-20251224-0935] All Web UI pages shall be optimized for desktop usage, offering clear navigation, real-time feedback on operations, and graceful handling of errors with informative messages.
 
+- [UR-20251229-1841] The framework shall provide a command to create a git commit for changes made during the current active prompt execution.
+
+- [UR-20251229-1842] The git commit message shall follow the format: iteration-id_prompt-id_prompt-title where spaces in the prompt title are preserved as-is.
+
+- [UR-20251229-1843] The git commit action shall automatically stage all changes in the repository before committing (equivalent to git commit -a behavior).
+
+- [UR-20251229-1844] The git commit action shall validate that changes exist before attempting to commit and shall exit gracefully with an informative message when the working tree is clean.
 
 
 
@@ -240,3 +247,12 @@ The framework enables:
 - [TR-20251229-1360] All CLI error messages shall include both a specific problem description and suggested remediation steps.
 
 - [TR-20251229-1361] All Python functions in the CLI implementation shall include comprehensive docstrings describing purpose, parameters, return values, and any exceptions raised.
+
+- [TR-20251229-1841] The framework shall extend the CLI domain-based routing architecture to include a `git` domain in addition to `prompt` and `workdir` domains.
+
+- [TR-20251229-1842] The framework shall provide a script `.rdd/src/actions/git_commit.py` that reads the active prompt from work-iteration-registry.json, constructs a commit message in the format `iteration-id_prompt-id_prompt-title`, stages all changes using `git add -A`, validates that changes exist, and creates a git commit with the constructed message.
+
+- [TR-20251229-1843] The git commit action script shall provide clear error messages with remediation steps for common failure scenarios including: missing work iteration registry, no active prompt found, missing prompt details, git command failures, and no changes to commit.
+
+- [TR-20251229-1844] The CLI main menu shall include the git domain as an option alongside prompt and workdir domains with the description "Version control operations (commit)".
+
