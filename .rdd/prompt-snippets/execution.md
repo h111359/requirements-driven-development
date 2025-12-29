@@ -20,7 +20,7 @@
 - [QUESTIONNAIRE] is a file containing questions to the user. The file location is in [active-prompt-folder]. The file name convention is `questionnaire.md`.
 
 - [MODIFIER] is a key word written in the chat after the prompt file. The MODIFIER could be:
-  * analyse
+  * analyze
 
 
 
@@ -32,9 +32,9 @@
 
 3. If the user has added a [MODIFIER]
    
-   * analyse:
+   * analyze:
      *  Write in the chat "Analyze mode" 
-     *  then follow the instructions in `.rdd/prompt-snippets/execution-step.analyse.md` and stop (do not continue with the next instructions here)
+     *  then follow the instructions in `.rdd/prompt-snippets/execution-step.analyze.md` and stop (do not continue with the next instructions here)
 
 4. If there is no modifier detected - 
    * Write in the chat "No modifiers detected"
