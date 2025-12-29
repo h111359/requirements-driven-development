@@ -184,6 +184,82 @@ def _show_menu(title: str, options: List[Dict[str, str]]) -> Optional[str]:
     return result
 
 
+def _prompt_for_parameters(action_key: str) -> List[str]:
+    """Prompt user for parameters required by an action.
+    
+    Args:
+        action_key: The action identifier in format 'domain.action'.
+        
+    Returns:
+        List of parameter strings in format 'key=value'.
+    """
+    # Define parameter specifications for each action
+    param_specs = {
+        "prompt.create": [
+            {"name": "title", "prompt": "Enter prompt title", "required": True},
+            {"name": "type", "prompt": "Enter prompt type (main/modification)", "required": True, "default": "main"},
+        ],
+        "prompt.set-state": [
+            {"name": "state", "prompt": "Enter new state (draft/planned/in-progress/completed)", "required": True},
+            {"name": "prompt-id", "prompt": "Enter prompt ID (or leave empty for active prompt)", "required": False},
+        ],
+        "workdir.new-setup": [
+            {"name": "name", "prompt": "Enter iteration name", "required": True},
+        ],
+    }
+    
+    specs = param_specs.get(action_key, [])
+    if not specs:
+        return []
+    
+    print()
+    print("Action Parameters")
+    print("=" * 17)
+    print()
+    
+    params = []
+    
+    for spec in specs:
+        param_name = spec["name"]
+        param_prompt = spec["prompt"]
+        required = spec.get("required", False)
+        default = spec.get("default")
+        
+        prompt_text = f"{param_prompt}"
+        if default:
+            prompt_text += f" [default: {default}]"
+        if not required:
+            prompt_text += " (optional)"
+        prompt_text += ": "
+        
+        while True:
+            try:
+                value = input(prompt_text).strip()
+                
+                # Use default if provided and user input is empty
+                if not value and default:
+                    value = default
+                
+                # Validate required fields
+                if required and not value:
+                    print(f"Error: {param_name} is required. Please provide a value.")
+                    continue
+                
+                # Add to params if value provided
+                if value:
+                    params.append(f"{param_name}={value}")
+                
+                break
+                
+            except (EOFError, KeyboardInterrupt):
+                print()
+                print("Parameter input cancelled.")
+                return []
+    
+    print()
+    return params
+
+
 def _execute_action(domain: str, action: str, args: List[str]) -> int:
     """Execute a domain action script.
     
@@ -239,7 +315,16 @@ def _prompt_domain_menu() -> int:
     if choice is None:
         return 0
     
-    return _execute_action("prompt", choice, [])
+    # Prompt for parameters if needed
+    action_key = f"prompt.{choice}"
+    params = _prompt_for_parameters(action_key)
+    
+    # Check if parameter gathering was cancelled
+    if action_key in ["prompt.create", "prompt.set-state"] and not params:
+        print("Action cancelled.")
+        return 0
+    
+    return _execute_action("prompt", choice, params)
 
 
 def _workdir_domain_menu() -> int:
@@ -258,7 +343,16 @@ def _workdir_domain_menu() -> int:
     if choice is None:
         return 0
     
-    return _execute_action("workdir", choice, [])
+    # Prompt for parameters if needed
+    action_key = f"workdir.{choice}"
+    params = _prompt_for_parameters(action_key)
+    
+    # Check if parameter gathering was cancelled
+    if action_key == "workdir.new-setup" and not params:
+        print("Action cancelled.")
+        return 0
+    
+    return _execute_action("workdir", choice, params)
 
 
 def _git_domain_menu() -> int:
@@ -326,6 +420,9 @@ def main(argv: List[str]) -> int:
         return 0
     
     # No arguments: show main menu
+    if len(argv) == 0:
+        return _main_menu()
+    
     # Single argument: domain menu
     if len(argv) == 1:
         domain = argv[0]
@@ -340,8 +437,7 @@ def main(argv: List[str]) -> int:
             print(f"Error: Unknown domain '{domain}'", file=sys.stderr)
             print(f"Remediation: Valid domains are 'prompt', 'workdir', and 'git'. Use --help for more info.", file=sys.stderr)
             return 1
-            print(f"Error: Unknown domain '{domain}'", file=sys.stderr)
-            print(f"Remediation: Valid domains are 'prompt' and 'workdir'. Use --help for more info.", file=sys.stderr)
+    
     # Two or more arguments: direct action execution
     domain = argv[0]
     action = argv[1]
@@ -351,8 +447,6 @@ def main(argv: List[str]) -> int:
         print(f"Error: Unknown domain '{domain}'", file=sys.stderr)
         print(f"Remediation: Valid domains are 'prompt', 'workdir', and 'git'. Use --help for more info.", file=sys.stderr)
         return 1
-    
-    return _execute_action(domain, action, args)
     
     return _execute_action(domain, action, args)
 

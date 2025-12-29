@@ -21,6 +21,7 @@
 
 - [MODIFIER] is a key word written in the chat after the prompt file. The MODIFIER could be:
   * analyze
+  * apply-modification
 
 
 
@@ -39,6 +40,11 @@
    * analyze:
      *  Write in the chat "Analyze mode" 
      *  then follow the instructions in `.rdd/prompt-snippets/execution-step.analyze.md` and stop (do not continue with the next instructions here)
+  
+  *  modification:
+     *  Should be followed by the number of the modification - read the text of the modification from [ACTIVE-PROMPT] (read it again as the user has changed it)
+     *   Write in the chat "Modification <ID>" 
+     *  Execute the instruction of the modification and stop (do not continue with the next instructions here)
 
 6. If there is no modifier detected - 
    * Write in the chat "No modifiers detected"
