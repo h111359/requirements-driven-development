@@ -13,3 +13,11 @@ TBD
 %%PROMPT P-004 "Add prompt completion with commit command"
 TBD
 %%ENDPROMPT
+
+%%PROMPT P-005 "Web Interface Draft"
+TBD
+%%ENDPROMPT
+
+%%PROMPT P-006 "Troubleshoot web interface"
+TBD
+%%ENDPROMPT

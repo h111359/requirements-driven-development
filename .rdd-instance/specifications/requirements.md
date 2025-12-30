@@ -256,3 +256,19 @@ The framework enables:
 
 - [TR-20251229-1844] The CLI main menu shall include the git domain as an option alongside prompt and workdir domains with the description "Version control operations (commit)".
 
+- [TR-20251230-1430] The framework shall provide a web server implementation at `.rdd/src/web/server.py` that serves the web interface on localhost port 8080 (configurable via --port parameter) and automatically opens the default browser on startup.
+
+- [TR-20251230-1431] The web server shall implement API endpoints including GET /api/token for session token retrieval, GET /api/registry for work iteration registry access, GET /api/file/{filepath} for reading files from .rdd-instance, POST /api/action for executing RDD actions, and POST /api/file/save for saving files to .rdd-instance.
+
+- [TR-20251230-1432] The web interface shall be implemented using vanilla JavaScript, HTML, and Bootstrap 5 CSS framework, with all frontend assets located in `.rdd/src/web/static/` (app.js, style.css) and templates in `.rdd/src/web/templates/` (index.html).
+
+- [TR-20251230-1433] The web interface shall provide a responsive navigation bar with sections for Prompts, Workdir, Git, and Files, each section displaying relevant operations and status information with color-coded alerts (success: green, error: red, warning: yellow, info: blue).
+
+- [TR-20251230-1434] The Prompts section shall display all prompts in a table showing ID, title, type, state, parent ID, and actions, with buttons for creating new prompts and setting prompt states via modal dialogs.
+
+- [TR-20251230-1435] The Workdir section shall provide forms for creating new work iterations with iteration name input, archiving current iterations with confirmation dialog, and displaying current iteration status including iteration ID, name, total prompts, and next prompt ID.
+
+- [TR-20251230-1436] The Git section shall display active prompt information including prompt ID, title, state, and the commit message that will be generated, with a button to execute the git commit action.
+
+- [TR-20251230-1437] The Files section shall provide a file browser with path input field, quick access buttons for common files (registry, requirements, technical design), a text editor for viewing and editing file contents, and save functionality.
+

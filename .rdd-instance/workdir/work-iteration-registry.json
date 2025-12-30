@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 5,
+    "prompt-id-sequence-next-value": 7,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -66,6 +66,44 @@
             "type": "main",
             "state": "completed",
             "parent-id": null,
+            "analysis": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "questionnaire": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "plan": {
+                "approval": false,
+                "state": "not-started"
+            }
+        },
+        {
+            "prompt-id": "P-005",
+            "title": "Web Interface Draft",
+            "type": "main",
+            "state": "in-progress",
+            "parent-id": null,
+            "analysis": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "questionnaire": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "plan": {
+                "approval": false,
+                "state": "not-started"
+            }
+        },
+        {
+            "prompt-id": "P-006",
+            "title": "Troubleshoot web interface",
+            "type": "modification",
+            "state": "draft",
+            "parent-id": "P-005",
             "analysis": {
                 "approval": false,
                 "state": "not-started"
