@@ -20,7 +20,8 @@
             "plan": {
                 "approval": false,
                 "state": "not-started"
-            }
+            },
+            "analyze-enabled": false
         },
         {
             "prompt-id": "P-002",
@@ -39,7 +40,8 @@
             "plan": {
                 "approval": false,
                 "state": "not-started"
-            }
+            },
+            "analyze-enabled": false
         },
         {
             "prompt-id": "P-003",
@@ -58,7 +60,8 @@
             "plan": {
                 "approval": false,
                 "state": "not-started"
-            }
+            },
+            "analyze-enabled": false
         },
         {
             "prompt-id": "P-004",
@@ -77,7 +80,8 @@
             "plan": {
                 "approval": false,
                 "state": "not-started"
-            }
+            },
+            "analyze-enabled": false
         },
         {
             "prompt-id": "P-005",
@@ -96,7 +100,8 @@
             "plan": {
                 "approval": false,
                 "state": "not-started"
-            }
+            },
+            "analyze-enabled": false
         },
         {
             "prompt-id": "P-006",
@@ -115,7 +120,8 @@
             "plan": {
                 "approval": false,
                 "state": "not-started"
-            }
+            },
+            "analyze-enabled": false
         },
         {
             "prompt-id": "P-007",
@@ -134,7 +140,8 @@
             "plan": {
                 "approval": false,
                 "state": "not-started"
-            }
+            },
+            "analyze-enabled": false
         },
         {
             "prompt-id": "P-008",
@@ -153,7 +160,8 @@
             "plan": {
                 "approval": false,
                 "state": "not-started"
-            }
+            },
+            "analyze-enabled": false
         }
     ]
 }

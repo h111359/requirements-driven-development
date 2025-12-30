@@ -179,6 +179,7 @@ async function loadPrompts() {
                         <th>Type</th>
                         <th>State</th>
                         <th>Parent ID</th>
+                        <th>Analyze Mode</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -191,6 +192,7 @@ async function loadPrompts() {
         const type = prompt.type || '';
         const state = prompt.state || '';
         const parentId = prompt['parent-id'] || '-';
+        const analyzeEnabled = prompt['analyze-enabled'] || false;
         
         const stateBadge = getStateBadge(state);
         const typeBadge = getTypeBadge(type);
@@ -201,6 +203,24 @@ async function loadPrompts() {
         const buttonLabel = isEditable ? 'Edit' : 'View';
         const buttonIcon = isEditable ? 'pencil' : 'eye';
         
+        // Analyze toggle (only for non-completed prompts)
+        let analyzeToggleHtml = '';
+        if (state !== 'completed') {
+            const toggleChecked = analyzeEnabled ? 'checked' : '';
+            const toggleId = `analyze-toggle-${promptId}`;
+            analyzeToggleHtml = `
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="${toggleId}" 
+                           ${toggleChecked} onchange="toggleAnalyzeMode('${promptId}', this.checked)">
+                    <label class="form-check-label" for="${toggleId}">
+                        ${analyzeEnabled ? 'ON' : 'OFF'}
+                    </label>
+                </div>
+            `;
+        } else {
+            analyzeToggleHtml = '<span class="text-muted">N/A</span>';
+        }
+        
         html += `
             <tr>
                 <td><code>${promptId}</code></td>
@@ -208,6 +228,7 @@ async function loadPrompts() {
                 <td>${typeBadge}</td>
                 <td>${stateBadge}</td>
                 <td>${parentId === null ? '-' : '<code>' + parentId + '</code>'}</td>
+                <td>${analyzeToggleHtml}</td>
                 <td>
                     <button class="btn btn-sm btn-${buttonType}" 
                             onclick="openPromptEditor('${promptId}', ${!isEditable})">
@@ -356,6 +377,44 @@ async function setPromptState() {
         await loadPrompts();
     } else {
         showAlert('danger', 'Failed to set prompt state: ' + (result.error || result.stderr));
+    }
+}
+
+/**
+ * Toggle analyze mode for a prompt
+ */
+async function toggleAnalyzeMode(promptId, enabled) {
+    const action = enabled ? 'analyze_on' : 'analyze_off';
+    const params = {
+        'prompt-id': promptId
+    };
+    
+    const result = await executeAction('prompt', action, params);
+    
+    if (result.success) {
+        showAlert('success', `Analyze mode ${enabled ? 'enabled' : 'disabled'} for prompt ${promptId}`);
+        
+        // Update the label next to the toggle
+        const toggleId = `analyze-toggle-${promptId}`;
+        const toggleElement = document.getElementById(toggleId);
+        if (toggleElement) {
+            const label = toggleElement.nextElementSibling;
+            if (label) {
+                label.textContent = enabled ? 'ON' : 'OFF';
+            }
+        }
+        
+        // Reload registry to ensure consistency
+        await loadRegistry();
+    } else {
+        showAlert('danger', `Failed to ${enabled ? 'enable' : 'disable'} analyze mode: ` + (result.error || result.stderr));
+        
+        // Revert the toggle state
+        const toggleId = `analyze-toggle-${promptId}`;
+        const toggleElement = document.getElementById(toggleId);
+        if (toggleElement) {
+            toggleElement.checked = !enabled;
+        }
     }
 }
 

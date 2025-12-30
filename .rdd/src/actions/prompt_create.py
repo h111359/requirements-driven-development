@@ -272,6 +272,7 @@ def main() -> int:
         "analysis": analysis,
         "questionnaire": questionnaire,
         "plan": plan,
+        "analyze-enabled": False,
     }
 
     prompts.append(prompt_metadata)

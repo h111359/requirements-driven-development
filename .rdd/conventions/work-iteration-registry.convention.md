@@ -113,6 +113,15 @@ The JSON file MUST be an object with the following keys:
     * `approval` (boolean) - false mean no approval is needed, the framework will create the file and will use it. true means the framework will create the file and will wait for approval from the user to continue based on its content.
     * `state` (strings) - the state in which the generation of the file is. Possible values are `not-started` -> `waiting-approval` -> `approved` -> `completed` (or in case `approval` is false: `not-started` -> `completed`)
 
+* `analyze-enabled` (boolean)
+  * **Required:** yes
+  * **Default value:** false
+  * **Meaning:** Controls whether analyze mode is enabled for this prompt. When set to `true`, the execute command will perform analysis instead of normal execution. The flag is automatically set to `false` after analyze execution completes.
+  * **Validation rules:**
+    * Can only be set to `true` for prompts with state `draft`, `planned`, or `in-progress`
+    * Cannot be enabled for prompts with state `completed`
+    * Setting this flag replaces the legacy chat-based "analyze" modifier
+
 
 ## Canonical example
 
@@ -132,7 +141,8 @@ The following is the canonical baseline structure (values may be empty during in
       "parent-id": null,
       "analysis": {"approval": true, "state": "completed"},
       "questionnaire": {"approval": true, "state": "completed"},
-      "plan": {"approval": true, "state": "completed"}
+      "plan": {"approval": true, "state": "completed"},
+      "analyze-enabled": false
     },
     {
       "prompt-id": "P-002",
@@ -142,7 +152,8 @@ The following is the canonical baseline structure (values may be empty during in
       "parent-id": "P-001",
       "analysis": {"approval": false, "state": "completed"},
       "questionnaire": {"approval": false, "state": "completed"},
-      "plan": {"approval": true, "state": "approved"}
+      "plan": {"approval": true, "state": "approved"},
+      "analyze-enabled": false
     },
     {
       "prompt-id": "P-003",
@@ -152,7 +163,8 @@ The following is the canonical baseline structure (values may be empty during in
       "parent-id": "P-001",
       "analysis": {"approval": false, "state": "completed"},
       "questionnaire": {"approval": true, "state": "approved"},
-      "plan": {"approval": true, "state": "waiting-approval"}
+      "plan": {"approval": true, "state": "waiting-approval"},
+      "analyze-enabled": false
     },
     {
       "prompt-id": "P-004",
@@ -162,7 +174,8 @@ The following is the canonical baseline structure (values may be empty during in
       "parent-id": null,
       "analysis": {"approval": false, "state": "not-started"},
       "questionnaire": {"approval": true, "state": "not-started"},
-      "plan": {"approval": false, "state": "not-started"}
+      "plan": {"approval": false, "state": "not-started"},
+      "analyze-enabled": false
     }    
   ]
 }

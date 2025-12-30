@@ -20,9 +20,7 @@
 - [QUESTIONNAIRE] is a file containing questions to the user. The file location is in [active-prompt-folder]. The file name convention is `questionnaire.md`.
 
 - [MODIFIER] is a key word written in the chat after the prompt file. The MODIFIER could be:
-  * analyze
-  * apply-modification
-
+  * modification
 
 
 ## Instructions - Follow these steps exactly:  
@@ -35,18 +33,18 @@
    
 4. Check if there are questions and answers in the [QUESTIONNAIRE]. If there are, you shall comply with the chosen answers in the next steps.
 
-5. If the user has added a [MODIFIER]
-   
-   * analyze:
-     *  Write in the chat "Analyze mode" 
-     *  then follow the instructions in `.rdd/prompt-snippets/execution-step.analyze.md` and stop (do not continue with the next instructions here)
+5. Check if the active prompt has `analyze-enabled` set to `true` in [WI-REGISTRY]. If it is set to true:
+   * Write in the chat "Analyze mode" 
+   * then follow the instructions in `.rdd/prompt-snippets/execution-step.analyze.md` and stop (do not continue with the next instructions here)
+
+6. If the user has added a [MODIFIER]
   
   *  modification:
      *  Should be followed by the number of the modification - read the text of the modification from [ACTIVE-PROMPT] (read it again as the user has changed it)
      *   Write in the chat "Modification <ID>" 
      *  Execute the instruction of the modification and stop (do not continue with the next instructions here)
 
-6. If there is no modifier detected - 
+7. If there is no modifier detected and analyze mode is not enabled - 
    * Write in the chat "No modifiers detected"
    * follow the instructions in `.rdd/prompt-snippets/execution-step.plan.md`
    * then follow the instructions in `.rdd/prompt-snippets/execution-step.implementation.md`

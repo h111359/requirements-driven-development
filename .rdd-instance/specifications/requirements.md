@@ -284,4 +284,24 @@ The framework enables:
 
 - [TR-20251230-1443] The prompt editor shall enforce frontend soft enforcement of edit permissions by setting textareas to readonly and disabling save buttons when in view-only mode (for completed prompts).
 
+- [UR-20251230-2001] The framework shall provide a toggle mechanism to enable/disable analyze mode for prompts through the Web UI.
+
+- [UR-20251230-2002] The framework shall automatically disable analyze mode after each analyze execution completes.
+
+- [UR-20251230-2003] The framework shall prevent enabling analyze mode for completed prompts.
+
+- [TR-20251230-2004] Each prompt in work-iteration-registry.json shall have an `analyze-enabled` boolean field with default value `false`.
+
+- [TR-20251230-2005] The framework shall provide scripts `prompt_analyze_on.py` and `prompt_analyze_off.py` in `.rdd/src/actions/` for controlling analyze mode.
+
+- [TR-20251230-2006] The execution prompt logic shall read analyze mode from the `analyze-enabled` field in work-iteration-registry.json rather than from chat modifiers.
+
+- [TR-20251230-2007] The Web UI shall display analyze mode toggles only for prompts in draft, planned, or in-progress states.
+
+- [TR-20251230-2008] The Prompts section table in the Web UI shall include an "Analyze Mode" column with a toggle switch for non-completed prompts and "N/A" for completed prompts.
+
+- [TR-20251230-2009] The CLI prompt domain menu shall include "analyze-on" and "analyze-off" actions that route to the prompt_analyze_on.py and prompt_analyze_off.py scripts.
+
+- [TR-20251230-2010] The analyze execution step shall automatically invoke the prompt_analyze_off.py script after completing the analyze execution to disable the analyze flag.
+
 
