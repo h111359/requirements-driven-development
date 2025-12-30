@@ -48,6 +48,7 @@
    * Write in the chat "No modifiers detected"
    * follow the instructions in `.rdd/prompt-snippets/execution-step.plan.md`
    * then follow the instructions in `.rdd/prompt-snippets/execution-step.implementation.md`
+   * after the implementation is completed, execute `.rdd/src/actions/prompt_set_executed_on.py`
 
 
 

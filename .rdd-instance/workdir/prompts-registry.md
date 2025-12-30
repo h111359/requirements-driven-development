@@ -33,3 +33,7 @@ TBD
 %%PROMPT P-009 "Completion operation"
 TBD
 %%ENDPROMPT
+
+%%PROMPT P-010 "Set complete status before git commit command"
+TBD
+%%ENDPROMPT

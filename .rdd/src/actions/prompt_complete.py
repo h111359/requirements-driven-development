@@ -4,7 +4,8 @@
 Behavior:
   - Updates the `state` field of a prompt to 'completed' in:
         `.rdd-instance/workdir/work-iteration-registry.json`
-  - If the root-level `git-enabled` flag is true, executes `.rdd/src/actions/git_commit.py`
+  - If the root-level `git-enabled` flag is true, creates a git commit with all changes
+  - Commit message format: iteration-id_prompt-id_prompt-title
   - If git commit fails due to no changes, logs a warning but proceeds with state change
   - If `prompt-id=` is omitted, defaults to the currently active prompt.
 
@@ -134,56 +135,74 @@ def main() -> int:
         print(f"{prompt_id} already completed")
         return 0
 
-    # Check git-enabled flag
-    git_enabled = registry.get("git-enabled", False)
-    git_result = None
-
-    if git_enabled:
-        # Execute git commit
-        git_commit_script = repo_root / ".rdd" / "src" / "actions" / "git_commit.py"
-        if not git_commit_script.is_file():
-            print(
-                f"WARNING: git-enabled is true but git_commit.py not found at {git_commit_script}",
-                file=sys.stderr,
-            )
-        else:
-            try:
-                result = subprocess.run(
-                    ["python", str(git_commit_script)],
-                    cwd=str(repo_root),
-                    capture_output=True,
-                    text=True,
-                )
-                if result.returncode == 0:
-                    git_result = "success"
-                    print(f"Git commit executed successfully: {result.stdout.strip()}")
-                else:
-                    # Check if failure is due to no changes
-                    if "no changes to commit" in result.stderr.lower() or "working tree clean" in result.stderr.lower():
-                        git_result = "no-changes"
-                        print(
-                            f"WARNING: Git commit skipped - no changes to commit",
-                            file=sys.stderr,
-                        )
-                    else:
-                        # Other git error - log but continue
-                        git_result = "error"
-                        print(
-                            f"WARNING: Git commit failed: {result.stderr.strip()}",
-                            file=sys.stderr,
-                        )
-            except Exception as e:
-                git_result = "error"
-                print(
-                    f"WARNING: Error executing git commit: {e}",
-                    file=sys.stderr,
-                )
-
     # Update the state to completed
     target_prompt["state"] = "completed"
 
     # Write the updated registry
     _dump_json(registry_path, registry)
+
+    # Check git-enabled flag
+    git_enabled = registry.get("git-enabled", False)
+    git_result = None
+
+    if git_enabled:
+        # Execute git commit inline (can't use git_commit.py since we already changed state)
+        try:
+            # Get iteration details
+            iteration_id = registry.get("iteration-id", "UNKNOWN")
+            prompt_title = target_prompt.get("prompt-title") or target_prompt.get("title", "UNKNOWN")
+            
+            # Construct commit message
+            commit_message = f"{iteration_id}_{prompt_id}_{prompt_title}"
+            
+            # Stage all changes
+            subprocess.run(
+                ["git", "add", "-A"],
+                cwd=str(repo_root),
+                check=True,
+                capture_output=True,
+                text=True
+            )
+            
+            # Check if there are changes to commit
+            status_result = subprocess.run(
+                ["git", "status", "--porcelain"],
+                cwd=str(repo_root),
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            
+            if not status_result.stdout.strip():
+                git_result = "no-changes"
+                print(
+                    f"WARNING: Git commit skipped - no changes to commit",
+                    file=sys.stderr,
+                )
+            else:
+                # Create commit
+                commit_result = subprocess.run(
+                    ["git", "commit", "-m", commit_message],
+                    cwd=str(repo_root),
+                    capture_output=True,
+                    text=True,
+                    check=True
+                )
+                git_result = "success"
+                print(f"Git commit executed successfully: {commit_message}")
+                
+        except subprocess.CalledProcessError as e:
+            git_result = "error"
+            print(
+                f"WARNING: Git commit failed: {e.stderr if e.stderr else str(e)}",
+                file=sys.stderr,
+            )
+        except Exception as e:
+            git_result = "error"
+            print(
+                f"WARNING: Error executing git commit: {e}",
+                file=sys.stderr,
+            )
 
     if git_result:
         print(f"{prompt_id} completed (git: {git_result})")

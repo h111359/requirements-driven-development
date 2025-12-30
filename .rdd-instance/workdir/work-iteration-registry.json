@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 10,
+    "prompt-id-sequence-next-value": 11,
     "git-enabled": true,
     "prompts": [
         {
@@ -176,7 +176,28 @@
             "prompt-id": "P-009",
             "title": "Completion operation",
             "type": "main",
-            "state": "in-progress",
+            "state": "completed",
+            "parent-id": null,
+            "analysis": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "questionnaire": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "plan": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "analyze-enabled": false,
+            "executed": true
+        },
+        {
+            "prompt-id": "P-010",
+            "title": "Set complete status before git commit command",
+            "type": "main",
+            "state": "completed",
             "parent-id": null,
             "analysis": {
                 "approval": false,

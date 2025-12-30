@@ -1,0 +1,1 @@
+Currently during the completion action the git commit is executed before setting the status of the prompt to completed, which leads to a new uncommitted changes. The order should be opposite - first set the status to completed and then commit, so after the commit no uncommitted changes exist.
