@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 7,
+    "prompt-id-sequence-next-value": 9,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -83,7 +83,7 @@
             "prompt-id": "P-005",
             "title": "Web Interface Draft",
             "type": "main",
-            "state": "in-progress",
+            "state": "completed",
             "parent-id": null,
             "analysis": {
                 "approval": false,
@@ -101,9 +101,47 @@
         {
             "prompt-id": "P-006",
             "title": "Troubleshoot web interface",
-            "type": "modification",
-            "state": "draft",
-            "parent-id": "P-005",
+            "type": "main",
+            "state": "completed",
+            "parent-id": null,
+            "analysis": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "questionnaire": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "plan": {
+                "approval": false,
+                "state": "not-started"
+            }
+        },
+        {
+            "prompt-id": "P-007",
+            "title": "Edit prompt text in Web UI",
+            "type": "main",
+            "state": "completed",
+            "parent-id": null,
+            "analysis": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "questionnaire": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "plan": {
+                "approval": false,
+                "state": "not-started"
+            }
+        },
+        {
+            "prompt-id": "P-008",
+            "title": "Move analyze command in the Web UI",
+            "type": "main",
+            "state": "in-progress",
+            "parent-id": null,
             "analysis": {
                 "approval": false,
                 "state": "not-started"

@@ -21,3 +21,11 @@ TBD
 %%PROMPT P-006 "Troubleshoot web interface"
 TBD
 %%ENDPROMPT
+
+%%PROMPT P-007 "Edit prompt text in Web UI"
+TBD
+%%ENDPROMPT
+
+%%PROMPT P-008 "Move analyze command in the Web UI"
+TBD
+%%ENDPROMPT

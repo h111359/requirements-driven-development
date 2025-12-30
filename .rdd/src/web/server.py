@@ -28,7 +28,7 @@ import sys
 import webbrowser
 from pathlib import Path
 from typing import Any, Dict, Optional
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, urlparse, unquote
 
 
 def _repo_root() -> Path:
@@ -240,7 +240,7 @@ class RDDWebHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error_response("Invalid session token", 403)
                 return
             
-            filepath = path[10:]  # Remove "/api/file/"
+            filepath = unquote(path[10:])  # Remove "/api/file/" and decode URL encoding
             if filepath.endswith(".json"):
                 result = self.read_json_file(filepath)
             else:

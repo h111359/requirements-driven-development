@@ -4,6 +4,9 @@
 let sessionToken = null;
 let currentPromptId = null;
 let currentRegistry = null;
+let currentEditingPrompt = null;
+let currentPromptFolder = null;
+let isViewOnlyMode = false;
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
@@ -192,6 +195,12 @@ async function loadPrompts() {
         const stateBadge = getStateBadge(state);
         const typeBadge = getTypeBadge(type);
         
+        // Determine if prompt is editable (draft, planned, in-progress)
+        const isEditable = (state === 'draft' || state === 'planned' || state === 'in-progress');
+        const buttonType = isEditable ? 'primary' : 'secondary';
+        const buttonLabel = isEditable ? 'Edit' : 'View';
+        const buttonIcon = isEditable ? 'pencil' : 'eye';
+        
         html += `
             <tr>
                 <td><code>${promptId}</code></td>
@@ -200,6 +209,10 @@ async function loadPrompts() {
                 <td>${stateBadge}</td>
                 <td>${parentId === null ? '-' : '<code>' + parentId + '</code>'}</td>
                 <td>
+                    <button class="btn btn-sm btn-${buttonType}" 
+                            onclick="openPromptEditor('${promptId}', ${!isEditable})">
+                        <i class="bi bi-${buttonIcon}"></i> ${buttonLabel}
+                    </button>
                     <button class="btn btn-sm btn-primary" 
                             onclick="showSetStateModal('${promptId}', '${state}')">
                         <i class="bi bi-pencil"></i> Set State
@@ -561,4 +574,165 @@ async function saveFile() {
     } catch (error) {
         showAlert('danger', 'Error saving file: ' + error.message);
     }
+}
+
+/**
+ * Open prompt editor
+ */
+async function openPromptEditor(promptId, viewOnly = false) {
+    currentEditingPrompt = promptId;
+    isViewOnlyMode = viewOnly;
+    
+    // Find prompt details from registry
+    await loadRegistry();
+    const prompt = currentRegistry.prompts.find(p => p['prompt-id'] === promptId);
+    
+    if (!prompt) {
+        showAlert('danger', 'Prompt not found: ' + promptId);
+        return;
+    }
+    
+    const title = prompt.title || prompt['prompt-title'] || '';
+    currentPromptFolder = `workdir/${promptId}_${title}`;
+    
+    // Update UI
+    document.getElementById('editor-prompt-id').textContent = promptId;
+    document.getElementById('editor-mode-label').textContent = viewOnly ? 'View' : 'Edit';
+    
+    // Show editor view, hide list view
+    document.getElementById('prompts-list-view').style.display = 'none';
+    document.getElementById('prompt-editor-view').style.display = 'block';
+    
+    // Load all files
+    await loadPromptEditorFiles();
+    
+    // Disable/enable textareas and save buttons based on view mode
+    updateEditorPermissions();
+}
+
+/**
+ * Close prompt editor
+ */
+function closePromptEditor() {
+    // Show list view, hide editor view
+    document.getElementById('prompts-list-view').style.display = 'block';
+    document.getElementById('prompt-editor-view').style.display = 'none';
+    
+    // Clear editor state
+    currentEditingPrompt = null;
+    currentPromptFolder = null;
+    isViewOnlyMode = false;
+    
+    // Reload prompts list
+    loadPrompts();
+}
+
+/**
+ * Load all prompt editor files
+ */
+async function loadPromptEditorFiles() {
+    const files = ['prompt.md', 'plan.md', 'questionnaire.md', 'implementation.md'];
+    
+    for (const file of files) {
+        await loadPromptEditorFile(file);
+    }
+}
+
+/**
+ * Load a single prompt editor file
+ */
+async function loadPromptEditorFile(filename) {
+    const filepath = `${currentPromptFolder}/${filename}`;
+    const elementId = `editor-${filename.replace('.', '-')}`;
+    
+    try {
+        // URL-encode the filepath to handle spaces and special characters
+        const encodedFilepath = encodeURIComponent(filepath);
+        const response = await fetch('/api/file/' + encodedFilepath + '?token=' + sessionToken);
+        const result = await response.json();
+        
+        const textarea = document.getElementById(elementId);
+        if (textarea) {
+            if (result.success) {
+                textarea.value = result.content || '';
+            } else {
+                // File might not exist yet
+                textarea.value = '';
+                console.log(`File ${filename} not found or empty`);
+            }
+        }
+    } catch (error) {
+        console.error(`Error loading ${filename}:`, error);
+        const textarea = document.getElementById(elementId);
+        if (textarea) {
+            textarea.value = '';
+        }
+    }
+}
+
+/**
+ * Save a prompt file
+ */
+async function savePromptFile(filename) {
+    if (isViewOnlyMode) {
+        showAlert('warning', 'Cannot save in view-only mode');
+        return;
+    }
+    
+    const elementId = `editor-${filename.replace('.', '-')}`;
+    const content = document.getElementById(elementId).value;
+    const filepath = `${currentPromptFolder}/${filename}`;
+    
+    try {
+        const response = await fetch('/api/file/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                filepath: filepath,
+                content: content
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('success', `${filename} saved successfully`);
+        } else {
+            showAlert('danger', `Failed to save ${filename}: ${result.error}`);
+        }
+    } catch (error) {
+        showAlert('danger', `Error saving ${filename}: ${error.message}`);
+    }
+}
+
+/**
+ * Update editor permissions based on view mode
+ */
+function updateEditorPermissions() {
+    const textareaIds = ['editor-prompt-md', 'editor-plan-md', 'editor-questionnaire-md'];
+    const saveButtonIds = ['save-prompt-btn', 'save-plan-btn', 'save-questionnaire-btn'];
+    
+    textareaIds.forEach(id => {
+        const textarea = document.getElementById(id);
+        if (textarea) {
+            textarea.readOnly = isViewOnlyMode;
+        }
+    });
+    
+    saveButtonIds.forEach(id => {
+        const button = document.getElementById(id);
+        if (button) {
+            button.disabled = isViewOnlyMode;
+            if (isViewOnlyMode) {
+                button.classList.remove('btn-success');
+                button.classList.add('btn-secondary');
+            } else {
+                button.classList.remove('btn-secondary');
+                button.classList.add('btn-success');
+            }
+        }
+    });
 }

@@ -48,6 +48,7 @@
 
 6. If there is no modifier detected - 
    * Write in the chat "No modifiers detected"
+   * follow the instructions in `.rdd/prompt-snippets/execution-step.plan.md`
    * then follow the instructions in `.rdd/prompt-snippets/execution-step.implementation.md`
 
 

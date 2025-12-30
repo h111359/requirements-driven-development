@@ -272,3 +272,16 @@ The framework enables:
 
 - [TR-20251230-1437] The Files section shall provide a file browser with path input field, quick access buttons for common files (registry, requirements, technical design), a text editor for viewing and editing file contents, and save functionality.
 
+- [TR-20251230-1438] The Prompts section shall provide an integrated prompt editor that displays Edit buttons for prompts in draft, planned, or in-progress states and View buttons for prompts in completed state.
+
+- [TR-20251230-1439] The prompt editor shall replace the prompts list view with a tabbed interface containing tabs for prompt.md, plan.md, questionnaire.md, and implementation.md files, with a Back button to return to the prompts list.
+
+- [TR-20251230-1440] The prompt editor shall load prompt files from the prompt's working folder (workdir/<prompt-id>_<prompt-title>/) and display their contents in monospace textareas within the appropriate tabs.
+
+- [TR-20251230-1441] The prompt editor shall provide individual Save buttons for prompt.md, plan.md, and questionnaire.md files that persist changes back to the file system when clicked.
+
+- [TR-20251230-1442] The implementation.md file in the prompt editor shall be displayed as read-only in all cases.
+
+- [TR-20251230-1443] The prompt editor shall enforce frontend soft enforcement of edit permissions by setting textareas to readonly and disabling save buttons when in view-only mode (for completed prompts).
+
+
