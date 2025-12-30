@@ -134,6 +134,14 @@ The framework enables:
 
 - [UR-20251229-1844] The git commit action shall validate that changes exist before attempting to commit and shall exit gracefully with an informative message when the working tree is clean.
 
+- [UR-20251231-0100] The framework shall provide a mechanism to mark prompts as executed and track execution status in the work iteration registry.
+
+- [UR-20251231-0101] The framework shall provide a prompt completion command that transitions prompts to completed state and optionally triggers git commit operations.
+
+- [UR-20251231-0102] The Web UI shall display execution status for each prompt and provide a completion button that is enabled only for executed prompts in in-progress state.
+
+- [UR-20251231-0103] The framework shall support optional git integration during prompt completion, controlled by a global configuration flag.
+
 
 
 ## Technical Requirements
@@ -304,4 +312,17 @@ The framework enables:
 
 - [TR-20251230-2010] The analyze execution step shall automatically invoke the prompt_analyze_off.py script after completing the analyze execution to disable the analyze flag.
 
+- [TR-20251231-0100] The work iteration registry shall include a root-level boolean field `git-enabled` (default: false) to control git operations during prompt completion.
+
+- [TR-20251231-0101] Each prompt object in the work iteration registry shall include an `executed` boolean field (default: false) to track execution status.
+
+- [TR-20251231-0102] The framework shall provide a script `.rdd/src/actions/prompt_set_executed_on.py` that sets the executed flag for a specified prompt or the active prompt.
+
+- [TR-20251231-0103] The framework shall provide a script `.rdd/src/actions/prompt_complete.py` that sets a prompt to completed state and conditionally executes git commit based on the git-enabled flag.
+
+- [TR-20251231-0104] The prompt completion action shall handle git commit failures gracefully, logging warnings but proceeding with state changes when no repository changes exist.
+
+- [TR-20251231-0105] The Web UI Prompts section table shall include an "Executed" column displaying a badge indicating whether each prompt has been executed (green "Yes" or gray "No").
+
+- [TR-20251231-0106] The Web UI shall provide a "Complete" button in the Actions column for prompts in in-progress state, enabled only when the prompt's executed flag is true, with a tooltip explaining the requirement.
 

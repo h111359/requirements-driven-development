@@ -178,6 +178,7 @@ async function loadPrompts() {
                         <th>Title</th>
                         <th>Type</th>
                         <th>State</th>
+                        <th>Executed</th>
                         <th>Parent ID</th>
                         <th>Analyze Mode</th>
                         <th>Actions</th>
@@ -193,9 +194,15 @@ async function loadPrompts() {
         const state = prompt.state || '';
         const parentId = prompt['parent-id'] || '-';
         const analyzeEnabled = prompt['analyze-enabled'] || false;
+        const executed = prompt['executed'] || false;
         
         const stateBadge = getStateBadge(state);
         const typeBadge = getTypeBadge(type);
+        
+        // Executed badge
+        const executedBadge = executed 
+            ? '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Yes</span>'
+            : '<span class="badge bg-secondary">No</span>';
         
         // Determine if prompt is editable (draft, planned, in-progress)
         const isEditable = (state === 'draft' || state === 'planned' || state === 'in-progress');
@@ -221,12 +228,28 @@ async function loadPrompts() {
             analyzeToggleHtml = '<span class="text-muted">N/A</span>';
         }
         
+        // Complete button (only for in-progress prompts with executed=true)
+        let completeButtonHtml = '';
+        if (state === 'in-progress') {
+            const completeDisabled = !executed ? 'disabled' : '';
+            const completeTitle = !executed ? 'Prompt must be executed first' : 'Complete this prompt';
+            completeButtonHtml = `
+                <button class="btn btn-sm btn-success" 
+                        onclick="completePrompt('${promptId}')"
+                        ${completeDisabled}
+                        title="${completeTitle}">
+                    <i class="bi bi-check-lg"></i> Complete
+                </button>
+            `;
+        }
+        
         html += `
             <tr>
                 <td><code>${promptId}</code></td>
                 <td>${escapeHtml(title)}</td>
                 <td>${typeBadge}</td>
                 <td>${stateBadge}</td>
+                <td>${executedBadge}</td>
                 <td>${parentId === null ? '-' : '<code>' + parentId + '</code>'}</td>
                 <td>${analyzeToggleHtml}</td>
                 <td>
@@ -238,6 +261,7 @@ async function loadPrompts() {
                             onclick="showSetStateModal('${promptId}', '${state}')">
                         <i class="bi bi-pencil"></i> Set State
                     </button>
+                    ${completeButtonHtml}
                 </td>
             </tr>
         `;
@@ -415,6 +439,36 @@ async function toggleAnalyzeMode(promptId, enabled) {
         if (toggleElement) {
             toggleElement.checked = !enabled;
         }
+    }
+}
+
+/**
+ * Complete a prompt
+ */
+async function completePrompt(promptId) {
+    if (!confirm(`Are you sure you want to complete prompt ${promptId}?`)) {
+        return;
+    }
+    
+    const params = {
+        'prompt-id': promptId
+    };
+    
+    const result = await executeAction('prompt', 'complete', params);
+    
+    if (result.success) {
+        showAlert('success', `Prompt ${promptId} completed successfully`);
+        
+        // Reload prompts list
+        await loadPrompts();
+        
+        // Reload git status if on git section
+        const gitSection = document.getElementById('section-git');
+        if (gitSection && gitSection.style.display !== 'none') {
+            await loadGitStatus();
+        }
+    } else {
+        showAlert('danger', `Failed to complete prompt: ` + (result.error || result.stderr));
     }
 }
 

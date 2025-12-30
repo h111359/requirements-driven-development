@@ -30,3 +30,6 @@ TBD
 TBD
 %%ENDPROMPT
 
+%%PROMPT P-009 "Completion operation"
+TBD
+%%ENDPROMPT

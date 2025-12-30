@@ -1,7 +1,8 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 9,
+    "prompt-id-sequence-next-value": 10,
+    "git-enabled": true,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -21,7 +22,8 @@
                 "approval": false,
                 "state": "not-started"
             },
-            "analyze-enabled": false
+            "analyze-enabled": false,
+            "executed": false
         },
         {
             "prompt-id": "P-002",
@@ -41,7 +43,8 @@
                 "approval": false,
                 "state": "not-started"
             },
-            "analyze-enabled": false
+            "analyze-enabled": false,
+            "executed": false
         },
         {
             "prompt-id": "P-003",
@@ -61,7 +64,8 @@
                 "approval": false,
                 "state": "not-started"
             },
-            "analyze-enabled": false
+            "analyze-enabled": false,
+            "executed": false
         },
         {
             "prompt-id": "P-004",
@@ -81,7 +85,8 @@
                 "approval": false,
                 "state": "not-started"
             },
-            "analyze-enabled": false
+            "analyze-enabled": false,
+            "executed": false
         },
         {
             "prompt-id": "P-005",
@@ -101,7 +106,8 @@
                 "approval": false,
                 "state": "not-started"
             },
-            "analyze-enabled": false
+            "analyze-enabled": false,
+            "executed": false
         },
         {
             "prompt-id": "P-006",
@@ -121,7 +127,8 @@
                 "approval": false,
                 "state": "not-started"
             },
-            "analyze-enabled": false
+            "analyze-enabled": false,
+            "executed": false
         },
         {
             "prompt-id": "P-007",
@@ -141,11 +148,33 @@
                 "approval": false,
                 "state": "not-started"
             },
-            "analyze-enabled": false
+            "analyze-enabled": false,
+            "executed": false
         },
         {
             "prompt-id": "P-008",
             "title": "Move analyze command in the Web UI",
+            "type": "main",
+            "state": "completed",
+            "parent-id": null,
+            "analysis": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "questionnaire": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "plan": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "analyze-enabled": false,
+            "executed": false
+        },
+        {
+            "prompt-id": "P-009",
+            "title": "Completion operation",
             "type": "main",
             "state": "in-progress",
             "parent-id": null,
@@ -161,7 +190,8 @@
                 "approval": false,
                 "state": "not-started"
             },
-            "analyze-enabled": false
+            "analyze-enabled": false,
+            "executed": true
         }
     ]
 }
