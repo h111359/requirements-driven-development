@@ -37,6 +37,12 @@
    * Write in the chat "Analyze mode" 
    * then follow the instructions in `.rdd/prompt-snippets/execution-step.analyze.md` and stop (do not continue with the next instructions here)
 
+5.5. Check if the active prompt has `plan-enabled` set to `true` in [WI-REGISTRY]. If it is set to true:
+   * Write in the chat "Plan mode" 
+   * then follow the instructions in `.rdd/prompt-snippets/execution-step.plan.md`
+   * after the plan execution is completed, execute `.rdd/src/actions/prompt_plan_off.py` to automatically disable plan mode
+   * stop (do not continue with the next instructions here - do not execute implementation step)
+
 6. If the user has added a [MODIFIER]
   
   *  modification:

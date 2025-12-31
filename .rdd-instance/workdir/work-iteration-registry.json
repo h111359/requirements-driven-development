@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 12,
+    "prompt-id-sequence-next-value": 13,
     "git-enabled": true,
     "prompts": [
         {
@@ -23,7 +23,8 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": false
+            "executed": false,
+            "plan-enabled": false
         },
         {
             "prompt-id": "P-002",
@@ -44,7 +45,8 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": false
+            "executed": false,
+            "plan-enabled": false
         },
         {
             "prompt-id": "P-003",
@@ -65,7 +67,8 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": false
+            "executed": false,
+            "plan-enabled": false
         },
         {
             "prompt-id": "P-004",
@@ -86,7 +89,8 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": false
+            "executed": false,
+            "plan-enabled": false
         },
         {
             "prompt-id": "P-005",
@@ -107,7 +111,8 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": false
+            "executed": false,
+            "plan-enabled": false
         },
         {
             "prompt-id": "P-006",
@@ -128,7 +133,8 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": false
+            "executed": false,
+            "plan-enabled": false
         },
         {
             "prompt-id": "P-007",
@@ -149,7 +155,8 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": false
+            "executed": false,
+            "plan-enabled": false
         },
         {
             "prompt-id": "P-008",
@@ -170,7 +177,8 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": false
+            "executed": false,
+            "plan-enabled": false
         },
         {
             "prompt-id": "P-009",
@@ -191,7 +199,8 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": true
+            "executed": true,
+            "plan-enabled": false
         },
         {
             "prompt-id": "P-010",
@@ -212,7 +221,8 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": true
+            "executed": true,
+            "plan-enabled": false
         },
         {
             "prompt-id": "P-011",
@@ -233,6 +243,29 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
+            "executed": true,
+            "plan-enabled": false
+        },
+        {
+            "prompt-id": "P-012",
+            "title": "Plan mode",
+            "type": "main",
+            "state": "completed",
+            "parent-id": null,
+            "analysis": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "questionnaire": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "plan": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "analyze-enabled": false,
+            "plan-enabled": false,
             "executed": true
         }
     ]

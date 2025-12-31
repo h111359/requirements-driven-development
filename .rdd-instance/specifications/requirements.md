@@ -326,3 +326,32 @@ The framework enables:
 
 - [TR-20251231-0106] The Web UI shall provide a "Complete" button in the Actions column for prompts in in-progress state, enabled only when the prompt's executed flag is true, with a tooltip explaining the requirement.
 
+
+
+## Plan Mode Requirements
+
+- [UR-20251231-0200] The framework shall provide a plan mode that allows users to generate implementation plans without proceeding to execution, enabling plan review and approval.
+
+- [UR-20251231-0201] The framework shall automatically disable plan mode after the plan generation completes.
+
+- [UR-20251231-0202] The framework shall ensure that plan mode and analyze mode are mutually exclusive and cannot be enabled simultaneously for the same prompt.
+
+- [UR-20251231-0203] The framework shall prevent enabling plan mode for completed prompts.
+
+- [UR-20251231-0204] The framework shall provide a toggle mechanism to enable/disable plan mode for prompts through the Web UI.
+
+- [TR-20251231-0200] Each prompt in work-iteration-registry.json shall have a `plan-enabled` boolean field with default value `false`.
+
+- [TR-20251231-0201] The framework shall provide scripts `prompt_plan_on.py` and `prompt_plan_off.py` in `.rdd/src/actions/` for controlling plan mode.
+
+- [TR-20251231-0202] The execution prompt logic shall read plan mode from the `plan-enabled` field in work-iteration-registry.json and execute only the plan generation step when enabled.
+
+- [TR-20251231-0203] The Web UI shall display plan mode toggles only for prompts in draft, planned, or in-progress states.
+
+- [TR-20251231-0204] The Prompts section table in the Web UI shall include a "Plan Mode" column with a toggle switch for non-completed prompts and "N/A" for completed prompts.
+
+- [TR-20251231-0205] The CLI prompt domain menu shall include "plan-on" and "plan-off" actions that route to the prompt_plan_on.py and prompt_plan_off.py scripts.
+
+- [TR-20251231-0206] The plan execution step shall automatically invoke the prompt_plan_off.py script after completing the plan generation to disable the plan flag.
+
+- [TR-20251231-0207] When enabling plan mode, the system shall automatically disable analyze mode if it is currently enabled, and vice versa, to enforce mutual exclusivity.

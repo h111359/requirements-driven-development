@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 """
-Enable analyze mode for a prompt.
+Enable plan mode for a prompt.
 
-This script sets the analyze-enabled flag to true for a specified prompt
+This script sets the plan-enabled flag to true for a specified prompt
 in the work iteration registry. If no prompt-id is provided, it defaults
 to the currently active prompt (one in 'planned' or 'in-progress' state).
 
+When plan mode is enabled, analyze mode is automatically disabled to enforce
+mutual exclusivity.
+
 Usage:
-    python prompt_analyze_on.py [prompt-id=<id>]
+    python prompt_plan_on.py [prompt-id=<id>]
 
 Example:
-    python prompt_analyze_on.py prompt-id=P-003
-    python prompt_analyze_on.py  # Uses active prompt
+    python prompt_plan_on.py prompt-id=P-003
+    python prompt_plan_on.py  # Uses active prompt
 """
 
 import json
@@ -35,12 +38,12 @@ def find_active_prompt(prompts):
     return None
 
 
-def enable_analyze_mode(prompt_id=None):
+def enable_plan_mode(prompt_id=None):
     """
-    Enable analyze mode for the specified prompt.
+    Enable plan mode for the specified prompt.
     
     Args:
-        prompt_id (str, optional): Prompt ID to enable analyze for.
+        prompt_id (str, optional): Prompt ID to enable plan for.
                                    If None, uses the active prompt.
     
     Returns:
@@ -92,40 +95,40 @@ def enable_analyze_mode(prompt_id=None):
     
     # Validate that the prompt is not completed
     if target_prompt.get('state') == 'completed':
-        print(f"ERROR: Cannot enable analyze mode for completed prompt '{prompt_id}'")
-        print("REMEDIATION: Analyze mode can only be enabled for prompts in 'draft', 'planned', or 'in-progress' state.")
+        print(f"ERROR: Cannot enable plan mode for completed prompt '{prompt_id}'")
+        print("REMEDIATION: Plan mode can only be enabled for prompts in 'draft', 'planned', or 'in-progress' state.")
         return 1
     
-    # Enforce mutual exclusivity: disable plan mode if enabled
-    if target_prompt.get('plan-enabled', False):
-        print(f"INFO: Automatically disabling plan mode for prompt '{prompt_id}' (mutual exclusivity)")
-        target_prompt['plan-enabled'] = False
+    # Enforce mutual exclusivity: disable analyze mode if enabled
+    if target_prompt.get('analyze-enabled', False):
+        print(f"INFO: Automatically disabling analyze mode for prompt '{prompt_id}' (mutual exclusivity)")
+        target_prompt['analyze-enabled'] = False
     
-    # Set analyze-enabled to true
-    target_prompt['analyze-enabled'] = True
+    # Set plan-enabled to true
+    target_prompt['plan-enabled'] = True
     
     # Save the updated registry
     try:
         with open(registry_path, 'w', encoding='utf-8') as f:
             json.dump(registry, f, indent=4, ensure_ascii=False)
     except Exception as e:
-        print(f"ERROR: Failed to write work iteration registry: {e}")
+        print(f"ERROR: Failed to save work iteration registry: {e}")
         return 1
     
-    print(f"SUCCESS: Analyze mode enabled for prompt '{prompt_id}'")
+    print(f"SUCCESS: Plan mode enabled for prompt '{prompt_id}'")
     return 0
 
 
 def main():
-    """Main entry point for the script."""
-    # Parse command line arguments
+    """Main entry point."""
+    # Parse command-line arguments
     prompt_id = None
     for arg in sys.argv[1:]:
         if arg.startswith('prompt-id='):
             prompt_id = arg.split('=', 1)[1]
     
-    # Enable analyze mode
-    exit_code = enable_analyze_mode(prompt_id)
+    # Enable plan mode
+    exit_code = enable_plan_mode(prompt_id)
     sys.exit(exit_code)
 
 

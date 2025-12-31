@@ -179,6 +179,7 @@ async function loadPrompts() {
                         <th>Executed</th>
                         <th>Parent ID</th>
                         <th>Analyze Mode</th>
+                        <th>Plan Mode</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -192,6 +193,7 @@ async function loadPrompts() {
         const state = prompt.state || '';
         const parentId = prompt['parent-id'] || '-';
         const analyzeEnabled = prompt['analyze-enabled'] || false;
+        const planEnabled = prompt['plan-enabled'] || false;
         const executed = prompt['executed'] || false;
         
         const stateBadge = getStateBadge(state);
@@ -226,6 +228,24 @@ async function loadPrompts() {
             analyzeToggleHtml = '<span class="text-muted">N/A</span>';
         }
         
+        // Plan toggle (only for non-completed prompts)
+        let planToggleHtml = '';
+        if (state !== 'completed') {
+            const toggleChecked = planEnabled ? 'checked' : '';
+            const toggleId = `plan-toggle-${promptId}`;
+            planToggleHtml = `
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="${toggleId}" 
+                           ${toggleChecked} onchange="togglePlanMode('${promptId}', this.checked)">
+                    <label class="form-check-label" for="${toggleId}">
+                        ${planEnabled ? 'ON' : 'OFF'}
+                    </label>
+                </div>
+            `;
+        } else {
+            planToggleHtml = '<span class="text-muted">N/A</span>';
+        }
+        
         // Complete button (only for in-progress prompts with executed=true)
         let completeButtonHtml = '';
         if (state === 'in-progress') {
@@ -250,6 +270,7 @@ async function loadPrompts() {
                 <td>${executedBadge}</td>
                 <td>${parentId === null ? '-' : '<code>' + parentId + '</code>'}</td>
                 <td>${analyzeToggleHtml}</td>
+                <td>${planToggleHtml}</td>
                 <td>
                     <button class="btn btn-sm btn-${buttonType}" 
                             onclick="openPromptEditor('${promptId}', ${!isEditable})">
@@ -433,6 +454,44 @@ async function toggleAnalyzeMode(promptId, enabled) {
         
         // Revert the toggle state
         const toggleId = `analyze-toggle-${promptId}`;
+        const toggleElement = document.getElementById(toggleId);
+        if (toggleElement) {
+            toggleElement.checked = !enabled;
+        }
+    }
+}
+
+/**
+ * Toggle plan mode for a prompt
+ */
+async function togglePlanMode(promptId, enabled) {
+    const action = enabled ? 'plan_on' : 'plan_off';
+    const params = {
+        'prompt-id': promptId
+    };
+    
+    const result = await executeAction('prompt', action, params);
+    
+    if (result.success) {
+        showAlert('success', `Plan mode ${enabled ? 'enabled' : 'disabled'} for prompt ${promptId}`);
+        
+        // Update the label next to the toggle
+        const toggleId = `plan-toggle-${promptId}`;
+        const toggleElement = document.getElementById(toggleId);
+        if (toggleElement) {
+            const label = toggleElement.nextElementSibling;
+            if (label) {
+                label.textContent = enabled ? 'ON' : 'OFF';
+            }
+        }
+        
+        // Reload registry to ensure consistency (this will also update analyze toggle if it was auto-disabled)
+        await loadRegistry();
+    } else {
+        showAlert('danger', `Failed to ${enabled ? 'enable' : 'disable'} plan mode: ` + (result.error || result.stderr));
+        
+        // Revert the toggle state
+        const toggleId = `plan-toggle-${promptId}`;
         const toggleElement = document.getElementById(toggleId);
         if (toggleElement) {
             toggleElement.checked = !enabled;

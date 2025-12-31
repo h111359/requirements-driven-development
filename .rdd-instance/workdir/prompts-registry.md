@@ -41,3 +41,7 @@ TBD
 %%PROMPT P-011 "Remove git_commit.py"
 TBD
 %%ENDPROMPT
+
+%%PROMPT P-012 "Plan mode"
+TBD
+%%ENDPROMPT
