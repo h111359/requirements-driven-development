@@ -37,3 +37,7 @@ TBD
 %%PROMPT P-010 "Set complete status before git commit command"
 TBD
 %%ENDPROMPT
+
+%%PROMPT P-011 "Remove git_commit.py"
+TBD
+%%ENDPROMPT

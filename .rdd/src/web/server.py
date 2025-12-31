@@ -3,7 +3,7 @@
 
 A lightweight HTTP server providing a web-based interface for RDD framework operations.
 Uses Python standard library components, binds to localhost, and provides REST-like
-JSON endpoints for managing prompts, workdir, and git operations.
+JSON endpoints for managing prompts and workdir operations.
 
 Features:
   - Session token authentication for operations
@@ -106,7 +106,7 @@ class RDDWebHandler(http.server.SimpleHTTPRequestHandler):
         """Execute an RDD action script.
         
         Args:
-            domain: Action domain (prompt, workdir, git).
+            domain: Action domain (prompt, workdir).
             action: Action name (create, list, etc.).
             params: Parameters to pass to the action.
             

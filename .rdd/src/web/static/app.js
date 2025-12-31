@@ -57,8 +57,6 @@ function showSection(sectionName) {
     // Load section-specific data
     if (sectionName === 'workdir') {
         loadIterationStatus();
-    } else if (sectionName === 'git') {
-        loadGitStatus();
     }
 }
 
@@ -461,12 +459,6 @@ async function completePrompt(promptId) {
         
         // Reload prompts list
         await loadPrompts();
-        
-        // Reload git status if on git section
-        const gitSection = document.getElementById('section-git');
-        if (gitSection && gitSection.style.display !== 'none') {
-            await loadGitStatus();
-        }
     } else {
         showAlert('danger', `Failed to complete prompt: ` + (result.error || result.stderr));
     }
@@ -541,67 +533,6 @@ async function loadIterationStatus() {
             
             <dt class="col-sm-3">Next Prompt ID:</dt>
             <dd class="col-sm-9"><code>P-${String(currentRegistry['prompt-id-sequence-next-value']).padStart(3, '0')}</code></dd>
-        </dl>
-    `;
-    
-    container.innerHTML = html;
-}
-
-/**
- * Git commit
- */
-async function gitCommit() {
-    const result = await executeAction('git', 'commit', {});
-    
-    if (result.success) {
-        showAlert('success', 'Git commit created successfully');
-        await loadGitStatus();
-    } else {
-        showAlert('danger', 'Failed to create git commit: ' + (result.error || result.stderr));
-    }
-}
-
-/**
- * Load git status
- */
-async function loadGitStatus() {
-    const container = document.getElementById('git-status');
-    container.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>';
-    
-    await loadRegistry();
-    
-    if (!currentRegistry || !currentRegistry.prompts) {
-        container.innerHTML = '<p class="text-warning">No work iteration found.</p>';
-        return;
-    }
-    
-    // Find active prompt
-    const activePrompt = currentRegistry.prompts.find(p => 
-        p.state === 'planned' || p.state === 'in-progress'
-    );
-    
-    if (!activePrompt) {
-        container.innerHTML = '<p class="text-warning">No active prompt found (no prompt in planned or in-progress state).</p>';
-        return;
-    }
-    
-    const promptId = activePrompt['prompt-id'];
-    const title = activePrompt.title || activePrompt['prompt-title'] || '';
-    const state = activePrompt.state || '';
-    
-    const html = `
-        <dl class="row mb-0">
-            <dt class="col-sm-3">Prompt ID:</dt>
-            <dd class="col-sm-9"><code>${promptId}</code></dd>
-            
-            <dt class="col-sm-3">Title:</dt>
-            <dd class="col-sm-9">${escapeHtml(title)}</dd>
-            
-            <dt class="col-sm-3">State:</dt>
-            <dd class="col-sm-9">${getStateBadge(state)}</dd>
-            
-            <dt class="col-sm-3">Commit Message:</dt>
-            <dd class="col-sm-9"><code>${currentRegistry['iteration-id']}_${promptId}_${title}</code></dd>
         </dl>
     `;
     
