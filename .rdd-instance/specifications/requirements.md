@@ -142,6 +142,12 @@ The framework enables:
 
 - [UR-20251231-0103] The framework shall support optional git integration during prompt completion, controlled by a global configuration flag.
 
+- [UR-20251231-1600] The framework shall provide easy-to-use launcher scripts for starting the Web UI on both Windows and Linux platforms without requiring manual terminal commands.
+
+- [UR-20251231-1601] The Web UI launchers shall automatically open the default web browser when the server starts successfully.
+
+- [UR-20251231-1602] The Web UI shall provide a shutdown button to allow users to stop the server without using terminal commands.
+
 
 
 ## Technical Requirements
@@ -355,3 +361,15 @@ The framework enables:
 - [TR-20251231-0206] The plan execution step shall automatically invoke the prompt_plan_off.py script after completing the plan generation to disable the plan flag.
 
 - [TR-20251231-0207] When enabling plan mode, the system shall automatically disable analyze mode if it is currently enabled, and vice versa, to enforce mutual exclusivity.
+
+- [TR-20251231-1600] The framework shall provide launcher scripts `run.bat` for Windows and `run.sh` for Linux located in the `.rdd/` directory.
+
+- [TR-20251231-1601] The launcher scripts shall execute `.rdd/src/web/server.py` using the `python` command with automatic browser opening enabled.
+
+- [TR-20251231-1602] The launcher scripts shall display clear error messages and keep the console/terminal window open when errors occur to allow users to read the error information.
+
+- [TR-20251231-1603] The Web UI server shall support automatic detection of available ports and use a fallback mechanism if the default port is occupied.
+
+- [TR-20251231-1604] The Web UI shall implement a POST /api/shutdown endpoint that gracefully stops the web server when invoked.
+
+- [TR-20251231-1605] The Linux launcher script `run.sh` shall include proper shebang (`#!/bin/bash`) and require executable permissions to be set before use.

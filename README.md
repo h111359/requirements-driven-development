@@ -94,12 +94,33 @@ Add in `.vscode/settings.json` the following entries (if not exist already):
 
 ## 🎯 Start RDD
 
-- Start the application running (from the root folder of the repo) 
-```
+There are multiple ways to start the RDD Web UI:
+
+### Quick Start (Double-Click Launch)
+
+The easiest way to start the RDD Web UI is using the platform-specific launcher scripts:
+
+**Windows:**
+- Navigate to the `.rdd/` folder in your repository
+- Double-click `run.bat`
+- The Web UI will automatically open in your default browser
+
+**Linux:**
+- Navigate to the `.rdd/` folder in your repository
+- Double-click `run.sh` (or run `./run.sh` from terminal)
+- Ensure the script is executable: `chmod +x .rdd/run.sh`
+- The Web UI will automatically open in your default browser
+
+### Alternative Methods
+
+You can also start RDD using the following commands from the root folder of your repository:
+
+**Using rdd.py:**
+```bash
 python .rdd/src/rdd.py
 ```
 
-Alternatively you can run:
+**Using platform-specific scripts:**
 
 Windows:
 ```
@@ -108,10 +129,19 @@ Windows:
 
 Linux:
 ```
-.rdd/src/rdd.bat
+.rdd/src/rdd.sh
 ```
 
-- When you start the application, a Web UI will be opened in your browser. You can find the user guide in the menu of the Web UI.
+### Stopping the Server
+
+When you're done using the RDD Web UI, you can stop the server in two ways:
+
+1. **From the Web UI**: Click the "Shutdown" button in the navigation bar
+2. **From the terminal**: Press `Ctrl+C` in the terminal window where the server is running
+
+### Web UI
+
+When you start the application, the Web UI will automatically open in your browser at `http://127.0.0.1:8080/`. You can find the user guide in the menu of the Web UI.
 
 
 ## 📄 License

@@ -45,3 +45,7 @@ TBD
 %%PROMPT P-012 "Plan mode"
 TBD
 %%ENDPROMPT
+
+%%PROMPT P-013 "Requirements add script"
+TBD
+%%ENDPROMPT

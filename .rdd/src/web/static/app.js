@@ -839,3 +839,40 @@ function updateEditorPermissions() {
         }
     });
 }
+
+/**
+ * Shutdown the server
+ */
+async function shutdownServer() {
+    if (!confirm('Are you sure you want to shutdown the RDD Web Server?')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/shutdown', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('success', 'Server is shutting down. You can close this window.');
+            // Disable all UI elements after shutdown
+            document.body.innerHTML = '<div class="container mt-5 text-center"><h2>Server Shutdown</h2><p>The RDD Web Server has been shut down. You can close this window.</p></div>';
+        } else {
+            showAlert('danger', `Failed to shutdown server: ${result.error}`);
+        }
+    } catch (error) {
+        // Server likely already shut down, which is expected
+        showAlert('success', 'Server shutdown initiated. You can close this window.');
+        setTimeout(() => {
+            document.body.innerHTML = '<div class="container mt-5 text-center"><h2>Server Shutdown</h2><p>The RDD Web Server has been shut down. You can close this window.</p></div>';
+        }, 1000);
+    }
+}

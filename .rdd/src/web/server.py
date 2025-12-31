@@ -58,6 +58,8 @@ class RDDWebHandler(http.server.SimpleHTTPRequestHandler):
     
     # Class-level session token (generated on server startup)
     session_token: str = ""
+    # Class-level shutdown flag
+    shutdown_requested: bool = False
     
     def __init__(self, *args, **kwargs):
         """Initialize handler with the web directory as base."""
@@ -270,7 +272,19 @@ class RDDWebHandler(http.server.SimpleHTTPRequestHandler):
             self.send_error_response("Invalid JSON in request body")
             return
         
-        # Verify session token for all POST requests
+        # Handle shutdown before token verification to allow graceful shutdown
+        if path == "/api/shutdown":
+            # Verify session token for shutdown
+            if not self.verify_session_token(params):
+                self.send_error_response("Invalid session token", 403)
+                return
+            # Shutdown the server
+            print("\nShutdown request received from Web UI")
+            RDDWebHandler.shutdown_requested = True
+            self.send_json_response({"success": True, "message": "Server shutdown initiated"})
+            return
+        
+        # Verify session token for all other POST requests
         if not self.verify_session_token(params):
             self.send_error_response("Invalid session token", 403)
             return
@@ -335,9 +349,12 @@ def main() -> int:
     # Generate session token
     session_token = secrets.token_urlsafe(32)
     RDDWebHandler.session_token = session_token
+    RDDWebHandler.shutdown_requested = False  # Reset shutdown flag
     
-    # Create server
+    # Create server with socket reuse
     try:
+        # Allow immediate socket reuse to prevent "Address already in use" errors
+        socketserver.TCPServer.allow_reuse_address = True
         with socketserver.TCPServer(("127.0.0.1", port), RDDWebHandler) as httpd:
             url = f"http://127.0.0.1:{port}/"
             print(f"RDD Web Interface")
@@ -356,8 +373,15 @@ def main() -> int:
                 print(f"Could not open browser automatically: {e}")
                 print(f"Please open {url} manually")
             
-            # Serve requests
-            httpd.serve_forever()
+            # Serve requests with shutdown check
+            httpd.timeout = 0.5  # Check for shutdown every 0.5 seconds
+            while not RDDWebHandler.shutdown_requested:
+                httpd.handle_request()
+            
+            # Explicitly shutdown the server
+            httpd.server_close()
+            print("Server stopped")
+            return 0
     
     except KeyboardInterrupt:
         print("\nServer stopped")

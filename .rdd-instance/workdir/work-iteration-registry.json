@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 13,
+    "prompt-id-sequence-next-value": 14,
     "git-enabled": true,
     "prompts": [
         {
@@ -249,6 +249,28 @@
         {
             "prompt-id": "P-012",
             "title": "Plan mode",
+            "type": "main",
+            "state": "completed",
+            "parent-id": null,
+            "analysis": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "questionnaire": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "plan": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "analyze-enabled": false,
+            "plan-enabled": false,
+            "executed": true
+        },
+        {
+            "prompt-id": "P-013",
+            "title": "Requirements add script",
             "type": "main",
             "state": "completed",
             "parent-id": null,
