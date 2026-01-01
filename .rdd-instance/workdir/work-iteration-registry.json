@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 20,
+    "prompt-id-sequence-next-value": 21,
     "git-enabled": true,
     "prompts": [
         {
@@ -207,6 +207,17 @@
         {
             "prompt-id": "P-019",
             "prompt-title": "Move create new prompt button and make Active Prompt page the landing page",
+            "state": "completed",
+            "questionnaire-generated": false,
+            "questionnaire-answered": false,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
+        },
+        {
+            "prompt-id": "P-020",
+            "prompt-title": "View button in Prompt History page is not working",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,

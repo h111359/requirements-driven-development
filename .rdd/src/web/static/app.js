@@ -780,8 +780,153 @@ async function saveActivePromptFile(filename) {
  * View completed prompt (opens modal with read-only view)
  */
 async function viewCompletedPrompt(promptId) {
-    // For now, reuse the existing openPromptEditor with view-only mode
-    await openPromptEditor(promptId, true);
+    // Find prompt details from registry
+    await loadRegistry();
+    const prompt = currentRegistry.prompts.find(p => p['prompt-id'] === promptId);
+    
+    if (!prompt) {
+        showAlert('danger', 'Prompt not found: ' + promptId);
+        return;
+    }
+    
+    const title = prompt.title || prompt['prompt-title'] || '';
+    const promptFolder = `workdir/${promptId}_${title}`;
+    
+    // Update modal title
+    document.getElementById('view-completed-prompt-title').textContent = 
+        `View Prompt: ${promptId} - ${title}`;
+    
+    // Load all files into the modal
+    const files = ['prompt.md', 'plan.md', 'questionnaire.md', 'implementation.md'];
+    
+    for (const file of files) {
+        const filepath = `${promptFolder}/${file}`;
+        const elementId = `view-editor-${file.replace('.', '-')}`;
+        
+        try {
+            const encodedFilepath = encodeURIComponent(filepath);
+            const response = await fetch('/api/file/' + encodedFilepath + '?token=' + sessionToken);
+            const result = await response.json();
+            
+            const textarea = document.getElementById(elementId);
+            if (textarea) {
+                if (result.success) {
+                    textarea.value = result.content || '';
+                } else {
+                    textarea.value = '';
+                }
+            }
+        } catch (error) {
+            console.error(`Error loading ${file}:`, error);
+            const textarea = document.getElementById(elementId);
+            if (textarea) {
+                textarea.value = '';
+            }
+        }
+    }
+    
+    // Load modifications if any
+    await loadCompletedPromptModifications(promptId, promptFolder);
+    
+    // Show the modal
+    const modal = new bootstrap.Modal(document.getElementById('viewCompletedPromptModal'));
+    modal.show();
+}
+
+/**
+ * Load modifications for a completed prompt
+ */
+async function loadCompletedPromptModifications(promptId, promptFolder) {
+    const container = document.getElementById('view-modifications-list-container');
+    
+    await loadRegistry();
+    const prompt = currentRegistry.prompts.find(p => p['prompt-id'] === promptId);
+    
+    if (!prompt) {
+        container.innerHTML = '<p class="text-muted">No modifications.</p>';
+        return;
+    }
+    
+    const modificationsCount = prompt['modifications-count'] || 0;
+    
+    if (modificationsCount === 0) {
+        container.innerHTML = '<p class="text-muted">No modifications.</p>';
+        return;
+    }
+    
+    let html = '<div class="list-group">';
+    
+    for (let i = 1; i <= modificationsCount; i++) {
+        const modFile = `modification-${i}.md`;
+        const modImplFile = `modification-${i}-implementation.md`;
+        const filepath = `${promptFolder}/${modFile}`;
+        
+        try {
+            const encodedFilepath = encodeURIComponent(filepath);
+            const response = await fetch('/api/file/' + encodedFilepath + '?token=' + sessionToken);
+            const result = await response.json();
+            
+            const content = result.success ? (result.content || 'No content') : 'File not found';
+            const preview = content.substring(0, 200) + (content.length > 200 ? '...' : '');
+            
+            html += `
+                <div class="list-group-item">
+                    <h6 class="mb-1">Modification ${i}</h6>
+                    <p class="mb-1 font-monospace small">${escapeHtml(preview)}</p>
+                    <button class="btn btn-sm btn-outline-primary mt-2" 
+                            onclick="viewModificationDetails('${promptFolder}', ${i})">
+                        <i class="bi bi-eye"></i> View Details
+                    </button>
+                </div>
+            `;
+        } catch (error) {
+            console.error(`Error loading modification ${i}:`, error);
+        }
+    }
+    
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+/**
+ * View modification details (can be enhanced with a sub-modal if needed)
+ */
+async function viewModificationDetails(promptFolder, modId) {
+    const modFile = `modification-${modId}.md`;
+    const modImplFile = `modification-${modId}-implementation.md`;
+    
+    let details = `=== Modification ${modId} ===\n\n`;
+    
+    // Load modification description
+    try {
+        const filepath = `${promptFolder}/${modFile}`;
+        const encodedFilepath = encodeURIComponent(filepath);
+        const response = await fetch('/api/file/' + encodedFilepath + '?token=' + sessionToken);
+        const result = await response.json();
+        
+        if (result.success) {
+            details += `Description:\n${result.content}\n\n`;
+        }
+    } catch (error) {
+        details += `Description: Error loading\n\n`;
+    }
+    
+    // Load modification implementation
+    try {
+        const filepath = `${promptFolder}/${modImplFile}`;
+        const encodedFilepath = encodeURIComponent(filepath);
+        const response = await fetch('/api/file/' + encodedFilepath + '?token=' + sessionToken);
+        const result = await response.json();
+        
+        if (result.success) {
+            details += `Implementation:\n${result.content}\n`;
+        }
+    } catch (error) {
+        details += `Implementation: Error loading\n`;
+    }
+    
+    // Show in alert (can be enhanced with a better modal)
+    alert(details);
 }
 
 /**

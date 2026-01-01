@@ -73,3 +73,7 @@ TBD
 %%PROMPT P-019 "Move create new prompt button and make Active Prompt page the landing page"
 TBD
 %%ENDPROMPT
+
+%%PROMPT P-020 "View button in Prompt History page is not working"
+TBD
+%%ENDPROMPT

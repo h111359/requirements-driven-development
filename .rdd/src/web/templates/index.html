@@ -490,6 +490,93 @@
         </div>
     </div>
 
+    <!-- View Completed Prompt Modal -->
+    <div class="modal fade" id="viewCompletedPromptModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="view-completed-prompt-title">View Prompt</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Tab Navigation -->
+                    <ul class="nav nav-tabs mb-3" id="completed-prompt-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="completed-prompt-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#completed-prompt-content-tab" type="button" role="tab">
+                                <i class="bi bi-file-text"></i> Prompt
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="completed-plan-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#completed-plan-content-tab" type="button" role="tab">
+                                <i class="bi bi-list-check"></i> Plan
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="completed-questionnaire-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#completed-questionnaire-content-tab" type="button" role="tab">
+                                <i class="bi bi-question-circle"></i> Questionnaire
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="completed-implementation-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#completed-implementation-content-tab" type="button" role="tab">
+                                <i class="bi bi-code-square"></i> Implementation
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="completed-modifications-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#completed-modifications-content-tab" type="button" role="tab">
+                                <i class="bi bi-pencil-square"></i> Modifications
+                            </button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="completed-prompt-tab-content">
+                        <div class="tab-pane fade show active" id="completed-prompt-content-tab" role="tabpanel">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">prompt.md</label>
+                                <textarea class="form-control font-monospace" id="view-editor-prompt-md" 
+                                          rows="20" style="font-size: 14px;" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="completed-plan-content-tab" role="tabpanel">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">plan.md</label>
+                                <textarea class="form-control font-monospace" id="view-editor-plan-md" 
+                                          rows="20" style="font-size: 14px;" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="completed-questionnaire-content-tab" role="tabpanel">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">questionnaire.md</label>
+                                <textarea class="form-control font-monospace" id="view-editor-questionnaire-md" 
+                                          rows="20" style="font-size: 14px;" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="completed-implementation-content-tab" role="tabpanel">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">implementation.md</label>
+                                <textarea class="form-control font-monospace" id="view-editor-implementation-md" 
+                                          rows="20" style="font-size: 14px;" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="completed-modifications-content-tab" role="tabpanel">
+                            <div id="view-modifications-list-container">
+                                <p class="text-muted">No modifications.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
