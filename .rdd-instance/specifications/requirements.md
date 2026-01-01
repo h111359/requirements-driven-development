@@ -170,6 +170,10 @@ The framework enables:
 
 - [UR-20260101-1617] The framework shall provide a "modification" execution mode that executes the current modification and logs implementation details to a modification-specific implementation file.
 
+- [UR-20260102-0100] The Web UI shall display the "Active Prompt" page as the default landing page when the web portal opens, with "Active Prompt" appearing as the leftmost navigation menu item.
+
+- [UR-20260102-0101] The Web UI shall provide the "Create New Prompt" button on the Active Prompt page to enable quick prompt creation from the primary workspace.
+
 
 
 ## Technical Requirements

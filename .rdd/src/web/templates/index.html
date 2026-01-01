@@ -24,13 +24,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#" onclick="showSection('prompts-history')">
-                            <i class="bi bi-clock-history"></i> Prompts History
+                        <a class="nav-link active" href="#" onclick="showSection('active-prompt')">
+                            <i class="bi bi-journal-check"></i> Active Prompt
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="showSection('active-prompt')">
-                            <i class="bi bi-journal-check"></i> Active Prompt
+                        <a class="nav-link" href="#" onclick="showSection('prompts-history')">
+                            <i class="bi bi-clock-history"></i> Prompts History
                         </a>
                     </li>
                     <li class="nav-item">
@@ -59,7 +59,7 @@
         <div id="alert-container"></div>
 
         <!-- Prompts History Section -->
-        <div id="section-prompts-history" class="section">
+        <div id="section-prompts-history" class="section" style="display:none;">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -68,9 +68,6 @@
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <button class="btn btn-success" onclick="showCreatePromptModal()">
-                                    <i class="bi bi-plus-circle"></i> Create New Prompt
-                                </button>
                                 <button class="btn btn-primary" onclick="loadPromptsHistory()">
                                     <i class="bi bi-arrow-clockwise"></i> Refresh
                                 </button>
@@ -86,7 +83,7 @@
         </div>
 
         <!-- Active Prompt Section -->
-        <div id="section-active-prompt" class="section" style="display:none;">
+        <div id="section-active-prompt" class="section">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -94,11 +91,17 @@
                             <h5 id="active-prompt-title"><i class="bi bi-journal-check"></i> Active Prompt</h5>
                         </div>
                         <div class="card-body">
+                            <div class="mb-3">
+                                <button class="btn btn-success" onclick="showCreatePromptModal()">
+                                    <i class="bi bi-plus-circle"></i> Create New Prompt
+                                </button>
+                            </div>
+
                             <!-- No Active Prompt Message -->
                             <div id="no-active-prompt-message" style="display:none;">
                                 <div class="alert alert-info">
                                     <i class="bi bi-info-circle"></i> 
-                                    No active prompt. Create a new prompt from the <a href="#" onclick="showSection('prompts-history')">Prompts History</a> page.
+                                    No active prompt. Use the button above to create a new prompt.
                                 </div>
                             </div>
 

@@ -69,3 +69,7 @@ TBD
 %%PROMPT P-018 "Implement Modifications accordingly P-017"
 TBD
 %%ENDPROMPT
+
+%%PROMPT P-019 "Move create new prompt button and make Active Prompt page the landing page"
+TBD
+%%ENDPROMPT

@@ -25,7 +25,7 @@ async function initializeApp() {
         
         // Load initial data
         await loadRegistry();
-        await loadPromptsHistory();
+        await loadActivePrompt();
         
         showAlert('success', 'Application initialized successfully');
     } catch (error) {
