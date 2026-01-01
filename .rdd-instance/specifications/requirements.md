@@ -385,3 +385,4 @@ The framework enables:
 - [TR-20251231-0701] The framework shall allow bidirectional state transitions between `active` and `completed` states without restrictions.
 
 - [TR-20251231-0702] The `prompt_create.py` script shall validate that no other prompt is in `active` state when creating a new prompt, and shall fail with a clear error message if validation fails.
+- [TR-20260101-1000] The framework shall not distinguish between different types of prompts. All prompts shall be treated equally without type classification or parent-child relationships.

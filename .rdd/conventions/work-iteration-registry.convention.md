@@ -21,8 +21,6 @@ When a new prompt is created:
 Validation rules during prompt creation:
 
 - If creating a prompt with state `active`, the tool MUST validate that no other prompt currently has state `active`.
-- If `type` is `main`, then `parent-id` MUST be `null`.
-- If `type` is `modification`, then `parent-id` MUST reference an existing prompt in `prompts` with `type` = `main`.
 
 ## File format
 
@@ -61,13 +59,11 @@ The JSON file MUST be an object with the following keys:
 * **Meaning:** Registry-owned **prompt definitions** for the current iteration, used by tooling (JS app, scripts, Copilot) to:
 
   * list of `prompt-metadata` objects
-  * resolve parent chains
   * map prompt IDs to prompt text in the '.rdd-instance/workdir/prompts-registry.md` file
   * associate questionnaire references (without embedding questionnaire content)
   * define capabilities/default execution semantics per prompt
 * **Type:** array of `prompt-metadata` objects
 * **Uniqueness constraint:** each `id` MUST be unique within the array
-* **Ordering:** recommended topological (roots first), but not required if `parent-id` is resolvable
 
 
 ### `prompt-metadata` (object)
@@ -82,18 +78,9 @@ The JSON file MUST be an object with the following keys:
   * Free text up to 128 chars
   * In case of difference of titles of same prompt id in comparison with `.rdd-instance/workdir/prompts-registry.md`, the title in `.rdd-instance/workdir/work-iteration-registry.json` shall be treated as the source of truth
 
-* `type` (string)
-  * **Meaning** - Defines if the prompt is from type `main` or `modification`
-  * Possible values: ["main" | "modification"]
-
 * `state` (string)
   * **Meaning** - Defines if the prompt is currently active or completed. Only one prompt can be in `active` state at a given time, and this is the prompt which `execute command` (as defined in `.rdd-instance/specifications/requirements.md`) will run.
   * Possible values: ["active" | "completed"]  
-
-* `parent-id` (string | null)
-  * **Meaning** - The prompts could be type `main` or type `modification`. When the type is `main`, it does not rely on other prompts for its definition. The definition of the `modification` prompts is always a union of `main` prompt + previously executed `modification` prompts referred tp the same `main` prompt and the current modification own definition.
-  * `null` for `main` prompts (not dependent)
-  * Otherwise must reference a `main` prompt `id` in the same `prompts` array
 
 * `analysis` (object)
   * **Meaning:**: Each prompt will generate a file `analysis.md` where will be stored the results of analysis of the prompt, the related requirements, found additional information, etc. Two keys manage the behavior of the execution - will the user be waited to approve the analysis or to proceed automatically.
@@ -145,9 +132,7 @@ The following is the canonical baseline structure (values may be empty during in
     {
       "prompt-id": "P-001",
       "prompt-title": "Baseline problem statement",
-      "type": "main",
-      "state": "completed",      
-      "parent-id": null,
+      "state": "completed",
       "analysis": {"approval": true, "state": "completed"},
       "questionnaire": {"approval": true, "state": "completed"},
       "plan": {"approval": true, "state": "completed"},
@@ -157,9 +142,7 @@ The following is the canonical baseline structure (values may be empty during in
     {
       "prompt-id": "P-002",
       "prompt-title": "Add architectural constraints",
-      "type": "modification",      
-      "state": "completed",         
-      "parent-id": "P-001",
+      "state": "completed",
       "analysis": {"approval": false, "state": "completed"},
       "questionnaire": {"approval": false, "state": "completed"},
       "plan": {"approval": true, "state": "approved"},
@@ -169,9 +152,7 @@ The following is the canonical baseline structure (values may be empty during in
     {
       "prompt-id": "P-003",
       "prompt-title": "Decision-oriented output",
-      "type": "modification",        
-      "state": "active",             
-      "parent-id": "P-001",
+      "state": "active",
       "analysis": {"approval": false, "state": "completed"},
       "questionnaire": {"approval": true, "state": "approved"},
       "plan": {"approval": true, "state": "waiting-approval"},
@@ -181,9 +162,7 @@ The following is the canonical baseline structure (values may be empty during in
     {
       "prompt-id": "P-004",
       "prompt-title": "Add logging",
-      "type": "main",     
-      "state": "completed",               
-      "parent-id": null,
+      "state": "completed",
       "analysis": {"approval": false, "state": "not-started"},
       "questionnaire": {"approval": true, "state": "not-started"},
       "plan": {"approval": false, "state": "not-started"},

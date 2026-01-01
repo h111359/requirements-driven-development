@@ -13,8 +13,8 @@ Behavior:
 This script is intentionally deterministic and non-interactive.
 
 Usage (named parameters):
-  prompt_create.py title="<title>" type=<main|modification> [state=<active|completed>] \
-      [id=P-001] [parent-id=P-001|parent_id=P-001|parent-id=null] \
+  prompt_create.py title="<title>" [state=<active|completed>] \
+      [id=P-001] \
       [analysis-approval=true|false] [analysis-state=<not-started|waiting-approval|approved|completed>] \
       [questionnaire-approval=true|false] [questionnaire-state=<not-started|waiting-approval|approved|completed>] \
       [plan-approval=true|false] [plan-state=<not-started|waiting-approval|approved|completed>]
@@ -34,7 +34,6 @@ from typing import Any, Dict, Optional
 
 _PROMPT_ID_RE = re.compile(r"^P-[0-9]{3,}$")
 
-_PROMPT_TYPES = {"main", "modification"}
 _PROMPT_STATES = {"active", "completed"}
 _ARTIFACT_STATES = {"not-started", "waiting-approval", "approved", "completed"}
 
@@ -182,21 +181,9 @@ def main() -> int:
     if len(title) > 128:
         raise ValueError("Title must be <= 128 characters")
 
-    prompt_type = _get_param(params, "type")
-    if not prompt_type or prompt_type.strip() not in _PROMPT_TYPES:
-        raise ValueError(f"'type' required; expected one of {sorted(_PROMPT_TYPES)}")
-    prompt_type = prompt_type.strip()
-
     state = (_get_param(params, "state") or "active").strip()
     if state not in _PROMPT_STATES:
         raise ValueError(f"Invalid prompt state {state!r}; expected one of {sorted(_PROMPT_STATES)}")
-
-    parent_id_raw = _get_param(params, "parent-id", "parent_id")
-    parent_id: Optional[str]
-    if parent_id_raw is None or parent_id_raw.strip().lower() == "null" or parent_id_raw.strip() == "":
-        parent_id = None
-    else:
-        parent_id = parent_id_raw.strip()
 
     repo_root = _repo_root()
     workdir = repo_root / ".rdd-instance" / "workdir"
@@ -244,21 +231,6 @@ def main() -> int:
                     f"already active: {p.get('prompt-id')!r}"
                 )
 
-    # Validate parent relationship.
-    if prompt_type == "main":
-        if parent_id is not None:
-            raise ValueError("'parent-id' must be null for type=main")
-    else:
-        if parent_id is None:
-            raise ValueError("'parent-id' is required for type=modification")
-        if parent_id not in existing_ids:
-            raise ValueError(f"'parent-id' must reference an existing main prompt id: {parent_id}")
-        parent_obj = next(
-            (p for p in prompts if isinstance(p, dict) and p.get("prompt-id") == parent_id), None
-        )
-        if not isinstance(parent_obj, dict) or parent_obj.get("type") != "main":
-            raise ValueError(f"'parent-id' must reference a prompt with type=main: {parent_id}")
-
     analysis = _artifact_block(params, "analysis")
     questionnaire = _artifact_block(params, "questionnaire")
     plan = _artifact_block(params, "plan")
@@ -266,9 +238,7 @@ def main() -> int:
     prompt_metadata: Dict[str, Any] = {
         "prompt-id": prompt_id,
         "title": title,
-        "type": prompt_type,
         "state": state,
-        "parent-id": parent_id,
         "analysis": analysis,
         "questionnaire": questionnaire,
         "plan": plan,

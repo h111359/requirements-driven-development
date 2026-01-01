@@ -195,7 +195,6 @@ def _prompt_for_parameters(action_key: str) -> List[str]:
     param_specs = {
         "prompt.create": [
             {"name": "title", "prompt": "Enter prompt title", "required": True},
-            {"name": "type", "prompt": "Enter prompt type (main/modification)", "required": True, "default": "main"},
         ],
         "prompt.set-state": [
             {"name": "state", "prompt": "Enter new state (active/completed)", "required": True},

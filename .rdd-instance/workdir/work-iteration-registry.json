@@ -1,15 +1,13 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 15,
+    "prompt-id-sequence-next-value": 16,
     "git-enabled": true,
     "prompts": [
         {
             "prompt-id": "P-001",
             "prompt-title": "Baseline problem statement",
-            "type": "main",
             "state": "completed",
-            "parent-id": null,
             "analysis": {
                 "approval": false,
                 "state": "not-started"
@@ -23,15 +21,13 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": false,
+            "executed": true,
             "plan-enabled": false
         },
         {
             "prompt-id": "P-002",
             "title": "prompt-set-state",
-            "type": "main",
             "state": "completed",
-            "parent-id": null,
             "analysis": {
                 "approval": false,
                 "state": "not-started"
@@ -45,15 +41,13 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": false,
+            "executed": true,
             "plan-enabled": false
         },
         {
             "prompt-id": "P-003",
             "title": "CLI",
-            "type": "main",
             "state": "completed",
-            "parent-id": null,
             "analysis": {
                 "approval": false,
                 "state": "not-started"
@@ -67,15 +61,13 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": false,
+            "executed": true,
             "plan-enabled": false
         },
         {
             "prompt-id": "P-004",
             "title": "Add prompt completion with commit command",
-            "type": "main",
             "state": "completed",
-            "parent-id": null,
             "analysis": {
                 "approval": false,
                 "state": "not-started"
@@ -89,15 +81,13 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": false,
+            "executed": true,
             "plan-enabled": false
         },
         {
             "prompt-id": "P-005",
             "title": "Web Interface Draft",
-            "type": "main",
             "state": "completed",
-            "parent-id": null,
             "analysis": {
                 "approval": false,
                 "state": "not-started"
@@ -111,15 +101,13 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": false,
+            "executed": true,
             "plan-enabled": false
         },
         {
             "prompt-id": "P-006",
             "title": "Troubleshoot web interface",
-            "type": "main",
             "state": "completed",
-            "parent-id": null,
             "analysis": {
                 "approval": false,
                 "state": "not-started"
@@ -133,15 +121,13 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": false,
+            "executed": true,
             "plan-enabled": false
         },
         {
             "prompt-id": "P-007",
             "title": "Edit prompt text in Web UI",
-            "type": "main",
             "state": "completed",
-            "parent-id": null,
             "analysis": {
                 "approval": false,
                 "state": "not-started"
@@ -155,15 +141,13 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": false,
+            "executed": true,
             "plan-enabled": false
         },
         {
             "prompt-id": "P-008",
             "title": "Move analyze command in the Web UI",
-            "type": "main",
             "state": "completed",
-            "parent-id": null,
             "analysis": {
                 "approval": false,
                 "state": "not-started"
@@ -177,15 +161,13 @@
                 "state": "not-started"
             },
             "analyze-enabled": false,
-            "executed": false,
+            "executed": true,
             "plan-enabled": false
         },
         {
             "prompt-id": "P-009",
             "title": "Completion operation",
-            "type": "main",
             "state": "completed",
-            "parent-id": null,
             "analysis": {
                 "approval": false,
                 "state": "not-started"
@@ -205,9 +187,7 @@
         {
             "prompt-id": "P-010",
             "title": "Set complete status before git commit command",
-            "type": "main",
             "state": "completed",
-            "parent-id": null,
             "analysis": {
                 "approval": false,
                 "state": "not-started"
@@ -227,9 +207,7 @@
         {
             "prompt-id": "P-011",
             "title": "Remove git_commit.py",
-            "type": "main",
             "state": "completed",
-            "parent-id": null,
             "analysis": {
                 "approval": false,
                 "state": "not-started"
@@ -249,9 +227,7 @@
         {
             "prompt-id": "P-012",
             "title": "Plan mode",
-            "type": "main",
             "state": "completed",
-            "parent-id": null,
             "analysis": {
                 "approval": false,
                 "state": "not-started"
@@ -271,9 +247,7 @@
         {
             "prompt-id": "P-013",
             "title": "Requirements add script",
-            "type": "main",
             "state": "completed",
-            "parent-id": null,
             "analysis": {
                 "approval": false,
                 "state": "not-started"
@@ -293,9 +267,27 @@
         {
             "prompt-id": "P-014",
             "title": "States simplification",
-            "type": "main",
             "state": "completed",
-            "parent-id": null,
+            "analysis": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "questionnaire": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "plan": {
+                "approval": false,
+                "state": "not-started"
+            },
+            "analyze-enabled": false,
+            "plan-enabled": false,
+            "executed": true
+        },
+        {
+            "prompt-id": "P-015",
+            "title": "Remove prompt type",
+            "state": "completed",
             "analysis": {
                 "approval": false,
                 "state": "not-started"

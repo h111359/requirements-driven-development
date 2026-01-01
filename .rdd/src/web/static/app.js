@@ -174,10 +174,8 @@ async function loadPrompts() {
                     <tr>
                         <th>ID</th>
                         <th>Title</th>
-                        <th>Type</th>
                         <th>State</th>
                         <th>Executed</th>
-                        <th>Parent ID</th>
                         <th>Analyze Mode</th>
                         <th>Plan Mode</th>
                         <th>Actions</th>
@@ -189,15 +187,12 @@ async function loadPrompts() {
     prompts.forEach(prompt => {
         const promptId = prompt['prompt-id'];
         const title = prompt.title || prompt['prompt-title'] || '';
-        const type = prompt.type || '';
         const state = prompt.state || '';
-        const parentId = prompt['parent-id'] || '-';
         const analyzeEnabled = prompt['analyze-enabled'] || false;
         const planEnabled = prompt['plan-enabled'] || false;
         const executed = prompt['executed'] || false;
         
         const stateBadge = getStateBadge(state);
-        const typeBadge = getTypeBadge(type);
         
         // Executed badge
         const executedBadge = executed 
@@ -265,10 +260,8 @@ async function loadPrompts() {
             <tr>
                 <td><code>${promptId}</code></td>
                 <td>${escapeHtml(title)}</td>
-                <td>${typeBadge}</td>
                 <td>${stateBadge}</td>
                 <td>${executedBadge}</td>
-                <td>${parentId === null ? '-' : '<code>' + parentId + '</code>'}</td>
                 <td>${analyzeToggleHtml}</td>
                 <td>${planToggleHtml}</td>
                 <td>
@@ -307,17 +300,6 @@ function getStateBadge(state) {
 }
 
 /**
- * Get badge HTML for type
- */
-function getTypeBadge(type) {
-    const badges = {
-        'main': '<span class="badge bg-primary">Main</span>',
-        'modification': '<span class="badge bg-warning text-dark">Modification</span>'
-    };
-    return badges[type] || '<span class="badge bg-light text-dark">' + type + '</span>';
-}
-
-/**
  * Escape HTML to prevent XSS
  */
 function escapeHtml(text) {
@@ -334,9 +316,7 @@ function showCreatePromptModal() {
     
     // Reset form
     document.getElementById('prompt-title').value = '';
-    document.getElementById('prompt-type').value = 'main';
     document.getElementById('prompt-state').value = 'active';
-    document.getElementById('prompt-parent-id').value = '';
     
     modal.show();
 }
@@ -346,9 +326,7 @@ function showCreatePromptModal() {
  */
 async function createPrompt() {
     const title = document.getElementById('prompt-title').value.trim();
-    const type = document.getElementById('prompt-type').value;
     const state = document.getElementById('prompt-state').value;
-    const parentId = document.getElementById('prompt-parent-id').value.trim();
     
     if (!title) {
         showAlert('warning', 'Please enter a prompt title');
@@ -357,13 +335,8 @@ async function createPrompt() {
     
     const params = {
         title: title,
-        type: type,
         state: state
     };
-    
-    if (parentId) {
-        params['parent-id'] = parentId;
-    }
     
     const result = await executeAction('prompt', 'create', params);
     

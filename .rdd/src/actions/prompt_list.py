@@ -83,11 +83,8 @@ def _format_prompt_table(prompts: List[Dict[str, Any]]) -> None:
     state_width = max(len(p.get("state", "")) for p in prompts)
     state_width = max(state_width, len("State"))
     
-    type_width = max(len(p.get("type", "")) for p in prompts)
-    type_width = max(type_width, len("Type"))
-    
     # Print header
-    header = f"{'ID':<{id_width}}  {'Title':<{title_width}}  {'State':<{state_width}}  {'Type':<{type_width}}"
+    header = f"{'ID':<{id_width}}  {'Title':<{title_width}}  {'State':<{state_width}}"
     print(header)
     print("=" * len(header))
     
@@ -96,9 +93,8 @@ def _format_prompt_table(prompts: List[Dict[str, Any]]) -> None:
         prompt_id = p.get("prompt-id", "")
         title = p.get("title", p.get("prompt-title", ""))
         state = p.get("state", "")
-        ptype = p.get("type", "")
         
-        print(f"{prompt_id:<{id_width}}  {title:<{title_width}}  {state:<{state_width}}  {ptype:<{type_width}}")
+        print(f"{prompt_id:<{id_width}}  {title:<{title_width}}  {state:<{state_width}}")
 
 
 def main() -> int:

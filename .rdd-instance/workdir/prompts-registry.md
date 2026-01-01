@@ -53,3 +53,7 @@ TBD
 %%PROMPT P-014 "States simplification"
 TBD
 %%ENDPROMPT
+
+%%PROMPT P-015 "Remove prompt type"
+TBD
+%%ENDPROMPT
