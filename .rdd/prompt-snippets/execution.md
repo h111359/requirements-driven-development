@@ -33,15 +33,32 @@
    
 4. Check if there are questions and answers in the [QUESTIONNAIRE]. If there are, you shall comply with the chosen answers in the next steps.
 
-5. Check if the active prompt has `analyze-enabled` set to `true` in [WI-REGISTRY]. If it is set to true:
-   * Write in the chat "Analyze mode" 
-   * then follow the instructions in `.rdd/prompt-snippets/execution-step.analyze.md` and stop (do not continue with the next instructions here)
-
-5.5. Check if the active prompt has `plan-enabled` set to `true` in [WI-REGISTRY]. If it is set to true:
-   * Write in the chat "Plan mode" 
-   * then follow the instructions in `.rdd/prompt-snippets/execution-step.plan.md`
-   * after the plan execution is completed, execute `.rdd/src/actions/prompt_plan_off.py` to automatically disable plan mode
-   * stop (do not continue with the next instructions here - do not execute implementation step)
+5. Read the `execution-mode` attribute of the active prompt from [WI-REGISTRY]. Based on the value:
+   
+   * If `execution-mode` is `"no-action"`:
+     * Write in the chat "No action mode selected"
+     * Stop execution and inform the user to set a different execution mode via the Web UI or CLI
+   
+   * If `execution-mode` is `"analyze"`:
+     * Write in the chat "Analyze mode"
+     * Follow the instructions in `.rdd/prompt-snippets/execution-step.analyze.md`
+     * After analyze execution is completed, execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
+     * Stop (do not continue with the next instructions here)
+   
+   * If `execution-mode` is `"plan"`:
+     * Write in the chat "Plan mode"
+     * Follow the instructions in `.rdd/prompt-snippets/execution-step.plan.md`
+     * After plan execution is completed, execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
+     * Stop (do not continue with the next instructions here - do not execute implementation step)
+   
+   * If `execution-mode` is `"implement"`:
+     * Write in the chat "Implementation mode"
+     * Follow the instructions in `.rdd/prompt-snippets/execution-step.implementation.md`
+     * After implementation is completed:
+       - Execute `.rdd/src/actions/prompt_set_executed_on.py`
+       - Execute `.rdd/src/actions/prompt_implementation_completed_on.py`
+       - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
+     * Stop (do not continue with the next instructions here)
 
 6. If the user has added a [MODIFIER]
   
@@ -50,11 +67,7 @@
      *   Write in the chat "Modification <ID>" 
      *  Execute the instruction of the modification and stop (do not continue with the next instructions here)
 
-7. If there is no modifier detected and analyze mode is not enabled - 
-   * Write in the chat "No modifiers detected"
-   * follow the instructions in `.rdd/prompt-snippets/execution-step.plan.md`
-   * then follow the instructions in `.rdd/prompt-snippets/execution-step.implementation.md`
-   * after the implementation is completed, execute `.rdd/src/actions/prompt_set_executed_on.py`
+7. (This step should not be reached in normal execution flow - execution mode should have been checked in step 5)
 
 
 

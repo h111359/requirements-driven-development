@@ -101,7 +101,8 @@ class RDDWebHandler(http.server.SimpleHTTPRequestHandler):
         Returns:
             True if token is valid, False otherwise.
         """
-        token = params.get("token", [""])[0] if isinstance(params.get("token"), list) else params.get("token", "")
+        token_value = params.get("token", "")
+        token = token_value[0] if isinstance(token_value, list) else token_value
         return token == self.session_token
     
     def execute_action(self, domain: str, action: str, params: Dict[str, Any]) -> Dict[str, Any]:

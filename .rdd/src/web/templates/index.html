@@ -24,8 +24,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#" onclick="showSection('prompts')">
-                            <i class="bi bi-journal-text"></i> Prompts
+                        <a class="nav-link active" href="#" onclick="showSection('prompts-history')">
+                            <i class="bi bi-clock-history"></i> Prompts History
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('active-prompt')">
+                            <i class="bi bi-journal-check"></i> Active Prompt
                         </a>
                     </li>
                     <li class="nav-item">
@@ -53,119 +58,205 @@
     <div class="container-fluid mt-4">
         <div id="alert-container"></div>
 
-        <!-- Prompts Section -->
-        <div id="section-prompts" class="section">
-            <!-- Prompts List View -->
-            <div id="prompts-list-view">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header bg-primary text-white">
-                                <h5><i class="bi bi-journal-text"></i> Prompt Management</h5>
+        <!-- Prompts History Section -->
+        <div id="section-prompts-history" class="section">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5><i class="bi bi-clock-history"></i> Prompts History</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <button class="btn btn-success" onclick="showCreatePromptModal()">
+                                    <i class="bi bi-plus-circle"></i> Create New Prompt
+                                </button>
+                                <button class="btn btn-primary" onclick="loadPromptsHistory()">
+                                    <i class="bi bi-arrow-clockwise"></i> Refresh
+                                </button>
                             </div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <button class="btn btn-success" onclick="showCreatePromptModal()">
-                                        <i class="bi bi-plus-circle"></i> Create New Prompt
-                                    </button>
-                                    <button class="btn btn-primary" onclick="loadPrompts()">
-                                        <i class="bi bi-arrow-clockwise"></i> Refresh
-                                    </button>
-                                </div>
-                                
-                                <div id="prompts-table-container">
-                                    <p class="text-muted">Click "Refresh" to load prompts...</p>
-                                </div>
+                            
+                            <div id="prompts-history-table-container">
+                                <p class="text-muted">Click "Refresh" to load completed prompts...</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Prompt Editor View -->
-            <div id="prompt-editor-view" style="display:none;">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">
-                                    <i class="bi bi-pencil-square"></i> 
-                                    <span id="editor-mode-label">Edit</span> Prompt: 
-                                    <span id="editor-prompt-id"></span>
-                                </h5>
-                                <button class="btn btn-light btn-sm" onclick="closePromptEditor()">
-                                    <i class="bi bi-arrow-left"></i> Back to Prompts
-                                </button>
+        <!-- Active Prompt Section -->
+        <div id="section-active-prompt" class="section" style="display:none;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 id="active-prompt-title"><i class="bi bi-journal-check"></i> Active Prompt</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- No Active Prompt Message -->
+                            <div id="no-active-prompt-message" style="display:none;">
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle"></i> 
+                                    No active prompt. Create a new prompt from the <a href="#" onclick="showSection('prompts-history')">Prompts History</a> page.
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <!-- Tab Navigation -->
-                                <ul class="nav nav-tabs mb-3" id="prompt-editor-tabs" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="prompt-tab" data-bs-toggle="tab" 
-                                                data-bs-target="#prompt-content" type="button" role="tab">
-                                            <i class="bi bi-file-text"></i> Prompt
-                                        </button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="plan-tab" data-bs-toggle="tab" 
-                                                data-bs-target="#plan-content" type="button" role="tab">
-                                            <i class="bi bi-list-check"></i> Plan
-                                        </button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="questionnaire-tab" data-bs-toggle="tab" 
-                                                data-bs-target="#questionnaire-content" type="button" role="tab">
-                                            <i class="bi bi-question-circle"></i> Questionnaire
-                                        </button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="implementation-tab" data-bs-toggle="tab" 
-                                                data-bs-target="#implementation-content" type="button" role="tab">
-                                            <i class="bi bi-code-square"></i> Implementation
-                                        </button>
-                                    </li>
-                                </ul>
 
-                                <!-- Tab Content -->
-                                <div class="tab-content" id="prompt-editor-tab-content">
-                                    <div class="tab-pane fade show active" id="prompt-content" role="tabpanel">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold">prompt.md</label>
-                                            <textarea class="form-control font-monospace" id="editor-prompt-md" 
-                                                      rows="20" style="font-size: 14px;"></textarea>
-                                        </div>
-                                        <button class="btn btn-success" id="save-prompt-btn" onclick="savePromptFile('prompt.md')">
-                                            <i class="bi bi-save"></i> Save Prompt
-                                        </button>
+                            <!-- Active Prompt Content -->
+                            <div id="active-prompt-content" style="display:none;">
+                                <!-- Execution Mode Selector -->
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <h6><i class="bi bi-toggles"></i> Execution Mode</h6>
                                     </div>
-                                    <div class="tab-pane fade" id="plan-content" role="tabpanel">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold">plan.md</label>
-                                            <textarea class="form-control font-monospace" id="editor-plan-md" 
-                                                      rows="20" style="font-size: 14px;"></textarea>
+                                    <div class="card-body">
+                                        <div class="btn-group" role="group" id="execution-mode-selector">
+                                            <input type="radio" class="btn-check" name="execution-mode" id="mode-no-action" value="no-action" autocomplete="off">
+                                            <label class="btn btn-outline-secondary" for="mode-no-action" onclick="updateExecutionMode('no-action')">
+                                                <i class="bi bi-pause-circle"></i> No Action
+                                            </label>
+
+                                            <input type="radio" class="btn-check" name="execution-mode" id="mode-analyze" value="analyze" autocomplete="off">
+                                            <label class="btn btn-outline-primary" for="mode-analyze" onclick="updateExecutionMode('analyze')">
+                                                <i class="bi bi-search"></i> Analyze
+                                            </label>
+
+                                            <input type="radio" class="btn-check" name="execution-mode" id="mode-plan" value="plan" autocomplete="off">
+                                            <label class="btn btn-outline-info" for="mode-plan" onclick="updateExecutionMode('plan')">
+                                                <i class="bi bi-list-check"></i> Plan
+                                            </label>
+
+                                            <input type="radio" class="btn-check" name="execution-mode" id="mode-implement" value="implement" autocomplete="off">
+                                            <label class="btn btn-outline-success" for="mode-implement" onclick="updateExecutionMode('implement')">
+                                                <i class="bi bi-code-square"></i> Implement
+                                            </label>
                                         </div>
-                                        <button class="btn btn-success" id="save-plan-btn" onclick="savePromptFile('plan.md')">
-                                            <i class="bi bi-save"></i> Save Plan
-                                        </button>
+                                        <div class="text-muted mt-2">
+                                            <small><i class="bi bi-info-circle"></i> Select the mode for the next execution in VS Code</small>
+                                        </div>
+                                        <div class="mt-3">
+                                            <button class="btn btn-success" id="complete-prompt-btn" onclick="completeActivePrompt()" disabled>
+                                                <i class="bi bi-check-lg"></i> Complete Prompt
+                                            </button>
+                                            <small class="text-muted ms-2" id="complete-prompt-hint">Prompt must be executed first</small>
+                                        </div>
                                     </div>
-                                    <div class="tab-pane fade" id="questionnaire-content" role="tabpanel">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold">questionnaire.md</label>
-                                            <textarea class="form-control font-monospace" id="editor-questionnaire-md" 
-                                                      rows="20" style="font-size: 14px;"></textarea>
-                                        </div>
-                                        <button class="btn btn-success" id="save-questionnaire-btn" onclick="savePromptFile('questionnaire.md')">
-                                            <i class="bi bi-save"></i> Save Questionnaire
-                                        </button>
+                                </div>
+
+                                <!-- Status Indicators -->
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <h6><i class="bi bi-clipboard-check"></i> Progress Status</h6>
                                     </div>
-                                    <div class="tab-pane fade" id="implementation-content" role="tabpanel">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold">implementation.md</label>
-                                            <textarea class="form-control font-monospace" id="editor-implementation-md" 
-                                                      rows="20" style="font-size: 14px;" readonly></textarea>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="bi bi-question-circle fs-4 me-2" id="questionnaire-icon"></i>
+                                                    <div>
+                                                        <strong>Questionnaire</strong>
+                                                        <div id="questionnaire-status" class="badge"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="bi bi-list-check fs-4 me-2" id="plan-icon"></i>
+                                                    <div>
+                                                        <strong>Plan</strong>
+                                                        <div id="plan-status" class="badge"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="bi bi-code-square fs-4 me-2" id="implementation-icon"></i>
+                                                    <div>
+                                                        <strong>Implementation</strong>
+                                                        <div id="implementation-status" class="badge"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="alert alert-info">
-                                            <i class="bi bi-info-circle"></i> Implementation file is view-only.
+                                    </div>
+                                </div>
+
+                                <!-- Prompt Files Editor -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6><i class="bi bi-file-earmark-text"></i> Prompt Files</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Tab Navigation -->
+                                        <ul class="nav nav-tabs mb-3" id="active-prompt-tabs" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link active" id="active-prompt-tab" data-bs-toggle="tab" 
+                                                        data-bs-target="#active-prompt-content-tab" type="button" role="tab">
+                                                    <i class="bi bi-file-text"></i> Prompt
+                                                </button>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="active-plan-tab" data-bs-toggle="tab" 
+                                                        data-bs-target="#active-plan-content-tab" type="button" role="tab">
+                                                    <i class="bi bi-list-check"></i> Plan
+                                                </button>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="active-questionnaire-tab" data-bs-toggle="tab" 
+                                                        data-bs-target="#active-questionnaire-content-tab" type="button" role="tab">
+                                                    <i class="bi bi-question-circle"></i> Questionnaire
+                                                </button>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="active-implementation-tab" data-bs-toggle="tab" 
+                                                        data-bs-target="#active-implementation-content-tab" type="button" role="tab">
+                                                    <i class="bi bi-code-square"></i> Implementation
+                                                </button>
+                                            </li>
+                                        </ul>
+
+                                        <!-- Tab Content -->
+                                        <div class="tab-content" id="active-prompt-tab-content">
+                                            <div class="tab-pane fade show active" id="active-prompt-content-tab" role="tabpanel">
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold">prompt.md</label>
+                                                    <textarea class="form-control font-monospace" id="active-editor-prompt-md" 
+                                                              rows="20" style="font-size: 14px;"></textarea>
+                                                </div>
+                                                <button class="btn btn-success" onclick="saveActivePromptFile('prompt.md')">
+                                                    <i class="bi bi-save"></i> Save Prompt
+                                                </button>
+                                            </div>
+                                            <div class="tab-pane fade" id="active-plan-content-tab" role="tabpanel">
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold">plan.md</label>
+                                                    <textarea class="form-control font-monospace" id="active-editor-plan-md" 
+                                                              rows="20" style="font-size: 14px;"></textarea>
+                                                </div>
+                                                <button class="btn btn-success" onclick="saveActivePromptFile('plan.md')">
+                                                    <i class="bi bi-save"></i> Save Plan
+                                                </button>
+                                            </div>
+                                            <div class="tab-pane fade" id="active-questionnaire-content-tab" role="tabpanel">
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold">questionnaire.md</label>
+                                                    <textarea class="form-control font-monospace" id="active-editor-questionnaire-md" 
+                                                              rows="20" style="font-size: 14px;"></textarea>
+                                                </div>
+                                                <button class="btn btn-success" onclick="saveActivePromptFile('questionnaire.md')">
+                                                    <i class="bi bi-save"></i> Save Questionnaire
+                                                </button>
+                                            </div>
+                                            <div class="tab-pane fade" id="active-implementation-content-tab" role="tabpanel">
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold">implementation.md</label>
+                                                    <textarea class="form-control font-monospace" id="active-editor-implementation-md" 
+                                                              rows="20" style="font-size: 14px;" readonly></textarea>
+                                                </div>
+                                                <div class="alert alert-info">
+                                                    <i class="bi bi-info-circle"></i> Implementation file is view-only.
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

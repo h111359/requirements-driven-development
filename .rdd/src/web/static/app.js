@@ -25,7 +25,7 @@ async function initializeApp() {
         
         // Load initial data
         await loadRegistry();
-        await loadPrompts();
+        await loadPromptsHistory();
         
         showAlert('success', 'Application initialized successfully');
     } catch (error) {
@@ -55,7 +55,11 @@ function showSection(sectionName) {
     event.target.classList.add('active');
     
     // Load section-specific data
-    if (sectionName === 'workdir') {
+    if (sectionName === 'prompts-history') {
+        loadPromptsHistory();
+    } else if (sectionName === 'active-prompt') {
+        loadActivePrompt();
+    } else if (sectionName === 'workdir') {
         loadIterationStatus();
     }
 }
@@ -347,8 +351,13 @@ async function createPrompt() {
         const modal = bootstrap.Modal.getInstance(document.getElementById('createPromptModal'));
         modal.hide();
         
-        // Reload prompts
-        await loadPrompts();
+        // Reload prompts history
+        await loadPromptsHistory();
+        // Also reload active prompt page if it exists
+        const activeSection = document.getElementById('section-active-prompt');
+        if (activeSection && activeSection.style.display !== 'none') {
+            await loadActivePrompt();
+        }
     } else {
         showAlert('danger', 'Failed to create prompt: ' + (result.error || result.stderr));
     }
@@ -387,10 +396,433 @@ async function setPromptState() {
         const modal = bootstrap.Modal.getInstance(document.getElementById('setStateModal'));
         modal.hide();
         
-        // Reload prompts
-        await loadPrompts();
+        // Reload both views
+        await loadPromptsHistory();
+        await loadActivePrompt();
     } else {
         showAlert('danger', 'Failed to set prompt state: ' + (result.error || result.stderr));
+    }
+}
+
+/**
+ * Load and display prompts history (completed prompts only)
+ */
+async function loadPromptsHistory() {
+    const container = document.getElementById('prompts-history-table-container');
+    container.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
+    
+    await loadRegistry();
+    
+    if (!currentRegistry || !currentRegistry.prompts) {
+        container.innerHTML = '<p class="text-warning">No work iteration found. Please create one in the Workdir section.</p>';
+        return;
+    }
+    
+    // Filter to completed prompts only
+    const completedPrompts = currentRegistry.prompts.filter(p => p.state === 'completed');
+    
+    if (completedPrompts.length === 0) {
+        container.innerHTML = '<p class="text-muted">No completed prompts found.</p>';
+        return;
+    }
+    
+    // Build table
+    let html = `
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Questionnaire</th>
+                        <th>Plan</th>
+                        <th>Implementation</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+    
+    completedPrompts.forEach(prompt => {
+        const promptId = prompt['prompt-id'];
+        const title = prompt.title || prompt['prompt-title'] || '';
+        
+        // Status badges
+        const questionnaireGenerated = prompt['questionnaire-generated'] || false;
+        const questionnaireAnswered = prompt['questionnaire-answered'] || false;
+        const planGenerated = prompt['plan-generated'] || false;
+        const implementationCompleted = prompt['implementation-completed'] || false;
+        
+        // Questionnaire status: Green if answered, Gray if not generated
+        let questionnaireBadge = '';
+        if (!questionnaireGenerated) {
+            questionnaireBadge = '<span class="badge bg-secondary"><i class="bi bi-dash-circle"></i> Not Generated</span>';
+        } else if (questionnaireAnswered) {
+            questionnaireBadge = '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Answered</span>';
+        } else {
+            questionnaireBadge = '<span class="badge bg-warning"><i class="bi bi-clock-history"></i> Generated</span>';
+        }
+        
+        // Plan status
+        const planBadge = planGenerated 
+            ? '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Generated</span>'
+            : '<span class="badge bg-secondary"><i class="bi bi-dash-circle"></i> Not Generated</span>';
+        
+        // Implementation status
+        const implementationBadge = implementationCompleted
+            ? '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Completed</span>'
+            : '<span class="badge bg-secondary"><i class="bi bi-dash-circle"></i> Not Completed</span>';
+        
+        html += `
+            <tr>
+                <td><code>${promptId}</code></td>
+                <td>${escapeHtml(title)}</td>
+                <td>${questionnaireBadge}</td>
+                <td>${planBadge}</td>
+                <td>${implementationBadge}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary" 
+                            onclick="viewCompletedPrompt('${promptId}')">
+                        <i class="bi bi-eye"></i> View
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    
+    html += `
+                </tbody>
+            </table>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+}
+
+/**
+ * Load and display active prompt
+ */
+async function loadActivePrompt() {
+    await loadRegistry();
+    
+    if (!currentRegistry || !currentRegistry.prompts) {
+        showNoActivePrompt();
+        return;
+    }
+    
+    // Find active prompt
+    const activePrompt = currentRegistry.prompts.find(p => p.state === 'active');
+    
+    if (!activePrompt) {
+        showNoActivePrompt();
+        return;
+    }
+    
+    // Show active prompt content
+    document.getElementById('no-active-prompt-message').style.display = 'none';
+    document.getElementById('active-prompt-content').style.display = 'block';
+    
+    // Update title
+    const promptId = activePrompt['prompt-id'];
+    const title = activePrompt.title || activePrompt['prompt-title'] || '';
+    document.getElementById('active-prompt-title').innerHTML = 
+        `<i class="bi bi-journal-check"></i> Active Prompt: ${promptId} - ${escapeHtml(title)}`;
+    
+    // Update execution mode selector
+    const currentMode = activePrompt['execution-mode'] || getSmartDefaultMode(activePrompt);
+    document.getElementById(`mode-${currentMode}`).checked = true;
+    
+    // Update complete button state
+    const executed = activePrompt.executed || false;
+    const completeBtn = document.getElementById('complete-prompt-btn');
+    const completeHint = document.getElementById('complete-prompt-hint');
+    if (executed) {
+        completeBtn.disabled = false;
+        completeHint.textContent = 'Mark this prompt as completed';
+    } else {
+        completeBtn.disabled = true;
+        completeHint.textContent = 'Prompt must be executed first';
+    }
+    
+    // Update status indicators
+    updateStatusIndicators(activePrompt);
+    
+    // Load prompt files
+    await loadActivePromptFiles(promptId);
+}
+
+/**
+ * Show no active prompt message
+ */
+function showNoActivePrompt() {
+    document.getElementById('no-active-prompt-message').style.display = 'block';
+    document.getElementById('active-prompt-content').style.display = 'none';
+}
+
+/**
+ * Get smart default execution mode based on prompt state
+ */
+function getSmartDefaultMode(prompt) {
+    const questionnaireGenerated = prompt['questionnaire-generated'] || false;
+    const planGenerated = prompt['plan-generated'] || false;
+    const implementationCompleted = prompt['implementation-completed'] || false;
+    
+    if (!questionnaireGenerated) {
+        return 'analyze';
+    } else if (!planGenerated) {
+        return 'plan';
+    } else if (!implementationCompleted) {
+        return 'implement';
+    } else {
+        return 'no-action';
+    }
+}
+
+/**
+ * Update status indicators for active prompt
+ */
+function updateStatusIndicators(prompt) {
+    const questionnaireGenerated = prompt['questionnaire-generated'] || false;
+    const questionnaireAnswered = prompt['questionnaire-answered'] || false;
+    const planGenerated = prompt['plan-generated'] || false;
+    const implementationCompleted = prompt['implementation-completed'] || false;
+    
+    // Questionnaire status
+    const questionnaireIcon = document.getElementById('questionnaire-icon');
+    const questionnaireStatus = document.getElementById('questionnaire-status');
+    
+    if (!questionnaireGenerated) {
+        questionnaireIcon.style.color = '#CCCCCC';
+        questionnaireStatus.className = 'badge bg-secondary';
+        questionnaireStatus.innerHTML = '<i class="bi bi-dash-circle"></i> Not Generated';
+    } else if (questionnaireAnswered) {
+        questionnaireIcon.style.color = '#28a745';
+        questionnaireStatus.className = 'badge bg-success';
+        questionnaireStatus.innerHTML = '<i class="bi bi-check-circle"></i> Answered';
+    } else {
+        questionnaireIcon.style.color = '#ffc107';
+        questionnaireStatus.className = 'badge bg-warning';
+        questionnaireStatus.innerHTML = '<i class="bi bi-clock-history"></i> In Progress';
+    }
+    
+    // Plan status
+    const planIcon = document.getElementById('plan-icon');
+    const planStatus = document.getElementById('plan-status');
+    
+    if (planGenerated) {
+        planIcon.style.color = '#28a745';
+        planStatus.className = 'badge bg-success';
+        planStatus.innerHTML = '<i class="bi bi-check-circle"></i> Generated';
+    } else {
+        planIcon.style.color = '#CCCCCC';
+        planStatus.className = 'badge bg-secondary';
+        planStatus.innerHTML = '<i class="bi bi-dash-circle"></i> Not Generated';
+    }
+    
+    // Implementation status
+    const implementationIcon = document.getElementById('implementation-icon');
+    const implementationStatus = document.getElementById('implementation-status');
+    
+    if (implementationCompleted) {
+        implementationIcon.style.color = '#28a745';
+        implementationStatus.className = 'badge bg-success';
+        implementationStatus.innerHTML = '<i class="bi bi-check-circle"></i> Completed';
+    } else {
+        implementationIcon.style.color = '#CCCCCC';
+        implementationStatus.className = 'badge bg-secondary';
+        implementationStatus.innerHTML = '<i class="bi bi-dash-circle"></i> Not Completed';
+    }
+}
+
+/**
+ * Update execution mode for active prompt
+ */
+async function updateExecutionMode(mode) {
+    try {
+        const response = await fetch('/api/action', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                domain: 'prompt',
+                action: 'set_execution_mode',
+                params: {
+                    mode: mode
+                }
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('success', `Execution mode set to: ${mode}`);
+            await loadRegistry();
+        } else {
+            showAlert('danger', 'Failed to update execution mode: ' + (result.error || result.stderr));
+        }
+    } catch (error) {
+        showAlert('danger', 'Failed to update execution mode: ' + error.message);
+    }
+}
+
+/**
+ * Load files for active prompt
+ */
+async function loadActivePromptFiles(promptId) {
+    currentEditingPrompt = promptId;
+    
+    // Find the prompt folder
+    try {
+        const folderName = promptId + '_' + getFolderSuffix(promptId);
+        currentPromptFolder = `workdir/${folderName}`;
+        
+        // Load all files
+        await Promise.all([
+            loadActivePromptFile('prompt.md'),
+            loadActivePromptFile('plan.md'),
+            loadActivePromptFile('questionnaire.md'),
+            loadActivePromptFile('implementation.md')
+        ]);
+    } catch (error) {
+        console.error('Error loading prompt files:', error);
+        showAlert('warning', 'Some prompt files could not be loaded');
+    }
+}
+
+/**
+ * Load a single file for active prompt
+ */
+async function loadActivePromptFile(filename) {
+    const textareaId = `active-editor-${filename.replace('.md', '-md')}`;
+    const textarea = document.getElementById(textareaId);
+    
+    if (!textarea) {
+        console.warn(`Textarea not found for ${filename}`);
+        return;
+    }
+    
+    try {
+        const filepath = `${currentPromptFolder}/${filename}`;
+        const response = await fetch('/api/file/' + filepath + '?token=' + sessionToken);
+        const result = await response.json();
+        
+        if (result.success) {
+            textarea.value = result.content || '';
+        } else {
+            textarea.value = `# File not found\n\nThis file does not exist yet.`;
+        }
+    } catch (error) {
+        console.error(`Error loading ${filename}:`, error);
+        textarea.value = `# Error\n\nFailed to load file: ${error.message}`;
+    }
+}
+
+/**
+ * Save file for active prompt
+ */
+async function saveActivePromptFile(filename) {
+    const textareaId = `active-editor-${filename.replace('.md', '-md')}`;
+    const textarea = document.getElementById(textareaId);
+    
+    if (!textarea) {
+        showAlert('danger', 'Textarea not found');
+        return;
+    }
+    
+    const content = textarea.value;
+    
+    try {
+        const filepath = `${currentPromptFolder}/${filename}`;
+        const response = await fetch('/api/file/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                filepath: filepath,
+                content: content
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('success', `${filename} saved successfully`);
+        } else {
+            showAlert('danger', `Failed to save ${filename}: ` + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        showAlert('danger', `Failed to save ${filename}: ` + error.message);
+    }
+}
+
+/**
+ * View completed prompt (opens modal with read-only view)
+ */
+async function viewCompletedPrompt(promptId) {
+    // For now, reuse the existing openPromptEditor with view-only mode
+    await openPromptEditor(promptId, true);
+}
+
+/**
+ * Get folder suffix from prompt in registry
+ */
+function getFolderSuffix(promptId) {
+    if (!currentRegistry || !currentRegistry.prompts) {
+        return '';
+    }
+    
+    const prompt = currentRegistry.prompts.find(p => p['prompt-id'] === promptId);
+    if (!prompt) {
+        return '';
+    }
+    
+    return prompt.title || prompt['prompt-title'] || '';
+}
+
+/**
+ * Complete the active prompt
+ */
+async function completeActivePrompt() {
+    if (!currentRegistry || !currentRegistry.prompts) {
+        showAlert('danger', 'No registry loaded');
+        return;
+    }
+    
+    const activePrompt = currentRegistry.prompts.find(p => p.state === 'active');
+    if (!activePrompt) {
+        showAlert('danger', 'No active prompt found');
+        return;
+    }
+    
+    const promptId = activePrompt['prompt-id'];
+    
+    if (!activePrompt.executed) {
+        showAlert('warning', 'Prompt must be executed before it can be completed');
+        return;
+    }
+    
+    if (!confirm(`Are you sure you want to complete prompt ${promptId}?`)) {
+        return;
+    }
+    
+    const params = {
+        'prompt-id': promptId
+    };
+    
+    const result = await executeAction('prompt', 'complete', params);
+    
+    if (result.success) {
+        showAlert('success', `Prompt ${promptId} completed successfully`);
+        
+        // Reload both views
+        await loadPromptsHistory();
+        await loadActivePrompt();
+    } else {
+        showAlert('danger', `Failed to complete prompt: ` + (result.error || result.stderr));
     }
 }
 
@@ -487,8 +919,9 @@ async function completePrompt(promptId) {
     if (result.success) {
         showAlert('success', `Prompt ${promptId} completed successfully`);
         
-        // Reload prompts list
-        await loadPrompts();
+        // Reload both views
+        await loadPromptsHistory();
+        await loadActivePrompt();
     } else {
         showAlert('danger', `Failed to complete prompt: ` + (result.error || result.stderr));
     }

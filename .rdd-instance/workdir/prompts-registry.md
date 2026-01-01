@@ -57,3 +57,7 @@ TBD
 %%PROMPT P-015 "Remove prompt type"
 TBD
 %%ENDPROMPT
+
+%%PROMPT P-016 "Active prompt in a separate page"
+TBD
+%%ENDPROMPT
