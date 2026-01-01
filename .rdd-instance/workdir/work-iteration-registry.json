@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 21,
+    "prompt-id-sequence-next-value": 22,
     "git-enabled": true,
     "prompts": [
         {
@@ -225,6 +225,18 @@
             "implementation-completed": true,
             "execution-mode": "no-action",
             "executed": true
+        },
+        {
+            "prompt-id": "P-021",
+            "prompt-title": "Add prompt texts in prompts-registry",
+            "state": "completed",
+            "questionnaire-generated": false,
+            "questionnaire-answered": false,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "analyze-enabled": false
         }
     ]
 }

@@ -140,6 +140,28 @@ def main() -> int:
 
     # Write the updated registry
     _dump_json(registry_path, registry)
+    
+    # Add prompt to prompts-registry.md
+    try:
+        add_to_registry_script = repo_root / ".rdd" / "src" / "actions" / "prompt_add_to_registry.py"
+        subprocess.run(
+            ["python", str(add_to_registry_script), f"prompt-id={prompt_id}"],
+            cwd=str(repo_root),
+            check=True,
+            capture_output=True,
+            text=True
+        )
+        print(f"Added {prompt_id} to prompts-registry.md")
+    except subprocess.CalledProcessError as e:
+        print(
+            f"WARNING: Failed to add prompt to prompts-registry.md: {e.stderr if e.stderr else str(e)}",
+            file=sys.stderr,
+        )
+    except Exception as e:
+        print(
+            f"WARNING: Error adding prompt to prompts-registry.md: {e}",
+            file=sys.stderr,
+        )
 
     # Check git-enabled flag
     git_enabled = registry.get("git-enabled", False)
