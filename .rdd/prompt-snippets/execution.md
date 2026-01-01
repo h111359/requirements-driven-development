@@ -4,7 +4,7 @@
   
 - [PROMPT-REGISTRY] is the file `.rdd-instance/workdir/prompts-registry.md`
 
-- [ACTIVE-PROMPT-ID] is the prompt-id of the prompt entry in `.rdd-instance/workdir/work-iteration-registry.json` which is with state `planned` or `in-progress`. The framework allows only one prompt to be in some of those states.
+- [ACTIVE-PROMPT-ID] is the prompt-id of the prompt entry in `.rdd-instance/workdir/work-iteration-registry.json` which is with state `active`. The framework allows only one prompt to be in this state.
 
 - [ACTIVE-PROMPT-FOLDER] is a folder in `.rdd-instance/workdir` with format 
   `<[ACTIVE-PROMPT-ID]>_<prompt-title>`

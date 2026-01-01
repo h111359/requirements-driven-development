@@ -204,15 +204,15 @@ async function loadPrompts() {
             ? '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Yes</span>'
             : '<span class="badge bg-secondary">No</span>';
         
-        // Determine if prompt is editable (draft, planned, in-progress)
-        const isEditable = (state === 'draft' || state === 'planned' || state === 'in-progress');
+        // Determine if prompt is editable (active)
+        const isEditable = (state === 'active');
         const buttonType = isEditable ? 'primary' : 'secondary';
         const buttonLabel = isEditable ? 'Edit' : 'View';
         const buttonIcon = isEditable ? 'pencil' : 'eye';
         
-        // Analyze toggle (only for non-completed prompts)
+        // Analyze toggle (only for active prompts)
         let analyzeToggleHtml = '';
-        if (state !== 'completed') {
+        if (state === 'active') {
             const toggleChecked = analyzeEnabled ? 'checked' : '';
             const toggleId = `analyze-toggle-${promptId}`;
             analyzeToggleHtml = `
@@ -228,9 +228,9 @@ async function loadPrompts() {
             analyzeToggleHtml = '<span class="text-muted">N/A</span>';
         }
         
-        // Plan toggle (only for non-completed prompts)
+        // Plan toggle (only for active prompts)
         let planToggleHtml = '';
-        if (state !== 'completed') {
+        if (state === 'active') {
             const toggleChecked = planEnabled ? 'checked' : '';
             const toggleId = `plan-toggle-${promptId}`;
             planToggleHtml = `
@@ -246,9 +246,9 @@ async function loadPrompts() {
             planToggleHtml = '<span class="text-muted">N/A</span>';
         }
         
-        // Complete button (only for in-progress prompts with executed=true)
+        // Complete button (only for active prompts with executed=true)
         let completeButtonHtml = '';
-        if (state === 'in-progress') {
+        if (state === 'active') {
             const completeDisabled = !executed ? 'disabled' : '';
             const completeTitle = !executed ? 'Prompt must be executed first' : 'Complete this prompt';
             completeButtonHtml = `
@@ -300,9 +300,7 @@ async function loadPrompts() {
  */
 function getStateBadge(state) {
     const badges = {
-        'draft': '<span class="badge bg-secondary">Draft</span>',
-        'planned': '<span class="badge bg-info">Planned</span>',
-        'in-progress': '<span class="badge bg-primary">In Progress</span>',
+        'active': '<span class="badge bg-warning">Active</span>',
         'completed': '<span class="badge bg-success">Completed</span>'
     };
     return badges[state] || '<span class="badge bg-light text-dark">' + state + '</span>';
@@ -337,7 +335,7 @@ function showCreatePromptModal() {
     // Reset form
     document.getElementById('prompt-title').value = '';
     document.getElementById('prompt-type').value = 'main';
-    document.getElementById('prompt-state').value = 'draft';
+    document.getElementById('prompt-state').value = 'active';
     document.getElementById('prompt-parent-id').value = '';
     
     modal.show();

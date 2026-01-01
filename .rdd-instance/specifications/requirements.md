@@ -38,7 +38,7 @@ The framework enables:
 
 * **execute command** - A github prompt, which is the only prompt executed in GitHub Copilot chat window and which includes instructions how the copilot to understand the needed context and actions.
 
-* **active prompt** - The prompt in `.rdd-instance/workdir/work-iteration-registry.json` which is with state `planned` or `in-progress`. The framework allows only one prompt to be in some of those states and this prompt is considered to be the `active prompt`
+* **active prompt** - The prompt in `.rdd-instance/workdir/work-iteration-registry.json` which is with state `active`. The framework allows only one prompt to be in this state and this prompt is considered to be the `active prompt`
 
 * **requirements file** - The file `.rdd-instance/specifications/requirements.md` which contains user and technical requirements and is formatted accordingly `.rdd/conventions/requirements.convention.md`
 
@@ -148,6 +148,12 @@ The framework enables:
 
 - [UR-20251231-1602] The Web UI shall provide a shutdown button to allow users to stop the server without using terminal commands.
 
+- [UR-20251231-0700] The framework shall support two prompt states: `active` and `completed`. The `active` state indicates a prompt is currently being worked on, while `completed` indicates finished work.
+
+- [UR-20251231-0701] New prompts shall be created in `active` state by default.
+
+- [UR-20251231-0702] The framework shall enforce that only one prompt can be in `active` state at any time, ensuring clear focus on current work.
+
 
 
 ## Technical Requirements
@@ -240,7 +246,7 @@ The framework enables:
 
 - [TR-20251228-1537] The framework shall create a per-prompt working folder under `.rdd-instance/workdir/` named `<prompt-id>_<prompt-title>` and in it shall create empty files `prompt.md`, `plan.md`, and `implementation.md` when a new prompt is created.
 
-- [TR-20251228-1727] The framework shall provide a deterministic script `.rdd/src/actions/prompt_set_state.py` that updates the `state` field of a prompt record in `.rdd-instance/workdir/work-iteration-registry.json`. The script shall accept `state=` (required, one of `draft|planned|in-progress|completed`) and optional `prompt-id=` parameters. When `prompt-id=` is omitted, the script shall default to the currently active prompt (the one in `planned` or `in-progress` state). The script shall enforce the "single active prompt" invariant by failing with a clear error if attempting to set a prompt to `planned` or `in-progress` when another prompt is already in one of those states.
+- [TR-20251228-1727] The framework shall provide a deterministic script `.rdd/src/actions/prompt_set_state.py` that updates the `state` field of a prompt record in `.rdd-instance/workdir/work-iteration-registry.json`. The script shall accept `state=` (required, one of `active|completed`) and optional `prompt-id=` parameters. When `prompt-id=` is omitted, the script shall default to the currently active prompt (the one in `active` state). The script shall enforce the "single active prompt" invariant by failing with a clear error if attempting to set a prompt to `active` when another prompt is already in that state.
   
 - [TR-20251229-1352] The framework shall provide a main CLI entry point at `.rdd/src/rdd.py` that implements domain-based command routing with support for `prompt` and `workdir` domains.
 
@@ -286,7 +292,7 @@ The framework enables:
 
 - [TR-20251230-1437] The Files section shall provide a file browser with path input field, quick access buttons for common files (registry, requirements, technical design), a text editor for viewing and editing file contents, and save functionality.
 
-- [TR-20251230-1438] The Prompts section shall provide an integrated prompt editor that displays Edit buttons for prompts in draft, planned, or in-progress states and View buttons for prompts in completed state.
+- [TR-20251230-1438] The Prompts section shall provide an integrated prompt editor that displays Edit buttons for prompts in `active` state and View buttons for prompts in `completed` state.
 
 - [TR-20251230-1439] The prompt editor shall replace the prompts list view with a tabbed interface containing tabs for prompt.md, plan.md, questionnaire.md, and implementation.md files, with a Back button to return to the prompts list.
 
@@ -302,7 +308,7 @@ The framework enables:
 
 - [UR-20251230-2002] The framework shall automatically disable analyze mode after each analyze execution completes.
 
-- [UR-20251230-2003] The framework shall prevent enabling analyze mode for completed prompts.
+- [UR-20251230-2003] The framework shall prevent enabling analyze mode for prompts not in `active` state.
 
 - [TR-20251230-2004] Each prompt in work-iteration-registry.json shall have an `analyze-enabled` boolean field with default value `false`.
 
@@ -310,9 +316,9 @@ The framework enables:
 
 - [TR-20251230-2006] The execution prompt logic shall read analyze mode from the `analyze-enabled` field in work-iteration-registry.json rather than from chat modifiers.
 
-- [TR-20251230-2007] The Web UI shall display analyze mode toggles only for prompts in draft, planned, or in-progress states.
+- [TR-20251230-2007] The Web UI shall display analyze mode toggles only for prompts in `active` state.
 
-- [TR-20251230-2008] The Prompts section table in the Web UI shall include an "Analyze Mode" column with a toggle switch for non-completed prompts and "N/A" for completed prompts.
+- [TR-20251230-2008] The Prompts section table in the Web UI shall include an "Analyze Mode" column with a toggle switch for `active` prompts and "N/A" for `completed` prompts.
 
 - [TR-20251230-2009] The CLI prompt domain menu shall include "analyze-on" and "analyze-off" actions that route to the prompt_analyze_on.py and prompt_analyze_off.py scripts.
 
@@ -330,7 +336,7 @@ The framework enables:
 
 - [TR-20251231-0105] The Web UI Prompts section table shall include an "Executed" column displaying a badge indicating whether each prompt has been executed (green "Yes" or gray "No").
 
-- [TR-20251231-0106] The Web UI shall provide a "Complete" button in the Actions column for prompts in in-progress state, enabled only when the prompt's executed flag is true, with a tooltip explaining the requirement.
+- [TR-20251231-0106] The Web UI shall provide a "Complete" button in the Actions column for prompts in `active` state, enabled only when the prompt's executed flag is true, with a tooltip explaining the requirement.
 
 
 
@@ -342,7 +348,7 @@ The framework enables:
 
 - [UR-20251231-0202] The framework shall ensure that plan mode and analyze mode are mutually exclusive and cannot be enabled simultaneously for the same prompt.
 
-- [UR-20251231-0203] The framework shall prevent enabling plan mode for completed prompts.
+- [UR-20251231-0203] The framework shall prevent enabling plan mode for prompts not in `active` state.
 
 - [UR-20251231-0204] The framework shall provide a toggle mechanism to enable/disable plan mode for prompts through the Web UI.
 
@@ -352,9 +358,9 @@ The framework enables:
 
 - [TR-20251231-0202] The execution prompt logic shall read plan mode from the `plan-enabled` field in work-iteration-registry.json and execute only the plan generation step when enabled.
 
-- [TR-20251231-0203] The Web UI shall display plan mode toggles only for prompts in draft, planned, or in-progress states.
+- [TR-20251231-0203] The Web UI shall display plan mode toggles only for prompts in `active` state.
 
-- [TR-20251231-0204] The Prompts section table in the Web UI shall include a "Plan Mode" column with a toggle switch for non-completed prompts and "N/A" for completed prompts.
+- [TR-20251231-0204] The Prompts section table in the Web UI shall include a "Plan Mode" column with a toggle switch for `active` prompts and "N/A" for `completed` prompts.
 
 - [TR-20251231-0205] The CLI prompt domain menu shall include "plan-on" and "plan-off" actions that route to the prompt_plan_on.py and prompt_plan_off.py scripts.
 
@@ -373,3 +379,9 @@ The framework enables:
 - [TR-20251231-1604] The Web UI shall implement a POST /api/shutdown endpoint that gracefully stops the web server when invoked.
 
 - [TR-20251231-1605] The Linux launcher script `run.sh` shall include proper shebang (`#!/bin/bash`) and require executable permissions to be set before use.
+
+- [TR-20251231-0700] The `prompt_set_state.py` script shall accept only `active` or `completed` as valid state values.
+
+- [TR-20251231-0701] The framework shall allow bidirectional state transitions between `active` and `completed` states without restrictions.
+
+- [TR-20251231-0702] The `prompt_create.py` script shall validate that no other prompt is in `active` state when creating a new prompt, and shall fail with a clear error message if validation fails.

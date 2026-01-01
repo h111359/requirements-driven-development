@@ -4,7 +4,7 @@ Disable plan mode for a prompt.
 
 This script sets the plan-enabled flag to false for a specified prompt
 in the work iteration registry. If no prompt-id is provided, it defaults
-to the currently active prompt (one in 'planned' or 'in-progress' state).
+to the currently active prompt (one in 'active' state).
 
 Usage:
     python prompt_plan_off.py [prompt-id=<id>]
@@ -21,7 +21,7 @@ import sys
 
 def find_active_prompt(prompts):
     """
-    Find the active prompt (state = 'planned' or 'in-progress').
+    Find the active prompt (state = 'active').
     
     Args:
         prompts (list): List of prompt metadata objects
@@ -30,7 +30,7 @@ def find_active_prompt(prompts):
         dict: The active prompt object, or None if not found
     """
     for prompt in prompts:
-        if prompt.get('state') in ['planned', 'in-progress']:
+        if prompt.get('state') == 'active':
             return prompt
     return None
 
@@ -73,8 +73,8 @@ def disable_plan_mode(prompt_id=None):
         # Find active prompt
         target_prompt = find_active_prompt(prompts)
         if target_prompt is None:
-            print("ERROR: No active prompt found (state='planned' or 'in-progress')")
-            print("REMEDIATION: Create a prompt or set an existing prompt to 'planned' or 'in-progress' state.")
+            print("ERROR: No active prompt found (state='active')")
+            print("REMEDIATION: Create a prompt or set an existing prompt to 'active' state.")
             return 1
         prompt_id = target_prompt.get('prompt-id')
     else:

@@ -198,7 +198,7 @@ def _prompt_for_parameters(action_key: str) -> List[str]:
             {"name": "type", "prompt": "Enter prompt type (main/modification)", "required": True, "default": "main"},
         ],
         "prompt.set-state": [
-            {"name": "state", "prompt": "Enter new state (draft/planned/in-progress/completed)", "required": True},
+            {"name": "state", "prompt": "Enter new state (active/completed)", "required": True},
             {"name": "prompt-id", "prompt": "Enter prompt ID (or leave empty for active prompt)", "required": False},
         ],
         "prompt.analyze-on": [

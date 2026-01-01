@@ -5,20 +5,20 @@ Behavior:
   - Updates the `state` field of a prompt record in:
         `.rdd-instance/workdir/work-iteration-registry.json`
   - Enforces the "single active prompt" invariant:
-      Only one prompt may be in state 'planned' or 'in-progress' at a time.
+      Only one prompt may be in state 'active' at a time.
   - If `prompt-id=` is omitted, defaults to the currently active prompt.
 
 This script is intentionally deterministic and non-interactive.
 
 Usage (named parameters):
-  prompt_set_state.py state=<draft|planned|in-progress|completed> [prompt-id=P-001]
+  prompt_set_state.py state=<active|completed> [prompt-id=P-001]
 
 Examples:
   # Set the active prompt to 'completed'
   prompt_set_state.py state=completed
 
-  # Set a specific prompt to 'in-progress'
-  prompt_set_state.py state=in-progress prompt-id=P-003
+  # Set a specific prompt to 'active'
+  prompt_set_state.py state=active prompt-id=P-003
 
 Output:
   Prints the updated prompt ID and state as a single line to stdout.
@@ -32,7 +32,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 
-_PROMPT_STATES = {"draft", "planned", "in-progress", "completed"}
+_PROMPT_STATES = {"active", "completed"}
 
 
 def _repo_root() -> Path:
@@ -72,11 +72,11 @@ def _dump_json(path: Path, data: Dict[str, Any]) -> None:
 
 
 def _find_active_prompt(prompts: list[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-    """Find the prompt currently in 'planned' or 'in-progress' state."""
+    """Find the prompt currently in 'active' state."""
     for p in prompts:
         if not isinstance(p, dict):
             continue
-        if p.get("state") in {"planned", "in-progress"}:
+        if p.get("state") == "active":
             return p
     return None
 
@@ -127,7 +127,7 @@ def main() -> int:
         target_prompt = _find_active_prompt(prompts)
         if target_prompt is None:
             raise ValueError(
-                "No active prompt found (no prompt in 'planned' or 'in-progress' state); "
+                "No active prompt found (no prompt in 'active' state); "
                 "please specify prompt-id= explicitly"
             )
 
@@ -139,14 +139,14 @@ def main() -> int:
         print(f"{prompt_id} {new_state}")
         return 0
 
-    # Enforce single-active invariant when setting to 'planned' or 'in-progress'
-    if new_state in {"planned", "in-progress"}:
+    # Enforce single-active invariant when setting to 'active'
+    if new_state == "active":
         active_prompt = _find_active_prompt(prompts)
         if active_prompt is not None and active_prompt.get("prompt-id") != prompt_id:
             raise ValueError(
                 f"Cannot set {prompt_id} to '{new_state}': "
                 f"prompt {active_prompt.get('prompt-id')} is already in state '{active_prompt.get('state')}'. "
-                "Only one prompt may be in 'planned' or 'in-progress' at a time."
+                "Only one prompt may be in 'active' state at a time."
             )
 
     # Update the state

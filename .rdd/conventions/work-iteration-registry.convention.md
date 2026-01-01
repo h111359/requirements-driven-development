@@ -20,7 +20,7 @@ When a new prompt is created:
 
 Validation rules during prompt creation:
 
-- If creating a prompt with state `planned` or `in-progress`, the tool MUST validate that no other prompt currently has state `planned` or `in-progress`.
+- If creating a prompt with state `active`, the tool MUST validate that no other prompt currently has state `active`.
 - If `type` is `main`, then `parent-id` MUST be `null`.
 - If `type` is `modification`, then `parent-id` MUST reference an existing prompt in `prompts` with `type` = `main`.
 
@@ -87,8 +87,8 @@ The JSON file MUST be an object with the following keys:
   * Possible values: ["main" | "modification"]
 
 * `state` (string)
-  * **Meaning** - Defines if the prompt is still a draft, if it is planned for execution, in progress or completed. Only one prompt could be in a state "planned" or "in-progress" at a given time and this it the prompt which `execute command` (as defined in `.rdd-instance/specifications/requirements.md`) will run.
-  * Possible values: ["draft" | "planned" | "in-progress" | "completed"]  
+  * **Meaning** - Defines if the prompt is currently active or completed. Only one prompt can be in `active` state at a given time, and this is the prompt which `execute command` (as defined in `.rdd-instance/specifications/requirements.md`) will run.
+  * Possible values: ["active" | "completed"]  
 
 * `parent-id` (string | null)
   * **Meaning** - The prompts could be type `main` or type `modification`. When the type is `main`, it does not rely on other prompts for its definition. The definition of the `modification` prompts is always a union of `main` prompt + previously executed `modification` prompts referred tp the same `main` prompt and the current modification own definition.
@@ -118,9 +118,18 @@ The JSON file MUST be an object with the following keys:
   * **Default value:** false
   * **Meaning:** Controls whether analyze mode is enabled for this prompt. When set to `true`, the execute command will perform analysis instead of normal execution. The flag is automatically set to `false` after analyze execution completes.
   * **Validation rules:**
-    * Can only be set to `true` for prompts with state `draft`, `planned`, or `in-progress`
+    * Can only be set to `true` for prompts with state `active`
     * Cannot be enabled for prompts with state `completed`
     * Setting this flag replaces the legacy chat-based "analyze" modifier
+
+* `plan-enabled` (boolean)
+  * **Required:** yes
+  * **Default value:** false
+  * **Meaning:** Controls whether plan mode is enabled for this prompt. When set to `true`, the execute command will generate only the plan without proceeding to implementation. The flag is automatically set to `false` after plan generation completes.
+  * **Validation rules:**
+    * Can only be set to `true` for prompts with state `active`
+    * Cannot be enabled for prompts with state `completed`
+    * Mutually exclusive with `analyze-enabled` - only one can be `true` at a time
 
 
 ## Canonical example
@@ -142,7 +151,8 @@ The following is the canonical baseline structure (values may be empty during in
       "analysis": {"approval": true, "state": "completed"},
       "questionnaire": {"approval": true, "state": "completed"},
       "plan": {"approval": true, "state": "completed"},
-      "analyze-enabled": false
+      "analyze-enabled": false,
+      "plan-enabled": false
     },
     {
       "prompt-id": "P-002",
@@ -153,29 +163,32 @@ The following is the canonical baseline structure (values may be empty during in
       "analysis": {"approval": false, "state": "completed"},
       "questionnaire": {"approval": false, "state": "completed"},
       "plan": {"approval": true, "state": "approved"},
-      "analyze-enabled": false
+      "analyze-enabled": false,
+      "plan-enabled": false
     },
     {
       "prompt-id": "P-003",
       "prompt-title": "Decision-oriented output",
       "type": "modification",        
-      "state": "in-progress",             
+      "state": "active",             
       "parent-id": "P-001",
       "analysis": {"approval": false, "state": "completed"},
       "questionnaire": {"approval": true, "state": "approved"},
       "plan": {"approval": true, "state": "waiting-approval"},
-      "analyze-enabled": false
+      "analyze-enabled": false,
+      "plan-enabled": false
     },
     {
       "prompt-id": "P-004",
       "prompt-title": "Add logging",
       "type": "main",     
-      "state": "draft",               
+      "state": "completed",               
       "parent-id": null,
       "analysis": {"approval": false, "state": "not-started"},
       "questionnaire": {"approval": true, "state": "not-started"},
       "plan": {"approval": false, "state": "not-started"},
-      "analyze-enabled": false
+      "analyze-enabled": false,
+      "plan-enabled": false
     }    
   ]
 }

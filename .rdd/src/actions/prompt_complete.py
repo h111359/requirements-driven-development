@@ -71,11 +71,11 @@ def _dump_json(path: Path, data: Dict[str, Any]) -> None:
 
 
 def _find_active_prompt(prompts: list[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-    """Find the prompt currently in 'planned' or 'in-progress' state."""
+    """Find the prompt currently in 'active' state."""
     for p in prompts:
         if not isinstance(p, dict):
             continue
-        if p.get("state") in {"planned", "in-progress"}:
+        if p.get("state") == "active":
             return p
     return None
 
@@ -122,9 +122,9 @@ def main() -> int:
         target_prompt = _find_active_prompt(prompts)
         if target_prompt is None:
             raise ValueError(
-                "No active prompt found (no prompt in 'planned' or 'in-progress' state); "
+                "No active prompt found (no prompt in 'active' state); "
                 "please specify prompt-id= explicitly\n"
-                "Remediation: Either specify a prompt-id or set a prompt to 'planned' or 'in-progress' state."
+                "Remediation: Either specify a prompt-id or set a prompt to 'active' state."
             )
 
     prompt_id = target_prompt["prompt-id"]

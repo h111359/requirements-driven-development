@@ -49,3 +49,7 @@ TBD
 %%PROMPT P-013 "Requirements add script"
 TBD
 %%ENDPROMPT
+
+%%PROMPT P-014 "States simplification"
+TBD
+%%ENDPROMPT

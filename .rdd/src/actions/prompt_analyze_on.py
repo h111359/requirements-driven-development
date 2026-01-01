@@ -4,7 +4,7 @@ Enable analyze mode for a prompt.
 
 This script sets the analyze-enabled flag to true for a specified prompt
 in the work iteration registry. If no prompt-id is provided, it defaults
-to the currently active prompt (one in 'planned' or 'in-progress' state).
+to the currently active prompt (one in 'active' state).
 
 Usage:
     python prompt_analyze_on.py [prompt-id=<id>]
@@ -21,7 +21,7 @@ import sys
 
 def find_active_prompt(prompts):
     """
-    Find the active prompt (state = 'planned' or 'in-progress').
+    Find the active prompt (state = 'active').
     
     Args:
         prompts (list): List of prompt metadata objects
@@ -30,7 +30,7 @@ def find_active_prompt(prompts):
         dict: The active prompt object, or None if not found
     """
     for prompt in prompts:
-        if prompt.get('state') in ['planned', 'in-progress']:
+        if prompt.get('state') == 'active':
             return prompt
     return None
 
@@ -73,8 +73,8 @@ def enable_analyze_mode(prompt_id=None):
         # Find active prompt
         target_prompt = find_active_prompt(prompts)
         if target_prompt is None:
-            print("ERROR: No active prompt found (state='planned' or 'in-progress')")
-            print("REMEDIATION: Create a prompt or set an existing prompt to 'planned' or 'in-progress' state.")
+            print("ERROR: No active prompt found (state='active')")
+            print("REMEDIATION: Create a prompt or set an existing prompt to 'active' state.")
             return 1
         prompt_id = target_prompt.get('prompt-id')
     else:
@@ -90,10 +90,10 @@ def enable_analyze_mode(prompt_id=None):
             print("REMEDIATION: Check the prompt ID and try again. Use 'rdd.py prompt list' to see available prompts.")
             return 1
     
-    # Validate that the prompt is not completed
-    if target_prompt.get('state') == 'completed':
-        print(f"ERROR: Cannot enable analyze mode for completed prompt '{prompt_id}'")
-        print("REMEDIATION: Analyze mode can only be enabled for prompts in 'draft', 'planned', or 'in-progress' state.")
+    # Validate that the prompt is in active state
+    if target_prompt.get('state') != 'active':
+        print(f"ERROR: Cannot enable analyze mode for prompt '{prompt_id}' in state '{target_prompt.get('state')}'")
+        print("REMEDIATION: Analyze mode can only be enabled for prompts in 'active' state.")
         return 1
     
     # Enforce mutual exclusivity: disable plan mode if enabled

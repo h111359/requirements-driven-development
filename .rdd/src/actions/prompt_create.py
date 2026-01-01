@@ -13,7 +13,7 @@ Behavior:
 This script is intentionally deterministic and non-interactive.
 
 Usage (named parameters):
-  prompt_create.py title="<title>" type=<main|modification> [state=<draft|planned|in-progress|completed>] \
+  prompt_create.py title="<title>" type=<main|modification> [state=<active|completed>] \
       [id=P-001] [parent-id=P-001|parent_id=P-001|parent-id=null] \
       [analysis-approval=true|false] [analysis-state=<not-started|waiting-approval|approved|completed>] \
       [questionnaire-approval=true|false] [questionnaire-state=<not-started|waiting-approval|approved|completed>] \
@@ -35,7 +35,7 @@ from typing import Any, Dict, Optional
 _PROMPT_ID_RE = re.compile(r"^P-[0-9]{3,}$")
 
 _PROMPT_TYPES = {"main", "modification"}
-_PROMPT_STATES = {"draft", "planned", "in-progress", "completed"}
+_PROMPT_STATES = {"active", "completed"}
 _ARTIFACT_STATES = {"not-started", "waiting-approval", "approved", "completed"}
 
 
@@ -187,7 +187,7 @@ def main() -> int:
         raise ValueError(f"'type' required; expected one of {sorted(_PROMPT_TYPES)}")
     prompt_type = prompt_type.strip()
 
-    state = (_get_param(params, "state") or "draft").strip()
+    state = (_get_param(params, "state") or "active").strip()
     if state not in _PROMPT_STATES:
         raise ValueError(f"Invalid prompt state {state!r}; expected one of {sorted(_PROMPT_STATES)}")
 
@@ -232,16 +232,16 @@ def main() -> int:
     if prompt_id in existing_ids:
         raise ValueError(f"Prompt id already exists in work iteration registry: {prompt_id}")
 
-    # Enforce the single-active invariant when creating planned/in-progress prompts.
-    if state in {"planned", "in-progress"}:
+    # Enforce the single-active invariant when creating active prompts.
+    if state == "active":
         for p in prompts:
             if not isinstance(p, dict):
                 continue
             s = p.get("state")
-            if s in {"planned", "in-progress"}:
+            if s == "active":
                 raise ValueError(
-                    "Only one prompt may be in state 'planned' or 'in-progress' at a time; "
-                    f"already active: {p.get('id')!r}"
+                    "Only one prompt may be in 'active' state at a time; "
+                    f"already active: {p.get('prompt-id')!r}"
                 )
 
     # Validate parent relationship.
