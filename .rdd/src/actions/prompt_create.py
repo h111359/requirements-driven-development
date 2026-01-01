@@ -195,7 +195,7 @@ def main() -> int:
     # Create prompt metadata using the current flat structure
     prompt_metadata: Dict[str, Any] = {
         "prompt-id": prompt_id,
-        "title": title,
+        "prompt-title": title,
         "state": state,
         "questionnaire-generated": False,
         "questionnaire-answered": False,
