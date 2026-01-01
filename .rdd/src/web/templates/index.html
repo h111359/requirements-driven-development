@@ -130,6 +130,11 @@
                                             <label class="btn btn-outline-success" for="mode-implement" onclick="updateExecutionMode('implement')">
                                                 <i class="bi bi-code-square"></i> Implement
                                             </label>
+
+                                            <input type="radio" class="btn-check" name="execution-mode" id="mode-modification" value="modification" autocomplete="off">
+                                            <label class="btn btn-outline-warning" for="mode-modification" onclick="updateExecutionMode('modification')">
+                                                <i class="bi bi-pencil-square"></i> Modification
+                                            </label>
                                         </div>
                                         <div class="text-muted mt-2">
                                             <small><i class="bi bi-info-circle"></i> Select the mode for the next execution in VS Code</small>
@@ -139,6 +144,11 @@
                                                 <i class="bi bi-check-lg"></i> Complete Prompt
                                             </button>
                                             <small class="text-muted ms-2" id="complete-prompt-hint">Prompt must be executed first</small>
+                                            
+                                            <button class="btn btn-primary ms-3" id="add-modification-btn" onclick="showAddModificationModal()" disabled>
+                                                <i class="bi bi-plus-circle"></i> Add Modification
+                                            </button>
+                                            <small class="text-muted ms-2" id="add-modification-hint">Available after implementation completed</small>
                                         </div>
                                     </div>
                                 </div>
@@ -213,6 +223,12 @@
                                                     <i class="bi bi-code-square"></i> Implementation
                                                 </button>
                                             </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="active-modifications-tab" data-bs-toggle="tab" 
+                                                        data-bs-target="#active-modifications-content-tab" type="button" role="tab">
+                                                    <i class="bi bi-pencil-square"></i> Modifications
+                                                </button>
+                                            </li>
                                         </ul>
 
                                         <!-- Tab Content -->
@@ -255,6 +271,11 @@
                                                 </div>
                                                 <div class="alert alert-info">
                                                     <i class="bi bi-info-circle"></i> Implementation file is view-only.
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="active-modifications-content-tab" role="tabpanel">
+                                                <div id="modifications-list-container">
+                                                    <p class="text-muted">No modifications yet.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -431,6 +452,35 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-primary" onclick="setPromptState()">
                         <i class="bi bi-check-circle"></i> Update State
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Modification Modal -->
+    <div class="modal fade" id="addModificationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Modification</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted">
+                        <i class="bi bi-info-circle"></i> Modifications are for small corrections after implementation is completed.
+                        For complex changes, create a new prompt instead.
+                    </p>
+                    <div class="mb-3">
+                        <label for="modification-description" class="form-label">Description</label>
+                        <textarea class="form-control" id="modification-description" rows="5" 
+                                  placeholder="Describe the modification needed..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="createModification()">
+                        <i class="bi bi-plus-circle"></i> Create Modification
                     </button>
                 </div>
             </div>

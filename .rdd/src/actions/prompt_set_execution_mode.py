@@ -10,10 +10,11 @@ Usage:
     python prompt_set_execution_mode.py mode=<mode> [prompt-id=<id>]
 
 Modes:
-    no-action - No execution action
-    analyze   - Generate questionnaire
-    plan      - Generate plan
-    implement - Execute implementation
+    no-action    - No execution action
+    analyze      - Generate questionnaire
+    plan         - Generate plan
+    implement    - Execute implementation
+    modification - Execute a modification (only available after implementation-completed=true)
 
 Example:
     python prompt_set_execution_mode.py mode=analyze
@@ -25,7 +26,7 @@ import os
 import sys
 
 
-VALID_MODES = ['no-action', 'analyze', 'plan', 'implement']
+VALID_MODES = ['no-action', 'analyze', 'plan', 'implement', 'modification']
 
 
 def find_active_prompt(prompts):

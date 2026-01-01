@@ -318,6 +318,140 @@ class RDDWebHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json_response(result)
             return
         
+        elif path == "/api/modification/create":
+            # Create a modification
+            description = params.get("description", "")
+            
+            if not description:
+                self.send_error_response("Missing description")
+                return
+            
+            result = self.execute_action("modification", "create", {"description": description})
+            self.send_json_response(result)
+            return
+        
+        elif path == "/api/modification/list":
+            # List modifications
+            result = self.execute_action("modification", "list", {})
+            
+            # If successful, try to parse and enhance the output
+            if result.get("success"):
+                try:
+                    # Try to read the modifications-log.json file
+                    registry_path = _repo_root() / ".rdd-instance" / "workdir" / "work-iteration-registry.json"
+                    if registry_path.exists():
+                        with open(registry_path, 'r', encoding='utf-8') as f:
+                            registry = json.load(f)
+                        
+                        # Find active prompt
+                        active_prompt = None
+                        for prompt in registry.get('prompts', []):
+                            if prompt.get('state') == 'active':
+                                active_prompt = prompt
+                                break
+                        
+                        if active_prompt:
+                            prompt_id = active_prompt.get('prompt-id')
+                            prompt_title = active_prompt.get('prompt-title', '')
+                            
+                            # Find prompt folder
+                            workdir = _repo_root() / ".rdd-instance" / "workdir"
+                            prompt_folder = None
+                            for item in workdir.iterdir():
+                                if item.is_dir() and item.name.startswith(f"{prompt_id}_"):
+                                    prompt_folder = item
+                                    break
+                            
+                            if prompt_folder:
+                                modifications_log_file = prompt_folder / "modifications-log.json"
+                                if modifications_log_file.exists():
+                                    with open(modifications_log_file, 'r', encoding='utf-8') as f:
+                                        modifications_log = json.load(f)
+                                    
+                                    # Read descriptions from modification files
+                                    modifications = []
+                                    for mod in modifications_log.get('modifications', []):
+                                        mod_id = mod.get('modification-id')
+                                        mod_file = prompt_folder / f"modification-{mod_id}.md"
+                                        description = ""
+                                        if mod_file.exists():
+                                            with open(mod_file, 'r', encoding='utf-8') as f:
+                                                description = f.read().strip()
+                                        
+                                        modifications.append({
+                                            'modification-id': mod_id,
+                                            'created': mod.get('created'),
+                                            'status': mod.get('status'),
+                                            'completed': mod.get('completed'),
+                                            'description': description
+                                        })
+                                    
+                                    result['modifications'] = modifications
+                except Exception as e:
+                    # If parsing fails, just return the basic result
+                    result['parse_error'] = str(e)
+            
+            self.send_json_response(result)
+            return
+        
+        elif path == "/api/modification/update":
+            # Update a modification
+            modification_id = params.get("modificationId", "")
+            description = params.get("description", "")
+            
+            if not modification_id or not description:
+                self.send_error_response("Missing modificationId or description")
+                return
+            
+            try:
+                # Find active prompt
+                registry_path = _repo_root() / ".rdd-instance" / "workdir" / "work-iteration-registry.json"
+                if not registry_path.exists():
+                    self.send_error_response("Work iteration registry not found")
+                    return
+                
+                with open(registry_path, 'r', encoding='utf-8') as f:
+                    registry = json.load(f)
+                
+                active_prompt = None
+                for prompt in registry.get('prompts', []):
+                    if prompt.get('state') == 'active':
+                        active_prompt = prompt
+                        break
+                
+                if not active_prompt:
+                    self.send_error_response("No active prompt found")
+                    return
+                
+                prompt_id = active_prompt.get('prompt-id')
+                prompt_title = active_prompt.get('prompt-title', '')
+                
+                # Find prompt folder
+                workdir = _repo_root() / ".rdd-instance" / "workdir"
+                prompt_folder = None
+                for item in workdir.iterdir():
+                    if item.is_dir() and item.name.startswith(f"{prompt_id}_"):
+                        prompt_folder = item
+                        break
+                
+                if not prompt_folder:
+                    self.send_error_response("Prompt folder not found")
+                    return
+                
+                # Update modification file
+                mod_file = prompt_folder / f"modification-{modification_id}.md"
+                if not mod_file.exists():
+                    self.send_error_response(f"Modification {modification_id} not found")
+                    return
+                
+                with open(mod_file, 'w', encoding='utf-8') as f:
+                    f.write(description)
+                
+                self.send_json_response({"success": True, "message": "Modification updated successfully"})
+            except Exception as e:
+                self.send_error_response(f"Failed to update modification: {str(e)}")
+            return
+        
         else:
             self.send_error_response("Unknown endpoint", 404)
     

@@ -154,6 +154,22 @@ The framework enables:
 
 - [UR-20251231-0702] The framework shall enforce that only one prompt can be in `active` state at any time, ensuring clear focus on current work.
 
+- [UR-20260101-1610] The framework shall support creation of modifications for prompts that have completed implementation, enabling small corrections without requiring a new prompt.
+
+- [UR-20260101-1611] Each modification shall be stored in a separate markdown file in the prompt folder with naming pattern modification-<ID>.md where ID is a sequential three-digit number.
+
+- [UR-20260101-1612] The framework shall maintain a modifications-log.json file in each prompt folder that tracks metadata for all modifications including creation timestamp, status, and completion timestamp.
+
+- [UR-20260101-1613] Modifications shall skip questionnaire and planning steps, going directly to implementation to provide a lightweight workflow for small corrections.
+
+- [UR-20260101-1614] The framework shall enforce that only one modification can be active at a time per prompt, tracked via the current-modification-id field in the work iteration registry.
+
+- [UR-20260101-1615] The Web UI shall display an "Add Modification" button in the active prompt page that is enabled only when implementation-completed is true.
+
+- [UR-20260101-1616] The Web UI shall provide a modifications history section showing all modifications with their status, timestamps, and descriptions.
+
+- [UR-20260101-1617] The framework shall provide a "modification" execution mode that executes the current modification and logs implementation details to a modification-specific implementation file.
+
 
 
 ## Technical Requirements
@@ -386,3 +402,30 @@ The framework enables:
 
 - [TR-20251231-0702] The `prompt_create.py` script shall validate that no other prompt is in `active` state when creating a new prompt, and shall fail with a clear error message if validation fails.
 - [TR-20260101-1000] The framework shall not distinguish between different types of prompts. All prompts shall be treated equally without type classification or parent-child relationships.
+- [TR-20260101-1610] The framework shall provide Python action scripts modification_create.py, modification_list.py, and modification_complete.py in .rdd/src/actions/ for managing modifications.
+
+- [TR-20260101-1611] The work-iteration-registry.json schema shall include current-modification-id and modifications-count fields for each prompt entry to track modification state.
+
+- [TR-20260101-1612] The modifications-log.json file shall store an array of modification metadata objects with fields modification-id, created, status, and completed timestamps in ISO8601 format.
+
+- [TR-20260101-1613] The modification_create.py script shall validate that implementation-completed is true before allowing modification creation and shall fail with a clear error message if validation fails.
+
+- [TR-20260101-1614] The modification_create.py script shall increment the modifications-count field and set current-modification-id when creating a new modification.
+
+- [TR-20260101-1615] The modification_complete.py script shall update the modifications-log.json with completion timestamp, set status to completed, and reset current-modification-id to null.
+
+- [TR-20260101-1616] The execution prompt logic in .rdd/prompt-snippets/execution.md shall include a modification execution mode that follows instructions in .rdd/prompt-snippets/execution-step.modification.md.
+
+- [TR-20260101-1617] The Web UI shall provide /api/modification/create and /api/modification/list endpoints that invoke the corresponding action scripts and return JSON responses.
+
+- [TR-20260101-1618] The prompt_set_execution_mode.py script shall support "modification" as a valid execution mode value in addition to no-action, analyze, plan, and implement.
+
+- [UR-20260101-1645] The Web UI shall allow users to edit the description of in-progress modifications directly from the modifications list.
+
+- [UR-20260101-1646] The Web UI shall display an "Edit" button for modifications with status not equal to "completed" in the modifications history section.
+
+- [TR-20260101-1645] The Web UI shall provide inline editing capability for modification descriptions using a textarea with Save and Cancel buttons.
+
+- [TR-20260101-1646] The Web UI shall provide /api/modification/update endpoint that accepts modificationId and description parameters and updates the corresponding modification file.
+
+- [TR-20260101-1647] The modification edit functionality shall validate that the description is not empty before allowing save operation.

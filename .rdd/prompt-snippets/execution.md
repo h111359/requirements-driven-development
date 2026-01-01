@@ -19,6 +19,14 @@
   
 - [QUESTIONNAIRE] is a file containing questions to the user. The file location is in [active-prompt-folder]. The file name convention is `questionnaire.md`.
 
+- [CURRENT-MODIFICATION-ID] is the value of `current-modification-id` field in [WI-REGISTRY] for the active prompt
+
+- [MODIFICATION-FILE] is the file `modification-<[CURRENT-MODIFICATION-ID]>.md` in [ACTIVE-PROMPT-FOLDER]
+
+- [MODIFICATION-IMPLEMENTATION] is the file `modification-<[CURRENT-MODIFICATION-ID]>-implementation.md` in [ACTIVE-PROMPT-FOLDER]
+
+- [MODIFICATIONS-LOG] is the file `modifications-log.json` in [ACTIVE-PROMPT-FOLDER]
+
 - [MODIFIER] is a key word written in the chat after the prompt file. The MODIFIER could be:
   * modification
 
@@ -57,6 +65,14 @@
      * After implementation is completed:
        - Execute `.rdd/src/actions/prompt_set_executed_on.py`
        - Execute `.rdd/src/actions/prompt_implementation_completed_on.py`
+       - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
+     * Stop (do not continue with the next instructions here)
+   
+   * If `execution-mode` is `"modification"`:
+     * Write in the chat "Modification mode"
+     * Follow the instructions in `.rdd/prompt-snippets/execution-step.modification.md`
+     * After modification execution is completed:
+       - Execute `.rdd/src/actions/modification_complete.py`
        - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
      * Stop (do not continue with the next instructions here)
 
