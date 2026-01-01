@@ -17,7 +17,7 @@
         },
         {
             "prompt-id": "P-002",
-            "title": "prompt-set-state",
+            "prompt-title": "prompt-set-state",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,
@@ -28,7 +28,7 @@
         },
         {
             "prompt-id": "P-003",
-            "title": "CLI",
+            "prompt-title": "CLI",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,
@@ -39,7 +39,7 @@
         },
         {
             "prompt-id": "P-004",
-            "title": "Add prompt completion with commit command",
+            "prompt-title": "Add prompt completion with commit command",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,
@@ -50,7 +50,7 @@
         },
         {
             "prompt-id": "P-005",
-            "title": "Web Interface Draft",
+            "prompt-title": "Web Interface Draft",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,
@@ -61,7 +61,7 @@
         },
         {
             "prompt-id": "P-006",
-            "title": "Troubleshoot web interface",
+            "prompt-title": "Troubleshoot web interface",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,
@@ -72,7 +72,7 @@
         },
         {
             "prompt-id": "P-007",
-            "title": "Edit prompt text in Web UI",
+            "prompt-title": "Edit prompt text in Web UI",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,
@@ -83,7 +83,7 @@
         },
         {
             "prompt-id": "P-008",
-            "title": "Move analyze command in the Web UI",
+            "prompt-title": "Move analyze command in the Web UI",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,
@@ -94,7 +94,7 @@
         },
         {
             "prompt-id": "P-009",
-            "title": "Completion operation",
+            "prompt-title": "Completion operation",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,
@@ -105,7 +105,7 @@
         },
         {
             "prompt-id": "P-010",
-            "title": "Set complete status before git commit command",
+            "prompt-title": "Set complete status before git commit command",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,
@@ -116,7 +116,7 @@
         },
         {
             "prompt-id": "P-011",
-            "title": "Remove git_commit.py",
+            "prompt-title": "Remove git_commit.py",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,
@@ -127,7 +127,7 @@
         },
         {
             "prompt-id": "P-012",
-            "title": "Plan mode",
+            "prompt-title": "Plan mode",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,
@@ -138,7 +138,7 @@
         },
         {
             "prompt-id": "P-013",
-            "title": "Requirements add script",
+            "prompt-title": "Requirements add script",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,
@@ -149,7 +149,7 @@
         },
         {
             "prompt-id": "P-014",
-            "title": "States simplification",
+            "prompt-title": "States simplification",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,
@@ -160,7 +160,7 @@
         },
         {
             "prompt-id": "P-015",
-            "title": "Remove prompt type",
+            "prompt-title": "Remove prompt type",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,
@@ -171,7 +171,7 @@
         },
         {
             "prompt-id": "P-016",
-            "title": "Active prompt in a separate page",
+            "prompt-title": "Active prompt in a separate page",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,

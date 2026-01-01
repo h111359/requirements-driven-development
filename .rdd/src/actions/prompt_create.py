@@ -13,11 +13,7 @@ Behavior:
 This script is intentionally deterministic and non-interactive.
 
 Usage (named parameters):
-  prompt_create.py title="<title>" [state=<active|completed>] \
-      [id=P-001] \
-      [analysis-approval=true|false] [analysis-state=<not-started|waiting-approval|approved|completed>] \
-      [questionnaire-approval=true|false] [questionnaire-state=<not-started|waiting-approval|approved|completed>] \
-      [plan-approval=true|false] [plan-state=<not-started|waiting-approval|approved|completed>]
+  prompt_create.py title="<title>" [state=<active|completed>] [id=P-001]
 
 Output:
   Prints the created prompt ID as a single line to stdout.
@@ -35,21 +31,11 @@ from typing import Any, Dict, Optional
 _PROMPT_ID_RE = re.compile(r"^P-[0-9]{3,}$")
 
 _PROMPT_STATES = {"active", "completed"}
-_ARTIFACT_STATES = {"not-started", "waiting-approval", "approved", "completed"}
 
 
 def _repo_root() -> Path:
     # This file lives at: <repo>/.rdd/src/actions/prompt_create.py
     return Path(__file__).resolve().parents[3]
-
-
-def _parse_bool(raw: str) -> bool:
-    v = raw.strip().lower()
-    if v in {"true", "1", "yes", "y"}:
-        return True
-    if v in {"false", "0", "no", "n"}:
-        return False
-    raise ValueError(f"Invalid boolean value: {raw!r}")
 
 
 def _parse_params(argv: list[str]) -> Dict[str, str]:
@@ -145,31 +131,6 @@ def _ensure_prompt_workdir_artifacts(workdir: Path, prompt_id: str, title: str) 
     return prompt_dir
 
 
-def _artifact_block(
-    params: Dict[str, str],
-    name: str,
-    *,
-    default_approval: bool = False,
-    default_state: str = "not-started",
-) -> Dict[str, Any]:
-    approval_raw = _get_param(params, f"{name}-approval", f"{name}_approval")
-    state_raw = _get_param(params, f"{name}-state", f"{name}_state")
-
-    approval = default_approval if approval_raw is None else _parse_bool(approval_raw)
-    state = default_state if state_raw is None else state_raw.strip()
-
-    if state not in _ARTIFACT_STATES:
-        raise ValueError(
-            f"Invalid {name} state {state!r}; expected one of {sorted(_ARTIFACT_STATES)}"
-        )
-    if not approval and state in {"waiting-approval", "approved"}:
-        raise ValueError(
-            f"Invalid {name} state {state!r} when {name} approval is false"
-        )
-
-    return {"approval": approval, "state": state}
-
-
 def main() -> int:
     params = _parse_params(sys.argv[1:])
 
@@ -231,18 +192,17 @@ def main() -> int:
                     f"already active: {p.get('prompt-id')!r}"
                 )
 
-    analysis = _artifact_block(params, "analysis")
-    questionnaire = _artifact_block(params, "questionnaire")
-    plan = _artifact_block(params, "plan")
-
+    # Create prompt metadata using the current flat structure
     prompt_metadata: Dict[str, Any] = {
         "prompt-id": prompt_id,
         "title": title,
         "state": state,
-        "analysis": analysis,
-        "questionnaire": questionnaire,
-        "plan": plan,
-        "analyze-enabled": False,
+        "questionnaire-generated": False,
+        "questionnaire-answered": False,
+        "plan-generated": False,
+        "implementation-completed": False,
+        "execution-mode": "no-action",
+        "executed": False,
     }
 
     prompts.append(prompt_metadata)

@@ -80,43 +80,41 @@ The JSON file MUST be an object with the following keys:
 
 * `state` (string)
   * **Meaning** - Defines if the prompt is currently active or completed. Only one prompt can be in `active` state at a given time, and this is the prompt which `execute command` (as defined in `.rdd-instance/specifications/requirements.md`) will run.
-  * Possible values: ["active" | "completed"]  
+  * Possible values: ["active" | "completed"]
 
-* `analysis` (object)
-  * **Meaning:**: Each prompt will generate a file `analysis.md` where will be stored the results of analysis of the prompt, the related requirements, found additional information, etc. Two keys manage the behavior of the execution - will the user be waited to approve the analysis or to proceed automatically.
-  * Keys: 
-    * `approval` (boolean) - false mean no approval is needed, the framework will create the file and will use it. true means the framework will create the file and will wait for approval from the user to continue based on its content.
-    * `state` (strings) - the state in which the generation of the file is. Possible values are `not-started` -> `waiting-approval` -> `approved` -> `completed` (or in case `approval` is false: `not-started` -> `completed`)
-
-* `questionnaire` (object)
-  * **Meaning:**: Each prompt will generate a file `questionnaire.md` where will be stored the questions for additional clarifications. Two keys manage the behavior of the execution - will the user be waited to approve the questionnaire answers or to proceed automatically.
-  * Keys: 
-    * `approval` (boolean) - false mean no approval is needed, the framework will create the file and will use it. true means the framework will create the file and will wait for approval from the user to continue based on its content.
-    * `state` (strings) - the state in which the generation of the file is. Possible values are `not-started` -> `waiting-approval` -> `approved` -> `completed` (or in case `approval` is false: `not-started` -> `completed`)
-
-* `plan` (object)
-  * **Meaning:**: Each prompt will generate a file `plan.md` where will be stored the plan for implementation of the prompt, the steps that will be executed, files to be changed, etc. Two keys manage the behavior of the execution - will the user be waited to approve the plan before implementation or to proceed automatically.
-  * Keys: 
-    * `approval` (boolean) - false mean no approval is needed, the framework will create the file and will use it. true means the framework will create the file and will wait for approval from the user to continue based on its content.
-    * `state` (strings) - the state in which the generation of the file is. Possible values are `not-started` -> `waiting-approval` -> `approved` -> `completed` (or in case `approval` is false: `not-started` -> `completed`)
-
-* `analyze-enabled` (boolean)
+* `questionnaire-generated` (boolean)
   * **Required:** yes
   * **Default value:** false
-  * **Meaning:** Controls whether analyze mode is enabled for this prompt. When set to `true`, the execute command will perform analysis instead of normal execution. The flag is automatically set to `false` after analyze execution completes.
-  * **Validation rules:**
-    * Can only be set to `true` for prompts with state `active`
-    * Cannot be enabled for prompts with state `completed`
-    * Setting this flag replaces the legacy chat-based "analyze" modifier
+  * **Meaning:** Indicates whether a questionnaire.md file has been generated for this prompt.
 
-* `plan-enabled` (boolean)
+* `questionnaire-answered` (boolean)
   * **Required:** yes
   * **Default value:** false
-  * **Meaning:** Controls whether plan mode is enabled for this prompt. When set to `true`, the execute command will generate only the plan without proceeding to implementation. The flag is automatically set to `false` after plan generation completes.
+  * **Meaning:** Indicates whether the questionnaire has been completely answered.
+
+* `plan-generated` (boolean)
+  * **Required:** yes
+  * **Default value:** false
+  * **Meaning:** Indicates whether a plan.md file has been generated for this prompt.
+
+* `implementation-completed` (boolean)
+  * **Required:** yes
+  * **Default value:** false (true for completed prompts)
+  * **Meaning:** Indicates whether the implementation has been completed.
+
+* `execution-mode` (string)
+  * **Required:** yes
+  * **Default value:** "no-action"
+  * **Meaning:** Defines what action the execute command will perform for this prompt.
+  * **Allowed values:** "no-action" | "analyze" | "plan" | "implement"
   * **Validation rules:**
-    * Can only be set to `true` for prompts with state `active`
-    * Cannot be enabled for prompts with state `completed`
-    * Mutually exclusive with `analyze-enabled` - only one can be `true` at a time
+    * Can be set to any value for prompts with state `active`
+    * Should typically be "no-action" for prompts with state `completed`
+
+* `executed` (boolean)
+  * **Required:** no
+  * **Default value:** false
+  * **Meaning:** Legacy field indicating whether the prompt has been executed at least once. Maintained for backward compatibility.
 
 
 ## Canonical example
@@ -133,41 +131,45 @@ The following is the canonical baseline structure (values may be empty during in
       "prompt-id": "P-001",
       "prompt-title": "Baseline problem statement",
       "state": "completed",
-      "analysis": {"approval": true, "state": "completed"},
-      "questionnaire": {"approval": true, "state": "completed"},
-      "plan": {"approval": true, "state": "completed"},
-      "analyze-enabled": false,
-      "plan-enabled": false
+      "questionnaire-generated": true,
+      "questionnaire-answered": true,
+      "plan-generated": true,
+      "implementation-completed": true,
+      "execution-mode": "no-action",
+      "executed": true
     },
     {
       "prompt-id": "P-002",
       "prompt-title": "Add architectural constraints",
       "state": "completed",
-      "analysis": {"approval": false, "state": "completed"},
-      "questionnaire": {"approval": false, "state": "completed"},
-      "plan": {"approval": true, "state": "approved"},
-      "analyze-enabled": false,
-      "plan-enabled": false
+      "questionnaire-generated": false,
+      "questionnaire-answered": false,
+      "plan-generated": true,
+      "implementation-completed": true,
+      "execution-mode": "no-action",
+      "executed": true
     },
     {
       "prompt-id": "P-003",
       "prompt-title": "Decision-oriented output",
       "state": "active",
-      "analysis": {"approval": false, "state": "completed"},
-      "questionnaire": {"approval": true, "state": "approved"},
-      "plan": {"approval": true, "state": "waiting-approval"},
-      "analyze-enabled": false,
-      "plan-enabled": false
+      "questionnaire-generated": true,
+      "questionnaire-answered": true,
+      "plan-generated": true,
+      "implementation-completed": false,
+      "execution-mode": "implement",
+      "executed": false
     },
     {
       "prompt-id": "P-004",
       "prompt-title": "Add logging",
       "state": "completed",
-      "analysis": {"approval": false, "state": "not-started"},
-      "questionnaire": {"approval": true, "state": "not-started"},
-      "plan": {"approval": false, "state": "not-started"},
-      "analyze-enabled": false,
-      "plan-enabled": false
+      "questionnaire-generated": false,
+      "questionnaire-answered": false,
+      "plan-generated": false,
+      "implementation-completed": true,
+      "execution-mode": "no-action",
+      "executed": true
     }    
   ]
 }
