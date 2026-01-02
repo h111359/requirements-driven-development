@@ -187,3 +187,7 @@ On the right side of the Questionnaire make the text of the question to be alway
 
 The questionnaire is generated and even answered, but the state in Active Prompt is not reflecting that - stays in the same way as it is not generated at all. Fix that
 %%ENDPROMPT
+
+%%PROMPT P-025 "Modification Implementation files - visible"
+Add a way the modification implementation files to be viewed - somewhere in the page when Modifications tab is selected
+%%ENDPROMPT

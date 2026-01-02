@@ -188,6 +188,8 @@ The framework enables:
 
 - [UR-20260102-1130] The Web UI questionnaire form shall use a two-column layout with context and question navigation on the left side and the current question details and answer options on the right side, enabling efficient navigation and better space utilization.
 
+- [UR-20260102-1645] The Web UI Active Prompt page shall provide a "View Implementation" button for each modification in the Modifications tab that displays the modification's implementation log file in a read-only modal dialog with monospace font formatting.
+
 
 
 ## Technical Requirements

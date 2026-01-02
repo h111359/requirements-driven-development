@@ -1954,6 +1954,11 @@ function displayModificationsList(modifications) {
                </button>` 
             : '';
         
+        // Add view implementation button for all modifications
+        const viewImplButton = `<button class="btn btn-sm btn-outline-secondary" onclick="viewModificationImplementation('${mod['modification-id']}')" title="View implementation log">
+                   <i class="bi bi-file-earmark-text"></i> View Implementation
+               </button>`;
+        
         html += `
             <div class="list-group-item">
                 <div class="d-flex w-100 justify-content-between align-items-start">
@@ -1967,7 +1972,8 @@ function displayModificationsList(modifications) {
                             Created: ${created} | Completed: ${completed}
                         </small>
                     </div>
-                    <div class="ms-2">
+                    <div class="ms-2 d-flex gap-1">
+                        ${viewImplButton}
                         ${editButton}
                     </div>
                 </div>
@@ -1978,6 +1984,43 @@ function displayModificationsList(modifications) {
     html += '</div>';
     container.innerHTML = html;
 }
+/**
+ * View modification implementation log
+ */
+async function viewModificationImplementation(modificationId) {
+    const filepath = `${currentPromptFolder}/modification-${modificationId}-implementation.md`;
+    const encodedFilepath = encodeURIComponent(filepath);
+    
+    // Set modal title
+    document.getElementById('view-modification-impl-title').textContent = `Modification ${modificationId} - Implementation Log`;
+    
+    // Load implementation file
+    try {
+        const response = await fetch('/api/file/' + encodedFilepath + '?token=' + sessionToken);
+        const result = await response.json();
+        
+        const contentArea = document.getElementById('view-modification-impl-content');
+        
+        if (result.success) {
+            const content = result.content || '';
+            if (content.trim() === '') {
+                contentArea.value = 'No implementation log recorded yet.';
+            } else {
+                contentArea.value = content;
+            }
+        } else {
+            contentArea.value = 'Implementation log file not found or could not be loaded.';
+        }
+    } catch (error) {
+        console.error('Error loading modification implementation:', error);
+        document.getElementById('view-modification-impl-content').value = 'Error loading implementation log: ' + error.message;
+    }
+    
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('viewModificationImplementationModal'));
+    modal.show();
+}
+
 /**
  * Edit a modification description
  */
