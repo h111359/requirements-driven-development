@@ -174,7 +174,15 @@ The framework enables:
 
 - [UR-20260102-0101] The Web UI shall provide the "Create New Prompt" button on the Active Prompt page to enable quick prompt creation from the primary workspace.
 
+- [UR-20260102-1300] The framework shall store questionnaire data in JSON format with structured fields for questions, options, pros/cons, recommendations, and user answers to enable programmatic parsing and interactive UI rendering.
 
+- [UR-20260102-1301] The Web UI Active Prompt page shall display questionnaires as interactive forms with radio buttons for option selection, custom answer text inputs, and visual indicators for recommendations.
+
+- [UR-20260102-1302] User answers to questionnaire questions shall be persisted immediately to the JSON file when selections are made, without requiring a manual save action.
+
+- [UR-20260102-1303] The questionnaire form shall display pros and cons for each answer option, show recommended answers with rationale, and allow custom text answers when predefined options are insufficient.
+
+- [UR-20260102-1304] The framework shall support both legacy markdown questionnaires (read-only display) and new JSON questionnaires (interactive forms) without requiring migration of historical data.
 
 ## Technical Requirements
 
@@ -435,3 +443,22 @@ The framework enables:
 - [TR-20260101-1646] The Web UI shall provide /api/modification/update endpoint that accepts modificationId and description parameters and updates the corresponding modification file.
 
 - [TR-20260101-1647] The modification edit functionality shall validate that the description is not empty before allowing save operation.
+- [TR-20260102-1300] Questionnaire JSON files shall follow the schema defined in `.rdd/conventions/questionnaire-json-schema.md` with root-level `context` and `questions` array fields.
+
+- [TR-20260102-1301] Each question object in the JSON shall include: `id`, `question-text`, `options` array, `recommended-option`, `recommendation-rationale`, and `user-selection` object with `type` and `value` fields.
+
+- [TR-20260102-1302] Question options shall be stored as an array of objects with `id`, `label`, `pros`, and `cons` fields for each option.
+
+- [TR-20260102-1303] User selections shall be stored as an object with `type` field ("predefined", "custom", or null) and `value` field containing the selected option ID or custom text.
+
+- [TR-20260102-1304] The Web UI shall render questionnaire forms using Bootstrap accordion components with individual panels for each question, displaying options as radio buttons with associated pros/cons text.
+
+- [TR-20260102-1305] The questionnaire form shall implement immediate persistence using the existing `/api/file/save` endpoint, updating the entire JSON file when user selections change.
+
+- [TR-20260102-1306] Custom answer text inputs shall use explicit save buttons rather than debounced auto-save to ensure users confirm their custom text submissions.
+
+- [TR-20260102-1307] The analyze execution step in `.rdd/prompt-snippets/execution-step.analyze.md` shall generate questionnaire data in JSON format stored as `questionnaire.json` in the prompt's working folder.
+
+- [TR-20260102-1308] The prompt creation script `.rdd/src/actions/prompt_create.py` shall initialize new prompts with an empty `questionnaire.json` file containing the base structure with empty context and questions array.
+
+- [TR-20260102-1309] The Web UI Active Prompt page shall detect questionnaire file type (.json vs .md) and render interactive forms for JSON files while displaying markdown files as read-only text for legacy support.

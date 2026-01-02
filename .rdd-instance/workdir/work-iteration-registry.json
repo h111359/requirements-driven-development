@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 22,
+    "prompt-id-sequence-next-value": 24,
     "git-enabled": true,
     "prompts": [
         {
@@ -237,6 +237,29 @@
             "execution-mode": "no-action",
             "executed": true,
             "analyze-enabled": false
+        },
+        {
+            "prompt-id": "P-022",
+            "prompt-title": "Questionnaire to JSON",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": false,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "analyze-enabled": false
+        },
+        {
+            "prompt-id": "P-023",
+            "prompt-title": "Test Questionnaire JSON",
+            "state": "completed",
+            "questionnaire-generated": false,
+            "questionnaire-answered": false,
+            "plan-generated": false,
+            "implementation-completed": false,
+            "execution-mode": "no-action",
+            "executed": false
         }
     ]
 }

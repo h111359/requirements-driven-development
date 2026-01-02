@@ -67,7 +67,7 @@ function showSection(sectionName) {
 /**
  * Show alert message
  */
-function showAlert(type, message) {
+function showAlert(type, message, duration = 5000) {
     const alertContainer = document.getElementById('alert-container');
     const alertId = 'alert-' + Date.now();
     
@@ -80,14 +80,14 @@ function showAlert(type, message) {
     
     alertContainer.innerHTML = alertHtml;
     
-    // Auto-dismiss after 5 seconds
+    // Auto-dismiss after specified duration
     setTimeout(() => {
         const alert = document.getElementById(alertId);
         if (alert) {
             const bsAlert = new bootstrap.Alert(alert);
             bsAlert.close();
         }
-    }, 5000);
+    }, duration);
 }
 
 /**
@@ -699,7 +699,7 @@ async function loadActivePromptFiles(promptId) {
         await Promise.all([
             loadActivePromptFile('prompt.md'),
             loadActivePromptFile('plan.md'),
-            loadActivePromptFile('questionnaire.md'),
+            loadQuestionnaire(),
             loadActivePromptFile('implementation.md')
         ]);
     } catch (error) {
@@ -774,6 +774,309 @@ async function saveActivePromptFile(filename) {
     } catch (error) {
         showAlert('danger', `Failed to save ${filename}: ` + error.message);
     }
+}
+
+/**
+ * Load questionnaire (tries JSON first, then MD for legacy support)
+ */
+async function loadQuestionnaire() {
+    const container = document.getElementById('questionnaire-container');
+    
+    if (!container) {
+        console.warn('Questionnaire container not found');
+        return;
+    }
+    
+    try {
+        // Try to load questionnaire.json first
+        const jsonPath = `${currentPromptFolder}/questionnaire.json`;
+        const jsonResponse = await fetch('/api/file/' + jsonPath + '?token=' + sessionToken);
+        const jsonResult = await jsonResponse.json();
+        
+        if (jsonResult.success && jsonResult.content) {
+            // Parse and render JSON questionnaire
+            const questionnaireData = JSON.parse(jsonResult.content);
+            renderQuestionnaireForm(questionnaireData, jsonPath);
+            return;
+        }
+    } catch (error) {
+        console.log('questionnaire.json not found or invalid, trying .md');
+    }
+    
+    // Fall back to questionnaire.md (legacy)
+    try {
+        const mdPath = `${currentPromptFolder}/questionnaire.md`;
+        const mdResponse = await fetch('/api/file/' + mdPath + '?token=' + sessionToken);
+        const mdResult = await mdResponse.json();
+        
+        if (mdResult.success) {
+            renderQuestionnaireLegacy(mdResult.content || '');
+        } else {
+            renderQuestionnaireNotFound();
+        }
+    } catch (error) {
+        console.error('Error loading questionnaire:', error);
+        renderQuestionnaireNotFound();
+    }
+}
+
+/**
+ * Render questionnaire form from JSON data
+ */
+function renderQuestionnaireForm(data, filepath) {
+    const container = document.getElementById('questionnaire-container');
+    
+    let html = '';
+    
+    // Context section
+    if (data.context) {
+        html += `
+            <div class="alert alert-info mb-4">
+                <h5 class="alert-heading"><i class="bi bi-info-circle"></i> Context</h5>
+                <p class="mb-0">${escapeHtml(data.context)}</p>
+            </div>
+        `;
+    }
+    
+    // Questions accordion
+    if (data.questions && data.questions.length > 0) {
+        // Calculate completion stats
+        const totalQuestions = data.questions.length;
+        const answeredQuestions = data.questions.filter(q => q['user-selection'] && q['user-selection'].type).length;
+        const completionPercent = Math.round((answeredQuestions / totalQuestions) * 100);
+        
+        html += `
+            <div class="mb-3">
+                <h5>Questions (${answeredQuestions} / ${totalQuestions} answered)</h5>
+                <div class="progress mb-3">
+                    <div class="progress-bar ${completionPercent === 100 ? 'bg-success' : 'bg-warning'}" 
+                         role="progressbar" style="width: ${completionPercent}%" 
+                         aria-valuenow="${completionPercent}" aria-valuemin="0" aria-valuemax="100">
+                        ${completionPercent}%
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        html += '<div class="accordion" id="questionnaireAccordion">';
+        
+        data.questions.forEach((question, index) => {
+            const questionId = question.id || `Q${index + 1}`;
+            const isAnswered = question['user-selection'] && question['user-selection'].type;
+            const accordionId = `question-${questionId}`;
+            
+            html += `
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button ${index !== 0 ? 'collapsed' : ''}" type="button" 
+                                data-bs-toggle="collapse" data-bs-target="#${accordionId}">
+                            <strong>${questionId}:</strong>&nbsp;${escapeHtml(question['question-text'] || '')}
+                            ${isAnswered ? '<span class="badge bg-success ms-2"><i class="bi bi-check-circle"></i> Answered</span>' : 
+                                         '<span class="badge bg-warning ms-2"><i class="bi bi-clock"></i> Unanswered</span>'}
+                        </button>
+                    </h2>
+                    <div id="${accordionId}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" 
+                         data-bs-parent="#questionnaireAccordion">
+                        <div class="accordion-body">
+                            ${renderQuestion(question, questionId, filepath)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+    } else {
+        html += '<p class="text-muted">No questions available.</p>';
+    }
+    
+    container.innerHTML = html;
+}
+
+/**
+ * Render a single question with options
+ */
+function renderQuestion(question, questionId, filepath) {
+    let html = '';
+    
+    // Recommendation alert
+    if (question['recommended-option'] && question['recommendation-rationale']) {
+        html += `
+            <div class="alert alert-success" role="alert">
+                <h6 class="alert-heading"><i class="bi bi-star-fill"></i> Recommended: Option ${question['recommended-option']}</h6>
+                <p class="mb-0 small">${escapeHtml(question['recommendation-rationale'])}</p>
+            </div>
+        `;
+    }
+    
+    // Options as radio buttons
+    if (question.options && question.options.length > 0) {
+        const userSelection = question['user-selection'] || { type: null, value: null };
+        
+        question.options.forEach(option => {
+            const optionId = option.id || '';
+            const isSelected = userSelection.type === 'predefined' && userSelection.value === optionId;
+            const inputId = `${questionId}-option-${optionId}`;
+            
+            html += `
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="${questionId}-options" 
+                           id="${inputId}" value="${optionId}" ${isSelected ? 'checked' : ''}
+                           onchange="saveQuestionnaireAnswer('${questionId}', 'predefined', '${optionId}', '${filepath}')">
+                    <label class="form-check-label fw-bold" for="${inputId}">
+                        ${optionId}. ${escapeHtml(option.label || '')}
+                    </label>
+                </div>
+            `;
+            
+            // Pros and cons in a card
+            if (option.pros || option.cons) {
+                html += `
+                    <div class="card mb-3 ms-4">
+                        <div class="card-body">
+                            ${option.pros ? `
+                                <div class="mb-2">
+                                    <strong class="text-success"><i class="bi bi-plus-circle"></i> Pros:</strong>
+                                    <span class="ms-2">${escapeHtml(option.pros)}</span>
+                                </div>
+                            ` : ''}
+                            ${option.cons ? `
+                                <div>
+                                    <strong class="text-danger"><i class="bi bi-dash-circle"></i> Cons:</strong>
+                                    <span class="ms-2">${escapeHtml(option.cons)}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    }
+    
+    // Custom answer field
+    const userSelection = question['user-selection'] || { type: null, value: null };
+    const customText = userSelection.type === 'custom' ? userSelection.value : '';
+    
+    html += `
+        <div class="mt-3">
+            <label class="form-label fw-bold">Custom answer (if none of the above options fit):</label>
+            <textarea class="form-control" id="${questionId}-custom-answer" rows="3" 
+                      placeholder="Enter your custom answer here...">${escapeHtml(customText)}</textarea>
+            <button class="btn btn-sm btn-primary mt-2" 
+                    onclick="saveQuestionnaireCustomAnswer('${questionId}', '${filepath}')">
+                <i class="bi bi-save"></i> Save Custom Answer
+            </button>
+        </div>
+    `;
+    
+    return html;
+}
+
+/**
+ * Save questionnaire answer (predefined option)
+ */
+async function saveQuestionnaireAnswer(questionId, type, value, filepath) {
+    try {
+        // Load current questionnaire data
+        const response = await fetch('/api/file/' + filepath + '?token=' + sessionToken);
+        const result = await response.json();
+        
+        if (!result.success) {
+            showAlert('danger', 'Failed to load questionnaire data');
+            return;
+        }
+        
+        const data = JSON.parse(result.content);
+        
+        // Update the specific question's user-selection
+        const question = data.questions.find(q => q.id === questionId);
+        if (question) {
+            question['user-selection'] = { type, value };
+            
+            // Save back to file
+            const saveResponse = await fetch('/api/file/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    token: sessionToken,
+                    filepath: filepath,
+                    content: JSON.stringify(data, null, 2)
+                })
+            });
+            
+            const saveResult = await saveResponse.json();
+            
+            if (saveResult.success) {
+                // Update UI to show saved state
+                showAlert('success', `Answer saved for ${questionId}`, 2000);
+                // Reload questionnaire to update stats
+                await loadQuestionnaire();
+            } else {
+                showAlert('danger', 'Failed to save answer: ' + (saveResult.error || 'Unknown error'));
+            }
+        }
+    } catch (error) {
+        console.error('Error saving answer:', error);
+        showAlert('danger', 'Failed to save answer: ' + error.message);
+    }
+}
+
+/**
+ * Save questionnaire custom answer
+ */
+async function saveQuestionnaireCustomAnswer(questionId, filepath) {
+    const textarea = document.getElementById(`${questionId}-custom-answer`);
+    if (!textarea) return;
+    
+    const customText = textarea.value.trim();
+    
+    if (!customText) {
+        showAlert('warning', 'Please enter a custom answer');
+        return;
+    }
+    
+    await saveQuestionnaireAnswer(questionId, 'custom', customText, filepath);
+}
+
+/**
+ * Render legacy markdown questionnaire (read-only)
+ */
+function renderQuestionnaireLegacy(content) {
+    const container = document.getElementById('questionnaire-container');
+    container.innerHTML = `
+        <div class="alert alert-warning mb-3">
+            <i class="bi bi-info-circle"></i> This is a legacy markdown questionnaire (read-only).
+            New questionnaires use an interactive JSON format.
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-bold">questionnaire.md</label>
+            <textarea class="form-control font-monospace" rows="20" style="font-size: 14px;" readonly>${escapeHtml(content)}</textarea>
+        </div>
+    `;
+}
+
+/**
+ * Render not found message
+ */
+function renderQuestionnaireNotFound() {
+    const container = document.getElementById('questionnaire-container');
+    container.innerHTML = `
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> No questionnaire file found.
+            Run analyze mode to generate questions.
+        </div>
+    `;
+}
+
+/**
+ * Escape HTML to prevent XSS
+ */
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 /**

@@ -141,3 +141,15 @@ Fix the view button in Prompts History page - it is not doing anything
 %%PROMPT P-021 "Add prompt texts in prompts-registry"
 When Complete prompt is pressed, the prompt.md and all modifications texts should be copied in `.rdd-instance/workdir/prompts-registry.md` following the `.rdd/conventions/prompts-registry.convention.md`.
 %%ENDPROMPT
+
+%%PROMPT P-022 "Questionnaire to JSON"
+Currently the questionnaire is created as markdown file. Change to be created as JSON file. All attributes of the questions (see the questions generated in prompts workdir subfoldersin `.rdd-instance/workdir` to see examples) should be reflected in the JSON. There should be entry for each question, the pros and cons for each answer from the proposed optione. Also there should be a recommended answer with rationale. There should be also option for user free text answer, if none of the options are OK. 
+
+In Active Prompt page the Questionnaire should not be displayed as a text file anymore, but to be introduced a way (form fulfillment) where the user to fulfill the questionnaire. Every answer from the user should be immediately reflected in the JSON file.
+
+Do not change the questionnaires back in time - no need of back compatibility.
+%%ENDPROMPT
+
+%%PROMPT P-023 "Test Questionnaire JSON"
+TBD
+%%ENDPROMPT
