@@ -88,107 +88,79 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header bg-success text-white">
-                            <h5 id="active-prompt-title"><i class="bi bi-journal-check"></i> Active Prompt</h5>
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-journal-check me-2"></i>
+                                <span id="active-prompt-title" class="flex-grow-1">Active Prompt</span>
+                            </div>
                         </div>
                         <div class="card-body">
-                            <div class="mb-3">
+                            <!-- No Active Prompt Message -->
+                            <div id="no-active-prompt-message" style="display:none;">
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle"></i> 
+                                    No active prompt. Use the button below to create a new prompt.
+                                </div>
                                 <button class="btn btn-success" onclick="showCreatePromptModal()">
                                     <i class="bi bi-plus-circle"></i> Create New Prompt
                                 </button>
                             </div>
 
-                            <!-- No Active Prompt Message -->
-                            <div id="no-active-prompt-message" style="display:none;">
-                                <div class="alert alert-info">
-                                    <i class="bi bi-info-circle"></i> 
-                                    No active prompt. Use the button above to create a new prompt.
-                                </div>
-                            </div>
-
                             <!-- Active Prompt Content -->
                             <div id="active-prompt-content" style="display:none;">
-                                <!-- Execution Mode Selector -->
-                                <div class="card mb-3">
-                                    <div class="card-header">
-                                        <h6><i class="bi bi-toggles"></i> Execution Mode</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="btn-group" role="group" id="execution-mode-selector">
-                                            <input type="radio" class="btn-check" name="execution-mode" id="mode-no-action" value="no-action" autocomplete="off">
-                                            <label class="btn btn-outline-secondary" for="mode-no-action" onclick="updateExecutionMode('no-action')">
-                                                <i class="bi bi-pause-circle"></i> No Action
-                                            </label>
-
-                                            <input type="radio" class="btn-check" name="execution-mode" id="mode-analyze" value="analyze" autocomplete="off">
-                                            <label class="btn btn-outline-primary" for="mode-analyze" onclick="updateExecutionMode('analyze')">
-                                                <i class="bi bi-search"></i> Analyze
-                                            </label>
-
-                                            <input type="radio" class="btn-check" name="execution-mode" id="mode-plan" value="plan" autocomplete="off">
-                                            <label class="btn btn-outline-info" for="mode-plan" onclick="updateExecutionMode('plan')">
-                                                <i class="bi bi-list-check"></i> Plan
-                                            </label>
-
-                                            <input type="radio" class="btn-check" name="execution-mode" id="mode-implement" value="implement" autocomplete="off">
-                                            <label class="btn btn-outline-success" for="mode-implement" onclick="updateExecutionMode('implement')">
-                                                <i class="bi bi-code-square"></i> Implement
-                                            </label>
-
-                                            <input type="radio" class="btn-check" name="execution-mode" id="mode-modification" value="modification" autocomplete="off">
-                                            <label class="btn btn-outline-warning" for="mode-modification" onclick="updateExecutionMode('modification')">
-                                                <i class="bi bi-pencil-square"></i> Modification
-                                            </label>
-                                        </div>
-                                        <div class="text-muted mt-2">
-                                            <small><i class="bi bi-info-circle"></i> Select the mode for the next execution in VS Code</small>
-                                        </div>
-                                        <div class="mt-3">
-                                            <button class="btn btn-success" id="complete-prompt-btn" onclick="completeActivePrompt()" disabled>
-                                                <i class="bi bi-check-lg"></i> Complete Prompt
-                                            </button>
-                                            <small class="text-muted ms-2" id="complete-prompt-hint">Prompt must be executed first</small>
-                                            
-                                            <button class="btn btn-primary ms-3" id="add-modification-btn" onclick="showAddModificationModal()" disabled>
-                                                <i class="bi bi-plus-circle"></i> Add Modification
-                                            </button>
-                                            <small class="text-muted ms-2" id="add-modification-hint">Available after implementation completed</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Status Indicators -->
-                                <div class="card mb-3">
-                                    <div class="card-header">
-                                        <h6><i class="bi bi-clipboard-check"></i> Progress Status</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="d-flex align-items-center mb-2">
-                                                    <i class="bi bi-question-circle fs-4 me-2" id="questionnaire-icon"></i>
-                                                    <div>
-                                                        <strong>Questionnaire</strong>
-                                                        <div id="questionnaire-status" class="badge"></div>
-                                                    </div>
-                                                </div>
+                                <!-- Sticky Control Panel -->
+                                <div class="sticky-controls-panel">
+                                    <div class="row g-2 align-items-center">
+                                        <!-- Action Buttons -->
+                                        <div class="col-md-4">
+                                            <div class="d-flex gap-1 flex-wrap">
+                                                <button class="btn btn-sm btn-success" onclick="showCreatePromptModal()" title="Create New Prompt">
+                                                    <i class="bi bi-plus-circle"></i> New
+                                                </button>
+                                                <button class="btn btn-sm btn-primary" id="add-modification-btn" onclick="showAddModificationModal()" disabled title="Add Modification">
+                                                    <i class="bi bi-plus-circle"></i> Mod
+                                                </button>
+                                                <button class="btn btn-sm btn-success" id="complete-prompt-btn" onclick="completeActivePrompt()" disabled title="Complete Prompt">
+                                                    <i class="bi bi-check-lg"></i> Complete
+                                                </button>
                                             </div>
-                                            <div class="col-md-4">
-                                                <div class="d-flex align-items-center mb-2">
-                                                    <i class="bi bi-list-check fs-4 me-2" id="plan-icon"></i>
-                                                    <div>
-                                                        <strong>Plan</strong>
-                                                        <div id="plan-status" class="badge"></div>
-                                                    </div>
-                                                </div>
+                                        </div>
+                                        
+                                        <!-- Execution Mode -->
+                                        <div class="col-md-8">
+                                            <div class="btn-group btn-group-sm compact-mode-selector" role="group" id="execution-mode-selector">
+                                                <input type="radio" class="btn-check" name="execution-mode" id="mode-no-action" value="no-action" autocomplete="off">
+                                                <label class="btn btn-outline-secondary" for="mode-no-action" onclick="updateExecutionMode('no-action')">
+                                                    No Action
+                                                </label>
+
+                                                <input type="radio" class="btn-check" name="execution-mode" id="mode-analyze" value="analyze" autocomplete="off">
+                                                <label class="btn btn-outline-primary" for="mode-analyze" onclick="updateExecutionMode('analyze')">
+                                                    Analyze
+                                                </label>
+
+                                                <input type="radio" class="btn-check" name="execution-mode" id="mode-plan" value="plan" autocomplete="off">
+                                                <label class="btn btn-outline-info" for="mode-plan" onclick="updateExecutionMode('plan')">
+                                                    Plan
+                                                </label>
+
+                                                <input type="radio" class="btn-check" name="execution-mode" id="mode-implement" value="implement" autocomplete="off">
+                                                <label class="btn btn-outline-success" for="mode-implement" onclick="updateExecutionMode('implement')">
+                                                    Implement
+                                                </label>
+
+                                                <input type="radio" class="btn-check" name="execution-mode" id="mode-modification" value="modification" autocomplete="off">
+                                                <label class="btn btn-outline-warning" for="mode-modification" onclick="updateExecutionMode('modification')">
+                                                    Modification
+                                                </label>
                                             </div>
-                                            <div class="col-md-4">
-                                                <div class="d-flex align-items-center mb-2">
-                                                    <i class="bi bi-code-square fs-4 me-2" id="implementation-icon"></i>
-                                                    <div>
-                                                        <strong>Implementation</strong>
-                                                        <div id="implementation-status" class="badge"></div>
-                                                    </div>
-                                                </div>
+                                        </div>
+                                        
+                                        <!-- Progress Status Badges -->
+                                        <div class="col-md-12 mt-2">
+                                            <div class="d-flex gap-1 justify-content-start flex-wrap">
+                                                <span class="badge" id="questionnaire-status" title="Questionnaire"></span>
+                                                <span class="badge" id="plan-status" title="Plan"></span>
+                                                <span class="badge" id="implementation-status" title="Implementation"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -196,9 +168,6 @@
 
                                 <!-- Prompt Files Editor -->
                                 <div class="card">
-                                    <div class="card-header">
-                                        <h6><i class="bi bi-file-earmark-text"></i> Prompt Files</h6>
-                                    </div>
                                     <div class="card-body">
                                         <!-- Tab Navigation -->
                                         <ul class="nav nav-tabs mb-3" id="active-prompt-tabs" role="tablist">

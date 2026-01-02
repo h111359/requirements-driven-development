@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 24,
+    "prompt-id-sequence-next-value": 25,
     "git-enabled": true,
     "prompts": [
         {
@@ -260,6 +260,20 @@
             "implementation-completed": false,
             "execution-mode": "no-action",
             "executed": false
+        },
+        {
+            "prompt-id": "P-024",
+            "prompt-title": "Compact Active Prompt page",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "analyze-enabled": false,
+            "modifications-count": 6,
+            "current-modification-id": null
         }
     ]
 }

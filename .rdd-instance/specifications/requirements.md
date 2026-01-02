@@ -184,6 +184,12 @@ The framework enables:
 
 - [UR-20260102-1304] The framework shall support both legacy markdown questionnaires (read-only display) and new JSON questionnaires (interactive forms) without requiring migration of historical data.
 
+- [UR-20260102-1111] The Web UI questionnaire form shall automatically display the first unanswered question when loading, and shall automatically advance to the next unanswered question after saving an answer to improve workflow efficiency.
+
+- [UR-20260102-1130] The Web UI questionnaire form shall use a two-column layout with context and question navigation on the left side and the current question details and answer options on the right side, enabling efficient navigation and better space utilization.
+
+
+
 ## Technical Requirements
 
 - [TR-20251224-0901] The framework shall implement all automation functionality in Python using a domain-based command routing architecture and for the user interface shall use only vanilla JavaScript, HTML, CSS.

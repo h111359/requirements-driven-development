@@ -153,3 +153,37 @@ Do not change the questionnaires back in time - no need of back compatibility.
 %%PROMPT P-023 "Test Questionnaire JSON"
 TBD
 %%ENDPROMPT
+
+%%PROMPT P-024 "Compact Active Prompt page"
+Make the page Active Prompt in the web UI more compact and all elements visible in 14 inch screen. All the buttons should be together (Create New Prompt, Add Modification, Complete Prompt). Find a way the Execution Mode and Progress Status to keep the same functionality and information but to be take less space. Also make the name of the prompt to take less space. Make also the buttons and the main information to remain visible while scrolling (if scrolling is needed at all).
+
+
+### Modification 001
+
+In Q2 in the questionnaire I have chosen "C. Keep current button group but reduce padding, margins, and font size " but you have created a dropdown. Why? I want the button group back in the place of the current dropdown
+
+
+### Modification 002
+
+Remove the title "Prompt files" - no need of it, it is clear what is below
+
+
+### Modification 003
+
+Make questionnaire form more compact. It takes too much space now. Keep all texts and visuals
+
+
+### Modification 004
+
+In Questionnaire - make the context and the navigation of the questions on left and the current question and its answers on the right (changing the displayed question in the same placeholder). Keep all the current functionality. Reflect in requirements.md
+
+
+### Modification 005
+
+On the right side of the Questionnaire make the text of the question to be always visible during scrolling of the answer options - only in the questions placeholder
+
+
+### Modification 006
+
+The questionnaire is generated and even answered, but the state in Active Prompt is not reflecting that - stays in the same way as it is not generated at all. Fix that
+%%ENDPROMPT

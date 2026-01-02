@@ -526,34 +526,29 @@ async function loadActivePrompt() {
     const promptId = activePrompt['prompt-id'];
     const title = activePrompt.title || activePrompt['prompt-title'] || '';
     document.getElementById('active-prompt-title').innerHTML = 
-        `<i class="bi bi-journal-check"></i> Active Prompt: ${promptId} - ${escapeHtml(title)}`;
+        `<i class="bi bi-journal-check me-2"></i><span>${promptId}: ${escapeHtml(title)}</span>`;
     
-    // Update execution mode selector
+    // Update execution mode selector (button group)
     const currentMode = activePrompt['execution-mode'] || getSmartDefaultMode(activePrompt);
-    document.getElementById(`mode-${currentMode}`).checked = true;
+    const modeRadio = document.getElementById(`mode-${currentMode}`);
+    if (modeRadio) {
+        modeRadio.checked = true;
+    }
     
     // Update complete button state
     const executed = activePrompt.executed || false;
     const completeBtn = document.getElementById('complete-prompt-btn');
-    const completeHint = document.getElementById('complete-prompt-hint');
-    if (executed) {
-        completeBtn.disabled = false;
-        completeHint.textContent = 'Mark this prompt as completed';
-    } else {
-        completeBtn.disabled = true;
-        completeHint.textContent = 'Prompt must be executed first';
+    if (completeBtn) {
+        completeBtn.disabled = !executed;
+        completeBtn.title = executed ? 'Mark this prompt as completed' : 'Prompt must be executed first';
     }
     
     // Update add modification button state
     const implementationCompleted = activePrompt['implementation-completed'] || false;
     const addModificationBtn = document.getElementById('add-modification-btn');
-    const addModificationHint = document.getElementById('add-modification-hint');
-    if (implementationCompleted) {
-        addModificationBtn.disabled = false;
-        addModificationHint.textContent = 'Create a modification for small corrections';
-    } else {
-        addModificationBtn.disabled = true;
-        addModificationHint.textContent = 'Available after implementation completed';
+    if (addModificationBtn) {
+        addModificationBtn.disabled = !implementationCompleted;
+        addModificationBtn.title = implementationCompleted ? 'Create a modification for small corrections' : 'Available after implementation completed';
     }
     
     // Update status indicators
@@ -604,50 +599,47 @@ function updateStatusIndicators(prompt) {
     const planGenerated = prompt['plan-generated'] || false;
     const implementationCompleted = prompt['implementation-completed'] || false;
     
-    // Questionnaire status
-    const questionnaireIcon = document.getElementById('questionnaire-icon');
+    // Questionnaire status (compact badge)
     const questionnaireStatus = document.getElementById('questionnaire-status');
     
     if (!questionnaireGenerated) {
-        questionnaireIcon.style.color = '#CCCCCC';
         questionnaireStatus.className = 'badge bg-secondary';
-        questionnaireStatus.innerHTML = '<i class="bi bi-dash-circle"></i> Not Generated';
+        questionnaireStatus.innerHTML = '<i class="bi bi-question-circle"></i> Q';
+        questionnaireStatus.title = 'Questionnaire: Not Generated';
     } else if (questionnaireAnswered) {
-        questionnaireIcon.style.color = '#28a745';
         questionnaireStatus.className = 'badge bg-success';
-        questionnaireStatus.innerHTML = '<i class="bi bi-check-circle"></i> Answered';
+        questionnaireStatus.innerHTML = '<i class="bi bi-check-circle"></i> Q';
+        questionnaireStatus.title = 'Questionnaire: Answered';
     } else {
-        questionnaireIcon.style.color = '#ffc107';
         questionnaireStatus.className = 'badge bg-warning';
-        questionnaireStatus.innerHTML = '<i class="bi bi-clock-history"></i> In Progress';
+        questionnaireStatus.innerHTML = '<i class="bi bi-question-circle"></i> Q';
+        questionnaireStatus.title = 'Questionnaire: In Progress';
     }
     
-    // Plan status
-    const planIcon = document.getElementById('plan-icon');
+    // Plan status (compact badge)
     const planStatus = document.getElementById('plan-status');
     
     if (planGenerated) {
-        planIcon.style.color = '#28a745';
         planStatus.className = 'badge bg-success';
-        planStatus.innerHTML = '<i class="bi bi-check-circle"></i> Generated';
+        planStatus.innerHTML = '<i class="bi bi-check-circle"></i> P';
+        planStatus.title = 'Plan: Generated';
     } else {
-        planIcon.style.color = '#CCCCCC';
         planStatus.className = 'badge bg-secondary';
-        planStatus.innerHTML = '<i class="bi bi-dash-circle"></i> Not Generated';
+        planStatus.innerHTML = '<i class="bi bi-list-check"></i> P';
+        planStatus.title = 'Plan: Not Generated';
     }
     
-    // Implementation status
-    const implementationIcon = document.getElementById('implementation-icon');
+    // Implementation status (compact badge)
     const implementationStatus = document.getElementById('implementation-status');
     
     if (implementationCompleted) {
-        implementationIcon.style.color = '#28a745';
         implementationStatus.className = 'badge bg-success';
-        implementationStatus.innerHTML = '<i class="bi bi-check-circle"></i> Completed';
+        implementationStatus.innerHTML = '<i class="bi bi-check-circle"></i> I';
+        implementationStatus.title = 'Implementation: Completed';
     } else {
-        implementationIcon.style.color = '#CCCCCC';
         implementationStatus.className = 'badge bg-secondary';
-        implementationStatus.innerHTML = '<i class="bi bi-dash-circle"></i> Not Completed';
+        implementationStatus.innerHTML = '<i class="bi bi-code-square"></i> I';
+        implementationStatus.title = 'Implementation: Not Completed';
     }
 }
 
@@ -793,10 +785,17 @@ async function loadQuestionnaire() {
         const jsonResponse = await fetch('/api/file/' + jsonPath + '?token=' + sessionToken);
         const jsonResult = await jsonResponse.json();
         
-        if (jsonResult.success && jsonResult.content) {
-            // Parse and render JSON questionnaire
-            const questionnaireData = JSON.parse(jsonResult.content);
-            renderQuestionnaireForm(questionnaireData, jsonPath);
+        if (jsonResult.success && jsonResult.data) {
+            // Render JSON questionnaire (data is already parsed)
+            renderQuestionnaireForm(jsonResult.data, jsonPath);
+            
+            // Update questionnaire-generated flag in registry
+            await updateQuestionnaireGeneratedFlag(true);
+            
+            // Check if all questions are answered and update questionnaire-answered flag
+            const allAnswered = jsonResult.data.questions.every(q => q['user-selection'] && q['user-selection'].type);
+            await updateQuestionnaireAnsweredFlag(allAnswered);
+            
             return;
         }
     } catch (error) {
@@ -826,84 +825,128 @@ async function loadQuestionnaire() {
 function renderQuestionnaireForm(data, filepath) {
     const container = document.getElementById('questionnaire-container');
     
-    let html = '';
-    
-    // Context section
-    if (data.context) {
-        html += `
-            <div class="alert alert-info mb-4">
-                <h5 class="alert-heading"><i class="bi bi-info-circle"></i> Context</h5>
-                <p class="mb-0">${escapeHtml(data.context)}</p>
-            </div>
-        `;
+    if (!data.questions || data.questions.length === 0) {
+        container.innerHTML = '<p class="text-muted">No questions available.</p>';
+        return;
     }
     
-    // Questions accordion
-    if (data.questions && data.questions.length > 0) {
-        // Calculate completion stats
-        const totalQuestions = data.questions.length;
-        const answeredQuestions = data.questions.filter(q => q['user-selection'] && q['user-selection'].type).length;
-        const completionPercent = Math.round((answeredQuestions / totalQuestions) * 100);
-        
-        html += `
-            <div class="mb-3">
-                <h5>Questions (${answeredQuestions} / ${totalQuestions} answered)</h5>
-                <div class="progress mb-3">
-                    <div class="progress-bar ${completionPercent === 100 ? 'bg-success' : 'bg-warning'}" 
-                         role="progressbar" style="width: ${completionPercent}%" 
-                         aria-valuenow="${completionPercent}" aria-valuemin="0" aria-valuemax="100">
-                        ${completionPercent}%
-                    </div>
+    // Calculate completion stats
+    const totalQuestions = data.questions.length;
+    const answeredQuestions = data.questions.filter(q => q['user-selection'] && q['user-selection'].type).length;
+    const completionPercent = Math.round((answeredQuestions / totalQuestions) * 100);
+    
+    // Find the first unanswered question to show by default
+    let indexToShow = data.questions.findIndex(q => !(q['user-selection'] && q['user-selection'].type));
+    if (indexToShow === -1) indexToShow = 0; // If all answered, show first
+    
+    let html = `
+        <div class="row">
+            <!-- Left Column: Context and Navigation -->
+            <div class="col-md-4">
+                <!-- Context section -->
+                ${data.context ? `
+                <div class="alert alert-info mb-3 py-2">
+                    <h6 class="alert-heading mb-1"><i class="bi bi-info-circle"></i> Context</h6>
+                    <p class="mb-0 small">${escapeHtml(data.context)}</p>
                 </div>
-            </div>
-        `;
-        
-        html += '<div class="accordion" id="questionnaireAccordion">';
-        
-        data.questions.forEach((question, index) => {
-            const questionId = question.id || `Q${index + 1}`;
-            const isAnswered = question['user-selection'] && question['user-selection'].type;
-            const accordionId = `question-${questionId}`;
-            
-            html += `
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button ${index !== 0 ? 'collapsed' : ''}" type="button" 
-                                data-bs-toggle="collapse" data-bs-target="#${accordionId}">
-                            <strong>${questionId}:</strong>&nbsp;${escapeHtml(question['question-text'] || '')}
-                            ${isAnswered ? '<span class="badge bg-success ms-2"><i class="bi bi-check-circle"></i> Answered</span>' : 
-                                         '<span class="badge bg-warning ms-2"><i class="bi bi-clock"></i> Unanswered</span>'}
-                        </button>
-                    </h2>
-                    <div id="${accordionId}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" 
-                         data-bs-parent="#questionnaireAccordion">
-                        <div class="accordion-body">
-                            ${renderQuestion(question, questionId, filepath)}
+                ` : ''}
+                
+                <!-- Progress -->
+                <div class="mb-2">
+                    <h6>Progress</h6>
+                    <div class="progress mb-2" style="height: 20px;">
+                        <div class="progress-bar ${completionPercent === 100 ? 'bg-success' : 'bg-warning'}" 
+                             role="progressbar" style="width: ${completionPercent}%" 
+                             aria-valuenow="${completionPercent}" aria-valuemin="0" aria-valuemax="100">
+                            ${answeredQuestions}/${totalQuestions}
                         </div>
                     </div>
                 </div>
-            `;
-        });
+                
+                <!-- Question Navigation -->
+                <div class="list-group" id="questionNavigation">
+    `;
+    
+    data.questions.forEach((question, index) => {
+        const questionId = question.id || `Q${index + 1}`;
+        const isAnswered = question['user-selection'] && question['user-selection'].type;
+        const isActive = index === indexToShow;
         
-        html += '</div>';
-    } else {
-        html += '<p class="text-muted">No questions available.</p>';
-    }
+        html += `
+            <a href="#" class="list-group-item list-group-item-action ${isActive ? 'active' : ''}" 
+               data-question-index="${index}" data-question-id="${questionId}"
+               onclick="showQuestion(event, ${index}, '${filepath}')">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="small"><strong>${questionId}</strong></span>
+                    ${isAnswered ? '<i class="bi bi-check-circle text-success"></i>' : '<i class="bi bi-clock text-warning"></i>'}
+                </div>
+                <div class="small text-truncate">${escapeHtml(question['question-text'] || '').substring(0, 50)}...</div>
+            </a>
+        `;
+    });
+    
+    html += `
+                </div>
+            </div>
+            
+            <!-- Right Column: Current Question Details -->
+            <div class="col-md-8">
+                <div id="currentQuestionContainer">
+                    ${renderQuestionDetail(data.questions[indexToShow], data.questions[indexToShow].id || `Q${indexToShow + 1}`, filepath)}
+                </div>
+            </div>
+        </div>
+    `;
     
     container.innerHTML = html;
+    
+    // Store data globally for showQuestion function
+    window.currentQuestionnaireData = data;
+    window.currentQuestionnairePath = filepath;
 }
 
 /**
- * Render a single question with options
+ * Show a specific question in the right panel
  */
-function renderQuestion(question, questionId, filepath) {
-    let html = '';
+function showQuestion(event, index, filepath) {
+    event.preventDefault();
     
-    // Recommendation alert
+    const data = window.currentQuestionnaireData;
+    if (!data || !data.questions || !data.questions[index]) return;
+    
+    const question = data.questions[index];
+    const questionId = question.id || `Q${index + 1}`;
+    
+    // Update navigation active state
+    document.querySelectorAll('#questionNavigation .list-group-item').forEach((item, i) => {
+        if (i === index) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+    
+    // Update question detail panel
+    document.getElementById('currentQuestionContainer').innerHTML = 
+        renderQuestionDetail(question, questionId, filepath);
+}
+
+/**
+ * Render a single question detail with options
+ */
+function renderQuestionDetail(question, questionId, filepath) {
+    let html = `
+        <div class="question-title-sticky">
+            <h5 class="mb-3"><strong>${questionId}:</strong> ${escapeHtml(question['question-text'] || '')}</h5>
+        </div>
+        <div class="question-content">
+    `;
+    
+    // Recommendation alert - more compact
     if (question['recommended-option'] && question['recommendation-rationale']) {
         html += `
-            <div class="alert alert-success" role="alert">
-                <h6 class="alert-heading"><i class="bi bi-star-fill"></i> Recommended: Option ${question['recommended-option']}</h6>
+            <div class="alert alert-success py-2 mb-2" role="alert">
+                <h6 class="alert-heading mb-1"><i class="bi bi-star-fill"></i> Recommended: Option ${question['recommended-option']}</h6>
                 <p class="mb-0 small">${escapeHtml(question['recommendation-rationale'])}</p>
             </div>
         `;
@@ -919,7 +962,7 @@ function renderQuestion(question, questionId, filepath) {
             const inputId = `${questionId}-option-${optionId}`;
             
             html += `
-                <div class="form-check mb-3">
+                <div class="form-check mb-2">
                     <input class="form-check-input" type="radio" name="${questionId}-options" 
                            id="${inputId}" value="${optionId}" ${isSelected ? 'checked' : ''}
                            onchange="saveQuestionnaireAnswer('${questionId}', 'predefined', '${optionId}', '${filepath}')">
@@ -929,21 +972,21 @@ function renderQuestion(question, questionId, filepath) {
                 </div>
             `;
             
-            // Pros and cons in a card
+            // Pros and cons in a compact card
             if (option.pros || option.cons) {
                 html += `
-                    <div class="card mb-3 ms-4">
-                        <div class="card-body">
+                    <div class="card mb-2 ms-4">
+                        <div class="card-body py-2 px-3">
                             ${option.pros ? `
-                                <div class="mb-2">
-                                    <strong class="text-success"><i class="bi bi-plus-circle"></i> Pros:</strong>
-                                    <span class="ms-2">${escapeHtml(option.pros)}</span>
+                                <div class="mb-1">
+                                    <strong class="text-success small"><i class="bi bi-plus-circle"></i> Pros:</strong>
+                                    <span class="ms-1 small">${escapeHtml(option.pros)}</span>
                                 </div>
                             ` : ''}
                             ${option.cons ? `
-                                <div>
-                                    <strong class="text-danger"><i class="bi bi-dash-circle"></i> Cons:</strong>
-                                    <span class="ms-2">${escapeHtml(option.cons)}</span>
+                                <div class="${option.pros ? '' : 'mb-0'}">
+                                    <strong class="text-danger small"><i class="bi bi-dash-circle"></i> Cons:</strong>
+                                    <span class="ms-1 small">${escapeHtml(option.cons)}</span>
                                 </div>
                             ` : ''}
                         </div>
@@ -953,21 +996,21 @@ function renderQuestion(question, questionId, filepath) {
         });
     }
     
-    // Custom answer field
+    // Custom answer field - more compact
     const userSelection = question['user-selection'] || { type: null, value: null };
     const customText = userSelection.type === 'custom' ? userSelection.value : '';
     
     html += `
-        <div class="mt-3">
-            <label class="form-label fw-bold">Custom answer (if none of the above options fit):</label>
-            <textarea class="form-control" id="${questionId}-custom-answer" rows="3" 
+        <div class="mt-2">
+            <label class="form-label fw-bold small">Custom answer (if none of the above options fit):</label>
+            <textarea class="form-control form-control-sm" id="${questionId}-custom-answer" rows="2" 
                       placeholder="Enter your custom answer here...">${escapeHtml(customText)}</textarea>
-            <button class="btn btn-sm btn-primary mt-2" 
+            <button class="btn btn-sm btn-primary mt-1" 
                     onclick="saveQuestionnaireCustomAnswer('${questionId}', '${filepath}')">
                 <i class="bi bi-save"></i> Save Custom Answer
             </button>
         </div>
-    `;
+    </div>`;
     
     return html;
 }
@@ -986,7 +1029,8 @@ async function saveQuestionnaireAnswer(questionId, type, value, filepath) {
             return;
         }
         
-        const data = JSON.parse(result.content);
+        // For JSON files, server returns parsed data in result.data
+        const data = result.data;
         
         // Update the specific question's user-selection
         const question = data.questions.find(q => q.id === questionId);
@@ -1009,10 +1053,16 @@ async function saveQuestionnaireAnswer(questionId, type, value, filepath) {
             const saveResult = await saveResponse.json();
             
             if (saveResult.success) {
+                // Check if all questions are now answered
+                const allAnswered = data.questions.every(q => q['user-selection'] && q['user-selection'].type);
+                await updateQuestionnaireAnsweredFlag(allAnswered);
+                
                 // Update UI to show saved state
                 showAlert('success', `Answer saved for ${questionId}`, 2000);
                 // Reload questionnaire to update stats
                 await loadQuestionnaire();
+                // Reload active prompt to update badges
+                await loadActivePrompt();
             } else {
                 showAlert('danger', 'Failed to save answer: ' + (saveResult.error || 'Unknown error'));
             }
@@ -1038,6 +1088,60 @@ async function saveQuestionnaireCustomAnswer(questionId, filepath) {
     }
     
     await saveQuestionnaireAnswer(questionId, 'custom', customText, filepath);
+}
+
+/**
+ * Update questionnaire-generated flag in registry
+ */
+async function updateQuestionnaireGeneratedFlag(value) {
+    try {
+        const response = await fetch('/api/action', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                domain: 'prompt',
+                action: value ? 'questionnaire_generated_on' : 'questionnaire_generated_off',
+                params: {}
+            })
+        });
+        
+        const result = await response.json();
+        if (!result.success) {
+            console.error('Failed to update questionnaire-generated flag:', result.error);
+        }
+    } catch (error) {
+        console.error('Error updating questionnaire-generated flag:', error);
+    }
+}
+
+/**
+ * Update questionnaire-answered flag in registry
+ */
+async function updateQuestionnaireAnsweredFlag(value) {
+    try {
+        const response = await fetch('/api/action', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                domain: 'prompt',
+                action: value ? 'questionnaire_answered_on' : 'questionnaire_answered_off',
+                params: {}
+            })
+        });
+        
+        const result = await response.json();
+        if (!result.success) {
+            console.error('Failed to update questionnaire-answered flag:', result.error);
+        }
+    } catch (error) {
+        console.error('Error updating questionnaire-answered flag:', error);
+    }
 }
 
 /**
