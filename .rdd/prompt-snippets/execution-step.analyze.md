@@ -14,8 +14,6 @@ See the definitions in `.rdd/prompt-snippets/execution.md`
    - Include context, question text, options with pros/cons, recommended option, and rationale for each question
    - Only add questions if the questionnaire is being created for the first time. If `questionnaire.json` already exists with questions, do not modify the existing questions but be careful not to repeat the same question several times.
 
-2. After completing the analyze execution, automatically disable analyze mode by running the command: `python .rdd/src/actions/prompt_analyze_off.py`
-
 
 
  ## Execution Step Rules

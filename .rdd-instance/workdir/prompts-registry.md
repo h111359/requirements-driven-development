@@ -278,3 +278,78 @@ The requirements are not modified accordingly the convention. Only [DELETED] sho
 
 I want to be able easily to add in the prompt text prompt snippet keys while choosing from the predefined in `.rdd/config/manifest.json` list of keys. I have to be able to see the list, to see a view only text of the prompt and to be able to place the key on a chosen from me spot in the prompt. What are the possible approaches for that?
 %%ENDPROMPT
+
+%%PROMPT P-030 "Add Prompt Snippet Insertion UI to Web Interface"
+*Role Context:** [[[ROLE_SOFTWARE_DEVELOPER]]]
+
+**Background:**
+The RDD framework uses prompt snippet keys (e.g., `[[[ROLE_SOLUTION_ARCHITECT]]]`, `[[[ANALYZE]]]`) to include reusable prompt instructions. These keys are defined in `.rdd/config/manifest.json` under the `promptSnippets` array. Currently, users must manually type these keys, which is error-prone and requires memorizing the exact syntax.
+
+**Requirements:**
+
+1. **Snippet Quick Picker** (Priority: HIGH)
+   - Add a quick picker/dropdown UI component to the prompt editor in the Web UI
+   - Display all available prompt snippet keys from manifest.json
+   - Show snippet descriptions/paths alongside keys
+   - Support search/filter within the snippet list
+   - Insert selected snippet key at current cursor position
+   - Accessible via keyboard shortcut (e.g., Ctrl+K, S) and toolbar button
+
+2. **Snippet Preview** (Priority: MEDIUM)
+   - Show preview of snippet file content when hovering over a snippet in the picker
+   - Display file path and snippet description
+   - Highlight syntax in preview (if applicable)
+
+3. **Snippet Validation** (Priority: MEDIUM)
+   - Validate snippet keys in prompt text against manifest.json
+   - Show warning indicators for invalid/outdated snippet keys
+   - Provide quick fix to update or remove invalid keys
+
+4. **Future Considerations** (Priority: LOW)
+   - Design with autocomplete integration in mind
+   - Consider sidebar panel for snippet browsing
+   - Plan for custom user snippets (not in this iteration)
+
+**Technical Constraints:**
+- Must read snippet definitions from `.rdd/config/manifest.json`
+- Should update dynamically if manifest changes
+- Web UI is built with [specify framework: React/Vue/etc.] - ensure compatibility
+- Backend API may need new endpoint to serve snippet data
+
+**Acceptance Criteria:**
+- User can open snippet picker from prompt editor
+- Picker shows all snippet keys with descriptions
+- Selecting a snippet inserts the key (e.g., `[[[ROLE_SOLUTION_ARCHITECT]]]`) at cursor
+- Picker supports keyboard navigation and search
+- No performance impact on prompt editor load time
+- Unit tests for snippet service and picker component
+
+**Out of Scope:**
+- Editing snippet definitions (read-only for now)
+- Custom user snippets
+- Snippet parameterization
+- CLI integration (future iteration)
+
+**Reference Implementation:**
+Review VS Code's snippet picker implementation for UX patterns: [microsoft/vscode/src/vs/workbench/contrib/snippets/browser/snippetPicker.ts](https://github.com/microsoft/vscode/tree/main/src/vs/workbench/contrib/snippets/browser/snippetPicker.ts)
+
+
+### Modification 001
+
+When the button Insert Snippet is pressed, the list with snippets do not appear. Just after start typing something after [[[. This is confusing. Make the list of snippets to appear along adding [[[
+
+
+### Modification 002
+
+Instead of showing list of the available snippets below the prompt, make the list to appear in modal and when selected a snippet - its key to be added in the prompt text
+
+
+### Modification 003
+
+Move the modal action buttons to the top to avoid forcing users to scroll to the bottom when inserting snippets.
+
+
+### Modification 004
+
+When Insert Snippet is pressed, in the prompt is entered [[[ and when later in the modal is pressed Cancel - the [[[ stays. No [[[ should be added when Insert Snippet is pressed.
+%%ENDPROMPT

@@ -1,0 +1,1 @@
+Move the modal action buttons to the top to avoid forcing users to scroll to the bottom when inserting snippets.

@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 30,
+    "prompt-id-sequence-next-value": 31,
     "git-enabled": true,
     "prompts": [
         {
@@ -328,6 +328,19 @@
             "implementation-completed": true,
             "execution-mode": "no-action",
             "executed": true
+        },
+        {
+            "prompt-id": "P-030",
+            "prompt-title": "Add Prompt Snippet Insertion UI to Web Interface",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": true,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "modifications-count": 4,
+            "current-modification-id": null
         }
     ]
 }

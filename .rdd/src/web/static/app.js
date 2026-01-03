@@ -23,6 +23,11 @@ async function initializeApp() {
         const data = await response.json();
         sessionToken = data.token;
         
+        // Initialize snippet service
+        if (typeof snippetService !== 'undefined') {
+            snippetService.init(sessionToken);
+        }
+        
         // Load initial data
         await loadRegistry();
         await loadActivePrompt();
@@ -694,6 +699,11 @@ async function loadActivePromptFiles(promptId) {
             loadQuestionnaire(),
             loadActivePromptFile('implementation.md')
         ]);
+        
+        // Initialize snippet autocomplete for the prompt editor
+        if (typeof initializeSnippetAutocomplete === 'function') {
+            initializeSnippetAutocomplete();
+        }
     } catch (error) {
         console.error('Error loading prompt files:', error);
         showAlert('warning', 'Some prompt files could not be loaded');
@@ -741,6 +751,24 @@ async function saveActivePromptFile(filename) {
     }
     
     const content = textarea.value;
+    
+    // Validate snippet keys if saving prompt.md
+    if (filename === 'prompt.md' && typeof snippetService !== 'undefined') {
+        try {
+            await snippetService.loadSnippets();
+            const invalidKeys = snippetService.validateSnippetKeys(content);
+            
+            if (invalidKeys.length > 0) {
+                const proceed = await showSnippetValidationDialog(invalidKeys);
+                if (!proceed) {
+                    return; // User chose to cancel save
+                }
+            }
+        } catch (error) {
+            console.warn('Snippet validation failed:', error);
+            // Continue with save even if validation fails
+        }
+    }
     
     try {
         const filepath = `${currentPromptFolder}/${filename}`;
@@ -2090,4 +2118,86 @@ function cancelModificationEdit(modificationId, originalDescription) {
     if (!descElement) return;
     
     descElement.innerHTML = escapeHtml(originalDescription);
+}
+
+/**
+ * Show snippet validation dialog with invalid keys
+ * @param {Array<string>} invalidKeys - Array of invalid snippet keys
+ * @returns {Promise<boolean>} True if user wants to save anyway, false to cancel
+ */
+function showSnippetValidationDialog(invalidKeys) {
+    return new Promise((resolve) => {
+        const invalidKeysList = invalidKeys.map(key => `<code>${escapeHtml(key)}</code>`).join('<br>');
+        
+        const modalHtml = `
+            <div class="modal fade" id="snippetValidationModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-warning">
+                            <h5 class="modal-title">
+                                <i class="bi bi-exclamation-triangle"></i> Invalid Snippet Keys Found
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>The following snippet keys in your prompt are not defined in manifest.json:</p>
+                            <div class="alert alert-warning">
+                                ${invalidKeysList}
+                            </div>
+                            <p>Do you want to:</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="fixManuallyBtn">
+                                <i class="bi bi-pencil"></i> Fix Manually
+                            </button>
+                            <button type="button" class="btn btn-warning" id="saveAnywayBtn">
+                                <i class="bi bi-save"></i> Save Anyway
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Remove existing modal if any
+        const existingModal = document.getElementById('snippetValidationModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+        
+        // Add modal to body
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        
+        const modalElement = document.getElementById('snippetValidationModal');
+        const modal = new bootstrap.Modal(modalElement);
+        
+        // Handle button clicks
+        document.getElementById('saveAnywayBtn').addEventListener('click', () => {
+            modal.hide();
+            resolve(true);
+        });
+        
+        document.getElementById('fixManuallyBtn').addEventListener('click', () => {
+            modal.hide();
+            resolve(false);
+        });
+        
+        // Handle modal close (X button or backdrop)
+        modalElement.addEventListener('hidden.bs.modal', () => {
+            modalElement.remove();
+        });
+        
+        modal.show();
+    });
+}
+
+/**
+ * Insert snippet from toolbar button
+ */
+function insertSnippetFromButton() {
+    if (typeof promptSnippetAutocomplete !== 'undefined' && promptSnippetAutocomplete) {
+        promptSnippetAutocomplete.trigger();
+    } else {
+        showAlert('warning', 'Snippet autocomplete not initialized. Type [[[ to insert snippets.');
+    }
 }

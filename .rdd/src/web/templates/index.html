@@ -211,6 +211,10 @@
                                                     <textarea class="form-control font-monospace" id="active-editor-prompt-md" 
                                                               rows="20" style="font-size: 14px;"></textarea>
                                                 </div>
+                                                <button class="btn btn-primary me-2" onclick="insertSnippetFromButton()" 
+                                                        title="Insert snippet key (or type [[[)">
+                                                    <i class="bi bi-puzzle"></i> Insert Snippet
+                                                </button>
                                                 <button class="btn btn-success" onclick="saveActivePromptFile('prompt.md')">
                                                     <i class="bi bi-save"></i> Save Prompt
                                                 </button>
@@ -566,10 +570,59 @@
         </div>
     </div>
 
+    <!-- Snippet Picker Modal -->
+    <div class="modal fade" id="snippetPickerModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-puzzle"></i> Insert Snippet
+                    </h5>
+                    <div class="ms-auto me-2">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">
+                            <i class="bi bi-x-lg"></i> Cancel
+                        </button>
+                        <button type="button" class="btn btn-success btn-sm ms-2" id="insert-snippet-btn" disabled>
+                            <i class="bi bi-check-lg"></i> Insert
+                        </button>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="min-height: 400px;">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="mb-2">
+                                <input type="text" class="form-control" id="snippet-search" 
+                                       placeholder="Search snippets..." autocomplete="off">
+                            </div>
+                            <div id="snippet-list-modal" class="border rounded" 
+                                 style="max-height: 450px; overflow-y: auto; background-color: #f8f9fa;">
+                                <p class="text-muted text-center p-3">Loading snippets...</p>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div id="snippet-preview-modal" class="border rounded h-100" 
+                                 style="min-height: 450px; background-color: white;">
+                                <div class="p-3 bg-light border-bottom">
+                                    <strong>Preview</strong>
+                                </div>
+                                <div class="p-3">
+                                    <p class="text-muted">Select a snippet to preview</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Custom JS -->
+    <script src="/static/snippet-service.js"></script>
+    <script src="/static/snippet-autocomplete.js"></script>
     <script src="/static/app.js"></script>
 </body>
 </html>

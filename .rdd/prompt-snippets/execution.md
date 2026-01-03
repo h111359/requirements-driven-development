@@ -58,13 +58,17 @@
    * If `execution-mode` is `"analyze"`:
      * Write in the chat "Analyze mode"
      * Follow the instructions in `.rdd/prompt-snippets/execution-step.analyze.md`
-     * After analyze execution is completed, execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
+     * After analyze execution is completed:
+       - Execute `.rdd/src/actions/prompt_questionnaire_generated_on.py`
+       - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
      * Stop (do not continue with the next instructions here)
    
    * If `execution-mode` is `"plan"`:
      * Write in the chat "Plan mode"
      * Follow the instructions in `.rdd/prompt-snippets/execution-step.plan.md`
-     * After plan execution is completed, execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
+     * After plan execution is completed:
+       - Execute `.rdd/src/actions/prompt_plan_generated_on.py`
+       - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
      * Stop (do not continue with the next instructions here - do not execute implementation step)
    
    * If `execution-mode` is `"implement"`:

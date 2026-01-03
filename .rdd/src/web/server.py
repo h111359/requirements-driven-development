@@ -237,6 +237,59 @@ class RDDWebHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json_response(result)
             return
         
+        elif path == "/api/snippets":
+            # Get prompt snippets from manifest.json
+            try:
+                manifest_path = _repo_root() / ".rdd" / "config" / "manifest.json"
+                if not manifest_path.exists():
+                    self.send_error_response("Manifest file not found")
+                    return
+                
+                with open(manifest_path, "r", encoding="utf-8") as f:
+                    manifest = json.load(f)
+                
+                snippets = []
+                prompt_snippets = manifest.get("promptSnippets", [])
+                
+                for snippet_def in prompt_snippets:
+                    key = snippet_def.get("prompt-snippet-key", "")
+                    path_str = snippet_def.get("prompt-snippet-path", "")
+                    
+                    if not key or not path_str:
+                        continue
+                    
+                    # Read snippet content
+                    snippet_path = _repo_root() / path_str
+                    content = ""
+                    description = ""
+                    
+                    if snippet_path.exists():
+                        try:
+                            with open(snippet_path, "r", encoding="utf-8") as sf:
+                                content = sf.read()
+                                # Use first line as description (if it's not too long)
+                                first_line = content.split('\n')[0].strip()
+                                if len(first_line) < 100:
+                                    description = first_line
+                                else:
+                                    description = key.replace("[[[", "").replace("]]]", "")
+                        except Exception as e:
+                            content = f"Error reading file: {str(e)}"
+                    else:
+                        content = "File not found"
+                    
+                    snippets.append({
+                        "key": key,
+                        "path": path_str,
+                        "description": description,
+                        "content": content
+                    })
+                
+                self.send_json_response({"success": True, "snippets": snippets})
+            except Exception as e:
+                self.send_error_response(f"Failed to load snippets: {str(e)}")
+            return
+        
         elif path.startswith("/api/file/"):
             # Read a file
             if not self.verify_session_token(params):

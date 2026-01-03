@@ -473,3 +473,4 @@ The framework enables:
 - [TR-20260102-1702] The framework shall provide a script `.rdd/src/actions/files_list_csv_set_description.py` that accepts `file-name=`, `relative-path=`, and `description=` parameters and updates the Description field for the matching entry in `.rdd-instance/specifications/files-list.csv`.
 
 - [TR-20260102-1703] The files listing CSV shall use tab character as field delimiter and shall be stored with UTF-8 encoding to support international characters in file names and descriptions.
+- [UR-20260103-1100] The Web UI shall provide a snippet insertion feature for the prompt editor that enables users to insert predefined prompt snippet keys through an autocomplete dropdown interface. The autocomplete shall trigger when user types '[[[' and display available snippets with preview content. The system shall validate snippet keys against manifest.json on save and warn about invalid keys.
