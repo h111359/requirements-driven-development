@@ -398,3 +398,7 @@ Web interface won&#x27;t start
 
     Ensure Python 3.7+ is installed and accessible via python command"
 %%ENDPROMPT
+
+%%PROMPT P-032 "Upper menu to stay while scrolling"
+The menu in the Web UI with tabs (like Active Prompt, Prompts History, Workdir etc. should stay always visible while scrolling.
+%%ENDPROMPT

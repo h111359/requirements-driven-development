@@ -200,6 +200,8 @@ The framework enables:
 
 - [UR-20251231-0204] The framework shall provide a toggle mechanism to enable/disable plan mode for prompts through the Web UI.
 
+- [UR-20260103-1420] The Web UI navigation menu shall remain fixed at the top of the viewport while scrolling, ensuring navigation tabs are always accessible to users. The navbar shall include a subtle bottom shadow to provide visual depth and indicate its floating state.
+
 
 
 ## Technical Requirements

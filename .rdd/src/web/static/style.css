@@ -7,11 +7,21 @@
     --rdd-danger: #dc3545;
     --rdd-info: #0dcaf0;
     --rdd-dark: #212529;
+    --navbar-height: 56px;
 }
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background-color: #f8f9fa;
+    padding-top: calc(var(--navbar-height) + 1rem);
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1030;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-brand {
