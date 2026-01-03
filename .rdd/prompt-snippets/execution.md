@@ -40,8 +40,10 @@
 3. **Check for prompt snippet keys**: Read [ACTIVE-PROMPT] and check if it contains any prompt-snippet-keys (strings starting with `[[[` and ending with `]]]`). If found:
    - Look up the corresponding file path in `.rdd/config/manifest.json` under `promptSnippets`
    - Read that file immediately
-   - If the snippet file contains instructions that override the normal execution flow (like `[[[Analyse]]]` which changes implementation behavior), follow those instructions instead of the default execution-mode flow
-   - These snippet instructions have precedence over the standard execution steps
+   - If the snippet file contains instructions that override the normal execution flow (like `[[[Analyse]]]` which changes implementation behavior):
+     - Follow those snippet instructions to complete the work
+     - After completing the snippet-specific work, continue with the completion steps for the current execution-mode (see step 6) unless the snippet says something else.
+     - The snippet instructions modify WHAT work is done, but do not skip the mode-specific completion steps (setting executed, implementation-completed, resetting mode) by default - execute them unless the snippet explicitely says other.
 
 4. Check if the [PLAN] is fulfilled. If it is, you shall observe it in the next steps. Do not skip any of the steps in the plan. Do not stop the implementation until the entire plan is completed. 
    

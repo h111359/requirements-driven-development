@@ -6,7 +6,7 @@
 
   * **Copilot Review** - provide your opinion for the change requested from the prompt. You should be brutally honest and without any attempt to please me. Just the facts, the truth and the rough reality
 
-  * **Best Practices** check what are the best practices currently in Internet. This is mandatory you to search via MCP in Internet sources.
+  * **Best Practices** check what are the best practices currently in Internet. This is mandatory you to search via MCP in Internet sources. List the URLs you have checked and make a short summary for each URL - what are the conclusions.
 
   * **Samples from GitHub** - check and shortly write how other people in other GitHub repositories have solved similar problems
 
