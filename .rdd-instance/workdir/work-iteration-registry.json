@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 28,
+    "prompt-id-sequence-next-value": 29,
     "git-enabled": true,
     "prompts": [
         {
@@ -235,8 +235,7 @@
             "plan-generated": false,
             "implementation-completed": true,
             "execution-mode": "no-action",
-            "executed": true,
-            "analyze-enabled": false
+            "executed": true
         },
         {
             "prompt-id": "P-022",
@@ -247,8 +246,7 @@
             "plan-generated": false,
             "implementation-completed": true,
             "execution-mode": "no-action",
-            "executed": true,
-            "analyze-enabled": false
+            "executed": true
         },
         {
             "prompt-id": "P-023",
@@ -271,7 +269,6 @@
             "implementation-completed": true,
             "execution-mode": "no-action",
             "executed": true,
-            "analyze-enabled": false,
             "modifications-count": 6,
             "current-modification-id": null
         },
@@ -284,8 +281,7 @@
             "plan-generated": true,
             "implementation-completed": true,
             "execution-mode": "no-action",
-            "executed": true,
-            "analyze-enabled": false
+            "executed": true
         },
         {
             "prompt-id": "P-026",
@@ -296,8 +292,7 @@
             "plan-generated": false,
             "implementation-completed": true,
             "execution-mode": "no-action",
-            "executed": true,
-            "analyze-enabled": false
+            "executed": true
         },
         {
             "prompt-id": "P-027",
@@ -309,6 +304,19 @@
             "implementation-completed": true,
             "execution-mode": "no-action",
             "executed": true
+        },
+        {
+            "prompt-id": "P-028",
+            "prompt-title": "Clean up obsolete analyze plan mode artifacts",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "modifications-count": 1,
+            "current-modification-id": null
         }
     ]
 }

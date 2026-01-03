@@ -200,18 +200,6 @@ def _prompt_for_parameters(action_key: str) -> List[str]:
             {"name": "state", "prompt": "Enter new state (active/completed)", "required": True},
             {"name": "prompt-id", "prompt": "Enter prompt ID (or leave empty for active prompt)", "required": False},
         ],
-        "prompt.analyze-on": [
-            {"name": "prompt-id", "prompt": "Enter prompt ID (or leave empty for active prompt)", "required": False},
-        ],
-        "prompt.analyze-off": [
-            {"name": "prompt-id", "prompt": "Enter prompt ID (or leave empty for active prompt)", "required": False},
-        ],
-        "prompt.plan-on": [
-            {"name": "prompt-id", "prompt": "Enter prompt ID (or leave empty for active prompt)", "required": False},
-        ],
-        "prompt.plan-off": [
-            {"name": "prompt-id", "prompt": "Enter prompt ID (or leave empty for active prompt)", "required": False},
-        ],
         "workdir.new-setup": [
             {"name": "name", "prompt": "Enter iteration name", "required": True},
         ],
@@ -317,10 +305,6 @@ def _prompt_domain_menu() -> int:
         {"key": "create", "desc": "Create a new prompt"},
         {"key": "set-state", "desc": "Change prompt state"},
         {"key": "list", "desc": "List all prompts"},
-        {"key": "analyze-on", "desc": "Enable analyze mode for a prompt"},
-        {"key": "analyze-off", "desc": "Disable analyze mode for a prompt"},
-        {"key": "plan-on", "desc": "Enable plan mode for a prompt"},
-        {"key": "plan-off", "desc": "Disable plan mode for a prompt"},
     ]
     
     choice = _show_menu("RDD - Prompt Domain", options)

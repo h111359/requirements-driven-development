@@ -358,19 +358,19 @@ The framework enables:
 
 - [UR-20251230-2003] The framework shall prevent enabling analyze mode for prompts not in `active` state.
 
-- [TR-20251230-2004] Each prompt in work-iteration-registry.json shall have an `analyze-enabled` boolean field with default value `false`.
+- [TR-20251230-2004] [DELETED]
 
-- [TR-20251230-2005] The framework shall provide scripts `prompt_analyze_on.py` and `prompt_analyze_off.py` in `.rdd/src/actions/` for controlling analyze mode.
+- [TR-20251230-2005] [DELETED]
 
-- [TR-20251230-2006] The execution prompt logic shall read analyze mode from the `analyze-enabled` field in work-iteration-registry.json rather than from chat modifiers.
+- [TR-20251230-2006] [DELETED]
 
 - [TR-20251230-2007] The Web UI shall display analyze mode toggles only for prompts in `active` state.
 
 - [TR-20251230-2008] The Prompts section table in the Web UI shall include an "Analyze Mode" column with a toggle switch for `active` prompts and "N/A" for `completed` prompts.
 
-- [TR-20251230-2009] The CLI prompt domain menu shall include "analyze-on" and "analyze-off" actions that route to the prompt_analyze_on.py and prompt_analyze_off.py scripts.
+- [TR-20251230-2009] [DELETED]
 
-- [TR-20251230-2010] The analyze execution step shall automatically invoke the prompt_analyze_off.py script after completing the analyze execution to disable the analyze flag.
+- [TR-20251230-2010] [DELETED]
 
 - [TR-20251231-0100] The work iteration registry shall include a root-level boolean field `git-enabled` (default: false) to control git operations during prompt completion.
 
@@ -395,7 +395,7 @@ The framework enables:
 
 - [TR-20251231-0204] The Prompts section table in the Web UI shall include a "Plan Mode" column with a toggle switch for `active` prompts and "N/A" for `completed` prompts.
 
-- [TR-20251231-0205] The CLI prompt domain menu shall include "plan-on" and "plan-off" actions that route to the prompt_plan_on.py and prompt_plan_off.py scripts.
+- [TR-20251231-0205] [DELETED]
 
 - [TR-20251231-0206] The plan execution step shall automatically invoke the prompt_plan_off.py script after completing the plan generation to disable the plan flag.
 
