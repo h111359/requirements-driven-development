@@ -27,8 +27,11 @@
 
 - [MODIFICATIONS-LOG] is the file `modifications-log.json` in [ACTIVE-PROMPT-FOLDER]
 
-- [MODIFIER] is a key word written in the chat after the prompt file. The MODIFIER could be:
-  * modification
+- [REQUIREMENTS] is the file `.rdd-instance/specifications/requirements.md`
+
+- [FILES-AND-FOLDERS] is the file `.rdd-instance/specifications/files-and-folders.md`
+
+- [TECHNICAL-DESIGN] is the file `.rdd-instance/specifications/technical-design.json`
 
 
 ## Instructions - Follow these steps exactly:  
@@ -45,11 +48,17 @@
      - After completing the snippet-specific work, continue with the completion steps for the current execution-mode (see step 6) unless the snippet says something else.
      - The snippet instructions modify WHAT work is done, but do not skip the mode-specific completion steps (setting executed, implementation-completed, resetting mode) by default - execute them unless the snippet explicitely says other.
 
-4. Check if the [PLAN] is fulfilled. If it is, you shall observe it in the next steps. Do not skip any of the steps in the plan. Do not stop the implementation until the entire plan is completed. 
-   
-5. Check if there are questions and answers in the [QUESTIONNAIRE]. If there are, you shall comply with the chosen answers in the next steps.
+4. Read [TECHNICAL-DESIGN] and identify the information in it related to the [ACTIVE-PROMPT]
 
-6. Read the `execution-mode` attribute of the active prompt from [WI-REGISTRY]. Based on the value:
+5. Read [REQUIREMENTS] and identify those, which are related to the [ACTIVE-PROMPT]
+
+6. Read [FILES-AND-FOLDERS] and identify those, which are related to the [ACTIVE-PROMPT]
+
+7. Check if there are questions and answers in the [QUESTIONNAIRE]. If there are, you shall comply with the chosen answers in the next steps.
+
+8. Check if the [PLAN] is fulfilled. If it is, you shall observe it in the next steps. Do not skip any of the steps in the plan. Do not stop the implementation until the entire plan is completed. 
+
+9. Read the `execution-mode` attribute of the active prompt from [WI-REGISTRY]. Based on the value:
    
    * If `execution-mode` is `"no-action"`:
      * Write in the chat "No action mode selected"
@@ -88,14 +97,7 @@
        - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
      * Stop (do not continue with the next instructions here)
 
-7. If the user has added a [MODIFIER]
-  
-  *  modification:
-     *  Should be followed by the number of the modification - read the text of the modification from [ACTIVE-PROMPT] (read it again as the user has changed it)
-     *   Write in the chat "Modification <ID>" 
-     *  Execute the instruction of the modification and stop (do not continue with the next instructions here)
-
-8. (This step should not be reached in normal execution flow - execution mode should have been checked in step 5)
+10. After all id finished, write in the chat "I am done"
 
 
 

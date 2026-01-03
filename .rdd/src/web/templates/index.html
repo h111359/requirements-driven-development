@@ -43,6 +43,11 @@
                             <i class="bi bi-file-earmark"></i> Files
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('help')">
+                            <i class="bi bi-question-circle"></i> Help
+                        </a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -367,6 +372,29 @@
                                         onclick="loadFileQuick('specifications/technical-design.json')">
                                     Technical Design
                                 </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div id="section-help" class="section" style="display:none;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-secondary text-white">
+                            <h5><i class="bi bi-question-circle"></i> Help - User Guide</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="help-content-container">
+                                <div class="text-center py-5">
+                                    <div class="spinner-border text-secondary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-3">Loading user guide...</p>
+                                </div>
                             </div>
                         </div>
                     </div>

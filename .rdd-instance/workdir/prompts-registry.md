@@ -353,3 +353,48 @@ Move the modal action buttons to the top to avoid forcing users to scroll to the
 
 When Insert Snippet is pressed, in the prompt is entered [[[ and when later in the modal is pressed Cancel - the [[[ stays. No [[[ should be added when Insert Snippet is pressed.
 %%ENDPROMPT
+
+%%PROMPT P-031 "Help Tab"
+[[[ROLE_SOFTWARE_DEVELOPER]]]
+
+In the tab section in UI should be created new section - Help
+In Help should be displayed for now a User Guide, which you should refer to `.rdd/docs/user-guide.md`. It is a markdown file, so it should be transferred to HTML/CSS/JS look and feel dynamically.
+The file `.rdd/docs/user-guide.md` should be totally recreated - read all the content of .rdd/ folder as well as .rdd-iteration/ folder to understand the current state, principles, etc.
+Do not explain the technical details - just how the user should work with the UI and VSC so to develop.
+Make the description simple to follow, logical and as short as possible (still the user should be able to understand clearly)
+
+
+### Modification 001
+
+Bug: I see the following in the User Guide text: "trong>" where in markdown is used "**". Fix it
+
+
+### Modification 002
+
+Bug: There still appears not properly rendered. For example:
+strong>
+
+
+### Modification 003
+
+The bug reported in modifications 001 and 002 is not eliminated. Now appears:
+*Step 1: Create a New Prompt**
+But this text should be without asterisks and bold. The enclosed in ** text should be bold. Troubleshoot, find the root cause and fix the bug. Make sure the bug is eliminated
+
+
+### Modification 004
+
+Bug: In the user guide are seen special symbols:
+For example in
+"Web interface won&#x27;t start" the '&#x27;' is wrong. Find the issue and fix it. Work until the issue is fixed completely.
+
+
+### Modification 005
+
+The bug in Modification 004 is not fixed. I still can see same issue. For example:
+"Troubleshooting
+
+Web interface won&#x27;t start
+
+    Ensure Python 3.7+ is installed and accessible via python command"
+%%ENDPROMPT

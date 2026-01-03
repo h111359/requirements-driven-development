@@ -50,6 +50,141 @@ def _actions_dir() -> Path:
     return _repo_root() / ".rdd" / "src" / "actions"
 
 
+def _markdown_to_html(markdown_text: str) -> str:
+    """Convert markdown to HTML using simple pattern matching.
+    
+    This is a lightweight markdown converter that handles common markdown
+    syntax without requiring external dependencies.
+    
+    Args:
+        markdown_text: Markdown formatted text.
+        
+    Returns:
+        HTML formatted text.
+    """
+    import re
+    import html
+    
+    lines = markdown_text.split('\n')
+    html_lines = []
+    in_code_block = False
+    code_language = ""
+    in_list = False
+    
+    for line in lines:
+        # Handle code blocks
+        if line.strip().startswith('```'):
+            if in_code_block:
+                html_lines.append('</code></pre>')
+                in_code_block = False
+                code_language = ""
+            else:
+                in_code_block = True
+                code_language = line.strip()[3:].strip()
+                lang_class = f' class="language-{code_language}"' if code_language else ''
+                html_lines.append(f'<pre{lang_class}><code>')
+            continue
+        
+        if in_code_block:
+            html_lines.append(html.escape(line))
+            continue
+        
+        # Close list if we're not in a list item anymore
+        if in_list and not line.strip().startswith(('- ', '* ', '1.', '2.', '3.', '4.', '5.', '6.', '7.', '8.', '9.')):
+            html_lines.append('</ul>')
+            in_list = False
+        
+        # Headers
+        if line.startswith('# '):
+            html_lines.append(f'<h1>{html.escape(line[2:])}</h1>')
+        elif line.startswith('## '):
+            html_lines.append(f'<h2>{html.escape(line[3:])}</h2>')
+        elif line.startswith('### '):
+            html_lines.append(f'<h3>{html.escape(line[4:])}</h3>')
+        elif line.startswith('#### '):
+            html_lines.append(f'<h4>{html.escape(line[5:])}</h4>')
+        # Bold and emphasis inline
+        elif '**' in line or '_' in line or '`' in line or '[' in line:
+            # Check if this is a list item first (must have space after marker)
+            is_list_item = line.strip().startswith(('- ', '* '))
+            if is_list_item:
+                # Extract content after list marker
+                content = line.strip()[2:].strip()
+            else:
+                content = line
+            
+            # Process markdown patterns and escape content
+            # Strategy:
+            # 1. Match markdown patterns in original text
+            # 2. For each match, create HTML tag with escaped content
+            # 3. For non-matched text, escape it
+            # This ensures each piece of text is escaped exactly once
+            
+            def process_markdown(text):
+                result = []
+                pos = 0
+                
+                # Find all markdown patterns (bold, italic, code, links)
+                # Combine all patterns into one regex
+                pattern = r'(\*\*(.+?)\*\*)|(_(.+?)_)|(`(.+?)`)|(\[(.+?)\]\((.+?)\))'
+                
+                for match in re.finditer(pattern, text):
+                    # Add escaped text before this match
+                    if pos < match.start():
+                        result.append(html.escape(text[pos:match.start()]))
+                    
+                    # Process the match
+                    if match.group(1):  # Bold **text**
+                        result.append(f'<strong>{html.escape(match.group(2))}</strong>')
+                    elif match.group(3):  # Italic _text_
+                        result.append(f'<em>{html.escape(match.group(4))}</em>')
+                    elif match.group(5):  # Code `text`
+                        result.append(f'<code>{html.escape(match.group(6))}</code>')
+                    elif match.group(7):  # Link [text](url)
+                        link_text = html.escape(match.group(8))
+                        link_url = match.group(9)
+                        result.append(f'<a href="{link_url}" target="_blank">{link_text}</a>')
+                    
+                    pos = match.end()
+                
+                # Add escaped text after the last match
+                if pos < len(text):
+                    result.append(html.escape(text[pos:]))
+                
+                return ''.join(result)
+            
+            content = process_markdown(content)
+            
+            if is_list_item:
+                if not in_list:
+                    html_lines.append('<ul>')
+                    in_list = True
+                html_lines.append(f'<li>{content}</li>')
+            else:
+                html_lines.append(f'<p>{content}</p>')
+        # List items
+        elif line.strip().startswith(('- ', '* ')):
+            if not in_list:
+                html_lines.append('<ul>')
+                in_list = True
+            html_lines.append(f'<li>{html.escape(line.strip()[2:])}</li>')
+        # Empty line
+        elif not line.strip():
+            if in_list:
+                html_lines.append('</ul>')
+                in_list = False
+            html_lines.append('<br>')
+        # Regular paragraph
+        else:
+            html_lines.append(f'<p>{html.escape(line)}</p>')
+    
+    # Close any open lists
+    if in_list:
+        html_lines.append('</ul>')
+    
+    return '\n'.join(html_lines)
+
+
 class RDDWebHandler(http.server.SimpleHTTPRequestHandler):
     """HTTP request handler for RDD web interface.
     
@@ -288,6 +423,23 @@ class RDDWebHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_json_response({"success": True, "snippets": snippets})
             except Exception as e:
                 self.send_error_response(f"Failed to load snippets: {str(e)}")
+            return
+        
+        elif path == "/api/help/user-guide":
+            # Get user guide as rendered HTML
+            try:
+                user_guide_path = _repo_root() / ".rdd" / "docs" / "user-guide.md"
+                if not user_guide_path.exists():
+                    self.send_error_response("User guide file not found")
+                    return
+                
+                with open(user_guide_path, "r", encoding="utf-8") as f:
+                    markdown_content = f.read()
+                
+                html_content = _markdown_to_html(markdown_content)
+                self.send_json_response({"success": True, "html": html_content})
+            except Exception as e:
+                self.send_error_response(f"Failed to load user guide: {str(e)}")
             return
         
         elif path.startswith("/api/file/"):

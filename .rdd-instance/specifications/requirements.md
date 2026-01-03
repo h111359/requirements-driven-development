@@ -474,3 +474,14 @@ The framework enables:
 
 - [TR-20260102-1703] The files listing CSV shall use tab character as field delimiter and shall be stored with UTF-8 encoding to support international characters in file names and descriptions.
 - [UR-20260103-1100] The Web UI shall provide a snippet insertion feature for the prompt editor that enables users to insert predefined prompt snippet keys through an autocomplete dropdown interface. The autocomplete shall trigger when user types '[[[' and display available snippets with preview content. The system shall validate snippet keys against manifest.json on save and warn about invalid keys.
+
+- [UR-20260103-1200] The Web UI shall provide a Help tab that displays the user guide to assist users in understanding how to work with the RDD framework through the Web UI and VS Code.
+
+- [UR-20260103-1201] The user guide shall focus on practical Web UI workflows without exposing technical implementation details, providing multiple short workflow examples for different development scenarios including creating prompts, using plan mode, working with modifications, and completing prompts.
+
+- [TR-20260103-1200] The web server shall provide a GET /api/help/user-guide endpoint that reads `.rdd/docs/user-guide.md`, converts it to HTML using a Python-based markdown converter, and returns the rendered HTML in JSON format.
+
+- [TR-20260103-1201] The Help tab shall be positioned after the Files tab in the Web UI navigation bar and shall automatically load and display the rendered user guide when accessed.
+
+- [TR-20260103-1202] The user guide markdown rendering shall be performed server-side using a lightweight markdown-to-HTML converter implemented in Python without requiring external dependencies beyond the standard library.
+- [TR-20260103-1518] The markdown-to-HTML converter shall escape special HTML characters (apostrophes, quotes, ampersands, angle brackets) exactly once to prevent XSS vulnerabilities while ensuring correct display without double-escaping (e.g., apostrophes shall render as ' not as &#x27;).

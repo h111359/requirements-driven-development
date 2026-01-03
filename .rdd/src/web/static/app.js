@@ -66,6 +66,8 @@ function showSection(sectionName) {
         loadActivePrompt();
     } else if (sectionName === 'workdir') {
         loadIterationStatus();
+    } else if (sectionName === 'help') {
+        loadUserGuide();
     }
 }
 
@@ -2199,5 +2201,46 @@ function insertSnippetFromButton() {
         promptSnippetAutocomplete.trigger();
     } else {
         showAlert('warning', 'Snippet autocomplete not initialized. Type [[[ to insert snippets.');
+    }
+}
+
+/**
+ * Load and display the user guide in the Help section
+ */
+async function loadUserGuide() {
+    const container = document.getElementById('help-content-container');
+    
+    try {
+        // Show loading state
+        container.innerHTML = `
+            <div class="text-center py-5">
+                <div class="spinner-border text-secondary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3">Loading user guide...</p>
+            </div>
+        `;
+        
+        const response = await fetch('/api/help/user-guide');
+        const data = await response.json();
+        
+        if (!response.ok || !data.success) {
+            throw new Error(data.error || 'Failed to load user guide');
+        }
+        
+        // Display the rendered HTML
+        container.innerHTML = `<div class="user-guide-content">${data.html}</div>`;
+        
+    } catch (error) {
+        console.error('Error loading user guide:', error);
+        container.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle"></i>
+                <strong>Error loading user guide:</strong> ${error.message}
+                <p class="mt-2 mb-0">
+                    <small>Please ensure the user guide file exists at .rdd/docs/user-guide.md</small>
+                </p>
+            </div>
+        `;
     }
 }
