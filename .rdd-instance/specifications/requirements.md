@@ -344,7 +344,7 @@ The framework enables:
 
 - [TR-20251230-1436] [DELETED]
 
-- [TR-20251230-1437] The Files section shall provide a file browser with path input field, quick access buttons for common files (registry, requirements, technical design), a text editor for viewing and editing file contents, and save functionality.
+- [TR-20251230-1437] The Files section shall provide a file browser with quick access buttons for common files (registry, requirements, technical design), a text editor for viewing and editing file contents, and save functionality.
 
 - [TR-20251230-1438] The Prompts section shall provide an integrated prompt editor that displays Edit buttons for prompts in `active` state and View buttons for prompts in `completed` state.
 

@@ -415,3 +415,7 @@ The options radio buttons in the Questionnaire are too light and barely visible.
 Instead of statuses for Questionnaire, Plan and Implementation - hide or show the tabs for Plan, Questionnaire or Implementation. If the tab is present, this will mean the respective attribute is on and the files are present. 
 Modifications tab should appear only when executed is set to true.
 %%ENDPROMPT
+
+%%PROMPT P-035 "Remove File Path"
+Remove the section "File Path (relative to .rdd-instance):" together with the file selector.
+%%ENDPROMPT
