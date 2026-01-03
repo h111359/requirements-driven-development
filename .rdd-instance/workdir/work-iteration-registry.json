@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
-    "iteration-name": "Experimental 3",
-    "prompt-id-sequence-next-value": 34,
+    "iteration-name": "Web UI",
+    "prompt-id-sequence-next-value": 35,
     "git-enabled": true,
     "prompts": [
         {
@@ -369,6 +369,17 @@
         {
             "prompt-id": "P-033",
             "prompt-title": "More visible checkboxes for questionnaires",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
+        },
+        {
+            "prompt-id": "P-034",
+            "prompt-title": "Instead of tabs - the statuses to be clickable",
             "state": "completed",
             "questionnaire-generated": true,
             "questionnaire-answered": true,

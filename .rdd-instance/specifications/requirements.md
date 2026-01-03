@@ -204,6 +204,8 @@ The framework enables:
 
 - [UR-20260103-1530] The Web UI shall display all radio button form controls with enhanced visibility through increased size, darker border colors, and interactive visual feedback states including hover, focus, and checked states to improve usability and accessibility across all pages and forms.
 
+- [UR-20260103-1700] The Web UI Active Prompt page shall control tab visibility based on workflow state instead of displaying status badges, showing the Questionnaire tab only when questionnaire-generated is true, the Plan tab only when plan-generated is true, the Modifications tab only when executed is true, while keeping the Prompt and Implementation tabs always visible.
+
 
 
 ## Technical Requirements
@@ -491,3 +493,5 @@ The framework enables:
 - [TR-20260103-1518] The markdown-to-HTML converter shall escape special HTML characters (apostrophes, quotes, ampersands, angle brackets) exactly once to prevent XSS vulnerabilities while ensuring correct display without double-escaping (e.g., apostrophes shall render as ' not as &#x27;).
 
 - [TR-20260103-1530] Radio button styles in `.rdd/src/web/static/style.css` shall define enhanced visibility CSS rules for `.form-check-input[type="radio"]` elements with increased size (1.25em width and height), thicker borders (2px), darker border colors (#495057), and comprehensive interactive state styling including hover (primary blue border with light background), focus (primary blue border with box-shadow), and checked (primary blue background with border and subtle shadow) states to ensure visibility and accessibility compliance.
+
+- [TR-20260103-1700] The Web UI Active Prompt page shall implement tab visibility control through JavaScript by dynamically showing or hiding tab navigation items based on prompt workflow state flags (questionnaire-generated, plan-generated, executed), removing the previous status badge indicators, and ensuring that the currently active tab remains selected when tab visibility changes.

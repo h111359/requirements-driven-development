@@ -558,8 +558,8 @@ async function loadActivePrompt() {
         addModificationBtn.title = implementationCompleted ? 'Create a modification for small corrections' : 'Available after implementation completed';
     }
     
-    // Update status indicators
-    updateStatusIndicators(activePrompt);
+    // Update tab visibility based on workflow state
+    updateTabVisibility(activePrompt);
     
     // Load prompt files
     await loadActivePromptFiles(promptId);
@@ -598,55 +598,34 @@ function getSmartDefaultMode(prompt) {
 }
 
 /**
- * Update status indicators for active prompt
+ * Update tab visibility for active prompt based on workflow state
  */
-function updateStatusIndicators(prompt) {
+function updateTabVisibility(prompt) {
     const questionnaireGenerated = prompt['questionnaire-generated'] || false;
-    const questionnaireAnswered = prompt['questionnaire-answered'] || false;
     const planGenerated = prompt['plan-generated'] || false;
-    const implementationCompleted = prompt['implementation-completed'] || false;
+    const executed = prompt.executed || false;
     
-    // Questionnaire status (compact badge)
-    const questionnaireStatus = document.getElementById('questionnaire-status');
+    // Get tab elements (li elements containing the tab buttons)
+    const questionnaireTabLi = document.querySelector('#active-questionnaire-tab').closest('li.nav-item');
+    const planTabLi = document.querySelector('#active-plan-tab').closest('li.nav-item');
+    const modificationsTabLi = document.querySelector('#active-modifications-tab').closest('li.nav-item');
     
-    if (!questionnaireGenerated) {
-        questionnaireStatus.className = 'badge bg-secondary';
-        questionnaireStatus.innerHTML = '<i class="bi bi-question-circle"></i> Q';
-        questionnaireStatus.title = 'Questionnaire: Not Generated';
-    } else if (questionnaireAnswered) {
-        questionnaireStatus.className = 'badge bg-success';
-        questionnaireStatus.innerHTML = '<i class="bi bi-check-circle"></i> Q';
-        questionnaireStatus.title = 'Questionnaire: Answered';
-    } else {
-        questionnaireStatus.className = 'badge bg-warning';
-        questionnaireStatus.innerHTML = '<i class="bi bi-question-circle"></i> Q';
-        questionnaireStatus.title = 'Questionnaire: In Progress';
+    // Prompt tab: always visible (no action needed)
+    // Implementation tab: always visible (no action needed)
+    
+    // Questionnaire tab: visible when questionnaire-generated=true
+    if (questionnaireTabLi) {
+        questionnaireTabLi.style.display = questionnaireGenerated ? '' : 'none';
     }
     
-    // Plan status (compact badge)
-    const planStatus = document.getElementById('plan-status');
-    
-    if (planGenerated) {
-        planStatus.className = 'badge bg-success';
-        planStatus.innerHTML = '<i class="bi bi-check-circle"></i> P';
-        planStatus.title = 'Plan: Generated';
-    } else {
-        planStatus.className = 'badge bg-secondary';
-        planStatus.innerHTML = '<i class="bi bi-list-check"></i> P';
-        planStatus.title = 'Plan: Not Generated';
+    // Plan tab: visible when plan-generated=true
+    if (planTabLi) {
+        planTabLi.style.display = planGenerated ? '' : 'none';
     }
     
-    // Implementation status (compact badge)
-    const implementationStatus = document.getElementById('implementation-status');
-    
-    if (implementationCompleted) {
-        implementationStatus.className = 'badge bg-success';
-        implementationStatus.innerHTML = '<i class="bi bi-check-circle"></i> I';
-        implementationStatus.title = 'Implementation: Completed';
-    } else {
-        implementationStatus.className = 'badge bg-secondary';
-        implementationStatus.innerHTML = '<i class="bi bi-code-square"></i> I';
-        implementationStatus.title = 'Implementation: Not Completed';
+    // Modifications tab: visible when executed=true
+    if (modificationsTabLi) {
+        modificationsTabLi.style.display = executed ? '' : 'none';
     }
 }
 
