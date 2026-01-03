@@ -70,5 +70,20 @@
       { "path": ".rdd/**", "action": "overwrite" },
       { "path": ".rdd-instance/**", "action": "preserve" }
     ]
-  }
+  },
+
+  "promptSnippets": [
+    {"prompt-snippet-key": "[[[CONSISTENCY]]]", "prompt-snippet-path": ".rdd/prompt-snippets/check-consistency.prompt.md"},
+    {"prompt-snippet-key": "[[[COMPARE_REQUIREMENTS]]]", "prompt-snippet-path": ".rdd/prompt-snippets/compare-requirements.prompt.md"},
+    {"prompt-snippet-key": "[[[EXECUTION_STEP_ANALYZE]]]", "prompt-snippet-path": ".rdd/prompt-snippets/execution-step.analyze.md"},
+    {"prompt-snippet-key": "[[[EXECUTION_STEP_IMPLEMENTATION]]]", "prompt-snippet-path": ".rdd/prompt-snippets/execution-step.implementation.md"},
+    {"prompt-snippet-key": "[[[EXECUTION_STEP_MODIFICATION]]]", "prompt-snippet-path": ".rdd/prompt-snippets/execution-step.modification.md"},
+    {"prompt-snippet-key": "[[[EXECUTION_STEP_PLAN]]]", "prompt-snippet-path": ".rdd/prompt-snippets/execution-step.plan.md"},
+    {"prompt-snippet-key": "[[[EXECUTION]]]", "prompt-snippet-path": ".rdd/prompt-snippets/execution.md"},
+    {"prompt-snippet-key": "[[[FOLDER_STRUCTURE_UPDATE]]]", "prompt-snippet-path": ".rdd/prompt-snippets/folder-structure.update.md"},
+    {"prompt-snippet-key": "[[[ROLE_SOLUTION_ARCHITECT]]]", "prompt-snippet-path": ".rdd/prompt-snippets/role.solution-architect.md"},
+    {"prompt-snippet-key": "[[[ROLE_SOFTWARE_DEVELOPER]]]", "prompt-snippet-path": ".rdd/prompt-snippets/role.sotware-developer.md"},
+    {"prompt-snippet-key": "[[[ANALYZE]]]", "prompt-snippet-path": ".rdd/prompt-snippets/analyze.md"}
+  ]
+
 }

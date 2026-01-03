@@ -190,6 +190,16 @@ The framework enables:
 
 - [UR-20260102-1645] The Web UI Active Prompt page shall provide a "View Implementation" button for each modification in the Modifications tab that displays the modification's implementation log file in a read-only modal dialog with monospace font formatting.
 
+- [UR-20251231-0200] The framework shall provide a plan mode that allows users to generate implementation plans without proceeding to execution, enabling plan review and approval.
+
+- [UR-20251231-0201] The framework shall automatically disable plan mode after the plan generation completes.
+
+- [UR-20251231-0202] The framework shall ensure that plan mode and analyze mode are mutually exclusive and cannot be enabled simultaneously for the same prompt.
+
+- [UR-20251231-0203] The framework shall prevent enabling plan mode for prompts not in `active` state.
+
+- [UR-20251231-0204] The framework shall provide a toggle mechanism to enable/disable plan mode for prompts through the Web UI.
+
 
 
 ## Technical Requirements
@@ -375,21 +385,6 @@ The framework enables:
 - [TR-20251231-0105] The Web UI Prompts section table shall include an "Executed" column displaying a badge indicating whether each prompt has been executed (green "Yes" or gray "No").
 
 - [TR-20251231-0106] The Web UI shall provide a "Complete" button in the Actions column for prompts in `active` state, enabled only when the prompt's executed flag is true, with a tooltip explaining the requirement.
-
-
-
-## Plan Mode Requirements
-
-- [UR-20251231-0200] The framework shall provide a plan mode that allows users to generate implementation plans without proceeding to execution, enabling plan review and approval.
-
-- [UR-20251231-0201] The framework shall automatically disable plan mode after the plan generation completes.
-
-- [UR-20251231-0202] The framework shall ensure that plan mode and analyze mode are mutually exclusive and cannot be enabled simultaneously for the same prompt.
-
-- [UR-20251231-0203] The framework shall prevent enabling plan mode for prompts not in `active` state.
-
-- [UR-20251231-0204] The framework shall provide a toggle mechanism to enable/disable plan mode for prompts through the Web UI.
-
 - [TR-20251231-0200] Each prompt in work-iteration-registry.json shall have a `plan-enabled` boolean field with default value `false`.
 
 - [TR-20251231-0201] The framework shall provide scripts `prompt_plan_on.py` and `prompt_plan_off.py` in `.rdd/src/actions/` for controlling plan mode.

@@ -206,3 +206,21 @@ On every execution of the script:
 
 Create a python script `.rdd/src/actions/files_list_csv_set_description.py` which receives parameters file-name and relative-path and for the entry with those values in `.rdd-instance/specifications/files-list.csv` applies the content of third parameter description. This script will be called from copilot.
 %%ENDPROMPT
+
+%%PROMPT P-027 "Remove analyze-enabled"
+[[[Analyse]]]
+
+Check if the following files are still in use or they are obsolete:
+
+.rdd/src/actions/prompt_analyze_off.py
+.rdd/src/actions/prompt_analyze_on.py
+.rdd/src/actions/prompt_plan_off.py
+.rdd/src/actions/prompt_plan_on.py
+
+Also check if these requirements should stay or are obsolete:
+
+- [TR-20251230-2004] Each prompt in work-iteration-registry.json shall have an `analyze-enabled` boolean field with default value `false`.
+- [TR-20251230-2006] The execution prompt logic shall read analyze mode from the `analyze-enabled` field in work-iteration-registry.json rather than from chat modifiers.
+
+Check all the prompts executed up to now. In case of conflict, prompts with bigger number are with precedence.
+%%ENDPROMPT

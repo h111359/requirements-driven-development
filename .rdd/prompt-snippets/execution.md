@@ -37,11 +37,17 @@
       
 2. Identify the [ACTIVE-PROMPT-ID], [ACTIVE-PROMPT-FOLDER], [ACTIVE-PROMPT].
 
-3. Check if the [PLAN] is fulfilled. If it is, you shall observe it in the next steps. Do not skip any of the steps in the plan. Do not stop the implementation until the entire plan is completed. 
-   
-4. Check if there are questions and answers in the [QUESTIONNAIRE]. If there are, you shall comply with the chosen answers in the next steps.
+3. **Check for prompt snippet keys**: Read [ACTIVE-PROMPT] and check if it contains any prompt-snippet-keys (strings starting with `[[[` and ending with `]]]`). If found:
+   - Look up the corresponding file path in `.rdd/config/manifest.json` under `promptSnippets`
+   - Read that file immediately
+   - If the snippet file contains instructions that override the normal execution flow (like `[[[Analyse]]]` which changes implementation behavior), follow those instructions instead of the default execution-mode flow
+   - These snippet instructions have precedence over the standard execution steps
 
-5. Read the `execution-mode` attribute of the active prompt from [WI-REGISTRY]. Based on the value:
+4. Check if the [PLAN] is fulfilled. If it is, you shall observe it in the next steps. Do not skip any of the steps in the plan. Do not stop the implementation until the entire plan is completed. 
+   
+5. Check if there are questions and answers in the [QUESTIONNAIRE]. If there are, you shall comply with the chosen answers in the next steps.
+
+6. Read the `execution-mode` attribute of the active prompt from [WI-REGISTRY]. Based on the value:
    
    * If `execution-mode` is `"no-action"`:
      * Write in the chat "No action mode selected"
@@ -76,18 +82,20 @@
        - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
      * Stop (do not continue with the next instructions here)
 
-6. If the user has added a [MODIFIER]
+7. If the user has added a [MODIFIER]
   
   *  modification:
      *  Should be followed by the number of the modification - read the text of the modification from [ACTIVE-PROMPT] (read it again as the user has changed it)
      *   Write in the chat "Modification <ID>" 
      *  Execute the instruction of the modification and stop (do not continue with the next instructions here)
 
-7. (This step should not be reached in normal execution flow - execution mode should have been checked in step 5)
+8. (This step should not be reached in normal execution flow - execution mode should have been checked in step 5)
 
 
 
 ## Mandatory Rules:  
+
+- If in the prompt text is written string (or several strings) startin with "[[[" and ending with "]]], this is a prompt-snippet-key. This is a refference to additional instructions in a separate file. You should read and follow these instructions. The list of prompt-snippet-keys and the respective files are defined in `.rdd/config/manifest.json` key "promptSnippets". Always consider these instructions. Treat the text in the prompt-snippet files in the same way as if it was copy-pasted instead of the prompt-snippet-key.
 
 - **Be verbose in files**: When writing to files in `.rdd-instance/workdir/` folder, provide detailed explanations, reasoning, and context to ensure clarity for future reference. 
 
