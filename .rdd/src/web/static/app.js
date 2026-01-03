@@ -66,6 +66,8 @@ function showSection(sectionName) {
         loadActivePrompt();
     } else if (sectionName === 'workdir') {
         loadIterationStatus();
+    } else if (sectionName === 'requirements') {
+        loadRequirements();
     } else if (sectionName === 'help') {
         loadUserGuide();
     }
@@ -2184,6 +2186,57 @@ function insertSnippetFromButton() {
         promptSnippetAutocomplete.trigger();
     } else {
         showAlert('warning', 'Snippet autocomplete not initialized. Type [[[ to insert snippets.');
+    }
+}
+
+/**
+ * Load requirements content for the Requirements tab
+ */
+async function loadRequirements() {
+    const textarea = document.getElementById('requirements-content');
+    
+    try {
+        const response = await fetch('/api/file/specifications/requirements.md?token=' + sessionToken);
+        const result = await response.json();
+        
+        if (result.success) {
+            textarea.value = result.content || '';
+        } else {
+            showAlert('danger', 'Failed to load requirements: ' + result.error);
+        }
+    } catch (error) {
+        showAlert('danger', 'Error loading requirements: ' + error.message);
+    }
+}
+
+/**
+ * Save requirements content
+ */
+async function saveRequirements() {
+    const content = document.getElementById('requirements-content').value;
+    
+    try {
+        const response = await fetch('/api/file/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                filepath: 'specifications/requirements.md',
+                content: content
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('success', 'Requirements saved successfully');
+        } else {
+            showAlert('danger', 'Failed to save requirements: ' + result.error);
+        }
+    } catch (error) {
+        showAlert('danger', 'Error saving requirements: ' + error.message);
     }
 }
 

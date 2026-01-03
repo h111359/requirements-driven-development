@@ -97,7 +97,9 @@
        - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
      * Stop (do not continue with the next instructions here)
 
-10. After all id finished, write in the chat "I am done"
+10. Update [REQUIREMENTS] if needed. In all cases - write in the chat and in [IMPLEMENTATION] your rationale what is changed and if no changes - why.
+
+10. After all id finished, write in the chat "I am done with <execution-mode>". In case the execiution mode is modification - add the modification-id.
 
 
 

@@ -39,6 +39,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('requirements')">
+                            <i class="bi bi-file-text"></i> Requirements
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#" onclick="showSection('help')">
                             <i class="bi bi-question-circle"></i> Help
                         </a>
@@ -300,10 +305,6 @@
                                             Registry
                                         </button>
                                         <button class="btn btn-sm btn-outline-info me-2" 
-                                                onclick="loadFileQuick('specifications/requirements.md')">
-                                            Requirements
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-info me-2" 
                                                 onclick="loadFileQuick('specifications/technical-design.json')">
                                             Technical Design
                                         </button>
@@ -330,6 +331,29 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Requirements Section -->
+        <div id="section-requirements" class="section" style="display:none;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h5><i class="bi bi-file-text"></i> Requirements</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="requirements-content" class="form-label fw-bold">specifications/requirements.md</label>
+                                <textarea class="form-control font-monospace" id="requirements-content" 
+                                          rows="25" style="font-size: 14px;"></textarea>
+                            </div>
+                            <button class="btn btn-success" onclick="saveRequirements()">
+                                <i class="bi bi-save"></i> Save Requirements
+                            </button>
                         </div>
                     </div>
                 </div>

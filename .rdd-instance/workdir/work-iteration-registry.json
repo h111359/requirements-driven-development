@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Web UI",
-    "prompt-id-sequence-next-value": 39,
+    "prompt-id-sequence-next-value": 40,
     "git-enabled": true,
     "prompts": [
         {
@@ -426,6 +426,17 @@
         {
             "prompt-id": "P-038",
             "prompt-title": "New Workdir modal",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
+        },
+        {
+            "prompt-id": "P-039",
+            "prompt-title": "Requirements tab",
             "state": "completed",
             "questionnaire-generated": true,
             "questionnaire-answered": true,

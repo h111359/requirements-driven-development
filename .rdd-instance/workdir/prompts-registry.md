@@ -446,3 +446,7 @@ Remove " Archive Current: " label. Make the button for archiving smaller
 In Workdir page - remove the label "New Work Iteration: " and rename the "Create" button to "Create Work Iteration".
 Instead of form in the page - leave the button only and creation should be made as a modal (like the way a new prompt is created)
 %%ENDPROMPT
+
+%%PROMPT P-039 "Requirements tab"
+Instead of invoked with a button in Workdir page, move requirements to a new menu tab page named "Requirements"
+%%ENDPROMPT
