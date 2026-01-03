@@ -1551,33 +1551,21 @@ async function archiveWorkdir() {
  * Load iteration status
  */
 async function loadIterationStatus() {
-    const container = document.getElementById('iteration-status');
-    container.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>';
-    
+    // Update compact status header
     await loadRegistry();
     
     if (!currentRegistry) {
-        container.innerHTML = '<p class="text-warning">No work iteration registry found.</p>';
+        document.getElementById('status-iteration-id').textContent = 'No iteration';
+        document.getElementById('status-iteration-name').textContent = '';
+        document.getElementById('status-total-prompts').textContent = '';
+        document.getElementById('status-next-prompt-id').textContent = '';
         return;
     }
     
-    const html = `
-        <dl class="row mb-0">
-            <dt class="col-sm-3">Iteration ID:</dt>
-            <dd class="col-sm-9"><code>${currentRegistry['iteration-id']}</code></dd>
-            
-            <dt class="col-sm-3">Iteration Name:</dt>
-            <dd class="col-sm-9">${escapeHtml(currentRegistry['iteration-name'])}</dd>
-            
-            <dt class="col-sm-3">Total Prompts:</dt>
-            <dd class="col-sm-9">${currentRegistry.prompts ? currentRegistry.prompts.length : 0}</dd>
-            
-            <dt class="col-sm-3">Next Prompt ID:</dt>
-            <dd class="col-sm-9"><code>P-${String(currentRegistry['prompt-id-sequence-next-value']).padStart(3, '0')}</code></dd>
-        </dl>
-    `;
-    
-    container.innerHTML = html;
+    document.getElementById('status-iteration-id').innerHTML = `<strong>ID:</strong> <code>${currentRegistry['iteration-id']}</code>`;
+    document.getElementById('status-iteration-name').innerHTML = `<strong>Name:</strong> ${escapeHtml(currentRegistry['iteration-name'])}`;
+    document.getElementById('status-total-prompts').innerHTML = `<strong>Prompts:</strong> ${currentRegistry.prompts ? currentRegistry.prompts.length : 0}`;
+    document.getElementById('status-next-prompt-id').innerHTML = `<strong>Next ID:</strong> <code>P-${String(currentRegistry['prompt-id-sequence-next-value']).padStart(3, '0')}</code>`;
 }
 
 /**

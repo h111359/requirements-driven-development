@@ -265,50 +265,63 @@
                             <h5><i class="bi bi-folder"></i> Working Directory Management</h5>
                         </div>
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <h6 class="card-title">
-                                                <i class="bi bi-folder-plus"></i> New Setup
-                                            </h6>
-                                            <p class="card-text">Initialize a new work iteration</p>
-                                            <div class="mb-3">
-                                                <label for="iteration-name" class="form-label">Iteration Name:</label>
+                            <!-- Status Header -->
+                            <div class="alert alert-info" id="iteration-status-compact">
+                                <div class="d-flex flex-wrap align-items-center">
+                                    <strong class="me-2">Status:</strong>
+                                    <span id="status-iteration-id" class="me-3"></span>
+                                    <span class="text-muted me-2">|</span>
+                                    <span id="status-iteration-name" class="me-3"></span>
+                                    <span class="text-muted me-2">|</span>
+                                    <span id="status-total-prompts" class="me-3"></span>
+                                    <span class="text-muted me-2">|</span>
+                                    <span id="status-next-prompt-id"></span>
+                                </div>
+                            </div>
+                            
+                            <!-- Actions Section -->
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="iteration-name" class="form-label">
+                                                <i class="bi bi-folder-plus"></i> New Work Iteration:
+                                            </label>
+                                            <div class="input-group">
                                                 <input type="text" class="form-control" id="iteration-name" 
                                                        placeholder="e.g., Sprint 1">
+                                                <button class="btn btn-success" onclick="createWorkdir()">
+                                                    <i class="bi bi-play-fill"></i> Create
+                                                </button>
                                             </div>
-                                            <button class="btn btn-success" onclick="createWorkdir()">
-                                                <i class="bi bi-play-fill"></i> Create New Iteration
-                                            </button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <button class="btn btn-warning" onclick="archiveWorkdir()">
+                                                    <i class="bi bi-archive-fill"></i> Archive Iteration
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <h6 class="card-title">
-                                                <i class="bi bi-archive"></i> Archive
-                                            </h6>
-                                            <p class="card-text">Archive the current work iteration</p>
-                                            <button class="btn btn-warning" onclick="archiveWorkdir()">
-                                                <i class="bi bi-archive-fill"></i> Archive Current Iteration
-                                            </button>
-                                        </div>
+                                    <div>
+                                        <button class="btn btn-sm btn-outline-info me-2" 
+                                                onclick="loadFileQuick('workdir/work-iteration-registry.json')">
+                                            Registry
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info me-2" 
+                                                onclick="loadFileQuick('specifications/requirements.md')">
+                                            Requirements
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info me-2" 
+                                                onclick="loadFileQuick('specifications/technical-design.json')">
+                                            Technical Design
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                             
+                            <!-- File Viewer -->
                             <div class="card">
-                                <div class="card-header">
-                                    <h6>Current Iteration Status</h6>
-                                </div>
-                                <div class="card-body" id="iteration-status">
-                                    <p class="text-muted">Loading...</p>
-                                </div>
-                            </div>
-                            
-                            <div class="card mt-3">
                                 <div class="card-header">
                                     <h6>File Viewer</h6>
                                 </div>
@@ -322,22 +335,6 @@
                                         </div>
                                         <button class="btn btn-success" onclick="saveFile()">
                                             <i class="bi bi-save"></i> Save File
-                                        </button>
-                                    </div>
-                                    
-                                    <div class="alert alert-info" id="file-quick-access-info">
-                                        <strong>Quick Access:</strong><br>
-                                        <button class="btn btn-sm btn-outline-info me-2" 
-                                                onclick="loadFileQuick('workdir/work-iteration-registry.json')">
-                                            Registry
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-info me-2" 
-                                                onclick="loadFileQuick('specifications/requirements.md')">
-                                            Requirements
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-info me-2" 
-                                                onclick="loadFileQuick('specifications/technical-design.json')">
-                                            Technical Design
                                         </button>
                                     </div>
                                 </div>

@@ -424,3 +424,20 @@ Remove the section "File Path (relative to .rdd-instance):" together with the fi
 Move the buttons Registry, Requirements and Technical Design in Workdir tab and remove Files tab.
 Verify so the buttons to work properly.
 %%ENDPROMPT
+
+%%PROMPT P-037 "Workdir tab restructuring"
+Make the Workdir page compact
+It should start with a header where all statuses should be positioned in concise way
+After that should be all the buttons and actions
+The content of the files should be at the bottom
+
+
+### Modification 001
+
+Remove label  Quick Access:  and the whole line in Workdir page
+
+
+### Modification 002
+
+Remove " Archive Current: " label. Make the button for archiving smaller
+%%ENDPROMPT

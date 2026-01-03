@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Web UI",
-    "prompt-id-sequence-next-value": 37,
+    "prompt-id-sequence-next-value": 38,
     "git-enabled": true,
     "prompts": [
         {
@@ -409,6 +409,19 @@
             "implementation-completed": true,
             "execution-mode": "no-action",
             "executed": true
+        },
+        {
+            "prompt-id": "P-037",
+            "prompt-title": "Workdir tab restructuring",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "modifications-count": 2,
+            "current-modification-id": null
         }
     ]
 }

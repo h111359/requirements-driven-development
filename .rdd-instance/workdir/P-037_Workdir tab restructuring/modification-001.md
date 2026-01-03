@@ -1,0 +1,1 @@
+Remove label  Quick Access:  and the whole line in Workdir page

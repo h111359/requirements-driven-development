@@ -1,0 +1,155 @@
+{
+  "context": "The Workdir tab currently displays working directory management functionality with New Setup, Archive, Current Iteration Status, and File Viewer sections arranged vertically. The prompt requests restructuring this page to be more compact with a clear hierarchy: status information at the top, buttons/actions in the middle, and file content at the bottom.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "How should the 'Current Iteration Status' information be displayed in the compact header?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Single horizontal row with key status fields (iteration-id, name, total prompts, next prompt ID) displayed inline with separators",
+          "pros": "Most compact layout, all status visible at a glance without scrolling, efficient use of horizontal space",
+          "cons": "May be cramped on smaller screens, less readable with long iteration names"
+        },
+        {
+          "id": "B",
+          "label": "Two-row layout with iteration info on first row and prompt statistics on second row",
+          "pros": "Balanced between compactness and readability, groups related information logically, works better on medium screens",
+          "cons": "Takes slightly more vertical space than single row option"
+        },
+        {
+          "id": "C",
+          "label": "Badge-style compact indicators for each status field arranged horizontally",
+          "pros": "Clean modern look, color-coded status badges provide visual distinction, very compact",
+          "cons": "May require abbreviations for field labels, less familiar pattern for status display"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A provides the most compact layout while still displaying all necessary status information. Since the Web UI is optimized for desktop usage per requirement UR-20251224-0935, horizontal space is not a constraint, making a single-row layout ideal for maximizing vertical space.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "Should the New Setup and Archive buttons be combined into a single 'Actions' section or kept in separate cards?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Combine into a single horizontal 'Actions' section with buttons side-by-side",
+          "pros": "More compact, reduces number of card containers, simpler visual hierarchy, faster to scan",
+          "cons": "Less visual separation between creation and destructive operations"
+        },
+        {
+          "id": "B",
+          "label": "Keep separate cards but make them smaller and arrange side-by-side horizontally",
+          "pros": "Maintains clear separation of concerns, card borders provide visual grouping, easier to add labels/descriptions",
+          "cons": "Takes more space than fully combined option, more visual complexity"
+        },
+        {
+          "id": "C",
+          "label": "Use a button group with dropdown for less-frequently-used operations",
+          "pros": "Extremely compact, hides complexity for advanced operations, clean primary action focus",
+          "cons": "Reduced discoverability of archive function, requires extra click for some operations"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Combining the actions into a single section aligns with the goal of making the page compact while maintaining clarity. Both New Setup and Archive are primary workdir operations that should be easily accessible, making option A the best balance of compactness and usability.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "How should the File Viewer section be structured to minimize space when not in use?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Show only Quick Access buttons by default, expand file editor on demand when a file is loaded",
+          "pros": "Minimal space usage when idle, file content appears only when needed, matches current behavior, progressive disclosure pattern",
+          "cons": "File editor collapses after saving which may be unexpected if user wants to make multiple edits"
+        },
+        {
+          "id": "B",
+          "label": "Use a collapsible accordion for the entire File Viewer section, collapsed by default",
+          "pros": "Complete control over visibility, can hide entire section when not needed, standard Bootstrap pattern",
+          "cons": "Requires extra click to access file viewer, may hide functionality from new users"
+        },
+        {
+          "id": "C",
+          "label": "Always show Quick Access buttons and a compact file path indicator, show full editor in a modal dialog when file is loaded",
+          "pros": "Maximizes main page compactness, editor doesn't take up page real estate, can have larger editor in modal",
+          "cons": "Modal dialogs feel heavier for file editing workflow, less fluid experience"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A maintains the current progressive disclosure pattern where the file editor appears only when needed. This is the most compact approach while keeping the file editing workflow simple and inline, which is appropriate given that file editing is a secondary function in the Workdir tab.",
+      "user-selection": {
+        "type": "custom",
+        "value": "Add the buttons in the \"Actions\" section. Actions section should not have a title - it is clear what it is"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "What visual styling should be used for the compact status header to make it visually distinct?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Light background panel with subtle border, similar to Bootstrap's alert-info style",
+          "pros": "Clearly distinct from rest of content, familiar Bootstrap pattern, not too prominent, good readability",
+          "cons": "Takes up some visual weight at top of page"
+        },
+        {
+          "id": "B",
+          "label": "No special container, just bold labels with values in the card body",
+          "pros": "Most minimalist approach, no extra visual elements, maximum compactness",
+          "cons": "Status info may blend with other content, less visual hierarchy"
+        },
+        {
+          "id": "C",
+          "label": "Dark header bar similar to card headers used elsewhere in the UI (bg-success style)",
+          "pros": "Consistent with existing card header patterns, strong visual prominence, clear section delimiter",
+          "cons": "Takes more visual weight, may be too prominent for status information"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A provides clear visual distinction for the status information without being overly prominent. Using a light background panel creates a clear hierarchy where status is visible but doesn't dominate the page, aligning with the goal of a compact layout.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "Should the Quick Access buttons (Registry, Requirements, Technical Design) remain visible when a file is loaded, or should they be hidden?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Keep Quick Access buttons always visible even when file editor is shown",
+          "pros": "Easy to switch between different files without closing editor, better workflow for reviewing multiple files, consistent UI state",
+          "cons": "Takes up space even when not needed, slight visual clutter when editing files"
+        },
+        {
+          "id": "B",
+          "label": "Hide Quick Access buttons when file editor is displayed, show a 'Close' button instead to return to buttons",
+          "pros": "More compact when editing, focuses attention on file content, clearer state transition",
+          "cons": "Requires closing current file to switch to another, extra clicks for multi-file workflows, less efficient"
+        },
+        {
+          "id": "C",
+          "label": "Integrate Quick Access buttons into the file editor header area when a file is loaded",
+          "pros": "Saves vertical space by combining navigation with editor, keeps access to file switching, compact layout",
+          "cons": "More complex layout, header area becomes crowded, may be confusing which file is active"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Keeping the Quick Access buttons always visible provides the best user experience for file navigation. Since these are small buttons, the space cost is minimal, and the benefit of easy file switching is significant for common workflows like comparing requirements with technical design.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}
