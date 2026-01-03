@@ -224,7 +224,7 @@ The framework enables:
 
 - [TR-20251224-0922] The system shall store all active workdir files in .rdd-instance/workdir/
 
-- [TR-20251224-0923] The framework shall provide a command to generate a JSON listing of repository or workdir files and store it at `.rdd-instance/workdir/files-list.json`, excluding directories beginning with `.` and directories named `venv`, and listing for each entry: `type` (file type - like 'txt', 'md', 'csv', 'xlsx', 'pdf', 'json', 'py', 'html', 'js', 'css' and others), `name` (file name), `relpath` (relative path), and `mtime` (modification time) in ISO8601 UTC format.
+- [TR-20251224-0923] The framework shall provide scripts for managing file listings: `.rdd/src/actions/files_list_csv_refresh.py` generates a CSV listing stored at `.rdd-instance/specifications/files-list.csv` and `.rdd/src/actions/files_list_csv_set_description.py` updates descriptions for specific files in the CSV.
 
 - [TR-20251224-0924] The Web UI shall provide pages for managing prompts, technical specifications, folder structures, requirements, and version-control workflows, backed by the REST endpoints and reflecting the interaction model defined in the Product Requirements Specification.
 
@@ -470,3 +470,11 @@ The framework enables:
 - [TR-20260102-1308] The prompt creation script `.rdd/src/actions/prompt_create.py` shall initialize new prompts with an empty `questionnaire.json` file containing the base structure with empty context and questions array.
 
 - [TR-20260102-1309] The Web UI Active Prompt page shall detect questionnaire file type (.json vs .md) and render interactive forms for JSON files while displaying markdown files as read-only text for legacy support.
+
+- [TR-20260102-1700] The framework shall provide a script `.rdd/src/actions/files_list_csv_refresh.py` that generates a CSV listing of all repository files and stores it at `.rdd-instance/specifications/files-list.csv`, excluding directories beginning with `.` and directories named `venv`, and listing for each entry: `File Name` (file name), `Relative Path` (relative path from repository root), `Modification Time` (file modification timestamp in ISO8601 format), and `Description` (manually-maintained description field).
+
+- [TR-20260102-1701] The `files_list_csv_refresh.py` script shall update the CSV file incrementally by adding new files with empty descriptions, updating modification times and clearing descriptions for modified files, removing deleted files, and preserving descriptions for unchanged files.
+
+- [TR-20260102-1702] The framework shall provide a script `.rdd/src/actions/files_list_csv_set_description.py` that accepts `file-name=`, `relative-path=`, and `description=` parameters and updates the Description field for the matching entry in `.rdd-instance/specifications/files-list.csv`.
+
+- [TR-20260102-1703] The files listing CSV shall use tab character as field delimiter and shall be stored with UTF-8 encoding to support international characters in file names and descriptions.
