@@ -202,6 +202,8 @@ The framework enables:
 
 - [UR-20260103-1420] The Web UI navigation menu shall remain fixed at the top of the viewport while scrolling, ensuring navigation tabs are always accessible to users. The navbar shall include a subtle bottom shadow to provide visual depth and indicate its floating state.
 
+- [UR-20260103-1530] The Web UI shall display all radio button form controls with enhanced visibility through increased size, darker border colors, and interactive visual feedback states including hover, focus, and checked states to improve usability and accessibility across all pages and forms.
+
 
 
 ## Technical Requirements
@@ -487,3 +489,5 @@ The framework enables:
 
 - [TR-20260103-1202] The user guide markdown rendering shall be performed server-side using a lightweight markdown-to-HTML converter implemented in Python without requiring external dependencies beyond the standard library.
 - [TR-20260103-1518] The markdown-to-HTML converter shall escape special HTML characters (apostrophes, quotes, ampersands, angle brackets) exactly once to prevent XSS vulnerabilities while ensuring correct display without double-escaping (e.g., apostrophes shall render as ' not as &#x27;).
+
+- [TR-20260103-1530] Radio button styles in `.rdd/src/web/static/style.css` shall define enhanced visibility CSS rules for `.form-check-input[type="radio"]` elements with increased size (1.25em width and height), thicker borders (2px), darker border colors (#495057), and comprehensive interactive state styling including hover (primary blue border with light background), focus (primary blue border with box-shadow), and checked (primary blue background with border and subtle shadow) states to ensure visibility and accessibility compliance.

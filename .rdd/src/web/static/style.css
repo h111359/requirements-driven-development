@@ -266,6 +266,50 @@ textarea.form-control {
         border: 1px solid #dee2e6;
     }
 }
+
+/* Enhanced Radio Button Styles - Improved Visibility */
+.form-check-input[type="radio"] {
+    width: 1.25em;
+    height: 1.25em;
+    min-width: 1.25em;
+    min-height: 1.25em;
+    border-width: 2px;
+    border-color: #495057;
+    margin-top: 0.15em;
+    cursor: pointer;
+}
+
+.form-check-input[type="radio"]:hover {
+    border-color: #0d6efd;
+    background-color: rgba(13, 110, 253, 0.1);
+}
+
+.form-check-input[type="radio"]:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.form-check-input[type="radio"]:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.1rem rgba(13, 110, 253, 0.3);
+}
+
+.form-check-input[type="radio"]:checked:hover {
+    background-color: #0b5ed7;
+    border-color: #0b5ed7;
+}
+
+/* Make the label clickable and add hover feedback */
+.form-check-label {
+    cursor: pointer;
+    user-select: none;
+}
+
+.form-check:hover .form-check-label {
+    color: #0d6efd;
+}
+
 /* Snippet Autocomplete Styles */
 .snippet-autocomplete-container {
     position: absolute;

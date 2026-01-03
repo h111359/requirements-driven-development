@@ -402,3 +402,9 @@ Web interface won&#x27;t start
 %%PROMPT P-032 "Upper menu to stay while scrolling"
 The menu in the Web UI with tabs (like Active Prompt, Prompts History, Workdir etc. should stay always visible while scrolling.
 %%ENDPROMPT
+
+%%PROMPT P-033 "More visible checkboxes for questionnaires"
+[[[ROLE_SOFTWARE_DEVELOPER]]]
+
+The options radio buttons in the Questionnaire are too light and barely visible. Fix that
+%%ENDPROMPT
