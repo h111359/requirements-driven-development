@@ -340,7 +340,7 @@ The framework enables:
 
 - [TR-20251230-1434] The Prompts section shall display all prompts in a table showing ID, title, type, state, parent ID, and actions, with buttons for creating new prompts and setting prompt states via modal dialogs.
 
-- [TR-20251230-1435] The Workdir section shall provide forms for creating new work iterations with iteration name input, archiving current iterations with confirmation dialog, displaying current iteration status including iteration ID, name, total prompts, and next prompt ID, and a file viewer with quick access buttons for common files (registry, requirements, technical design), a text editor for viewing and editing file contents, and save functionality.
+- [TR-20251230-1435] The Workdir section shall provide a button to create new work iterations via a modal dialog, archiving current iterations with confirmation dialog, displaying current iteration status including iteration ID, name, total prompts, and next prompt ID, and a file viewer with quick access buttons for common files (registry, requirements, technical design), a text editor for viewing and editing file contents, and save functionality.
 
 - [TR-20251230-1436] [DELETED]
 

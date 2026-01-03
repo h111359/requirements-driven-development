@@ -1506,10 +1506,22 @@ async function completePrompt(promptId) {
 }
 
 /**
+ * Show create work iteration modal
+ */
+function showCreateWorkIterationModal() {
+    const modal = new bootstrap.Modal(document.getElementById('createWorkIterationModal'));
+    
+    // Reset form
+    document.getElementById('modal-iteration-name').value = '';
+    
+    modal.show();
+}
+
+/**
  * Create new workdir
  */
 async function createWorkdir() {
-    const name = document.getElementById('iteration-name').value.trim();
+    const name = document.getElementById('modal-iteration-name').value.trim();
     
     if (!name) {
         showAlert('warning', 'Please enter an iteration name');
@@ -1520,7 +1532,11 @@ async function createWorkdir() {
     
     if (result.success) {
         showAlert('success', 'Work iteration created successfully');
-        document.getElementById('iteration-name').value = '';
+        
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('createWorkIterationModal'));
+        modal.hide();
+        
         await loadIterationStatus();
         await loadRegistry();
     } else {

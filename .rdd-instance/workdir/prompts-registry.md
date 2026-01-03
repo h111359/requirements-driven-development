@@ -441,3 +441,8 @@ Remove label  Quick Access:  and the whole line in Workdir page
 
 Remove " Archive Current: " label. Make the button for archiving smaller
 %%ENDPROMPT
+
+%%PROMPT P-038 "New Workdir modal"
+In Workdir page - remove the label "New Work Iteration: " and rename the "Create" button to "Create Work Iteration".
+Instead of form in the page - leave the button only and creation should be made as a modal (like the way a new prompt is created)
+%%ENDPROMPT
