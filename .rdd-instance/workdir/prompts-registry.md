@@ -419,3 +419,8 @@ Modifications tab should appear only when executed is set to true.
 %%PROMPT P-035 "Remove File Path"
 Remove the section "File Path (relative to .rdd-instance):" together with the file selector.
 %%ENDPROMPT
+
+%%PROMPT P-036 "Remove Files Tab"
+Move the buttons Registry, Requirements and Technical Design in Workdir tab and remove Files tab.
+Verify so the buttons to work properly.
+%%ENDPROMPT

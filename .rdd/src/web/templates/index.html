@@ -39,11 +39,6 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="showSection('files')">
-                            <i class="bi bi-file-earmark"></i> Files
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="#" onclick="showSection('help')">
                             <i class="bi bi-question-circle"></i> Help
                         </a>
@@ -312,46 +307,40 @@
                                     <p class="text-muted">Loading...</p>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Files Section -->
-        <div id="section-files" class="section" style="display:none;">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header bg-info text-white">
-                            <h5><i class="bi bi-file-earmark"></i> File Browser</h5>
-                        </div>
-                        <div class="card-body">
-                            <div id="file-editor-container" style="display:none;">
-                                <div class="mb-3">
-                                    <label for="file-content" class="form-label">File Content:</label>
-                                    <textarea class="form-control font-monospace" id="file-content" 
-                                              rows="20" style="font-size: 14px;"></textarea>
-                                </div>
-                                <button class="btn btn-success" onclick="saveFile()">
-                                    <i class="bi bi-save"></i> Save File
-                                </button>
-                            </div>
                             
-                            <div class="alert alert-info mt-3">
-                                <strong>Quick Access:</strong><br>
-                                <button class="btn btn-sm btn-outline-info me-2" 
-                                        onclick="loadFileQuick('workdir/work-iteration-registry.json')">
-                                    Registry
-                                </button>
-                                <button class="btn btn-sm btn-outline-info me-2" 
-                                        onclick="loadFileQuick('specifications/requirements.md')">
-                                    Requirements
-                                </button>
-                                <button class="btn btn-sm btn-outline-info me-2" 
-                                        onclick="loadFileQuick('specifications/technical-design.json')">
-                                    Technical Design
-                                </button>
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h6>File Viewer</h6>
+                                </div>
+                                <div class="card-body">
+                                    <input type="hidden" id="file-path" value="">
+                                    <div id="file-editor-container" style="display:none;">
+                                        <div class="mb-3">
+                                            <label for="file-content" class="form-label">File Content:</label>
+                                            <textarea class="form-control font-monospace" id="file-content" 
+                                                      rows="20" style="font-size: 14px;"></textarea>
+                                        </div>
+                                        <button class="btn btn-success" onclick="saveFile()">
+                                            <i class="bi bi-save"></i> Save File
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="alert alert-info" id="file-quick-access-info">
+                                        <strong>Quick Access:</strong><br>
+                                        <button class="btn btn-sm btn-outline-info me-2" 
+                                                onclick="loadFileQuick('workdir/work-iteration-registry.json')">
+                                            Registry
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info me-2" 
+                                                onclick="loadFileQuick('specifications/requirements.md')">
+                                            Requirements
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info me-2" 
+                                                onclick="loadFileQuick('specifications/technical-design.json')">
+                                            Technical Design
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

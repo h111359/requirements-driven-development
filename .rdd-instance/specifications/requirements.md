@@ -336,15 +336,15 @@ The framework enables:
 
 - [TR-20251230-1432] The web interface shall be implemented using vanilla JavaScript, HTML, and Bootstrap 5 CSS framework, with all frontend assets located in `.rdd/src/web/static/` (app.js, style.css) and templates in `.rdd/src/web/templates/` (index.html).
 
-- [TR-20251230-1433] The web interface shall provide a responsive navigation bar with sections for Prompts, Workdir, Git, and Files, each section displaying relevant operations and status information with color-coded alerts (success: green, error: red, warning: yellow, info: blue).
+- [TR-20251230-1433] The web interface shall provide a responsive navigation bar with sections for Active Prompt, Prompts History, Workdir, and Help, with each section displaying relevant operations and status information with color-coded alerts (success: green, error: red, warning: yellow, info: blue).
 
 - [TR-20251230-1434] The Prompts section shall display all prompts in a table showing ID, title, type, state, parent ID, and actions, with buttons for creating new prompts and setting prompt states via modal dialogs.
 
-- [TR-20251230-1435] The Workdir section shall provide forms for creating new work iterations with iteration name input, archiving current iterations with confirmation dialog, and displaying current iteration status including iteration ID, name, total prompts, and next prompt ID.
+- [TR-20251230-1435] The Workdir section shall provide forms for creating new work iterations with iteration name input, archiving current iterations with confirmation dialog, displaying current iteration status including iteration ID, name, total prompts, and next prompt ID, and a file viewer with quick access buttons for common files (registry, requirements, technical design), a text editor for viewing and editing file contents, and save functionality.
 
 - [TR-20251230-1436] [DELETED]
 
-- [TR-20251230-1437] The Files section shall provide a file browser with quick access buttons for common files (registry, requirements, technical design), a text editor for viewing and editing file contents, and save functionality.
+- [TR-20251230-1437] [DELETED]
 
 - [TR-20251230-1438] The Prompts section shall provide an integrated prompt editor that displays Edit buttons for prompts in `active` state and View buttons for prompts in `completed` state.
 
