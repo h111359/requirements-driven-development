@@ -29,11 +29,6 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="showSection('prompts-history')">
-                            <i class="bi bi-clock-history"></i> Prompts History
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="#" onclick="showSection('workdir')">
                             <i class="bi bi-folder"></i> Workdir
                         </a>
@@ -67,30 +62,6 @@
 
     <div class="container-fluid mt-4">
         <div id="alert-container"></div>
-
-        <!-- Prompts History Section -->
-        <div id="section-prompts-history" class="section" style="display:none;">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header bg-primary text-white">
-                            <h5><i class="bi bi-clock-history"></i> Prompts History</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <button class="btn btn-primary" onclick="loadPromptsHistory()">
-                                    <i class="bi bi-arrow-clockwise"></i> Refresh
-                                </button>
-                            </div>
-                            
-                            <div id="prompts-history-table-container">
-                                <p class="text-muted">Click "Refresh" to load completed prompts...</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Active Prompt Section -->
         <div id="section-active-prompt" class="section">

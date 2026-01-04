@@ -359,7 +359,7 @@ The framework enables:
 
 - [TR-0063] The web interface shall be implemented using vanilla JavaScript, HTML, and Bootstrap 5 CSS framework, with all frontend assets located in `.rdd/src/web/static/` (app.js, style.css) and templates in `.rdd/src/web/templates/` (index.html).
 
-- [TR-0064] The web interface shall provide a responsive navigation bar with sections for Active Prompt, Prompts History, Workdir, and Help, with each section displaying relevant operations and status information with color-coded alerts (success: green, error: red, warning: yellow, info: blue).
+- [TR-0064] The web interface shall provide a responsive navigation bar with sections for Active Prompt, Workdir, Technical Design, Requirements, and Help, with each section displaying relevant operations and status information with color-coded alerts (success: green, error: red, warning: yellow, info: blue).
 
 - [TR-0065] The Prompts section shall display all prompts in a table showing ID, title, type, state, parent ID, and actions, with buttons for creating new prompts and setting prompt states via modal dialogs.
 

@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Web UI",
-    "prompt-id-sequence-next-value": 51,
+    "prompt-id-sequence-next-value": 52,
     "git-enabled": true,
     "prompts": [
         {
@@ -619,6 +619,17 @@
             "executed": true,
             "modifications-count": 1,
             "current-modification-id": null
+        },
+        {
+            "prompt-id": "P-051",
+            "prompt-title": "Prompt History removing",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": true,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
         }
     ]
 }

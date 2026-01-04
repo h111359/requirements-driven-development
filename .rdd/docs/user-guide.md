@@ -24,16 +24,13 @@ Your browser will automatically open the RDD Web Interface. You can now manage y
 
 ## Understanding the Web Interface
 
-The Web Interface has four main sections accessible from the navigation bar:
+The Web Interface has main sections accessible from the navigation bar:
 
 ### Active Prompt
 Your current work item. This is where you create new prompts, write instructions for what you want to build, answer clarification questions, review implementation plans, and track progress.
 
-### Prompts History
-A searchable list of all completed prompts. Use this to review past work and understand what has been implemented in your project.
-
 ### Workdir
-Manage your work iteration. You can create new iterations (work sessions), archive completed iterations, and view iteration status.
+Manage your work iteration and view all prompts. You can create new iterations (work sessions), archive completed iterations, view iteration status, and browse all prompts (both active and completed) in the registry view. Click on any prompt to view its details.
 
 ### Files
 Browse and edit files in your `.rdd-instance` folder, which contains your requirements, technical specifications, and work files.
@@ -80,7 +77,7 @@ Browse and edit files in your `.rdd-instance` folder, which contains your requir
 **Step 8: Complete the Prompt**
 1. After Copilot finishes, return to the Web Interface
 2. Click "Complete" button
-3. Your prompt moves to Prompts History
+3. Your prompt becomes completed and appears in the Workdir registry view
 
 ### Workflow 2: Using Plan Mode
 
@@ -195,7 +192,7 @@ You'll mostly interact with files in `.rdd-instance` through the Web Interface.
 ## Next Steps
 
 - Create your first prompt and try the complete workflow
-- Explore the Prompts History to see examples
+- Explore the Workdir registry to see all prompts and their status
 - Review and update requirements in the Files section
 - Experiment with different execution modes
 

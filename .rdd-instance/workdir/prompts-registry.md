@@ -632,3 +632,9 @@ Make the registry directly visible in Workdir - view only. Parse the JSON and re
 
 Merge Prompt History to Workdir registry - take the view buttons from Prompt History with their full functionality and add it to the table of prompts in Workdir
 %%ENDPROMPT
+
+%%PROMPT P-051 "Prompt History removing"
+Now, when all the information is available in Workdir, Prompt History tab is not needed anymore.
+Check what should be done the tab to be removed - will this affect something, and what from the code is related only to this page and could be safely removed.
+Then remove the page Prompts History
+%%ENDPROMPT

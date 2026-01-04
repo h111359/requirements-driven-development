@@ -60,9 +60,7 @@ function showSection(sectionName) {
     event.target.classList.add('active');
     
     // Load section-specific data
-    if (sectionName === 'prompts-history') {
-        loadPromptsHistory();
-    } else if (sectionName === 'active-prompt') {
+    if (sectionName === 'active-prompt') {
         loadActivePrompt();
     } else if (sectionName === 'workdir') {
         loadIterationStatus();
@@ -362,13 +360,8 @@ async function createPrompt() {
         const modal = bootstrap.Modal.getInstance(document.getElementById('createPromptModal'));
         modal.hide();
         
-        // Reload prompts history
-        await loadPromptsHistory();
-        // Also reload active prompt page if it exists
-        const activeSection = document.getElementById('section-active-prompt');
-        if (activeSection && activeSection.style.display !== 'none') {
-            await loadActivePrompt();
-        }
+        // Reload active prompt view
+        await loadActivePrompt();
     } else {
         showAlert('danger', 'Failed to create prompt: ' + (result.error || result.stderr));
     }
@@ -407,107 +400,11 @@ async function setPromptState() {
         const modal = bootstrap.Modal.getInstance(document.getElementById('setStateModal'));
         modal.hide();
         
-        // Reload both views
-        await loadPromptsHistory();
+        // Reload active prompt view
         await loadActivePrompt();
     } else {
         showAlert('danger', 'Failed to set prompt state: ' + (result.error || result.stderr));
     }
-}
-
-/**
- * Load and display prompts history (completed prompts only)
- */
-async function loadPromptsHistory() {
-    const container = document.getElementById('prompts-history-table-container');
-    container.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
-    
-    await loadRegistry();
-    
-    if (!currentRegistry || !currentRegistry.prompts) {
-        container.innerHTML = '<p class="text-warning">No work iteration found. Please create one in the Workdir section.</p>';
-        return;
-    }
-    
-    // Filter to completed prompts only
-    const completedPrompts = currentRegistry.prompts.filter(p => p.state === 'completed');
-    
-    if (completedPrompts.length === 0) {
-        container.innerHTML = '<p class="text-muted">No completed prompts found.</p>';
-        return;
-    }
-    
-    // Build table
-    let html = `
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead class="table-primary">
-                    <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Questionnaire</th>
-                        <th>Plan</th>
-                        <th>Implementation</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-    `;
-    
-    completedPrompts.forEach(prompt => {
-        const promptId = prompt['prompt-id'];
-        const title = prompt.title || prompt['prompt-title'] || '';
-        
-        // Status badges
-        const questionnaireGenerated = prompt['questionnaire-generated'] || false;
-        const questionnaireAnswered = prompt['questionnaire-answered'] || false;
-        const planGenerated = prompt['plan-generated'] || false;
-        const implementationCompleted = prompt['implementation-completed'] || false;
-        
-        // Questionnaire status: Green if answered, Gray if not generated
-        let questionnaireBadge = '';
-        if (!questionnaireGenerated) {
-            questionnaireBadge = '<span class="badge bg-secondary"><i class="bi bi-dash-circle"></i> Not Generated</span>';
-        } else if (questionnaireAnswered) {
-            questionnaireBadge = '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Answered</span>';
-        } else {
-            questionnaireBadge = '<span class="badge bg-warning"><i class="bi bi-clock-history"></i> Generated</span>';
-        }
-        
-        // Plan status
-        const planBadge = planGenerated 
-            ? '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Generated</span>'
-            : '<span class="badge bg-secondary"><i class="bi bi-dash-circle"></i> Not Generated</span>';
-        
-        // Implementation status
-        const implementationBadge = implementationCompleted
-            ? '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Completed</span>'
-            : '<span class="badge bg-secondary"><i class="bi bi-dash-circle"></i> Not Completed</span>';
-        
-        html += `
-            <tr>
-                <td><code>${promptId}</code></td>
-                <td>${escapeHtml(title)}</td>
-                <td>${questionnaireBadge}</td>
-                <td>${planBadge}</td>
-                <td>${implementationBadge}</td>
-                <td>
-                    <button class="btn btn-sm btn-primary" 
-                            onclick="viewCompletedPrompt('${promptId}')">
-                        <i class="bi bi-eye"></i> View
-                    </button>
-                </td>
-            </tr>
-        `;
-    });
-    
-    html += `
-                </tbody>
-            </table>
-        </div>
-    `;
-    
-    container.innerHTML = html;
 }
 
 /**
@@ -1746,8 +1643,7 @@ async function completeActivePrompt() {
     if (result.success) {
         showAlert('success', `Prompt ${promptId} completed successfully`);
         
-        // Reload both views
-        await loadPromptsHistory();
+        // Reload active prompt view
         await loadActivePrompt();
     } else {
         showAlert('danger', `Failed to complete prompt: ` + (result.error || result.stderr));
@@ -1847,8 +1743,7 @@ async function completePrompt(promptId) {
     if (result.success) {
         showAlert('success', `Prompt ${promptId} completed successfully`);
         
-        // Reload both views
-        await loadPromptsHistory();
+        // Reload active prompt view
         await loadActivePrompt();
     } else {
         showAlert('danger', `Failed to complete prompt: ` + (result.error || result.stderr));
@@ -2021,7 +1916,7 @@ function renderRegistryView(container, registry) {
             // Make title clickable for navigation
             const titleLink = `<a href="#" onclick="openPromptFromRegistry('${promptId}'); return false;" class="text-decoration-none">${title}</a>`;
             
-            // View button (reuses existing viewCompletedPrompt function from Prompts History)
+            // View button
             const viewButton = `<button class="btn btn-sm btn-primary" onclick="viewCompletedPrompt('${promptId}')">
                 <i class="bi bi-eye"></i> View
             </button>`;
@@ -2062,25 +1957,11 @@ function renderRegistryView(container, registry) {
 }
 
 /**
- * Open prompt from registry (navigate to Prompts History and view prompt)
+ * Open prompt from registry (view prompt directly)
  */
 function openPromptFromRegistry(promptId) {
-    // Switch to Prompts History section
-    showSection('prompts-history');
-    
-    // Load prompts history if not already loaded
-    loadPromptsHistory().then(() => {
-        // Scroll to the prompt row if possible
-        const promptRow = document.querySelector(`tr[data-prompt-id="${promptId}"]`);
-        if (promptRow) {
-            promptRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            // Highlight briefly
-            promptRow.classList.add('table-active');
-            setTimeout(() => {
-                promptRow.classList.remove('table-active');
-            }, 2000);
-        }
-    });
+    // Directly view the completed prompt
+    viewCompletedPrompt(promptId);
 }
 
 /**

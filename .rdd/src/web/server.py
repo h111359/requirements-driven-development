@@ -366,12 +366,6 @@ class RDDWebHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json_response(result)
             return
         
-        elif path == "/api/prompts-list":
-            # List all prompts
-            result = self.execute_action("prompt", "list", {})
-            self.send_json_response(result)
-            return
-        
         elif path == "/api/snippets":
             # Get prompt snippets from manifest.json
             try:
