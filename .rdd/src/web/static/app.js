@@ -66,6 +66,8 @@ function showSection(sectionName) {
         loadActivePrompt();
     } else if (sectionName === 'workdir') {
         loadIterationStatus();
+    } else if (sectionName === 'technical-design') {
+        loadTechnicalDesign();
     } else if (sectionName === 'requirements') {
         loadRequirements();
     } else if (sectionName === 'help') {
@@ -2585,6 +2587,57 @@ async function saveRequirements() {
         }
     } catch (error) {
         showAlert('danger', 'Error saving requirements: ' + error.message);
+    }
+}
+
+/**
+ * Load technical design content
+ */
+async function loadTechnicalDesign() {
+    const textarea = document.getElementById('technical-design-content');
+    
+    try {
+        const response = await fetch('/api/file/specifications/technical-design.json?token=' + sessionToken);
+        const result = await response.json();
+        
+        if (result.success) {
+            textarea.value = result.content || '';
+        } else {
+            showAlert('danger', 'Failed to load technical design: ' + result.error);
+        }
+    } catch (error) {
+        showAlert('danger', 'Error loading technical design: ' + error.message);
+    }
+}
+
+/**
+ * Save technical design content
+ */
+async function saveTechnicalDesign() {
+    const content = document.getElementById('technical-design-content').value;
+    
+    try {
+        const response = await fetch('/api/file/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                filepath: 'specifications/technical-design.json',
+                content: content
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('success', 'Technical design saved successfully');
+        } else {
+            showAlert('danger', 'Failed to save technical design: ' + result.error);
+        }
+    } catch (error) {
+        showAlert('danger', 'Error saving technical design: ' + error.message);
     }
 }
 

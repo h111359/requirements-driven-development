@@ -39,6 +39,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('technical-design')">
+                            <i class="bi bi-diagram-3"></i> Technical Design
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#" onclick="showSection('requirements')">
                             <i class="bi bi-file-text"></i> Requirements
                         </a>
@@ -394,10 +399,6 @@
                                                 onclick="loadFileQuick('workdir/work-iteration-registry.json')">
                                             Registry
                                         </button>
-                                        <button class="btn btn-sm btn-outline-info me-2" 
-                                                onclick="loadFileQuick('specifications/technical-design.json')">
-                                            Technical Design
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -421,6 +422,29 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Design Section -->
+        <div id="section-technical-design" class="section" style="display:none;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h5><i class="bi bi-diagram-3"></i> Technical Design</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="technical-design-content" class="form-label fw-bold">specifications/technical-design.json</label>
+                                <textarea class="form-control font-monospace" id="technical-design-content" 
+                                          rows="25" style="font-size: 14px;"></textarea>
+                            </div>
+                            <button class="btn btn-success" onclick="saveTechnicalDesign()">
+                                <i class="bi bi-save"></i> Save Technical Design
+                            </button>
                         </div>
                     </div>
                 </div>

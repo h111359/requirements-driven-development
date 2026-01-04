@@ -619,3 +619,7 @@ After that the existing requirements file should be updated with the new format.
 %%PROMPT P-048 "Prompt text saved automatically"
 Make the prompt text to be saved automatically without the need to press save button
 %%ENDPROMPT
+
+%%PROMPT P-049 "Technical Design"
+Move technical design out of Workdir tab in a stand alone tab (similar to requirements).
+%%ENDPROMPT
