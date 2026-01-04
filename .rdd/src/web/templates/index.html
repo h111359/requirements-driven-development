@@ -365,20 +365,6 @@
                             <h5><i class="bi bi-folder"></i> Working Directory Management</h5>
                         </div>
                         <div class="card-body">
-                            <!-- Status Header -->
-                            <div class="alert alert-info" id="iteration-status-compact">
-                                <div class="d-flex flex-wrap align-items-center">
-                                    <strong class="me-2">Status:</strong>
-                                    <span id="status-iteration-id" class="me-3"></span>
-                                    <span class="text-muted me-2">|</span>
-                                    <span id="status-iteration-name" class="me-3"></span>
-                                    <span class="text-muted me-2">|</span>
-                                    <span id="status-total-prompts" class="me-3"></span>
-                                    <span class="text-muted me-2">|</span>
-                                    <span id="status-next-prompt-id"></span>
-                                </div>
-                            </div>
-                            
                             <!-- Actions Section -->
                             <div class="card mb-3">
                                 <div class="card-body">
@@ -394,17 +380,23 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div>
-                                        <button class="btn btn-sm btn-outline-info me-2" 
-                                                onclick="loadFileQuick('workdir/work-iteration-registry.json')">
-                                            Registry
-                                        </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Registry View -->
+                            <div class="card">
+                                <div class="card-header bg-info text-white">
+                                    <h6><i class="bi bi-journal-text"></i> Work Iteration Registry</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div id="registry-view-container">
+                                        <p class="text-muted">Loading registry...</p>
                                     </div>
                                 </div>
                             </div>
                             
                             <!-- File Viewer -->
-                            <div class="card">
+                            <div class="card mt-3">
                                 <div class="card-header">
                                     <h6>File Viewer</h6>
                                 </div>

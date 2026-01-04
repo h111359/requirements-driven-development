@@ -222,6 +222,9 @@ The framework enables:
 
 - [UR-0090] The Web UI shall automatically save changes to prompt.md without requiring manual save button clicks, using a combination of debounced auto-save (after 2 seconds of typing inactivity) and immediate save on blur events.
 
+- [UR-0091] The Web UI Workdir page shall display the work iteration registry in a comprehensive, human-readable format showing iteration metadata and a table of all prompts with their states, execution modes, and workflow flags, enabling quick status overview and navigation to individual prompts.
+
+
 
 
 

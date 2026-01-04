@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Web UI",
-    "prompt-id-sequence-next-value": 50,
+    "prompt-id-sequence-next-value": 51,
     "git-enabled": true,
     "prompts": [
         {
@@ -606,6 +606,19 @@
             "implementation-completed": true,
             "execution-mode": "no-action",
             "executed": true
+        },
+        {
+            "prompt-id": "P-050",
+            "prompt-title": "Registry edition",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "modifications-count": 1,
+            "current-modification-id": null
         }
     ]
 }

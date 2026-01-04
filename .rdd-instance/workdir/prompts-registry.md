@@ -623,3 +623,12 @@ Make the prompt text to be saved automatically without the need to press save bu
 %%PROMPT P-049 "Technical Design"
 Move technical design out of Workdir tab in a stand alone tab (similar to requirements).
 %%ENDPROMPT
+
+%%PROMPT P-050 "Registry edition"
+Make the registry directly visible in Workdir - view only. Parse the JSON and render it in a human-readable nice looking format
+
+
+### Modification 001
+
+Merge Prompt History to Workdir registry - take the view buttons from Prompt History with their full functionality and add it to the table of prompts in Workdir
+%%ENDPROMPT

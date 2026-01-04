@@ -1917,21 +1917,170 @@ async function archiveWorkdir() {
  * Load iteration status
  */
 async function loadIterationStatus() {
-    // Update compact status header
+    // Load and display the registry
     await loadRegistry();
     
+    const container = document.getElementById('registry-view-container');
+    
     if (!currentRegistry) {
-        document.getElementById('status-iteration-id').textContent = 'No iteration';
-        document.getElementById('status-iteration-name').textContent = '';
-        document.getElementById('status-total-prompts').textContent = '';
-        document.getElementById('status-next-prompt-id').textContent = '';
+        container.innerHTML = '<div class="alert alert-warning"><i class="bi bi-exclamation-triangle"></i> No work iteration found. Please create one using the button above.</div>';
         return;
     }
     
-    document.getElementById('status-iteration-id').innerHTML = `<strong>ID:</strong> <code>${currentRegistry['iteration-id']}</code>`;
-    document.getElementById('status-iteration-name').innerHTML = `<strong>Name:</strong> ${escapeHtml(currentRegistry['iteration-name'])}`;
-    document.getElementById('status-total-prompts').innerHTML = `<strong>Prompts:</strong> ${currentRegistry.prompts ? currentRegistry.prompts.length : 0}`;
-    document.getElementById('status-next-prompt-id').innerHTML = `<strong>Next ID:</strong> <code>P-${String(currentRegistry['prompt-id-sequence-next-value']).padStart(3, '0')}</code>`;
+    // Render registry view
+    renderRegistryView(container, currentRegistry);
+}
+
+/**
+ * Render the registry view
+ */
+function renderRegistryView(container, registry) {
+    // Iteration metadata section
+    const metadataHtml = `
+        <div class="card mb-3 border-primary">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-3 text-muted">Iteration Metadata</h6>
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Iteration ID:</strong><br>
+                        <code>${escapeHtml(registry['iteration-id'])}</code>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Iteration Name:</strong><br>
+                        ${escapeHtml(registry['iteration-name'])}
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Total Prompts:</strong><br>
+                        ${registry.prompts ? registry.prompts.length : 0}
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Next Prompt ID:</strong><br>
+                        <code>P-${String(registry['prompt-id-sequence-next-value']).padStart(3, '0')}</code>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3">
+                        <strong>Git Enabled:</strong><br>
+                        ${registry['git-enabled'] ? '<i class="bi bi-check-circle-fill text-success"></i> Yes' : '<i class="bi bi-x-circle-fill text-danger"></i> No'}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Prompts table
+    let tableHtml = `
+        <div class="table-responsive">
+            <table class="table table-sm table-hover table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 80px;">Prompt ID</th>
+                        <th>Title</th>
+                        <th style="width: 90px;">State</th>
+                        <th style="width: 100px;">Exec Mode</th>
+                        <th style="width: 50px;" title="Questionnaire Generated"><i class="bi bi-question-circle"></i> QG</th>
+                        <th style="width: 50px;" title="Questionnaire Answered"><i class="bi bi-question-circle-fill"></i> QA</th>
+                        <th style="width: 50px;" title="Plan Generated"><i class="bi bi-list-check"></i> Plan</th>
+                        <th style="width: 50px;" title="Analysis Generated"><i class="bi bi-clipboard-data"></i> Anl</th>
+                        <th style="width: 50px;" title="Implementation Completed"><i class="bi bi-code-square"></i> Impl</th>
+                        <th style="width: 50px;" title="Executed"><i class="bi bi-play-circle"></i> Exec</th>
+                        <th style="width: 90px;">Mod ID</th>
+                        <th style="width: 90px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+    
+    if (registry.prompts && registry.prompts.length > 0) {
+        registry.prompts.forEach(prompt => {
+            const promptId = prompt['prompt-id'];
+            const title = escapeHtml(prompt['prompt-title'] || prompt.title || '');
+            const state = prompt.state || 'unknown';
+            const executionMode = prompt['execution-mode'] || 'no-action';
+            const modId = prompt['current-modification-id'] ? String(prompt['current-modification-id']).padStart(3, '0') : '-';
+            
+            // State badge
+            const stateBadge = state === 'active' 
+                ? '<span class="badge bg-success">Active</span>'
+                : '<span class="badge bg-secondary">Completed</span>';
+            
+            // Execution mode badge
+            const modeBadge = `<span class="badge bg-info">${escapeHtml(executionMode)}</span>`;
+            
+            // Boolean icons
+            const checkIcon = '<i class="bi bi-check-circle-fill text-success" title="Yes"></i>';
+            const xIcon = '<i class="bi bi-x-circle text-secondary" title="No"></i>';
+            
+            const qGenIcon = prompt['questionnaire-generated'] ? checkIcon : xIcon;
+            const qAnsIcon = prompt['questionnaire-answered'] ? checkIcon : xIcon;
+            const planIcon = prompt['plan-generated'] ? checkIcon : xIcon;
+            const analysisIcon = prompt['analysis-generated'] ? checkIcon : xIcon;
+            const implIcon = prompt['implementation-completed'] ? checkIcon : xIcon;
+            const execIcon = prompt['executed'] ? checkIcon : xIcon;
+            
+            // Make title clickable for navigation
+            const titleLink = `<a href="#" onclick="openPromptFromRegistry('${promptId}'); return false;" class="text-decoration-none">${title}</a>`;
+            
+            // View button (reuses existing viewCompletedPrompt function from Prompts History)
+            const viewButton = `<button class="btn btn-sm btn-primary" onclick="viewCompletedPrompt('${promptId}')">
+                <i class="bi bi-eye"></i> View
+            </button>`;
+            
+            tableHtml += `
+                <tr>
+                    <td><code>${promptId}</code></td>
+                    <td>${titleLink}</td>
+                    <td>${stateBadge}</td>
+                    <td>${modeBadge}</td>
+                    <td class="text-center">${qGenIcon}</td>
+                    <td class="text-center">${qAnsIcon}</td>
+                    <td class="text-center">${planIcon}</td>
+                    <td class="text-center">${analysisIcon}</td>
+                    <td class="text-center">${implIcon}</td>
+                    <td class="text-center">${execIcon}</td>
+                    <td class="text-center"><code>${modId}</code></td>
+                    <td class="text-center">${viewButton}</td>
+                </tr>
+            `;
+        });
+    } else {
+        tableHtml += `
+            <tr>
+                <td colspan="12" class="text-center text-muted">No prompts found in this iteration</td>
+            </tr>
+        `;
+    }
+    
+    tableHtml += `
+                </tbody>
+            </table>
+        </div>
+    `;
+    
+    // Combine metadata and table
+    container.innerHTML = metadataHtml + tableHtml;
+}
+
+/**
+ * Open prompt from registry (navigate to Prompts History and view prompt)
+ */
+function openPromptFromRegistry(promptId) {
+    // Switch to Prompts History section
+    showSection('prompts-history');
+    
+    // Load prompts history if not already loaded
+    loadPromptsHistory().then(() => {
+        // Scroll to the prompt row if possible
+        const promptRow = document.querySelector(`tr[data-prompt-id="${promptId}"]`);
+        if (promptRow) {
+            promptRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Highlight briefly
+            promptRow.classList.add('table-active');
+            setTimeout(() => {
+                promptRow.classList.remove('table-active');
+            }, 2000);
+        }
+    });
 }
 
 /**

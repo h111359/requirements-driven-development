@@ -1,0 +1,1 @@
+Make the registry directly visible in Workdir - view only. Parse the JSON and render it in a human-readable nice looking format 
