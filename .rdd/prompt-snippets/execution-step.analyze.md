@@ -4,20 +4,35 @@ See the definitions in `.rdd/prompt-snippets/execution.md`
 
 
 
-## Instructions - Follow these steps exactly:  
+## Execution Step Instructions
 
-1. For each [ACTIVE-PROMPT] parts for which there are still multiple different interpretations and multiple variants of interpretation of the the required result - generate multiple-choice question with up to 5 most probable preferences in [QUESTIONNAIRE] following the conventions in [QUESTIONNAIRE-CONVENTION] and the JSON schema defined in `.rdd/conventions/questionnaire-json-schema.md`. 
+1. Create in the [ACTIVE-PROMPT-FOLDER] a file named `analysis.md` with the following chapters:
 
-   - The questionnaire must be created as a JSON file named `questionnaire.json` in the [ACTIVE-PROMPT-FOLDER]
-   - Follow the JSON structure specified in `.rdd/conventions/questionnaire-json-schema.md`
-   - Initialize all `user-selection` fields with `{"type": null, "value": null}`
-   - Include context, question text, options with pros/cons, recommended option, and rationale for each question
-   - Only add questions if the questionnaire is being created for the first time. If `questionnaire.json` already exists with questions, do not modify the existing questions but be careful not to repeat the same question several times.
+   * **Copilot Review** - Provide your opinion for the change requested from the prompt. You should be brutally honest and without any attempt to please the user. Just the facts, the truth and the rough reality. Include your assessment of:
+     - Feasibility of the requested changes
+     - Potential risks and challenges
+     - Impact on existing functionality
+     - Completeness of the prompt description
+   
+   * **Best Practices** - Check what are the best practices currently available on the Internet. This is mandatory to search via MCP in Internet sources when available. List the URLs you have checked and make a short summary for each URL - what are the conclusions. If MCP is not available, provide general best practices based on your knowledge.
+   
+   * **Samples from GitHub** - Check and shortly write how other people in other GitHub repositories have solved similar problems. If possible, provide specific repository names and approaches used.
+   
+   * **Proposals** - Propose changes in the requirements and different options (even if they contradict to the prompt, but are better as approach). Include:
+     - Alternative implementation strategies
+     - Suggested requirement modifications
+     - Trade-offs between different approaches
+   
+   * **Prompt Modification** - Propose how you would write the same prompt if it was you who should do it. Provide a refined version that:
+     - Is more clear and specific
+     - Includes necessary context
+     - Follows best practices for prompt engineering
 
 
 
- ## Execution Step Rules
+## Execution Step Rules
 
-- Do not generate quesions for which answers are already found in the context files. 
-
-- Always follow the conventions defined in [QUESTIONNAIRE-CONVENTION].
+- Do not make any implementation changes to the codebase during this execution step
+- Focus solely on creating the analysis.md file
+- Be objective and critical in your analysis
+- Provide actionable insights and recommendations

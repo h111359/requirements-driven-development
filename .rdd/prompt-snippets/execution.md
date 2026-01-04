@@ -64,11 +64,19 @@
      * **FIRST ACTION**:  Write in the chat "No action mode selected"
      * **FINAL ACTION**: Stop execution and inform the user to set a different execution mode via the Web UI or CLI
    
+   * If `execution-mode` is `"clarify"`:
+     * **FIRST ACTION**: Write in the chat "Clarify mode"
+     * **SECOND ACTION**: Follow the instructions in `.rdd/prompt-snippets/execution-step.clarify.md`
+     * **AFTER**: After clarify execution is completed:
+       - Execute `.rdd/src/actions/prompt_questionnaire_generated_on.py`
+       - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
+     * **FINAL ACTION**: Stop (do not continue with the next instructions here)
+   
    * If `execution-mode` is `"analyze"`:
      * **FIRST ACTION**: Write in the chat "Analyze mode"
      * **SECOND ACTION**: Follow the instructions in `.rdd/prompt-snippets/execution-step.analyze.md`
      * **AFTER**: After analyze execution is completed:
-       - Execute `.rdd/src/actions/prompt_questionnaire_generated_on.py`
+       - Execute `.rdd/src/actions/prompt_analysis_generated_on.py`
        - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
      * **FINAL ACTION**: Stop (do not continue with the next instructions here)
    

@@ -206,7 +206,7 @@ The framework enables:
 
 - [UR-20260103-1700] The Web UI Active Prompt page shall control tab visibility based on workflow state instead of displaying status badges, showing the Questionnaire tab only when questionnaire-generated is true, the Plan tab only when plan-generated is true, the Modifications tab only when executed is true, while keeping the Prompt and Implementation tabs always visible.
 
-- [UR-20260104-1400] The Web UI Active Prompt page shall display visual indicators for prompt workflow state flags in the buttons row area, showing the status of questionnaire-generated, questionnaire-answered, plan-generated, implementation-completed, and executed boolean flags, as well as displaying modifications-count and current-modification-id values with short labels to provide immediate visibility of the prompt's lifecycle state without requiring navigation through tabs or registry inspection.
+- [UR-20260104-1400] The Web UI Active Prompt page shall display visual indicators for prompt workflow state flags positioned directly above their corresponding execution mode buttons, with each execution mode showing relevant status icons (Clarify mode displaying questionnaire-generated and questionnaire-answered icons, Analyze mode displaying analysis-generated icon, Plan mode displaying plan-generated icon, Implement mode displaying implementation-completed and executed icons, and Modification mode displaying modifications-count and current-modification-id values), providing immediate visibility of the prompt's lifecycle state aligned with each mode's function.
 
 
 
@@ -497,3 +497,26 @@ The framework enables:
 - [TR-20260103-1530] Radio button styles in `.rdd/src/web/static/style.css` shall define enhanced visibility CSS rules for `.form-check-input[type="radio"]` elements with increased size (1.25em width and height), thicker borders (2px), darker border colors (#495057), and comprehensive interactive state styling including hover (primary blue border with light background), focus (primary blue border with box-shadow), and checked (primary blue background with border and subtle shadow) states to ensure visibility and accessibility compliance.
 
 - [TR-20260103-1700] The Web UI Active Prompt page shall implement tab visibility control through JavaScript by dynamically showing or hiding tab navigation items based on prompt workflow state flags (questionnaire-generated, plan-generated, executed), removing the previous status badge indicators, and ensuring that the currently active tab remains selected when tab visibility changes.
+
+- [TR-20260104-1100] The framework shall provide a "clarify" execution mode that generates a questionnaire to clarify ambiguous or missing information in the active prompt.
+
+- [TR-20260104-1101] The framework shall provide an "analyze" execution mode that generates an analysis.md file containing copilot review, best practices research, GitHub samples, proposals, and prompt modifications.
+
+- [TR-20260104-1102] The framework shall track whether analysis has been generated for each prompt using an "analysis-generated" boolean flag in the work iteration registry, positioned after "plan-generated" and before "implementation-completed" for consistency.
+
+- [TR-20260104-1103] The clarify and analyze modes shall automatically reset execution-mode to "no-action" after completion, following the same pattern as plan and implement modes.
+
+- [TR-20260104-1104] The analyze mode shall NOT execute prompt_set_executed_on.py after completion, as analysis is documentation generation, not implementation execution.
+
+- [TR-20260104-1105] The framework shall provide a script `.rdd/src/actions/prompt_analysis_generated_on.py` that sets the analysis-generated flag to true for the active or specified prompt in the work iteration registry.
+
+- [TR-20260104-1106] The execution orchestration file `.rdd/prompt-snippets/execution.md` shall include both clarify and analyze modes, with clarify referencing `.rdd/prompt-snippets/execution-step.clarify.md` and analyze referencing `.rdd/prompt-snippets/execution-step.analyze.md`.
+
+- [TR-20260104-1107] The Web UI Active Prompt page shall display an analysis-generated flag icon in the workflow status indicators and show an Analysis tab that becomes visible when analysis-generated is true.
+
+- [TR-20260104-1108] The Web UI execution mode selector shall provide both "Clarify" and "Analyze" mode options, replacing the previous single "Analyze" mode which has been renamed to "Clarify".
+
+- [TR-20260104-1109] The prompt snippet key [[[ANALYZE]]] shall be removed from the manifest.json promptSnippets array, as analyze is now an execution mode invoked via execution-mode setting, not a user-insertable prompt snippet.
+- [TR-20260104-1410] The Web UI Active Prompt page shall display execution mode buttons with consistent visual styling, using secondary outline style for inactive buttons and primary solid background for the active button, with smooth transitions and hover effects to improve user interaction clarity.
+
+- [TR-20260104-1411] The Web UI Active Prompt page shall order tabs in the logical execution workflow sequence: Prompt, Questionnaire, Analysis, Plan, Implementation, Modifications, enabling users to navigate through the prompt lifecycle in a natural progression.

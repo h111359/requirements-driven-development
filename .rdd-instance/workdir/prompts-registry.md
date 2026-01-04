@@ -467,3 +467,40 @@ As well add there also the values (with short label) for:
 
 The icons of the flags should be different and to resemble the meaning of the flag
 %%ENDPROMPT
+
+%%PROMPT P-041 "Clarity and Analyze modes"
+The current execution-mode analyze should be renamed to clarify and analyze to be used as a new execution mode.
+Clarify should continue to generate a questionnaire. The snippet `.rdd/prompt-snippets/execution-step.analyze.md` should be renamed to `.rdd/prompt-snippets/execution-step.clarify.md` and the references to it should be changed respectively (for example in `.rdd/prompt-snippets/execution.md`)
+The role of analyze mode is to generate in the prompt workdir a file named "analysis.md" using as initial instructions the prompt `.rdd/prompt-snippets/analyze.md` renamed to `.rdd/prompt-snippets/execution-step.analyze.md` and modified to be in line with the structure of the rest `execution-step*` prompts.
+
+
+### Modification 001
+
+Make the icons of statuses to be right above the buttons for the execution modes and to reflect the respective mode. Clarify will have two icons - for generated and answered
+
+
+### Modification 002
+
+Change the Plan icon as the current one is with too tiny lines and it is not visible is it ON or OFF. Increase with 10% the size of all the icons
+
+
+### Modification 003
+
+Change the colors of the modes buttons. It should be one and the same color for non-active and another color for the active option
+
+
+### Modification 004
+
+Reorder the files tabs in Active Prompt page to follow the order of the execution modes:
+1. Prompt
+2. Questionnaire
+3. Analysis
+4. Plan
+5. Implementation
+6. Modifications
+
+
+### Modification 005
+
+Reflect the changes in the modifications in requirements.md file
+%%ENDPROMPT

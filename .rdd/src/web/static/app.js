@@ -592,7 +592,7 @@ function getSmartDefaultMode(prompt) {
     const implementationCompleted = prompt['implementation-completed'] || false;
     
     if (!questionnaireGenerated) {
-        return 'analyze';
+        return 'clarify';
     } else if (!planGenerated) {
         return 'plan';
     } else if (!implementationCompleted) {
@@ -608,11 +608,13 @@ function getSmartDefaultMode(prompt) {
 function updateTabVisibility(prompt) {
     const questionnaireGenerated = prompt['questionnaire-generated'] || false;
     const planGenerated = prompt['plan-generated'] || false;
+    const analysisGenerated = prompt['analysis-generated'] || false;
     const executed = prompt.executed || false;
     
     // Get tab elements (li elements containing the tab buttons)
     const questionnaireTabLi = document.querySelector('#active-questionnaire-tab').closest('li.nav-item');
     const planTabLi = document.querySelector('#active-plan-tab').closest('li.nav-item');
+    const analysisTabLi = document.querySelector('#active-analysis-tab').closest('li.nav-item');
     const modificationsTabLi = document.querySelector('#active-modifications-tab').closest('li.nav-item');
     
     // Prompt tab: always visible (no action needed)
@@ -626,6 +628,11 @@ function updateTabVisibility(prompt) {
     // Plan tab: visible when plan-generated=true
     if (planTabLi) {
         planTabLi.style.display = planGenerated ? '' : 'none';
+    }
+    
+    // Analysis tab: visible when analysis-generated=true
+    if (analysisTabLi) {
+        analysisTabLi.style.display = analysisGenerated ? '' : 'none';
     }
     
     // Modifications tab: visible when executed=true
@@ -664,8 +671,12 @@ function updateWorkflowFlags(prompt) {
         'bi bi-check-square-fill');
     updateFlag('flag-plan-generated', 
         prompt['plan-generated'] || false,
-        'bi bi-list-ul',
-        'bi bi-list-check');
+        'bi bi-journal-text',
+        'bi bi-journal-check');
+    updateFlag('flag-analysis-generated', 
+        prompt['analysis-generated'] || false,
+        'bi bi-clipboard-data',
+        'bi bi-clipboard-check');
     updateFlag('flag-implementation-completed', 
         prompt['implementation-completed'] || false,
         'bi bi-code-slash',
@@ -758,6 +769,7 @@ async function loadActivePromptFiles(promptId) {
         await Promise.all([
             loadActivePromptFile('prompt.md'),
             loadActivePromptFile('plan.md'),
+            loadActivePromptFile('analysis.md'),
             loadQuestionnaire(),
             loadActivePromptFile('implementation.md')
         ]);

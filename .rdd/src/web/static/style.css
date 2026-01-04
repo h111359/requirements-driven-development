@@ -207,6 +207,22 @@ textarea.form-control {
     font-size: 0.8rem;
 }
 
+/* Execution mode buttons - consistent color scheme */
+input[name="execution-mode"].btn-check:checked + label.btn {
+    background-color: var(--rdd-primary);
+    border-color: var(--rdd-primary);
+    color: white;
+}
+
+input[name="execution-mode"].btn-check + label.btn {
+    transition: all 0.2s ease-in-out;
+}
+
+input[name="execution-mode"].btn-check + label.btn:hover {
+    background-color: rgba(13, 110, 253, 0.1);
+    border-color: #6c757d;
+}
+
 /* Compact accordion for questionnaire */
 .accordion-compact .accordion-button {
     padding: 0.5rem 0.75rem;

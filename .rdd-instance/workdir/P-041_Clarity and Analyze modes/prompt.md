@@ -1,0 +1,3 @@
+The current execution-mode analyze should be renamed to clarify and analyze to be used as a new execution mode.
+Clarify should continue to generate a questionnaire. The snippet `.rdd/prompt-snippets/execution-step.analyze.md` should be renamed to `.rdd/prompt-snippets/execution-step.clarify.md` and the references to it should be changed respectively (for example in `.rdd/prompt-snippets/execution.md`)
+The role of analyze mode is to generate in the prompt workdir a file named "analysis.md" using as initial instructions the prompt `.rdd/prompt-snippets/analyze.md` renamed to `.rdd/prompt-snippets/execution-step.analyze.md` and modified to be in line with the structure of the rest `execution-step*` prompts.

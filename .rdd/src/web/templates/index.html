@@ -132,56 +132,103 @@
                                         
                                         <!-- Execution Mode -->
                                         <div class="col-md-8">
-                                            <div class="btn-group btn-group-sm compact-mode-selector" role="group" id="execution-mode-selector">
-                                                <input type="radio" class="btn-check" name="execution-mode" id="mode-no-action" value="no-action" autocomplete="off">
-                                                <label class="btn btn-outline-secondary" for="mode-no-action" onclick="updateExecutionMode('no-action')">
-                                                    No Action
-                                                </label>
+                                            <div class="d-flex gap-1 flex-wrap">
+                                                <!-- No Action -->
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <div class="mb-1" style="height: 20px; font-size: 0.99rem;">
+                                                        <!-- No icons for No Action -->
+                                                    </div>
+                                                    <div>
+                                                        <input type="radio" class="btn-check" name="execution-mode" id="mode-no-action" value="no-action" autocomplete="off">
+                                                        <label class="btn btn-outline-secondary btn-sm" for="mode-no-action" onclick="updateExecutionMode('no-action')">
+                                                            No Action
+                                                        </label>
+                                                    </div>
+                                                </div>
 
-                                                <input type="radio" class="btn-check" name="execution-mode" id="mode-analyze" value="analyze" autocomplete="off">
-                                                <label class="btn btn-outline-primary" for="mode-analyze" onclick="updateExecutionMode('analyze')">
-                                                    Analyze
-                                                </label>
+                                                <!-- Clarify -->
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <div class="mb-1 d-flex gap-1" style="height: 20px; font-size: 0.99rem;">
+                                                        <span id="flag-questionnaire-generated" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Questionnaire Generated">
+                                                            <i class="bi bi-circle text-secondary"></i>
+                                                        </span>
+                                                        <span id="flag-questionnaire-answered" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Questionnaire Answered">
+                                                            <i class="bi bi-circle text-secondary"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <input type="radio" class="btn-check" name="execution-mode" id="mode-clarify" value="clarify" autocomplete="off">
+                                                        <label class="btn btn-outline-secondary btn-sm" for="mode-clarify" onclick="updateExecutionMode('clarify')">
+                                                            Clarify
+                                                        </label>
+                                                    </div>
+                                                </div>
 
-                                                <input type="radio" class="btn-check" name="execution-mode" id="mode-plan" value="plan" autocomplete="off">
-                                                <label class="btn btn-outline-info" for="mode-plan" onclick="updateExecutionMode('plan')">
-                                                    Plan
-                                                </label>
+                                                <!-- Analyze -->
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <div class="mb-1" style="height: 20px; font-size: 0.99rem;">
+                                                        <span id="flag-analysis-generated" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Analysis Generated">
+                                                            <i class="bi bi-circle text-secondary"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <input type="radio" class="btn-check" name="execution-mode" id="mode-analyze" value="analyze" autocomplete="off">
+                                                        <label class="btn btn-outline-secondary btn-sm" for="mode-analyze" onclick="updateExecutionMode('analyze')">
+                                                            Analyze
+                                                        </label>
+                                                    </div>
+                                                </div>
 
-                                                <input type="radio" class="btn-check" name="execution-mode" id="mode-implement" value="implement" autocomplete="off">
-                                                <label class="btn btn-outline-success" for="mode-implement" onclick="updateExecutionMode('implement')">
-                                                    Implement
-                                                </label>
+                                                <!-- Plan -->
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <div class="mb-1" style="height: 20px; font-size: 0.99rem;">
+                                                        <span id="flag-plan-generated" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Plan Generated">
+                                                            <i class="bi bi-circle text-secondary"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <input type="radio" class="btn-check" name="execution-mode" id="mode-plan" value="plan" autocomplete="off">
+                                                        <label class="btn btn-outline-secondary btn-sm" for="mode-plan" onclick="updateExecutionMode('plan')">
+                                                            Plan
+                                                        </label>
+                                                    </div>
+                                                </div>
 
-                                                <input type="radio" class="btn-check" name="execution-mode" id="mode-modification" value="modification" autocomplete="off">
-                                                <label class="btn btn-outline-warning" for="mode-modification" onclick="updateExecutionMode('modification')">
-                                                    Modification
-                                                </label>
-                                            </div>
-                                            
-                                            <!-- Workflow Status Flags -->
-                                            <div class="mt-2 d-flex align-items-center gap-2 flex-wrap" style="font-size: 0.9rem;">
-                                                <span id="flag-questionnaire-generated" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Questionnaire Generated">
-                                                    <i class="bi bi-circle text-secondary"></i>
-                                                </span>
-                                                <span id="flag-questionnaire-answered" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Questionnaire Answered">
-                                                    <i class="bi bi-circle text-secondary"></i>
-                                                </span>
-                                                <span id="flag-plan-generated" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Plan Generated">
-                                                    <i class="bi bi-circle text-secondary"></i>
-                                                </span>
-                                                <span id="flag-implementation-completed" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Implementation Completed">
-                                                    <i class="bi bi-circle text-secondary"></i>
-                                                </span>
-                                                <span id="flag-executed" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Executed">
-                                                    <i class="bi bi-circle text-secondary"></i>
-                                                </span>
-                                                <span id="flag-modifications-count" class="text-muted small" style="display: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Modifications Count">
-                                                    Mods: <span id="modifications-count-value">0</span>
-                                                </span>
-                                                <span id="flag-current-modification" class="text-muted small" style="display: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Current Modification ID">
-                                                    Current: <span id="current-modification-value">---</span>
-                                                </span>
+                                                <!-- Implement -->
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <div class="mb-1 d-flex gap-1" style="height: 20px; font-size: 0.99rem;">
+                                                        <span id="flag-implementation-completed" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Implementation Completed">
+                                                            <i class="bi bi-circle text-secondary"></i>
+                                                        </span>
+                                                        <span id="flag-executed" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Executed">
+                                                            <i class="bi bi-circle text-secondary"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <input type="radio" class="btn-check" name="execution-mode" id="mode-implement" value="implement" autocomplete="off">
+                                                        <label class="btn btn-outline-secondary btn-sm" for="mode-implement" onclick="updateExecutionMode('implement')">
+                                                            Implement
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Modification -->
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <div class="mb-1 d-flex gap-1" style="height: 20px; font-size: 0.88rem;">
+                                                        <span id="flag-modifications-count" class="text-muted small" style="display: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Modifications Count">
+                                                            <span id="modifications-count-value">0</span>
+                                                        </span>
+                                                        <span id="flag-current-modification" class="text-muted small" style="display: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Current Modification ID">
+                                                            #<span id="current-modification-value">---</span>
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <input type="radio" class="btn-check" name="execution-mode" id="mode-modification" value="modification" autocomplete="off">
+                                                        <label class="btn btn-outline-secondary btn-sm" for="mode-modification" onclick="updateExecutionMode('modification')">
+                                                            Modification
+                                                        </label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -199,15 +246,21 @@
                                                 </button>
                                             </li>
                                             <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="active-plan-tab" data-bs-toggle="tab" 
-                                                        data-bs-target="#active-plan-content-tab" type="button" role="tab">
-                                                    <i class="bi bi-list-check"></i> Plan
-                                                </button>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
                                                 <button class="nav-link" id="active-questionnaire-tab" data-bs-toggle="tab" 
                                                         data-bs-target="#active-questionnaire-content-tab" type="button" role="tab">
                                                     <i class="bi bi-question-circle"></i> Questionnaire
+                                                </button>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="active-analysis-tab" data-bs-toggle="tab" 
+                                                        data-bs-target="#active-analysis-content-tab" type="button" role="tab">
+                                                    <i class="bi bi-clipboard-data"></i> Analysis
+                                                </button>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="active-plan-tab" data-bs-toggle="tab" 
+                                                        data-bs-target="#active-plan-content-tab" type="button" role="tab">
+                                                    <i class="bi bi-list-check"></i> Plan
                                                 </button>
                                             </li>
                                             <li class="nav-item" role="presentation">
@@ -240,16 +293,6 @@
                                                     <i class="bi bi-save"></i> Save Prompt
                                                 </button>
                                             </div>
-                                            <div class="tab-pane fade" id="active-plan-content-tab" role="tabpanel">
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-bold">plan.md</label>
-                                                    <textarea class="form-control font-monospace" id="active-editor-plan-md" 
-                                                              rows="20" style="font-size: 14px;"></textarea>
-                                                </div>
-                                                <button class="btn btn-success" onclick="saveActivePromptFile('plan.md')">
-                                                    <i class="bi bi-save"></i> Save Plan
-                                                </button>
-                                            </div>
                                             <div class="tab-pane fade" id="active-questionnaire-content-tab" role="tabpanel">
                                                 <!-- Dynamic questionnaire container - renders JSON or MD -->
                                                 <div id="questionnaire-container">
@@ -260,6 +303,26 @@
                                                         <p class="mt-2">Loading questionnaire...</p>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="active-analysis-content-tab" role="tabpanel">
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold">analysis.md</label>
+                                                    <textarea class="form-control font-monospace" id="active-editor-analysis-md" 
+                                                              rows="20" style="font-size: 14px;" readonly></textarea>
+                                                </div>
+                                                <div class="alert alert-info">
+                                                    <i class="bi bi-info-circle"></i> Analysis file is view-only.
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="active-plan-content-tab" role="tabpanel">
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold">plan.md</label>
+                                                    <textarea class="form-control font-monospace" id="active-editor-plan-md" 
+                                                              rows="20" style="font-size: 14px;"></textarea>
+                                                </div>
+                                                <button class="btn btn-success" onclick="saveActivePromptFile('plan.md')">
+                                                    <i class="bi bi-save"></i> Save Plan
+                                                </button>
                                             </div>
                                             <div class="tab-pane fade" id="active-implementation-content-tab" role="tabpanel">
                                                 <div class="mb-3">
