@@ -332,8 +332,11 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header bg-success text-white">
-                            <h5><i class="bi bi-folder"></i> Working Directory Management</h5>
+                        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="bi bi-folder"></i> Working Directory Management</h5>
+                            <button class="btn btn-warning btn-sm" id="archive-iteration-btn" onclick="archiveWorkdir()" style="display:none;">
+                                <i class="bi bi-archive-fill"></i> Archive Iteration
+                            </button>
                         </div>
                         <div class="card-body">
                             <!-- Create Work Iteration Button (shown when no iteration exists) -->
@@ -343,20 +346,10 @@
                                 </button>
                             </div>
                             
-                            <!-- Registry View (shown when iteration exists) -->
+                            <!-- Registry section content (shown when iteration exists) -->
                             <div id="registry-section" style="display:none;">
-                                <div class="card">
-                                    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-                                        <h6 class="mb-0"><i class="bi bi-journal-text"></i> Registry View</h6>
-                                        <button class="btn btn-warning btn-sm" onclick="archiveWorkdir()">
-                                            <i class="bi bi-archive-fill"></i> Archive Iteration
-                                        </button>
-                                    </div>
-                                    <div class="card-body">
-                                        <div id="registry-view-container">
-                                            <p class="text-muted">Loading registry...</p>
-                                        </div>
-                                    </div>
+                                <div id="registry-view-container">
+                                    <p class="text-muted">Loading registry...</p>
                                 </div>
                                 
                                 <!-- File Viewer -->

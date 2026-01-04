@@ -1817,18 +1817,21 @@ async function loadIterationStatus() {
     
     const createSection = document.getElementById('create-iteration-section');
     const registrySection = document.getElementById('registry-section');
+    const archiveBtn = document.getElementById('archive-iteration-btn');
     const container = document.getElementById('registry-view-container');
     
     if (!currentRegistry) {
         // No iteration exists - show create button only
         createSection.style.display = 'block';
         registrySection.style.display = 'none';
+        if (archiveBtn) archiveBtn.style.display = 'none';
         return;
     }
     
-    // Iteration exists - show registry and file viewer
+    // Iteration exists - show registry and archive button
     createSection.style.display = 'none';
     registrySection.style.display = 'block';
+    if (archiveBtn) archiveBtn.style.display = 'inline-block';
     
     // Render registry view
     renderRegistryView(container, currentRegistry);
@@ -1838,33 +1841,26 @@ async function loadIterationStatus() {
  * Render the registry view
  */
 function renderRegistryView(container, registry) {
-    // Iteration metadata section
+    // Iteration metadata section - compact single row layout
     const metadataHtml = `
         <div class="card mb-3 border-primary">
             <div class="card-body">
-                <h6 class="card-subtitle mb-3 text-muted">Iteration Metadata</h6>
-                <div class="row">
-                    <div class="col-md-3">
-                        <strong>Iteration ID:</strong><br>
-                        <code>${escapeHtml(registry['iteration-id'])}</code>
+                <h6 class="card-subtitle mb-2 text-muted">Iteration Metadata</h6>
+                <div class="d-flex flex-wrap gap-3 align-items-center">
+                    <div>
+                        <strong>ID:</strong> <code>${escapeHtml(registry['iteration-id'])}</code>
                     </div>
-                    <div class="col-md-3">
-                        <strong>Iteration Name:</strong><br>
-                        ${escapeHtml(registry['iteration-name'])}
+                    <div>
+                        <strong>Name:</strong> ${escapeHtml(registry['iteration-name'])}
                     </div>
-                    <div class="col-md-3">
-                        <strong>Total Prompts:</strong><br>
-                        ${registry.prompts ? registry.prompts.length : 0}
+                    <div>
+                        <strong>Total Prompts:</strong> ${registry.prompts ? registry.prompts.length : 0}
                     </div>
-                    <div class="col-md-3">
-                        <strong>Next Prompt ID:</strong><br>
-                        <code>P-${String(registry['prompt-id-sequence-next-value']).padStart(3, '0')}</code>
+                    <div>
+                        <strong>Next ID:</strong> <code>P-${String(registry['prompt-id-sequence-next-value']).padStart(3, '0')}</code>
                     </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-md-3">
-                        <strong>Git Enabled:</strong><br>
-                        ${registry['git-enabled'] ? '<i class="bi bi-check-circle-fill text-success"></i> Yes' : '<i class="bi bi-x-circle-fill text-danger"></i> No'}
+                    <div>
+                        <strong>Git:</strong> ${registry['git-enabled'] ? '<i class="bi bi-check-circle-fill text-success"></i> Yes' : '<i class="bi bi-x-circle-fill text-danger"></i> No'}
                     </div>
                 </div>
             </div>

@@ -643,3 +643,9 @@ Then remove the page Prompts History
 Make Workdir page more compact
 Remove  "Work Iteration Registry" container and let the two areas (cards) in it to be directly in "Working Directory Management" container. Reduce the font of "Working Directory Management" title and make it same as the Active Prompt page title look and feel. Buttons "Create Work Iteration" and "Archive Iteration" can not coexist. When there is a created iteration, the button "Create Work Iteration" should not be visible. When the workdir is empty, "Create Work Iteration" should be the only element on the page.
 %%ENDPROMPT
+
+%%PROMPT P-053 "Workdir improvement"
+Move "Archive Iteration" button on the right side of the heading "Working Directory Management". 
+Remove "Registry View" heading (and the whole container - subcontainers to be positioned directly in "Working Directory Management" element.
+Compact "Iteration Metadata" container - all indicators should fit on a single row.
+%%ENDPROMPT
