@@ -74,7 +74,6 @@
 
   "promptSnippets": [
     {"prompt-snippet-key": "[[[CONSISTENCY]]]", "prompt-snippet-path": ".rdd/prompt-snippets/check-consistency.prompt.md"},
-    {"prompt-snippet-key": "[[[COMPARE_REQUIREMENTS]]]", "prompt-snippet-path": ".rdd/prompt-snippets/compare-requirements.prompt.md"},
     {"prompt-snippet-key": "[[[FOLDER_STRUCTURE_UPDATE]]]", "prompt-snippet-path": ".rdd/prompt-snippets/folder-structure.update.md"},
     {"prompt-snippet-key": "[[[ROLE_SOLUTION_ARCHITECT]]]", "prompt-snippet-path": ".rdd/prompt-snippets/role.solution-architect.md"},
     {"prompt-snippet-key": "[[[ROLE_SOFTWARE_DEVELOPER]]]", "prompt-snippet-path": ".rdd/prompt-snippets/role.sotware-developer.md"}

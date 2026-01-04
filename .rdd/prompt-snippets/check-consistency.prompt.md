@@ -1,4 +1,8 @@
-# Check Consistency Prompt
+## Definitions
+
+See the definitions in `.rdd/prompt-snippets/execution.md`
+
+
 
 ## Role
 
@@ -17,13 +21,15 @@ You will review ONLY the files and folders listed under **Scope** below.
 ### Scope (must be fully covered)
 
 Folders (recursive):
-- `.rdd-instance/specifications/`
 - `.rdd/conventions/`
-- `.rdd/prompt-snippets/`
 - `.rdd/docs/`
+- `.rdd/prompt-snippets/`
+- `.rdd/src/`
 
 Individual files:
+- `.rdd-instance/specifications/files-and-folders.md`
 - `.rdd-instance/specifications/requirements.md`
+- `.rdd-instance/specifications/technical-design.md`
 - `.rdd/config/manifest.json`
 
 ### Goal
@@ -39,8 +45,7 @@ Produce a written analysis that:
 After completing the analysis, write the results to exactly one new file:
 - `.rdd-instance/workdir/consistency-analysis-[TIMESTAMP].md`
 
-Where `[TIMESTAMP]` is an ISO-like timestamp suitable for filenames, for example:
-- `2025-12-15T141530Z`
+Where `[TIMESTAMP]` is the result of executing the script `.rdd/src/actions/print_timestamp.py`
 
 ## Rules
 
@@ -156,11 +161,7 @@ Write the analysis file in Markdown with the following sections (in this exact o
   - Instance-managed: `.rdd-instance/**`
   (If you detect differences between stated ownership policies and actual repo content, flag them.)
 
-- Pay special attention to the RDD manifest and how it describes:
-  - requiredPaths / requiredFiles
-  - upgrade policy
-  - workdir model
-  and whether other documents/templates reflect the same rules.
+- Pay special attention to the RDD manifest and whether other documents/templates reflect the same rules.
 
 - If you identify naming or version mismatches (e.g., version strings, schema versions), surface them.
 

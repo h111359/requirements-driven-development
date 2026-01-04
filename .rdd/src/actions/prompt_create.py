@@ -123,22 +123,14 @@ def _ensure_prompt_workdir_artifacts(workdir: Path, prompt_id: str, title: str) 
     prompt_dir = workdir / f"{prompt_id}_{_sanitize_title_for_path_component(title)}"
     prompt_dir.mkdir(parents=True, exist_ok=True)
 
-    # Create empty markdown files
-    for name in ("prompt.md", "plan.md", "implementation.md"):
+    # Create only prompt.md file - other files created during execution modes
+    # plan.md created by plan mode execution
+    # questionnaire.json created by clarify mode execution  
+    # implementation.md created by implement mode execution
+    for name in ("prompt.md",):
         p = prompt_dir / name
         if not p.exists():
             p.write_text("", encoding="utf-8")
-    
-    # Create initial JSON questionnaire file
-    questionnaire_json = prompt_dir / "questionnaire.json"
-    if not questionnaire_json.exists():
-        initial_questionnaire = {
-            "context": "",
-            "questions": []
-        }
-        with questionnaire_json.open("w", encoding="utf-8") as f:
-            json.dump(initial_questionnaire, f, indent=2)
-            f.write("\n")
 
     return prompt_dir
 

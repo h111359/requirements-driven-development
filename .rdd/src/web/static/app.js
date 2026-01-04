@@ -609,16 +609,17 @@ function updateTabVisibility(prompt) {
     const questionnaireGenerated = prompt['questionnaire-generated'] || false;
     const planGenerated = prompt['plan-generated'] || false;
     const analysisGenerated = prompt['analysis-generated'] || false;
+    const implementationCompleted = prompt['implementation-completed'] || false;
     const executed = prompt.executed || false;
     
     // Get tab elements (li elements containing the tab buttons)
     const questionnaireTabLi = document.querySelector('#active-questionnaire-tab').closest('li.nav-item');
     const planTabLi = document.querySelector('#active-plan-tab').closest('li.nav-item');
     const analysisTabLi = document.querySelector('#active-analysis-tab').closest('li.nav-item');
+    const implementationTabLi = document.querySelector('#active-implementation-tab').closest('li.nav-item');
     const modificationsTabLi = document.querySelector('#active-modifications-tab').closest('li.nav-item');
     
     // Prompt tab: always visible (no action needed)
-    // Implementation tab: always visible (no action needed)
     
     // Questionnaire tab: visible when questionnaire-generated=true
     if (questionnaireTabLi) {
@@ -633,6 +634,11 @@ function updateTabVisibility(prompt) {
     // Analysis tab: visible when analysis-generated=true
     if (analysisTabLi) {
         analysisTabLi.style.display = analysisGenerated ? '' : 'none';
+    }
+    
+    // Implementation tab: visible when implementation-completed=true
+    if (implementationTabLi) {
+        implementationTabLi.style.display = implementationCompleted ? '' : 'none';
     }
     
     // Modifications tab: visible when executed=true
@@ -680,7 +686,7 @@ function updateWorkflowFlags(prompt) {
     updateFlag('flag-implementation-completed', 
         prompt['implementation-completed'] || false,
         'bi bi-code-slash',
-        'bi bi-code-square');
+        'bi bi-check-circle-fill');
     updateFlag('flag-executed', 
         prompt.executed || false,
         'bi bi-play-circle',
@@ -1155,9 +1161,8 @@ async function saveQuestionnaireAnswer(questionId, type, value, filepath) {
             const saveResult = await saveResponse.json();
             
             if (saveResult.success) {
-                // Check if all questions are now answered
-                const allAnswered = data.questions.every(q => q['user-selection'] && q['user-selection'].type);
-                await updateQuestionnaireAnsweredFlag(allAnswered);
+                // Call validation script to check if all questions are answered
+                await checkQuestionnaireComplete();
                 
                 // Update UI to show saved state
                 showAlert('success', `Answer saved for ${questionId}`, 2000);
@@ -1216,6 +1221,33 @@ async function updateQuestionnaireGeneratedFlag(value) {
         }
     } catch (error) {
         console.error('Error updating questionnaire-generated flag:', error);
+    }
+}
+
+/**
+ * Check questionnaire completion and update flag via validation script
+ */
+async function checkQuestionnaireComplete() {
+    try {
+        const response = await fetch('/api/action', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                domain: 'questionnaire',
+                action: 'check_complete',
+                params: {}
+            })
+        });
+        
+        const result = await response.json();
+        if (!result.success) {
+            console.error('Failed to check questionnaire completion:', result.error);
+        }
+    } catch (error) {
+        console.error('Error checking questionnaire completion:', error);
     }
 }
 

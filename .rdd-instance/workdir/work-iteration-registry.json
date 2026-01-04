@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Web UI",
-    "prompt-id-sequence-next-value": 45,
+    "prompt-id-sequence-next-value": 46,
     "git-enabled": true,
     "prompts": [
         {
@@ -547,6 +547,19 @@
             "implementation-completed": true,
             "execution-mode": "no-action",
             "executed": true
+        },
+        {
+            "prompt-id": "P-045",
+            "prompt-title": "Bug: questionnaire-generated and questionnaire-answered flags are set to true immediately after creation of new prompt",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "modifications-count": 2,
+            "current-modification-id": null
         }
     ]
 }

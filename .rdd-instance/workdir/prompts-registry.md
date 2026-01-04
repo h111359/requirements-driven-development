@@ -527,3 +527,25 @@ When there is Active Prompt, the New button should not appear. On its place move
 %%PROMPT P-044 "Execute command clipboard"
 Create a button in in Active Prompt which copies in the clipboard the text, which can be pasted directly in copilot chat for execution: "Follow the instructions in file `.rdd/prompt-snippets/execution.md`". The aim is this prompt to be used to trigger the execution command.
 %%ENDPROMPT
+
+%%PROMPT P-045 "Bug: questionnaire-generated and questionnaire-answered flags are set to true immediately after creation of new prompt"
+Change `.rdd/src/actions/prompt_create.py` not to create empty plan.md, prompt.md and questionnaire.json files when creating a new prompt
+
+Create scripts in `.rdd/src/actions/` trough which are created the questionnaire.json file and in it are added the needed questions and all other elements + chosen answers are set. The prompts should not directly change the questionnaire.json file but only via these scripts.
+
+questionnaire-generated flag should be set to true only after creation of the questionnaire (currently it is set immediately after prompt creation). Fix so these flags to be set only after clarify is executed.
+
+questionnaire-answered flag should be set to true only after all questions are answered
+
+Implementation tab in Active Prompt is visible immediately after creation of the prompt. It shall remain hidden until "implementation-completed" attribute of the Active Prompt in `.rdd-instance/workdir/work-iteration-registry.json` is changed to truth.
+
+
+### Modification 001
+
+Change the icon for Implementation completed = true with negated colors as it is not well visible now that it is active. Should be with filled green background as the other icons depicting true value of flags
+
+
+### Modification 002
+
+When there are modifications already executed but not in modification mode, over the status mode stand only a single digit, which is not clear what it is. Make it more clear that this are the number of modifications executed so far
+%%ENDPROMPT

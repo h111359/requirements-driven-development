@@ -204,7 +204,7 @@ The framework enables:
 
 - [UR-20260103-1530] The Web UI shall display all radio button form controls with enhanced visibility through increased size, darker border colors, and interactive visual feedback states including hover, focus, and checked states to improve usability and accessibility across all pages and forms.
 
-- [UR-20260103-1700] The Web UI Active Prompt page shall control tab visibility based on workflow state instead of displaying status badges, showing the Questionnaire tab only when questionnaire-generated is true, the Plan tab only when plan-generated is true, the Modifications tab only when executed is true, while keeping the Prompt and Implementation tabs always visible.
+- [UR-20260103-1700] The Web UI Active Prompt page shall control tab visibility based on workflow state instead of displaying status badges, showing the Questionnaire tab only when questionnaire-generated is true, the Plan tab only when plan-generated is true, the Analysis tab only when analysis-generated is true, the Implementation tab only when implementation-completed is true, and the Modifications tab only when executed is true, while keeping only the Prompt tab always visible.
 
 - [UR-20260104-1400] The Web UI Active Prompt page shall display visual indicators for prompt workflow state flags positioned directly above their corresponding execution mode buttons, with each execution mode showing relevant status icons (Clarify mode displaying questionnaire-generated and questionnaire-answered icons, Analyze mode displaying analysis-generated icon, Plan mode displaying plan-generated icon, Implement mode displaying implementation-completed and executed icons, and Modification mode displaying modifications-count and current-modification-id values), providing immediate visibility of the prompt's lifecycle state aligned with each mode's function.
 
@@ -300,7 +300,7 @@ The framework enables:
 
 - [TR-20260101-2144] The framework shall provide a deterministic script `.rdd/src/actions/prompt_add_to_registry.py` that reads the prompt.md file and any modification-XXX.md files from a prompt's workdir folder and updates the corresponding record in `.rdd-instance/workdir/prompts-registry.md` following the format defined in `.rdd/conventions/prompts-registry.convention.md`. Modifications shall be appended inline within the same prompt record using `### Modification XXX` markers. The script shall accept an optional `prompt-id=` parameter (defaulting to the active prompt if omitted). The prompt completion workflow in `.rdd/src/actions/prompt_complete.py` shall automatically invoke this script when setting a prompt to completed state.
 
-- [TR-20251228-1537] The framework shall create a per-prompt working folder under `.rdd-instance/workdir/` named `<prompt-id>_<prompt-title>` and in it shall create empty files `prompt.md`, `plan.md`, and `implementation.md` when a new prompt is created.
+- [TR-20251228-1537] The framework shall create a per-prompt working folder under `.rdd-instance/workdir/` named `<prompt-id>_<prompt-title>` and in it shall create an empty `prompt.md` file when a new prompt is created. Other files (plan.md, questionnaire.json, implementation.md) shall be created by their respective execution modes (plan, clarify, implement) when those modes execute.
 
 - [TR-20251228-1727] The framework shall provide a deterministic script `.rdd/src/actions/prompt_set_state.py` that updates the `state` field of a prompt record in `.rdd-instance/workdir/work-iteration-registry.json`. The script shall accept `state=` (required, one of `active|completed`) and optional `prompt-id=` parameters. When `prompt-id=` is omitted, the script shall default to the currently active prompt (the one in `active` state). The script shall enforce the "single active prompt" invariant by failing with a clear error if attempting to set a prompt to `active` when another prompt is already in that state.
   
@@ -468,9 +468,9 @@ The framework enables:
 
 - [TR-20260102-1306] Custom answer text inputs shall use explicit save buttons rather than debounced auto-save to ensure users confirm their custom text submissions.
 
-- [TR-20260102-1307] The analyze execution step in `.rdd/prompt-snippets/execution-step.analyze.md` shall generate questionnaire data in JSON format stored as `questionnaire.json` in the prompt's working folder.
+- [TR-20260102-1307] The clarify execution step in `.rdd/prompt-snippets/execution-step.clarify.md` shall generate questionnaire data in JSON format stored as `questionnaire.json` in the prompt's working folder.
 
-- [TR-20260102-1308] The prompt creation script `.rdd/src/actions/prompt_create.py` shall initialize new prompts with an empty `questionnaire.json` file containing the base structure with empty context and questions array.
+- [TR-20260102-1308] [DELETED]
 
 - [TR-20260102-1309] The Web UI Active Prompt page shall detect questionnaire file type (.json vs .md) and render interactive forms for JSON files while displaying markdown files as read-only text for legacy support.
 
@@ -496,7 +496,7 @@ The framework enables:
 
 - [TR-20260103-1530] Radio button styles in `.rdd/src/web/static/style.css` shall define enhanced visibility CSS rules for `.form-check-input[type="radio"]` elements with increased size (1.25em width and height), thicker borders (2px), darker border colors (#495057), and comprehensive interactive state styling including hover (primary blue border with light background), focus (primary blue border with box-shadow), and checked (primary blue background with border and subtle shadow) states to ensure visibility and accessibility compliance.
 
-- [TR-20260103-1700] The Web UI Active Prompt page shall implement tab visibility control through JavaScript by dynamically showing or hiding tab navigation items based on prompt workflow state flags (questionnaire-generated, plan-generated, executed), removing the previous status badge indicators, and ensuring that the currently active tab remains selected when tab visibility changes.
+- [TR-20260103-1700] The Web UI Active Prompt page shall implement tab visibility control through JavaScript by dynamically showing or hiding tab navigation items based on prompt workflow state flags (questionnaire-generated, plan-generated, analysis-generated, implementation-completed, executed), removing the previous status badge indicators, and ensuring that the currently active tab remains selected when tab visibility changes.
 
 - [TR-20260104-1100] The framework shall provide a "clarify" execution mode that generates a questionnaire to clarify ambiguous or missing information in the active prompt.
 
@@ -520,3 +520,9 @@ The framework enables:
 - [TR-20260104-1410] The Web UI Active Prompt page shall display execution mode buttons with consistent visual styling, using secondary outline style for inactive buttons and primary solid background for the active button, with smooth transitions and hover effects to improve user interaction clarity.
 
 - [TR-20260104-1411] The Web UI Active Prompt page shall order tabs in the logical execution workflow sequence: Prompt, Questionnaire, Analysis, Plan, Implementation, Modifications, enabling users to navigate through the prompt lifecycle in a natural progression.
+
+- [TR-20260104-1500] The framework shall provide a script `.rdd/src/actions/questionnaire_check_complete.py` that validates whether all questions in a prompt's questionnaire.json have been answered by checking that each question's user-selection.type field is not null, and automatically sets the questionnaire-answered flag to true when all questions are answered or false otherwise.
+
+- [TR-20260104-1501] The Web UI shall call the questionnaire validation script via the /api/action endpoint after each questionnaire answer is saved to automatically update the questionnaire-answered flag based on completion status.
+
+- [TR-20260104-1502] The questionnaire validation script shall accept an optional prompt-id parameter and default to the active prompt when the parameter is omitted, following the same pattern as other prompt action scripts.
