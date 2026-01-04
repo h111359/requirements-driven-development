@@ -1884,7 +1884,6 @@ function renderRegistryView(container, registry) {
                         <th style="width: 50px;" title="Implementation Completed"><i class="bi bi-code-square"></i> Impl</th>
                         <th style="width: 50px;" title="Executed"><i class="bi bi-play-circle"></i> Exec</th>
                         <th style="width: 90px;">Mod ID</th>
-                        <th style="width: 90px;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1918,12 +1917,7 @@ function renderRegistryView(container, registry) {
             const execIcon = prompt['executed'] ? checkIcon : xIcon;
             
             // Make title clickable for navigation
-            const titleLink = `<a href="#" onclick="openPromptFromRegistry('${promptId}'); return false;" class="text-decoration-none">${title}</a>`;
-            
-            // View button
-            const viewButton = `<button class="btn btn-sm btn-primary" onclick="viewCompletedPrompt('${promptId}')">
-                <i class="bi bi-eye"></i> View
-            </button>`;
+            const titleLink = `<a href="#" onclick="openPromptFromRegistry('${promptId}'); return false;" class="text-decoration-none prompt-title-link">${title}</a>`;
             
             tableHtml += `
                 <tr>
@@ -1938,14 +1932,13 @@ function renderRegistryView(container, registry) {
                     <td class="text-center">${implIcon}</td>
                     <td class="text-center">${execIcon}</td>
                     <td class="text-center"><code>${modId}</code></td>
-                    <td class="text-center">${viewButton}</td>
                 </tr>
             `;
         });
     } else {
         tableHtml += `
             <tr>
-                <td colspan="12" class="text-center text-muted">No prompts found in this iteration</td>
+                <td colspan="11" class="text-center text-muted">No prompts found in this iteration</td>
             </tr>
         `;
     }
@@ -1966,87 +1959,6 @@ function renderRegistryView(container, registry) {
 function openPromptFromRegistry(promptId) {
     // Directly view the completed prompt
     viewCompletedPrompt(promptId);
-}
-
-/**
- * Load file
- */
-async function loadFile() {
-    const filepath = document.getElementById('file-path').value.trim();
-    
-    if (!filepath) {
-        showAlert('warning', 'Please enter a file path');
-        return;
-    }
-    
-    try {
-        const response = await fetch('/api/file/' + filepath + '?token=' + sessionToken);
-        const result = await response.json();
-        
-        if (result.success) {
-            let content;
-            if (result.data) {
-                // JSON file
-                content = JSON.stringify(result.data, null, 2);
-            } else {
-                // Text file
-                content = result.content;
-            }
-            
-            document.getElementById('file-content').value = content;
-            document.getElementById('file-editor-container').style.display = 'block';
-            showAlert('success', 'File loaded successfully');
-        } else {
-            showAlert('danger', 'Failed to load file: ' + result.error);
-        }
-    } catch (error) {
-        showAlert('danger', 'Error loading file: ' + error.message);
-    }
-}
-
-/**
- * Load file (quick access)
- */
-function loadFileQuick(filepath) {
-    document.getElementById('file-path').value = filepath;
-    loadFile();
-}
-
-/**
- * Save file
- */
-async function saveFile() {
-    const filepath = document.getElementById('file-path').value.trim();
-    const content = document.getElementById('file-content').value;
-    
-    if (!filepath) {
-        showAlert('warning', 'Please enter a file path');
-        return;
-    }
-    
-    try {
-        const response = await fetch('/api/file/save', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                token: sessionToken,
-                filepath: filepath,
-                content: content
-            })
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            showAlert('success', 'File saved successfully');
-        } else {
-            showAlert('danger', 'Failed to save file: ' + result.error);
-        }
-    } catch (error) {
-        showAlert('danger', 'Error saving file: ' + error.message);
-    }
 }
 
 /**

@@ -649,3 +649,12 @@ Move "Archive Iteration" button on the right side of the heading "Working Direct
 Remove "Registry View" heading (and the whole container - subcontainers to be positioned directly in "Working Directory Management" element.
 Compact "Iteration Metadata" container - all indicators should fit on a single row.
 %%ENDPROMPT
+
+%%PROMPT P-054 "Remove view button in Workdir"
+As both View button and clicking on the name of the prompt open the modal, one of these should be removed
+
+
+### Modification 001
+
+Remove the empty "File Viewer" element at the bottom of Workdir page
+%%ENDPROMPT

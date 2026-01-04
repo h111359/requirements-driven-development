@@ -617,3 +617,14 @@ input[name="execution-mode"].btn-check:checked + label.btn-primary {
     vertical-align: middle;
 }
 
+/* Workdir registry - clickable prompt title styling */
+.prompt-title-link {
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.prompt-title-link:hover {
+    color: #0056b3 !important;
+    text-decoration: none !important;
+}
+
