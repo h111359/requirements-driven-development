@@ -214,6 +214,12 @@ The framework enables:
 
 - [UR-0076] The Web UI Active Prompt page shall display visual indicators for prompt workflow state flags positioned directly above their corresponding execution mode buttons, with each execution mode showing relevant status icons (Clarify mode displaying questionnaire-generated and questionnaire-answered icons, Analyze mode displaying analysis-generated icon, Plan mode displaying plan-generated icon, Implement mode displaying implementation-completed and executed icons, and Modification mode displaying modifications-count and current-modification-id values), providing immediate visibility of the prompt's lifecycle state aligned with each mode's function.
 
+- [UR-0087] [DELETED]
+
+- [UR-0088] [DELETED]
+
+
+
 
 
 ## Technical Requirements
@@ -542,3 +548,5 @@ The framework enables:
 - [TR-0155] The requirements convention file shall specify the requirement ID format, padding rules, and uniqueness guarantees to ensure consistent ID generation across all framework operations.
 
 - [TR-0156] Requirement ID generation shall scan requirements.md using regex pattern `\[(UR|TR)-(\d{4})\]` to extract existing IDs and calculate the next available ID per category.
+
+- [TR-0157] The framework shall provide deterministic Python scripts for requirement management (requirement_ur_create.py, requirement_ur_modify.py, requirement_ur_delete.py, requirement_tr_create.py, requirement_tr_modify.py, requirement_tr_delete.py) that enforce format consistency, prevent ID conflicts, and provide atomic file operations with validation.

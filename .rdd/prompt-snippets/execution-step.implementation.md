@@ -20,6 +20,56 @@ See the definitions in `.rdd/prompt-snippets/execution.md`
 
 
 
+## Examples: Managing Requirements During Implementation
+
+**IMPORTANT**: Never edit requirements.md directly. Always use requirement scripts.
+
+**Creating new requirements:**
+
+```bash
+# Add new user requirement
+python .rdd/src/actions/requirement_ur_create.py text="The system shall provide export to PDF format"
+
+# Add new technical requirement
+python .rdd/src/actions/requirement_tr_create.py text="The export module shall use the reportlab library"
+```
+
+**Modifying existing requirements:**
+
+```bash
+# Update user requirement
+python .rdd/src/actions/requirement_ur_modify.py id="UR-0042" text="The system shall export data in CSV and JSON formats"
+
+# Update technical requirement  
+python .rdd/src/actions/requirement_tr_modify.py id="TR-0015" text="The framework shall use Python 3.11 or higher"
+```
+
+**Deleting requirements:**
+
+```bash
+# Mark user requirement as deleted
+python .rdd/src/actions/requirement_ur_delete.py id="UR-0088"
+
+# Mark technical requirement as deleted
+python .rdd/src/actions/requirement_tr_delete.py id="TR-0052"
+```
+
+**Skipping validation (special cases only):**
+
+```bash
+# Create requirement without validation
+python .rdd/src/actions/requirement_ur_create.py text="See section 5.2 of external specification" validation=none
+```
+
+**Documenting requirement changes in implementation.md:**
+
+After running requirement scripts, document in your implementation file:
+- Which requirements were added/modified/deleted
+- Why the changes were made
+- How they relate to the prompt objectives
+
+
+
 
 
 

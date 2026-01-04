@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Web UI",
-    "prompt-id-sequence-next-value": 47,
+    "prompt-id-sequence-next-value": 48,
     "git-enabled": true,
     "prompts": [
         {
@@ -564,6 +564,18 @@
         {
             "prompt-id": "P-046",
             "prompt-title": "Requirements IDs",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": true,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "analysis-generated": true
+        },
+        {
+            "prompt-id": "P-047",
+            "prompt-title": "Requirements scripts",
             "state": "completed",
             "questionnaire-generated": true,
             "questionnaire-answered": true,

@@ -14,7 +14,7 @@ See the definitions in `.rdd/prompt-snippets/execution.md`
 
 4. Execute the modification instructions exactly as described in [MODIFICATION-FILE]. Along with the execution, add continuously information for the implementation details in [MODIFICATION-IMPLEMENTATION] on each step. Especially take care of adding the commands you run in a terminal! Do not log the content of the changed files.
 
-5. Update `.rdd-instance/specifications/requirements.md` following the instructions in `.rdd/conventions/requirements.convention.md` to reflect precisely the changes from the modification (if not reflected already).
+5. Update `.rdd-instance/specifications/requirements.md` using requirement scripts (see Requirements Management Rules in execution.md) to reflect precisely the changes from the modification (if not reflected already).
 
 
 

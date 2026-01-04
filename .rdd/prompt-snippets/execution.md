@@ -34,6 +34,46 @@
 - [TECHNICAL-DESIGN] is the file `.rdd-instance/specifications/technical-design.json`
 
 
+## Requirements Management Rules
+
+**CRITICAL - Requirements File Safety:**
+
+NEVER edit `.rdd-instance/specifications/requirements.md` directly. Always use the requirement management scripts to ensure format consistency and prevent data corruption.
+
+**Available Scripts:**
+
+Create new requirement:
+```bash
+python .rdd/src/actions/requirement_ur_create.py text="The system shall..."
+python .rdd/src/actions/requirement_tr_create.py text="The framework shall..."
+```
+
+Modify existing requirement:
+```bash
+python .rdd/src/actions/requirement_ur_modify.py id="UR-XXXX" text="Updated text..."
+python .rdd/src/actions/requirement_tr_modify.py id="TR-XXXX" text="Updated text..."
+```
+
+Delete requirement (marks as [DELETED]):
+```bash
+python .rdd/src/actions/requirement_ur_delete.py id="UR-XXXX"
+python .rdd/src/actions/requirement_tr_delete.py id="TR-XXXX"
+```
+
+**Validation:**
+- Default: Basic validation (10-2048 chars, contains "shall")
+- Skip validation: Add `validation=none` parameter
+
+**Examples:**
+```bash
+# Create with validation
+python .rdd/src/actions/requirement_ur_create.py text="The system shall export data in CSV format"
+
+# Create without validation (for special cases)
+python .rdd/src/actions/requirement_tr_create.py text="See external document XYZ" validation=none
+```
+
+
 ## Instructions - Follow these steps exactly:  
 
 1. **Read the registry**: Open and read the [WI-REGISTRY] file.
@@ -105,7 +145,7 @@
        - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
      * **FINAL ACTION**: Stop (do not continue with the next instructions here)
 
-10. Update [REQUIREMENTS] if needed. In all cases - write in the chat and in [IMPLEMENTATION] your rationale what is changed and if no changes - why.
+10. Update [REQUIREMENTS] if needed using requirement scripts (NEVER edit requirements.md directly - see Requirements Management Rules above). In all cases - write in the chat and in [IMPLEMENTATION] your rationale what is changed and if no changes - why.
 
 10. After all id finished, write in the chat "I am done with <execution-mode>". In case the execiution mode is modification - add the modification-id.
 
