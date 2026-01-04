@@ -2,6 +2,7 @@
 
 class SnippetAutocomplete {
     constructor(textareaId, snippetService) {
+        this.textareaId = textareaId;
         this.textarea = document.getElementById(textareaId);
         this.snippetService = snippetService;
         this.modal = null;
@@ -63,8 +64,9 @@ class SnippetAutocomplete {
      * Check if trigger sequence was typed
      */
     checkTrigger() {
-        const cursorPos = this.textarea.selectionStart;
-        const textBeforeCursor = this.textarea.value.substring(0, cursorPos);
+        const textarea = document.getElementById(this.textareaId) || this.textarea;
+        const cursorPos = textarea.selectionStart;
+        const textBeforeCursor = textarea.value.substring(0, cursorPos);
         
         // Find the last occurrence of the trigger sequence before cursor
         const lastTriggerIndex = textBeforeCursor.lastIndexOf(this.triggerSequence);
@@ -96,8 +98,9 @@ class SnippetAutocomplete {
      */
     async showModal(initialQuery = '') {
         try {
-            // Save cursor position
-            this.cursorPositionBeforeModal = this.textarea.selectionStart;
+            // Save cursor position (query fresh textarea in case of DOM refreshes)
+            const textarea = document.getElementById(this.textareaId) || this.textarea;
+            this.cursorPositionBeforeModal = textarea.selectionStart;
             
             // Load snippets
             await this.snippetService.loadSnippets();
@@ -231,9 +234,10 @@ class SnippetAutocomplete {
         }
         
         const snippet = this.selectedSnippet;
+        const textarea = document.getElementById(this.textareaId) || this.textarea;
         const cursorPos = this.cursorPositionBeforeModal;
-        const textBeforeCursor = this.textarea.value.substring(0, cursorPos);
-        const textAfterCursor = this.textarea.value.substring(cursorPos);
+        const textBeforeCursor = textarea.value.substring(0, cursorPos);
+        const textAfterCursor = textarea.value.substring(cursorPos);
         
         // Find if there's a [[[  before cursor that we should replace
         const lastTriggerIndex = textBeforeCursor.lastIndexOf(this.triggerSequence);
@@ -249,21 +253,21 @@ class SnippetAutocomplete {
         
         const newValue = newTextBefore + textAfterCursor;
         
-        // Update textarea
-        this.textarea.value = newValue;
+        // Update textarea (use fresh reference in case of auto-refresh)
+        textarea.value = newValue;
         
         // Set cursor position after inserted snippet
         const newCursorPos = newTextBefore.length;
-        this.textarea.setSelectionRange(newCursorPos, newCursorPos);
+        textarea.setSelectionRange(newCursorPos, newCursorPos);
         
         // Trigger input event
-        this.textarea.dispatchEvent(new Event('input', { bubbles: true }));
+        textarea.dispatchEvent(new Event('input', { bubbles: true }));
         
         // Close modal
         this.modalInstance.hide();
         
         // Focus back on textarea
-        this.textarea.focus();
+        textarea.focus();
     }
 
     /**
@@ -301,7 +305,8 @@ class SnippetAutocomplete {
      */
     trigger() {
         // Save current cursor position
-        this.cursorPositionBeforeModal = this.textarea.selectionStart;
+        const textarea = document.getElementById(this.textareaId) || this.textarea;
+        this.cursorPositionBeforeModal = textarea.selectionStart;
         
         // Clear any pending debounce
         clearTimeout(this.debounceTimer);

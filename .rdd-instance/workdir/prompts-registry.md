@@ -666,3 +666,45 @@ Scrolling Active Prompt and sticky header does not consider that the menu is als
 %%PROMPT P-056 "Active Page refreshes"
 In Active Prompt page - make the statuses and mode buttons to refresh (only them) on every 2 seconds automatically. No interruption of the user activities should be caused by this refreshes.
 %%ENDPROMPT
+
+%%PROMPT P-057 "Active Prompt modes icons"
+[[[ROLE_SOFTWARE_DEVELOPER]]]
+
+In Active Prompt - replace the current statuses icons with:
+
+questionnaire-generated
+false -> question-circle
+true -> question-circle-fill
+
+questionnaire-answered
+false -> clipboard-check
+true -> clipboard-check-fill
+
+analysis-generated
+false -> clipboard-data
+true -> clipboard-data-fill
+
+plan-generated
+false -> "bi bi-file-earmark-text"
+true -> "bi bi-file-earmark-text-fill"
+
+implementation-completed
+false -> file-code
+true -> file-code-fill
+
+executed
+false -> patch-check
+true -> patch-check-fill
+
+When false - the color should be gray, when true - green
+
+
+### Modification 001
+
+When hover over the icons, the tooltip appears but do not disappears. Fix this bug.
+
+
+### Modification 002
+
+In Insert Snippet modal, when press a snippet is chosen and press Insert - the snippet is not written in the prompt. Fix this bug and be careful not to break the auto-refreshes
+%%ENDPROMPT

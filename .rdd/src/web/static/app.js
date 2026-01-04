@@ -574,24 +574,24 @@ function updateWorkflowFlags(prompt) {
         'bi bi-question-circle-fill');
     updateFlag('flag-questionnaire-answered', 
         prompt['questionnaire-answered'] || false,
-        'bi bi-square',
-        'bi bi-check-square-fill');
+        'bi bi-clipboard-check',
+        'bi bi-clipboard-check-fill');
     updateFlag('flag-plan-generated', 
         prompt['plan-generated'] || false,
-        'bi bi-journal-text',
-        'bi bi-journal-check');
+        'bi bi-file-earmark-text',
+        'bi bi-file-earmark-text-fill');
     updateFlag('flag-analysis-generated', 
         prompt['analysis-generated'] || false,
         'bi bi-clipboard-data',
-        'bi bi-clipboard-check');
+        'bi bi-clipboard-data-fill');
     updateFlag('flag-implementation-completed', 
         prompt['implementation-completed'] || false,
-        'bi bi-code-slash',
-        'bi bi-check-circle-fill');
+        'bi bi-file-code',
+        'bi bi-file-code-fill');
     updateFlag('flag-executed', 
         prompt.executed || false,
-        'bi bi-play-circle',
-        'bi bi-play-circle-fill');
+        'bi bi-patch-check',
+        'bi bi-patch-check-fill');
     
     // Update modifications count (only show when > 0)
     const modificationsCount = prompt['modifications-count'] || 0;
@@ -624,6 +624,11 @@ function updateWorkflowFlags(prompt) {
     // Re-initialize Bootstrap tooltips for the flag elements
     const tooltipTriggerList = [].slice.call(document.querySelectorAll('.flag-icon[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+        // Dispose existing tooltip instance if present to avoid multiple instances
+        const existing = bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+        if (existing) {
+            try { existing.dispose(); } catch (e) { /* ignore dispose errors */ }
+        }
         new bootstrap.Tooltip(tooltipTriggerEl);
     });
 }
