@@ -662,3 +662,7 @@ Remove the empty "File Viewer" element at the bottom of Workdir page
 %%PROMPT P-055 "Active Prompt Sticky Header Fix"
 Scrolling Active Prompt and sticky header does not consider that the menu is also fixed and hides under it. Fix so not hiding to appear.
 %%ENDPROMPT
+
+%%PROMPT P-056 "Active Page refreshes"
+In Active Prompt page - make the statuses and mode buttons to refresh (only them) on every 2 seconds automatically. No interruption of the user activities should be caused by this refreshes.
+%%ENDPROMPT

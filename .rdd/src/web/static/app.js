@@ -31,6 +31,8 @@ async function initializeApp() {
         // Load initial data
         await loadRegistry();
         await loadActivePrompt();
+        // Start background refresh of active prompt statuses and mode buttons
+        startActivePromptRefresh();
         
         showAlert('success', 'Application initialized successfully');
     } catch (error) {
@@ -625,6 +627,74 @@ function updateWorkflowFlags(prompt) {
         new bootstrap.Tooltip(tooltipTriggerEl);
     });
 }
+
+// --- Active Prompt Background Refresh ---
+let activePromptRefreshIntervalId = null;
+
+function isUserInteractingWithActivePrompt() {
+    // If any modal is open, consider user interacting
+    if (document.querySelector('.modal.show')) return true;
+
+    // If any element inside active-prompt-content is focused (e.g., typing), suppress updates
+    const activeContainer = document.getElementById('active-prompt-content');
+    if (!activeContainer) return false;
+    const activeEl = document.activeElement;
+    if (!activeEl) return false;
+    return activeContainer.contains(activeEl);
+}
+
+async function refreshActivePromptStatuses() {
+    try {
+        if (isUserInteractingWithActivePrompt()) return; // partial suppression per questionnaire
+
+        const response = await fetch('/api/registry');
+        const result = await response.json();
+
+        if (!result || !result.success) return;
+
+        const registry = result.data;
+        if (!registry || !registry.prompts) return;
+
+        const activePrompt = registry.prompts.find(p => p.state === 'active');
+        if (!activePrompt) return;
+
+        // Update flags (only updates the DOM for flags)
+        updateWorkflowFlags(activePrompt);
+
+        // Update execution-mode radio/buttons (targeted update)
+        const currentMode = activePrompt['execution-mode'] || getSmartDefaultMode(activePrompt);
+        // Try to set radio by id convention `mode-<mode>`
+        const modeRadio = document.getElementById(`mode-${currentMode}`);
+        if (modeRadio) {
+            modeRadio.checked = true;
+        } else {
+            // Fallback: set inputs named execution-mode if present
+            const radios = document.querySelectorAll('input[name="execution-mode"]');
+            radios.forEach(r => r.checked = (r.id === `mode-${currentMode}` || r.value === currentMode));
+        }
+
+        // Update complete button enabled state silently
+        const executed = activePrompt.executed || false;
+        const completeBtn = document.getElementById('complete-prompt-btn');
+        if (completeBtn) {
+            completeBtn.disabled = !executed;
+            completeBtn.title = executed ? 'Mark this prompt as completed' : 'Prompt must be executed first';
+        }
+    } catch (err) {
+        console.warn('Active prompt refresh failed:', err);
+    }
+}
+
+function startActivePromptRefresh() {
+    // Fixed 2s interval per questionnaire selection
+    if (activePromptRefreshIntervalId) {
+        clearInterval(activePromptRefreshIntervalId);
+    }
+    // Run immediately once, then every 2s
+    refreshActivePromptStatuses();
+    activePromptRefreshIntervalId = setInterval(refreshActivePromptStatuses, 2000);
+}
+
 
 /**
  * Update execution mode for active prompt
