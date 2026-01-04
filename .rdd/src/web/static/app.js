@@ -1455,6 +1455,39 @@ function getFolderSuffix(promptId) {
 }
 
 /**
+ * Copy execute command text to clipboard
+ */
+async function copyExecuteCommand() {
+    const textToCopy = "Follow the instructions in file `.rdd/prompt-snippets/execution.md`";
+    const button = document.getElementById('copy-execute-cmd-btn');
+    
+    if (!button) {
+        return;
+    }
+    
+    try {
+        // Copy to clipboard using the Clipboard API
+        await navigator.clipboard.writeText(textToCopy);
+        
+        // Store original button content
+        const originalHTML = button.innerHTML;
+        
+        // Change button to show "Copied!" with checkmark
+        button.innerHTML = '<i class="bi bi-check-lg"></i> Copied!';
+        button.disabled = true;
+        
+        // Revert button back to original after 2 seconds
+        setTimeout(() => {
+            button.innerHTML = originalHTML;
+            button.disabled = false;
+        }, 2000);
+        
+    } catch (error) {
+        showAlert('danger', 'Failed to copy to clipboard: ' + error.message);
+    }
+}
+
+/**
  * Complete the active prompt
  */
 async function completeActivePrompt() {

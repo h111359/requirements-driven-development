@@ -523,3 +523,7 @@ Only the active Execution mode button should have solid backgroud. The rest shou
 Create New Prompt button should remain only when there is no active prompt (all are completed or there are no prompts yet)
 When there is Active Prompt, the New button should not appear. On its place move the Mod button. Mod button should be renamed to Create Modification.
 %%ENDPROMPT
+
+%%PROMPT P-044 "Execute command clipboard"
+Create a button in in Active Prompt which copies in the clipboard the text, which can be pasted directly in copilot chat for execution: "Follow the instructions in file `.rdd/prompt-snippets/execution.md`". The aim is this prompt to be used to trigger the execution command.
+%%ENDPROMPT
