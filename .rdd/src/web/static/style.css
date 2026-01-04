@@ -595,3 +595,25 @@ input[name="execution-mode"].btn-check:checked + label.btn-primary {
         font-size: 1.25rem;
     }
 }
+
+/* Auto-save spinner animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+    display: inline-block;
+}
+
+/* Save status styling */
+#prompt-save-status {
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+

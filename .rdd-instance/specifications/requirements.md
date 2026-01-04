@@ -218,6 +218,12 @@ The framework enables:
 
 - [UR-0088] [DELETED]
 
+- [UR-0089] The Web UI shall automatically save changes to prompt.md without requiring manual save button clicks, using a combination of debounced auto-save (after 2 seconds of typing inactivity) and immediate save on blur events.
+
+- [UR-0090] The Web UI shall automatically save changes to prompt.md without requiring manual save button clicks, using a combination of debounced auto-save (after 2 seconds of typing inactivity) and immediate save on blur events.
+
+
+
 
 
 
@@ -366,7 +372,7 @@ The framework enables:
 
 - [TR-0071] The prompt editor shall load prompt files from the prompt's working folder (workdir/<prompt-id>_<prompt-title>/) and display their contents in monospace textareas within the appropriate tabs.
 
-- [TR-0072] The prompt editor shall provide individual Save buttons for prompt.md, plan.md, and questionnaire.md files that persist changes back to the file system when clicked.
+- [TR-0072] The prompt editor shall provide individual Save buttons for plan.md and questionnaire.md files that persist changes back to the file system when clicked, while prompt.md uses automatic save functionality.
 
 - [TR-0073] The implementation.md file in the prompt editor shall be displayed as read-only in all cases.
 
@@ -550,3 +556,15 @@ The framework enables:
 - [TR-0156] Requirement ID generation shall scan requirements.md using regex pattern `\[(UR|TR)-(\d{4})\]` to extract existing IDs and calculate the next available ID per category.
 
 - [TR-0157] The framework shall provide deterministic Python scripts for requirement management (requirement_ur_create.py, requirement_ur_modify.py, requirement_ur_delete.py, requirement_tr_create.py, requirement_tr_modify.py, requirement_tr_delete.py) that enforce format consistency, prevent ID conflicts, and provide atomic file operations with validation.
+
+- [TR-0158] The prompt.md editor shall implement auto-save using a 2-second debounce delay combined with immediate save on textarea blur events, with deduplication to prevent saving unchanged content.
+
+- [TR-0159] The prompt.md editor shall display a dynamic status indicator showing the current save state (Editing, Saving, Saved, Error) instead of a manual save button.
+
+- [TR-0160] The prompt.md auto-save shall run snippet validation asynchronously and display validation results (invalid snippet count) in the status indicator without blocking the save operation.
+
+- [TR-0161] The prompt.md auto-save error state shall provide a manual retry option via a clickable link in the status indicator.
+
+
+
+

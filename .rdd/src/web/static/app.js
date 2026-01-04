@@ -784,6 +784,9 @@ async function loadActivePromptFiles(promptId) {
         if (typeof initializeSnippetAutocomplete === 'function') {
             initializeSnippetAutocomplete();
         }
+        
+        // Setup auto-save for prompt.md
+        setupPromptAutoSave();
     } catch (error) {
         console.error('Error loading prompt files:', error);
         showAlert('warning', 'Some prompt files could not be loaded');
@@ -874,6 +877,193 @@ async function saveActivePromptFile(filename) {
     } catch (error) {
         showAlert('danger', `Failed to save ${filename}: ` + error.message);
     }
+}
+
+/**
+ * Auto-save state management
+ */
+let promptAutoSaveTimeout = null;
+let promptSaveInProgress = false;
+let promptLastSaveHash = null;
+let promptValidationCache = { valid: true, invalidKeys: [] };
+
+/**
+ * Setup auto-save for prompt.md textarea
+ */
+function setupPromptAutoSave() {
+    const textarea = document.getElementById('active-editor-prompt-md');
+    if (!textarea) {
+        console.warn('Prompt textarea not found for auto-save setup');
+        return;
+    }
+    
+    // Clear any existing listeners by cloning the element
+    const newTextarea = textarea.cloneNode(true);
+    textarea.parentNode.replaceChild(newTextarea, textarea);
+    
+    // Add input event for debounced auto-save
+    newTextarea.addEventListener('input', function() {
+        updatePromptSaveStatus('typing');
+        triggerPromptAutoSave();
+    });
+    
+    // Add blur event for immediate save on focus loss
+    newTextarea.addEventListener('blur', function() {
+        triggerPromptAutoSave(true); // Immediate save on blur
+    });
+    
+    // Initialize save status
+    updatePromptSaveStatus('saved');
+    
+    // Store initial content hash
+    promptLastSaveHash = hashString(newTextarea.value);
+}
+
+/**
+ * Trigger auto-save with debouncing
+ */
+function triggerPromptAutoSave(immediate = false) {
+    // Clear existing timeout
+    if (promptAutoSaveTimeout) {
+        clearTimeout(promptAutoSaveTimeout);
+        promptAutoSaveTimeout = null;
+    }
+    
+    // If immediate, save right away
+    if (immediate) {
+        performPromptAutoSave();
+    } else {
+        // Debounce: wait 2 seconds after last keystroke
+        promptAutoSaveTimeout = setTimeout(() => {
+            performPromptAutoSave();
+        }, 2000);
+    }
+}
+
+/**
+ * Perform the actual auto-save operation
+ */
+async function performPromptAutoSave() {
+    if (promptSaveInProgress) {
+        console.log('Save already in progress, skipping...');
+        return;
+    }
+    
+    const textarea = document.getElementById('active-editor-prompt-md');
+    if (!textarea) {
+        return;
+    }
+    
+    const content = textarea.value;
+    const contentHash = hashString(content);
+    
+    // Skip save if content hasn't changed
+    if (contentHash === promptLastSaveHash) {
+        console.log('Content unchanged, skipping save');
+        return;
+    }
+    
+    promptSaveInProgress = true;
+    updatePromptSaveStatus('saving');
+    
+    try {
+        // Run async validation (non-blocking)
+        if (typeof snippetService !== 'undefined') {
+            try {
+                await snippetService.loadSnippets();
+                const invalidKeys = snippetService.validateSnippetKeys(content);
+                promptValidationCache = {
+                    valid: invalidKeys.length === 0,
+                    invalidKeys: invalidKeys
+                };
+            } catch (error) {
+                console.warn('Snippet validation failed:', error);
+                promptValidationCache = { valid: true, invalidKeys: [] };
+            }
+        }
+        
+        // Perform the save
+        const filepath = `${currentPromptFolder}/prompt.md`;
+        const response = await fetch('/api/file/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                filepath: filepath,
+                content: content
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            promptLastSaveHash = contentHash;
+            updatePromptSaveStatus('saved');
+        } else {
+            updatePromptSaveStatus('error', result.error || 'Unknown error');
+        }
+    } catch (error) {
+        console.error('Auto-save failed:', error);
+        updatePromptSaveStatus('error', error.message);
+    } finally {
+        promptSaveInProgress = false;
+    }
+}
+
+/**
+ * Update the save status indicator
+ */
+function updatePromptSaveStatus(status, errorMessage = '') {
+    const statusElement = document.getElementById('prompt-save-status');
+    if (!statusElement) {
+        console.warn('Save status element not found');
+        return;
+    }
+    
+    const validationInfo = !promptValidationCache.valid 
+        ? ` (${promptValidationCache.invalidKeys.length} invalid snippet${promptValidationCache.invalidKeys.length > 1 ? 's' : ''})`
+        : '';
+    
+    switch (status) {
+        case 'typing':
+            statusElement.innerHTML = '<span class="text-muted"><i class="bi bi-pencil"></i> Editing...</span>';
+            break;
+        case 'saving':
+            statusElement.innerHTML = '<span class="text-primary"><i class="bi bi-arrow-repeat spin"></i> Saving...</span>';
+            break;
+        case 'saved':
+            if (promptValidationCache.valid) {
+                statusElement.innerHTML = '<span class="text-success"><i class="bi bi-check-circle"></i> Saved</span>';
+            } else {
+                statusElement.innerHTML = `<span class="text-warning"><i class="bi bi-exclamation-triangle"></i> Saved${validationInfo}</span>`;
+            }
+            break;
+        case 'error':
+            statusElement.innerHTML = `<span class="text-danger"><i class="bi bi-x-circle"></i> Error: ${errorMessage} <a href="#" onclick="retryPromptSave(); return false;" class="text-decoration-underline">Retry</a></span>`;
+            break;
+    }
+}
+
+/**
+ * Retry save on error
+ */
+function retryPromptSave() {
+    performPromptAutoSave();
+}
+
+/**
+ * Simple string hash function for change detection
+ */
+function hashString(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32-bit integer
+    }
+    return hash;
 }
 
 /**

@@ -615,3 +615,7 @@ After that the existing requirements file should be updated with the new format.
 - Target file: `.rdd-instance/specifications/requirements.md`
 - Execution orchestration: `.rdd/prompt-snippets/execution.md`
 %%ENDPROMPT
+
+%%PROMPT P-048 "Prompt text saved automatically"
+Make the prompt text to be saved automatically without the need to press save button
+%%ENDPROMPT

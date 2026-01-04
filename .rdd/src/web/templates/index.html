@@ -291,9 +291,9 @@
                                                         title="Insert snippet key (or type [[[)">
                                                     <i class="bi bi-puzzle"></i> Insert Snippet
                                                 </button>
-                                                <button class="btn btn-success" onclick="saveActivePromptFile('prompt.md')">
-                                                    <i class="bi bi-save"></i> Save Prompt
-                                                </button>
+                                                <span id="prompt-save-status" class="ms-2">
+                                                    <span class="text-muted"><i class="bi bi-info-circle"></i> Auto-save enabled</span>
+                                                </span>
                                             </div>
                                             <div class="tab-pane fade" id="active-questionnaire-content-tab" role="tabpanel">
                                                 <!-- Dynamic questionnaire container - renders JSON or MD -->
