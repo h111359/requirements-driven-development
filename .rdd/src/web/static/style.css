@@ -207,20 +207,41 @@ textarea.form-control {
     font-size: 0.8rem;
 }
 
-/* Execution mode buttons - consistent color scheme */
-input[name="execution-mode"].btn-check:checked + label.btn {
-    background-color: var(--rdd-primary);
-    border-color: var(--rdd-primary);
-    color: white;
-}
-
-input[name="execution-mode"].btn-check + label.btn {
+/* Execution mode buttons - clear active/inactive distinction */
+/* Inactive buttons: outlined style */
+input[name="execution-mode"].btn-check + label.btn-primary {
+    background-color: transparent;
+    border-color: #0d6efd;
+    color: #0d6efd;
     transition: all 0.2s ease-in-out;
 }
 
-input[name="execution-mode"].btn-check + label.btn:hover {
+input[name="execution-mode"].btn-check + label.btn-primary:hover {
     background-color: rgba(13, 110, 253, 0.1);
-    border-color: #6c757d;
+    border-color: #0d6efd;
+    color: #0d6efd;
+}
+
+/* Active button: solid background */
+input[name="execution-mode"].btn-check:checked + label.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.5);
+}
+
+/* Responsive behavior for control panel */
+@media (max-width: 768px) {
+    .sticky-controls-panel .d-flex {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .sticky-controls-panel > div > div:last-child {
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
 }
 
 /* Compact accordion for questionnaire */

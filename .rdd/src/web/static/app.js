@@ -744,7 +744,7 @@ async function updateExecutionMode(mode) {
         const result = await response.json();
         
         if (result.success) {
-            showAlert('success', `Execution mode set to: ${mode}`);
+            // Silent success - visual feedback from button state is sufficient
             await loadRegistry();
         } else {
             showAlert('danger', 'Failed to update execution mode: ' + (result.error || result.stderr));
@@ -1991,6 +1991,8 @@ async function createModification() {
         
         if (result.success) {
             showAlert('success', 'Modification created successfully');
+            // Immediately set execution mode to modification
+            await updateExecutionMode('modification');
             // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('addModificationModal'));
             modal.hide();

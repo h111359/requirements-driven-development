@@ -11,12 +11,14 @@ Usage:
 
 Modes:
     no-action    - No execution action
-    analyze      - Generate questionnaire
+    clarify      - Generate questionnaire to clarify ambiguous or missing information
+    analyze      - Generate analysis with copilot review, best practices, and proposals
     plan         - Generate plan
     implement    - Execute implementation
     modification - Execute a modification (only available after implementation-completed=true)
 
 Example:
+    python prompt_set_execution_mode.py mode=clarify
     python prompt_set_execution_mode.py mode=analyze
     python prompt_set_execution_mode.py mode=plan prompt-id=P-003
 """
@@ -26,7 +28,7 @@ import os
 import sys
 
 
-VALID_MODES = ['no-action', 'analyze', 'plan', 'implement', 'modification']
+VALID_MODES = ['no-action', 'clarify', 'analyze', 'plan', 'implement', 'modification']
 
 
 def find_active_prompt(prompts):

@@ -114,25 +114,17 @@
                             <div id="active-prompt-content" style="display:none;">
                                 <!-- Sticky Control Panel -->
                                 <div class="sticky-controls-panel">
-                                    <div class="row g-2 align-items-center">
-                                        <!-- Action Buttons -->
-                                        <div class="col-md-4">
-                                            <div class="d-flex gap-1 flex-wrap">
-                                                <button class="btn btn-sm btn-success" onclick="showCreatePromptModal()" title="Create New Prompt">
-                                                    <i class="bi bi-plus-circle"></i> New
-                                                </button>
-                                                <button class="btn btn-sm btn-primary" id="add-modification-btn" onclick="showAddModificationModal()" disabled title="Add Modification">
-                                                    <i class="bi bi-plus-circle"></i> Mod
-                                                </button>
-                                                <button class="btn btn-sm btn-success" id="complete-prompt-btn" onclick="completeActivePrompt()" disabled title="Complete Prompt">
-                                                    <i class="bi bi-check-lg"></i> Complete
-                                                </button>
-                                            </div>
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <!-- Region 1: New Button (left) -->
+                                        <div>
+                                            <button class="btn btn-sm btn-primary" onclick="showCreatePromptModal()" title="Create New Prompt">
+                                                <i class="bi bi-plus-circle"></i> New
+                                            </button>
                                         </div>
                                         
-                                        <!-- Execution Mode -->
-                                        <div class="col-md-8">
-                                            <div class="d-flex gap-1 flex-wrap">
+                                        <!-- Region 2: Execution Mode Buttons (center, flex-grow) -->
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex gap-1 flex-wrap justify-content-center">
                                                 <!-- No Action -->
                                                 <div class="d-flex flex-column align-items-center">
                                                     <div class="mb-1" style="height: 20px; font-size: 0.99rem;">
@@ -140,7 +132,7 @@
                                                     </div>
                                                     <div>
                                                         <input type="radio" class="btn-check" name="execution-mode" id="mode-no-action" value="no-action" autocomplete="off">
-                                                        <label class="btn btn-outline-secondary btn-sm" for="mode-no-action" onclick="updateExecutionMode('no-action')">
+                                                        <label class="btn btn-primary btn-sm" for="mode-no-action" onclick="updateExecutionMode('no-action')">
                                                             No Action
                                                         </label>
                                                     </div>
@@ -158,7 +150,7 @@
                                                     </div>
                                                     <div>
                                                         <input type="radio" class="btn-check" name="execution-mode" id="mode-clarify" value="clarify" autocomplete="off">
-                                                        <label class="btn btn-outline-secondary btn-sm" for="mode-clarify" onclick="updateExecutionMode('clarify')">
+                                                        <label class="btn btn-primary btn-sm" for="mode-clarify" onclick="updateExecutionMode('clarify')">
                                                             Clarify
                                                         </label>
                                                     </div>
@@ -173,7 +165,7 @@
                                                     </div>
                                                     <div>
                                                         <input type="radio" class="btn-check" name="execution-mode" id="mode-analyze" value="analyze" autocomplete="off">
-                                                        <label class="btn btn-outline-secondary btn-sm" for="mode-analyze" onclick="updateExecutionMode('analyze')">
+                                                        <label class="btn btn-primary btn-sm" for="mode-analyze" onclick="updateExecutionMode('analyze')">
                                                             Analyze
                                                         </label>
                                                     </div>
@@ -188,7 +180,7 @@
                                                     </div>
                                                     <div>
                                                         <input type="radio" class="btn-check" name="execution-mode" id="mode-plan" value="plan" autocomplete="off">
-                                                        <label class="btn btn-outline-secondary btn-sm" for="mode-plan" onclick="updateExecutionMode('plan')">
+                                                        <label class="btn btn-primary btn-sm" for="mode-plan" onclick="updateExecutionMode('plan')">
                                                             Plan
                                                         </label>
                                                     </div>
@@ -206,7 +198,7 @@
                                                     </div>
                                                     <div>
                                                         <input type="radio" class="btn-check" name="execution-mode" id="mode-implement" value="implement" autocomplete="off">
-                                                        <label class="btn btn-outline-secondary btn-sm" for="mode-implement" onclick="updateExecutionMode('implement')">
+                                                        <label class="btn btn-primary btn-sm" for="mode-implement" onclick="updateExecutionMode('implement')">
                                                             Implement
                                                         </label>
                                                     </div>
@@ -224,12 +216,22 @@
                                                     </div>
                                                     <div>
                                                         <input type="radio" class="btn-check" name="execution-mode" id="mode-modification" value="modification" autocomplete="off">
-                                                        <label class="btn btn-outline-secondary btn-sm" for="mode-modification" onclick="updateExecutionMode('modification')">
+                                                        <label class="btn btn-primary btn-sm" for="mode-modification" onclick="updateExecutionMode('modification')">
                                                             Modification
                                                         </label>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                        
+                                        <!-- Region 3: Workflow Action Buttons (right) -->
+                                        <div class="d-flex gap-1">
+                                            <button class="btn btn-sm btn-primary" id="add-modification-btn" onclick="showAddModificationModal()" disabled title="Add Modification">
+                                                <i class="bi bi-plus-circle"></i> Mod
+                                            </button>
+                                            <button class="btn btn-sm btn-primary" id="complete-prompt-btn" onclick="completeActivePrompt()" disabled title="Complete Prompt">
+                                                <i class="bi bi-check-lg"></i> Complete
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

@@ -504,3 +504,17 @@ Reorder the files tabs in Active Prompt page to follow the order of the executio
 
 Reflect the changes in the modifications in requirements.md file
 %%ENDPROMPT
+
+%%PROMPT P-042 "Active Prompt page design chage"
+On Active Prompt page:
+- move Complete button to most right on the banner
+- move Mod button after the execution mode statuses group
+- Change the color of all buttons to blue, including the execution modes buttons. 
+- Stop showing message when I change the execution mode
+- When a new modification is created - set the execution mode to Modification automatically
+
+
+### Modification 001
+
+Only the active Execution mode button should have solid backgroud. The rest should negate the colors so to be very clear which mode is the active one
+%%ENDPROMPT
