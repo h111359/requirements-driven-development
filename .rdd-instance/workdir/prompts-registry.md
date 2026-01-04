@@ -658,3 +658,7 @@ As both View button and clicking on the name of the prompt open the modal, one o
 
 Remove the empty "File Viewer" element at the bottom of Workdir page
 %%ENDPROMPT
+
+%%PROMPT P-055 "Active Prompt Sticky Header Fix"
+Scrolling Active Prompt and sticky header does not consider that the menu is also fixed and hides under it. Fix so not hiding to appear.
+%%ENDPROMPT

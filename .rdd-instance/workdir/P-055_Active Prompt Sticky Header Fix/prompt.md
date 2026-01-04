@@ -1,0 +1,1 @@
+Scrolling Active Prompt and sticky header does not consider that the menu is also fixed and hides under it. Fix so not hiding to appear.
