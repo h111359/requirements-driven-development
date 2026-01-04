@@ -31,8 +31,10 @@ Each requirement follows this format:
 ### Components:
 
 - **Prefix**: Section identifier (UR, TR)
-- **ID**: The timestamp of creation of the requirement entry in format YYYYMMDD-HHmm whre YYYY is the year, MM - month, DD - day, HH - 24 format hour, mm - minutes. Example 20251224-0913
+- **ID**: 4-digit zero-padded sequential number starting from 0001 (e.g., 0001, 0042, 0183, 1247). The next available ID is determined by scanning the requirements file to find the highest existing ID in each category (UR, TR) and incrementing by 1. This ensures uniqueness without requiring separate state tracking. Valid format regex: `\[(UR|TR)-(\d{4})\]`
 - **Description**: Detailed description of the requirement. Complete requirement statement using "shall" language
+
+**ID Padding Rationale**: 4-digit padding supports up to 9999 requirements per category while ensuring consistent visual alignment in documents and diffs.
 
 
 ## Section Categories
@@ -43,8 +45,8 @@ User perspective requirements. High-level capabilities and features of the syste
 **Examples:**
 
 ```markdown
-- [UR-20251224-0901] The system shall allow users to upload files up to 100MB
-- [UR-20251224-0902] The system shall export data in CSV format with UTF-8 encoding
+- [UR-0001] The system shall allow users to upload files up to 100MB
+- [UR-0002] The system shall export data in CSV format with UTF-8 encoding
 ```
 
 
@@ -54,8 +56,8 @@ High-level principles for design of the system as well as technology stack and i
 **Examples:**
 
 ```markdown
-- [TR-20251224-0901] The system shall use Python 3.11 or higher
-- [TR-20251224-0902] The framework shall use PostgreSQL 15+ as the database
+- [TR-0001] The system shall use Python 3.11 or higher
+- [TR-0002] The framework shall use PostgreSQL 15+ as the database
 ```
 
 
@@ -75,22 +77,22 @@ High-level principles for design of the system as well as technology stack and i
 ### 3. One Requirement Per Line
 
 ✅ **Good:** 
-- `[UR-20251224-0901] Max 100MB`
-- `[UR-20251224-0902] Accept PDF, DOC, DOCX only`
+- `[UR-0001] Max 100MB`
+- `[UR-0002] Accept PDF, DOC, DOCX only`
 
 ❌ **Bad:**
-- `[UR-20251224-0901] Max 100MB, PDF/DOC/DOCX only`
+- `[UR-0001] Max 100MB, PDF/DOC/DOCX only`
 
 ### 4. Avoid Implementation Details in UR
 
 Implementation belongs in Technical Requirements (TR).
 
 ✅ **Good:**
-- `[UR-20251224-0901] Export data in structured format`
-- `[TR-20251224-0901] Use JSON serialization with UTF-8 encoding`
+- `[UR-0001] Export data in structured format`
+- `[TR-0001] Use JSON serialization with UTF-8 encoding`
 
 ❌ **Bad:**
-- `[UR-20251224-0901] Export data using JSON serialization`
+- `[UR-0001] Export data using JSON serialization`
 
 
 
@@ -110,5 +112,5 @@ In `requirements.md`, use these prefixes:
 ### [DELETED]
 Remove existing requirement (must include existing ID). Example:
 ```markdown
-- [UR-20251224-0912] [DELETED] 
+- [UR-0123] [DELETED] 
 ```

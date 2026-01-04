@@ -549,3 +549,11 @@ Change the icon for Implementation completed = true with negated colors as it is
 
 When there are modifications already executed but not in modification mode, over the status mode stand only a single digit, which is not clear what it is. Make it more clear that this are the number of modifications executed so far
 %%ENDPROMPT
+
+%%PROMPT P-046 "Requirements IDs"
+Find the best way to generate the requirements id in the file `.rdd-instance/specifications/requirements.md`
+
+The convention file `.rdd/conventions/requirements.convention.md` should be modified as well.
+
+After that the existing requirements file should be updated with the new format.
+%%ENDPROMPT
