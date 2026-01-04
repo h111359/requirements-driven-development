@@ -450,3 +450,20 @@ Instead of form in the page - leave the button only and creation should be made 
 %%PROMPT P-039 "Requirements tab"
 Instead of invoked with a button in Workdir page, move requirements to a new menu tab page named "Requirements"
 %%ENDPROMPT
+
+%%PROMPT P-040 "Active Prompt Flags"
+In Active Prompt page in the buttons row add an icon for indication of each of the boolean flags:
+      "questionnaire-generated",
+      "questionnaire-answered",
+      "plan-generated",
+      "implementation-completed",
+      "executed"
+As well add there also the values (with short label) for:
+      "modifications-count",
+      "current-modification-id"
+
+
+### Modification 001
+
+The icons of the flags should be different and to resemble the meaning of the flag
+%%ENDPROMPT

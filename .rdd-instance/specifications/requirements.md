@@ -206,6 +206,8 @@ The framework enables:
 
 - [UR-20260103-1700] The Web UI Active Prompt page shall control tab visibility based on workflow state instead of displaying status badges, showing the Questionnaire tab only when questionnaire-generated is true, the Plan tab only when plan-generated is true, the Modifications tab only when executed is true, while keeping the Prompt and Implementation tabs always visible.
 
+- [UR-20260104-1400] The Web UI Active Prompt page shall display visual indicators for prompt workflow state flags in the buttons row area, showing the status of questionnaire-generated, questionnaire-answered, plan-generated, implementation-completed, and executed boolean flags, as well as displaying modifications-count and current-modification-id values with short labels to provide immediate visibility of the prompt's lifecycle state without requiring navigation through tabs or registry inspection.
+
 
 
 ## Technical Requirements

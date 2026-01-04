@@ -560,6 +560,9 @@ async function loadActivePrompt() {
         addModificationBtn.title = implementationCompleted ? 'Create a modification for small corrections' : 'Available after implementation completed';
     }
     
+    // Update workflow status flags
+    updateWorkflowFlags(activePrompt);
+    
     // Update tab visibility based on workflow state
     updateTabVisibility(activePrompt);
     
@@ -629,6 +632,82 @@ function updateTabVisibility(prompt) {
     if (modificationsTabLi) {
         modificationsTabLi.style.display = executed ? '' : 'none';
     }
+}
+
+/**
+ * Update workflow status flags for active prompt
+ */
+function updateWorkflowFlags(prompt) {
+    // Helper function to update a flag icon with semantic icons
+    function updateFlag(flagId, isActive, inactiveIcon, activeIcon) {
+        const flagElement = document.getElementById(flagId);
+        if (flagElement) {
+            const icon = flagElement.querySelector('i');
+            if (icon) {
+                if (isActive) {
+                    icon.className = activeIcon + ' text-success';
+                } else {
+                    icon.className = inactiveIcon + ' text-secondary';
+                }
+            }
+        }
+    }
+    
+    // Update boolean flags with semantic icons
+    updateFlag('flag-questionnaire-generated', 
+        prompt['questionnaire-generated'] || false,
+        'bi bi-question-circle',
+        'bi bi-question-circle-fill');
+    updateFlag('flag-questionnaire-answered', 
+        prompt['questionnaire-answered'] || false,
+        'bi bi-square',
+        'bi bi-check-square-fill');
+    updateFlag('flag-plan-generated', 
+        prompt['plan-generated'] || false,
+        'bi bi-list-ul',
+        'bi bi-list-check');
+    updateFlag('flag-implementation-completed', 
+        prompt['implementation-completed'] || false,
+        'bi bi-code-slash',
+        'bi bi-code-square');
+    updateFlag('flag-executed', 
+        prompt.executed || false,
+        'bi bi-play-circle',
+        'bi bi-play-circle-fill');
+    
+    // Update modifications count (only show when > 0)
+    const modificationsCount = prompt['modifications-count'] || 0;
+    const modificationsCountElement = document.getElementById('flag-modifications-count');
+    const modificationsCountValue = document.getElementById('modifications-count-value');
+    if (modificationsCountElement && modificationsCountValue) {
+        if (modificationsCount > 0) {
+            modificationsCountValue.textContent = modificationsCount;
+            modificationsCountElement.style.display = 'inline';
+        } else {
+            modificationsCountElement.style.display = 'none';
+        }
+    }
+    
+    // Update current modification ID (only show when not null)
+    const currentModificationId = prompt['current-modification-id'];
+    const currentModificationElement = document.getElementById('flag-current-modification');
+    const currentModificationValue = document.getElementById('current-modification-value');
+    if (currentModificationElement && currentModificationValue) {
+        if (currentModificationId !== null && currentModificationId !== undefined) {
+            // Format with leading zeros (e.g., "001", "023")
+            const formattedId = String(currentModificationId).padStart(3, '0');
+            currentModificationValue.textContent = formattedId;
+            currentModificationElement.style.display = 'inline';
+        } else {
+            currentModificationElement.style.display = 'none';
+        }
+    }
+    
+    // Re-initialize Bootstrap tooltips for the flag elements
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('.flag-icon[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+        new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 }
 
 /**

@@ -61,41 +61,41 @@
 9. Read the `execution-mode` attribute of the active prompt from [WI-REGISTRY]. Based on the value:
    
    * If `execution-mode` is `"no-action"`:
-     * Write in the chat "No action mode selected"
-     * Stop execution and inform the user to set a different execution mode via the Web UI or CLI
+     * **FIRST ACTION**:  Write in the chat "No action mode selected"
+     * **FINAL ACTION**: Stop execution and inform the user to set a different execution mode via the Web UI or CLI
    
    * If `execution-mode` is `"analyze"`:
-     * Write in the chat "Analyze mode"
-     * Follow the instructions in `.rdd/prompt-snippets/execution-step.analyze.md`
-     * After analyze execution is completed:
+     * **FIRST ACTION**: Write in the chat "Analyze mode"
+     * **SECOND ACTION**: Follow the instructions in `.rdd/prompt-snippets/execution-step.analyze.md`
+     * **AFTER**: After analyze execution is completed:
        - Execute `.rdd/src/actions/prompt_questionnaire_generated_on.py`
        - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
-     * Stop (do not continue with the next instructions here)
+     * **FINAL ACTION**: Stop (do not continue with the next instructions here)
    
    * If `execution-mode` is `"plan"`:
-     * Write in the chat "Plan mode"
-     * Follow the instructions in `.rdd/prompt-snippets/execution-step.plan.md`
-     * After plan execution is completed:
+     * **FIRST ACTION**: Write in the chat "Plan mode"
+     * **SECOND ACTION**: Follow the instructions in `.rdd/prompt-snippets/execution-step.plan.md`
+     * **AFTER**: After plan execution is completed:
        - Execute `.rdd/src/actions/prompt_plan_generated_on.py`
        - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
-     * Stop (do not continue with the next instructions here - do not execute implementation step)
+     * **FINAL ACTION**: Stop (do not continue with the next instructions here - do not execute implementation step)
    
    * If `execution-mode` is `"implement"`:
-     * Write in the chat "Implementation mode"
-     * Follow the instructions in `.rdd/prompt-snippets/execution-step.implementation.md`
-     * After implementation is completed:
+     * **FIRST ACTION**:  Write in the chat "Implementation mode"
+     * **SECOND ACTION**: Follow the instructions in `.rdd/prompt-snippets/execution-step.implementation.md`
+     * **AFTER**: After implementation is completed:
        - Execute `.rdd/src/actions/prompt_set_executed_on.py`
        - Execute `.rdd/src/actions/prompt_implementation_completed_on.py`
        - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
-     * Stop (do not continue with the next instructions here)
+     * **FINAL ACTION**: Stop (do not continue with the next instructions here)
    
    * If `execution-mode` is `"modification"`:
-     * Write in the chat "Modification mode"
-     * Follow the instructions in `.rdd/prompt-snippets/execution-step.modification.md`
-     * After modification execution is completed:
+     * **FIRST ACTION**:  Write in the chat "Modification mode"
+     * **SECOND ACTION**: Follow the instructions in `.rdd/prompt-snippets/execution-step.modification.md`
+     * **AFTER**: After modification execution is completed:
        - Execute `.rdd/src/actions/modification_complete.py`
        - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
-     * Stop (do not continue with the next instructions here)
+     * **FINAL ACTION**: Stop (do not continue with the next instructions here)
 
 10. Update [REQUIREMENTS] if needed. In all cases - write in the chat and in [IMPLEMENTATION] your rationale what is changed and if no changes - why.
 
