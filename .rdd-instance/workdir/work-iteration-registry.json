@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20251222-060042",
     "iteration-name": "Web UI",
-    "prompt-id-sequence-next-value": 52,
+    "prompt-id-sequence-next-value": 53,
     "git-enabled": true,
     "prompts": [
         {
@@ -627,6 +627,17 @@
             "questionnaire-generated": true,
             "questionnaire-answered": true,
             "plan-generated": true,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
+        },
+        {
+            "prompt-id": "P-052",
+            "prompt-title": "Workdir compact",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
             "implementation-completed": true,
             "execution-mode": "no-action",
             "executed": true

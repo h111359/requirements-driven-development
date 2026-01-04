@@ -1,0 +1,125 @@
+{
+  "context": "The prompt requests making the Workdir page more compact by removing the 'Work Iteration Registry' container and changing the layout and button visibility. This questionnaire clarifies implementation details for the UI restructuring.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "How should the 'Working Directory Management' title be styled to match the Active Prompt page?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Use the same CSS classes and font size as Active Prompt page header (bg-success text-white h5)",
+          "pros": "Maintains visual consistency across pages, familiar user experience, leverages existing styles",
+          "cons": "May be too prominent for a secondary page, green color might not be appropriate for workdir"
+        },
+        {
+          "id": "B",
+          "label": "Use smaller font (h6 instead of h5) with same color scheme as Active Prompt",
+          "pros": "More compact as requested, still maintains color consistency, reduces visual weight",
+          "cons": "Creates slight inconsistency in header hierarchy across pages"
+        },
+        {
+          "id": "C",
+          "label": "Keep current styling but reduce font size in card-header without changing to h5",
+          "pros": "Minimal changes to existing structure, easy to implement",
+          "cons": "May not fully match Active Prompt page look and feel as requested"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Option B best balances the requirement to make the page more compact while maintaining visual consistency. Using h6 reduces the title's visual prominence (making it more compact) while keeping the same color scheme ensures consistency with other pages.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "When there is no work iteration created (empty workdir), what should be displayed on the page?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Only the 'Create Work Iteration' button centered on the page with minimal surrounding UI",
+          "pros": "Cleanest approach, focuses user attention on the only available action, truly minimal",
+          "cons": "May feel too sparse, lacks context for new users"
+        },
+        {
+          "id": "B",
+          "label": "'Create Work Iteration' button with a brief informational message explaining the workdir is empty",
+          "pros": "Provides context to users, helpful for first-time users, better UX",
+          "cons": "Slightly less compact than option A"
+        },
+        {
+          "id": "C",
+          "label": "Show the page title and 'Create Work Iteration' button (no other containers)",
+          "pros": "Maintains page structure consistency, still very minimal, users know which page they're on",
+          "cons": "Adds one extra element (title) beyond the absolute minimum"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Option C provides the best balance between minimalism and usability. It keeps the page structure consistent (users always see the page title), while still being very minimal. The title helps users understand they're on the Workdir page, which is important for navigation context.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "After removing the 'Work Iteration Registry' container, how should the two areas (Registry View and File Viewer) be laid out?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Stack them vertically as two separate cards directly in the main card body (Registry View on top, File Viewer below)",
+          "pros": "Clear separation of concerns, maintains current logical structure, easy to read",
+          "cons": "Takes more vertical space, requires scrolling for File Viewer"
+        },
+        {
+          "id": "B",
+          "label": "Place them side-by-side in a two-column layout (Registry View left, File Viewer right)",
+          "pros": "More compact, better use of horizontal space, both visible simultaneously",
+          "cons": "May be cramped on smaller screens, less space for each component"
+        },
+        {
+          "id": "C",
+          "label": "Use tabs to switch between Registry View and File Viewer",
+          "pros": "Most compact option, one area visible at a time, clean interface",
+          "cons": "Adds interaction overhead, users can't see both at once, more complex implementation"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A maintains the current vertical stacking which is intuitive and works well for desktop usage. The Registry View is the primary information users need, and File Viewer is secondary (only used when editing specific files). Vertical stacking ensures both are easily accessible without introducing complexity.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "What should happen to the 'Archive Iteration' button when there is an active work iteration?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Keep it visible in a separate row/area below the Registry View",
+          "pros": "Always accessible, clear separation from creation flow, easy to find",
+          "cons": "Takes up space even when not immediately needed"
+        },
+        {
+          "id": "B",
+          "label": "Place it at the bottom of the page (after File Viewer)",
+          "pros": "Separates destructive operation from main content, reduces accidental clicks",
+          "cons": "Less visible, requires scrolling to access"
+        },
+        {
+          "id": "C",
+          "label": "Include it in the Registry View card header as a button",
+          "pros": "Compact, contextually related to the registry, easy access",
+          "cons": "May clutter the card header, proximity to registry data might cause confusion"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A keeps the Archive button visible and accessible without cluttering other components. Since archiving is an important operation that users may need to perform when completing an iteration, it should be easy to find but not so prominent that it causes accidental clicks. A separate area provides good balance.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    }
+  ]
+}

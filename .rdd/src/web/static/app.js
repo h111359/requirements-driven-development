@@ -1815,12 +1815,20 @@ async function loadIterationStatus() {
     // Load and display the registry
     await loadRegistry();
     
+    const createSection = document.getElementById('create-iteration-section');
+    const registrySection = document.getElementById('registry-section');
     const container = document.getElementById('registry-view-container');
     
     if (!currentRegistry) {
-        container.innerHTML = '<div class="alert alert-warning"><i class="bi bi-exclamation-triangle"></i> No work iteration found. Please create one using the button above.</div>';
+        // No iteration exists - show create button only
+        createSection.style.display = 'block';
+        registrySection.style.display = 'none';
         return;
     }
+    
+    // Iteration exists - show registry and file viewer
+    createSection.style.display = 'none';
+    registrySection.style.display = 'block';
     
     // Render registry view
     renderRegistryView(container, currentRegistry);

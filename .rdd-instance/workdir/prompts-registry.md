@@ -638,3 +638,8 @@ Now, when all the information is available in Workdir, Prompt History tab is not
 Check what should be done the tab to be removed - will this affect something, and what from the code is related only to this page and could be safely removed.
 Then remove the page Prompts History
 %%ENDPROMPT
+
+%%PROMPT P-052 "Workdir compact"
+Make Workdir page more compact
+Remove  "Work Iteration Registry" container and let the two areas (cards) in it to be directly in "Working Directory Management" container. Reduce the font of "Working Directory Management" title and make it same as the Active Prompt page title look and feel. Buttons "Create Work Iteration" and "Archive Iteration" can not coexist. When there is a created iteration, the button "Create Work Iteration" should not be visible. When the workdir is empty, "Create Work Iteration" should be the only element on the page.
+%%ENDPROMPT

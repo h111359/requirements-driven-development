@@ -336,52 +336,46 @@
                             <h5><i class="bi bi-folder"></i> Working Directory Management</h5>
                         </div>
                         <div class="card-body">
-                            <!-- Actions Section -->
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <button class="btn btn-success" onclick="showCreateWorkIterationModal()">
-                                                <i class="bi bi-plus-circle"></i> Create Work Iteration
-                                            </button>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <button class="btn btn-warning" onclick="archiveWorkdir()">
-                                                <i class="bi bi-archive-fill"></i> Archive Iteration
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                            <!-- Create Work Iteration Button (shown when no iteration exists) -->
+                            <div id="create-iteration-section" style="display:none;">
+                                <button class="btn btn-success" onclick="showCreateWorkIterationModal()">
+                                    <i class="bi bi-plus-circle"></i> Create Work Iteration
+                                </button>
                             </div>
                             
-                            <!-- Registry View -->
-                            <div class="card">
-                                <div class="card-header bg-info text-white">
-                                    <h6><i class="bi bi-journal-text"></i> Work Iteration Registry</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div id="registry-view-container">
-                                        <p class="text-muted">Loading registry...</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- File Viewer -->
-                            <div class="card mt-3">
-                                <div class="card-header">
-                                    <h6>File Viewer</h6>
-                                </div>
-                                <div class="card-body">
-                                    <input type="hidden" id="file-path" value="">
-                                    <div id="file-editor-container" style="display:none;">
-                                        <div class="mb-3">
-                                            <label for="file-content" class="form-label">File Content:</label>
-                                            <textarea class="form-control font-monospace" id="file-content" 
-                                                      rows="20" style="font-size: 14px;"></textarea>
-                                        </div>
-                                        <button class="btn btn-success" onclick="saveFile()">
-                                            <i class="bi bi-save"></i> Save File
+                            <!-- Registry View (shown when iteration exists) -->
+                            <div id="registry-section" style="display:none;">
+                                <div class="card">
+                                    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                                        <h6 class="mb-0"><i class="bi bi-journal-text"></i> Registry View</h6>
+                                        <button class="btn btn-warning btn-sm" onclick="archiveWorkdir()">
+                                            <i class="bi bi-archive-fill"></i> Archive Iteration
                                         </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="registry-view-container">
+                                            <p class="text-muted">Loading registry...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- File Viewer -->
+                                <div class="card mt-3">
+                                    <div class="card-header">
+                                        <h6>File Viewer</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <input type="hidden" id="file-path" value="">
+                                        <div id="file-editor-container" style="display:none;">
+                                            <div class="mb-3">
+                                                <label for="file-content" class="form-label">File Content:</label>
+                                                <textarea class="form-control font-monospace" id="file-content" 
+                                                          rows="20" style="font-size: 14px;"></textarea>
+                                            </div>
+                                            <button class="btn btn-success" onclick="saveFile()">
+                                                <i class="bi bi-save"></i> Save File
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
