@@ -1,0 +1,143 @@
+{
+  "context": "The Active Prompt page currently shows a 'New' button (for creating new prompts) and a 'Mod' button (for creating modifications) simultaneously when there is an active prompt. The requirement is to conditionally show the New button only when there's no active prompt, and when there is an active prompt, hide the New button and reposition/rename the Mod button. This questionnaire clarifies the implementation details for this UI reorganization.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Where exactly should the Mod button be positioned when the New button is hidden (i.e., when there is an active prompt)?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Move Mod button to the exact position of the New button in Region 1 (leftmost position)",
+          "pros": "Clear visual replacement, maintains consistent left-side positioning for primary actions, simplifies layout logic",
+          "cons": "Creates asymmetric layout with action button on left and Complete on right, may feel disconnected from Complete button"
+        },
+        {
+          "id": "B",
+          "label": "Keep Mod button in Region 3 but move it before the Complete button (still on the right side)",
+          "pros": "Keeps workflow action buttons together on the right, maintains symmetry, logical flow (Mod then Complete)",
+          "cons": "Doesn't visually replace the New button position, leaves Region 1 empty when there's an active prompt"
+        },
+        {
+          "id": "C",
+          "label": "Move Mod button to Region 1 but keep both Region 1 and Region 3 visible with different content based on state",
+          "pros": "Most flexible layout allowing different content in different states",
+          "cons": "More complex implementation, may cause layout shifts between states"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A most directly fulfills the requirement 'On its place move the Mod button' - indicating the Mod button should take the position previously occupied by the New button. This creates a clear visual pattern where Region 1 always contains the primary prompt creation action (New when no active prompt, Create Modification when there is one).",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "What should be the exact button text and icon for the renamed Mod button?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Text: 'Create Modification', Icon: Keep existing plus-circle icon",
+          "pros": "Clearly describes the action, matches the requirement exactly, plus-circle icon is semantically appropriate for 'create' action",
+          "cons": "Longer text may require more space, could be abbreviated on small screens"
+        },
+        {
+          "id": "B",
+          "label": "Text: 'Modification', Icon: Keep existing plus-circle icon",
+          "pros": "Shorter text, saves space, still clear in context",
+          "cons": "Less explicit about the create action, deviates from the requirement which specifies 'Create Modification'"
+        },
+        {
+          "id": "C",
+          "label": "Text: 'Create Modification', Icon: Change to pencil or edit icon (bi-pencil)",
+          "pros": "Edit icon might better represent modification concept",
+          "cons": "Less consistent with 'create' semantics, deviates from plus-circle pattern used for New button"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The requirement explicitly states 'Mod button should be renamed to Create Modification', so the full text should be used. The plus-circle icon is consistent with the New button and semantically appropriate for a 'create' action.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "Should the Complete button remain in its current position or be repositioned when the layout changes?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Keep Complete button in Region 3 at the rightmost position regardless of where Mod button moves",
+          "pros": "Maintains consistent Complete button position, user familiarity, clear ending action always at the right",
+          "cons": "If Mod moves to Region 1, Region 3 will only have one button which may look sparse"
+        },
+        {
+          "id": "B",
+          "label": "Move Complete button to be always next to the Create Modification button",
+          "pros": "Keeps workflow action buttons together, visually grouped",
+          "cons": "Complete button position would change based on prompt state, less consistency"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The requirement focuses on the New and Mod buttons but doesn't mention changing the Complete button. Keeping it in a consistent position maintains user familiarity and the Complete action logically belongs at the end (right side) of the control panel.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "How should the Create New Prompt button behave when there is no active prompt?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Show only in the no-active-prompt-message section (as currently implemented), hide the entire sticky control panel",
+          "pros": "Clear separation between no-prompt and active-prompt states, simpler UI when there's nothing to control",
+          "cons": "Control panel disappears entirely, may disorient users"
+        },
+        {
+          "id": "B",
+          "label": "Show the New button in Region 1 of the sticky control panel (make the control panel always visible)",
+          "pros": "Consistent presence of control panel, New button always in the same position",
+          "cons": "Control panel shows execution mode buttons when there's no active prompt to execute"
+        },
+        {
+          "id": "C",
+          "label": "Show New button in both the no-active-prompt-message section AND in Region 1 of control panel when displayed",
+          "pros": "Maximum discoverability, redundant access to create action",
+          "cons": "Duplicate buttons may be confusing, unnecessary redundancy"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The requirement states 'Create New Prompt button should remain only when there is no active prompt' which implies it should not be in the active prompt control panel. The current implementation already shows it in the no-active-prompt-message section, which makes sense as the control panel is irrelevant without an active prompt.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "Should the Create Modification button be disabled/enabled based on the same conditions as the current Mod button?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes, maintain the current enabled/disabled logic from the existing Mod button implementation",
+          "pros": "Preserves existing business logic, no behavioral changes beyond repositioning and renaming",
+          "cons": "None identified, this is simply maintaining existing behavior"
+        },
+        {
+          "id": "B",
+          "label": "Change the logic to always enable the Create Modification button when there's an active prompt",
+          "pros": "Simpler logic, always available when needed",
+          "cons": "May allow invalid states, likely breaks existing workflow rules, not specified in the requirement"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The requirement only asks for repositioning and renaming, not changing the enabled/disabled behavior. Maintaining existing business logic ensures no unintended workflow changes.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

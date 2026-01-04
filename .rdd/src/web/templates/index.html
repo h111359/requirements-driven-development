@@ -115,10 +115,10 @@
                                 <!-- Sticky Control Panel -->
                                 <div class="sticky-controls-panel">
                                     <div class="d-flex gap-2 align-items-center">
-                                        <!-- Region 1: New Button (left) -->
+                                        <!-- Region 1: Create Modification Button (left) -->
                                         <div>
-                                            <button class="btn btn-sm btn-primary" onclick="showCreatePromptModal()" title="Create New Prompt">
-                                                <i class="bi bi-plus-circle"></i> New
+                                            <button class="btn btn-sm btn-primary" id="add-modification-btn" onclick="showAddModificationModal()" disabled title="Create Modification">
+                                                <i class="bi bi-plus-circle"></i> Create Modification
                                             </button>
                                         </div>
                                         
@@ -224,11 +224,8 @@
                                             </div>
                                         </div>
                                         
-                                        <!-- Region 3: Workflow Action Buttons (right) -->
+                                        <!-- Region 3: Complete Button (right) -->
                                         <div class="d-flex gap-1">
-                                            <button class="btn btn-sm btn-primary" id="add-modification-btn" onclick="showAddModificationModal()" disabled title="Add Modification">
-                                                <i class="bi bi-plus-circle"></i> Mod
-                                            </button>
                                             <button class="btn btn-sm btn-primary" id="complete-prompt-btn" onclick="completeActivePrompt()" disabled title="Complete Prompt">
                                                 <i class="bi bi-check-lg"></i> Complete
                                             </button>

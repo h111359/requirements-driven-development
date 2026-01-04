@@ -518,3 +518,8 @@ On Active Prompt page:
 
 Only the active Execution mode button should have solid backgroud. The rest should negate the colors so to be very clear which mode is the active one
 %%ENDPROMPT
+
+%%PROMPT P-043 "Remove new button when there is active prompt already"
+Create New Prompt button should remain only when there is no active prompt (all are completed or there are no prompts yet)
+When there is Active Prompt, the New button should not appear. On its place move the Mod button. Mod button should be renamed to Create Modification.
+%%ENDPROMPT
