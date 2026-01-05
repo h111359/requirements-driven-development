@@ -185,7 +185,6 @@ TBD
     "iteration-id": null,
     "iteration-name": null,
     "prompt-id-sequence-next-value": 1,
-    "git-enabled": false,
     "prompts": []
 }
 """
@@ -193,6 +192,10 @@ TBD
     elif file_name == 'prompts-registry.md':
         # Generate empty prompts registry
         return "# Prompts Registry\n\nNo prompts recorded yet.\n"
+    
+    elif file_name == 'instance-config.json':
+        # Generate instance configuration with git-enabled flag
+        return """{\n  "git-enabled": false\n}\n"""
     
     elif file_path.suffix == '.json':
         # Default for any other JSON file

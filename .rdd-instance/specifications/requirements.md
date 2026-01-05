@@ -401,13 +401,13 @@ The framework enables:
 
 - [TR-0081] [DELETED]
 
-- [TR-0082] The work iteration registry shall include a root-level boolean field `git-enabled` (default: false) to control git operations during prompt completion.
+- [TR-0082] [DELETED]
 
 - [TR-0083] Each prompt object in the work iteration registry shall include an `executed` boolean field (default: false) to track execution status.
 
 - [TR-0084] The framework shall provide a script `.rdd/src/actions/prompt_set_executed_on.py` that sets the executed flag for a specified prompt or the active prompt.
 
-- [TR-0085] The framework shall provide a script `.rdd/src/actions/prompt_complete.py` that sets a prompt to completed state and conditionally executes git commit based on the git-enabled flag.
+- [TR-0085] The framework shall provide a script .rdd/src/actions/prompt_complete.py that sets a prompt to completed state and conditionally executes git commit based on the git-enabled flag from .rdd-instance/config/instance-config.json
 
 - [TR-0086] The prompt completion action shall handle git commit failures gracefully, logging warnings but proceeding with state changes when no repository changes exist.
 
@@ -583,6 +583,15 @@ The framework enables:
 - [TR-0168] The web server startup sequence shall execute the seed script before starting the HTTP server and abort startup if seeding fails with non-zero exit code
 
 - [TR-0169] The seed script shall complete initialization in under 100ms for typical cases where all required files and folders already exist
+
+- [TR-0170] The framework shall store instance-level configuration in .rdd-instance/config/instance-config.json file containing a git-enabled boolean flag
+
+- [TR-0171] The framework shall read the git-enabled setting from .rdd-instance/config/instance-config.json to determine whether to perform git operations during prompt completion
+
+- [TR-0172] The framework shall validate the presence of .rdd-instance/config/ folder and instance-config.json file during manifest validation and provide clear error messages directing users to re-seed if missing
+
+
+
 
 
 

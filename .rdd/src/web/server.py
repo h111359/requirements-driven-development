@@ -363,6 +363,17 @@ class RDDWebHandler(http.server.SimpleHTTPRequestHandler):
         elif path == "/api/registry":
             # Get work iteration registry
             result = self.read_json_file("workdir/work-iteration-registry.json")
+            
+            # Add git-enabled from instance config
+            if result.get("success"):
+                config_result = self.read_json_file("config/instance-config.json")
+                if config_result.get("success"):
+                    # Inject git-enabled into registry data for backward compatibility
+                    result["data"]["git-enabled"] = config_result["data"].get("git-enabled", False)
+                else:
+                    # Config file missing - use default
+                    result["data"]["git-enabled"] = False
+            
             self.send_json_response(result)
             return
         

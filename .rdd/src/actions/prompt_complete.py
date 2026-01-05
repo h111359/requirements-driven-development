@@ -4,7 +4,8 @@
 Behavior:
   - Updates the `state` field of a prompt to 'completed' in:
         `.rdd-instance/workdir/work-iteration-registry.json`
-  - If the root-level `git-enabled` flag is true, creates a git commit with all changes
+  - If the `git-enabled` flag in `.rdd-instance/config/instance-config.json` is true,
+    creates a git commit with all changes
   - Commit message format: iteration-id_prompt-id_prompt-title
   - If git commit fails due to no changes, logs a warning but proceeds with state change
   - If `prompt-id=` is omitted, defaults to the currently active prompt.
@@ -163,8 +164,35 @@ def main() -> int:
             file=sys.stderr,
         )
 
-    # Check git-enabled flag
-    git_enabled = registry.get("git-enabled", False)
+    # Check git-enabled flag from instance config
+    config_path = repo_root / ".rdd-instance" / "config" / "instance-config.json"
+    git_enabled = False
+    
+    try:
+        if config_path.exists():
+            with open(config_path, "r", encoding="utf-8") as f:
+                config = json.load(f)
+                git_enabled = config.get("git-enabled", False)
+        else:
+            print(
+                "WARNING: Instance configuration file not found. Git operations disabled.",
+                file=sys.stderr,
+            )
+            print(
+                f"Expected file: {config_path}",
+                file=sys.stderr,
+            )
+            print(
+                "Remediation: Re-run the seed script to create the configuration file.",
+                file=sys.stderr,
+            )
+    except Exception as e:
+        print(
+            f"WARNING: Failed to read instance configuration: {e}",
+            file=sys.stderr,
+        )
+        print("Git operations disabled.", file=sys.stderr)
+    
     git_result = None
 
     if git_enabled:

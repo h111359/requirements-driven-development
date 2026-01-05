@@ -41,12 +41,17 @@
     ],
     "instance": [
       ".rdd-instance/archive/",
+      ".rdd-instance/config/",
       ".rdd-instance/specifications/",
       ".rdd-instance/workdir/"
     ]
   },
 
   "requiredInstanceFiles": [
+    {
+      "path": ".rdd-instance/config/instance-config.json",
+      "convention": ".rdd/conventions/requirements.convention.md"
+    },
     {
       "path": ".rdd-instance/specifications/files-and-folders.md",
       "convention": ".rdd/conventions/files-and-folders.convention.md"

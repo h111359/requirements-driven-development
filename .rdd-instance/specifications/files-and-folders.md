@@ -4,11 +4,11 @@
 
 repo-root/
 ├── LICENSE                        # MIT License for the RDD framework
-├── README.md                      # Main README with overview, installation instructions and usage guide for the RDD framework
+├── README.md                      # Main README with overview, installation instructions, usage guide and documentation for the RDD framework
 ├── build/                         # Build and release artifacts
-├── prompts/                       # Prompt engineering templates
 ├── researches/                    # Research and analysis documents
-└── scripts/                       # Utility scripts for testing and environment setup
+├── scripts/                       # Utility scripts for testing and environment setup
+└── tests/                         # Test suite for the RDD framework
 
 **LICENSE**
 - **Path**: `repo-root/LICENSE`
@@ -18,7 +18,7 @@ repo-root/
 **README.md**
 - **Path**: `repo-root/README.md`
 - **Type**: Markdown
-- **Description**: Main README with overview, installation instructions and usage guide for the RDD framework
+- **Description**: Main README with overview, installation instructions, usage guide and documentation for the RDD framework
 
 ---
 
@@ -50,9 +50,7 @@ repo-root/build/
 ├── release-notes-v1.0.5.md            # Release notes for version 1.0.5
 ├── release-notes-v1.1.0.md            # Release notes for version 1.1.0
 ├── release-notes-v1.1.1.md            # Release notes for version 1.1.1
-├── release-notes-v1.1.2.md            # Release notes for version 1.1.2
-├── scripts/                           # Test runner scripts
-└── tests/                             # Test suite
+└── release-notes-v1.1.2.md            # Release notes for version 1.1.2
 
 **build.py**
 - **Path**: `repo-root/build/build.py`
@@ -81,21 +79,47 @@ repo-root/build/
 
 ---
 
-### Build Scripts Folder Structure
+### Researches Folder Structure
 
-repo-root/build/scripts/
-└── run-tests.py                   # Cross-platform test runner for RDD Framework that runs all platform-appropriate tests
+repo-root/researches/
+├── 20251228-1300-build-folder-gitignored/    # Research on gitignoring build folder
+│   └── advantages-disadvantages.md           # Analysis of advantages and disadvantages of gitignoring the build folder
+└── 20251228-1537-plan-further-work/          # Planning documentation
+    └── plan.md                               # Detailed development plan for further work on the RDD framework
 
-**run-tests.py**
-- **Path**: `repo-root/build/scripts/run-tests.py`
-- **Type**: Python script
-- **Description**: Cross-platform test runner for RDD Framework that runs all platform-appropriate tests
+**advantages-disadvantages.md**
+- **Path**: `repo-root/researches/20251228-1300-build-folder-gitignored/advantages-disadvantages.md`
+- **Type**: Markdown
+- **Description**: Analysis of advantages and disadvantages of gitignoring the build folder
+
+**plan.md**
+- **Path**: `repo-root/researches/20251228-1537-plan-further-work/plan.md`
+- **Type**: Markdown
+- **Description**: Detailed development plan for further work on the RDD framework
 
 ---
 
-### Build Tests Folder Structure
+### Scripts Folder Structure
 
-repo-root/build/tests/
+repo-root/scripts/
+├── run-tests.py                   # Cross-platform test runner for RDD Framework that runs all platform-appropriate tests
+└── setup-test-env.py              # Setup script for creating or updating RDD test environment and installing test dependencies
+
+**run-tests.py**
+- **Path**: `repo-root/scripts/run-tests.py`
+- **Type**: Python script
+- **Description**: Cross-platform test runner for RDD Framework that runs all platform-appropriate tests
+
+**setup-test-env.py**
+- **Path**: `repo-root/scripts/setup-test-env.py`
+- **Type**: Python script
+- **Description**: Setup script for creating or updating RDD test environment and installing test dependencies
+
+---
+
+### Tests Folder Structure
+
+repo-root/tests/
 ├── requirements.txt               # RDD Framework test dependencies including pytest and code quality tools
 ├── test-spec.md                   # Comprehensive test specification for the RDD framework test suite
 ├── build/                         # Build script tests
@@ -104,99 +128,98 @@ repo-root/build/tests/
 └── python/                        # Python code tests
 
 **requirements.txt**
-- **Path**: `repo-root/build/tests/requirements.txt`
+- **Path**: `repo-root/tests/requirements.txt`
 - **Type**: Text file
 - **Description**: RDD Framework test dependencies including pytest and code quality tools
 
 **test-spec.md**
-- **Path**: `repo-root/build/tests/test-spec.md`
+- **Path**: `repo-root/tests/test-spec.md`
 - **Type**: Markdown
 - **Description**: Comprehensive test specification for the RDD framework test suite
 
 ---
 
-### Build Tests - Build Folder Structure
+### Tests - Build Folder Structure
 
-repo-root/build/tests/build/
+repo-root/tests/build/
 ├── conftest.py                    # Pytest fixtures for build script tests
 └── test_build.py                  # Tests for build.py script including version extraction and package creation
 
 **conftest.py**
-- **Path**: `repo-root/build/tests/build/conftest.py`
+- **Path**: `repo-root/tests/build/conftest.py`
 - **Type**: Python script
 - **Description**: Pytest fixtures for build script tests
 
 **test_build.py**
-- **Path**: `repo-root/build/tests/build/test_build.py`
+- **Path**: `repo-root/tests/build/test_build.py`
 - **Type**: Python script
 - **Description**: Tests for build.py script including version extraction and package creation
 
 ---
 
-### Build Tests - Fixtures Folder Structure
+### Tests - Fixtures Folder Structure
 
-repo-root/build/tests/fixtures/
+repo-root/tests/fixtures/
 └── README.md                      # Documentation for test fixtures and shared test data
 
 **README.md**
-- **Path**: `repo-root/build/tests/fixtures/README.md`
+- **Path**: `repo-root/tests/fixtures/README.md`
 - **Type**: Markdown
 - **Description**: Documentation for test fixtures and shared test data
 
 ---
 
-### Build Tests - Install Folder Structure
+### Tests - Install Folder Structure
 
-repo-root/build/tests/install/
+repo-root/tests/install/
 ├── conftest.py                    # Pytest fixtures for install script tests
 └── test_install.py                # Tests for install.py script including pre-flight checks and installation process
 
 **conftest.py**
-- **Path**: `repo-root/build/tests/install/conftest.py`
+- **Path**: `repo-root/tests/install/conftest.py`
 - **Type**: Python script
 - **Description**: Pytest fixtures for install script tests
 
 **test_install.py**
-- **Path**: `repo-root/build/tests/install/test_install.py`
+- **Path**: `repo-root/tests/install/test_install.py`
 - **Type**: Python script
 - **Description**: Tests for install.py script including pre-flight checks and installation process
 
 ---
 
-### Build Tests - Python Folder Structure
+### Tests - Python Folder Structure
 
-repo-root/build/tests/python/
+repo-root/tests/python/
 ├── conftest.py                    # Pytest configuration and shared fixtures for RDD framework tests
 ├── test_integration.py            # Integration tests for RDD workflow including end-to-end scenarios
 ├── test_rdd_main.py               # Unit tests for rdd.py main entry point and CLI interface
-└── test_rdd_utils.py              # Unit tests for rdd_utils.py utility functions
+├── test_rdd_utils.py              # Unit tests for rdd_utils.py utility functions
+└── test_seed.py                   # Test suite for rdd-instance_seed.py script including seed data validation
 
 **conftest.py**
-- **Path**: `repo-root/build/tests/python/conftest.py`
+- **Path**: `repo-root/tests/python/conftest.py`
 - **Type**: Python script
 - **Description**: Pytest configuration and shared fixtures for RDD framework tests
 
 **test_integration.py**
-- **Path**: `repo-root/build/tests/python/test_integration.py`
+- **Path**: `repo-root/tests/python/test_integration.py`
 - **Type**: Python script
 - **Description**: Integration tests for RDD workflow including end-to-end scenarios
 
 **test_rdd_main.py**
-- **Path**: `repo-root/build/tests/python/test_rdd_main.py`
+- **Path**: `repo-root/tests/python/test_rdd_main.py`
 - **Type**: Python script
 - **Description**: Unit tests for rdd.py main entry point and CLI interface
 
 **test_rdd_utils.py**
-- **Path**: `repo-root/build/tests/python/test_rdd_utils.py`
+- **Path**: `repo-root/tests/python/test_rdd_utils.py`
 - **Type**: Python script
 - **Description**: Unit tests for rdd_utils.py utility functions
 
----
-
-### Prompts Folder Structure
-
-repo-root/prompts/
-└── GitHub-Copilot-Expert.md       # Expert prompt engineering template for GitHub Copilot with best practices
+**test_seed.py**
+- **Path**: `repo-root/tests/python/test_seed.py`
+- **Type**: Python script
+- **Description**: Test suite for rdd-instance_seed.py script including seed data validation
 
 **GitHub-Copilot-Expert.md**
 - **Path**: `repo-root/prompts/GitHub-Copilot-Expert.md`
@@ -249,6 +272,20 @@ repo-root/scripts/
 - **Path**: `repo-root/tests/python/test_seed.py`
 - **Type**: Python test script
 - **Description**: Test suite for rdd-instance_seed.py script, verifying folder creation, file initialization, validation, idempotency, and error handling
+
+---
+
+### RDD Instance - Config Folder Structure
+
+.rdd-instance/config/
+└── instance-config.json           # Instance-level configuration file containing git-enabled flag and other instance settings
+
+**instance-config.json**
+- **Path**: `.rdd-instance/config/instance-config.json`
+- **Type**: JSON configuration file
+- **Description**: Instance-level configuration for the RDD framework. Contains the git-enabled boolean flag that controls whether git commit operations are performed during prompt completion. Default value is false. This configuration is separate from the work iteration registry to provide consistent behavior across all iterations in an instance.
+- **Schema**: `{"git-enabled": boolean}`
+- **Default**: `{"git-enabled": false}`
 
 ---
 
