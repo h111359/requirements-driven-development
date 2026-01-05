@@ -48,14 +48,6 @@
 
   "requiredInstanceFiles": [
     {
-      "path": ".rdd-instance/workdir/work-iteration-registry.json",
-      "convention": ".rdd/conventions/work-iteration-registry.convention.md"
-    },
-    {
-      "path": ".rdd-instance/workdir/prompts-registry.md",
-      "convention": ".rdd/conventions/prompts-registry.convention.md"
-    },    
-    {
       "path": ".rdd-instance/specifications/files-and-folders.md",
       "convention": ".rdd/conventions/files-and-folders.convention.md"
     },   

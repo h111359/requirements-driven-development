@@ -4,20 +4,21 @@
   
 - [PROMPT-REGISTRY] is the file `.rdd-instance/workdir/prompts-registry.md`
 
-- [ACTIVE-PROMPT-ID] is the prompt-id of the prompt entry in `.rdd-instance/workdir/work-iteration-registry.json` which is with state `active`. The framework allows only one prompt to be in this state.
+- [ACTIVE-PROMPT-ID] is the prompt-id of the prompt entry in [WI-REGISTRY] which is with state `active`. The framework allows only one prompt to be in this state.
 
-- [ACTIVE-PROMPT-FOLDER] is a folder in `.rdd-instance/workdir` with format 
-  `<[ACTIVE-PROMPT-ID]>_<prompt-title>`
+- [ACTIVE-PROMPT-FOLDER] is a folder in `.rdd-instance/workdir` with format `<[ACTIVE-PROMPT-ID]>_<prompt-title>`
 
 - [ACTIVE-PROMPT] is the file `prompt.md` in [ACTIVE-PROMPT-FOLDER]
 
 - [PLAN] is the file `plan.md` in [ACTIVE-PROMPT-FOLDER]
 
+- [ANALYSIS] is the file `analysis.md` in [ACTIVE-PROMPT-FOLDER]
+
 - [IMPLEMENTATION] is the file `implementation.md` in [ACTIVE-PROMPT-FOLDER]
 
 - [QUESTIONNAIRE-CONVENTION] is the file `.rdd/conventions/questions-formatting.md`
   
-- [QUESTIONNAIRE] is a file containing questions to the user. The file location is in [active-prompt-folder]. The file name convention is `questionnaire.md`.
+- [QUESTIONNAIRE] is the questionnaire artifact in [ACTIVE-PROMPT-FOLDER]. Primary format: `questionnaire.json` (per `.rdd/conventions/questionnaire-json-schema.md`)
 
 - [CURRENT-MODIFICATION-ID] is the value of `current-modification-id` field in [WI-REGISTRY] for the active prompt
 
@@ -76,103 +77,121 @@ python .rdd/src/actions/requirement_tr_create.py text="See external document XYZ
 
 ## Instructions - Follow these steps exactly:  
 
-1. **Read the registry**: Open and read the [WI-REGISTRY] file.
+1. **Read the registry**: Open and read the [WI-REGISTRY].
       
 2. Identify the [ACTIVE-PROMPT-ID], [ACTIVE-PROMPT-FOLDER], [ACTIVE-PROMPT].
 
-3. **Check for prompt snippet keys**: Read [ACTIVE-PROMPT] and check if it contains any prompt-snippet-keys (strings starting with `[[[` and ending with `]]]`). If found:
-   - Look up the corresponding file path in `.rdd/config/manifest.json` under `promptSnippets`
-   - Read that file immediately
-   - If the snippet file contains instructions that override the normal execution flow (like `[[[Analyse]]]` which changes implementation behavior):
-     - Follow those snippet instructions to complete the work
-     - After completing the snippet-specific work, continue with the completion steps for the current execution-mode (see step 6) unless the snippet says something else.
-     - The snippet instructions modify WHAT work is done, but do not skip the mode-specific completion steps (setting executed, implementation-completed, resetting mode) by default - execute them unless the snippet explicitely says other.
+3. **Check for prompt snippet keys in [ACTIVE-PROMPT]**:
 
-4. Read [TECHNICAL-DESIGN] and identify the information in it related to the [ACTIVE-PROMPT]
+   * A prompt-snippet-key is any string starting with `[[[` and ending with `]]]`.
+   * For each found key:
 
-5. Read [REQUIREMENTS] and identify those, which are related to the [ACTIVE-PROMPT]
+     * Look up the corresponding file path in `.rdd/config/manifest.json` under `promptSnippets`
+     * Read that snippet file immediately
+     * Treat snippet file content as if it was copy-pasted into the prompt at that position.
+   * If snippet content explicitly overrides normal execution flow, follow it.
+   * IMPORTANT: Snippets may change WHAT work is done, but do not skip mode-specific completion steps unless the snippet explicitly says to skip them.  
 
-6. Read [FILES-AND-FOLDERS] and identify those, which are related to the [ACTIVE-PROMPT]
+4. Read [TECHNICAL-DESIGN] and log exactly one sentence in chat describing what is relevant to [ACTIVE-PROMPT].
 
-7. Check if there are questions and answers in the [QUESTIONNAIRE]. If there are, you shall comply with the chosen answers in the next steps.
+5. Read [REQUIREMENTS] and log exactly one sentence in chat describing what is relevant to [ACTIVE-PROMPT].
 
-8. Check if the [PLAN] is fulfilled. If it is, you shall observe it in the next steps. Do not skip any of the steps in the plan. Do not stop the implementation until the entire plan is completed. 
+6. Read [FILES-AND-FOLDERS] and log exactly one sentence in chat describing what is relevant to [ACTIVE-PROMPT].
 
-9. Read the `execution-mode` attribute of the active prompt from [WI-REGISTRY]. Based on the value:
+7. Read [PROMPT-REGISTRY] and log exactly one sentence in chat describing what is relevant to [ACTIVE-PROMPT] (highest prompt-id wins on conflicts; [ACTIVE-PROMPT] always wins).
+
+8. If [QUESTIONNAIRE] exists and has any answered question (any user-selection.type != null), comply with those answers in subsequent steps.
+
+9. If [PLAN] exists, follow it strictly only in implement mode (and modification mode when it contains applicable steps). Do not apply [PLAN] in no-action/clarify/analyze/plan modes unless [ACTIVE-PROMPT] explicitly instructs otherwise.
+
+10. Read execution-mode once at start from [WI-REGISTRY] and treat it as SELECTED-MODE for this run. Later scripts may update it but do not re-evaluate within this run. Based on SELECTED-MODE:
    
-   * If `execution-mode` is `"no-action"`:
+   * If `no-action`:
      * **FIRST ACTION**:  Write in the chat "No action mode selected"
      * **FINAL ACTION**: Stop execution and inform the user to set a different execution mode via the Web UI or CLI
    
-   * If `execution-mode` is `"clarify"`:
+   * If `clarify`:
      * **FIRST ACTION**: Write in the chat "Clarify mode"
      * **SECOND ACTION**: Follow the instructions in `.rdd/prompt-snippets/execution-step.clarify.md`
      * **AFTER**: After clarify execution is completed:
-       - Execute `.rdd/src/actions/prompt_questionnaire_generated_on.py`
-       - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
-     * **FINAL ACTION**: Stop (do not continue with the next instructions here)
+       - Execute `python .rdd/src/actions/prompt_questionnaire_generated_on.py`
+       - Execute `python .rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
+     * **FINAL ACTION**: Stop
    
-   * If `execution-mode` is `"analyze"`:
+   * If `analyze`:
      * **FIRST ACTION**: Write in the chat "Analyze mode"
      * **SECOND ACTION**: Follow the instructions in `.rdd/prompt-snippets/execution-step.analyze.md`
      * **AFTER**: After analyze execution is completed:
-       - Execute `.rdd/src/actions/prompt_analysis_generated_on.py`
-       - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
-     * **FINAL ACTION**: Stop (do not continue with the next instructions here)
+       - Execute `python .rdd/src/actions/prompt_analysis_generated_on.py`
+       - Execute `python .rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
+     * **FINAL ACTION**: Stop 
    
-   * If `execution-mode` is `"plan"`:
+   * If `plan`:
      * **FIRST ACTION**: Write in the chat "Plan mode"
      * **SECOND ACTION**: Follow the instructions in `.rdd/prompt-snippets/execution-step.plan.md`
      * **AFTER**: After plan execution is completed:
-       - Execute `.rdd/src/actions/prompt_plan_generated_on.py`
-       - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
-     * **FINAL ACTION**: Stop (do not continue with the next instructions here - do not execute implementation step)
+       - Execute `python .rdd/src/actions/prompt_plan_generated_on.py`
+       - Execute `python .rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
+     * **FINAL ACTION**: Stop (do not execute implementation)
    
-   * If `execution-mode` is `"implement"`:
+   * If `implement`:
      * **FIRST ACTION**:  Write in the chat "Implementation mode"
      * **SECOND ACTION**: Follow the instructions in `.rdd/prompt-snippets/execution-step.implementation.md`
      * **AFTER**: After implementation is completed:
-       - Execute `.rdd/src/actions/prompt_set_executed_on.py`
-       - Execute `.rdd/src/actions/prompt_implementation_completed_on.py`
-       - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
-     * **FINAL ACTION**: Stop (do not continue with the next instructions here)
+       - Execute `python .rdd/src/actions/prompt_set_executed_on.py`
+       - Execute `python .rdd/src/actions/prompt_implementation_completed_on.py`
+       - Execute `python .rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
+     * **FINAL ACTION**: Stop 
    
-   * If `execution-mode` is `"modification"`:
+   * If `modification`:
      * **FIRST ACTION**:  Write in the chat "Modification mode"
      * **SECOND ACTION**: Follow the instructions in `.rdd/prompt-snippets/execution-step.modification.md`
      * **AFTER**: After modification execution is completed:
-       - Execute `.rdd/src/actions/modification_complete.py`
-       - Execute `.rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
+       - Execute `python .rdd/src/actions/modification_complete.py`
+       - Execute `python .rdd/src/actions/prompt_set_execution_mode.py mode=no-action` to reset mode
      * **FINAL ACTION**: Stop (do not continue with the next instructions here)
 
-10. Update [REQUIREMENTS] if needed using requirement scripts (NEVER edit requirements.md directly - see Requirements Management Rules above). In all cases - write in the chat and in [IMPLEMENTATION] your rationale what is changed and if no changes - why.
+11. Requirements updates guardrail:
+* Only in `implement` and `modification` modes: update [REQUIREMENTS] using requirement scripts if needed.
+* In `clarify`, `analyze`, `plan` modes: do NOT update [REQUIREMENTS].
+* In all cases where requirements are changed: record rationale in [IMPLEMENTATION] (or [MODIFICATION-IMPLEMENTATION] for modification mode).
 
-10. After all id finished, write in the chat "I am done with <execution-mode>". In case the execiution mode is modification - add the modification-id.
-
+12. FINAL chat message:
+* Write exactly: `I am done with <execution-mode>.`
+* If execution-mode is modification, append the modification-id: `I am done with modification <ID>.`
 
 
 ## Mandatory Rules:  
 
-- If in the prompt text is written string (or several strings) startin with "[[[" and ending with "]]], this is a prompt-snippet-key. This is a refference to additional instructions in a separate file. You should read and follow these instructions. The list of prompt-snippet-keys and the respective files are defined in `.rdd/config/manifest.json` key "promptSnippets". Always consider these instructions. Treat the text in the prompt-snippet files in the same way as if it was copy-pasted instead of the prompt-snippet-key.
+* **Snippet keys**: If [ACTIVE-PROMPT] contains `[[[...]]]`, always resolve via `.rdd/config/manifest.json` and follow the snippet content as part of the prompt.
 
-- **Be verbose in files**: When writing to files in `.rdd-instance/workdir/` folder, provide detailed explanations, reasoning, and context to ensure clarity for future reference. 
+* **Be verbose in files**: When writing to files in `.rdd-instance/workdir/`, provide detailed reasoning and context for future reference.
 
-- **Keep short chat**: Do not make detailed summaries in the chat when finishing the task, unless for errors. Just write "I am done." 
+* **Keep chat short**: Apart from the mandatory mode announcements and the final done message, do not provide long summaries unless there is an error.
 
-- It is not supposed the steps to be executed in parallel - always follow the order of the steps as they are defined in the instructions above. Steps depend on the results of the previous steps! 
+* **Sequential execution**: Do not execute steps in parallel. Follow the steps in order. Each step depends on the previous results.
+
+* **Precedence order (highest to lowest)**:
+
+  1. [ACTIVE-PROMPT]
+  2. Snippet files referenced by keys in [ACTIVE-PROMPT]
+  3. [QUESTIONNAIRE] answers
+  4. [PLAN] steps
+  5. [REQUIREMENTS], [TECHNICAL-DESIGN], [FILES-AND-FOLDERS]
+  6. [PROMPT-REGISTRY] (historical reference; higher prompt-id has precedence in conflicts)
+
+* **Analysis**: The [ANALYSIS] is for human reading only. If needed, the user will modify the [ACTIVE-PROMPT]. Do not consider it during the implementation.
 
 - At the end of the execution - verify you have followed all the steps. 
 
-- Always read `.rdd-instance/specifications/requirements.md` and comply with it, unless the active prompt provides different instructions; in that case, the active prompt overrides `requirements.md`.
+* **Follow Requirements**: [REQUIREMENTS] are binding unless [ACTIVE-PROMPT], [QUESTIONNAIRE] answers or [PLAN] explicitly overrides. 
 
-- Never delete already added requirements rows in `.rdd-instance/specifications/requirements.md`. If the entire requirement is already obsolete and nothing shall be left from it - replace its text (after the ID) with "[DELETED]".  
+* **Do not delete requirement entry**: Never delete requirement ID rows in [REQUIREMENTS]. If obsolete, replace only the text after the ID with `[DELETED]`.
 
-- Maintain existing structure and formatting of `.rdd-instance/specifications/requirements.md` - it should be accordingly the convention in `.rdd/conventions/requirements.convention.md` - always observe the rules in it. Inform the user in case of deviations from the convention. 
+* **Error handling**: If an error occurs:
 
-- Always read [PROMPT-REGISTRY] and comply with it, unless the active prompt provides different instructions; in that case, the active prompt overrides `requirements.md`. If there is a conflict between different prompts, the one with highest prompt-id has presedence. 
+  * Log the error in the appropriate implementation file
+  * Return an error response in chat with recovery guidance
+  * Preserve partial work (do not delete logs)
 
-- **Error Handling**: At each step, if an error occurs, log error to implementation file, return error response to caller in the chat, preserve partial work (don't delete implementation file or undo changes), provide recovery guidance (re-run with fixes, manual intervention, rollback options) 
-
-- Do not ask for permission (unless explicitly required) to continue if you have no blockers to proceed furhter. Do as much as you can without user input. *
-  
-- If you can proceed - keep going with the work, do not stop.
+* **Do not pause**: Do not pause for confirmation; proceed unless user input is required.

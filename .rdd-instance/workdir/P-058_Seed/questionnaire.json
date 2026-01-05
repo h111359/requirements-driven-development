@@ -1,0 +1,197 @@
+{
+  "context": "This prompt requests creation of a seed script that validates and recreates required RDD instance files and folders. The script should check against manifest.json requirements and recreate missing mandatory items using convention files. Questions help clarify implementation details and error handling strategies.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Should the seed script create missing folders recursively or stop at the first missing parent folder?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Create folders recursively (like mkdir -p)",
+          "pros": "More robust, handles any missing parent folders automatically, prevents partial initialization",
+          "cons": "May silently create unexpected folder structures if paths are misconfigured"
+        },
+        {
+          "id": "B",
+          "label": "Require all parent folders to exist first",
+          "pros": "More explicit, catches configuration errors early, ensures intentional setup",
+          "cons": "More fragile, requires multiple script runs or manual intervention"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Recursive folder creation is standard for initialization scripts and aligns with the goal of automatic seeding during web server startup. It ensures the script can fully initialize the instance without manual intervention.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "How should the seed script handle existing files that need to be recreated?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Skip existing files entirely (preserve user modifications)",
+          "pros": "Protects user data and customizations, safe for repeated runs",
+          "cons": "Won't fix corrupted or malformed existing files"
+        },
+        {
+          "id": "B",
+          "label": "Validate existing files and recreate only if invalid",
+          "pros": "Fixes corrupted files, ensures file format compliance",
+          "cons": "More complex, requires validation logic for each file type"
+        },
+        {
+          "id": "C",
+          "label": "Always overwrite existing files",
+          "pros": "Ensures files match current conventions, simplest implementation",
+          "cons": "Destroys user modifications, data loss risk"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Preserving existing files is safest and aligns with the manifest's upgrade policy ('preserve' for .rdd-instance). The seed script should only create missing files, not modify existing ones, to avoid data loss.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "What should the seed script do when it cannot find a convention file referenced in manifest.json?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Fail immediately with error message",
+          "pros": "Clear feedback, prevents incorrect initialization, forces fix of configuration issues",
+          "cons": "Script cannot complete partial seeding, may block web server startup"
+        },
+        {
+          "id": "B",
+          "label": "Log warning and create empty file",
+          "pros": "Allows script to continue, enables web server to start",
+          "cons": "Creates invalid files, may cause runtime errors later"
+        },
+        {
+          "id": "C",
+          "label": "Log warning and skip that file",
+          "pros": "Allows partial seeding, doesn't create invalid files",
+          "cons": "Leaves instance in incomplete state, may cause runtime errors"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Missing convention files indicate a framework installation problem that should be fixed immediately. Failing fast prevents creating an invalid instance state and makes the problem visible to the developer.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "Should the seed script validate the structure of files it creates (e.g., verify JSON is valid)?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes, validate all created files",
+          "pros": "Ensures files are well-formed, catches template errors early",
+          "cons": "More complex, requires validation logic for each file format"
+        },
+        {
+          "id": "B",
+          "label": "No, trust convention files are correct",
+          "pros": "Simpler implementation, faster execution",
+          "cons": "May create invalid files if convention templates are malformed"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Validation provides immediate feedback if convention files have errors. Since this runs during web server initialization, catching problems early prevents runtime failures and improves developer experience.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "How should the seed script report its actions to the user?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Print detailed log of all actions (created folders, files, skipped items)",
+          "pros": "Full transparency, helpful for debugging, clear audit trail",
+          "cons": "Verbose output may clutter web server startup logs"
+        },
+        {
+          "id": "B",
+          "label": "Print summary only (count of created items)",
+          "pros": "Clean output, minimal log clutter",
+          "cons": "Less visibility into what was actually done"
+        },
+        {
+          "id": "C",
+          "label": "Silent mode unless errors occur",
+          "pros": "No output clutter, fastest execution",
+          "cons": "No confirmation that seeding ran successfully"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Detailed logging helps developers understand what the seed script is doing, especially during initial setup or troubleshooting. Since it runs only once during web server initialization, verbose output is acceptable.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q6",
+      "question-text": "Should the seed script be idempotent (safe to run multiple times)?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes, must be idempotent and safe for repeated execution",
+          "pros": "Safe for web server restarts, can fix missing files later, developer-friendly",
+          "cons": "Must handle all edge cases carefully"
+        },
+        {
+          "id": "B",
+          "label": "No, designed for one-time initialization only",
+          "pros": "Simpler implementation, can assume clean state",
+          "cons": "Cannot fix missing files after initial setup, fragile"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The prompt explicitly states the script should 'check and do nothing' once seeded, and run during 'each initialization' of the web server. This clearly requires idempotent behavior for safe repeated execution.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q7",
+      "question-text": "The prompt contains contradictory instructions about template files. Section 'Template Files to Create' requests creating template files in .rdd/templates/, but the Notes section states 'No template files are used - the files content is generated by the script'. How should the seed script generate file content?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Create template files in .rdd/templates/ and use them to generate instance files",
+          "pros": "Separates template content from code, easier to customize file headers/structure, templates are reusable",
+          "cons": "More files to maintain, adds complexity, template location not in manifest.json"
+        },
+        {
+          "id": "B",
+          "label": "Generate file content directly in code based on convention files (no templates)",
+          "pros": "Simpler implementation, follows 'convention over configuration', no extra files needed, aligns with manifest.json structure",
+          "cons": "File structure is hardcoded in Python, less flexible for customization"
+        },
+        {
+          "id": "C",
+          "label": "Read convention files and extract/generate minimal valid content from them",
+          "pros": "Fully convention-driven, no hardcoded content, adapts to convention changes",
+          "cons": "Complex parsing logic required, convention files are documentation not templates"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Option B aligns with the Notes section stating 'no template files are used' and with the manifest.json structure which references convention files (which are documentation, not templates). Generating minimal valid content in code is simpler and follows the 'convention over configuration' principle mentioned in the prompt.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    }
+  ]
+}

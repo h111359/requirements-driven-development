@@ -240,3 +240,21 @@ repo-root/scripts/
 - **Path**: `repo-root/scripts/setup-test-env.py`
 - **Type**: Python script
 - **Description**: Setup script for creating or updating RDD test environment and installing test dependencies
+
+---
+
+### Tests - Python Folder - Seed Script Tests
+
+**test_seed.py**
+- **Path**: `repo-root/tests/python/test_seed.py`
+- **Type**: Python test script
+- **Description**: Test suite for rdd-instance_seed.py script, verifying folder creation, file initialization, validation, idempotency, and error handling
+
+---
+
+### RDD Framework - Actions Folder
+
+**.rdd/src/actions/rdd-instance_seed.py**
+- **Path**: `repo-root/.rdd/src/actions/rdd-instance_seed.py`
+- **Type**: Python script
+- **Description**: Validates and initializes RDD instance structure by creating missing folders and files based on manifest.json configuration. Idempotent and safe for repeated execution. Executed automatically during web server startup.

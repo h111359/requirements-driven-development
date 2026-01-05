@@ -568,6 +568,30 @@ The framework enables:
 
 - [TR-0161] The prompt.md auto-save error state shall provide a manual retry option via a clickable link in the status indicator.
 
+- [TR-0162] The framework shall provide a seed script at .rdd/src/actions/rdd-instance_seed.py that validates and initializes the RDD instance structure by creating missing folders and files based on manifest.json configuration
+
+- [TR-0163] The seed script shall create folders recursively using mkdir -p semantics, ensuring all parent directories are created as needed
+
+- [TR-0164] The seed script shall preserve existing files without modification, implementing idempotent behavior safe for repeated execution
+
+- [TR-0165] The seed script shall validate JSON files after creation using JSON parsing and verify UTF-8 encoding for Markdown files
+
+- [TR-0166] The seed script shall fail fast with specific error messages and exit code 1 when manifest.json is missing, malformed, or references non-existent convention files
+
+- [TR-0167] The seed script shall support a --verbose flag for DEBUG level logging and provide summary output showing folder and file creation statistics
+
+- [TR-0168] The web server startup sequence shall execute the seed script before starting the HTTP server and abort startup if seeding fails with non-zero exit code
+
+- [TR-0169] The seed script shall complete initialization in under 100ms for typical cases where all required files and folders already exist
+
+
+
+
+
+
+
+
+
 
 
 

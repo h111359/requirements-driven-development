@@ -680,6 +680,35 @@ def main() -> int:
                     print(f"ERROR: Invalid port number: {arg}", file=sys.stderr)
                     return 1
     
+    # Run seed script to ensure RDD instance structure is initialized
+    print("Initializing RDD instance structure...")
+    seed_script = _repo_root() / ".rdd" / "src" / "actions" / "rdd-instance_seed.py"
+    try:
+        result = subprocess.run(
+            [sys.executable, str(seed_script)],
+            capture_output=True,
+            text=True,
+            cwd=_repo_root()
+        )
+        
+        # Print seed script output
+        if result.stdout:
+            print(result.stdout)
+        
+        if result.returncode != 0:
+            print(f"ERROR: RDD instance seeding failed", file=sys.stderr)
+            if result.stderr:
+                print(result.stderr, file=sys.stderr)
+            print("Remediation: Check the error messages above and ensure the framework is properly installed.", file=sys.stderr)
+            return 1
+        
+    except Exception as e:
+        print(f"ERROR: Failed to run seed script: {e}", file=sys.stderr)
+        print("Remediation: Ensure .rdd/src/actions/rdd-instance_seed.py exists and is executable.", file=sys.stderr)
+        return 1
+    
+    print()
+    
     # Generate session token
     session_token = secrets.token_urlsafe(32)
     RDDWebHandler.session_token = session_token
