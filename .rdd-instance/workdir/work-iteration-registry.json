@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20260106-180532",
     "iteration-name": "Refresh",
-    "prompt-id-sequence-next-value": 3,
+    "prompt-id-sequence-next-value": 4,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -22,6 +22,17 @@
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
+        },
+        {
+            "prompt-id": "P-003",
+            "prompt-title": "Workdir metadata",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
             "plan-generated": false,
             "implementation-completed": true,
             "execution-mode": "no-action",

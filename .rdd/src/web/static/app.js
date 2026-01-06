@@ -440,6 +440,9 @@ async function loadActivePrompt() {
     document.getElementById('active-prompt-title').innerHTML = 
         `<i class="bi bi-journal-check me-2"></i><span>${promptId}: ${escapeHtml(title)}</span>`;
     
+    // Update iteration metadata in header
+    updateIterationMetadata();
+    
     // Update execution mode selector (button group)
     const currentMode = activePrompt['execution-mode'] || getSmartDefaultMode(activePrompt);
     const modeRadio = document.getElementById(`mode-${currentMode}`);
@@ -487,6 +490,35 @@ async function loadActivePrompt() {
 function showNoActivePrompt() {
     document.getElementById('no-active-prompt-message').style.display = 'block';
     document.getElementById('active-prompt-content').style.display = 'none';
+    
+    // Update iteration metadata even when no active prompt
+    updateIterationMetadata();
+}
+
+/**
+ * Update iteration metadata display in Active Prompt header
+ */
+function updateIterationMetadata() {
+    const metadataElement = document.getElementById('iteration-metadata');
+    
+    if (!metadataElement) {
+        return;
+    }
+    
+    if (!currentRegistry) {
+        metadataElement.style.display = 'none';
+        return;
+    }
+    
+    const iterationId = currentRegistry['iteration-id'] || '';
+    const iterationName = currentRegistry['iteration-name'] || '';
+    
+    if (iterationId && iterationName) {
+        metadataElement.textContent = `${iterationName} (${iterationId})`;
+        metadataElement.style.display = 'inline';
+    } else {
+        metadataElement.style.display = 'none';
+    }
 }
 
 /**
@@ -1968,33 +2000,7 @@ async function loadIterationStatus() {
  * Render the registry view
  */
 function renderRegistryView(container, registry) {
-    // Iteration metadata section - compact single row layout
-    const metadataHtml = `
-        <div class="card mb-3 border-primary">
-            <div class="card-body">
-                <h6 class="card-subtitle mb-2 text-muted">Iteration Metadata</h6>
-                <div class="d-flex flex-wrap gap-3 align-items-center">
-                    <div>
-                        <strong>ID:</strong> <code>${escapeHtml(registry['iteration-id'])}</code>
-                    </div>
-                    <div>
-                        <strong>Name:</strong> ${escapeHtml(registry['iteration-name'])}
-                    </div>
-                    <div>
-                        <strong>Total Prompts:</strong> ${registry.prompts ? registry.prompts.length : 0}
-                    </div>
-                    <div>
-                        <strong>Next ID:</strong> <code>P-${String(registry['prompt-id-sequence-next-value']).padStart(3, '0')}</code>
-                    </div>
-                    <div>
-                        <strong>Git:</strong> ${registry['git-enabled'] ? '<i class="bi bi-check-circle-fill text-success"></i> Yes' : '<i class="bi bi-x-circle-fill text-danger"></i> No'}
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    // Prompts table
+    // Prompts table (iteration metadata removed - now shown in Active Prompt page header)
     let tableHtml = `
         <div class="table-responsive">
             <table class="table table-sm table-hover table-bordered">
@@ -2076,8 +2082,8 @@ function renderRegistryView(container, registry) {
         </div>
     `;
     
-    // Combine metadata and table
-    container.innerHTML = metadataHtml + tableHtml;
+    // Set only the table (metadata removed)
+    container.innerHTML = tableHtml;
 }
 
 /**

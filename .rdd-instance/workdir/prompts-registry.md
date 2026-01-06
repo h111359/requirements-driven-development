@@ -16,3 +16,8 @@ Move the new areas in the same place where the buttons were before - between "Cr
 
 Place the Config tab between Requirements and Help
 %%ENDPROMPT
+
+%%PROMPT P-003 "Workdir metadata"
+Move the area from Workdir tab with Iteration Metadata (the ID, Name) to the title area of the Active Prompt page.
+Do not show Total Prompts, Next ID, Git
+%%ENDPROMPT
