@@ -30,3 +30,7 @@ Currently when the page is refreshed - the page goes on the Active Prompt page a
 
 When Questionnaire is opened, when page is refreshed, a message appears that there is no questionnaire file is found, but when I click on the Questionnaire button, the form with questions appears. This is a bug - fix it
 %%ENDPROMPT
+
+%%PROMPT P-005 "Archive Iteration"
+Move the "Archive Iteration" button to appear in "Active Prompt" header banner only when there is no active prompt. The iteration should not be archived if active prompt execution is in progress.
+%%ENDPROMPT

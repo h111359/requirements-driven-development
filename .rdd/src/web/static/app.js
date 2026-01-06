@@ -540,6 +540,12 @@ async function loadActivePrompt() {
     document.getElementById('no-active-prompt-message').style.display = 'none';
     document.getElementById('active-prompt-content').style.display = 'block';
     
+    // Hide Archive Iteration button when active prompt exists
+    const archiveBtn = document.getElementById('archive-iteration-btn');
+    if (archiveBtn) {
+        archiveBtn.style.display = 'none';
+    }
+    
     // Update title
     const promptId = activePrompt['prompt-id'];
     const title = activePrompt.title || activePrompt['prompt-title'] || '';
@@ -616,6 +622,14 @@ function showNoActivePrompt() {
     
     // Update iteration metadata even when no active prompt
     updateIterationMetadata();
+    
+    // Show Archive Iteration button if iteration exists
+    const archiveBtn = document.getElementById('archive-iteration-btn');
+    if (archiveBtn && currentRegistry) {
+        archiveBtn.style.display = 'inline-block';
+    } else if (archiveBtn) {
+        archiveBtn.style.display = 'none';
+    }
 }
 
 /**
@@ -2108,21 +2122,18 @@ async function loadIterationStatus() {
     
     const createSection = document.getElementById('create-iteration-section');
     const registrySection = document.getElementById('registry-section');
-    const archiveBtn = document.getElementById('archive-iteration-btn');
     const container = document.getElementById('registry-view-container');
     
     if (!currentRegistry) {
         // No iteration exists - show create button only
         createSection.style.display = 'block';
         registrySection.style.display = 'none';
-        if (archiveBtn) archiveBtn.style.display = 'none';
         return;
     }
     
-    // Iteration exists - show registry and archive button
+    // Iteration exists - show registry
     createSection.style.display = 'none';
     registrySection.style.display = 'block';
-    if (archiveBtn) archiveBtn.style.display = 'inline-block';
     
     // Render registry view
     renderRegistryView(container, currentRegistry);
