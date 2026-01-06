@@ -224,6 +224,9 @@ The framework enables:
 
 - [UR-0091] The Web UI Workdir page shall display the work iteration registry in a comprehensive, human-readable format showing iteration metadata and a table of all prompts with their states, execution modes, and workflow flags, enabling quick status overview and navigation to individual prompts.
 
+- [UR-0092] The Web UI shall provide a Config page enabling users to view and modify instance configuration settings including the git-enabled flag through an intuitive interface with toggle switches
+
+
 
 
 

@@ -1,11 +1,22 @@
 {
     "iteration-id": "ITR-20260106-010223",
     "iteration-name": "Test 20260106_0102",
-    "prompt-id-sequence-next-value": 2,
+    "prompt-id-sequence-next-value": 3,
     "prompts": [
         {
             "prompt-id": "P-001",
             "prompt-title": "Test",
+            "state": "completed",
+            "questionnaire-generated": false,
+            "questionnaire-answered": false,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
+        },
+        {
+            "prompt-id": "P-002",
+            "prompt-title": "Config Page",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,

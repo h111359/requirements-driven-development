@@ -64,6 +64,8 @@ function showSection(sectionName) {
     // Load section-specific data
     if (sectionName === 'active-prompt') {
         loadActivePrompt();
+    } else if (sectionName === 'config') {
+        loadConfig();
     } else if (sectionName === 'workdir') {
         loadIterationStatus();
     } else if (sectionName === 'technical-design') {
@@ -2608,6 +2610,55 @@ async function saveRequirements() {
         }
     } catch (error) {
         showAlert('danger', 'Error saving requirements: ' + error.message);
+    }
+}
+
+/**
+ * Load configuration
+ */
+async function loadConfig() {
+    try {
+        const response = await fetch('/api/config?token=' + sessionToken);
+        const result = await response.json();
+        
+        if (result.success) {
+            const gitEnabled = result.data['git-enabled'] || false;
+            document.getElementById('git-enabled-toggle').checked = gitEnabled;
+        } else {
+            showAlert('danger', 'Failed to load configuration: ' + result.error);
+        }
+    } catch (error) {
+        showAlert('danger', 'Error loading configuration: ' + error.message);
+    }
+}
+
+/**
+ * Save git-enabled configuration
+ */
+async function saveGitEnabled() {
+    const gitEnabled = document.getElementById('git-enabled-toggle').checked;
+    
+    try {
+        const response = await fetch('/api/config/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                gitEnabled: gitEnabled
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('success', 'Configuration saved successfully');
+        } else {
+            showAlert('danger', 'Failed to save configuration: ' + result.error);
+        }
+    } catch (error) {
+        showAlert('danger', 'Error saving configuration: ' + error.message);
     }
 }
 

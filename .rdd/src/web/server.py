@@ -430,6 +430,12 @@ class RDDWebHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error_response(f"Failed to load snippets: {str(e)}")
             return
         
+        elif path == "/api/config":
+            # Get instance config
+            result = self.read_json_file("config/instance-config.json")
+            self.send_json_response(result)
+            return
+        
         elif path == "/api/help/user-guide":
             # Get user guide as rendered HTML
             try:
@@ -513,6 +519,22 @@ class RDDWebHandler(http.server.SimpleHTTPRequestHandler):
             
             result = self.execute_action(domain, action, action_params)
             self.send_json_response(result)
+            return
+        
+        elif path == "/api/config/save":
+            # Save instance config
+            git_enabled = params.get("gitEnabled", False)
+            
+            try:
+                config_path = _repo_root() / ".rdd-instance" / "config" / "instance-config.json"
+                config_data = {"git-enabled": git_enabled}
+                
+                with open(config_path, 'w', encoding='utf-8') as f:
+                    json.dump(config_data, f, indent=2)
+                
+                self.send_json_response({"success": True, "message": "Configuration saved successfully"})
+            except Exception as e:
+                self.send_error_response(f"Failed to save configuration: {str(e)}")
             return
         
         elif path == "/api/file/save":
