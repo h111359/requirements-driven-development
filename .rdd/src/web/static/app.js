@@ -13,8 +13,7 @@ const StateManager = {
     // Keys for sessionStorage
     KEYS: {
         SECTION: 'rdd_current_section',
-        FILE_VIEW: 'rdd_current_file_view',
-        EXECUTION_MODE: 'rdd_execution_mode'
+        FILE_VIEW: 'rdd_current_file_view'
     },
     
     // Save current section
@@ -55,31 +54,11 @@ const StateManager = {
         }
     },
     
-    // Save execution mode
-    saveExecutionMode(mode) {
-        try {
-            sessionStorage.setItem(this.KEYS.EXECUTION_MODE, mode);
-        } catch (e) {
-            console.warn('Failed to save execution mode state:', e);
-        }
-    },
-    
-    // Get saved execution mode
-    getExecutionMode() {
-        try {
-            return sessionStorage.getItem(this.KEYS.EXECUTION_MODE);
-        } catch (e) {
-            console.warn('Failed to get execution mode state:', e);
-            return null;
-        }
-    },
-    
     // Clear all saved state
     clearAll() {
         try {
             sessionStorage.removeItem(this.KEYS.SECTION);
             sessionStorage.removeItem(this.KEYS.FILE_VIEW);
-            sessionStorage.removeItem(this.KEYS.EXECUTION_MODE);
         } catch (e) {
             console.warn('Failed to clear state:', e);
         }
@@ -555,10 +534,9 @@ async function loadActivePrompt() {
     // Update iteration metadata in header
     updateIterationMetadata();
     
-    // Update execution mode selector (button group)
-    // Check if user has a saved preference in session, otherwise use server state
-    const savedMode = StateManager.getExecutionMode();
-    const currentMode = savedMode || activePrompt['execution-mode'] || getSmartDefaultMode(activePrompt);
+    // Update execution mode selector (button group) - always use registry value
+    const currentMode = activePrompt['execution-mode'] || getSmartDefaultMode(activePrompt);
+    previousExecutionMode = currentMode; // Initialize tracking
     const modeRadio = document.getElementById(`mode-${currentMode}`);
     if (modeRadio) {
         modeRadio.checked = true;
@@ -859,6 +837,7 @@ function updateWorkflowFlags(prompt) {
 
 // --- Active Prompt Background Refresh ---
 let activePromptRefreshIntervalId = null;
+let previousExecutionMode = null; // Track previous mode to detect changes
 
 function isUserInteractingWithActivePrompt() {
     // If any modal is open, consider user interacting
@@ -890,19 +869,20 @@ async function refreshActivePromptStatuses() {
         // Update flags (only updates the DOM for flags)
         updateWorkflowFlags(activePrompt);
 
-        // Update execution-mode radio/buttons (targeted update)
-        // Check if user has a saved preference in session, otherwise use server state
-        const savedMode = StateManager.getExecutionMode();
-        const currentMode = savedMode || activePrompt['execution-mode'] || getSmartDefaultMode(activePrompt);
-        
-        // Try to set radio by id convention `mode-<mode>`
-        const modeRadio = document.getElementById(`mode-${currentMode}`);
-        if (modeRadio) {
-            modeRadio.checked = true;
-        } else {
-            // Fallback: set inputs named execution-mode if present
-            const radios = document.querySelectorAll('input[name="execution-mode"]');
-            radios.forEach(r => r.checked = (r.id === `mode-${currentMode}` || r.value === currentMode));
+        // Update execution-mode radio/buttons only if value changed (hybrid approach per Q2-C)
+        const currentMode = activePrompt['execution-mode'] || getSmartDefaultMode(activePrompt);
+        if (currentMode !== previousExecutionMode) {
+            previousExecutionMode = currentMode;
+            
+            // Try to set radio by id convention `mode-<mode>`
+            const modeRadio = document.getElementById(`mode-${currentMode}`);
+            if (modeRadio) {
+                modeRadio.checked = true;
+            } else {
+                // Fallback: set inputs named execution-mode if present
+                const radios = document.querySelectorAll('input[name="execution-mode"]');
+                radios.forEach(r => r.checked = (r.id === `mode-${currentMode}` || r.value === currentMode));
+            }
         }
 
         // Update complete button enabled state silently
@@ -932,9 +912,6 @@ function startActivePromptRefresh() {
  * Update execution mode for active prompt
  */
 async function updateExecutionMode(mode) {
-    // Save execution mode state
-    StateManager.saveExecutionMode(mode);
-    
     try {
         const response = await fetch('/api/action', {
             method: 'POST',

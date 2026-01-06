@@ -43,3 +43,7 @@ Rename Workdir tab to be named Prompts History
 
 Check if requirements should be updated because of the prompts in Workdir implemented so far
 %%ENDPROMPT
+
+%%PROMPT P-007 "Bug fix - execution-mode"
+The radio buttons for execution mode in Active Prompt page should reflect always the value of "execution-mode" entry in `.rdd-instance/workdir/work-iteration-registry.json`. Every refresh of the statuses of the files in Active Prompt should include radio buttons update as well.
+%%ENDPROMPT
