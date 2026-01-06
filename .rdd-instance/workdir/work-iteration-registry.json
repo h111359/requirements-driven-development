@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20260106-180532",
     "iteration-name": "Refresh",
-    "prompt-id-sequence-next-value": 2,
+    "prompt-id-sequence-next-value": 3,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -15,6 +15,17 @@
             "executed": true,
             "modifications-count": 1,
             "current-modification-id": null
+        },
+        {
+            "prompt-id": "P-002",
+            "prompt-title": "UX changes",
+            "state": "completed",
+            "questionnaire-generated": false,
+            "questionnaire-answered": false,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
         }
     ]
 }

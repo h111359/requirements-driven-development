@@ -10,3 +10,9 @@ The current functionality of these buttons - to set execution-mode - should be r
 
 Move the new areas in the same place where the buttons were before - between "Create Modification" button and "Copy Execute Cmd) as a centered sub-area
 %%ENDPROMPT
+
+%%PROMPT P-002 "UX changes"
+[[[ROLE_SOFTWARE_DEVELOPER]]]
+
+Place the Config tab between Requirements and Help
+%%ENDPROMPT
