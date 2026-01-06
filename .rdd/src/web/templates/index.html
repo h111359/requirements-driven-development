@@ -93,119 +93,139 @@
 
                             <!-- Active Prompt Content -->
                             <div id="active-prompt-content" style="display:none;">
-                                <!-- Sticky Control Panel -->
+                                <!-- Top Action Buttons Row with Workflow Areas in Center -->
                                 <div class="sticky-controls-panel">
-                                    <div class="d-flex gap-2 align-items-center">
-                                        <!-- Region 1: Create Modification Button (left) -->
-                                        <div>
-                                            <button class="btn btn-sm btn-primary" id="add-modification-btn" onclick="showAddModificationModal()" disabled title="Create Modification">
-                                                <i class="bi bi-plus-circle"></i> Create Modification
-                                            </button>
-                                        </div>
+                                    <div class="d-flex gap-2 justify-content-between align-items-center flex-wrap">
+                                        <button class="btn btn-sm btn-primary" id="add-modification-btn" onclick="showAddModificationModal()" disabled title="Create Modification">
+                                            <i class="bi bi-plus-circle"></i> Create Modification
+                                        </button>
                                         
-                                        <!-- Region 2: Execution Mode Buttons (center, flex-grow) -->
-                                        <div class="flex-grow-1">
-                                            <div class="d-flex gap-1 flex-wrap justify-content-center">
-                                                <!-- No Action -->
-                                                <div class="d-flex flex-column align-items-center">
-                                                    <div class="mb-1" style="height: 20px; font-size: 0.99rem;">
-                                                        <!-- No icons for No Action -->
-                                                    </div>
-                                                    <div>
-                                                        <input type="radio" class="btn-check" name="execution-mode" id="mode-no-action" value="no-action" autocomplete="off">
-                                                        <label class="btn btn-primary btn-sm" for="mode-no-action" onclick="updateExecutionMode('no-action')">
-                                                            No Action
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Clarify -->
-                                                <div class="d-flex flex-column align-items-center">
-                                                    <div class="mb-1 d-flex gap-1" style="height: 20px; font-size: 0.99rem;">
-                                                        <span id="flag-questionnaire-generated" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Questionnaire Generated">
-                                                            <i class="bi bi-question-circle text-secondary"></i>
-                                                        </span>
-                                                        <span id="flag-questionnaire-answered" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Questionnaire Answered">
-                                                            <i class="bi bi-clipboard-check text-secondary"></i>
-                                                        </span>
-                                                    </div>
-                                                    <div>
-                                                        <input type="radio" class="btn-check" name="execution-mode" id="mode-clarify" value="clarify" autocomplete="off">
-                                                        <label class="btn btn-primary btn-sm" for="mode-clarify" onclick="updateExecutionMode('clarify')">
-                                                            Clarify
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Analyze -->
-                                                <div class="d-flex flex-column align-items-center">
-                                                    <div class="mb-1" style="height: 20px; font-size: 0.99rem;">
-                                                        <span id="flag-analysis-generated" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Analysis Generated">
-                                                            <i class="bi bi-clipboard-data text-secondary"></i>
-                                                        </span>
-                                                    </div>
-                                                    <div>
-                                                        <input type="radio" class="btn-check" name="execution-mode" id="mode-analyze" value="analyze" autocomplete="off">
-                                                        <label class="btn btn-primary btn-sm" for="mode-analyze" onclick="updateExecutionMode('analyze')">
-                                                            Analyze
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Plan -->
-                                                <div class="d-flex flex-column align-items-center">
-                                                    <div class="mb-1" style="height: 20px; font-size: 0.99rem;">
-                                                        <span id="flag-plan-generated" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Plan Generated">
-                                                            <i class="bi bi-file-earmark-text text-secondary"></i>
-                                                        </span>
-                                                    </div>
-                                                    <div>
-                                                        <input type="radio" class="btn-check" name="execution-mode" id="mode-plan" value="plan" autocomplete="off">
-                                                        <label class="btn btn-primary btn-sm" for="mode-plan" onclick="updateExecutionMode('plan')">
-                                                            Plan
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Implement -->
-                                                <div class="d-flex flex-column align-items-center">
-                                                    <div class="mb-1 d-flex gap-1" style="height: 20px; font-size: 0.99rem;">
-                                                        <span id="flag-implementation-completed" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Implementation Completed">
-                                                            <i class="bi bi-file-code text-secondary"></i>
-                                                        </span>
-                                                        <span id="flag-executed" class="flag-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Executed">
-                                                            <i class="bi bi-patch-check text-secondary"></i>
-                                                        </span>
-                                                    </div>
-                                                    <div>
-                                                        <input type="radio" class="btn-check" name="execution-mode" id="mode-implement" value="implement" autocomplete="off">
-                                                        <label class="btn btn-primary btn-sm" for="mode-implement" onclick="updateExecutionMode('implement')">
-                                                            Implement
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Modification -->
-                                                <div class="d-flex flex-column align-items-center">
-                                                    <div class="mb-1 d-flex gap-1" style="height: 20px; font-size: 0.88rem;">
-                                                        <span id="flag-modifications-count" class="text-muted small" style="display: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Modifications Count">
-                                                            <i class="bi bi-pencil-square"></i> <span id="modifications-count-value">0</span>
-                                                        </span>
-                                                        <span id="flag-current-modification" class="text-muted small" style="display: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Current Modification ID">
-                                                            #<span id="current-modification-value">---</span>
-                                                        </span>
-                                                    </div>
-                                                    <div>
-                                                        <input type="radio" class="btn-check" name="execution-mode" id="mode-modification" value="modification" autocomplete="off">
-                                                        <label class="btn btn-primary btn-sm" for="mode-modification" onclick="updateExecutionMode('modification')">
-                                                            Modification
-                                                        </label>
-                                                    </div>
-                                                </div>
+                                        <!-- Workflow Areas - Centered -->
+                                        <div class="workflow-areas-container-inline flex-grow-1">
+                                            <div class="d-flex gap-2 flex-wrap justify-content-center">
+                                        <!-- Prompt Area (No Action) -->
+                                        <div class="workflow-area workflow-area-neutral">
+                                            <div class="workflow-area-icons">
+                                                <span class="text-muted small">Always Available</span>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm workflow-file-btn active" 
+                                                    id="file-btn-prompt" onclick="showFileView('prompt')">
+                                                <i class="bi bi-file-text"></i> Prompt
+                                            </button>
+                                            <div class="workflow-area-mode">
+                                                <input type="radio" class="form-check-input" name="execution-mode" 
+                                                       id="mode-no-action" value="no-action" autocomplete="off" 
+                                                       onchange="updateExecutionMode('no-action')">
+                                                <label class="form-check-label small" for="mode-no-action">No Action</label>
                                             </div>
                                         </div>
+
+                                        <!-- Questionnaire Area (Clarify) -->
+                                        <div class="workflow-area">
+                                            <div class="workflow-area-icons">
+                                                <span id="flag-questionnaire-generated" class="flag-icon" data-bs-toggle="tooltip" title="Questionnaire Generated">
+                                                    <i class="bi bi-question-circle text-secondary"></i>
+                                                </span>
+                                                <span id="flag-questionnaire-answered" class="flag-icon" data-bs-toggle="tooltip" title="Questionnaire Answered">
+                                                    <i class="bi bi-clipboard-check text-secondary"></i>
+                                                </span>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm workflow-file-btn" 
+                                                    id="file-btn-questionnaire" onclick="showFileView('questionnaire')" disabled>
+                                                <i class="bi bi-question-circle"></i> Questionnaire
+                                            </button>
+                                            <div class="workflow-area-mode">
+                                                <input type="radio" class="form-check-input" name="execution-mode" 
+                                                       id="mode-clarify" value="clarify" autocomplete="off" 
+                                                       onchange="updateExecutionMode('clarify')">
+                                                <label class="form-check-label small" for="mode-clarify">Clarify</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Analysis Area (Analyze) -->
+                                        <div class="workflow-area">
+                                            <div class="workflow-area-icons">
+                                                <span id="flag-analysis-generated" class="flag-icon" data-bs-toggle="tooltip" title="Analysis Generated">
+                                                    <i class="bi bi-clipboard-data text-secondary"></i>
+                                                </span>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm workflow-file-btn" 
+                                                    id="file-btn-analysis" onclick="showFileView('analysis')" disabled>
+                                                <i class="bi bi-clipboard-data"></i> Analysis
+                                            </button>
+                                            <div class="workflow-area-mode">
+                                                <input type="radio" class="form-check-input" name="execution-mode" 
+                                                       id="mode-analyze" value="analyze" autocomplete="off" 
+                                                       onchange="updateExecutionMode('analyze')">
+                                                <label class="form-check-label small" for="mode-analyze">Analyze</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Plan Area (Plan) -->
+                                        <div class="workflow-area">
+                                            <div class="workflow-area-icons">
+                                                <span id="flag-plan-generated" class="flag-icon" data-bs-toggle="tooltip" title="Plan Generated">
+                                                    <i class="bi bi-file-earmark-text text-secondary"></i>
+                                                </span>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm workflow-file-btn" 
+                                                    id="file-btn-plan" onclick="showFileView('plan')" disabled>
+                                                <i class="bi bi-list-check"></i> Plan
+                                            </button>
+                                            <div class="workflow-area-mode">
+                                                <input type="radio" class="form-check-input" name="execution-mode" 
+                                                       id="mode-plan" value="plan" autocomplete="off" 
+                                                       onchange="updateExecutionMode('plan')">
+                                                <label class="form-check-label small" for="mode-plan">Plan</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Implementation Area (Implement) -->
+                                        <div class="workflow-area">
+                                            <div class="workflow-area-icons">
+                                                <span id="flag-implementation-completed" class="flag-icon" data-bs-toggle="tooltip" title="Implementation Completed">
+                                                    <i class="bi bi-file-code text-secondary"></i>
+                                                </span>
+                                                <span id="flag-executed" class="flag-icon" data-bs-toggle="tooltip" title="Executed">
+                                                    <i class="bi bi-patch-check text-secondary"></i>
+                                                </span>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm workflow-file-btn" 
+                                                    id="file-btn-implementation" onclick="showFileView('implementation')" disabled>
+                                                <i class="bi bi-code-square"></i> Implementation
+                                            </button>
+                                            <div class="workflow-area-mode">
+                                                <input type="radio" class="form-check-input" name="execution-mode" 
+                                                       id="mode-implement" value="implement" autocomplete="off" 
+                                                       onchange="updateExecutionMode('implement')">
+                                                <label class="form-check-label small" for="mode-implement">Implement</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Modifications Area (Modification) -->
+                                        <div class="workflow-area">
+                                            <div class="workflow-area-icons">
+                                                <span id="flag-modifications-count" class="text-muted small" style="display: none;" data-bs-toggle="tooltip" title="Modifications Count">
+                                                    <i class="bi bi-pencil-square"></i> <span id="modifications-count-value">0</span>
+                                                </span>
+                                                <span id="flag-current-modification" class="text-muted small" style="display: none;" data-bs-toggle="tooltip" title="Current Modification ID">
+                                                    #<span id="current-modification-value">---</span>
+                                                </span>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm workflow-file-btn" 
+                                                    id="file-btn-modifications" onclick="showFileView('modifications')" disabled>
+                                                <i class="bi bi-pencil-square"></i> Modifications
+                                            </button>
+                                            <div class="workflow-area-mode">
+                                                <input type="radio" class="form-check-input" name="execution-mode" 
+                                                       id="mode-modification" value="modification" autocomplete="off" 
+                                                       onchange="updateExecutionMode('modification')">
+                                                <label class="form-check-label small" for="mode-modification">Modification</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        </div>
                                         
-                                        <!-- Region 3: Action Buttons (right) -->
                                         <div class="d-flex gap-1">
                                             <button class="btn btn-sm btn-primary" id="copy-execute-cmd-btn" onclick="copyExecuteCommand()" title="Copy execute command to clipboard">
                                                 <i class="bi bi-clipboard"></i> Copy Execute Cmd
@@ -220,49 +240,10 @@
                                 <!-- Prompt Files Editor -->
                                 <div class="card">
                                     <div class="card-body">
-                                        <!-- Tab Navigation -->
-                                        <ul class="nav nav-tabs mb-3" id="active-prompt-tabs" role="tablist">
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link active" id="active-prompt-tab" data-bs-toggle="tab" 
-                                                        data-bs-target="#active-prompt-content-tab" type="button" role="tab">
-                                                    <i class="bi bi-file-text"></i> Prompt
-                                                </button>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="active-questionnaire-tab" data-bs-toggle="tab" 
-                                                        data-bs-target="#active-questionnaire-content-tab" type="button" role="tab">
-                                                    <i class="bi bi-question-circle"></i> Questionnaire
-                                                </button>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="active-analysis-tab" data-bs-toggle="tab" 
-                                                        data-bs-target="#active-analysis-content-tab" type="button" role="tab">
-                                                    <i class="bi bi-clipboard-data"></i> Analysis
-                                                </button>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="active-plan-tab" data-bs-toggle="tab" 
-                                                        data-bs-target="#active-plan-content-tab" type="button" role="tab">
-                                                    <i class="bi bi-list-check"></i> Plan
-                                                </button>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="active-implementation-tab" data-bs-toggle="tab" 
-                                                        data-bs-target="#active-implementation-content-tab" type="button" role="tab">
-                                                    <i class="bi bi-code-square"></i> Implementation
-                                                </button>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="active-modifications-tab" data-bs-toggle="tab" 
-                                                        data-bs-target="#active-modifications-content-tab" type="button" role="tab">
-                                                    <i class="bi bi-pencil-square"></i> Modifications
-                                                </button>
-                                            </li>
-                                        </ul>
-
-                                        <!-- Tab Content -->
-                                        <div class="tab-content" id="active-prompt-tab-content">
-                                            <div class="tab-pane fade show active" id="active-prompt-content-tab" role="tabpanel">
+                                        <!-- Single File Content Display Area -->
+                                        <div id="file-content-display">
+                                            <!-- Prompt Content -->
+                                            <div id="content-prompt" class="file-view-content" style="display:block;">
                                                 <div class="mb-3">
                                                     <label class="form-label fw-bold">prompt.md</label>
                                                     <textarea class="form-control font-monospace" id="active-editor-prompt-md" 
@@ -276,8 +257,9 @@
                                                     <span class="text-muted"><i class="bi bi-info-circle"></i> Auto-save enabled</span>
                                                 </span>
                                             </div>
-                                            <div class="tab-pane fade" id="active-questionnaire-content-tab" role="tabpanel">
-                                                <!-- Dynamic questionnaire container - renders JSON or MD -->
+
+                                            <!-- Questionnaire Content -->
+                                            <div id="content-questionnaire" class="file-view-content" style="display:none;">
                                                 <div id="questionnaire-container">
                                                     <div class="text-center py-4">
                                                         <div class="spinner-border text-primary" role="status">
@@ -287,7 +269,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="tab-pane fade" id="active-analysis-content-tab" role="tabpanel">
+
+                                            <!-- Analysis Content -->
+                                            <div id="content-analysis" class="file-view-content" style="display:none;">
                                                 <div class="mb-3">
                                                     <label class="form-label fw-bold">analysis.md</label>
                                                     <textarea class="form-control font-monospace" id="active-editor-analysis-md" 
@@ -297,7 +281,9 @@
                                                     <i class="bi bi-info-circle"></i> Analysis file is view-only.
                                                 </div>
                                             </div>
-                                            <div class="tab-pane fade" id="active-plan-content-tab" role="tabpanel">
+
+                                            <!-- Plan Content -->
+                                            <div id="content-plan" class="file-view-content" style="display:none;">
                                                 <div class="mb-3">
                                                     <label class="form-label fw-bold">plan.md</label>
                                                     <textarea class="form-control font-monospace" id="active-editor-plan-md" 
@@ -307,7 +293,9 @@
                                                     <i class="bi bi-save"></i> Save Plan
                                                 </button>
                                             </div>
-                                            <div class="tab-pane fade" id="active-implementation-content-tab" role="tabpanel">
+
+                                            <!-- Implementation Content -->
+                                            <div id="content-implementation" class="file-view-content" style="display:none;">
                                                 <div class="mb-3">
                                                     <label class="form-label fw-bold">implementation.md</label>
                                                     <textarea class="form-control font-monospace" id="active-editor-implementation-md" 
@@ -317,7 +305,9 @@
                                                     <i class="bi bi-info-circle"></i> Implementation file is view-only.
                                                 </div>
                                             </div>
-                                            <div class="tab-pane fade" id="active-modifications-content-tab" role="tabpanel">
+
+                                            <!-- Modifications Content -->
+                                            <div id="content-modifications" class="file-view-content" style="display:none;">
                                                 <div id="modifications-list-container">
                                                     <p class="text-muted">No modifications yet.</p>
                                                 </div>

@@ -1,0 +1,20 @@
+{
+    "iteration-id": "ITR-20260106-180532",
+    "iteration-name": "Refresh",
+    "prompt-id-sequence-next-value": 2,
+    "prompts": [
+        {
+            "prompt-id": "P-001",
+            "prompt-title": "Files view activated from icons",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "modifications-count": 1,
+            "current-modification-id": null
+        }
+    ]
+}

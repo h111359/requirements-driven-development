@@ -466,8 +466,11 @@ async function loadActivePrompt() {
     // Update workflow status flags
     updateWorkflowFlags(activePrompt);
     
-    // Update tab visibility based on workflow state
-    updateTabVisibility(activePrompt);
+    // Update file button states based on workflow state
+    updateFileButtonStates(activePrompt);
+    
+    // Show initial file view (default to Prompt)
+    showFileView('prompt');
     
     // Load prompt files
     await loadActivePromptFiles(promptId);
@@ -506,48 +509,95 @@ function getSmartDefaultMode(prompt) {
 }
 
 /**
- * Update tab visibility for active prompt based on workflow state
+ * Update file button states for active prompt based on workflow state
  */
-function updateTabVisibility(prompt) {
+function updateFileButtonStates(prompt) {
     const questionnaireGenerated = prompt['questionnaire-generated'] || false;
     const planGenerated = prompt['plan-generated'] || false;
     const analysisGenerated = prompt['analysis-generated'] || false;
     const implementationCompleted = prompt['implementation-completed'] || false;
     const executed = prompt.executed || false;
     
-    // Get tab elements (li elements containing the tab buttons)
-    const questionnaireTabLi = document.querySelector('#active-questionnaire-tab').closest('li.nav-item');
-    const planTabLi = document.querySelector('#active-plan-tab').closest('li.nav-item');
-    const analysisTabLi = document.querySelector('#active-analysis-tab').closest('li.nav-item');
-    const implementationTabLi = document.querySelector('#active-implementation-tab').closest('li.nav-item');
-    const modificationsTabLi = document.querySelector('#active-modifications-tab').closest('li.nav-item');
+    // Get file button elements
+    const questionnaireBtn = document.getElementById('file-btn-questionnaire');
+    const planBtn = document.getElementById('file-btn-plan');
+    const analysisBtn = document.getElementById('file-btn-analysis');
+    const implementationBtn = document.getElementById('file-btn-implementation');
+    const modificationsBtn = document.getElementById('file-btn-modifications');
     
-    // Prompt tab: always visible (no action needed)
+    // Prompt button: always enabled (no action needed)
     
-    // Questionnaire tab: visible when questionnaire-generated=true
-    if (questionnaireTabLi) {
-        questionnaireTabLi.style.display = questionnaireGenerated ? '' : 'none';
+    // Questionnaire button: enabled when questionnaire-generated=true
+    if (questionnaireBtn) {
+        questionnaireBtn.disabled = !questionnaireGenerated;
     }
     
-    // Plan tab: visible when plan-generated=true
-    if (planTabLi) {
-        planTabLi.style.display = planGenerated ? '' : 'none';
+    // Plan button: enabled when plan-generated=true
+    if (planBtn) {
+        planBtn.disabled = !planGenerated;
     }
     
-    // Analysis tab: visible when analysis-generated=true
-    if (analysisTabLi) {
-        analysisTabLi.style.display = analysisGenerated ? '' : 'none';
+    // Analysis button: enabled when analysis-generated=true
+    if (analysisBtn) {
+        analysisBtn.disabled = !analysisGenerated;
     }
     
-    // Implementation tab: visible when implementation-completed=true
-    if (implementationTabLi) {
-        implementationTabLi.style.display = implementationCompleted ? '' : 'none';
+    // Implementation button: enabled when implementation-completed=true
+    if (implementationBtn) {
+        implementationBtn.disabled = !implementationCompleted;
     }
     
-    // Modifications tab: visible when executed=true
-    if (modificationsTabLi) {
-        modificationsTabLi.style.display = executed ? '' : 'none';
+    // Modifications button: enabled when executed=true
+    if (modificationsBtn) {
+        modificationsBtn.disabled = !executed;
     }
+}
+
+/**
+ * Show specific file view and hide others
+ */
+function showFileView(fileType) {
+    // Hide all file content views
+    const allViews = document.querySelectorAll('.file-view-content');
+    allViews.forEach(view => {
+        view.style.display = 'none';
+    });
+    
+    // Show selected view
+    const targetView = document.getElementById(`content-${fileType}`);
+    if (targetView) {
+        targetView.style.display = 'block';
+    }
+    
+    // Update file button active states
+    const allButtons = document.querySelectorAll('.workflow-file-btn');
+    allButtons.forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    const activeButton = document.getElementById(`file-btn-${fileType}`);
+    if (activeButton) {
+        activeButton.classList.add('active');
+    }
+    
+    // Load content if needed
+    if (fileType === 'questionnaire') {
+        // Reload questionnaire to ensure it's current
+        loadQuestionnaire();
+    } else if (fileType === 'modifications') {
+        // Reload modifications list
+        loadModifications();
+    }
+}
+
+/**
+ * Update tab visibility for active prompt based on workflow state
+ * @deprecated - Kept for backward compatibility but no longer used with new button-based UI
+ */
+function updateTabVisibility(prompt) {
+    // This function is deprecated but kept for compatibility
+    // The new UI uses updateFileButtonStates() instead
+    updateFileButtonStates(prompt);
 }
 
 /**
