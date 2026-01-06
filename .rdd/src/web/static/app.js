@@ -278,7 +278,7 @@ async function loadPrompts() {
     await loadRegistry();
     
     if (!currentRegistry || !currentRegistry.prompts) {
-        container.innerHTML = '<p class="text-warning">No work iteration found. Please create one in the Workdir section.</p>';
+        container.innerHTML = '<p class="text-warning">No work iteration found. Please create one in the Prompts History section.</p>';
         return;
     }
     
@@ -2098,7 +2098,7 @@ async function createWorkdir() {
  * Archive workdir
  */
 async function archiveWorkdir() {
-    if (!confirm('Are you sure you want to archive the current work iteration? This will clear the workdir.')) {
+    if (!confirm('Are you sure you want to archive the current work iteration? This will clear the prompts history working directory.')) {
         return;
     }
     

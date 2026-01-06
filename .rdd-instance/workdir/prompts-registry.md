@@ -34,3 +34,12 @@ When Questionnaire is opened, when page is refreshed, a message appears that the
 %%PROMPT P-005 "Archive Iteration"
 Move the "Archive Iteration" button to appear in "Active Prompt" header banner only when there is no active prompt. The iteration should not be archived if active prompt execution is in progress.
 %%ENDPROMPT
+
+%%PROMPT P-006 "Prompts History tab"
+Rename Workdir tab to be named Prompts History
+
+
+### Modification 001
+
+Check if requirements should be updated because of the prompts in Workdir implemented so far
+%%ENDPROMPT

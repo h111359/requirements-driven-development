@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20260106-180532",
     "iteration-name": "Refresh",
-    "prompt-id-sequence-next-value": 6,
+    "prompt-id-sequence-next-value": 7,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -61,6 +61,19 @@
             "implementation-completed": true,
             "execution-mode": "no-action",
             "executed": true
+        },
+        {
+            "prompt-id": "P-006",
+            "prompt-title": "Prompts History tab",
+            "state": "completed",
+            "questionnaire-generated": false,
+            "questionnaire-answered": false,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "modifications-count": 1,
+            "current-modification-id": null
         }
     ]
 }

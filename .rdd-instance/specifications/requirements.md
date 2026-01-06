@@ -210,7 +210,7 @@ The framework enables:
 
 - [UR-0074] The Web UI shall display all radio button form controls with enhanced visibility through increased size, darker border colors, and interactive visual feedback states including hover, focus, and checked states to improve usability and accessibility across all pages and forms.
 
-- [UR-0075] The Web UI Active Prompt page shall control tab visibility based on workflow state instead of displaying status badges, showing the Questionnaire tab only when questionnaire-generated is true, the Plan tab only when plan-generated is true, the Analysis tab only when analysis-generated is true, the Implementation tab only when implementation-completed is true, and the Modifications tab only when executed is true, while keeping only the Prompt tab always visible.
+- [UR-0075] The Web UI Active Prompt page shall control file view button visibility based on workflow state instead of displaying status badges, showing the Questionnaire button only when questionnaire-generated is true, the Plan button only when plan-generated is true, the Analysis button only when analysis-generated is true, the Implementation button only when implementation-completed is true, and the Modifications button only when executed is true, while keeping only the Prompt button always visible.
 
 - [UR-0076] The Web UI Active Prompt page shall display visual indicators for prompt workflow state flags positioned directly above their corresponding execution mode buttons, with each execution mode showing relevant status icons (Clarify mode displaying questionnaire-generated and questionnaire-answered icons, Analyze mode displaying analysis-generated icon, Plan mode displaying plan-generated icon, Implement mode displaying implementation-completed and executed icons, and Modification mode displaying modifications-count and current-modification-id values), providing immediate visibility of the prompt's lifecycle state aligned with each mode's function.
 
@@ -222,7 +222,7 @@ The framework enables:
 
 - [UR-0090] The Web UI shall automatically save changes to prompt.md without requiring manual save button clicks, using a combination of debounced auto-save (after 2 seconds of typing inactivity) and immediate save on blur events.
 
-- [UR-0091] The Web UI Workdir page shall display the work iteration registry in a comprehensive, human-readable format showing iteration metadata and a table of all prompts with their states, execution modes, and workflow flags, enabling quick status overview and navigation to individual prompts.
+- [UR-0091] The Web UI Prompts History page shall display the work iteration registry in a comprehensive, human-readable format showing iteration metadata in the Active Prompt page header and a table of all prompts with their states, execution modes, and workflow flags, enabling quick status overview and navigation to individual prompts.
 
 - [UR-0092] The Web UI shall provide a Config page enabling users to view and modify instance configuration settings including the git-enabled flag through an intuitive interface with toggle switches
 
@@ -362,7 +362,7 @@ The framework enables:
 
 - [TR-0063] The web interface shall be implemented using vanilla JavaScript, HTML, and Bootstrap 5 CSS framework, with all frontend assets located in `.rdd/src/web/static/` (app.js, style.css) and templates in `.rdd/src/web/templates/` (index.html).
 
-- [TR-0064] The web interface shall provide a responsive navigation bar with sections for Active Prompt, Workdir, Technical Design, Requirements, and Help, with each section displaying relevant operations and status information with color-coded alerts (success: green, error: red, warning: yellow, info: blue).
+- [TR-0064] The web interface shall provide a responsive navigation bar with sections for Active Prompt, Prompts History, Technical Design, Requirements, Config, and Help, with each section displaying relevant operations and status information with color-coded alerts (success: green, error: red, warning: yellow, info: blue).
 
 - [TR-0065] The Prompts section shall display all prompts in a table showing ID, title, type, state, parent ID, and actions, with buttons for creating new prompts and setting prompt states via modal dialogs.
 
