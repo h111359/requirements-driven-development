@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20260106-180532",
     "iteration-name": "Refresh",
-    "prompt-id-sequence-next-value": 4,
+    "prompt-id-sequence-next-value": 5,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -37,6 +37,19 @@
             "implementation-completed": true,
             "execution-mode": "no-action",
             "executed": true
+        },
+        {
+            "prompt-id": "P-004",
+            "prompt-title": "Refreshes stay on same page",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "modifications-count": 1,
+            "current-modification-id": null
         }
     ]
 }

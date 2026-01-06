@@ -8,6 +8,84 @@ let currentEditingPrompt = null;
 let currentPromptFolder = null;
 let isViewOnlyMode = false;
 
+// State persistence module
+const StateManager = {
+    // Keys for sessionStorage
+    KEYS: {
+        SECTION: 'rdd_current_section',
+        FILE_VIEW: 'rdd_current_file_view',
+        EXECUTION_MODE: 'rdd_execution_mode'
+    },
+    
+    // Save current section
+    saveSection(sectionName) {
+        try {
+            sessionStorage.setItem(this.KEYS.SECTION, sectionName);
+        } catch (e) {
+            console.warn('Failed to save section state:', e);
+        }
+    },
+    
+    // Get saved section
+    getSection() {
+        try {
+            return sessionStorage.getItem(this.KEYS.SECTION);
+        } catch (e) {
+            console.warn('Failed to get section state:', e);
+            return null;
+        }
+    },
+    
+    // Save current file view (for active-prompt section)
+    saveFileView(fileView) {
+        try {
+            sessionStorage.setItem(this.KEYS.FILE_VIEW, fileView);
+        } catch (e) {
+            console.warn('Failed to save file view state:', e);
+        }
+    },
+    
+    // Get saved file view
+    getFileView() {
+        try {
+            return sessionStorage.getItem(this.KEYS.FILE_VIEW);
+        } catch (e) {
+            console.warn('Failed to get file view state:', e);
+            return null;
+        }
+    },
+    
+    // Save execution mode
+    saveExecutionMode(mode) {
+        try {
+            sessionStorage.setItem(this.KEYS.EXECUTION_MODE, mode);
+        } catch (e) {
+            console.warn('Failed to save execution mode state:', e);
+        }
+    },
+    
+    // Get saved execution mode
+    getExecutionMode() {
+        try {
+            return sessionStorage.getItem(this.KEYS.EXECUTION_MODE);
+        } catch (e) {
+            console.warn('Failed to get execution mode state:', e);
+            return null;
+        }
+    },
+    
+    // Clear all saved state
+    clearAll() {
+        try {
+            sessionStorage.removeItem(this.KEYS.SECTION);
+            sessionStorage.removeItem(this.KEYS.FILE_VIEW);
+            sessionStorage.removeItem(this.KEYS.EXECUTION_MODE);
+        } catch (e) {
+            console.warn('Failed to clear state:', e);
+        }
+    }
+};
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
@@ -34,6 +112,23 @@ async function initializeApp() {
         // Start background refresh of active prompt statuses and mode buttons
         startActivePromptRefresh();
         
+        // Restore previous section state if available
+        const savedSection = StateManager.getSection();
+        if (savedSection && savedSection !== 'active-prompt') {
+            // Validate section exists before restoring
+            const sectionElement = document.getElementById('section-' + savedSection);
+            if (sectionElement) {
+                // Navigate to saved section
+                showSection(savedSection);
+            } else {
+                // Invalid section, clear state and stay on default (active-prompt)
+                StateManager.saveSection('active-prompt');
+            }
+        } else {
+            // Default to active-prompt and save initial state
+            StateManager.saveSection('active-prompt');
+        }
+        
         showAlert('success', 'Application initialized successfully');
     } catch (error) {
         showAlert('danger', 'Failed to initialize application: ' + error.message);
@@ -59,7 +154,18 @@ function showSection(sectionName) {
     }
     
     // Add active class to clicked nav link
-    event.target.classList.add('active');
+    if (event && event.target) {
+        event.target.classList.add('active');
+    } else {
+        // Find and activate the corresponding nav link when called programmatically
+        const navLink = document.querySelector(`a[onclick*="showSection('${sectionName}')"]`);
+        if (navLink) {
+            navLink.classList.add('active');
+        }
+    }
+    
+    // Save current section state
+    StateManager.saveSection(sectionName);
     
     // Load section-specific data
     if (sectionName === 'active-prompt') {
@@ -438,13 +544,15 @@ async function loadActivePrompt() {
     const promptId = activePrompt['prompt-id'];
     const title = activePrompt.title || activePrompt['prompt-title'] || '';
     document.getElementById('active-prompt-title').innerHTML = 
-        `<i class="bi bi-journal-check me-2"></i><span>${promptId}: ${escapeHtml(title)}</span>`;
+        `<span>Active Prompt: ${promptId}: ${escapeHtml(title)}</span>`;
     
     // Update iteration metadata in header
     updateIterationMetadata();
     
     // Update execution mode selector (button group)
-    const currentMode = activePrompt['execution-mode'] || getSmartDefaultMode(activePrompt);
+    // Check if user has a saved preference in session, otherwise use server state
+    const savedMode = StateManager.getExecutionMode();
+    const currentMode = savedMode || activePrompt['execution-mode'] || getSmartDefaultMode(activePrompt);
     const modeRadio = document.getElementById(`mode-${currentMode}`);
     if (modeRadio) {
         modeRadio.checked = true;
@@ -472,11 +580,26 @@ async function loadActivePrompt() {
     // Update file button states based on workflow state
     updateFileButtonStates(activePrompt);
     
-    // Show initial file view (default to Prompt)
-    showFileView('prompt');
-    
-    // Load prompt files
+    // Load prompt files first - this sets currentPromptFolder needed by file views
     await loadActivePromptFiles(promptId);
+    
+    // NOW restore previous file view or default to Prompt
+    // This happens after loadActivePromptFiles to ensure currentPromptFolder is set
+    const savedFileView = StateManager.getFileView();
+    if (savedFileView) {
+        // Validate that the saved file view is available (button exists and is enabled)
+        const fileButton = document.getElementById(`file-btn-${savedFileView}`);
+        if (fileButton && !fileButton.disabled) {
+            // Restore saved file view
+            showFileView(savedFileView);
+        } else {
+            // Saved view not available, fall back to prompt
+            showFileView('prompt');
+        }
+    } else {
+        // No saved state, show default view
+        showFileView('prompt');
+    }
     
     // Load modifications if implementation is completed
     if (implementationCompleted) {
@@ -514,7 +637,7 @@ function updateIterationMetadata() {
     const iterationName = currentRegistry['iteration-name'] || '';
     
     if (iterationId && iterationName) {
-        metadataElement.textContent = `${iterationName} (${iterationId})`;
+        metadataElement.textContent = `Iteration: ${iterationName} (${iterationId})`;
         metadataElement.style.display = 'inline';
     } else {
         metadataElement.style.display = 'none';
@@ -611,6 +734,9 @@ function showFileView(fileType) {
     if (activeButton) {
         activeButton.classList.add('active');
     }
+    
+    // Save current file view state
+    StateManager.saveFileView(fileType);
     
     // Load content if needed
     if (fileType === 'questionnaire') {
@@ -751,7 +877,10 @@ async function refreshActivePromptStatuses() {
         updateWorkflowFlags(activePrompt);
 
         // Update execution-mode radio/buttons (targeted update)
-        const currentMode = activePrompt['execution-mode'] || getSmartDefaultMode(activePrompt);
+        // Check if user has a saved preference in session, otherwise use server state
+        const savedMode = StateManager.getExecutionMode();
+        const currentMode = savedMode || activePrompt['execution-mode'] || getSmartDefaultMode(activePrompt);
+        
         // Try to set radio by id convention `mode-<mode>`
         const modeRadio = document.getElementById(`mode-${currentMode}`);
         if (modeRadio) {
@@ -789,6 +918,9 @@ function startActivePromptRefresh() {
  * Update execution mode for active prompt
  */
 async function updateExecutionMode(mode) {
+    // Save execution mode state
+    StateManager.saveExecutionMode(mode);
+    
     try {
         const response = await fetch('/api/action', {
             method: 'POST',

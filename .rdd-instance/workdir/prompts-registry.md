@@ -21,3 +21,12 @@ Place the Config tab between Requirements and Help
 Move the area from Workdir tab with Iteration Metadata (the ID, Name) to the title area of the Active Prompt page.
 Do not show Total Prompts, Next ID, Git
 %%ENDPROMPT
+
+%%PROMPT P-004 "Refreshes stay on same page"
+Currently when the page is refreshed - the page goes on the Active Prompt page and shows Prompt. Change so when refresh button is pressed, the current page and file displayed selected stays the same.
+
+
+### Modification 001
+
+When Questionnaire is opened, when page is refreshed, a message appears that there is no questionnaire file is found, but when I click on the Questionnaire button, the form with questions appears. This is a bug - fix it
+%%ENDPROMPT
