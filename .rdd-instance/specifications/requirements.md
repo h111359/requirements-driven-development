@@ -226,6 +226,12 @@ The framework enables:
 
 - [UR-0092] The Web UI shall provide a Config page enabling users to view and modify instance configuration settings including the git-enabled flag through an intuitive interface with toggle switches
 
+- [UR-0093] The Web UI shall provide delete buttons with trash bin icons for execution mode outputs (Questionnaire, Analysis, Plan) that allow users to delete the respective files and reset status flags as if the execution mode was never executed.
+
+- [UR-0094] The delete buttons for execution mode files shall be enabled only when the respective generated flag is true and shall show a confirmation dialog before performing the deletion.
+
+
+
 
 
 
@@ -592,6 +598,15 @@ The framework enables:
 - [TR-0171] The framework shall read the git-enabled setting from .rdd-instance/config/instance-config.json to determine whether to perform git operations during prompt completion
 
 - [TR-0172] The framework shall validate the presence of .rdd-instance/config/ folder and instance-config.json file during manifest validation and provide clear error messages directing users to re-seed if missing
+
+- [TR-0173] The framework shall provide action scripts prompt_questionnaire_delete.py, prompt_analysis_delete.py, and prompt_plan_delete.py that delete the respective execution mode files and reset the associated status flags in the work iteration registry.
+
+- [TR-0174] The prompt_questionnaire_delete.py script shall reset both questionnaire-generated and questionnaire-answered flags to false when deleting the questionnaire file, ensuring complete reset of the clarify execution mode state.
+
+- [TR-0175] The execution mode delete scripts shall only work with the active prompt and shall not accept a prompt-id parameter, ensuring operations are focused on current work context.
+
+
+
 
 
 

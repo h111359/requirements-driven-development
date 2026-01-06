@@ -683,6 +683,18 @@ input[name="execution-mode"].btn-check:checked + label.btn-primary {
     display: inline-block;
 }
 
+.workflow-area-icons .delete-execution-btn {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.75rem;
+    line-height: 1;
+    border-radius: 0.2rem;
+}
+
+.workflow-area-icons .delete-execution-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+}
+
 .workflow-file-btn {
     min-width: 120px;
     font-weight: 500;

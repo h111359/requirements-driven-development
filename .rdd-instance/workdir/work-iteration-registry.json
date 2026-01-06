@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20260106-180532",
     "iteration-name": "Refresh",
-    "prompt-id-sequence-next-value": 8,
+    "prompt-id-sequence-next-value": 9,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -78,6 +78,17 @@
         {
             "prompt-id": "P-007",
             "prompt-title": "Bug fix - execution-mode",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
+        },
+        {
+            "prompt-id": "P-008",
+            "prompt-title": "Delete execution modes",
             "state": "completed",
             "questionnaire-generated": true,
             "questionnaire-answered": true,

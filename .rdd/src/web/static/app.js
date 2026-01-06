@@ -672,6 +672,11 @@ function updateFileButtonStates(prompt) {
     const implementationBtn = document.getElementById('file-btn-implementation');
     const modificationsBtn = document.getElementById('file-btn-modifications');
     
+    // Get delete button elements
+    const deleteQuestionnaireBtn = document.getElementById('delete-questionnaire-btn');
+    const deletePlanBtn = document.getElementById('delete-plan-btn');
+    const deleteAnalysisBtn = document.getElementById('delete-analysis-btn');
+    
     // Prompt button: always enabled (no action needed)
     
     // Questionnaire button: enabled when questionnaire-generated=true
@@ -679,14 +684,29 @@ function updateFileButtonStates(prompt) {
         questionnaireBtn.disabled = !questionnaireGenerated;
     }
     
+    // Delete questionnaire button: enabled when questionnaire-generated=true
+    if (deleteQuestionnaireBtn) {
+        deleteQuestionnaireBtn.disabled = !questionnaireGenerated;
+    }
+    
     // Plan button: enabled when plan-generated=true
     if (planBtn) {
         planBtn.disabled = !planGenerated;
     }
     
+    // Delete plan button: enabled when plan-generated=true
+    if (deletePlanBtn) {
+        deletePlanBtn.disabled = !planGenerated;
+    }
+    
     // Analysis button: enabled when analysis-generated=true
     if (analysisBtn) {
         analysisBtn.disabled = !analysisGenerated;
+    }
+    
+    // Delete analysis button: enabled when analysis-generated=true
+    if (deleteAnalysisBtn) {
+        deleteAnalysisBtn.disabled = !analysisGenerated;
     }
     
     // Implementation button: enabled when implementation-completed=true
@@ -938,6 +958,77 @@ async function updateExecutionMode(mode) {
         }
     } catch (error) {
         showAlert('danger', 'Failed to update execution mode: ' + error.message);
+    }
+}
+
+/**
+ * Delete execution mode file with confirmation dialog
+ * @param {string} executionType - One of: 'questionnaire', 'analysis', 'plan'
+ */
+async function deleteExecutionModeFile(executionType) {
+    // Map execution type to user-friendly names and script names
+    const fileConfig = {
+        'questionnaire': {
+            displayName: 'Questionnaire',
+            scriptAction: 'questionnaire_delete'
+        },
+        'analysis': {
+            displayName: 'Analysis',
+            scriptAction: 'analysis_delete'
+        },
+        'plan': {
+            displayName: 'Plan',
+            scriptAction: 'plan_delete'
+        }
+    };
+    
+    const config = fileConfig[executionType];
+    if (!config) {
+        showAlert('danger', `Invalid execution type: ${executionType}`);
+        return;
+    }
+    
+    // Show confirmation dialog
+    const confirmMessage = `Are you sure you want to delete the ${config.displayName} file? This will reset the status as if the execution mode was never executed.`;
+    
+    if (!confirm(confirmMessage)) {
+        return; // User cancelled
+    }
+    
+    try {
+        // Call the backend script to delete the file and reset flags
+        const response = await fetch('/api/action', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                domain: 'prompt',
+                action: config.scriptAction,
+                params: {}
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('success', `${config.displayName} file deleted successfully`);
+            
+            // Reload the registry to update UI state
+            await loadRegistry();
+            
+            // If the deleted file was currently displayed, switch to prompt view
+            const currentView = StateManager.getFileView();
+            if (currentView === executionType) {
+                showFileView('prompt');
+            }
+        } else {
+            const errorMsg = result.error || result.stderr || 'Unknown error';
+            showAlert('danger', `Failed to delete ${config.displayName} file: ${errorMsg}`);
+        }
+    } catch (error) {
+        showAlert('danger', `Failed to delete ${config.displayName} file: ${error.message}`);
     }
 }
 

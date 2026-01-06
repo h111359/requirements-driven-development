@@ -135,6 +135,14 @@
                                                 <span id="flag-questionnaire-answered" class="flag-icon" data-bs-toggle="tooltip" title="Questionnaire Answered">
                                                     <i class="bi bi-clipboard-check text-secondary"></i>
                                                 </span>
+                                                <button class="btn btn-sm btn-outline-danger delete-execution-btn" 
+                                                        id="delete-questionnaire-btn" 
+                                                        onclick="deleteExecutionModeFile('questionnaire')" 
+                                                        disabled
+                                                        data-bs-toggle="tooltip" 
+                                                        title="Delete questionnaire file">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
                                             </div>
                                             <button class="btn btn-outline-primary btn-sm workflow-file-btn" 
                                                     id="file-btn-questionnaire" onclick="showFileView('questionnaire')" disabled>
@@ -154,6 +162,14 @@
                                                 <span id="flag-analysis-generated" class="flag-icon" data-bs-toggle="tooltip" title="Analysis Generated">
                                                     <i class="bi bi-clipboard-data text-secondary"></i>
                                                 </span>
+                                                <button class="btn btn-sm btn-outline-danger delete-execution-btn" 
+                                                        id="delete-analysis-btn" 
+                                                        onclick="deleteExecutionModeFile('analysis')" 
+                                                        disabled
+                                                        data-bs-toggle="tooltip" 
+                                                        title="Delete analysis file">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
                                             </div>
                                             <button class="btn btn-outline-primary btn-sm workflow-file-btn" 
                                                     id="file-btn-analysis" onclick="showFileView('analysis')" disabled>
@@ -173,6 +189,14 @@
                                                 <span id="flag-plan-generated" class="flag-icon" data-bs-toggle="tooltip" title="Plan Generated">
                                                     <i class="bi bi-file-earmark-text text-secondary"></i>
                                                 </span>
+                                                <button class="btn btn-sm btn-outline-danger delete-execution-btn" 
+                                                        id="delete-plan-btn" 
+                                                        onclick="deleteExecutionModeFile('plan')" 
+                                                        disabled
+                                                        data-bs-toggle="tooltip" 
+                                                        title="Delete plan file">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
                                             </div>
                                             <button class="btn btn-outline-primary btn-sm workflow-file-btn" 
                                                     id="file-btn-plan" onclick="showFileView('plan')" disabled>

@@ -47,3 +47,9 @@ Check if requirements should be updated because of the prompts in Workdir implem
 %%PROMPT P-007 "Bug fix - execution-mode"
 The radio buttons for execution mode in Active Prompt page should reflect always the value of "execution-mode" entry in `.rdd-instance/workdir/work-iteration-registry.json`. Every refresh of the statuses of the files in Active Prompt should include radio buttons update as well.
 %%ENDPROMPT
+
+%%PROMPT P-008 "Delete execution modes"
+In the respective cards for execution-modes Clarify, Analyze and Plan in Active Prompt page should be created buttons with icon trash bin which when pressed, deletes the respective file and toggle the status - as if the execution-mode was never executed.
+
+In `.rdd/src/actions` should be created the respective "prompt_*" scripts which to be invoked by the prompt. The prompt should not directly delete the prompt workdir files.
+%%ENDPROMPT
