@@ -1,0 +1,35 @@
+{
+  "context": "This questionnaire clarifies the meaning of 'no iteration exists (workdir is empty)' referenced in the prompt so that the implementation can deterministically decide when the 'Create New Iteration' button should be shown on the Prompts History page.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Which definition of 'workdir is empty' should the UI use to decide whether to show the 'Create New Iteration' button on the Prompts History page?",
+      "options": [
+        {
+          "id": "A",
+          "label": "No prompt folders or prompt artifacts exist in .rdd-instance/workdir (registry may exist).",
+          "pros": "Safe: matches TR-0019 safety check; prevents creating an iteration when any prompt files are present; deterministic and simple to check.",
+          "cons": "Prompts-registry.md and registry file remain present but are allowed; some very small residual files could still block creation if strict file presence checks are used incorrectly."
+        },
+        {
+          "id": "B",
+          "label": "No active prompt exists (state!='active'); archived or historical prompt folders may be present.",
+          "pros": "Allows creating a new iteration even if historical artifacts exist; more permissive and user-friendly when archives are kept in workdir.",
+          "cons": "Less safe: existing prompt artifacts might interfere with iteration initialization; contradicts TR-0019 which expects an empty workdir for new iterations."
+        },
+        {
+          "id": "C",
+          "label": "Workdir is completely empty (no files or folders at all).",
+          "pros": "Strictest interpretation; guarantees a pristine start state and avoids any ambiguity about existing artifacts.",
+          "cons": "Unnecessarily strict: system files such as the registry or prompts-registry may be expected to exist and would prevent iteration creation even when no prompts are active."
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A balances safety and practicality: it aligns with the safety intent in TR-0019 by ensuring no prompt artifacts are present while allowing expected registry files to exist. It's deterministic and minimizes accidental interference from leftover prompt data.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    }
+  ]
+}

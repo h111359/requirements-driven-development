@@ -2215,9 +2215,12 @@ async function loadIterationStatus() {
     const container = document.getElementById('registry-view-container');
     
     if (!currentRegistry) {
-        // No iteration exists - show create button only
-        createSection.style.display = 'block';
+        // No iteration exists - do NOT show the create button in Prompts History
+        // The Create Work Iteration control is intentionally available only
+        // on the Active Prompt page per the active prompt instructions.
+        createSection.style.display = 'none';
         registrySection.style.display = 'none';
+        container.innerHTML = '<p class="text-muted">No work iteration exists. Create one on the Active Prompt page.</p>';
         return;
     }
     

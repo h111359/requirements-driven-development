@@ -1,0 +1,18 @@
+{
+    "iteration-id": "ITR-20260107-215055",
+    "iteration-name": "Web UI enhancements",
+    "prompt-id-sequence-next-value": 2,
+    "prompts": [
+        {
+            "prompt-id": "P-001",
+            "prompt-title": "Create New Iteration",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
+        }
+    ]
+}

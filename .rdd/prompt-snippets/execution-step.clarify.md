@@ -13,7 +13,7 @@ See the definitions in `.rdd/prompt-snippets/execution.md`
    - [WI-REGISTRY]
    Generate questions ONLY when a decision is required for implementation and the answer cannot be derived from these sources.
 
-2. Identify ambiguous or underspecified parts of [ACTIVE-PROMPT] that have multiple plausible interpretations which would lead to materially different implementation/design outcomes. For each such ambiguity, generate ONE multiple-choice question with up to 5 mutually exclusive, realistic options.
+2. Identify ambiguous or underspecified parts of [ACTIVE-PROMPT] that have multiple plausible interpretations which would lead to materially different implementation/design outcomes. For each such ambiguity, generate ONE multiple-choice question with the most probable mutually exclusive, realistic options.
 
 3. Create or update the questionnaire JSON file:
    - The questionnaire must be a JSON file named `questionnaire.json` in the [ACTIVE-PROMPT-FOLDER].

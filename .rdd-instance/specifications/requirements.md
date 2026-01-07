@@ -244,6 +244,9 @@ The framework enables:
 
 - [UR-0101] See external document XYZ
 
+- [UR-0102] The Prompts History page shall not display a 'Create Work Iteration' button; the 'Create Work Iteration' control shall be available only on the Active Prompt page.
+
+
 
 
 
