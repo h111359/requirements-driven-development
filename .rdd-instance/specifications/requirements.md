@@ -640,6 +640,9 @@ The framework enables:
 
 - [TR-0182] The framework shall implement test support
 
+- [TR-0183] The framework shall enforce a maximum prompt title length of 80 characters to ensure cross-platform compatibility with Windows file path limitations (MAX_PATH = 260 characters).
+
+
 
 
 

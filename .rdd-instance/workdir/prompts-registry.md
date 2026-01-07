@@ -842,3 +842,7 @@ Test Product
 2026-01-07T05:36:09.6867613Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
 2026-01-07T05:36:09.7220190Z Cleaning up orphan processes
 %%ENDPROMPT
+
+%%PROMPT P-011 "Test troubleshoot"
+TBD
+%%ENDPROMPT

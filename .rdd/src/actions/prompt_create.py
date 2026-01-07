@@ -143,8 +143,8 @@ def main() -> int:
         print("ERROR: 'title' parameter required", file=sys.stderr)
         return 1
     title = title.strip()
-    if len(title) > 128:
-        raise ValueError("Title must be <= 128 characters")
+    if len(title) > 80:
+        raise ValueError("Title must be <= 80 characters")
 
     state = (_get_param(params, "state") or "active").strip()
     if state not in _PROMPT_STATES:

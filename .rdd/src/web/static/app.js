@@ -435,6 +435,11 @@ async function createPrompt() {
         return;
     }
     
+    if (title.length > 80) {
+        showAlert('warning', 'Prompt title must be 80 characters or less (currently ' + title.length + ' characters)');
+        return;
+    }
+    
     const params = {
         title: title,
         state: state
