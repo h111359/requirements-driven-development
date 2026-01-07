@@ -1,13 +1,25 @@
 #!/usr/bin/env python3
 """
 run-tests.py
-Cross-platform test runner for RDD Framework
-Runs all tests appropriate for the current platform
+Cross-platform test runner for RDD Framework with selective execution support
+Runs all tests by default, or specific test categories via command-line flags
+
+Selective execution flags:
+  --rdd-framework    Run only tests in tests/rdd-framework/
+  --actions          Run only tests/rdd-framework/actions/ tests
+  --config           Run only tests/rdd-framework/config/ tests
+  --integration      Run only tests/rdd-framework/integration/ tests
+  --quick            Run unit tests only, skip integration tests
+  --coverage         Generate coverage report (default: enabled)
+  --no-coverage      Skip coverage reporting
+
+Default behavior (no flags): Run all tests in all directories for CI/CD compatibility
 """
 
 import sys
 import os
 import subprocess
+import argparse
 from pathlib import Path
 
 # Ensure UTF-8 encoding on Windows
@@ -116,22 +128,55 @@ def get_pytest_executable() -> str:
     else:
         return str(venv_dir / "bin" / "pytest")
 
-def run_pytest_suite(test_dir: str, description: str) -> bool:
-    """Run a pytest test suite"""
+def run_pytest_suite(test_dir: str, description: str, with_coverage: bool = True, coverage_source: str = None) -> bool:
+    """Run a pytest test suite with optional coverage"""
     pytest_cmd = get_pytest_executable()
     
+    cmd = [pytest_cmd, test_dir, "-v", "--tb=short"]
+    
+    if with_coverage:
+        cmd.append("--cov")
+        if coverage_source:
+            cmd.append(f"--cov={coverage_source}")
+        else:
+            # Default coverage sources
+            cmd.extend(["--cov=.rdd/src", "--cov=scripts"])
+        cmd.extend(["--cov-report=term", "--cov-report=xml"])
+    
     try:
-        result = subprocess.run(
-            [pytest_cmd, test_dir, "-v", "--tb=short"],
-            check=False
-        )
+        result = subprocess.run(cmd, check=False)
         return result.returncode == 0
     except Exception as e:
         print_error(f"Failed to run tests: {e}")
         return False
 
+def parse_arguments():
+    """Parse command line arguments"""
+    parser = argparse.ArgumentParser(
+        description="RDD Framework Test Runner with selective execution support",
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    
+    parser.add_argument("--rdd-framework", action="store_true",
+                       help="Run only tests in tests/rdd-framework/")
+    parser.add_argument("--actions", action="store_true",
+                       help="Run only tests/rdd-framework/actions/ tests")
+    parser.add_argument("--config", action="store_true",
+                       help="Run only tests/rdd-framework/config/ tests")
+    parser.add_argument("--integration", action="store_true",
+                       help="Run only tests/rdd-framework/integration/ tests")
+    parser.add_argument("--quick", action="store_true",
+                       help="Run unit tests only, skip integration tests")
+    parser.add_argument("--no-coverage", action="store_true",
+                       help="Skip coverage reporting")
+    
+    return parser.parse_args()
+
 def main():
     """Main test execution"""
+    # Parse arguments
+    args = parse_arguments()
+    
     # Get repository root
     script_dir = Path(__file__).parent
     repo_root = script_dir.parent
@@ -145,35 +190,55 @@ def main():
     if not check_prerequisites():
         sys.exit(1)
     
+    # Determine test selection
+    with_coverage = not args.no_coverage
+    test_suites = []
+    
+    if args.actions:
+        test_suites.append(("tests/rdd-framework/actions/", "Action script tests", ".rdd/src/actions"))
+    elif args.config:
+        test_suites.append(("tests/rdd-framework/config/", "Configuration tests", ".rdd/config"))
+    elif args.integration:
+        test_suites.append(("tests/rdd-framework/integration/", "Integration tests", ".rdd/src"))
+    elif args.rdd_framework:
+        test_suites.append(("tests/rdd-framework/", "RDD framework tests", ".rdd/src"))
+    elif args.quick:
+        # Run all unit tests, exclude integration
+        test_suites.append(("tests/build/", "Build tests", None))
+        test_suites.append(("tests/install/", "Install tests", None))
+        test_suites.append(("tests/rdd-framework/actions/", "Action script tests", ".rdd/src/actions"))
+        test_suites.append(("tests/rdd-framework/config/", "Configuration tests", ".rdd/config"))
+    else:
+        # Default: run all tests (CI/CD mode)
+        test_suites.append(("tests/build/", "Build tests", None))
+        test_suites.append(("tests/install/", "Install tests", None))
+        if Path("tests/rdd-framework").exists():
+            test_suites.append(("tests/rdd-framework/", "RDD framework tests", ".rdd/src"))
+    
     # Track test results
-    total_tests = 0
+    total_tests = len(test_suites)
     passed_tests = 0
     failed_tests = 0
     
     print()
     print_header("Running Tests")
     
-    # Step 1: Python Unit Tests
-    print_step(1, 2, "Running Python unit tests")
-    total_tests += 1
-    if run_pytest_suite("tests/python/", "Python unit tests"):
-        print_success("Python unit tests passed")
-        passed_tests += 1
-    else:
-        print_error("Python unit tests failed")
-        failed_tests += 1
-    print()
-    
-    # Step 2: Install Tests
-    print_step(2, 2, "Running install tests")
-    total_tests += 1
-    if run_pytest_suite("tests/install/", "Install tests"):
-        print_success("Install tests passed")
-        passed_tests += 1
-    else:
-        print_error("Install tests failed")
-        failed_tests += 1
-    print()
+    # Run each test suite
+    for idx, (test_dir, description, coverage_source) in enumerate(test_suites, 1):
+        print_step(idx, total_tests, f"Running {description}")
+        
+        # Check if test directory exists
+        if not Path(test_dir).exists():
+            print_warning(f"Test directory not found: {test_dir}")
+            continue
+        
+        if run_pytest_suite(test_dir, description, with_coverage, coverage_source):
+            print_success(f"{description} passed")
+            passed_tests += 1
+        else:
+            print_error(f"{description} failed")
+            failed_tests += 1
+        print()
     
     # Summary
     print_header("Test Summary")

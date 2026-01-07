@@ -230,6 +230,12 @@ The framework enables:
 
 - [UR-0094] The delete buttons for execution mode files shall be enabled only when the respective generated flag is true and shall show a confirmation dialog before performing the deletion.
 
+- [UR-0095] The system shall provide comprehensive automated test coverage for RDD framework core components including action scripts, configuration validation, and integration workflows with minimum 80% code coverage for action scripts.
+
+- [UR-0096] The test runner shall support selective test execution with command-line flags including --rdd-framework for framework tests, --actions for action script tests, --config for configuration tests, --integration for integration tests, and --quick for unit tests only, while maintaining default run-all behavior for CI/CD compatibility.
+
+
+
 
 
 
@@ -298,13 +304,13 @@ The framework enables:
 
 - [TR-0028] The CI/CD pipeline shall include a GitHub Actions workflow file `.github/workflows/tests.yaml` configured to run on `pull_request` events targeting the `dev` branch and on manual `workflow_dispatch` triggers.
 
-- [TR-0029] The `.github/workflows/tests.yaml` workflow shall define a job `all-tests-linux` that runs on `ubuntu-latest`, checks out the repository, installs Python 3.9 using `actions/setup-python@v5`, installs BATS, sets up the test environment by running `python .rdd/src/setup-test-env.py`, and executes all tests by running `python .rdd/src/run-tests.py`.
+- [TR-0029] The .github/workflows/tests.yaml workflow shall define a job all-tests-linux that runs on ubuntu-latest, checks out the repository, installs Python 3.9 using actions/setup-python@v5, installs BATS, sets up the test environment by running python scripts/setup-test-env.py, and executes all tests by running python scripts/run-tests.py.
 
 - [TR-0030] The `all-tests-linux` job in `.github/workflows/tests.yaml` shall generate a Python test coverage report by activating the `.venv` virtual environment, running `pytest tests/python/ --cov=.rdd/src --cov=scripts --cov-report=xml --cov-report=term`, and producing a `coverage.xml` file.
 
 - [TR-0031] The `all-tests-linux` job in `.github/workflows/tests.yaml` shall upload the generated `coverage.xml` report using `codecov/codecov-action@v4` with appropriate flags and name metadata, and this upload step shall execute even when previous steps fail.
 
-- [TR-0032] The `.github/workflows/tests.yaml` workflow shall define a job `all-tests-windows` that runs on `windows-latest`, checks out the repository, installs Python 3.9 using `actions/setup-python@v5`, installs the Pester module using PowerShell, sets up the test environment by running `python .rdd/src/setup-test-env.py`, and executes all tests by running `python .rdd/src/run-tests.py`.
+- [TR-0032] The .github/workflows/tests.yaml workflow shall define a job all-tests-windows that runs on windows-latest, checks out the repository, installs Python 3.9 using actions/setup-python@v5, installs the Pester module using PowerShell, sets up the test environment by running python scripts/setup-test-env.py, and executes all tests by running python scripts/run-tests.py.
 
 - [TR-0033] The `.github/workflows/tests.yaml` workflow shall define a job `test-summary` that runs on `ubuntu-latest`, depends on the completion of `all-tests-linux` and `all-tests-windows`, executes regardless of their success or failure, and prints the final result status of both jobs to the workflow logs.
 
@@ -604,6 +610,24 @@ The framework enables:
 - [TR-0174] The prompt_questionnaire_delete.py script shall reset both questionnaire-generated and questionnaire-answered flags to false when deleting the questionnaire file, ensuring complete reset of the clarify execution mode state.
 
 - [TR-0175] The execution mode delete scripts shall only work with the active prompt and shall not accept a prompt-id parameter, ensuring operations are focused on current work context.
+
+- [TR-0176] The framework test suite shall be organized in component-based subdirectories under tests/rdd-framework/ including actions/ for action script tests, config/ for configuration validation tests, and integration/ for end-to-end workflow tests, with shared fixtures in conftest.py.
+
+- [TR-0177] The framework tests shall use pytest-mock for mocking filesystem operations and external calls in unit tests, providing cleaner syntax than unittest.mock while maintaining compatibility with pytest test runner.
+
+- [TR-0178] Integration tests shall use a shared .rdd-instance-test/ temporary directory that is cleaned before each test run to provide realistic filesystem testing while maintaining test isolation through cleanup fixtures.
+
+- [TR-0179] The test runner shall implement selective coverage reporting that measures code coverage only for the components tested by the selected test category, enabling focused development workflows while CI/CD runs all tests for complete coverage metrics.
+
+- [TR-0180] All test modules shall include a module-level docstring describing the component under test, key test scenarios covered, and any special setup requirements to provide context for test maintenance.
+
+- [TR-0181] Test fixtures shall be organized in tests/fixtures/rdd-framework/ with component-specific subdirectories using realistic but minimal data sets to reduce maintenance burden while providing adequate test coverage.
+
+
+
+
+
+
 
 
 

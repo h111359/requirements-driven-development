@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20260106-180532",
     "iteration-name": "Refresh",
-    "prompt-id-sequence-next-value": 9,
+    "prompt-id-sequence-next-value": 10,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -96,6 +96,18 @@
             "implementation-completed": true,
             "execution-mode": "no-action",
             "executed": true
+        },
+        {
+            "prompt-id": "P-009",
+            "prompt-title": "Tests",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": true,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "analysis-generated": true
         }
     ]
 }
