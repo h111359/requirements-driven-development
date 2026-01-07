@@ -85,10 +85,13 @@
                             <div id="no-active-prompt-message" style="display:none;">
                                 <div class="alert alert-info">
                                     <i class="bi bi-info-circle"></i> 
-                                    No active prompt. Use the button below to create a new prompt.
+                                    <span id="no-prompt-message-text">No active prompt. Use the buttons below to get started.</span>
                                 </div>
                                 <div class="d-flex gap-2">
-                                    <button class="btn btn-success" onclick="showCreatePromptModal()">
+                                    <button class="btn btn-primary" id="create-iteration-btn-active" onclick="showCreateWorkIterationModal()" style="display:none;">
+                                        <i class="bi bi-folder-plus"></i> Create Work Iteration
+                                    </button>
+                                    <button class="btn btn-success" id="create-prompt-btn-active" onclick="showCreatePromptModal()" style="display:none;">
                                         <i class="bi bi-plus-circle"></i> Create New Prompt
                                     </button>
                                     <button class="btn btn-warning" id="archive-iteration-btn" onclick="archiveWorkdir()" style="display:none;">

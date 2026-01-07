@@ -606,12 +606,24 @@ function showNoActivePrompt() {
     // Update iteration metadata even when no active prompt
     updateIterationMetadata();
     
-    // Show Archive Iteration button if iteration exists
+    // Determine what buttons to show based on whether iteration exists
+    const createIterationBtn = document.getElementById('create-iteration-btn-active');
+    const createPromptBtn = document.getElementById('create-prompt-btn-active');
     const archiveBtn = document.getElementById('archive-iteration-btn');
-    if (archiveBtn && currentRegistry) {
-        archiveBtn.style.display = 'inline-block';
-    } else if (archiveBtn) {
-        archiveBtn.style.display = 'none';
+    const messageText = document.getElementById('no-prompt-message-text');
+    
+    if (!currentRegistry) {
+        // No iteration exists at all - show create iteration button only
+        if (createIterationBtn) createIterationBtn.style.display = 'inline-block';
+        if (createPromptBtn) createPromptBtn.style.display = 'none';
+        if (archiveBtn) archiveBtn.style.display = 'none';
+        if (messageText) messageText.textContent = 'No work iteration exists. Create one to get started.';
+    } else {
+        // Iteration exists but no active prompt - show create prompt and archive buttons
+        if (createIterationBtn) createIterationBtn.style.display = 'none';
+        if (createPromptBtn) createPromptBtn.style.display = 'inline-block';
+        if (archiveBtn) archiveBtn.style.display = 'inline-block';
+        if (messageText) messageText.textContent = 'No active prompt. Create a new prompt to continue working.';
     }
 }
 
@@ -2160,8 +2172,10 @@ async function createWorkdir() {
         const modal = bootstrap.Modal.getInstance(document.getElementById('createWorkIterationModal'));
         modal.hide();
         
-        await loadIterationStatus();
+        // Reload data
         await loadRegistry();
+        await loadIterationStatus();
+        await loadActivePrompt();  // Refresh Active Prompt page to update button visibility
     } else {
         showAlert('danger', 'Failed to create work iteration: ' + (result.error || result.stderr));
     }
@@ -2179,8 +2193,11 @@ async function archiveWorkdir() {
     
     if (result.success) {
         showAlert('success', 'Work iteration archived successfully');
-        await loadIterationStatus();
+        
+        // Reload data
         await loadRegistry();
+        await loadIterationStatus();
+        await loadActivePrompt();  // Refresh Active Prompt page to show create iteration button
     } else {
         showAlert('danger', 'Failed to archive work iteration: ' + (result.error || result.stderr));
     }
