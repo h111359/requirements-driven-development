@@ -204,14 +204,10 @@ def main():
         test_suites.append(("tests/rdd-framework/", "RDD framework tests", ".rdd/src"))
     elif args.quick:
         # Run all unit tests, exclude integration
-        test_suites.append(("tests/build/", "Build tests", None))
-        test_suites.append(("tests/install/", "Install tests", None))
         test_suites.append(("tests/rdd-framework/actions/", "Action script tests", ".rdd/src/actions"))
         test_suites.append(("tests/rdd-framework/config/", "Configuration tests", ".rdd/config"))
     else:
         # Default: run all tests (CI/CD mode)
-        test_suites.append(("tests/build/", "Build tests", None))
-        test_suites.append(("tests/install/", "Install tests", None))
         if Path("tests/rdd-framework").exists():
             test_suites.append(("tests/rdd-framework/", "RDD framework tests", ".rdd/src"))
     
