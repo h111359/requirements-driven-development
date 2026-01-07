@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20260106-180532",
     "iteration-name": "Refresh",
-    "prompt-id-sequence-next-value": 11,
+    "prompt-id-sequence-next-value": 13,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -116,9 +116,32 @@
             "questionnaire-generated": false,
             "questionnaire-answered": false,
             "plan-generated": true,
-            "implementation-completed": false,
+            "implementation-completed": true,
             "execution-mode": "implement",
-            "executed": false
+            "executed": true
+        },
+        {
+            "prompt-id": "P-011",
+            "prompt-title": "Test troubleshoot",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
+        },
+        {
+            "prompt-id": "P-012",
+            "prompt-title": "Tests Troubleshoot 2",
+            "state": "completed",
+            "questionnaire-generated": false,
+            "questionnaire-answered": false,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "analysis-generated": true
         }
     ]
 }

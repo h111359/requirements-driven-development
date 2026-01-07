@@ -1,1 +1,0 @@
-Check if requirements should be updated because of the prompts in Workdir implemented so far
