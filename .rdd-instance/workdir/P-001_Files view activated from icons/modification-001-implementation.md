@@ -16,7 +16,7 @@ This means restructuring the layout from:
 [Workflow Areas Row - 6 areas in horizontal layout]
 ```
 
-To:
+To: 
 ```
 [Create Modification]  [Workflow Areas - centered]  [Copy Execute Cmd] [Complete]
 ```
