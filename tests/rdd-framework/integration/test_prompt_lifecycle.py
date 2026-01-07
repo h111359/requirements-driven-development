@@ -34,22 +34,26 @@ class TestCompletePromptWorkflow:
     
     def test_full_prompt_lifecycle(self, temp_rdd_instance):
         """Test complete workflow: create → clarify → analyze → plan → implement → complete"""
-        instance_dir = temp_rdd_instance
+        test_dir = temp_rdd_instance  # This is the directory containing .rdd-instance
+        instance_dir = test_dir / ".rdd-instance"
         workdir = instance_dir / "workdir"
         registry_file = workdir / "work-iteration-registry.json"
         
-        # Change to repo root for script execution
+        # Use the copied .rdd directory in test_dir
+        actions_dir = test_dir / ".rdd" / "src" / "actions"
+        
+        # Change to test directory for script execution
         original_cwd = Path.cwd()
         import os
-        os.chdir(REPO_ROOT)
+        os.chdir(test_dir)
         
         try:
             # Step 1: Create a prompt
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "prompt_create.py"), "title=Integration Test Prompt"],
+                [sys.executable, str(actions_dir / "prompt_create.py"), "title=Integration Test Prompt"],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             
             assert result.returncode == 0, f"prompt_create failed: {result.stderr}"
@@ -67,16 +71,16 @@ class TestCompletePromptWorkflow:
             assert prompt["execution-mode"] == "no-action"
             
             # Verify prompt folder created
-            prompt_folder = workdir / "P-001_Integration_Test_Prompt"
+            prompt_folder = workdir / "P-001_Integration Test Prompt"
             assert prompt_folder.exists()
             assert (prompt_folder / "prompt.md").exists()
             
             # Step 2: Generate questionnaire (simulate by setting flag)
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "prompt_questionnaire_generated_on.py")],
+                [sys.executable, str(actions_dir / "prompt_questionnaire_generated_on.py")],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0
             
@@ -102,19 +106,19 @@ class TestCompletePromptWorkflow:
             
             # Mark questionnaire as answered
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "questionnaire_check_complete.py")],
+                [sys.executable, str(actions_dir / "questionnaire_check_complete.py")],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0
             
             # Step 3: Generate analysis (simulate)
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "prompt_analysis_generated_on.py")],
+                [sys.executable, str(actions_dir / "prompt_analysis_generated_on.py")],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0
             
@@ -124,10 +128,10 @@ class TestCompletePromptWorkflow:
             
             # Step 4: Generate plan (simulate)
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "prompt_plan_generated_on.py")],
+                [sys.executable, str(actions_dir / "prompt_plan_generated_on.py")],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0
             
@@ -137,10 +141,10 @@ class TestCompletePromptWorkflow:
             
             # Step 5: Mark implementation completed
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "prompt_implementation_completed_on.py")],
+                [sys.executable, str(actions_dir / "prompt_implementation_completed_on.py")],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0
             
@@ -150,10 +154,10 @@ class TestCompletePromptWorkflow:
             
             # Step 6: Mark as executed
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "prompt_set_executed_on.py")],
+                [sys.executable, str(actions_dir / "prompt_set_executed_on.py")],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0
             
@@ -171,10 +175,10 @@ class TestCompletePromptWorkflow:
             
             # Step 7: Complete the prompt
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "prompt_set_state.py"), "state=completed"],
+                [sys.executable, str(actions_dir / "prompt_set_state.py"), "state=completed"],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0
             
@@ -190,29 +194,31 @@ class TestCompletePromptWorkflow:
     
     def test_create_multiple_prompts_enforces_single_active(self, temp_rdd_instance):
         """Test that only one prompt can be active at a time"""
-        instance_dir = temp_rdd_instance
+        test_dir = temp_rdd_instance
+        instance_dir = test_dir / ".rdd-instance"
         workdir = instance_dir / "workdir"
+        actions_dir = test_dir / ".rdd" / "src" / "actions"
         
         original_cwd = Path.cwd()
         import os
-        os.chdir(REPO_ROOT)
+        os.chdir(test_dir)
         
         try:
             # Create first prompt (active by default)
             result1 = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "prompt_create.py"), "title=First Prompt"],
+                [sys.executable, str(actions_dir / "prompt_create.py"), "title=First Prompt"],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result1.returncode == 0
             
             # Try to create second active prompt - should fail
             result2 = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "prompt_create.py"), "title=Second Prompt", "state=active"],
+                [sys.executable, str(actions_dir / "prompt_create.py"), "title=Second Prompt", "state=active"],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result2.returncode != 0
             assert "Only one prompt" in result2.stderr or "already active" in result2.stderr
@@ -226,52 +232,54 @@ class TestModificationWorkflow:
     
     def test_modification_lifecycle(self, temp_rdd_instance):
         """Test complete modification workflow"""
-        instance_dir = temp_rdd_instance
+        test_dir = temp_rdd_instance
+        instance_dir = test_dir / ".rdd-instance"
         workdir = instance_dir / "workdir"
+        actions_dir = test_dir / ".rdd" / "src" / "actions"
         
         original_cwd = Path.cwd()
         import os
-        os.chdir(REPO_ROOT)
+        os.chdir(test_dir)
         
         try:
             # Create and complete a prompt first
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "prompt_create.py"), "title=Test Prompt"],
+                [sys.executable, str(actions_dir / "prompt_create.py"), "title=Test Prompt"],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0
             prompt_id = result.stdout.strip()
             
             # Mark implementation completed
             subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "prompt_implementation_completed_on.py")],
+                [sys.executable, str(actions_dir / "prompt_implementation_completed_on.py")],
                 capture_output=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             
             # Create modification
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "modification_create.py"), 
+                [sys.executable, str(actions_dir / "modification_create.py"), 
                  f"prompt-id={prompt_id}", "description=Fix a bug"],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0
             
             # Verify modification file created
-            prompt_folder = workdir / "P-001_Test_Prompt"
+            prompt_folder = workdir / "P-001_Test Prompt"
             modification_file = prompt_folder / "modification-001.md"
             assert modification_file.exists()
             
             # Complete modification
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "modification_complete.py")],
+                [sys.executable, str(actions_dir / "modification_complete.py")],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0
             
@@ -284,40 +292,42 @@ class TestStateTransitions:
     
     def test_bidirectional_state_transitions(self, temp_rdd_instance):
         """Test that prompts can transition between active and completed freely"""
-        instance_dir = temp_rdd_instance
+        test_dir = temp_rdd_instance
+        instance_dir = test_dir / ".rdd-instance"
+        actions_dir = test_dir / ".rdd" / "src" / "actions"
         
         original_cwd = Path.cwd()
         import os
-        os.chdir(REPO_ROOT)
+        os.chdir(test_dir)
         
         try:
             # Create prompt (active by default)
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "prompt_create.py"), "title=Test Prompt"],
+                [sys.executable, str(actions_dir / "prompt_create.py"), "title=Test Prompt"],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0
             prompt_id = result.stdout.strip()
             
             # Transition to completed
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "prompt_set_state.py"), 
+                [sys.executable, str(actions_dir / "prompt_set_state.py"), 
                  "state=completed", f"prompt-id={prompt_id}"],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0
             
             # Transition back to active
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "prompt_set_state.py"), 
+                [sys.executable, str(actions_dir / "prompt_set_state.py"), 
                  "state=active", f"prompt-id={prompt_id}"],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0
             

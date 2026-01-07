@@ -234,9 +234,10 @@ class TestPromptValidation:
             assert params["state"] == "active"
             assert params["prompt-id"] == "P-001"
             
-            # Test with spaces around =
+            # Test with spaces around = (key should be stripped)
             params = _parse_params(["title = Test Value", "state=active"])
-            assert "title " in params  # Key includes space
+            assert "title" in params  # Key is stripped
+            assert params["title"] == " Test Value"  # Value preserves leading space
             
             # Test with args without =
             params = _parse_params(["title=Test", "somearg", "state=active"])

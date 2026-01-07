@@ -23,7 +23,7 @@ from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-ACTIONS_DIR = REPO_ROOT / ".rdd" / "src" / "actions"
+actions_dir = REPO_ROOT / ".rdd" / "src" / "actions"
 
 
 class TestIterationArchiving:
@@ -31,14 +31,16 @@ class TestIterationArchiving:
     
     def test_archive_creates_proper_structure(self, temp_rdd_instance):
         """Test that archiving creates correct folder structure"""
-        instance_dir = temp_rdd_instance
+        test_dir = temp_rdd_instance
+        instance_dir = test_dir / ".rdd-instance"
+        actions_dir = test_dir / ".rdd" / "src" / "actions"
         workdir = instance_dir / "workdir"
         archive_dir = instance_dir / "archive"
         registry_file = workdir / "work-iteration-registry.json"
         
         original_cwd = Path.cwd()
         import os
-        os.chdir(REPO_ROOT)
+        os.chdir(test_dir)
         
         try:
             # Read registry to get iteration info
@@ -50,26 +52,26 @@ class TestIterationArchiving:
             
             # Create and complete a prompt
             subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "prompt_create.py"), "title=Test Prompt"],
+                [sys.executable, str(actions_dir / "prompt_create.py"), "title=Test Prompt"],
                 capture_output=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             
             subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "prompt_set_state.py"), "state=completed"],
+                [sys.executable, str(actions_dir / "prompt_set_state.py"), "state=completed"],
                 capture_output=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             
             # Archive iteration (if script exists)
             # Note: Archive script may not exist yet
-            archive_script = ACTIONS_DIR / "workdir_archive.py"
+            archive_script = actions_dir / "workdir_archive.py"
             if archive_script.exists():
                 result = subprocess.run(
                     [sys.executable, str(archive_script)],
                     capture_output=True,
                     text=True,
-                    cwd=str(REPO_ROOT)
+                    cwd=str(test_dir)
                 )
                 
                 if result.returncode == 0:

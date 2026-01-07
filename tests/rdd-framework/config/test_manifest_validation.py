@@ -60,11 +60,12 @@ class TestManifestValidation:
         with open(manifest_path) as f:
             data = json.load(f)
         
-        assert "rddInstance" in data, "Manifest must have 'rddInstance' key"
-        assert "requiredPaths" in data["rddInstance"], "rddInstance must have 'requiredPaths'"
+        assert "requiredPaths" in data, "Manifest must have 'requiredPaths' key"
         
-        required_paths = data["rddInstance"]["requiredPaths"]
-        assert isinstance(required_paths, list), "requiredPaths must be an array"
+        required_paths = data["requiredPaths"]
+        assert isinstance(required_paths, dict), "requiredPaths must be an object"
+        assert "framework" in required_paths, "requiredPaths must have 'framework' key"
+        assert "instance" in required_paths, "requiredPaths must have 'instance' key"
     
     def test_manifest_required_paths_exist(self):
         """Test that all paths listed in requiredPaths actually exist in instance"""
@@ -82,12 +83,15 @@ class TestManifestValidation:
         assert "promptSnippets" in data, "Manifest must have 'promptSnippets' key"
         
         snippets = data["promptSnippets"]
-        assert isinstance(snippets, dict), "promptSnippets must be an object"
+        assert isinstance(snippets, list), "promptSnippets must be an array"
         
-        # Each snippet should map to a file path
-        for key, path in snippets.items():
-            assert isinstance(key, str), "Snippet keys must be strings"
-            assert isinstance(path, str), "Snippet paths must be strings"
+        # Each snippet should have prompt-snippet-key and prompt-snippet-path
+        for snippet in snippets:
+            assert isinstance(snippet, dict), "Each snippet must be an object"
+            assert "prompt-snippet-key" in snippet, "Snippet must have 'prompt-snippet-key'"
+            assert "prompt-snippet-path" in snippet, "Snippet must have 'prompt-snippet-path'"
+            assert isinstance(snippet["prompt-snippet-key"], str), "Snippet keys must be strings"
+            assert isinstance(snippet["prompt-snippet-path"], str), "Snippet paths must be strings"
     
     def test_manifest_prompt_snippet_files_exist(self):
         """Test that all prompt snippet files referenced in manifest exist"""
@@ -97,9 +101,11 @@ class TestManifestValidation:
         with open(manifest_path) as f:
             data = json.load(f)
         
-        snippets = data.get("promptSnippets", {})
+        snippets = data.get("promptSnippets", [])
         
-        for key, rel_path in snippets.items():
+        for snippet in snippets:
+            key = snippet["prompt-snippet-key"]
+            rel_path = snippet["prompt-snippet-path"]
             snippet_path = repo_root / rel_path
             assert snippet_path.exists(), f"Snippet file not found for key '{key}': {snippet_path}"
 
@@ -116,7 +122,10 @@ class TestConfigStructureValidation:
         """Test that technical-design-form.json has valid structure"""
         form_path = Path(__file__).resolve().parents[3] / ".rdd" / "config" / "technical-design-form.json"
         
-        if form_path.exists():
+        assert form_path.exists(), "technical-design-form.json must exist"
+        
+        # File may be empty initially
+        if form_path.stat().st_size > 0:
             with open(form_path) as f:
                 data = json.load(f)
             

@@ -24,25 +24,41 @@ from datetime import datetime
 @pytest.fixture
 def temp_rdd_instance(tmp_path):
     """
-    Creates a temporary .rdd-instance-test/ directory with required RDD structure.
+    Creates a temporary .rdd-instance/ directory with required RDD structure.
     
     This fixture sets up a minimal RDD instance suitable for integration testing
     with real filesystem operations. The structure includes:
     - workdir/ with work-iteration-registry.json
-    - specifications/ folder
+    - specifications/ folder with requirements.md
     - config/ folder with instance-config.json
+    - Symlink to .rdd directory so scripts can execute
     
     Args:
         tmp_path: pytest's built-in temporary directory fixture
         
     Returns:
-        Path: Path to the temporary .rdd-instance-test directory
+        Path: Path to the temporary test directory containing .rdd-instance
         
     Yields:
-        Path: The temporary instance directory, cleaned up after test completion
+        Path: The temporary test directory, cleaned up after test completion
     """
-    # Create base structure
-    instance_dir = tmp_path / ".rdd-instance-test"
+    # Import necessary modules
+    import shutil
+    
+    # Get the repo root where .rdd directory exists
+    repo_root = Path(__file__).resolve().parents[2]
+    
+    # Create test directory that will contain .rdd-instance
+    test_dir = tmp_path / "rdd-test-project"
+    test_dir.mkdir()
+    
+    # Copy .rdd directory so scripts can execute (scripts use __file__ to find repo root)
+    rdd_src = repo_root / ".rdd"
+    rdd_dst = test_dir / ".rdd"
+    shutil.copytree(rdd_src, rdd_dst, symlinks=True)
+    
+    # Create .rdd-instance structure (not .rdd-instance-test)
+    instance_dir = test_dir / ".rdd-instance"
     instance_dir.mkdir()
     
     # Create subdirectories
@@ -68,6 +84,10 @@ def temp_rdd_instance(tmp_path):
     }
     registry_file.write_text(json.dumps(initial_registry, indent=4))
     
+    # Create prompts-registry.md
+    prompts_registry_file = workdir / "prompts-registry.md"
+    prompts_registry_file.write_text("# Prompts Registry\n\n")
+    
     # Create instance-config.json
     config_file = config_dir / "instance-config.json"
     instance_config = {
@@ -75,11 +95,28 @@ def temp_rdd_instance(tmp_path):
     }
     config_file.write_text(json.dumps(instance_config, indent=4))
     
-    # Create empty requirements.md
+    # Create requirements.md with proper template structure
     requirements_file = specs_dir / "requirements.md"
-    requirements_file.write_text("## Product Name\n\nTest Product\n\n## User Requirements\n\n")
+    requirements_template = """## Product Name
+
+Test Product
+
+## User Requirements
+
+## Technical Requirements
+
+"""
+    requirements_file.write_text(requirements_template)
     
-    yield instance_dir
+    # Create empty technical-design.json
+    tech_design_file = specs_dir / "technical-design.json"
+    tech_design_file.write_text("")
+    
+    # Create files-and-folders.md
+    files_folders_file = specs_dir / "files-and-folders.md"
+    files_folders_file.write_text("# Files and Folders\n\n")
+    
+    yield test_dir
     
     # Cleanup is handled automatically by tmp_path
 

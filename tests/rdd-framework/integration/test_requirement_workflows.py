@@ -23,7 +23,7 @@ from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-ACTIONS_DIR = REPO_ROOT / ".rdd" / "src" / "actions"
+actions_dir = REPO_ROOT / ".rdd" / "src" / "actions"
 
 
 class TestRequirementCRUDCycle:
@@ -31,21 +31,23 @@ class TestRequirementCRUDCycle:
     
     def test_create_modify_delete_ur(self, temp_rdd_instance):
         """Test complete UR lifecycle"""
-        instance_dir = temp_rdd_instance
+        test_dir = temp_rdd_instance
+        instance_dir = test_dir / ".rdd-instance"
+        actions_dir = test_dir / ".rdd" / "src" / "actions"
         requirements_file = instance_dir / "specifications" / "requirements.md"
         
         original_cwd = Path.cwd()
         import os
-        os.chdir(REPO_ROOT)
+        os.chdir(test_dir)
         
         try:
             # Create UR
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "requirement_ur_create.py"),
+                [sys.executable, str(actions_dir / "requirement_ur_create.py"),
                  "text=The system shall provide test functionality"],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0, f"Create failed: {result.stderr}"
             
@@ -56,11 +58,11 @@ class TestRequirementCRUDCycle:
             
             # Modify UR
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "requirement_ur_modify.py"),
+                [sys.executable, str(actions_dir / "requirement_ur_modify.py"),
                  "id=UR-0001", "text=The system shall provide enhanced test functionality"],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0
             
@@ -70,11 +72,11 @@ class TestRequirementCRUDCycle:
             
             # Delete UR
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "requirement_ur_delete.py"),
+                [sys.executable, str(actions_dir / "requirement_ur_delete.py"),
                  "id=UR-0001"],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0
             
@@ -88,21 +90,23 @@ class TestRequirementCRUDCycle:
     
     def test_create_modify_delete_tr(self, temp_rdd_instance):
         """Test complete TR lifecycle"""
-        instance_dir = temp_rdd_instance
+        test_dir = temp_rdd_instance
+        instance_dir = test_dir / ".rdd-instance"
+        actions_dir = test_dir / ".rdd" / "src" / "actions"
         requirements_file = instance_dir / "specifications" / "requirements.md"
         
         original_cwd = Path.cwd()
         import os
-        os.chdir(REPO_ROOT)
+        os.chdir(test_dir)
         
         try:
             # Create TR
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "requirement_tr_create.py"),
+                [sys.executable, str(actions_dir / "requirement_tr_create.py"),
                  "text=The framework shall implement test support"],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             assert result.returncode == 0
             
@@ -119,36 +123,38 @@ class TestRequirementIDSequencing:
     
     def test_sequential_ur_ids(self, temp_rdd_instance):
         """Test that multiple URs get sequential IDs"""
-        instance_dir = temp_rdd_instance
+        test_dir = temp_rdd_instance
+        instance_dir = test_dir / ".rdd-instance"
+        actions_dir = test_dir / ".rdd" / "src" / "actions"
         requirements_file = instance_dir / "specifications" / "requirements.md"
         
         original_cwd = Path.cwd()
         import os
-        os.chdir(REPO_ROOT)
+        os.chdir(test_dir)
         
         try:
             # Create first UR
             subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "requirement_ur_create.py"),
+                [sys.executable, str(actions_dir / "requirement_ur_create.py"),
                  "text=The system shall do A"],
                 capture_output=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             
             # Create second UR
             subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "requirement_ur_create.py"),
+                [sys.executable, str(actions_dir / "requirement_ur_create.py"),
                  "text=The system shall do B"],
                 capture_output=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             
             # Create third UR
             subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "requirement_ur_create.py"),
+                [sys.executable, str(actions_dir / "requirement_ur_create.py"),
                  "text=The system shall do C"],
                 capture_output=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             
             # Verify sequential IDs
@@ -166,20 +172,22 @@ class TestRequirementValidation:
     
     def test_validation_bypass(self, temp_rdd_instance):
         """Test creating requirement with validation=none"""
-        instance_dir = temp_rdd_instance
+        test_dir = temp_rdd_instance
+        instance_dir = test_dir / ".rdd-instance"
+        actions_dir = test_dir / ".rdd" / "src" / "actions"
         
         original_cwd = Path.cwd()
         import os
-        os.chdir(REPO_ROOT)
+        os.chdir(test_dir)
         
         try:
             # Create requirement without "shall" (normally invalid)
             result = subprocess.run(
-                [sys.executable, str(ACTIONS_DIR / "requirement_ur_create.py"),
+                [sys.executable, str(actions_dir / "requirement_ur_create.py"),
                  "text=See external document XYZ", "validation=none"],
                 capture_output=True,
                 text=True,
-                cwd=str(REPO_ROOT)
+                cwd=str(test_dir)
             )
             # Should succeed with validation=none
             assert result.returncode == 0

@@ -116,9 +116,9 @@
             "questionnaire-generated": false,
             "questionnaire-answered": false,
             "plan-generated": true,
-            "implementation-completed": true,
+            "implementation-completed": false,
             "execution-mode": "implement",
-            "executed": true
+            "executed": false
         }
     ]
 }
