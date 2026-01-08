@@ -1,8 +1,3 @@
-%%PROMPT P-001 "Create New Iteration"
-The page Prompts History should not display a button "Create New Iteration" when no iteration exists (workdir is empty). This button shall be present only on Active Prompt page.
-%%ENDPROMPT
-
-%%PROMPT P-002 "Active Prompt real time statuses"
 Refactor the code so the status icons on "Active Prompt" page (representing the flags "state", "questionnaire-generated", "questionnaire-answered", "plan-generated", "implementation-completed",            "execution-mode", "executed") as well as the coloring of the buttons Prompt, Questionnaire, Analysis, Plan, Implementation, Modifications to reflect in real time (up to 2 seconds delay) the real state in `.rdd-instance/workdir/work-iteration-registry.json` and the presence of the files in `.rdd-instance/workdir/`. Buttons for deletion shall be disabled if the file is not present.
 
 **Description:**
@@ -18,9 +13,3 @@ Stabilize and extend the existing 2-second polling mechanism to also update file
    - Test with various workflow states (new prompt, questionnaire generated, plan generated, etc.)
    - Ensure no performance degradation from the additional button state logic
    - Verify disabled buttons remain non-clickable
-
-
-### Modification 001
-
-Remove the condition only one of the file buttons to be active at a given moment of time and color with solid blue background (same as of the active button) all buttons for which the files are available
-%%ENDPROMPT

@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20260107-215055",
     "iteration-name": "Web UI enhancements",
-    "prompt-id-sequence-next-value": 2,
+    "prompt-id-sequence-next-value": 3,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -13,6 +13,20 @@
             "implementation-completed": true,
             "execution-mode": "no-action",
             "executed": true
+        },
+        {
+            "prompt-id": "P-002",
+            "prompt-title": "Active Prompt real time statuses",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "analysis-generated": false,
+            "modifications-count": 1,
+            "current-modification-id": null
         }
     ]
 }

@@ -246,6 +246,9 @@ The framework enables:
 
 - [UR-0102] The Prompts History page shall not display a 'Create Work Iteration' button; the 'Create Work Iteration' control shall be available only on the Active Prompt page.
 
+- [UR-0103] The Web UI Active Prompt page shall update file view button states (Questionnaire, Analysis, Plan, Implementation, Modifications) and their corresponding delete buttons in real-time via 2-second polling to reflect current workflow state from the work iteration registry
+
+
 
 
 

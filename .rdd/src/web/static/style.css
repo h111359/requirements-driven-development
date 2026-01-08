@@ -700,7 +700,7 @@ input[name="execution-mode"].btn-check:checked + label.btn-primary {
     font-weight: 500;
 }
 
-.workflow-file-btn.active {
+.workflow-file-btn:not(:disabled) {
     background-color: #0d6efd;
     color: white;
     border-color: #0d6efd;

@@ -753,17 +753,6 @@ function showFileView(fileType) {
         targetView.style.display = 'block';
     }
     
-    // Update file button active states
-    const allButtons = document.querySelectorAll('.workflow-file-btn');
-    allButtons.forEach(btn => {
-        btn.classList.remove('active');
-    });
-    
-    const activeButton = document.getElementById(`file-btn-${fileType}`);
-    if (activeButton) {
-        activeButton.classList.add('active');
-    }
-    
     // Save current file view state
     StateManager.saveFileView(fileType);
     
@@ -905,6 +894,9 @@ async function refreshActivePromptStatuses() {
 
         // Update flags (only updates the DOM for flags)
         updateWorkflowFlags(activePrompt);
+
+        // Update file button states (view and delete buttons) in real-time
+        updateFileButtonStates(activePrompt);
 
         // Update execution-mode radio/buttons only if value changed (hybrid approach per Q2-C)
         const currentMode = activePrompt['execution-mode'] || getSmartDefaultMode(activePrompt);
