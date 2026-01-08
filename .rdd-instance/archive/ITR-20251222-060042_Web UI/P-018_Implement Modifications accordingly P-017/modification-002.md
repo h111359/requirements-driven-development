@@ -1,0 +1,1 @@
+The user should be able to edit the modification, which is In Progress

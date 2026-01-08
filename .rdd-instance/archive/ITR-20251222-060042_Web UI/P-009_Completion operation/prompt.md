@@ -1,0 +1,5 @@
+Create a new action python script in `.rdd/src/actions` named `prompt_complete.py` which sets the prompt provided as parameter to "completed" state.
+In `.rdd-instance/workdir/work-iteration-registry.json` shall be added a key if git operations are enabled.
+Based on this git key if it is enabled, the `prompt_complete.py` also should execute `.rdd/src/actions/git_commit.py` action.
+In `.rdd-instance/workdir/work-iteration-registry.json` should be added a flag in each prompt if it is executed. Create a new action python script in `.rdd/src/actions` named `prompt_set_executed_on.py` which sets the  executed flag of the prompt provided as parameter to true.
+In the Web UI in the prompt row should be added a button which executes the `prompt_complete.py`. Button should be enabled only if the executed flag is true for the prompt.

@@ -1,0 +1,84 @@
+{
+
+  "framework": {
+    "name": "RDD Framework",
+    "version": "2.0.0",
+    "description": "Requirements-Driven Development framework installed into a repository; framework assets live under .rdd and repo-specific state and documentation live under .rdd-instance.",
+    "supportedPlatforms": ["windows", "linux"],
+    "runtime": {
+      "language": "python",
+      "pythonCommand": "python"
+    }
+  },
+
+  "canonicalRoots": {
+    "frameworkRoot": ".rdd",
+    "instanceRoot": ".rdd-instance"
+  },
+
+  "components": [
+    {
+      "component-id": "framework",
+      "root": ".rdd",
+      "description": "Framework static assets: conventions, docs, prompts, scripts, config.",
+      "required": true
+    },
+    {
+      "component-id": "instance",
+      "root": ".rdd-instance",
+      "description": "Repo-specific configuration, requirements, specifications, workdir, archive.",
+      "required": true
+    }
+  ],
+
+  "requiredPaths": {
+    "framework": [
+      ".rdd/config/",
+      ".rdd/conventions/",
+      ".rdd/docs/",
+      ".rdd/prompt-snippets/",
+      ".rdd/src/"
+    ],
+    "instance": [
+      ".rdd-instance/archive/",
+      ".rdd-instance/config/",
+      ".rdd-instance/specifications/",
+      ".rdd-instance/workdir/"
+    ]
+  },
+
+  "requiredInstanceFiles": [
+    {
+      "path": ".rdd-instance/config/instance-config.json",
+      "convention": ".rdd/conventions/requirements.convention.md"
+    },
+    {
+      "path": ".rdd-instance/specifications/files-and-folders.md",
+      "convention": ".rdd/conventions/files-and-folders.convention.md"
+    },   
+    {
+      "path": ".rdd-instance/specifications/requirements.md",
+      "convention": ".rdd/conventions/requirements.convention.md"
+    },    
+    {
+      "path": ".rdd-instance/specifications/technical-design.json",
+      "convention": ".rdd/conventions/technical-design.convention.md"
+    }
+  ],
+
+  "upgradePolicy": {
+    "default": "preserve",
+    "rules": [
+      { "path": ".rdd/**", "action": "overwrite" },
+      { "path": ".rdd-instance/**", "action": "preserve" }
+    ]
+  },
+
+  "promptSnippets": [
+    {"prompt-snippet-key": "[[[CONSISTENCY]]]", "prompt-snippet-path": ".rdd/prompt-snippets/check-consistency.prompt.md"},
+    {"prompt-snippet-key": "[[[FOLDER_STRUCTURE_UPDATE]]]", "prompt-snippet-path": ".rdd/prompt-snippets/folder-structure.update.md"},
+    {"prompt-snippet-key": "[[[ROLE_SOLUTION_ARCHITECT]]]", "prompt-snippet-path": ".rdd/prompt-snippets/role.solution-architect.md"},
+    {"prompt-snippet-key": "[[[ROLE_SOFTWARE_DEVELOPER]]]", "prompt-snippet-path": ".rdd/prompt-snippets/role.sotware-developer.md"}
+  ]
+
+}

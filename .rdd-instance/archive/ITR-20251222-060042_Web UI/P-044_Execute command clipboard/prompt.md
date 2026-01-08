@@ -1,0 +1,1 @@
+Create a button in in Active Prompt which copies in the clipboard the text, which can be pasted directly in copilot chat for execution: "Follow the instructions in file `.rdd/prompt-snippets/execution.md`". The aim is this prompt to be used to trigger the execution command.

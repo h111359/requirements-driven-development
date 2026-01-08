@@ -1,0 +1,245 @@
+{
+  "context": "This prompt addresses a bug where prompt creation immediately sets questionnaire-generated and questionnaire-answered flags to true, and creates empty files that should only exist after specific execution steps. The fix requires changes to prompt_create.py, potential new scripts for questionnaire management, and updates to the Web UI to hide the Implementation tab until implementation-completed is true.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Should prompt_create.py create empty prompt.md file when creating a new prompt?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Create empty prompt.md file on prompt creation",
+          "pros": "File exists immediately for user to edit manually if needed, consistent with current behavior where prompts-registry.md gets a stub entry",
+          "cons": "Violates separation of concerns where prompt.md should only be created/managed through the prompts-registry system"
+        },
+        {
+          "id": "B",
+          "label": "Do NOT create prompt.md file, rely only on prompts-registry.md",
+          "pros": "Single source of truth for prompt text in prompts-registry.md, cleaner design, no duplicate/conflicting files",
+          "cons": "Breaks existing workflows if anything expects prompt.md to exist, requires checking all references to prompt.md"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "The framework already maintains prompts-registry.md as the authoritative source for prompt text. Creating a separate prompt.md file creates duplication and potential inconsistency. The prompt folder should only contain generated artifacts (questionnaire, plan, implementation) not the source prompt text.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "Should prompt_create.py create empty plan.md file when creating a new prompt?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Create empty plan.md file on prompt creation",
+          "pros": "File exists immediately, folder structure is complete from the start",
+          "cons": "Misleading - suggests plan exists when it doesn't, flag plan-generated should control whether plan exists"
+        },
+        {
+          "id": "B",
+          "label": "Do NOT create plan.md, create it only when plan mode executes",
+          "pros": "Clear workflow - file only exists when content is generated, aligns with plan-generated flag meaning, no confusion about whether plan exists",
+          "cons": "Need to ensure plan mode script creates the file, slightly more complex file creation logic"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "The plan.md file should only exist after the plan execution step completes. Creating an empty file immediately contradicts the purpose of the plan-generated flag. The file's existence should match the flag state.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "Should prompt_create.py create empty questionnaire.json file when creating a new prompt?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Create empty questionnaire.json with empty questions array",
+          "pros": "File structure exists for scripts to populate, Web UI can check file existence without errors",
+          "cons": "Suggests questionnaire has been generated when it hasn't, contradicts questionnaire-generated flag purpose"
+        },
+        {
+          "id": "B",
+          "label": "Do NOT create questionnaire.json, create it only when clarify mode executes",
+          "pros": "Clear workflow - file existence indicates clarify has run, aligns with questionnaire-generated flag, no confusion",
+          "cons": "Web UI and scripts must handle missing file gracefully, need null checks before reading"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "The questionnaire.json file should only exist after the clarify execution step completes and generates questions. Creating an empty file contradicts the questionnaire-generated flag. File existence should indicate that clarify has run and questions exist.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "Should we create dedicated scripts for questionnaire manipulation or allow direct file modification?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Create scripts questionnaire_add_question.py, questionnaire_set_answer.py, etc.",
+          "pros": "Controlled modification, validation guaranteed, centralized logic, easier to maintain consistency, prevents malformed JSON",
+          "cons": "More scripts to maintain, adds complexity, slower for bulk operations, AI agents need to call scripts instead of direct edits"
+        },
+        {
+          "id": "B",
+          "label": "Allow AI agents to directly modify questionnaire.json following the schema",
+          "pros": "Simpler, faster, more flexible, AI agents can make complex changes in one operation, fewer scripts to maintain",
+          "cons": "Risk of malformed JSON, no validation enforcement, harder to track changes, potential for schema violations"
+        },
+        {
+          "id": "C",
+          "label": "Hybrid: Create questionnaire.json through clarify execution, allow direct modification after creation",
+          "pros": "Controlled creation ensures valid structure, flexible modification for efficiency, best of both approaches",
+          "cons": "Unclear ownership - when to use scripts vs direct edits, potential inconsistency in approach"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "The framework is designed for AI agent execution. AI agents are capable of maintaining JSON schema compliance and can make complex multi-question updates efficiently. Creating manipulation scripts would add overhead without significant benefit, since AI agents already handle JSON manipulation reliably. The questionnaire schema is straightforward and well-documented.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "How should questionnaire-generated flag be set to true?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Automatically by prompt_questionnaire_generated_on.py called at end of clarify execution",
+          "pros": "Consistent with current flag management pattern, centralized control, clear execution flow",
+          "cons": "None significant - this aligns with the current architecture"
+        },
+        {
+          "id": "B",
+          "label": "Manually by user through Web UI or CLI after reviewing questions",
+          "pros": "User control over when questionnaire is considered complete",
+          "cons": "Extra step, potential to forget, breaks automation, inconsistent with other flags"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The existing pattern in the framework is for execution steps to call flag-setting scripts automatically. The clarify execution step should call prompt_questionnaire_generated_on.py after successfully creating the questionnaire. This is consistent with how other flags like plan-generated and executed are managed.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q6",
+      "question-text": "How should questionnaire-answered flag be set to true?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Automatically when Web UI detects all questions have user-selection values",
+          "pros": "Real-time, automatic, no manual step required, immediate feedback",
+          "cons": "Requires Web UI logic, what about CLI users, need validation in multiple places"
+        },
+        {
+          "id": "B",
+          "label": "Through dedicated script that validates all questions are answered",
+          "pros": "Centralized validation, works for both Web UI and CLI, consistent with framework patterns, reusable",
+          "cons": "Requires calling the script, extra step"
+        },
+        {
+          "id": "C",
+          "label": "Web UI calls validation script after each answer to check completion",
+          "pros": "Automated from user perspective, centralized validation logic, works immediately when last answer provided",
+          "cons": "Multiple script calls, potential performance overhead"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "This combines the benefits of automatic detection with centralized validation. The Web UI should call a validation script after each answer is saved, and the script sets the flag when all questions are answered. This maintains the framework's pattern of using scripts for state changes while providing good UX.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q7",
+      "question-text": "Should we create a questionnaire validation script to check if all questions are answered?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Create questionnaire_check_complete.py that sets questionnaire-answered flag",
+          "pros": "Reusable, centralized validation logic, can be called from Web UI or CLI, consistent with framework architecture",
+          "cons": "One more script to maintain, need to document when to call it"
+        },
+        {
+          "id": "B",
+          "label": "Embed validation logic directly in Web UI JavaScript and Python server",
+          "pros": "Fewer files, logic close to usage point",
+          "cons": "Duplicated logic across JS and Python, harder to maintain, not accessible to CLI"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "A dedicated script aligns with the framework's architecture of using scripts for state management. It provides a single source of truth for validation logic that can be called from multiple places (Web UI, CLI, execution scripts), ensuring consistency.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q8",
+      "question-text": "How should the Implementation tab visibility be controlled in the Web UI?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Show Implementation tab only when implementation-completed is true",
+          "pros": "Aligns with prompt requirement, prevents confusion when no implementation exists, cleaner UI",
+          "cons": "User cannot see implementation.md file until it's marked complete, cannot check progress during implementation"
+        },
+        {
+          "id": "B",
+          "label": "Show Implementation tab when implementation.md file exists (created during implement execution)",
+          "pros": "User can see implementation progress as it's being written, more transparent workflow",
+          "cons": "Requires file existence check, doesn't match the exact prompt requirement"
+        },
+        {
+          "id": "C",
+          "label": "Show Implementation tab when execution-mode has been set to 'implement' at least once",
+          "pros": "Shows tab as soon as implementation starts, user can see work in progress",
+          "cons": "Need to track whether implement mode was ever activated, more complex state tracking"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The prompt explicitly states 'Implementation tab in Active Prompt is visible immediately after creation of the prompt. It shall remain hidden until implementation-completed attribute is changed to true.' This is the clearest requirement and matches the flag-based visibility pattern used for other tabs.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q9",
+      "question-text": "Should implementation.md file be created by prompt_create.py?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Create empty implementation.md on prompt creation",
+          "pros": "File exists for implementation mode to write to, consistent with current behavior",
+          "cons": "File exists before any implementation happens, suggests implementation started when it hasn't"
+        },
+        {
+          "id": "B",
+          "label": "Do NOT create implementation.md, create it when implement mode first executes",
+          "pros": "File existence indicates implementation has started, aligns with workflow progression",
+          "cons": "Implementation mode script must create file, need to handle file creation in execution logic"
+        },
+        {
+          "id": "C",
+          "label": "Keep creating empty implementation.md but hide tab until implementation-completed",
+          "pros": "File ready for use, tab visibility controlled separately by flag, simpler implementation",
+          "cons": "Disconnection between file existence and tab visibility, file exists but is hidden"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "While it might seem contradictory to create the file but hide the tab, this approach is pragmatic. The implementation.md file serves as a log that the implement execution writes to. Creating it early ensures the file is ready. The tab visibility is controlled by the implementation-completed flag per the requirement. This separates file management from UI visibility concerns.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    }
+  ]
+}

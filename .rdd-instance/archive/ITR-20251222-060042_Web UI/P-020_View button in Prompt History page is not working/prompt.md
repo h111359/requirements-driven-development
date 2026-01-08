@@ -1,0 +1,1 @@
+Fix the view button in Prompts History page - it is not doing anything

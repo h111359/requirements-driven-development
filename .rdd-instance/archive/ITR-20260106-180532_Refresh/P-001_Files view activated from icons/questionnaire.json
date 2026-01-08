@@ -1,0 +1,179 @@
+{
+  "context": "The prompt requests a UI reorganization of the Active Prompt page to separate file viewing functionality from execution mode selection. Currently, buttons serve dual purposes (viewing files and setting execution mode), which causes accidental mode changes. The new design will have dedicated file viewing buttons and a separate radio button group for execution mode control. This questionnaire clarifies implementation details for the visual grouping, layout, and interaction patterns.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "How should the visual areas/groups be laid out on the page?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Horizontal layout - All groups arranged in a single row across the page",
+          "pros": "Compact, saves vertical space, all controls visible at once without scrolling",
+          "cons": "May become crowded on smaller screens, requires wider viewport, harder to scan vertically"
+        },
+        {
+          "id": "B",
+          "label": "Vertical layout - Groups stacked vertically down the page",
+          "pros": "Better for narrow screens, natural reading flow top-to-bottom, easier to add more groups later",
+          "cons": "Uses more vertical space, may require scrolling on smaller screens"
+        },
+        {
+          "id": "C",
+          "label": "Grid layout - Groups arranged in a responsive grid (e.g., 2 columns on desktop, 1 on mobile)",
+          "pros": "Flexible and responsive, balances horizontal and vertical space usage, adapts to screen sizes",
+          "cons": "More complex CSS, group order may change between screen sizes"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Vertical layout is recommended because the Active Prompt page is primarily used on desktop (per UR-0035), and the sequential workflow nature (Prompt → Questionnaire → Analysis → Plan → Implementation → Modifications) maps naturally to a top-to-bottom flow. This makes the execution progression visually clear and intuitive.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "Should the execution mode radio buttons be positioned inside each visual area or in a separate section?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Inside each area - Each group has its own execution mode radio positioned within it",
+          "pros": "Clear visual association between file/status and execution control, self-contained groups",
+          "cons": "More repetitive, may confuse users about which radio affects which area"
+        },
+        {
+          "id": "B",
+          "label": "Separate section - One radio button group for all execution modes, positioned separately",
+          "pros": "Single source of truth, less visual clutter, clear that one execution mode is active at a time",
+          "cons": "Requires visual cues to show relationship between selected mode and corresponding area"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The prompt explicitly states that 'The status icon, the file button and the radio for execution-mode setting should be visually grouped together in areas.' This indicates each area should contain its own execution mode control, creating self-contained workflow sections. This matches the requirement that execution modes correspond to specific lifecycle phases.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "How should disabled file buttons be indicated when their status is not true?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Fully disabled - Grayed out with cursor: not-allowed, no interaction possible",
+          "pros": "Clear visual indication of unavailability, prevents accidental clicks, standard UI pattern",
+          "cons": "Users cannot see why button is disabled without additional tooltips"
+        },
+        {
+          "id": "B",
+          "label": "Disabled with tooltip - Grayed out but shows explanatory tooltip on hover",
+          "pros": "Provides context about why disabled, educates users on workflow progression",
+          "cons": "Requires implementing tooltips, slightly more complex"
+        },
+        {
+          "id": "C",
+          "label": "Hidden - Buttons don't appear at all until their status flag is true",
+          "pros": "Clean interface showing only available options, no clutter from disabled controls",
+          "cons": "Users may not know what steps are available later, workflow less discoverable"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Disabled with tooltip aligns with UR-0027 (error messages include problem description and remediation) and provides better user experience by helping users understand the workflow progression. This is especially important for new users learning the RDD framework. The current tab visibility approach (UR-0075) hides unavailable content, but buttons should remain visible with explanations to maintain workflow discoverability.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "What should happen to the current tab-based view for showing different files?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Remove tabs completely - Use only the new button-based navigation, content switches in same placeholder",
+          "pros": "Simpler UI, removes redundancy, clearer single navigation pattern",
+          "cons": "Loses ability to see multiple files side-by-side (if that was ever needed)"
+        },
+        {
+          "id": "B",
+          "label": "Keep tabs as secondary navigation - Buttons select primary view, tabs show related content within that view",
+          "pros": "Two-level navigation for complex workflows, can group related files",
+          "cons": "More complex UI, potentially confusing with dual navigation patterns"
+        },
+        {
+          "id": "C",
+          "label": "Convert tabs to breadcrumb navigation - Show current file in breadcrumb, buttons for switching",
+          "pros": "Clear indication of current location, familiar navigation pattern",
+          "cons": "Breadcrumbs typically indicate hierarchy, which doesn't apply to peer files"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The prompt explicitly states that the new buttons should replace the current tabs, and that 'the same placeholder where the prompt.md is shown should be reused for the other files.' This indicates a single content area with button-based switching, removing the tab redundancy. Per UR-0075, tabs currently control visibility, but the new design shifts this to buttons, making tabs unnecessary.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "How should the Modifications area differ from the others, since it shows a list rather than a single file?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Same pattern - Modifications button shows a modifications list view in the content placeholder",
+          "pros": "Consistent with other buttons, uses same content area, familiar pattern",
+          "cons": "List might need different styling than file content views"
+        },
+        {
+          "id": "B",
+          "label": "Modal pattern - Modifications button opens modal dialog (like current implementation)",
+          "pros": "Separates list view from file content metaphor, consistent with current behavior",
+          "cons": "Inconsistent with other file-viewing buttons, modal breaks single-page flow"
+        },
+        {
+          "id": "C",
+          "label": "Sidebar pattern - Modifications button shows list in sidebar, selected modification shows in main content",
+          "pros": "Efficient navigation between modifications, list always visible during modification work",
+          "cons": "More complex layout, different interaction pattern from other areas"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The prompt states that 'Modification should show a Modifications list as in the modal,' but the context suggests bringing all views into unified file-viewing buttons. Showing the modifications list in the same content placeholder maintains consistency with the new design pattern while providing the list view that users need. The list can be styled appropriately within the content area without breaking the unified navigation pattern.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q6",
+      "question-text": "Should the Prompt area's 'No action' execution mode be visually distinguished from other execution modes?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Same styling - All execution mode radios look identical",
+          "pros": "Visual consistency, simpler CSS, uniform appearance",
+          "cons": "No visual cue that 'No action' is different from execution modes like Clarify/Analyze/Plan/Implement"
+        },
+        {
+          "id": "B",
+          "label": "Different styling - 'No action' has neutral/secondary styling while execution modes have primary/action styling",
+          "pros": "Visually distinguishes passive state from active execution modes, helps prevent accidental no-action selection",
+          "cons": "More complex styling rules, may look inconsistent if not carefully designed"
+        },
+        {
+          "id": "C",
+          "label": "No radio for Prompt area - Prompt area shows status but has no execution mode radio (No action is implicit)",
+          "pros": "Cleaner design, emphasizes that Prompt is always available, reduces clutter",
+          "cons": "Breaks the stated pattern that each area has status + button + radio, inconsistent grouping"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "The prompt mentions 'The \"No action\" should be in the \"Prompt\" area' suggesting it should be present but the context indicates users accidentally click execution mode buttons. Distinguishing 'No action' visually as a safe/neutral state versus action-oriented execution modes helps prevent mistakes and guides users toward intentional workflow progression. This aligns with the error prevention principles in UR-0027 and UR-0030.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    }
+  ]
+}

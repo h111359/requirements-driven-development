@@ -1,0 +1,1 @@
+Change the colors of the modes buttons. It should be one and the same color for non-active and another color for the active option

@@ -1,0 +1,1 @@
+When the button Insert Snippet is pressed, the list with snippets do not appear. Just after start typing something after [[[. This is confusing. Make the list of snippets to appear along adding [[[

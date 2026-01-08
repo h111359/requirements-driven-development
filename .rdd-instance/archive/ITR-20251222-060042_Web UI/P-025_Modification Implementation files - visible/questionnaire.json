@@ -1,0 +1,101 @@
+{
+  "context": "The Active Prompt page currently displays modifications in a tab, showing the modification description text from modification-XXX.md files. However, the modification-XXX-implementation.md files (which contain detailed logs of what was changed during each modification) are not visible in the Web UI. This questionnaire will help determine the best way to expose these implementation files.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Where should modification implementation files be displayed?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Add a 'View Implementation' button next to each modification in the Modifications tab that opens the implementation file in a modal/dialog",
+          "pros": "Simple to implement, clear separation between description and implementation, familiar pattern from completed prompts view, doesn't clutter the UI",
+          "cons": "Requires an extra click to view implementation details, modal might not be ideal for long implementation logs"
+        },
+        {
+          "id": "B",
+          "label": "Display both modification description and implementation inline in an expandable/collapsible section for each modification",
+          "pros": "All information visible in one place without modal, can quickly scan implementations, no page navigation needed",
+          "cons": "Can make the Modifications tab very long with many modifications, harder to scan modification descriptions when mixed with implementations"
+        },
+        {
+          "id": "C",
+          "label": "Add a sub-tab or split view within the Modifications tab: left side shows modification list, right side shows selected modification's description and implementation",
+          "pros": "Elegant two-panel layout like the questionnaire, all details visible without scrolling through long lists, professional UI",
+          "cons": "More complex to implement, takes more screen space, might not work well on smaller screens"
+        },
+        {
+          "id": "D",
+          "label": "Replace the current modification editor with a tabbed view: 'Description' tab and 'Implementation' tab for each modification",
+          "pros": "Clean separation of concerns, familiar tab pattern, works well when editing modifications",
+          "cons": "Need to switch tabs to see implementation, less useful when just browsing modifications"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Adding a 'View Implementation' button is the simplest approach that maintains consistency with how completed prompts show their implementation files in the Prompt History page. It keeps the UI clean while making implementation details easily accessible when needed.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "Should the implementation file be editable or read-only in the Web UI?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Read-only - implementation files should not be edited via Web UI",
+          "pros": "Implementation logs are historical records that shouldn't be changed, prevents accidental corruption of logs, aligns with implementation.md being read-only",
+          "cons": "Can't fix typos or update logs if something was missed during implementation"
+        },
+        {
+          "id": "B",
+          "label": "Editable - allow users to edit implementation logs for corrections or updates",
+          "pros": "Flexibility to fix typos, add missing details, or clarify confusing entries, useful for documentation improvements",
+          "cons": "Risk of losing historical accuracy, implementation logs should ideally be written during the work not retrospectively"
+        },
+        {
+          "id": "C",
+          "label": "Editable only for in-progress modifications, read-only once completed",
+          "pros": "Allows corrections during active work while preserving completed logs, balanced approach",
+          "cons": "More complex logic to implement, state-dependent behavior might confuse users"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Implementation files are logs of what was done and should be treated as historical records. Keeping them read-only maintains their integrity as a factual account of changes made. If corrections are needed, they should be made during the modification work itself.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "How should the implementation content be formatted when displayed?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Plain text in a textarea or pre element with monospace font",
+          "pros": "Simple, preserves exact formatting and whitespace, familiar for developers, works for any markdown content",
+          "cons": "Doesn't render markdown formatting like headers, code blocks, or lists"
+        },
+        {
+          "id": "B",
+          "label": "Rendered markdown with proper formatting (headers, code blocks, lists, etc.)",
+          "pros": "Much more readable, highlights code blocks, shows structure clearly, matches how implementation.md is typically written",
+          "cons": "Requires markdown rendering library, more complex to implement"
+        },
+        {
+          "id": "C",
+          "label": "Hybrid: markdown preview by default with option to toggle to raw text",
+          "pros": "Best of both worlds, users can see formatted version or raw text as needed",
+          "cons": "Most complex to implement, adds UI elements for toggling"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Modification implementation files are written in markdown format and should be rendered properly for best readability. The Web UI can use a simple markdown rendering library to display headers, code blocks, and lists correctly, making the logs much easier to read and understand.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

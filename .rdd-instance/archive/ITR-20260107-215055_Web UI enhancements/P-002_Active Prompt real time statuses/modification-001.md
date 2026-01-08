@@ -1,0 +1,1 @@
+Remove the condition only one of the file buttons to be active at a given moment of time and color with solid blue background (same as of the active button) all buttons for which the files are available

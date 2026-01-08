@@ -1,0 +1,191 @@
+{
+  "context": "The current requirement ID format uses timestamps (YYYYMMDD-HHmm) which can lead to conflicts when multiple requirements are added within the same minute, and makes it difficult to understand the sequence or count of requirements. This questionnaire explores alternative ID generation approaches that better support traceability, uniqueness, and usability.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "What ID format should be used for requirement identifiers?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Continue with timestamp-based IDs (YYYYMMDD-HHmm)",
+          "pros": "Natural chronological ordering, shows when requirement was added, already in use across existing requirements, no migration needed",
+          "cons": "Collision risk when multiple requirements added in same minute, verbose format (13 characters), doesn't show total count or sequence, difficult to reference verbally"
+        },
+        {
+          "id": "B",
+          "label": "Sequential numeric IDs (UR-001, UR-002, TR-001, TR-002)",
+          "pros": "Unique per category, compact format, shows total count at a glance, easy to reference and communicate, predictable next ID",
+          "cons": "Requires tracking last ID per category, loses chronological information, requires migration of all existing requirements"
+        },
+        {
+          "id": "C",
+          "label": "Date prefix with sequence (YYYYMMDD-001, YYYYMMDD-002)",
+          "pros": "Shows creation date, allows multiple requirements per day, unique within day, maintains some chronology",
+          "cons": "Sequence resets daily (could be confusing), still relatively verbose (12 characters), requires tracking daily sequence counter"
+        },
+        {
+          "id": "D",
+          "label": "Global sequential with date suffix (UR-001-20251224, UR-002-20251224)",
+          "pros": "Globally unique sequence number, includes creation date for reference, clear ordering, easy to count total requirements",
+          "cons": "Longer format (17 characters), date at end not natural for chronological sorting, requires tracking global sequence"
+        },
+        {
+          "id": "E",
+          "label": "Hybrid: Keep existing timestamp IDs but add sequential for new ones (UR-0001, TR-0001)",
+          "pros": "No need to migrate existing requirements, simpler for new additions, clean sequential format going forward, maintains all history",
+          "cons": "Inconsistent ID formats in same file, confusion about which format to use, two ID schemes to maintain"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Sequential numeric IDs provide the best balance of simplicity, uniqueness, and usability. They are compact, easy to reference, show the total count of requirements, and eliminate collision risks. While migration is required, it's a one-time effort that will benefit all future development. The chronological information is not critical since git history and requirement descriptions provide sufficient context.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "Should requirement IDs be tracked and auto-generated to prevent duplicates?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Manual ID assignment - user provides ID when adding requirement",
+          "pros": "Simple implementation, no state tracking needed, user has full control",
+          "cons": "High risk of duplicate IDs, requires manual coordination, error-prone, no validation"
+        },
+        {
+          "id": "B",
+          "label": "Auto-generate with registry file tracking last ID per category",
+          "pros": "Guarantees uniqueness, no user intervention needed, deterministic and predictable, easy to implement next-ID calculation",
+          "cons": "Requires maintaining registry file, adds file I/O overhead, could have race conditions in parallel usage"
+        },
+        {
+          "id": "C",
+          "label": "Auto-generate by scanning existing requirements file",
+          "pros": "No separate registry needed, self-contained in requirements.md, works even if registry is lost, simple architecture",
+          "cons": "Slower for large files (full file scan each time), parsing complexity, could miss IDs if file is malformed"
+        },
+        {
+          "id": "D",
+          "label": "Hybrid: Auto-generate with validation against existing IDs",
+          "pros": "Best of both worlds, can use registry for speed with fallback to scanning, validates against actual requirements.md state",
+          "cons": "More complex implementation, requires both registry and scanning logic"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Scanning the existing requirements file is the most robust approach for the RDD framework. It ensures consistency with the actual state of requirements.md without requiring additional state files. The performance impact is negligible for typical requirement files (hundreds of requirements), and it provides better reliability since there's no risk of registry file corruption or desynchronization. This aligns with the framework's principle of minimizing state tracking files.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "How should existing timestamp-based requirement IDs be handled?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Keep all existing timestamp IDs as-is (no migration)",
+          "pros": "No migration effort, preserves historical IDs, no risk of breaking references, maintains git history clarity",
+          "cons": "Two ID formats in same file permanently, inconsistent appearance, harder to establish clear patterns"
+        },
+        {
+          "id": "B",
+          "label": "Migrate all existing IDs to new format in one operation",
+          "pros": "Consistent ID format throughout file, clean slate for new system, easier to understand and maintain",
+          "cons": "Large one-time migration effort (528 lines), could break external references, significant git diff"
+        },
+        {
+          "id": "C",
+          "label": "Gradual migration - convert IDs only when requirements are edited",
+          "pros": "Spreads migration effort over time, low risk, natural transition, maintains stability",
+          "cons": "Long transition period, extended inconsistency, complicated logic to track partial migration"
+        },
+        {
+          "id": "D",
+          "label": "Create mapping file (old ID → new ID) and migrate",
+          "pros": "Provides traceability from old to new IDs, enables backward compatibility, supports external reference updates",
+          "cons": "Additional file to maintain, extra complexity, overkill if no external references exist"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "A complete one-time migration provides the cleanest outcome and best long-term maintainability. Since requirements.md is primarily used internally within the RDD framework and has comprehensive git history, the migration risk is low. The framework's scripts and documentation can be updated simultaneously to use the new IDs. This approach eliminates ongoing confusion from mixed ID formats and establishes a clear, consistent standard for the future.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "What should be the starting number for sequential IDs after migration?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Start from 001 for all categories",
+          "pros": "Clean start, simple numbering, easy to understand, consistent across categories",
+          "cons": "Doesn't reflect actual requirement count history, loses information about when categories grew"
+        },
+        {
+          "id": "B",
+          "label": "Start from 1001 to leave room for insertions",
+          "pros": "Allows adding requirements at beginning if needed, clear distinction from legacy, buffer for reordering",
+          "cons": "Unnecessary complexity, insertions rarely needed, creates false sense of order importance"
+        },
+        {
+          "id": "C",
+          "label": "Start from actual count (e.g., UR-001 through UR-178 if 178 exist)",
+          "pros": "Reflects actual number of requirements, no gaps in sequence, accurate count visible in last ID",
+          "cons": "Slightly more complex migration logic, requires accurate counting during migration"
+        },
+        {
+          "id": "D",
+          "label": "Use date-based starting point (e.g., start UR at 224 for Dec 24)",
+          "pros": "Preserves some chronological hint, unique across categories if using different dates",
+          "cons": "Arbitrary and confusing, no real benefit over simple sequential, harder to understand rationale"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Starting from the actual count provides the most transparent and meaningful numbering. It accurately represents the number of requirements in each category, makes the last ID immediately show the total count, and avoids gaps that could cause confusion. The migration logic is straightforward - count existing requirements in each category and assign sequential IDs from 001 upward.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "Should the convention file specify ID padding (number of digits)?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Fixed 3-digit padding (001, 002, ... 999)",
+          "pros": "Consistent visual alignment, supports up to 999 requirements per category, familiar format, easy sorting",
+          "cons": "Limits to 999 requirements per category, wastes space with leading zeros for small counts"
+        },
+        {
+          "id": "B",
+          "label": "Fixed 4-digit padding (0001, 0002, ... 9999)",
+          "pros": "Supports up to 9999 requirements, future-proof for large projects, consistent alignment",
+          "cons": "More verbose for typical projects, unnecessary for most use cases, wastes visual space"
+        },
+        {
+          "id": "C",
+          "label": "Dynamic padding based on current max (1, 2, 3... then 001, 002 after 99)",
+          "pros": "Minimal length for current size, grows as needed, efficient use of space",
+          "cons": "Inconsistent visual alignment, requires reformatting IDs when crossing thresholds, confusing presentation"
+        },
+        {
+          "id": "D",
+          "label": "No padding - use minimum digits (1, 2, 3, ... 100, 101)",
+          "pros": "Most compact format, natural number representation, no artificial limits, simple to implement",
+          "cons": "Inconsistent visual alignment in lists, harder to sort lexically, less professional appearance"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Fixed 3-digit padding provides the best balance of readability, consistency, and capacity. It supports up to 999 requirements per category, which is more than sufficient for most projects while keeping IDs compact (UR-001). The consistent width ensures proper alignment in lists and diffs, and the format is widely recognized and professional. Even large projects rarely exceed a few hundred requirements per category.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    }
+  ]
+}

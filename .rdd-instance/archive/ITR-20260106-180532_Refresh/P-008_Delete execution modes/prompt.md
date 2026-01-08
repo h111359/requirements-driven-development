@@ -1,0 +1,3 @@
+In the respective cards for execution-modes Clarify, Analyze and Plan in Active Prompt page should be created buttons with icon trash bin which when pressed, deletes the respective file and toggle the status - as if the execution-mode was never executed.
+
+In `.rdd/src/actions` should be created the respective "prompt_*" scripts which to be invoked by the prompt. The prompt should not directly delete the prompt workdir files.

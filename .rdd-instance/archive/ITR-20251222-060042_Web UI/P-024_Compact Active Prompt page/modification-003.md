@@ -1,0 +1,1 @@
+Make questionnaire form more compact. It takes too much space now. Keep all texts and visuals

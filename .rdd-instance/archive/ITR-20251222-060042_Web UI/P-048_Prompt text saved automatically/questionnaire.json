@@ -1,0 +1,185 @@
+{
+  "context": "The current Web UI implementation requires users to manually click a 'Save Prompt' button to save changes made to prompt.md. This prompt requests automatic saving of the prompt text without requiring the user to press the save button. We need to determine the best approach for implementing auto-save, including the trigger mechanism, timing, and user feedback.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "What should trigger the automatic save of the prompt text?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Auto-save on blur (when user clicks away from the textarea)",
+          "pros": "Simple implementation, saves when user moves to another field or area, predictable behavior, immediate persistence when leaving the field",
+          "cons": "May not save if user just stops typing but doesn't leave the field, could save incomplete thoughts mid-edit"
+        },
+        {
+          "id": "B",
+          "label": "Debounced auto-save (saves after N seconds of no typing activity)",
+          "pros": "Modern UX pattern, doesn't interrupt typing flow, prevents excessive saves during active typing, saves work even if user forgets to blur",
+          "cons": "May save incomplete or draft content, could be surprising if user doesn't realize it's auto-saving, introduces delay before save"
+        },
+        {
+          "id": "C",
+          "label": "Combination of blur and debounced (saves on blur OR after N seconds of inactivity)",
+          "pros": "Best of both worlds, ensures save even if user keeps focus, responsive to both navigation and pause events",
+          "cons": "More complex implementation, potential for duplicate save calls that need deduplication"
+        },
+        {
+          "id": "D",
+          "label": "Periodic auto-save at fixed intervals (e.g., every 30 seconds)",
+          "pros": "Predictable timing, simple implementation, doesn't depend on user interaction",
+          "cons": "May save when nothing changed, fixed interval may be too frequent or too infrequent, wastes resources"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "The combination approach provides the best user experience by ensuring changes are saved both when the user navigates away and when they pause typing, preventing data loss without being intrusive. This aligns with modern editor patterns (like VS Code auto-save) and provides reliability while maintaining responsiveness.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "What debounce delay should be used for auto-save (if debouncing is chosen)?",
+      "options": [
+        {
+          "id": "A",
+          "label": "1 second",
+          "pros": "Very responsive, quick save after stopping typing, minimal perceived delay",
+          "cons": "May trigger too frequently during short pauses, more server requests, could still save mid-thought"
+        },
+        {
+          "id": "B",
+          "label": "2 seconds",
+          "pros": "Good balance between responsiveness and efficiency, matches common UX patterns (like TR-0124 for questionnaires), reduces unnecessary saves",
+          "cons": "Slightly longer wait if user stops typing and expects immediate save"
+        },
+        {
+          "id": "C",
+          "label": "3-5 seconds",
+          "pros": "More conservative, ensures user has truly paused, fewer server requests, better for deliberate editing",
+          "cons": "Feels less responsive, longer potential data loss window if browser crashes"
+        },
+        {
+          "id": "D",
+          "label": "Configurable by user preference",
+          "pros": "Maximum flexibility, users can choose what works for them, accommodates different editing styles",
+          "cons": "Adds complexity, requires UI for configuration, most users won't change defaults anyway"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "A 2-second debounce delay is recommended because it matches the pattern already used for questionnaire auto-save in TR-0124 (though that was later changed to TR-0125 requiring explicit save). This provides consistency across the application and strikes a good balance between responsiveness and efficiency. It's long enough to avoid excessive saves during active typing but short enough to feel responsive.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "Should the Save button be removed entirely or kept for explicit saves?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Remove the Save button entirely, rely only on auto-save",
+          "pros": "Cleaner UI, enforces auto-save pattern, less clutter, matches user's stated requirement (no need to press save button)",
+          "cons": "No way to force immediate save if needed, some users may feel less in control, no clear confirmation action"
+        },
+        {
+          "id": "B",
+          "label": "Keep the Save button as a manual option alongside auto-save",
+          "pros": "Gives users explicit control when needed, provides confirmation action, supports both workflows, backward compatible",
+          "cons": "May confuse users about when content is saved, button may feel redundant, cluttered UI"
+        },
+        {
+          "id": "C",
+          "label": "Replace Save button with a status indicator showing save state",
+          "pros": "Clear feedback about save status, modern pattern (like 'Saving...', 'Saved', 'Draft'), informs without cluttering, builds user confidence",
+          "cons": "No manual save option, requires additional UI element for status display"
+        },
+        {
+          "id": "D",
+          "label": "Convert Save button to a 'Saved' indicator that updates dynamically",
+          "pros": "Reuses existing button space, provides visual feedback, shows last save time, minimal UI change",
+          "cons": "Not a clickable button anymore (or if clickable, unclear what it does), may confuse users expecting a button"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Replacing the Save button with a status indicator provides the best user experience. It gives clear feedback about the save state ('Saving...', 'Saved', 'Error') without cluttering the UI or creating confusion about when content is saved. This matches modern web application patterns and aligns with the user's goal of not needing to press a save button while still providing transparency about the save status.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "Should snippet validation still run on auto-save or be deferred?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Run validation on every auto-save (blocking)",
+          "pros": "Immediate feedback on invalid snippets, catches errors early, ensures data consistency",
+          "cons": "May interrupt user frequently if they're typing invalid keys temporarily, could be annoying during draft phase, validation modal would appear automatically"
+        },
+        {
+          "id": "B",
+          "label": "Run validation silently, show non-blocking indicator only",
+          "pros": "Doesn't interrupt workflow, user can continue typing, provides feedback without blocking, can show error count in status area",
+          "cons": "User may not notice validation errors, invalid snippets could persist, requires new UI for non-modal validation feedback"
+        },
+        {
+          "id": "C",
+          "label": "Skip validation on auto-save, only validate on explicit actions",
+          "pros": "No interruptions during editing, validation runs only when relevant (e.g., when executing prompt), allows draft invalid keys",
+          "cons": "User won't know about invalid keys until later, may waste time entering invalid keys, errors discovered late in workflow"
+        },
+        {
+          "id": "D",
+          "label": "Run validation asynchronously, cache results, show in status area",
+          "pros": "Best of both worlds, no blocking, user sees validation status, can check details when needed, modern pattern",
+          "cons": "More complex implementation, requires status UI, validation state management"
+        }
+      ],
+      "recommended-option": "D",
+      "recommendation-rationale": "Running validation asynchronously with cached results provides the best user experience. It avoids blocking the user's workflow while still providing feedback about snippet validation status. The validation results can be shown in the status indicator area (same place as save status) using color coding (green=valid, red=invalid with count). This allows users to continue editing without interruption while being aware of validation issues.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "D"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "What should happen if auto-save fails (network error, permission issue, etc.)?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Show error alert and retry automatically with exponential backoff",
+          "pros": "User is informed, automatic recovery, handles transient network issues, reduces data loss risk",
+          "cons": "Alert may be disruptive, retry logic adds complexity, could repeatedly fail and spam user"
+        },
+        {
+          "id": "B",
+          "label": "Show non-blocking error indicator, provide manual retry button",
+          "pros": "Less disruptive than modal, gives user control, clear about error state, simple implementation",
+          "cons": "Requires user action to recover, changes could be lost if user doesn't notice error, no automatic recovery"
+        },
+        {
+          "id": "C",
+          "label": "Queue changes locally, retry on next edit or blur event",
+          "pros": "Seamless recovery, no user action needed, works well with intermittent connectivity, preserves all changes",
+          "cons": "Complex implementation, requires local storage/state management, user may not know about pending saves"
+        },
+        {
+          "id": "D",
+          "label": "Show error in status area, keep trying on subsequent changes",
+          "pros": "Non-intrusive, keeps user informed via status indicator, simple retry logic, will eventually save when connection restored",
+          "cons": "May hide critical issues, user could navigate away losing unsaved changes, no guarantee of eventual save"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Showing a non-blocking error indicator with a manual retry button provides the best balance between user control and simplicity. It clearly communicates the error state without blocking the user's work, allows them to fix the issue (if on their end) or retry when ready, and avoids the complexity of automatic retry logic. The error can be shown in the same status area used for save status, with a red 'Error - Retry' button/link.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    }
+  ]
+}

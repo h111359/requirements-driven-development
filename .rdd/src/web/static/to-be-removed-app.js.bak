@@ -1,0 +1,1484 @@
+// RDD Web Interface - Main JavaScript
+
+// Global state
+let sessionToken = null;
+let currentPromptId = null;
+let currentRegistry = null;
+let currentEditingPrompt = null;
+let currentPromptFolder = null;
+let isViewOnlyMode = false;
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    initializeApp();
+});
+
+/**
+ * Initialize the application
+ */
+async function initializeApp() {
+    try {
+        // Get session token
+        const response = await fetch('/api/token');
+        const data = await response.json();
+        sessionToken = data.token;
+        
+        // Load initial data
+        await loadRegistry();
+        await loadPromptsHistory();
+        
+        showAlert('success', 'Application initialized successfully');
+    } catch (error) {
+        showAlert('danger', 'Failed to initialize application: ' + error.message);
+    }
+}
+
+/**
+ * Show/hide sections
+ */
+function showSection(sectionName) {
+    // Hide all sections
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(section => section.style.display = 'none');
+    
+    // Remove active class from all nav links
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => link.classList.remove('active'));
+    
+    // Show selected section
+    const targetSection = document.getElementById('section-' + sectionName);
+    if (targetSection) {
+        targetSection.style.display = 'block';
+    }
+    
+    // Add active class to clicked nav link
+    event.target.classList.add('active');
+    
+    // Load section-specific data
+    if (sectionName === 'prompts-history') {
+        loadPromptsHistory();
+    } else if (sectionName === 'active-prompt') {
+        loadActivePrompt();
+    } else if (sectionName === 'workdir') {
+        loadIterationStatus();
+    }
+}
+
+/**
+ * Show alert message
+ */
+function showAlert(type, message) {
+    const alertContainer = document.getElementById('alert-container');
+    const alertId = 'alert-' + Date.now();
+    
+    const alertHtml = `
+        <div id="${alertId}" class="alert alert-${type} alert-dismissible fade show" role="alert">
+            <i class="bi bi-${getAlertIcon(type)}"></i> ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+    
+    alertContainer.innerHTML = alertHtml;
+    
+    // Auto-dismiss after 5 seconds
+    setTimeout(() => {
+        const alert = document.getElementById(alertId);
+        if (alert) {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }
+    }, 5000);
+}
+
+/**
+ * Get icon for alert type
+ */
+function getAlertIcon(type) {
+    const icons = {
+        'success': 'check-circle-fill',
+        'danger': 'exclamation-triangle-fill',
+        'warning': 'exclamation-circle-fill',
+        'info': 'info-circle-fill'
+    };
+    return icons[type] || 'info-circle-fill';
+}
+
+/**
+ * Execute an RDD action
+ */
+async function executeAction(domain, action, params = {}) {
+    try {
+        const response = await fetch('/api/action', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                domain: domain,
+                action: action,
+                params: params
+            })
+        });
+        
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+}
+
+/**
+ * Load work iteration registry
+ */
+async function loadRegistry() {
+    try {
+        const response = await fetch('/api/registry');
+        const result = await response.json();
+        
+        if (result.success) {
+            currentRegistry = result.data;
+            return currentRegistry;
+        } else {
+            console.error('Failed to load registry:', result.error);
+            return null;
+        }
+    } catch (error) {
+        console.error('Error loading registry:', error);
+        return null;
+    }
+}
+
+/**
+ * Load prompts list
+ */
+async function loadPrompts() {
+    const container = document.getElementById('prompts-table-container');
+    container.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
+    
+    await loadRegistry();
+    
+    if (!currentRegistry || !currentRegistry.prompts) {
+        container.innerHTML = '<p class="text-warning">No work iteration found. Please create one in the Workdir section.</p>';
+        return;
+    }
+    
+    const prompts = currentRegistry.prompts;
+    
+    if (prompts.length === 0) {
+        container.innerHTML = '<p class="text-muted">No prompts found. Create one using the button above.</p>';
+        return;
+    }
+    
+    // Build table
+    let html = `
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>State</th>
+                        <th>Executed</th>
+                        <th>Analyze Mode</th>
+                        <th>Plan Mode</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+    
+    prompts.forEach(prompt => {
+        const promptId = prompt['prompt-id'];
+        const title = prompt.title || prompt['prompt-title'] || '';
+        const state = prompt.state || '';
+        const analyzeEnabled = prompt['analyze-enabled'] || false;
+        const planEnabled = prompt['plan-enabled'] || false;
+        const executed = prompt['executed'] || false;
+        
+        const stateBadge = getStateBadge(state);
+        
+        // Executed badge
+        const executedBadge = executed 
+            ? '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Yes</span>'
+            : '<span class="badge bg-secondary">No</span>';
+        
+        // Determine if prompt is editable (active)
+        const isEditable = (state === 'active');
+        const buttonType = isEditable ? 'primary' : 'secondary';
+        const buttonLabel = isEditable ? 'Edit' : 'View';
+        const buttonIcon = isEditable ? 'pencil' : 'eye';
+        
+        // Analyze toggle (only for active prompts)
+        let analyzeToggleHtml = '';
+        if (state === 'active') {
+            const toggleChecked = analyzeEnabled ? 'checked' : '';
+            const toggleId = `analyze-toggle-${promptId}`;
+            analyzeToggleHtml = `
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="${toggleId}" 
+                           ${toggleChecked} onchange="toggleAnalyzeMode('${promptId}', this.checked)">
+                    <label class="form-check-label" for="${toggleId}">
+                        ${analyzeEnabled ? 'ON' : 'OFF'}
+                    </label>
+                </div>
+            `;
+        } else {
+            analyzeToggleHtml = '<span class="text-muted">N/A</span>';
+        }
+        
+        // Plan toggle (only for active prompts)
+        let planToggleHtml = '';
+        if (state === 'active') {
+            const toggleChecked = planEnabled ? 'checked' : '';
+            const toggleId = `plan-toggle-${promptId}`;
+            planToggleHtml = `
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="${toggleId}" 
+                           ${toggleChecked} onchange="togglePlanMode('${promptId}', this.checked)">
+                    <label class="form-check-label" for="${toggleId}">
+                        ${planEnabled ? 'ON' : 'OFF'}
+                    </label>
+                </div>
+            `;
+        } else {
+            planToggleHtml = '<span class="text-muted">N/A</span>';
+        }
+        
+        // Complete button (only for active prompts with executed=true)
+        let completeButtonHtml = '';
+        if (state === 'active') {
+            const completeDisabled = !executed ? 'disabled' : '';
+            const completeTitle = !executed ? 'Prompt must be executed first' : 'Complete this prompt';
+            completeButtonHtml = `
+                <button class="btn btn-sm btn-success" 
+                        onclick="completePrompt('${promptId}')"
+                        ${completeDisabled}
+                        title="${completeTitle}">
+                    <i class="bi bi-check-lg"></i> Complete
+                </button>
+            `;
+        }
+        
+        html += `
+            <tr>
+                <td><code>${promptId}</code></td>
+                <td>${escapeHtml(title)}</td>
+                <td>${stateBadge}</td>
+                <td>${executedBadge}</td>
+                <td>${analyzeToggleHtml}</td>
+                <td>${planToggleHtml}</td>
+                <td>
+                    <button class="btn btn-sm btn-${buttonType}" 
+                            onclick="openPromptEditor('${promptId}', ${!isEditable})">
+                        <i class="bi bi-${buttonIcon}"></i> ${buttonLabel}
+                    </button>
+                    <button class="btn btn-sm btn-primary" 
+                            onclick="showSetStateModal('${promptId}', '${state}')">
+                        <i class="bi bi-pencil"></i> Set State
+                    </button>
+                    ${completeButtonHtml}
+                </td>
+            </tr>
+        `;
+    });
+    
+    html += `
+                </tbody>
+            </table>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+}
+
+/**
+ * Get badge HTML for state
+ */
+function getStateBadge(state) {
+    const badges = {
+        'active': '<span class="badge bg-warning">Active</span>',
+        'completed': '<span class="badge bg-success">Completed</span>'
+    };
+    return badges[state] || '<span class="badge bg-light text-dark">' + state + '</span>';
+}
+
+/**
+ * Escape HTML to prevent XSS
+ */
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+/**
+ * Show create prompt modal
+ */
+function showCreatePromptModal() {
+    const modal = new bootstrap.Modal(document.getElementById('createPromptModal'));
+    
+    // Reset form
+    document.getElementById('prompt-title').value = '';
+    document.getElementById('prompt-state').value = 'active';
+    
+    modal.show();
+}
+
+/**
+ * Create a new prompt
+ */
+async function createPrompt() {
+    const title = document.getElementById('prompt-title').value.trim();
+    const state = document.getElementById('prompt-state').value;
+    
+    if (!title) {
+        showAlert('warning', 'Please enter a prompt title');
+        return;
+    }
+    
+    const params = {
+        title: title,
+        state: state
+    };
+    
+    const result = await executeAction('prompt', 'create', params);
+    
+    if (result.success) {
+        showAlert('success', 'Prompt created successfully: ' + result.stdout.trim());
+        
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('createPromptModal'));
+        modal.hide();
+        
+        // Reload prompts history
+        await loadPromptsHistory();
+        // Also reload active prompt page if it exists
+        const activeSection = document.getElementById('section-active-prompt');
+        if (activeSection && activeSection.style.display !== 'none') {
+            await loadActivePrompt();
+        }
+    } else {
+        showAlert('danger', 'Failed to create prompt: ' + (result.error || result.stderr));
+    }
+}
+
+/**
+ * Show set state modal
+ */
+function showSetStateModal(promptId, currentState) {
+    currentPromptId = promptId;
+    
+    const modal = new bootstrap.Modal(document.getElementById('setStateModal'));
+    document.getElementById('set-state-prompt-id').textContent = promptId;
+    document.getElementById('new-state').value = currentState;
+    
+    modal.show();
+}
+
+/**
+ * Set prompt state
+ */
+async function setPromptState() {
+    const newState = document.getElementById('new-state').value;
+    
+    const params = {
+        'prompt-id': currentPromptId,
+        'state': newState
+    };
+    
+    const result = await executeAction('prompt', 'set_state', params);
+    
+    if (result.success) {
+        showAlert('success', 'Prompt state updated successfully');
+        
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('setStateModal'));
+        modal.hide();
+        
+        // Reload both views
+        await loadPromptsHistory();
+        await loadActivePrompt();
+    } else {
+        showAlert('danger', 'Failed to set prompt state: ' + (result.error || result.stderr));
+    }
+}
+
+/**
+ * Load and display prompts history (completed prompts only)
+ */
+async function loadPromptsHistory() {
+    const container = document.getElementById('prompts-history-table-container');
+    container.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
+    
+    await loadRegistry();
+    
+    if (!currentRegistry || !currentRegistry.prompts) {
+        container.innerHTML = '<p class="text-warning">No work iteration found. Please create one in the Workdir section.</p>';
+        return;
+    }
+    
+    // Filter to completed prompts only
+    const completedPrompts = currentRegistry.prompts.filter(p => p.state === 'completed');
+    
+    if (completedPrompts.length === 0) {
+        container.innerHTML = '<p class="text-muted">No completed prompts found.</p>';
+        return;
+    }
+    
+    // Build table
+    let html = `
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Questionnaire</th>
+                        <th>Plan</th>
+                        <th>Implementation</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+    
+    completedPrompts.forEach(prompt => {
+        const promptId = prompt['prompt-id'];
+        const title = prompt.title || prompt['prompt-title'] || '';
+        
+        // Status badges
+        const questionnaireGenerated = prompt['questionnaire-generated'] || false;
+        const questionnaireAnswered = prompt['questionnaire-answered'] || false;
+        const planGenerated = prompt['plan-generated'] || false;
+        const implementationCompleted = prompt['implementation-completed'] || false;
+        
+        // Questionnaire status: Green if answered, Gray if not generated
+        let questionnaireBadge = '';
+        if (!questionnaireGenerated) {
+            questionnaireBadge = '<span class="badge bg-secondary"><i class="bi bi-dash-circle"></i> Not Generated</span>';
+        } else if (questionnaireAnswered) {
+            questionnaireBadge = '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Answered</span>';
+        } else {
+            questionnaireBadge = '<span class="badge bg-warning"><i class="bi bi-clock-history"></i> Generated</span>';
+        }
+        
+        // Plan status
+        const planBadge = planGenerated 
+            ? '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Generated</span>'
+            : '<span class="badge bg-secondary"><i class="bi bi-dash-circle"></i> Not Generated</span>';
+        
+        // Implementation status
+        const implementationBadge = implementationCompleted
+            ? '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Completed</span>'
+            : '<span class="badge bg-secondary"><i class="bi bi-dash-circle"></i> Not Completed</span>';
+        
+        html += `
+            <tr>
+                <td><code>${promptId}</code></td>
+                <td>${escapeHtml(title)}</td>
+                <td>${questionnaireBadge}</td>
+                <td>${planBadge}</td>
+                <td>${implementationBadge}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary" 
+                            onclick="viewCompletedPrompt('${promptId}')">
+                        <i class="bi bi-eye"></i> View
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    
+    html += `
+                </tbody>
+            </table>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+}
+
+/**
+ * Load and display active prompt
+ */
+async function loadActivePrompt() {
+    await loadRegistry();
+    
+    if (!currentRegistry || !currentRegistry.prompts) {
+        showNoActivePrompt();
+        return;
+    }
+    
+    // Find active prompt
+    const activePrompt = currentRegistry.prompts.find(p => p.state === 'active');
+    
+    if (!activePrompt) {
+        showNoActivePrompt();
+        return;
+    }
+    
+    // Show active prompt content
+    document.getElementById('no-active-prompt-message').style.display = 'none';
+    document.getElementById('active-prompt-content').style.display = 'block';
+    
+    // Update title
+    const promptId = activePrompt['prompt-id'];
+    const title = activePrompt.title || activePrompt['prompt-title'] || '';
+    document.getElementById('active-prompt-title').innerHTML = 
+        `<i class="bi bi-journal-check"></i> Active Prompt: ${promptId} - ${escapeHtml(title)}`;
+    
+    // Update execution mode selector
+    const currentMode = activePrompt['execution-mode'] || getSmartDefaultMode(activePrompt);
+    document.getElementById(`mode-${currentMode}`).checked = true;
+    
+    // Update complete button state
+    const executed = activePrompt.executed || false;
+    const completeBtn = document.getElementById('complete-prompt-btn');
+    const completeHint = document.getElementById('complete-prompt-hint');
+    if (executed) {
+        completeBtn.disabled = false;
+        completeHint.textContent = 'Mark this prompt as completed';
+    } else {
+        completeBtn.disabled = true;
+        completeHint.textContent = 'Prompt must be executed first';
+    }
+    
+    // Update add modification button state
+    const implementationCompleted = activePrompt['implementation-completed'] || false;
+    const addModificationBtn = document.getElementById('add-modification-btn');
+    const addModificationHint = document.getElementById('add-modification-hint');
+    if (implementationCompleted) {
+        addModificationBtn.disabled = false;
+        addModificationHint.textContent = 'Create a modification for small corrections';
+    } else {
+        addModificationBtn.disabled = true;
+        addModificationHint.textContent = 'Available after implementation completed';
+    }
+    
+    // Update status indicators
+    updateStatusIndicators(activePrompt);
+    
+    // Load prompt files
+    await loadActivePromptFiles(promptId);
+    
+    // Load modifications if implementation is completed
+    if (implementationCompleted) {
+        await loadModifications();
+    }
+}
+
+/**
+ * Show no active prompt message
+ */
+function showNoActivePrompt() {
+    document.getElementById('no-active-prompt-message').style.display = 'block';
+    document.getElementById('active-prompt-content').style.display = 'none';
+}
+
+/**
+ * Get smart default execution mode based on prompt state
+ */
+function getSmartDefaultMode(prompt) {
+    const questionnaireGenerated = prompt['questionnaire-generated'] || false;
+    const planGenerated = prompt['plan-generated'] || false;
+    const implementationCompleted = prompt['implementation-completed'] || false;
+    
+    if (!questionnaireGenerated) {
+        return 'analyze';
+    } else if (!planGenerated) {
+        return 'plan';
+    } else if (!implementationCompleted) {
+        return 'implement';
+    } else {
+        return 'no-action';
+    }
+}
+
+/**
+ * Update status indicators for active prompt
+ */
+function updateStatusIndicators(prompt) {
+    const questionnaireGenerated = prompt['questionnaire-generated'] || false;
+    const questionnaireAnswered = prompt['questionnaire-answered'] || false;
+    const planGenerated = prompt['plan-generated'] || false;
+    const implementationCompleted = prompt['implementation-completed'] || false;
+    
+    // Questionnaire status
+    const questionnaireIcon = document.getElementById('questionnaire-icon');
+    const questionnaireStatus = document.getElementById('questionnaire-status');
+    
+    if (!questionnaireGenerated) {
+        questionnaireIcon.style.color = '#CCCCCC';
+        questionnaireStatus.className = 'badge bg-secondary';
+        questionnaireStatus.innerHTML = '<i class="bi bi-dash-circle"></i> Not Generated';
+    } else if (questionnaireAnswered) {
+        questionnaireIcon.style.color = '#28a745';
+        questionnaireStatus.className = 'badge bg-success';
+        questionnaireStatus.innerHTML = '<i class="bi bi-check-circle"></i> Answered';
+    } else {
+        questionnaireIcon.style.color = '#ffc107';
+        questionnaireStatus.className = 'badge bg-warning';
+        questionnaireStatus.innerHTML = '<i class="bi bi-clock-history"></i> In Progress';
+    }
+    
+    // Plan status
+    const planIcon = document.getElementById('plan-icon');
+    const planStatus = document.getElementById('plan-status');
+    
+    if (planGenerated) {
+        planIcon.style.color = '#28a745';
+        planStatus.className = 'badge bg-success';
+        planStatus.innerHTML = '<i class="bi bi-check-circle"></i> Generated';
+    } else {
+        planIcon.style.color = '#CCCCCC';
+        planStatus.className = 'badge bg-secondary';
+        planStatus.innerHTML = '<i class="bi bi-dash-circle"></i> Not Generated';
+    }
+    
+    // Implementation status
+    const implementationIcon = document.getElementById('implementation-icon');
+    const implementationStatus = document.getElementById('implementation-status');
+    
+    if (implementationCompleted) {
+        implementationIcon.style.color = '#28a745';
+        implementationStatus.className = 'badge bg-success';
+        implementationStatus.innerHTML = '<i class="bi bi-check-circle"></i> Completed';
+    } else {
+        implementationIcon.style.color = '#CCCCCC';
+        implementationStatus.className = 'badge bg-secondary';
+        implementationStatus.innerHTML = '<i class="bi bi-dash-circle"></i> Not Completed';
+    }
+}
+
+/**
+ * Update execution mode for active prompt
+ */
+async function updateExecutionMode(mode) {
+    try {
+        const response = await fetch('/api/action', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                domain: 'prompt',
+                action: 'set_execution_mode',
+                params: {
+                    mode: mode
+                }
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('success', `Execution mode set to: ${mode}`);
+            await loadRegistry();
+        } else {
+            showAlert('danger', 'Failed to update execution mode: ' + (result.error || result.stderr));
+        }
+    } catch (error) {
+        showAlert('danger', 'Failed to update execution mode: ' + error.message);
+    }
+}
+
+/**
+ * Load files for active prompt
+ */
+async function loadActivePromptFiles(promptId) {
+    currentEditingPrompt = promptId;
+    
+    // Find the prompt folder
+    try {
+        const folderName = promptId + '_' + getFolderSuffix(promptId);
+        currentPromptFolder = `workdir/${folderName}`;
+        
+        // Load all files
+        await Promise.all([
+            loadActivePromptFile('prompt.md'),
+            loadActivePromptFile('plan.md'),
+            loadActivePromptFile('questionnaire.md'),
+            loadActivePromptFile('implementation.md')
+        ]);
+    } catch (error) {
+        console.error('Error loading prompt files:', error);
+        showAlert('warning', 'Some prompt files could not be loaded');
+    }
+}
+
+/**
+ * Load a single file for active prompt
+ */
+async function loadActivePromptFile(filename) {
+    const textareaId = `active-editor-${filename.replace('.md', '-md')}`;
+    const textarea = document.getElementById(textareaId);
+    
+    if (!textarea) {
+        console.warn(`Textarea not found for ${filename}`);
+        return;
+    }
+    
+    try {
+        const filepath = `${currentPromptFolder}/${filename}`;
+        const response = await fetch('/api/file/' + filepath + '?token=' + sessionToken);
+        const result = await response.json();
+        
+        if (result.success) {
+            textarea.value = result.content || '';
+        } else {
+            textarea.value = `# File not found\n\nThis file does not exist yet.`;
+        }
+    } catch (error) {
+        console.error(`Error loading ${filename}:`, error);
+        textarea.value = `# Error\n\nFailed to load file: ${error.message}`;
+    }
+}
+
+/**
+ * Save file for active prompt
+ */
+async function saveActivePromptFile(filename) {
+    const textareaId = `active-editor-${filename.replace('.md', '-md')}`;
+    const textarea = document.getElementById(textareaId);
+    
+    if (!textarea) {
+        showAlert('danger', 'Textarea not found');
+        return;
+    }
+    
+    const content = textarea.value;
+    
+    try {
+        const filepath = `${currentPromptFolder}/${filename}`;
+        const response = await fetch('/api/file/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                filepath: filepath,
+                content: content
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('success', `${filename} saved successfully`);
+        } else {
+            showAlert('danger', `Failed to save ${filename}: ` + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        showAlert('danger', `Failed to save ${filename}: ` + error.message);
+    }
+}
+
+/**
+ * View completed prompt (opens modal with read-only view)
+ */
+async function viewCompletedPrompt(promptId) {
+    // For now, reuse the existing openPromptEditor with view-only mode
+    await openPromptEditor(promptId, true);
+}
+
+/**
+ * Get folder suffix from prompt in registry
+ */
+function getFolderSuffix(promptId) {
+    if (!currentRegistry || !currentRegistry.prompts) {
+        return '';
+    }
+    
+    const prompt = currentRegistry.prompts.find(p => p['prompt-id'] === promptId);
+    if (!prompt) {
+        return '';
+    }
+    
+    return prompt.title || prompt['prompt-title'] || '';
+}
+
+/**
+ * Complete the active prompt
+ */
+async function completeActivePrompt() {
+    if (!currentRegistry || !currentRegistry.prompts) {
+        showAlert('danger', 'No registry loaded');
+        return;
+    }
+    
+    const activePrompt = currentRegistry.prompts.find(p => p.state === 'active');
+    if (!activePrompt) {
+        showAlert('danger', 'No active prompt found');
+        return;
+    }
+    
+    const promptId = activePrompt['prompt-id'];
+    
+    if (!activePrompt.executed) {
+        showAlert('warning', 'Prompt must be executed before it can be completed');
+        return;
+    }
+    
+    if (!confirm(`Are you sure you want to complete prompt ${promptId}?`)) {
+        return;
+    }
+    
+    const params = {
+        'prompt-id': promptId
+    };
+    
+    const result = await executeAction('prompt', 'complete', params);
+    
+    if (result.success) {
+        showAlert('success', `Prompt ${promptId} completed successfully`);
+        
+        // Reload both views
+        await loadPromptsHistory();
+        await loadActivePrompt();
+    } else {
+        showAlert('danger', `Failed to complete prompt: ` + (result.error || result.stderr));
+    }
+}
+
+/**
+ * Toggle analyze mode for a prompt
+ */
+async function toggleAnalyzeMode(promptId, enabled) {
+    const action = enabled ? 'analyze_on' : 'analyze_off';
+    const params = {
+        'prompt-id': promptId
+    };
+    
+    const result = await executeAction('prompt', action, params);
+    
+    if (result.success) {
+        showAlert('success', `Analyze mode ${enabled ? 'enabled' : 'disabled'} for prompt ${promptId}`);
+        
+        // Update the label next to the toggle
+        const toggleId = `analyze-toggle-${promptId}`;
+        const toggleElement = document.getElementById(toggleId);
+        if (toggleElement) {
+            const label = toggleElement.nextElementSibling;
+            if (label) {
+                label.textContent = enabled ? 'ON' : 'OFF';
+            }
+        }
+        
+        // Reload registry to ensure consistency
+        await loadRegistry();
+    } else {
+        showAlert('danger', `Failed to ${enabled ? 'enable' : 'disable'} analyze mode: ` + (result.error || result.stderr));
+        
+        // Revert the toggle state
+        const toggleId = `analyze-toggle-${promptId}`;
+        const toggleElement = document.getElementById(toggleId);
+        if (toggleElement) {
+            toggleElement.checked = !enabled;
+        }
+    }
+}
+
+/**
+ * Toggle plan mode for a prompt
+ */
+async function togglePlanMode(promptId, enabled) {
+    const action = enabled ? 'plan_on' : 'plan_off';
+    const params = {
+        'prompt-id': promptId
+    };
+    
+    const result = await executeAction('prompt', action, params);
+    
+    if (result.success) {
+        showAlert('success', `Plan mode ${enabled ? 'enabled' : 'disabled'} for prompt ${promptId}`);
+        
+        // Update the label next to the toggle
+        const toggleId = `plan-toggle-${promptId}`;
+        const toggleElement = document.getElementById(toggleId);
+        if (toggleElement) {
+            const label = toggleElement.nextElementSibling;
+            if (label) {
+                label.textContent = enabled ? 'ON' : 'OFF';
+            }
+        }
+        
+        // Reload registry to ensure consistency (this will also update analyze toggle if it was auto-disabled)
+        await loadRegistry();
+    } else {
+        showAlert('danger', `Failed to ${enabled ? 'enable' : 'disable'} plan mode: ` + (result.error || result.stderr));
+        
+        // Revert the toggle state
+        const toggleId = `plan-toggle-${promptId}`;
+        const toggleElement = document.getElementById(toggleId);
+        if (toggleElement) {
+            toggleElement.checked = !enabled;
+        }
+    }
+}
+
+/**
+ * Complete a prompt
+ */
+async function completePrompt(promptId) {
+    if (!confirm(`Are you sure you want to complete prompt ${promptId}?`)) {
+        return;
+    }
+    
+    const params = {
+        'prompt-id': promptId
+    };
+    
+    const result = await executeAction('prompt', 'complete', params);
+    
+    if (result.success) {
+        showAlert('success', `Prompt ${promptId} completed successfully`);
+        
+        // Reload both views
+        await loadPromptsHistory();
+        await loadActivePrompt();
+    } else {
+        showAlert('danger', `Failed to complete prompt: ` + (result.error || result.stderr));
+    }
+}
+
+/**
+ * Create new workdir
+ */
+async function createWorkdir() {
+    const name = document.getElementById('iteration-name').value.trim();
+    
+    if (!name) {
+        showAlert('warning', 'Please enter an iteration name');
+        return;
+    }
+    
+    const result = await executeAction('workdir', 'new-setup', { name: name });
+    
+    if (result.success) {
+        showAlert('success', 'Work iteration created successfully');
+        document.getElementById('iteration-name').value = '';
+        await loadIterationStatus();
+        await loadRegistry();
+    } else {
+        showAlert('danger', 'Failed to create work iteration: ' + (result.error || result.stderr));
+    }
+}
+
+/**
+ * Archive workdir
+ */
+async function archiveWorkdir() {
+    if (!confirm('Are you sure you want to archive the current work iteration? This will clear the workdir.')) {
+        return;
+    }
+    
+    const result = await executeAction('workdir', 'archive', {});
+    
+    if (result.success) {
+        showAlert('success', 'Work iteration archived successfully');
+        await loadIterationStatus();
+        await loadRegistry();
+    } else {
+        showAlert('danger', 'Failed to archive work iteration: ' + (result.error || result.stderr));
+    }
+}
+
+/**
+ * Load iteration status
+ */
+async function loadIterationStatus() {
+    const container = document.getElementById('iteration-status');
+    container.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>';
+    
+    await loadRegistry();
+    
+    if (!currentRegistry) {
+        container.innerHTML = '<p class="text-warning">No work iteration registry found.</p>';
+        return;
+    }
+    
+    const html = `
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Iteration ID:</dt>
+            <dd class="col-sm-9"><code>${currentRegistry['iteration-id']}</code></dd>
+            
+            <dt class="col-sm-3">Iteration Name:</dt>
+            <dd class="col-sm-9">${escapeHtml(currentRegistry['iteration-name'])}</dd>
+            
+            <dt class="col-sm-3">Total Prompts:</dt>
+            <dd class="col-sm-9">${currentRegistry.prompts ? currentRegistry.prompts.length : 0}</dd>
+            
+            <dt class="col-sm-3">Next Prompt ID:</dt>
+            <dd class="col-sm-9"><code>P-${String(currentRegistry['prompt-id-sequence-next-value']).padStart(3, '0')}</code></dd>
+        </dl>
+    `;
+    
+    container.innerHTML = html;
+}
+
+/**
+ * Load file
+ */
+async function loadFile() {
+    const filepath = document.getElementById('file-path').value.trim();
+    
+    if (!filepath) {
+        showAlert('warning', 'Please enter a file path');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/file/' + filepath + '?token=' + sessionToken);
+        const result = await response.json();
+        
+        if (result.success) {
+            let content;
+            if (result.data) {
+                // JSON file
+                content = JSON.stringify(result.data, null, 2);
+            } else {
+                // Text file
+                content = result.content;
+            }
+            
+            document.getElementById('file-content').value = content;
+            document.getElementById('file-editor-container').style.display = 'block';
+            showAlert('success', 'File loaded successfully');
+        } else {
+            showAlert('danger', 'Failed to load file: ' + result.error);
+        }
+    } catch (error) {
+        showAlert('danger', 'Error loading file: ' + error.message);
+    }
+}
+
+/**
+ * Load file (quick access)
+ */
+function loadFileQuick(filepath) {
+    document.getElementById('file-path').value = filepath;
+    loadFile();
+}
+
+/**
+ * Save file
+ */
+async function saveFile() {
+    const filepath = document.getElementById('file-path').value.trim();
+    const content = document.getElementById('file-content').value;
+    
+    if (!filepath) {
+        showAlert('warning', 'Please enter a file path');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/file/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                filepath: filepath,
+                content: content
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('success', 'File saved successfully');
+        } else {
+            showAlert('danger', 'Failed to save file: ' + result.error);
+        }
+    } catch (error) {
+        showAlert('danger', 'Error saving file: ' + error.message);
+    }
+}
+
+/**
+ * Open prompt editor
+ */
+async function openPromptEditor(promptId, viewOnly = false) {
+    currentEditingPrompt = promptId;
+    isViewOnlyMode = viewOnly;
+    
+    // Find prompt details from registry
+    await loadRegistry();
+    const prompt = currentRegistry.prompts.find(p => p['prompt-id'] === promptId);
+    
+    if (!prompt) {
+        showAlert('danger', 'Prompt not found: ' + promptId);
+        return;
+    }
+    
+    const title = prompt.title || prompt['prompt-title'] || '';
+    currentPromptFolder = `workdir/${promptId}_${title}`;
+    
+    // Update UI
+    document.getElementById('editor-prompt-id').textContent = promptId;
+    document.getElementById('editor-mode-label').textContent = viewOnly ? 'View' : 'Edit';
+    
+    // Show editor view, hide list view
+    document.getElementById('prompts-list-view').style.display = 'none';
+    document.getElementById('prompt-editor-view').style.display = 'block';
+    
+    // Load all files
+    await loadPromptEditorFiles();
+    
+    // Disable/enable textareas and save buttons based on view mode
+    updateEditorPermissions();
+}
+
+/**
+ * Close prompt editor
+ */
+function closePromptEditor() {
+    // Show list view, hide editor view
+    document.getElementById('prompts-list-view').style.display = 'block';
+    document.getElementById('prompt-editor-view').style.display = 'none';
+    
+    // Clear editor state
+    currentEditingPrompt = null;
+    currentPromptFolder = null;
+    isViewOnlyMode = false;
+    
+    // Reload prompts list
+    loadPrompts();
+}
+
+/**
+ * Load all prompt editor files
+ */
+async function loadPromptEditorFiles() {
+    const files = ['prompt.md', 'plan.md', 'questionnaire.md', 'implementation.md'];
+    
+    for (const file of files) {
+        await loadPromptEditorFile(file);
+    }
+}
+
+/**
+ * Load a single prompt editor file
+ */
+async function loadPromptEditorFile(filename) {
+    const filepath = `${currentPromptFolder}/${filename}`;
+    const elementId = `editor-${filename.replace('.', '-')}`;
+    
+    try {
+        // URL-encode the filepath to handle spaces and special characters
+        const encodedFilepath = encodeURIComponent(filepath);
+        const response = await fetch('/api/file/' + encodedFilepath + '?token=' + sessionToken);
+        const result = await response.json();
+        
+        const textarea = document.getElementById(elementId);
+        if (textarea) {
+            if (result.success) {
+                textarea.value = result.content || '';
+            } else {
+                // File might not exist yet
+                textarea.value = '';
+                console.log(`File ${filename} not found or empty`);
+            }
+        }
+    } catch (error) {
+        console.error(`Error loading ${filename}:`, error);
+        const textarea = document.getElementById(elementId);
+        if (textarea) {
+            textarea.value = '';
+        }
+    }
+}
+
+/**
+ * Save a prompt file
+ */
+async function savePromptFile(filename) {
+    if (isViewOnlyMode) {
+        showAlert('warning', 'Cannot save in view-only mode');
+        return;
+    }
+    
+    const elementId = `editor-${filename.replace('.', '-')}`;
+    const content = document.getElementById(elementId).value;
+    const filepath = `${currentPromptFolder}/${filename}`;
+    
+    try {
+        const response = await fetch('/api/file/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                filepath: filepath,
+                content: content
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('success', `${filename} saved successfully`);
+        } else {
+            showAlert('danger', `Failed to save ${filename}: ${result.error}`);
+        }
+    } catch (error) {
+        showAlert('danger', `Error saving ${filename}: ${error.message}`);
+    }
+}
+
+/**
+ * Update editor permissions based on view mode
+ */
+function updateEditorPermissions() {
+    const textareaIds = ['editor-prompt-md', 'editor-plan-md', 'editor-questionnaire-md'];
+    const saveButtonIds = ['save-prompt-btn', 'save-plan-btn', 'save-questionnaire-btn'];
+    
+    textareaIds.forEach(id => {
+        const textarea = document.getElementById(id);
+        if (textarea) {
+            textarea.readOnly = isViewOnlyMode;
+        }
+    });
+    
+    saveButtonIds.forEach(id => {
+        const button = document.getElementById(id);
+        if (button) {
+            button.disabled = isViewOnlyMode;
+            if (isViewOnlyMode) {
+                button.classList.remove('btn-success');
+                button.classList.add('btn-secondary');
+            } else {
+                button.classList.remove('btn-secondary');
+                button.classList.add('btn-success');
+            }
+        }
+    });
+}
+
+/**
+ * Shutdown the server
+ */
+async function shutdownServer() {
+    if (!confirm('Are you sure you want to shutdown the RDD Web Server?')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/shutdown', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('success', 'Server is shutting down. You can close this window.');
+            // Disable all UI elements after shutdown
+            document.body.innerHTML = '<div class="container mt-5 text-center"><h2>Server Shutdown</h2><p>The RDD Web Server has been shut down. You can close this window.</p></div>';
+        } else {
+            showAlert('danger', `Failed to shutdown server: ${result.error}`);
+        }
+    } catch (error) {
+        // Server likely already shut down, which is expected
+        showAlert('success', 'Server shutdown initiated. You can close this window.');
+        setTimeout(() => {
+            document.body.innerHTML = '<div class="container mt-5 text-center"><h2>Server Shutdown</h2><p>The RDD Web Server has been shut down. You can close this window.</p></div>';
+        }, 1000);
+    }
+}
+/**
+ * Show add modification modal
+ */
+function showAddModificationModal() {
+    document.getElementById('modification-description').value = '';
+    const modal = new bootstrap.Modal(document.getElementById('addModificationModal'));
+    modal.show();
+}
+
+/**
+ * Create a new modification
+ */
+async function createModification() {
+    const description = document.getElementById('modification-description').value.trim();
+    
+    if (!description) {
+        showAlert('warning', 'Please enter a modification description');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/modification/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                description: description
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('success', 'Modification created successfully');
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addModificationModal'));
+            modal.hide();
+            // Reload active prompt to update modifications list
+            await loadActivePrompt();
+            await loadModifications();
+        } else {
+            showAlert('danger', `Failed to create modification: ${result.error}`);
+        }
+    } catch (error) {
+        showAlert('danger', `Error creating modification: ${error.message}`);
+    }
+}
+
+/**
+ * Load modifications list
+ */
+async function loadModifications() {
+    try {
+        const response = await fetch('/api/modification/list', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            displayModificationsList(result.modifications || []);
+        } else {
+            console.error('Failed to load modifications:', result.error);
+        }
+    } catch (error) {
+        console.error('Error loading modifications:', error);
+    }
+}
+
+/**
+ * Display modifications list
+ */
+function displayModificationsList(modifications) {
+    const container = document.getElementById('modifications-list-container');
+    
+    if (!modifications || modifications.length === 0) {
+        container.innerHTML = '<p class="text-muted">No modifications yet.</p>';
+        return;
+    }
+    
+    let html = '<div class="list-group">';
+    
+    modifications.forEach(mod => {
+        const statusBadge = mod.status === 'completed' 
+            ? '<span class="badge bg-success">Completed</span>' 
+            : '<span class="badge bg-warning">In Progress</span>';
+        
+        const created = new Date(mod.created).toLocaleString();
+        const completed = mod.completed ? new Date(mod.completed).toLocaleString() : 'N/A';
+        
+        html += `
+            <div class="list-group-item">
+                <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Modification ${mod['modification-id']}</h6>
+                    ${statusBadge}
+                </div>
+                <p class="mb-1">${escapeHtml(mod.description || 'No description')}</p>
+                <small class="text-muted">
+                    Created: ${created} | Completed: ${completed}
+                </small>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    container.innerHTML = html;
+}
+/**
+ * Edit a modification description
+ */
+function editModification(modificationId, currentDescription) {
+    const descElement = document.getElementById(`mod-desc-${modificationId}`);
+    if (!descElement) return;
+    
+    // Create textarea for editing
+    descElement.innerHTML = `
+        <textarea class="form-control mb-2" id="edit-mod-${modificationId}" rows="3">${currentDescription}</textarea>
+        <button class="btn btn-sm btn-success me-1" onclick="saveModificationEdit('${modificationId}')">
+            <i class="bi bi-check-lg"></i> Save
+        </button>
+        <button class="btn btn-sm btn-secondary" onclick="cancelModificationEdit('${modificationId}', \`${escapeHtml(currentDescription).replace(/`/g, '\\`')}\`)">
+            <i class="bi bi-x-lg"></i> Cancel
+        </button>
+    `;
+    
+    // Focus on textarea
+    document.getElementById(`edit-mod-${modificationId}`).focus();
+}
+
+/**
+ * Save modification edit
+ */
+async function saveModificationEdit(modificationId) {
+    const textarea = document.getElementById(`edit-mod-${modificationId}`);
+    if (!textarea) return;
+    
+    const newDescription = textarea.value.trim();
+    if (!newDescription) {
+        showAlert('warning', 'Description cannot be empty');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/modification/update', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                modificationId: modificationId,
+                description: newDescription
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('success', 'Modification updated successfully');
+            await loadModifications();
+        } else {
+            showAlert('danger', `Failed to update modification: ${result.error}`);
+        }
+    } catch (error) {
+        showAlert('danger', `Error updating modification: ${error.message}`);
+    }
+}
+
+/**
+ * Cancel modification edit
+ */
+function cancelModificationEdit(modificationId, originalDescription) {
+    const descElement = document.getElementById(`mod-desc-${modificationId}`);
+    if (!descElement) return;
+    
+    descElement.innerHTML = escapeHtml(originalDescription);
+}

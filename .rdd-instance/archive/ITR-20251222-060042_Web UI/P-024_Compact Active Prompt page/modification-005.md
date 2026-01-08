@@ -1,0 +1,1 @@
+On the right side of the Questionnaire make the text of the question to be always visible during scrolling of the answer options - only in the questions placeholder

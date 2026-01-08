@@ -1,0 +1,1 @@
+As the functionality for committing the changes of a prompt now are implemented directly in `.rdd/src/actions/prompt_complete.py`, the script `.rdd/src/actions/git_commit.py` probably is obsolete. Check if this is the case and if not needed anymore - remove it and reflect in the requirements the change.

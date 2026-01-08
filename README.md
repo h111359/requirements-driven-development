@@ -21,9 +21,12 @@ Requirements-Driven Development (RDD) is a framework for development augmented w
 ## 📋 System Requirements
 
 - **Python 3.7+** - Cross-platform runtime for RDD scripts
+- **AI assistant** - (optionally to be GitHub Copilot but recommended)
+
+## Recommended  
+
 - **Git 2.23+** - Version control operations
 - **VS Code** - Recommended editor (optional but enhances experience)
-- **GitHub Copilot** - AI assistant (optional but recommended)
 
 ## 🚀 Installation
 
@@ -34,17 +37,9 @@ Requirements-Driven Development (RDD) is a framework for development augmented w
    - Verify with `rdd-v{version}.zip.sha256` (optional)
 
 2. **Extract the archive**
-   Extract the archive in a folder
+   Extract the folder `.rdd` from the archive in your repo folder
 
-3. **Run the install scripts**
-   
-   - For Linux - run install.sh
-   - For Windows - run install.bat
-
-4. **Choose target folder**
-   Follow the instructions to install RDD in the desired destination
-
-### Python Command Setup for Linux
+### Linux specific python command setup
 
 The RDD framework uses the `python` command (not `python3`) to ensure compatibility across all platforms. Most modern distributions include `python` pointing to Python 3. If not available:
 
@@ -59,30 +54,47 @@ sudo dnf install python-unversioned-command
 sudo pacman -S python
 ```
 
-**Alternative**: Create an alias or symlink:
-```bash
-# Add to ~/.bashrc or ~/.zshrc
-echo "alias python=python3" >> ~/.bashrc
-source ~/.bashrc
 
-# Or create a symlink
-sudo ln -s /usr/bin/python3 /usr/local/bin/python
+## 🎯 Start RDD
+
+**Windows:**
+- Navigate to the `.rdd/` folder in your repository
+- Double-click `run.bat`
+
+**Linux:**
+- Open a terminal and navigate to the `.rdd/` folder in your repository
+- Ensure the script is executable: `chmod +x .rdd/run.sh`
+- Execute `./run.sh`
+
+The Web UI will automatically open in your browser at `http://127.0.0.1:8080/`. You can find the user guide in the menu of the Web UI.
+
+
+### Optional setup for GitHub
+
+The following steps are not included in the installation. They add additional convinience in case you are using GitHub Copilot in Visual Studio Code, but are not mandatory so RDD to work.
+
+#### GitHub execute prompt
+
+For convenience (if you work with GitHub copilot) you can create a file `.github/prompts/rdd.execute.promppt.md` with the following content:
+
+```
+Follow the instructions in `.rdd/prompt-snippets/execution.md`
 ```
 
+#### VSCode shortcuts and script autoapprove
 
-## 🎯 Next Steps
+Add in `.vscode/settings.json` the following entries (if not exist already):
 
-### 1. User Guide
-
-- When installation is completed, you can find the following documents in `.rdd` folder:
-  - RDD-Framework-User-Guide.pdf for shorter version of the guide
-  - user-guide.md - for more details
-  
-- If you want to read these documents in advance directly from this repo - check the links: 
-  - [RDD-Framework-User-Guide.pdf](https://github.com/h111359/requirements-driven-development/blob/main/templates/RDD-Framework-User-Guide.pdf)
-  - [user-guide.md](https://github.com/h111359/requirements-driven-development/blob/main/templates/user-guide.md)
-
-
+```
+{
+  "chat.promptFilesRecommendations": {
+    "rdd.execute": true
+  },
+  "chat.tools.terminal.autoApprove": {
+    "python .rdd/src/": true
+  }
+}
+```
 
 ## 📄 License
 
@@ -100,12 +112,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Email**: h111359@gmail.com
 - **GitHub**: [@h111359](https://github.com/h111359)
 
-### Getting Help
-
-1. **Check the documentation** in `.rdd-docs/` after installation
-2. **Use `--help` flag** for command usage: `python .rdd/scripts/rdd.py --help`
-3. **Search existing issues** on GitHub
-4. **Create a new issue** with detailed description and error messages
 
 ## 🙏 Acknowledgments
 
@@ -115,10 +121,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-<div align="center">
-
 **⭐ Star this repo if you find it useful!**
 
-Made with ❤️ for developers who value clear requirements and maintainable code
 
-</div>
