@@ -1,0 +1,113 @@
+{
+  "context": "The Web UI uses vanilla JavaScript with Bootstrap 5 for UI components. The prompt snippet insertion feature needs to be integrated into the existing prompt editor. This questionnaire helps clarify the implementation approach for the snippet picker UI component.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Which UI component pattern should be used for the snippet picker in the vanilla JavaScript/Bootstrap environment?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Bootstrap Modal Dialog with search and list",
+          "pros": "Familiar Bootstrap pattern, well-documented, responsive out of the box, can show rich preview content, easy to implement with existing Bootstrap",
+          "cons": "Takes full screen focus, requires modal open/close interaction, slightly heavier user interaction"
+        },
+        {
+          "id": "B",
+          "label": "Bootstrap Dropdown menu with search filter",
+          "pros": "Lightweight, quick access, stays in context of editor, minimal UI disruption, compact",
+          "cons": "Limited space for preview/descriptions, may be cluttered with many snippets, harder to show detailed information"
+        },
+        {
+          "id": "C",
+          "label": "Custom autocomplete dropdown (like VS Code IntelliSense)",
+          "pros": "Professional editor-like experience, triggers automatically on typing [[[, contextual and efficient, familiar pattern for developers",
+          "cons": "More complex to implement from scratch, requires custom JavaScript, needs careful positioning logic"
+        },
+        {
+          "id": "D",
+          "label": "Sidebar panel (always visible or collapsible)",
+          "pros": "Always accessible, can show full snippet list with descriptions, drag-and-drop friendly, good for browsing",
+          "cons": "Takes screen space, may be overkill for simple insertion, adds UI complexity"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Bootstrap Modal provides the best balance for the initial implementation - it's easy to implement with existing Bootstrap, can show rich content (descriptions, previews), supports search/filter, and provides a focused interaction. It can be enhanced later with autocomplete (option C) as a secondary interface.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "How should the snippet preview be displayed when user hovers or selects a snippet in the picker?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Preview pane within the picker (split view)",
+          "pros": "All information in one place, easy to compare snippets, no additional UI elements needed",
+          "cons": "Requires more complex layout, may reduce snippet list space"
+        },
+        {
+          "id": "B",
+          "label": "Tooltip/popover on hover",
+          "pros": "Non-intrusive, simple to implement with Bootstrap, appears on demand only",
+          "cons": "Limited space for long snippets, may be hard to read, hover interaction required"
+        },
+        {
+          "id": "C",
+          "label": "Expandable accordion items in the list",
+          "pros": "Clean list view, show details on demand, familiar pattern, no hover required",
+          "cons": "Requires clicking to see preview, may make list longer, vertical space usage"
+        },
+        {
+          "id": "D",
+          "label": "No preview in Phase 1 - just show snippet description",
+          "pros": "Simplest to implement, faster initial delivery, descriptions may be sufficient",
+          "cons": "Users can't see actual snippet content before inserting, less transparency"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "If using a modal (Q1 option A), a split view with preview pane is the most user-friendly. It allows users to see the full snippet content before insertion, which is important for understanding what will be inserted into their prompt. This matches the UX pattern of VS Code snippet picker referenced in the requirements.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "How should snippet validation warnings be displayed for invalid/outdated snippet keys in the prompt text?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Inline text highlighting (red underline) with tooltip on hover",
+          "pros": "Immediate visual feedback, editor-like experience, clear location of issue, non-intrusive",
+          "cons": "Requires parsing prompt text continuously, more complex to implement in textarea"
+        },
+        {
+          "id": "B",
+          "label": "Validation panel below the editor showing list of issues",
+          "pros": "Easy to implement, shows all issues at once, doesn't modify editor appearance, can provide detailed messages",
+          "cons": "Separate from the text, requires user to correlate issues with text locations"
+        },
+        {
+          "id": "C",
+          "label": "Alert banner at top of editor when invalid keys detected",
+          "pros": "Simple to implement, clear notification, doesn't interfere with editing",
+          "cons": "Not specific to location, may be easy to miss or ignore, takes vertical space"
+        },
+        {
+          "id": "D",
+          "label": "Validate only on save/submit with error dialog",
+          "pros": "Simplest implementation, no continuous parsing needed, focused validation moment",
+          "cons": "Late feedback, user may have typed invalid keys for a while, interrupts workflow"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "For the vanilla JavaScript/textarea environment, a validation panel is the most practical. It provides clear feedback without requiring complex in-editor text manipulation. Option A would be ideal but is complex to implement in a textarea (would need to migrate to a richer editor like CodeMirror). Option B can be enhanced later if the editor is upgraded.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "D"
+      }
+    }
+  ]
+}

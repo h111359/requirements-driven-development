@@ -1,0 +1,21 @@
+{
+    "prompt-id": "20251218-045733",
+    "prompt-description": "",
+    "prompt-file": "rdd-prompt-20251218-045733.md",
+    "context": {
+        "state": "not-started",
+        "file": ""
+    },
+    "clarity": {
+        "state": "not-started",
+        "file": ""
+    },
+    "plan": {
+        "state": "not-started",
+        "file": ""
+    },
+    "implementation": {
+        "state": "not-started",
+        "file": ""
+    }
+}

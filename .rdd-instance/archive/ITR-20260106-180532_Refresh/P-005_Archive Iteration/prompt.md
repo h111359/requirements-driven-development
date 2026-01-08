@@ -1,0 +1,1 @@
+Move the "Archive Iteration" button to appear in "Active Prompt" header banner only when there is no active prompt. The iteration should not be archived if active prompt execution is in progress.

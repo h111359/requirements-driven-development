@@ -1,0 +1,45 @@
+File Name	Relative Path	Modification Time	Description
+LICENSE	LICENSE	2025-12-03T07:07:15.064635	MIT License for the RDD framework
+README.md	README.md	2026-01-05T12:47:25.435294	Main README with overview, installation instructions, usage guide and documentation for the RDD framework
+build.py	build/build.py	2025-12-08T19:12:55.431230	Build script for creating RDD framework releases with cross-platform zip archive
+create-release.prompt.md	build/create-release.prompt.md	2025-12-08T19:12:55.446097	Prompt template for creating release notes from git history and branch information
+rdd-v1.0.0.zip	build/rdd-v1.0.0.zip	2025-12-08T19:12:55.442860	Release package for version 1.0.0
+rdd-v1.0.0.zip.sha256	build/rdd-v1.0.0.zip.sha256	2025-12-08T19:12:55.443420	SHA256 checksum for version 1.0.0 release package
+rdd-v1.0.1.zip	build/rdd-v1.0.1.zip	2025-12-08T19:12:55.444516	Release package for version 1.0.1
+rdd-v1.0.1.zip.sha256	build/rdd-v1.0.1.zip.sha256	2025-12-08T19:12:55.444786	SHA256 checksum for version 1.0.1 release package
+rdd-v1.0.2.zip	build/rdd-v1.0.2.zip	2025-12-08T19:12:55.445607	Release package for version 1.0.2
+rdd-v1.0.2.zip.sha256	build/rdd-v1.0.2.zip.sha256	2025-12-08T19:12:55.445866	SHA256 checksum for version 1.0.2 release package
+rdd-v1.0.3.zip	build/rdd-v1.0.3.zip	2025-12-08T19:12:55.446415	Release package for version 1.0.3
+rdd-v1.0.3.zip.sha256	build/rdd-v1.0.3.zip.sha256	2025-12-08T19:12:55.446685	SHA256 checksum for version 1.0.3 release package
+rdd-v1.0.4.zip	build/rdd-v1.0.4.zip	2025-12-08T19:12:55.443861	Release package for version 1.0.4
+rdd-v1.0.4.zip.sha256	build/rdd-v1.0.4.zip.sha256	2025-12-08T19:12:55.446917	SHA256 checksum for version 1.0.4 release package
+rdd-v1.1.0.zip	build/rdd-v1.1.0.zip	2025-12-08T19:12:55.441860	Release package for version 1.1.0
+rdd-v1.1.0.zip.sha256	build/rdd-v1.1.0.zip.sha256	2025-12-08T19:12:55.442340	SHA256 checksum for version 1.1.0 release package
+rdd-v1.1.1.zip	build/rdd-v1.1.1.zip	2025-12-08T19:12:55.433395	Release package for version 1.1.1
+rdd-v1.1.1.zip.sha256	build/rdd-v1.1.1.zip.sha256	2025-12-08T19:12:55.433929	SHA256 checksum for version 1.1.1 release package
+rdd-v1.1.2.zip	build/rdd-v1.1.2.zip	2025-12-08T19:12:55.439860	Release package for version 1.1.2
+rdd-v1.1.2.zip.sha256	build/rdd-v1.1.2.zip.sha256	2025-12-08T19:12:55.440816	SHA256 checksum for version 1.1.2 release package
+release-notes-v1.0.1.md	build/release-notes-v1.0.1.md	2025-12-08T19:12:55.443662	Release notes for version 1.0.1 including testing infrastructure and bug fixes
+release-notes-v1.0.2.md	build/release-notes-v1.0.2.md	2025-12-08T19:12:55.445272	Release notes for version 1.0.2
+release-notes-v1.0.3.md	build/release-notes-v1.0.3.md	2025-12-08T19:12:55.444860	Release notes for version 1.0.3
+release-notes-v1.0.4.md	build/release-notes-v1.0.4.md	2025-12-08T19:12:55.443859	Release notes for version 1.0.4
+release-notes-v1.0.5.md	build/release-notes-v1.0.5.md	2025-12-08T19:12:55.442834	Release notes for version 1.0.5
+release-notes-v1.1.0.md	build/release-notes-v1.1.0.md	2025-12-08T19:12:55.442594	Release notes for version 1.1.0
+release-notes-v1.1.1.md	build/release-notes-v1.1.1.md	2025-12-08T19:12:55.432328	Release notes for version 1.1.1
+release-notes-v1.1.2.md	build/release-notes-v1.1.2.md	2025-12-08T19:12:55.431860	Release notes for version 1.1.2
+advantages-disadvantages.md	researches/20251228-1300-build-folder-gitignored/advantages-disadvantages.md	2025-12-30T11:20:42.654159	Analysis of advantages and disadvantages of gitignoring the build folder
+plan.md	researches/20251228-1537-plan-further-work/plan.md	2025-12-30T11:20:42.654159	Detailed development plan for further work on the RDD framework
+run-tests.py	scripts/run-tests.py	2025-12-03T07:07:15.064811	Cross-platform test runner for RDD Framework that runs all platform-appropriate tests
+setup-test-env.py	scripts/setup-test-env.py	2025-12-03T07:07:15.064811	Setup script for creating or updating RDD test environment and installing test dependencies
+conftest.py	tests/build/conftest.py	2025-12-23T09:41:48.869593	Pytest fixtures for build script tests
+test_build.py	tests/build/test_build.py	2025-12-23T09:41:53.623443	Tests for build.py script including version extraction and package creation
+README.md	tests/fixtures/README.md	2025-12-08T19:12:55.435277	Documentation for test fixtures and shared test data
+conftest.py	tests/install/conftest.py	2025-12-23T09:41:58.180301	Pytest fixtures for install script tests
+test_install.py	tests/install/test_install.py	2025-12-23T09:42:00.385232	Tests for install.py script including pre-flight checks and installation process
+conftest.py	tests/python/conftest.py	2025-12-08T19:12:55.438382	Pytest configuration and shared fixtures for RDD framework tests
+test_integration.py	tests/python/test_integration.py	2025-12-08T19:12:55.438426	Integration tests for RDD workflow including end-to-end scenarios
+test_rdd_main.py	tests/python/test_rdd_main.py	2025-12-08T19:12:55.438470	Unit tests for rdd.py main entry point and CLI interface
+test_rdd_utils.py	tests/python/test_rdd_utils.py	2025-12-08T19:12:55.438520	Unit tests for rdd_utils.py utility functions
+test_seed.py	tests/python/test_seed.py	2026-01-05T12:34:03.696715	Test suite for rdd-instance_seed.py script including seed data validation
+requirements.txt	tests/requirements.txt	2025-12-08T19:12:55.438691	RDD Framework test dependencies including pytest and code quality tools
+test-spec.md	tests/test-spec.md	2025-12-23T09:41:37.692372	Comprehensive test specification for the RDD framework test suite

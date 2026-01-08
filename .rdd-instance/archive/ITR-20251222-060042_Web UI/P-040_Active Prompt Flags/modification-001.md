@@ -1,0 +1,1 @@
+The icons of the flags should be different and to resemble the meaning of the flag

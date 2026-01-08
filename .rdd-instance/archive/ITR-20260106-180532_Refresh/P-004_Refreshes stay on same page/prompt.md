@@ -1,0 +1,1 @@
+Currently when the page is refreshed - the page goes on the Active Prompt page and shows Prompt. Change so when refresh button is pressed, the current page and file displayed selected stays the same.

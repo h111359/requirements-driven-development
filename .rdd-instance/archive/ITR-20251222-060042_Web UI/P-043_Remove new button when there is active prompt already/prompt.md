@@ -1,0 +1,2 @@
+Create New Prompt button should remain only when there is no active prompt (all are completed or there are no prompts yet)
+When there is Active Prompt, the New button should not appear. On its place move the Mod button. Mod button should be renamed to Create Modification.

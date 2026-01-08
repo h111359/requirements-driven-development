@@ -1,0 +1,1 @@
+When Insert Snippet is pressed, in the prompt is entered [[[ and when later in the modal is pressed Cancel - the [[[ stays. No [[[ should be added when Insert Snippet is pressed.

@@ -1,0 +1,187 @@
+{
+  "context": "This prompt requires refactoring the execution modes to separate clarification (questionnaire generation) from analysis (creating analysis.md). The changes involve renaming existing files, updating references, and creating a new execution mode structure.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Should the new 'clarify' mode retain all the existing behavior of the current 'analyze' mode (questionnaire generation), or should there be any modifications to how questionnaires are generated?",
+      "options": [
+        {
+          "id": "opt1",
+          "label": "Retain all existing behavior exactly as-is",
+          "pros": [
+            "No risk of breaking existing functionality",
+            "Simpler implementation with just file renaming"
+          ],
+          "cons": [
+            "Misses opportunity to improve questionnaire generation if needed"
+          ]
+        },
+        {
+          "id": "opt2",
+          "label": "Review and potentially improve questionnaire generation logic",
+          "pros": [
+            "Opportunity to enhance the feature",
+            "Can address any known issues"
+          ],
+          "cons": [
+            "Higher complexity",
+            "Risk of introducing bugs",
+            "Longer implementation time"
+          ]
+        }
+      ],
+      "recommended-option": "opt1",
+      "recommendation-rationale": "The prompt focuses on structural changes (renaming and creating new modes), not on improving existing functionality. Keeping behavior identical reduces risk and aligns with the prompt's intent.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "opt1"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "For the new 'analyze' mode that creates analysis.md, should the execution automatically set execution-mode back to 'no-action' after completion, similar to how clarify/plan/implement modes work?",
+      "options": [
+        {
+          "id": "opt1",
+          "label": "Yes, automatically reset to no-action after completion",
+          "pros": [
+            "Consistent with other execution modes",
+            "Prevents accidental re-execution",
+            "Follows the established pattern"
+          ],
+          "cons": [
+            "None significant"
+          ]
+        },
+        {
+          "id": "opt2",
+          "label": "No, keep analyze mode active after completion",
+          "pros": [
+            "Allows repeated analysis without re-enabling the mode"
+          ],
+          "cons": [
+            "Inconsistent with other modes",
+            "May cause confusion",
+            "Could lead to unintended re-execution"
+          ]
+        }
+      ],
+      "recommended-option": "opt1",
+      "recommendation-rationale": "The execution.md file shows that all other modes (clarify, plan, implement, modification) reset to no-action after completion. Consistency is important for predictable behavior.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "opt1"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "Should the new analyze mode also execute the prompt_set_executed_on.py script after completion, similar to the implement mode?",
+      "options": [
+        {
+          "id": "opt1",
+          "label": "Yes, mark prompt as executed after analyze",
+          "pros": [
+            "Analysis represents meaningful work completion",
+            "Enables tracking of analysis completion"
+          ],
+          "cons": [
+            "May conflict with the intent of 'executed' flag which seems tied to implementation"
+          ]
+        },
+        {
+          "id": "opt2",
+          "label": "No, don't mark prompt as executed",
+          "pros": [
+            "'executed' flag remains specifically for implementation",
+            "Clearer separation of analysis vs implementation",
+            "Aligns with current usage where only implement mode sets executed"
+          ],
+          "cons": [
+            "Analysis work won't be reflected in execution tracking"
+          ]
+        }
+      ],
+      "recommended-option": "opt2",
+      "recommendation-rationale": "The 'executed' flag appears to track implementation execution, not analysis. The analyze mode is about creating analysis documentation, not executing the prompt's implementation. This maintains clear semantics.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "opt2"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "Should there be a new flag in the work-iteration-registry.json to track whether analysis has been generated, similar to questionnaire-generated and plan-generated?",
+      "options": [
+        {
+          "id": "opt1",
+          "label": "Yes, add an 'analysis-generated' boolean flag",
+          "pros": [
+            "Consistent with other workflow tracking flags",
+            "Enables UI to show analysis status",
+            "Allows conditional logic based on analysis completion"
+          ],
+          "cons": [
+            "Requires updating registry schema",
+            "Needs migration for existing prompts",
+            "Additional complexity"
+          ]
+        },
+        {
+          "id": "opt2",
+          "label": "No, don't add a specific flag",
+          "pros": [
+            "Simpler implementation",
+            "Analysis file existence can be checked directly",
+            "Fewer schema changes"
+          ],
+          "cons": [
+            "Less consistent with questionnaire-generated and plan-generated",
+            "Harder to track in UI"
+          ]
+        }
+      ],
+      "recommended-option": "opt1",
+      "recommendation-rationale": "Following the established pattern of questionnaire-generated and plan-generated provides consistency and better tracking. The Web UI can display this status like other flags.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "opt1"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "Should the prompt snippet key [[[ANALYZE]]] in manifest.json be updated to point to the new execution-step.analyze.md file, or should it remain pointing to analyze.md (which would no longer exist after renaming)?",
+      "options": [
+        {
+          "id": "opt1",
+          "label": "Update manifest.json to point to execution-step.analyze.md",
+          "pros": [
+            "Maintains snippet functionality",
+            "Prevents broken references",
+            "Ensures consistency"
+          ],
+          "cons": [
+            "Changes the snippet's purpose from standalone to execution-step"
+          ]
+        },
+        {
+          "id": "opt2",
+          "label": "Remove the [[[ANALYZE]]] entry from manifest.json",
+          "pros": [
+            "Analyze becomes a mode, not a snippet",
+            "Clearer separation of concerns",
+            "Snippets remain user-insertable only"
+          ],
+          "cons": [
+            "Users lose ability to insert analyze instructions via snippet key"
+          ]
+        }
+      ],
+      "recommended-option": "opt2",
+      "recommendation-rationale": "Since analyze is becoming an execution mode (like clarify, plan, implement), it should be invoked via execution-mode setting, not via snippet insertion in prompt text. This maintains clear separation between execution modes and prompt snippets.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "opt2"
+      }
+    }
+  ]
+}

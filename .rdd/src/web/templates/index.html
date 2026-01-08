@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDD Web Interface</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-gear-fill"></i> RDD Framework
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" onclick="showSection('active-prompt')">
+                            <i class="bi bi-journal-check"></i> Active Prompt
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('workdir')">
+                            <i class="bi bi-folder"></i> Prompts History
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('technical-design')">
+                            <i class="bi bi-diagram-3"></i> Technical Design
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('requirements')">
+                            <i class="bi bi-file-text"></i> Requirements
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('config')">
+                            <i class="bi bi-gear"></i> Config
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('help')">
+                            <i class="bi bi-question-circle"></i> Help
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="shutdownServer()">
+                            <i class="bi bi-power"></i> Shutdown
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div id="alert-container"></div>
+
+        <!-- Active Prompt Section -->
+        <div id="section-active-prompt" class="section">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-journal-check me-2"></i>
+                                <span id="active-prompt-title" class="flex-grow-1">Active Prompt</span>
+                                <button class="btn btn-sm btn-link text-white p-0 ms-2" onclick="showPageHelp('activePrompt')" 
+                                        data-bs-toggle="tooltip" title="Help for this page">
+                                    <i class="bi bi-info-circle fs-5"></i>
+                                </button>
+                                <span id="iteration-metadata" class="text-white-50 small ms-2" style="display:none;"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- No Active Prompt Message -->
+                            <div id="no-active-prompt-message" style="display:none;">
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle"></i> 
+                                    <span id="no-prompt-message-text">No active prompt. Use the buttons below to get started.</span>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-primary" id="create-iteration-btn-active" onclick="showCreateWorkIterationModal()" style="display:none;">
+                                        <i class="bi bi-folder-plus"></i> Create Work Iteration
+                                    </button>
+                                    <button class="btn btn-success" id="create-prompt-btn-active" onclick="showCreatePromptModal()" style="display:none;">
+                                        <i class="bi bi-plus-circle"></i> Create New Prompt
+                                    </button>
+                                    <button class="btn btn-warning" id="archive-iteration-btn" onclick="archiveWorkdir()" style="display:none;">
+                                        <i class="bi bi-archive-fill"></i> Archive Iteration
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Active Prompt Content -->
+                            <div id="active-prompt-content" style="display:none;">
+                                <!-- Top Action Buttons Row with Workflow Areas in Center -->
+                                <div class="sticky-controls-panel">
+                                    <div class="d-flex gap-2 justify-content-between align-items-center flex-wrap">
+                                        <button class="btn btn-sm btn-primary" id="add-modification-btn" onclick="showAddModificationModal()" disabled title="Create Modification">
+                                            <i class="bi bi-plus-circle"></i> Create Modification
+                                        </button>
+                                        
+                                        <!-- Workflow Areas - Centered -->
+                                        <div class="workflow-areas-container-inline flex-grow-1">
+                                            <div class="d-flex gap-2 flex-wrap justify-content-center">
+                                        <!-- Prompt Area (No Action) -->
+                                        <div class="workflow-area workflow-area-neutral">
+                                            <div class="workflow-area-icons">
+                                                <span class="text-muted small">Always Available</span>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm workflow-file-btn active" 
+                                                    id="file-btn-prompt" onclick="showFileView('prompt')">
+                                                <i class="bi bi-file-text"></i> Prompt
+                                            </button>
+                                            <div class="workflow-area-mode">
+                                                <input type="radio" class="form-check-input" name="execution-mode" 
+                                                       id="mode-no-action" value="no-action" autocomplete="off" 
+                                                       onchange="updateExecutionMode('no-action')">
+                                                <label class="form-check-label small" for="mode-no-action">No Action</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Questionnaire Area (Clarify) -->
+                                        <div class="workflow-area">
+                                            <div class="workflow-area-icons">
+                                                <span id="flag-questionnaire-generated" class="flag-icon" data-bs-toggle="tooltip" title="Questionnaire Generated">
+                                                    <i class="bi bi-question-circle text-secondary"></i>
+                                                </span>
+                                                <span id="flag-questionnaire-answered" class="flag-icon" data-bs-toggle="tooltip" title="Questionnaire Answered">
+                                                    <i class="bi bi-clipboard-check text-secondary"></i>
+                                                </span>
+                                                <button class="btn btn-sm btn-outline-danger delete-execution-btn" 
+                                                        id="delete-questionnaire-btn" 
+                                                        onclick="deleteExecutionModeFile('questionnaire')" 
+                                                        disabled
+                                                        data-bs-toggle="tooltip" 
+                                                        title="Delete questionnaire file">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm workflow-file-btn" 
+                                                    id="file-btn-questionnaire" onclick="showFileView('questionnaire')" disabled>
+                                                <i class="bi bi-question-circle"></i> Questionnaire
+                                            </button>
+                                            <div class="workflow-area-mode">
+                                                <input type="radio" class="form-check-input" name="execution-mode" 
+                                                       id="mode-clarify" value="clarify" autocomplete="off" 
+                                                       onchange="updateExecutionMode('clarify')">
+                                                <label class="form-check-label small" for="mode-clarify">Clarify</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Analysis Area (Analyze) -->
+                                        <div class="workflow-area">
+                                            <div class="workflow-area-icons">
+                                                <span id="flag-analysis-generated" class="flag-icon" data-bs-toggle="tooltip" title="Analysis Generated">
+                                                    <i class="bi bi-clipboard-data text-secondary"></i>
+                                                </span>
+                                                <button class="btn btn-sm btn-outline-danger delete-execution-btn" 
+                                                        id="delete-analysis-btn" 
+                                                        onclick="deleteExecutionModeFile('analysis')" 
+                                                        disabled
+                                                        data-bs-toggle="tooltip" 
+                                                        title="Delete analysis file">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm workflow-file-btn" 
+                                                    id="file-btn-analysis" onclick="showFileView('analysis')" disabled>
+                                                <i class="bi bi-clipboard-data"></i> Analysis
+                                            </button>
+                                            <div class="workflow-area-mode">
+                                                <input type="radio" class="form-check-input" name="execution-mode" 
+                                                       id="mode-analyze" value="analyze" autocomplete="off" 
+                                                       onchange="updateExecutionMode('analyze')">
+                                                <label class="form-check-label small" for="mode-analyze">Analyze</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Plan Area (Plan) -->
+                                        <div class="workflow-area">
+                                            <div class="workflow-area-icons">
+                                                <span id="flag-plan-generated" class="flag-icon" data-bs-toggle="tooltip" title="Plan Generated">
+                                                    <i class="bi bi-file-earmark-text text-secondary"></i>
+                                                </span>
+                                                <button class="btn btn-sm btn-outline-danger delete-execution-btn" 
+                                                        id="delete-plan-btn" 
+                                                        onclick="deleteExecutionModeFile('plan')" 
+                                                        disabled
+                                                        data-bs-toggle="tooltip" 
+                                                        title="Delete plan file">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm workflow-file-btn" 
+                                                    id="file-btn-plan" onclick="showFileView('plan')" disabled>
+                                                <i class="bi bi-list-check"></i> Plan
+                                            </button>
+                                            <div class="workflow-area-mode">
+                                                <input type="radio" class="form-check-input" name="execution-mode" 
+                                                       id="mode-plan" value="plan" autocomplete="off" 
+                                                       onchange="updateExecutionMode('plan')">
+                                                <label class="form-check-label small" for="mode-plan">Plan</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Implementation Area (Implement) -->
+                                        <div class="workflow-area">
+                                            <div class="workflow-area-icons">
+                                                <span id="flag-implementation-completed" class="flag-icon" data-bs-toggle="tooltip" title="Implementation Completed">
+                                                    <i class="bi bi-file-code text-secondary"></i>
+                                                </span>
+                                                <span id="flag-executed" class="flag-icon" data-bs-toggle="tooltip" title="Executed">
+                                                    <i class="bi bi-patch-check text-secondary"></i>
+                                                </span>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm workflow-file-btn" 
+                                                    id="file-btn-implementation" onclick="showFileView('implementation')" disabled>
+                                                <i class="bi bi-code-square"></i> Implementation
+                                            </button>
+                                            <div class="workflow-area-mode">
+                                                <input type="radio" class="form-check-input" name="execution-mode" 
+                                                       id="mode-implement" value="implement" autocomplete="off" 
+                                                       onchange="updateExecutionMode('implement')">
+                                                <label class="form-check-label small" for="mode-implement">Implement</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Modifications Area (Modification) -->
+                                        <div class="workflow-area">
+                                            <div class="workflow-area-icons">
+                                                <span id="flag-modifications-count" class="text-muted small" style="display: none;" data-bs-toggle="tooltip" title="Modifications Count">
+                                                    <i class="bi bi-pencil-square"></i> <span id="modifications-count-value">0</span>
+                                                </span>
+                                                <span id="flag-current-modification" class="text-muted small" style="display: none;" data-bs-toggle="tooltip" title="Current Modification ID">
+                                                    #<span id="current-modification-value">---</span>
+                                                </span>
+                                            </div>
+                                            <button class="btn btn-outline-primary btn-sm workflow-file-btn" 
+                                                    id="file-btn-modifications" onclick="showFileView('modifications')" disabled>
+                                                <i class="bi bi-pencil-square"></i> Modifications
+                                            </button>
+                                            <div class="workflow-area-mode">
+                                                <input type="radio" class="form-check-input" name="execution-mode" 
+                                                       id="mode-modification" value="modification" autocomplete="off" 
+                                                       onchange="updateExecutionMode('modification')">
+                                                <label class="form-check-label small" for="mode-modification">Modification</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        </div>
+                                        
+                                        <div class="d-flex gap-1">
+                                            <button class="btn btn-sm btn-primary" id="copy-execute-cmd-btn" onclick="copyExecuteCommand()" title="Copy execute command to clipboard">
+                                                <i class="bi bi-clipboard"></i> Copy Execute Cmd
+                                            </button>
+                                            <button class="btn btn-sm btn-primary" id="complete-prompt-btn" onclick="completeActivePrompt()" disabled title="Complete Prompt">
+                                                <i class="bi bi-check-lg"></i> Complete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Prompt Files Editor -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <!-- Single File Content Display Area -->
+                                        <div id="file-content-display">
+                                            <!-- Prompt Content -->
+                                            <div id="content-prompt" class="file-view-content" style="display:block;">
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold">prompt.md</label>
+                                                    <textarea class="form-control font-monospace" id="active-editor-prompt-md" 
+                                                              rows="20" style="font-size: 14px;"></textarea>
+                                                </div>
+                                                <button class="btn btn-primary me-2" onclick="insertSnippetFromButton()" 
+                                                        title="Insert snippet key (or type [[[)">
+                                                    <i class="bi bi-puzzle"></i> Insert Snippet
+                                                </button>
+                                                <span id="prompt-save-status" class="ms-2">
+                                                    <span class="text-muted"><i class="bi bi-info-circle"></i> Auto-save enabled</span>
+                                                </span>
+                                            </div>
+
+                                            <!-- Questionnaire Content -->
+                                            <div id="content-questionnaire" class="file-view-content" style="display:none;">
+                                                <div id="questionnaire-container">
+                                                    <div class="text-center py-4">
+                                                        <div class="spinner-border text-primary" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                        <p class="mt-2">Loading questionnaire...</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Analysis Content -->
+                                            <div id="content-analysis" class="file-view-content" style="display:none;">
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold">analysis.md</label>
+                                                    <textarea class="form-control font-monospace" id="active-editor-analysis-md" 
+                                                              rows="20" style="font-size: 14px;" readonly></textarea>
+                                                </div>
+                                                <div class="alert alert-info">
+                                                    <i class="bi bi-info-circle"></i> Analysis file is view-only.
+                                                </div>
+                                            </div>
+
+                                            <!-- Plan Content -->
+                                            <div id="content-plan" class="file-view-content" style="display:none;">
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold">plan.md</label>
+                                                    <textarea class="form-control font-monospace" id="active-editor-plan-md" 
+                                                              rows="20" style="font-size: 14px;"></textarea>
+                                                </div>
+                                                <button class="btn btn-success" onclick="saveActivePromptFile('plan.md')">
+                                                    <i class="bi bi-save"></i> Save Plan
+                                                </button>
+                                            </div>
+
+                                            <!-- Implementation Content -->
+                                            <div id="content-implementation" class="file-view-content" style="display:none;">
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold">implementation.md</label>
+                                                    <textarea class="form-control font-monospace" id="active-editor-implementation-md" 
+                                                              rows="20" style="font-size: 14px;" readonly></textarea>
+                                                </div>
+                                                <div class="alert alert-info">
+                                                    <i class="bi bi-info-circle"></i> Implementation file is view-only.
+                                                </div>
+                                            </div>
+
+                                            <!-- Modifications Content -->
+                                            <div id="content-modifications" class="file-view-content" style="display:none;">
+                                                <div id="modifications-list-container">
+                                                    <p class="text-muted">No modifications yet.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Config Section -->
+        <div id="section-config" class="section" style="display:none;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h5><i class="bi bi-gear"></i> Configuration</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <h6 class="fw-bold">Git Integration</h6>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="git-enabled-toggle" onchange="saveGitEnabled()">
+                                    <label class="form-check-label" for="git-enabled-toggle">
+                                        Enable Git integration for prompt completion
+                                    </label>
+                                </div>
+                                <small class="text-muted d-block mt-2">
+                                    When enabled, completing a prompt will trigger git commit operations.
+                                </small>
+                            </div>
+                            <div id="config-status" class="mt-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prompts History Section -->
+        <div id="section-workdir" class="section" style="display:none;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <div class="d-flex align-items-center">
+                                <h5 class="mb-0 flex-grow-1"><i class="bi bi-folder"></i> Prompts History</h5>
+                                <button class="btn btn-sm btn-link text-white p-0" onclick="showPageHelp('promptsHistory')" 
+                                        data-bs-toggle="tooltip" title="Help for this page">
+                                    <i class="bi bi-info-circle fs-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- Create Work Iteration Button (shown when no iteration exists) -->
+                            <div id="create-iteration-section" style="display:none;">
+                                <button class="btn btn-success" onclick="showCreateWorkIterationModal()">
+                                    <i class="bi bi-plus-circle"></i> Create Work Iteration
+                                </button>
+                            </div>
+                            
+                            <!-- Registry section content (shown when iteration exists) -->
+                            <div id="registry-section" style="display:none;">
+                                <div id="registry-view-container">
+                                    <p class="text-muted">Loading registry...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Design Section -->
+        <div id="section-technical-design" class="section" style="display:none;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <div class="d-flex align-items-center">
+                                <h5 class="mb-0 flex-grow-1"><i class="bi bi-diagram-3"></i> Technical Design</h5>
+                                <button class="btn btn-sm btn-link text-white p-0" onclick="showPageHelp('technicalDesign')" 
+                                        data-bs-toggle="tooltip" title="Help for this page">
+                                    <i class="bi bi-info-circle fs-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="technical-design-content" class="form-label fw-bold">specifications/technical-design.json</label>
+                                <textarea class="form-control font-monospace" id="technical-design-content" 
+                                          rows="25" style="font-size: 14px;"></textarea>
+                            </div>
+                            <button class="btn btn-success" onclick="saveTechnicalDesign()">
+                                <i class="bi bi-save"></i> Save Technical Design
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Requirements Section -->
+        <div id="section-requirements" class="section" style="display:none;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <div class="d-flex align-items-center">
+                                <h5 class="mb-0 flex-grow-1"><i class="bi bi-file-text"></i> Requirements</h5>
+                                <button class="btn btn-sm btn-link text-white p-0" onclick="showPageHelp('requirements')" 
+                                        data-bs-toggle="tooltip" title="Help for this page">
+                                    <i class="bi bi-info-circle fs-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="requirements-content" class="form-label fw-bold">specifications/requirements.md</label>
+                                <textarea class="form-control font-monospace" id="requirements-content" 
+                                          rows="25" style="font-size: 14px;"></textarea>
+                            </div>
+                            <button class="btn btn-success" onclick="saveRequirements()">
+                                <i class="bi bi-save"></i> Save Requirements
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div id="section-help" class="section" style="display:none;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-secondary text-white">
+                            <h5><i class="bi bi-question-circle"></i> Help - User Guide</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="help-content-container">
+                                <div class="text-center py-5">
+                                    <div class="spinner-border text-secondary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-3">Loading user guide...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Prompt Modal -->
+    <div class="modal fade" id="createPromptModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New Prompt</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="prompt-title" class="form-label">Title <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="prompt-title" 
+                               placeholder="e.g., Add new feature" maxlength="80">
+                        <small class="form-text text-muted">Maximum 80 characters</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="prompt-state" class="form-label">State</label>
+                        <select class="form-select" id="prompt-state">
+                            <option value="active" selected>Active</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="createPrompt()">
+                        <i class="bi bi-plus-circle"></i> Create Prompt
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Work Iteration Modal -->
+    <div class="modal fade" id="createWorkIterationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Work Iteration</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="modal-iteration-name" class="form-label">Iteration Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="modal-iteration-name" 
+                               placeholder="e.g., Sprint 1">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" onclick="createWorkdir()">
+                        <i class="bi bi-plus-circle"></i> Create Work Iteration
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Set State Modal -->
+    <div class="modal fade" id="setStateModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Set Prompt State</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Set state for prompt: <strong id="set-state-prompt-id"></strong></p>
+                    <div class="mb-3">
+                        <label for="new-state" class="form-label">New State</label>
+                        <select class="form-select" id="new-state">
+                            <option value="active">Active</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="setPromptState()">
+                        <i class="bi bi-check-circle"></i> Update State
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Modification Modal -->
+    <div class="modal fade" id="addModificationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Modification</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted">
+                        <i class="bi bi-info-circle"></i> Modifications are for small corrections after implementation is completed.
+                        For complex changes, create a new prompt instead.
+                    </p>
+                    <div class="mb-3">
+                        <label for="modification-description" class="form-label">Description</label>
+                        <textarea class="form-control" id="modification-description" rows="5" 
+                                  placeholder="Describe the modification needed..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="createModification()">
+                        <i class="bi bi-plus-circle"></i> Create Modification
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Modification Implementation Modal -->
+    <div class="modal fade" id="viewModificationImplementationModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="view-modification-impl-title">Modification Implementation Log</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea class="form-control font-monospace" id="view-modification-impl-content" 
+                              rows="25" style="font-size: 13px; white-space: pre-wrap;" readonly></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Completed Prompt Modal -->
+    <div class="modal fade" id="viewCompletedPromptModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="view-completed-prompt-title">View Prompt</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Tab Navigation -->
+                    <ul class="nav nav-tabs mb-3" id="completed-prompt-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="completed-prompt-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#completed-prompt-content-tab" type="button" role="tab">
+                                <i class="bi bi-file-text"></i> Prompt
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="completed-plan-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#completed-plan-content-tab" type="button" role="tab">
+                                <i class="bi bi-list-check"></i> Plan
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="completed-questionnaire-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#completed-questionnaire-content-tab" type="button" role="tab">
+                                <i class="bi bi-question-circle"></i> Questionnaire
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="completed-implementation-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#completed-implementation-content-tab" type="button" role="tab">
+                                <i class="bi bi-code-square"></i> Implementation
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="completed-modifications-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#completed-modifications-content-tab" type="button" role="tab">
+                                <i class="bi bi-pencil-square"></i> Modifications
+                            </button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="completed-prompt-tab-content">
+                        <div class="tab-pane fade show active" id="completed-prompt-content-tab" role="tabpanel">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">prompt.md</label>
+                                <textarea class="form-control font-monospace" id="view-editor-prompt-md" 
+                                          rows="20" style="font-size: 14px;" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="completed-plan-content-tab" role="tabpanel">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">plan.md</label>
+                                <textarea class="form-control font-monospace" id="view-editor-plan-md" 
+                                          rows="20" style="font-size: 14px;" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="completed-questionnaire-content-tab" role="tabpanel">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">questionnaire.md</label>
+                                <textarea class="form-control font-monospace" id="view-editor-questionnaire-md" 
+                                          rows="20" style="font-size: 14px;" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="completed-implementation-content-tab" role="tabpanel">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">implementation.md</label>
+                                <textarea class="form-control font-monospace" id="view-editor-implementation-md" 
+                                          rows="20" style="font-size: 14px;" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="completed-modifications-content-tab" role="tabpanel">
+                            <div id="view-modifications-list-container">
+                                <p class="text-muted">No modifications.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Snippet Picker Modal -->
+    <div class="modal fade" id="snippetPickerModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-puzzle"></i> Insert Snippet
+                    </h5>
+                    <div class="ms-auto me-2">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">
+                            <i class="bi bi-x-lg"></i> Cancel
+                        </button>
+                        <button type="button" class="btn btn-success btn-sm ms-2" id="insert-snippet-btn" disabled>
+                            <i class="bi bi-check-lg"></i> Insert
+                        </button>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="min-height: 400px;">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="mb-2">
+                                <input type="text" class="form-control" id="snippet-search" 
+                                       placeholder="Search snippets..." autocomplete="off">
+                            </div>
+                            <div id="snippet-list-modal" class="border rounded" 
+                                 style="max-height: 450px; overflow-y: auto; background-color: #f8f9fa;">
+                                <p class="text-muted text-center p-3">Loading snippets...</p>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div id="snippet-preview-modal" class="border rounded h-100" 
+                                 style="min-height: 450px; background-color: white;">
+                                <div class="p-3 bg-light border-bottom">
+                                    <strong>Preview</strong>
+                                </div>
+                                <div class="p-3">
+                                    <p class="text-muted">Select a snippet to preview</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="/static/snippet-service.js"></script>
+    <script src="/static/snippet-autocomplete.js"></script>
+    <script src="/static/app.js"></script>
+</body>
+</html>

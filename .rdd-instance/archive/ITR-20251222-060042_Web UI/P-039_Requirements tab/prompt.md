@@ -1,0 +1,1 @@
+Instead of invoked with a button in Workdir page, move requirements to a new menu tab page named "Requirements"

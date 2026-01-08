@@ -1,0 +1,1 @@
+Remove the section "File Path (relative to .rdd-instance):" together with the file selector.

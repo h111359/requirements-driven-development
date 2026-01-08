@@ -1,0 +1,23 @@
+{
+    "framework": {
+        "name": "RDD Framework",
+        "version": "1.2.0"
+    },
+    "rddInstance": {
+        "requiredPaths": [
+            ".rdd-instance/workdir",
+            ".rdd-instance/specifications",
+            ".rdd-instance/config",
+            ".rdd-instance/archive"
+        ],
+        "requiredFiles": {
+            ".rdd-instance/workdir/work-iteration-registry.json": "json",
+            ".rdd-instance/specifications/requirements.md": "markdown",
+            ".rdd-instance/config/instance-config.json": "json"
+        }
+    },
+    "promptSnippets": {
+        "ROLE_SOFTWARE_DEVELOPER": ".rdd/prompt-snippets/role-software-developer.md",
+        "EXECUTION": ".rdd/prompt-snippets/execution.md"
+    }
+}

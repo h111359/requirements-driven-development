@@ -1,16 +1,8 @@
 {
-  "chat.promptFilesRecommendations": {
-    "rdd.execute": true,
-    "rdd.update": true
-  },
   "chat.tools.terminal.autoApprove": {
-    "python .rdd/scripts/rdd.py": true,       
-  },
-  "files.associations": {
-    "*.jsonl": "jsonlines"
-  },
-  "editor.rulers": [
-    80,
-    120
-  ]
+    "/^python\\b.*\\.rdd\\/src\\//": {
+      "approve": true,
+      "matchCommandLine": true
+    }
+  }
 }

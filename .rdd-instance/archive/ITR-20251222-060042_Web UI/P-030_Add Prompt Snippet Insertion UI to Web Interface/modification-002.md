@@ -1,0 +1,1 @@
+Instead of showing list of the available snippets below the prompt, make the list to appear in modal and when selected a snippet - its key to be added in the prompt text

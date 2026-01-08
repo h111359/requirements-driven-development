@@ -1,0 +1,1 @@
+The page Prompts History should not display a button "Create New Iteration" when no iteration exists (workdir is empty). This button shall be present only on Active Prompt page.

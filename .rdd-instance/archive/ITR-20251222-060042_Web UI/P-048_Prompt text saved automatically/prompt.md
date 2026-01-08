@@ -1,0 +1,1 @@
+Make the prompt text to be saved automatically without the need to press save button

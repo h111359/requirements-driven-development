@@ -1,0 +1,185 @@
+{
+  "context": "The Active Prompt page needs a quick way to trigger the execute command. This questionnaire clarifies the exact button placement, appearance, and behavior for copying the execute command text to the clipboard.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Where should the execute command clipboard button be placed in the Active Prompt page?",
+      "options": [
+        {
+          "id": "A",
+          "label": "In the sticky control panel (the top banner with execution mode buttons)",
+          "pros": "Always visible when scrolling, grouped with other action buttons, quick access from any part of the page",
+          "cons": "Makes the banner more crowded, less space for existing buttons"
+        },
+        {
+          "id": "B",
+          "label": "As a standalone button above the sticky control panel",
+          "pros": "Clearly separated from other controls, highly visible, doesn't interfere with existing layout",
+          "cons": "Not sticky - will scroll out of view, requires scrolling to top to use"
+        },
+        {
+          "id": "C",
+          "label": "As a button within the Prompt tab content area",
+          "pros": "Contextually placed near the prompt text, doesn't clutter the control panel",
+          "cons": "Only visible when Prompt tab is active, requires tab switching if user is in another tab"
+        },
+        {
+          "id": "D",
+          "label": "As a floating action button (FAB) in the bottom-right corner",
+          "pros": "Always visible and accessible, modern UI pattern, doesn't interfere with existing layout",
+          "cons": "May cover content on smaller screens, less discoverable for new users"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The sticky control panel is the logical location since it contains other action buttons (Create Modification, Complete) and execution mode controls. Adding it there provides quick access from anywhere on the page and keeps all actions centralized.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "What should be the button label and icon for the execute command clipboard button?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Icon only: clipboard icon (bi-clipboard)",
+          "pros": "Minimal space usage, clean appearance, standard icon meaning",
+          "cons": "May not be immediately clear what text will be copied, relies on tooltip for clarity"
+        },
+        {
+          "id": "B",
+          "label": "Text and icon: 'Execute' with play icon (bi-play-fill)",
+          "pros": "Clear action indication, familiar terminology from the execute command concept",
+          "cons": "Slightly misleading - button copies text rather than executing directly"
+        },
+        {
+          "id": "C",
+          "label": "Text and icon: 'Copy Execute Cmd' with clipboard icon (bi-clipboard)",
+          "pros": "Explicitly states what will be copied, clear purpose, no ambiguity",
+          "cons": "Longer text takes more space, may wrap on smaller screens"
+        },
+        {
+          "id": "D",
+          "label": "Text and icon: 'Execute ⎘' with clipboard-check icon (bi-clipboard-check)",
+          "pros": "Concise, combines execute concept with clipboard action, modern appearance",
+          "cons": "May still be slightly unclear without tooltip explanation"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Option C provides the clearest user experience by explicitly stating the action. While it uses more space, clarity is more important than brevity for this feature. Users will immediately understand what happens when clicking the button.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "Should the button provide visual feedback when the text is copied to the clipboard?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Show a success alert at the top of the page",
+          "pros": "Consistent with existing alert patterns in the UI, clear confirmation message",
+          "cons": "Requires manual dismissal or auto-hide timing, adds clutter to the page"
+        },
+        {
+          "id": "B",
+          "label": "Temporarily change the button text/icon to 'Copied!' with checkmark",
+          "pros": "Immediate visual feedback at the interaction point, no additional UI elements needed, auto-reverts after a few seconds",
+          "cons": "May not be noticed if user looks away quickly"
+        },
+        {
+          "id": "C",
+          "label": "Show a small toast notification near the button",
+          "pros": "Non-intrusive, modern UX pattern, appears at interaction point",
+          "cons": "Requires additional CSS/JS for toast implementation, may interfere with other elements"
+        },
+        {
+          "id": "D",
+          "label": "No visual feedback - rely on system clipboard confirmation",
+          "pros": "Minimal implementation, users can verify by pasting",
+          "cons": "No confirmation that action succeeded, poor user experience, users may click multiple times"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Changing the button text to 'Copied!' with a checkmark provides immediate, clear feedback right where the user clicked. This is a widely-used pattern in modern web applications and requires minimal implementation - just a temporary text/icon change that reverts after 2-3 seconds.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "What exact text should be copied to the clipboard?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Exact text as specified: 'Follow the instructions in file `.rdd/prompt-snippets/execution.md`'",
+          "pros": "Matches the exact format specified in the prompt, uses backticks for file path",
+          "cons": "Backticks may not render properly if pasted in plain text contexts"
+        },
+        {
+          "id": "B",
+          "label": "Plain text version: 'Follow the instructions in file .rdd/prompt-snippets/execution.md'",
+          "pros": "Works in all contexts, no special characters that might cause formatting issues",
+          "cons": "Slightly different from the specified format"
+        },
+        {
+          "id": "C",
+          "label": "GitHub Copilot chat link format: 'Follow instructions in [rdd.execute.prompt.md](file:///full/path/.github/prompts/rdd.execute.prompt.md)'",
+          "pros": "Uses the actual prompt file that redirects to execution.md, provides clickable link in Copilot chat",
+          "cons": "Requires determining the full absolute path dynamically, more complex implementation"
+        },
+        {
+          "id": "D",
+          "label": "Markdown link format: 'Follow the instructions in [execution.md](.rdd/prompt-snippets/execution.md)'",
+          "pros": "Creates a clickable link in markdown-aware contexts, still readable as plain text",
+          "cons": "May not work as expected in all Copilot chat contexts"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A follows the exact format specified in the prompt requirements. The backticks are intentional for code formatting and should work correctly when pasted into GitHub Copilot chat. This provides the most predictable behavior.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "Should the button be always enabled or have conditional enabling logic?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Always enabled - copying execute command text should always be available",
+          "pros": "Users can always prepare the execute command, simple implementation, no confusion about when it's available",
+          "cons": "Button is enabled even when there might not be an active prompt (though this should not happen)"
+        },
+        {
+          "id": "B",
+          "label": "Disabled when no active prompt exists",
+          "pros": "Provides visual feedback about system state, prevents confusion",
+          "cons": "More complex logic, adds another state to manage, execute command can still technically be run without active prompt"
+        },
+        {
+          "id": "C",
+          "label": "Disabled when execution mode is 'no-action'",
+          "pros": "Aligns button state with execution readiness, guides users to set appropriate mode",
+          "cons": "May prevent users from copying the command to prepare for later execution, overly restrictive"
+        },
+        {
+          "id": "D",
+          "label": "Always enabled but show a warning if execution mode is 'no-action'",
+          "pros": "Allows copying at any time while providing helpful guidance",
+          "cons": "Additional complexity with warning logic, may interrupt workflow"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The button should always be enabled because copying text to clipboard is a harmless operation. Users may want to copy the execute command text before setting the execution mode, or prepare it for use. The framework's validation will handle inappropriate execution attempts.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

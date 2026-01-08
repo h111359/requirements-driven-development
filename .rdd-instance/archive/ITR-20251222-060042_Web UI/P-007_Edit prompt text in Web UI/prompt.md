@@ -1,0 +1,1 @@
+The web UI shall allow to be edited the text of the active prompt and all draft propmts, the plan and the questionnaire files. The implementation file of the active prompt and the draft prompts should be able to be viewed, but not edited. Also the respective files for the completed prompts should be able to be viewed, but not edited.

@@ -1,0 +1,113 @@
+{
+  "context": "The prompt requests moving the requirements display from a button in the Workdir page to a new dedicated 'Requirements' navigation tab. Currently, users access requirements.md by clicking a button in the Workdir section, which loads the file in the File Viewer area. The new tab would provide a dedicated page for viewing and editing requirements. This questionnaire clarifies specific implementation decisions for the Requirements tab.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Should the Requirements tab allow editing of the requirements.md file, or should it be read-only?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Editable - Allow users to modify requirements directly in the Requirements tab",
+          "pros": "Consistent with other tabs (Workdir File Viewer allows editing); Convenient for users to make quick requirement updates; Follows the Web UI pattern of providing edit capabilities",
+          "cons": "Requires implementing save functionality; Potential for accidental edits; Need to handle validation and error cases"
+        },
+        {
+          "id": "B",
+          "label": "Read-only - Display requirements without edit capability",
+          "pros": "Simpler implementation; Prevents accidental modifications; Requirements changes would go through more controlled processes; Reduces complexity",
+          "cons": "Less convenient for users; Would need to use Workdir tab for editing; Inconsistent with other file viewing patterns in the UI"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A is recommended because the existing pattern in the Web UI is to allow editing of files when displayed (as seen in the Workdir File Viewer). This maintains consistency with user expectations and provides a convenient workflow. Requirements should be editable through the Web UI to enable quick updates during development.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "Should the Requirements button in the Workdir section be completely removed or kept as a shortcut?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Remove completely - Delete the Requirements button from the Workdir section",
+          "pros": "Single point of access reduces confusion; Cleaner Workdir interface; Users learn to use the dedicated Requirements tab; Follows the 'one way to do things' principle",
+          "cons": "Users who frequently switch between Registry, Requirements, and Technical Design lose quick access; More navigation clicks required when working with multiple files"
+        },
+        {
+          "id": "B",
+          "label": "Keep as shortcut - Maintain the Requirements button in Workdir for convenience",
+          "pros": "Provides quick access when working in Workdir section; Flexibility for users; Maintains backward compatibility; Useful when comparing Requirements with Registry or Technical Design",
+          "cons": "Two ways to access the same content might confuse users; Duplicated functionality; Interface clutter"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A is recommended to maintain clarity and a single source of truth for accessing requirements. Since Requirements is getting its own dedicated tab in the navigation menu, the button in Workdir becomes redundant. Users should learn to use the dedicated tab, which provides a clearer information architecture. The Registry and Technical Design buttons can remain in Workdir as they don't have dedicated tabs.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "Where should the Requirements tab be positioned in the navigation menu?",
+      "options": [
+        {
+          "id": "A",
+          "label": "After Prompts History, before Workdir - Order: Active Prompt | Prompts History | Requirements | Workdir | Help",
+          "pros": "Logical grouping - Requirements sits between prompt management and working directory; Requirements are central to the development process; Natural workflow progression",
+          "cons": "Breaks the current Active Prompt -> Prompts History -> Workdir flow; Adds an item in the middle of established navigation"
+        },
+        {
+          "id": "B",
+          "label": "After Workdir, before Help - Order: Active Prompt | Prompts History | Workdir | Requirements | Help",
+          "pros": "Keeps existing navigation order intact; Minimal disruption for existing users; Requirements grouped with specifications-related content",
+          "cons": "Requirements feel less prominent; Help tab gets pushed further right; Less intuitive placement for a core specification file"
+        },
+        {
+          "id": "C",
+          "label": "After Help - Order: Active Prompt | Prompts History | Workdir | Help | Requirements",
+          "pros": "Zero disruption to existing navigation; Simple append operation",
+          "cons": "Requirements buried at the end; Poor discoverability; Doesn't reflect importance of requirements in the workflow"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Option B is recommended as it maintains the existing navigation order while adding Requirements in a logical position. This minimizes disruption for users familiar with the current interface while still providing dedicated access to requirements. The placement after Workdir makes sense as both deal with specifications and project-level content, creating a natural grouping before the Help section.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "Should the Requirements tab display only requirements.md content, or include additional specification files?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Requirements only - Display only specifications/requirements.md",
+          "pros": "Simple, focused implementation; Clear single purpose for the tab; Fast to implement; Follows the prompt exactly",
+          "cons": "Doesn't provide access to other important specs; Users still need Workdir for technical-design.json and files-and-folders.md; Missed opportunity for comprehensive specs view"
+        },
+        {
+          "id": "B",
+          "label": "Multiple specification files - Include tabs for requirements.md, technical-design.json, and files-and-folders.md",
+          "pros": "Comprehensive specifications view in one place; Better organization of spec files; Reduces need to use Workdir for specifications; More user-friendly for reviewing all specs together",
+          "cons": "More complex implementation; Beyond the original prompt scope; Requires nested tab structure; Might be confusing with already existing tabs"
+        },
+        {
+          "id": "C",
+          "label": "Requirements with quick links - Display requirements.md with buttons to open other specs in Workdir viewer",
+          "pros": "Focused on requirements while providing access to related files; Moderate complexity; Maintains single-file focus while offering convenience",
+          "cons": "Still requires switching to Workdir; Adds buttons that might clutter the interface; Mixed navigation pattern"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A is recommended as it stays true to the original prompt scope and maintains simplicity. The prompt specifically asks for a Requirements tab, not a general Specifications tab. This focused approach is easier to implement and maintains clear tab purposes. If additional specification files need dedicated access, they can be addressed in separate prompts with their own analysis and planning.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

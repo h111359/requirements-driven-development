@@ -1,0 +1,155 @@
+{
+  "context": "The current RDD Web UI behavior is to always navigate to the Active Prompt page and show the prompt.md file whenever the page is loaded or refreshed. The user wants to preserve the current page view and selected file/content when refreshing. This questionnaire clarifies the specific refresh behavior requirements, implementation approach, and edge cases.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "What type of 'refresh' operation should preserve the page and file state?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Browser refresh only (F5 key or browser refresh button)",
+          "pros": "Standard browser behavior, users expect page state to persist after accidental refresh, no need to add a UI refresh button",
+          "cons": "May confuse users if they expect a clean state after browser refresh, requires client-side state persistence (localStorage or URL)"
+        },
+        {
+          "id": "B",
+          "label": "A dedicated UI refresh button in the web interface",
+          "pros": "Explicit user action, clear intent to refresh data while staying on current page, can implement smart refresh logic",
+          "cons": "Requires adding a new UI element, users might still use browser refresh out of habit"
+        },
+        {
+          "id": "C",
+          "label": "Both browser refresh and any UI refresh mechanisms",
+          "pros": "Comprehensive solution, handles all refresh scenarios, best user experience",
+          "cons": "More complex implementation, need to coordinate multiple refresh mechanisms"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Handling both browser refresh and UI refresh mechanisms provides the most comprehensive and user-friendly solution. Users often refresh pages using F5 or the browser button, and the Web UI already has auto-refresh mechanisms for active prompt statuses. Implementing state persistence for all scenarios ensures consistent behavior.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "Which state elements should be preserved across page refreshes?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Only the current page/section (Active Prompt, Config, Workdir, etc.)",
+          "pros": "Simple implementation, minimal state to track, covers the basic requirement",
+          "cons": "Loses file view state within Active Prompt page, user might lose place in questionnaire or modifications list"
+        },
+        {
+          "id": "B",
+          "label": "Current page AND the selected file/view within that page (e.g., which file button is active on Active Prompt page)",
+          "pros": "Better user experience, preserves detailed navigation state, user stays exactly where they were",
+          "cons": "More complex state management, need to track multiple state dimensions"
+        },
+        {
+          "id": "C",
+          "label": "Current page, selected file/view, AND scroll position within content",
+          "pros": "Most complete state preservation, exact restoration of user context, best UX for long documents",
+          "cons": "Most complex implementation, tracking scroll position across various content types, potential performance overhead"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Preserving both the current page and the selected file/view provides excellent user experience without excessive complexity. This ensures users stay on their exact view (e.g., viewing questionnaire, modifications, or implementation) after refresh. Scroll position preservation (option C) adds significant complexity for limited benefit, as most views auto-scroll to relevant content (e.g., first unanswered question).",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "What technical approach should be used to persist page state across browser refreshes?",
+      "options": [
+        {
+          "id": "A",
+          "label": "localStorage - client-side persistent storage",
+          "pros": "Persists across browser sessions, simple API, widely supported, no server changes needed",
+          "cons": "Stored data persists even after closing browser, might not clear when session truly ends, limited to same browser/device"
+        },
+        {
+          "id": "B",
+          "label": "sessionStorage - client-side session storage",
+          "pros": "Automatically clears when browser tab/window closes, appropriate for temporary UI state, simple API, no server changes",
+          "cons": "Lost when user closes tab, doesn't persist across multiple tabs viewing same app"
+        },
+        {
+          "id": "C",
+          "label": "URL parameters/hash - encode state in URL",
+          "pros": "Shareable URLs with specific views, browser back/forward button support, no JavaScript storage needed",
+          "cons": "Visible state in address bar, URL length limits, more complex to encode/decode multiple state values"
+        },
+        {
+          "id": "D",
+          "label": "Server-side session storage - track state on backend",
+          "pros": "Works across devices/browsers with session token, centralized state management, can persist longer term",
+          "cons": "Requires backend changes, adds server complexity, session token already used for auth, overkill for UI state"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "sessionStorage is ideal for UI navigation state because it automatically clears when the user closes the tab (indicating end of work session), works seamlessly with the single-page app architecture, and requires no server-side changes. The state is temporary by nature - users likely want fresh state when starting a new work session. It balances simplicity with appropriate lifecycle management.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "What should happen if the preserved state references a page or file that no longer exists after refresh (e.g., active prompt was completed)?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Silently fall back to default view (Active Prompt page, prompt.md file)",
+          "pros": "No error messages, graceful degradation, simple implementation",
+          "cons": "User might be confused why they're on a different page, no feedback about state change"
+        },
+        {
+          "id": "B",
+          "label": "Show a warning message and navigate to default view",
+          "pros": "User is informed about state change, clear feedback, helps understand why state wasn't preserved",
+          "cons": "Extra message might be annoying for expected state changes, adds complexity"
+        },
+        {
+          "id": "C",
+          "label": "Attempt to preserve as much state as possible (e.g., stay on page but show default file if specific file missing)",
+          "pros": "Partial state preservation is better than none, minimizes disruption, intelligent fallback",
+          "cons": "Complex fallback logic, might lead to inconsistent state, harder to predict behavior"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Attempting partial state preservation provides the best user experience. For example, if the user was viewing the Workdir page, they should return to Workdir even if some specific item is no longer available. If on Active Prompt but a specific file view is invalid, fall back to the prompt.md view but stay on Active Prompt page. This graceful degradation with smart fallbacks minimizes disruption while handling edge cases robustly.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "Should the state persistence mechanism also track and restore execution mode radio button selections?",
+      "options": [
+        {
+          "id": "A",
+          "label": "No - execution mode is stored in registry and already restored from server data",
+          "pros": "Avoids duplicate state management, server registry is source of truth, existing refresh mechanism already updates mode",
+          "cons": "None - execution mode is already persisted and restored correctly"
+        },
+        {
+          "id": "B",
+          "label": "Yes - also persist execution mode selection in client state",
+          "pros": "Redundant backup, faster initial display before server data loads",
+          "cons": "Duplicate state management, potential conflicts between client and server state, unnecessary complexity"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Execution mode is already persisted in the work iteration registry on the server and is loaded when the active prompt is displayed. The existing auto-refresh mechanism (refreshActivePromptStatuses) already updates the execution mode radio buttons every 2 seconds. There's no need to duplicate this state in client storage - the server registry is the authoritative source and is already being used effectively.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    }
+  ]
+}

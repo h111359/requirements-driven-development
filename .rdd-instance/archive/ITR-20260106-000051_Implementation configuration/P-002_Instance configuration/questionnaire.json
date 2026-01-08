@@ -1,0 +1,125 @@
+{
+  "context": "The prompt requests creating a new instance-level configuration system by introducing a .rdd-instance/config folder with an instance-config.json file. This configuration will centralize the git-enabled setting, which currently lives in the work iteration registry. The change impacts the Web UI, manifest validation, seeding, and prompt completion logic. This questionnaire clarifies key design decisions for the implementation.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Should the existing git-enabled field be removed from work-iteration-registry.json after migrating to instance-config.json, or should it be kept for backward compatibility?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Remove git-enabled from work-iteration-registry.json completely",
+          "pros": "Single source of truth, eliminates potential conflicts, cleaner data model, forces users to update properly",
+          "cons": "Breaks any existing work iterations that reference the old field, requires migration logic for existing instances"
+        },
+        {
+          "id": "B",
+          "label": "Keep both fields temporarily with instance-config.json taking precedence",
+          "pros": "Backward compatibility maintained, graceful transition period, existing instances continue working",
+          "cons": "Potential confusion about which field is authoritative, dual maintenance burden, delays cleanup"
+        },
+        {
+          "id": "C",
+          "label": "Keep both fields with automatic synchronization (write to both locations)",
+          "pros": "Perfect backward compatibility, no data loss, transparent to users",
+          "cons": "Complex synchronization logic, risk of inconsistencies, perpetuates technical debt"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Complete removal is recommended because this is a framework-level change where the git-enabled setting logically belongs to the instance, not to individual work iterations. The setting should be consistent across all iterations in an instance. Since this is still early in the framework's lifecycle, a clean break now prevents accumulated technical debt.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "How should existing .rdd-instance installations handle the transition to the new config folder structure?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Automatic migration on first access (Web UI startup detects missing config and creates it)",
+          "pros": "Seamless user experience, no manual steps required, graceful handling of legacy instances",
+          "cons": "Adds complexity to startup logic, may hide the change from users, harder to debug migration issues"
+        },
+        {
+          "id": "B",
+          "label": "Require explicit migration via a dedicated script or command",
+          "pros": "Clear, controlled process, user awareness of the change, easier troubleshooting, explicit validation",
+          "cons": "Requires user action, potential for users to miss the migration step, more documentation needed"
+        },
+        {
+          "id": "C",
+          "label": "No migration - existing instances fail with clear error message directing users to re-seed",
+          "pros": "Simplest implementation, forces clean state, no migration bugs, clear expectations",
+          "cons": "Data loss for existing work iterations, disruptive for active users, poor user experience"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Automatic migration provides the best user experience and is consistent with the framework's goal of minimizing technical overhead (UR-0026). The Web UI and scripts should detect the missing config folder and create it with default values (git-enabled: false) on first access. This is safe because the new structure is additive and doesn't modify existing data.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "Should instance-config.json support additional configuration keys beyond git-enabled from the start, or be strictly limited to git-enabled only?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Support only git-enabled initially, add other keys when needed",
+          "pros": "Simple, focused implementation, YAGNI principle, easier testing, less initial documentation",
+          "cons": "May require schema changes later, could lead to multiple migrations if more settings are needed soon"
+        },
+        {
+          "id": "B",
+          "label": "Design schema to allow additional keys with validation, but only implement git-enabled",
+          "pros": "Extensible from the start, future-proof, avoids later schema migrations, clear structure for additions",
+          "cons": "Over-engineering if no other settings are planned, adds complexity for uncertain benefit"
+        },
+        {
+          "id": "C",
+          "label": "Implement additional common settings now (e.g., instance-name, default-execution-mode)",
+          "pros": "More complete solution, anticipates common needs, better user configuration control",
+          "cons": "Scope creep beyond the prompt, longer implementation time, may add unused features"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Following the YAGNI (You Aren't Gonna Need It) principle, the implementation should focus strictly on the git-enabled setting as specified in the prompt. The JSON format is naturally extensible, so adding new keys later is trivial and doesn't require schema changes. This keeps the implementation focused and testable while remaining flexible for future needs.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "How should the manifest.json validation handle the new config folder - should it be mandatory or optional?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Mandatory - treat missing .rdd-instance/config as an error requiring re-seed",
+          "pros": "Enforces correct structure, prevents inconsistent states, clear expectations for new instances",
+          "cons": "Breaks existing instances immediately, requires migration before validation passes, harsh error for legacy instances"
+        },
+        {
+          "id": "B",
+          "label": "Optional with warning - allow missing config but warn in Web UI and logs",
+          "pros": "Graceful degradation, backward compatibility, users can migrate at their convenience, informative rather than blocking",
+          "cons": "Allows inconsistent states, users may ignore warnings indefinitely, complicates validation logic"
+        },
+        {
+          "id": "C",
+          "label": "Mandatory after version threshold - optional in current version, mandatory in next major version",
+          "pros": "Balanced approach, gives users transition time, clear deprecation path, predictable timeline",
+          "cons": "Requires version tracking in manifest, more complex logic, delayed cleanup"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Making the config folder optional with warnings provides the best balance between enforcing the new structure for new instances and gracefully handling existing instances. Combined with automatic migration (Q2-A), this ensures a smooth transition. The manifest should mark it as 'recommended' with warnings, but allow the Web UI and scripts to auto-create it when missing.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

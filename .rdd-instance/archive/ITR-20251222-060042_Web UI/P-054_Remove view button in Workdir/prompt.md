@@ -1,0 +1,1 @@
+As both View button and clicking on the name of the prompt open the modal, one of these should be removed

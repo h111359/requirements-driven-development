@@ -1,0 +1,43 @@
+{
+    "iteration-id": "ITR-FIXTURE-001",
+    "iteration-name": "Sample Iteration",
+    "prompt-id-sequence-next-value": 4,
+    "prompts": [
+        {
+            "prompt-id": "P-001",
+            "prompt-title": "First Sample Prompt",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": true,
+            "analysis-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
+        },
+        {
+            "prompt-id": "P-002",
+            "prompt-title": "Second Sample Prompt",
+            "state": "active",
+            "questionnaire-generated": true,
+            "questionnaire-answered": false,
+            "plan-generated": false,
+            "analysis-generated": false,
+            "implementation-completed": false,
+            "execution-mode": "clarify",
+            "executed": false
+        },
+        {
+            "prompt-id": "P-003",
+            "prompt-title": "Third Sample Prompt",
+            "state": "completed",
+            "questionnaire-generated": false,
+            "questionnaire-answered": false,
+            "plan-generated": false,
+            "analysis-generated": false,
+            "implementation-completed": false,
+            "execution-mode": "no-action",
+            "executed": false
+        }
+    ]
+}

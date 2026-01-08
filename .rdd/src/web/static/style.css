@@ -1,0 +1,768 @@
+/* RDD Web Interface - Custom Styles */
+
+:root {
+    --rdd-primary: #0d6efd;
+    --rdd-success: #198754;
+    --rdd-warning: #ffc107;
+    --rdd-danger: #dc3545;
+    --rdd-info: #0dcaf0;
+    --rdd-dark: #212529;
+    --navbar-height: 56px;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f8f9fa;
+    padding-top: calc(var(--navbar-height) + 1rem);
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1030;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: none;
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    font-weight: 600;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.table {
+    background-color: white;
+}
+
+.table thead {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+}
+
+.table code {
+    background-color: #f8f9fa;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    color: #d63384;
+}
+
+.btn {
+    font-weight: 500;
+}
+
+.btn i {
+    margin-right: 0.25rem;
+}
+
+.form-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.font-monospace {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+#alert-container {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    z-index: 1050;
+    max-width: 400px;
+}
+
+.alert {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.spinner-border {
+    margin: 2rem auto;
+    display: block;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.badge {
+    font-weight: 600;
+    padding: 0.35rem 0.65rem;
+}
+
+dl.row {
+    margin-bottom: 0;
+}
+
+dl.row dt {
+    font-weight: 600;
+    color: #495057;
+}
+
+dl.row dd {
+    color: #212529;
+}
+
+.table-responsive {
+    border-radius: 0.25rem;
+}
+
+.modal-header {
+    background-color: var(--rdd-primary);
+    color: white;
+}
+
+.modal-header .btn-close {
+    filter: invert(1);
+}
+
+.input-group .btn {
+    border-color: #ced4da;
+}
+
+textarea.form-control {
+    resize: vertical;
+}
+
+.text-danger {
+    font-weight: 600;
+}
+
+/* Utility classes */
+.mb-half {
+    margin-bottom: 0.5rem;
+}
+
+.mt-half {
+    margin-top: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #alert-container {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+    
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .table {
+        font-size: 0.875rem;
+    }
+}
+
+.sticky-controls-panel {
+    position: sticky;
+    /* Place the sticky control panel below the fixed navbar to avoid overlap */
+    top: calc(var(--navbar-height) + 0.5rem);
+    z-index: 1020;
+    background-color: #ffffff;
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sticky-controls-panel .badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Compact button group */
+.gap-1 {
+    gap: 0.25rem;
+}
+
+/* Compact mode selector */
+.compact-mode-selector {
+    font-size: 0.8rem;
+}
+
+.compact-mode-selector .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+/* Execution mode buttons - clear active/inactive distinction */
+/* Inactive buttons: outlined style */
+input[name="execution-mode"].btn-check + label.btn-primary {
+    background-color: transparent;
+    border-color: #0d6efd;
+    color: #0d6efd;
+    transition: all 0.2s ease-in-out;
+}
+
+input[name="execution-mode"].btn-check + label.btn-primary:hover {
+    background-color: rgba(13, 110, 253, 0.1);
+    border-color: #0d6efd;
+    color: #0d6efd;
+}
+
+/* Active button: solid background */
+input[name="execution-mode"].btn-check:checked + label.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.5);
+}
+
+/* Responsive behavior for control panel */
+@media (max-width: 768px) {
+    .sticky-controls-panel .d-flex {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .sticky-controls-panel > div > div:last-child {
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+}
+
+/* Compact accordion for questionnaire */
+.accordion-compact .accordion-button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+}
+
+.accordion-compact .accordion-body {
+    padding: 0.75rem;
+}
+
+.accordion-compact .accordion-item {
+    margin-bottom: 0.25rem;
+}
+
+/* Questionnaire sidebar navigation */
+#questionNavigation .list-group-item {
+    padding: 0.5rem 0.75rem;
+    border-left: 3px solid transparent;
+}
+
+#questionNavigation .list-group-item.active {
+    border-left-color: #0d6efd;
+    background-color: #e7f1ff;
+    color: #0d6efd;
+}
+
+#questionNavigation .list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+#currentQuestionContainer {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.question-title-sticky {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 10;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 0.75rem;
+}
+
+/* Print styles */
+@media print {
+    .navbar,
+    .btn,
+    #alert-container,
+    .sticky-controls-panel {
+        display: none;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #dee2e6;
+    }
+}
+
+/* Enhanced Radio Button Styles - Improved Visibility */
+.form-check-input[type="radio"] {
+    width: 1.25em;
+    height: 1.25em;
+    min-width: 1.25em;
+    min-height: 1.25em;
+    border-width: 2px;
+    border-color: #495057;
+    margin-top: 0.15em;
+    cursor: pointer;
+}
+
+.form-check-input[type="radio"]:hover {
+    border-color: #0d6efd;
+    background-color: rgba(13, 110, 253, 0.1);
+}
+
+.form-check-input[type="radio"]:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.form-check-input[type="radio"]:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.1rem rgba(13, 110, 253, 0.3);
+}
+
+.form-check-input[type="radio"]:checked:hover {
+    background-color: #0b5ed7;
+    border-color: #0b5ed7;
+}
+
+/* Make the label clickable and add hover feedback */
+.form-check-label {
+    cursor: pointer;
+    user-select: none;
+}
+
+.form-check:hover .form-check-label {
+    color: #0d6efd;
+}
+
+/* Snippet Autocomplete Styles */
+.snippet-autocomplete-container {
+    position: absolute;
+    display: flex;
+    background: white;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    max-height: 400px;
+    z-index: 1050;
+    overflow: hidden;
+}
+
+.snippet-list {
+    flex: 0 0 40%;
+    border-right: 1px solid #dee2e6;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+}
+
+.snippet-list-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #e9ecef;
+    transition: background-color 0.15s ease;
+}
+
+.snippet-list-item:hover,
+.snippet-list-item.active {
+    background-color: #e7f3ff;
+}
+
+.snippet-list-item.active {
+    border-left: 3px solid var(--rdd-primary);
+}
+
+.snippet-list-item .snippet-key {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0d6efd;
+    margin-bottom: 0.25rem;
+}
+
+.snippet-list-item .snippet-key strong {
+    background-color: #fff3cd;
+    padding: 0 2px;
+}
+
+.snippet-list-item .snippet-description {
+    font-size: 0.75rem;
+    color: #6c757d;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.snippet-list-item-empty {
+    padding: 1rem;
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.snippet-preview {
+    flex: 0 0 60%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.snippet-preview-header {
+    padding: 0.75rem 1rem;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    font-size: 0.875rem;
+}
+
+.snippet-preview-header strong {
+    font-family: 'Courier New', Courier, monospace;
+    color: #0d6efd;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.snippet-preview-content {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    background-color: white;
+    color: #212529;
+}
+
+/* Responsive: collapse preview on small screens */
+@media (max-width: 768px) {
+    .snippet-autocomplete-container {
+        flex-direction: column;
+    }
+    
+    .snippet-list {
+        flex: 1;
+        border-right: none;
+        border-bottom: 1px solid #dee2e6;
+        max-height: 200px;
+    }
+    
+    .snippet-preview {
+        flex: 1;
+        max-height: 200px;
+    }
+}
+/* Snippet Modal Styles */
+.snippet-modal-item {
+    transition: background-color 0.15s ease;
+}
+
+.snippet-modal-item:hover {
+    background-color: #f0f0f0 !important;
+}
+
+/* User Guide / Help Content Styles */
+.user-guide-content {
+    padding: 1rem 2rem;
+    max-width: 900px;
+    line-height: 1.7;
+}
+
+.user-guide-content h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    color: #212529;
+    border-bottom: 3px solid var(--rdd-primary);
+    padding-bottom: 0.5rem;
+}
+
+.user-guide-content h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: #495057;
+}
+
+.user-guide-content h3 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: #6c757d;
+}
+
+.user-guide-content h4 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #6c757d;
+}
+
+.user-guide-content p {
+    margin-bottom: 1rem;
+    color: #212529;
+}
+
+.user-guide-content ul,
+.user-guide-content ol {
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+}
+
+.user-guide-content li {
+    margin-bottom: 0.5rem;
+    color: #212529;
+}
+
+.user-guide-content code {
+    background-color: #f8f9fa;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
+    color: #d63384;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.user-guide-content pre {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    padding: 1rem;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+.user-guide-content pre code {
+    background-color: transparent;
+    padding: 0;
+    color: #212529;
+    font-size: 0.875rem;
+}
+
+.user-guide-content a {
+    color: var(--rdd-primary);
+    text-decoration: none;
+}
+
+.user-guide-content a:hover {
+    text-decoration: underline;
+}
+
+.user-guide-content strong {
+    font-weight: 600;
+    color: #212529;
+}
+
+.user-guide-content em {
+    font-style: italic;
+}
+
+.user-guide-content br {
+    display: block;
+    content: "";
+    margin-top: 0.5rem;
+}
+
+/* Responsive adjustments for user guide */
+@media (max-width: 768px) {
+    .user-guide-content {
+        padding: 1rem;
+    }
+    
+    .user-guide-content h1 {
+        font-size: 1.75rem;
+    }
+    
+    .user-guide-content h2 {
+        font-size: 1.5rem;
+    }
+    
+    .user-guide-content h3 {
+        font-size: 1.25rem;
+    }
+}
+
+/* Auto-save spinner animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+    display: inline-block;
+}
+
+/* Save status styling */
+#prompt-save-status {
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+/* Workdir registry - clickable prompt title styling */
+.prompt-title-link {
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.prompt-title-link:hover {
+    color: #0056b3 !important;
+    text-decoration: none !important;
+}
+
+
+/* Workflow Areas Styling */
+.workflow-areas-container {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid #dee2e6;
+}
+
+/* Inline workflow areas container (for centered layout in sticky panel) */
+.workflow-areas-container-inline {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.workflow-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border: 2px solid #0d6efd;
+    border-radius: 0.375rem;
+    background-color: white;
+    min-width: 140px;
+    transition: all 0.2s ease;
+}
+
+.workflow-area:hover {
+    box-shadow: 0 0.25rem 0.5rem rgba(13, 110, 253, 0.15);
+    transform: translateY(-2px);
+}
+
+.workflow-area-neutral {
+    border-color: #6c757d;
+    background-color: #f8f9fa;
+}
+
+.workflow-area-neutral:hover {
+    box-shadow: 0 0.25rem 0.5rem rgba(108, 117, 125, 0.15);
+}
+
+.workflow-area-icons {
+    height: 24px;
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.workflow-area-icons .flag-icon {
+    display: inline-block;
+}
+
+.workflow-area-icons .delete-execution-btn {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.75rem;
+    line-height: 1;
+    border-radius: 0.2rem;
+}
+
+.workflow-area-icons .delete-execution-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+}
+
+.workflow-file-btn {
+    min-width: 120px;
+    font-weight: 500;
+}
+
+.workflow-file-btn:not(:disabled) {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+}
+
+.workflow-file-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.workflow-area-mode {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.workflow-area-mode .form-check-input {
+    margin: 0;
+}
+
+.workflow-area-mode .form-check-label {
+    margin: 0;
+    cursor: pointer;
+}
+
+/* File content display */
+.file-view-content {
+    animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive adjustments for workflow areas */
+@media (max-width: 992px) {
+    .workflow-areas-container .d-flex {
+        justify-content: center;
+    }
+    
+    .workflow-area {
+        min-width: 120px;
+    }
+}
+
+@media (max-width: 768px) {
+    .workflow-areas-container {
+        padding: 0.5rem;
+    }
+    
+    .workflow-area {
+        min-width: 100px;
+        padding: 0.5rem;
+    }
+    
+    .workflow-file-btn {
+        min-width: 100px;
+        font-size: 0.875rem;
+    }
+}

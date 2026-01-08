@@ -1,0 +1,149 @@
+{
+  "context": "The GitHub Actions CI workflow is failing on Windows Server 2025 during git checkout due to file path length limitations. The error occurs when trying to create files in the archive folder with prompt title 'P-045_Bug questionnaire-generated and questionnaire-answered flags are set to true immediately after creation of new prompt'. The full path exceeds Windows MAX_PATH limit (260 characters). This questionnaire addresses how to resolve this issue to ensure cross-platform compatibility.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "How should we address the Windows path length limitation for archived prompt folders?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Shorten prompt titles to enforce maximum length limit",
+          "pros": "Simple solution, prevents future issues, no system dependencies, works on all Windows versions",
+          "cons": "May reduce clarity of prompt titles, requires updating documentation and validation logic, affects existing workflows"
+        },
+        {
+          "id": "B",
+          "label": "Use short IDs in archive folder names instead of full prompt titles",
+          "pros": "Guaranteed short paths, consistent archive structure, prevents all path length issues",
+          "cons": "Archive folders less human-readable, requires lookup to understand archived prompt, breaks existing archive structure"
+        },
+        {
+          "id": "C",
+          "label": "Enable Windows long path support via manifest/registry and document requirement",
+          "pros": "Preserves current naming, no code changes needed, aligns with modern Windows best practices",
+          "cons": "Requires Windows 10 version 1607+ or Windows 11, needs system configuration, may not work on older CI runners"
+        },
+        {
+          "id": "D",
+          "label": "Truncate folder names only in archive (keep original in workdir)",
+          "pros": "Workdir keeps full names for active work, archives remain accessible, minimal workflow impact",
+          "cons": "Creates inconsistency between workdir and archive naming, requires truncation logic, may cause confusion"
+        },
+        {
+          "id": "E",
+          "label": "Hash or compress prompt titles in folder names while maintaining metadata file",
+          "pros": "Guaranteed short names, preserves full title in metadata, technical solution",
+          "cons": "Folders not human-readable, requires parsing metadata to identify prompts, more complex implementation"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Enforcing a maximum prompt title length is the most reliable cross-platform solution. It prevents the issue at the source, works on all Windows versions without configuration, and maintains human-readable folder names. While it may require updating existing prompts with long titles, it ensures consistent behavior across all environments and prevents future path length issues. A reasonable limit of 80-100 characters for prompt titles still allows descriptive names while staying well under Windows path limits.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "Should we implement validation to prevent long prompt titles at creation time?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes, validate prompt title length when creating new prompts",
+          "pros": "Prevents issue at source, provides immediate feedback to users, ensures consistency, simple to implement",
+          "cons": "May require users to rethink titles, adds constraint to user workflow"
+        },
+        {
+          "id": "B",
+          "label": "No, handle long paths dynamically at archive/filesystem level",
+          "pros": "No constraints on user creativity, more flexible approach",
+          "cons": "Complex to implement reliably, may still fail in edge cases, harder to debug, cross-platform challenges"
+        },
+        {
+          "id": "C",
+          "label": "Validate with warning but allow override",
+          "pros": "Balances user flexibility with safety, educates users about limits",
+          "cons": "Users may ignore warnings, doesn't guarantee resolution, complexity in implementation"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Validating prompt titles at creation time is the preventive approach that ensures cross-platform compatibility from the start. It provides immediate, clear feedback to users and prevents downstream issues in CI/CD pipelines, archiving, and file operations. This aligns with the framework's goal of reliable operation on both Windows and Linux.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "What should be the maximum allowed prompt title length?",
+      "options": [
+        {
+          "id": "A",
+          "label": "50 characters",
+          "pros": "Very safe for all path scenarios, forces concise titles, minimal risk",
+          "cons": "May be too restrictive, harder to create descriptive titles, impacts existing long titles"
+        },
+        {
+          "id": "B",
+          "label": "80 characters",
+          "pros": "Good balance between safety and expressiveness, aligns with common text conventions, allows descriptive titles",
+          "cons": "Still may need shortening for some existing prompts"
+        },
+        {
+          "id": "C",
+          "label": "100 characters",
+          "pros": "More permissive, allows detailed descriptions, minimal impact on existing prompts",
+          "cons": "May still hit limits with deep archive paths on Windows"
+        },
+        {
+          "id": "D",
+          "label": "150 characters",
+          "pros": "Maximum flexibility, covers most use cases",
+          "cons": "Higher risk of path issues, may not fully solve the problem"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "80 characters provides a good balance between descriptive clarity and path safety. Considering the folder structure '.rdd-instance/archive/ITR-YYYYMMDD-HHMMSS_Name/P-XXX_Title/filename.md', an 80-character title keeps total paths well under the 260-character Windows limit while allowing meaningful, descriptive prompt titles. This aligns with common conventions in software development and documentation.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "How should we handle existing prompts with titles exceeding the new limit?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Automatically truncate with validation script",
+          "pros": "Automated solution, consistent handling, can run before archiving",
+          "cons": "May lose meaning, identical truncated names possible, no user input"
+        },
+        {
+          "id": "B",
+          "label": "Require manual renaming via migration script with review",
+          "pros": "User maintains control over meaning, ensures quality, prevents duplicates",
+          "cons": "Manual work required, may block archiving until resolved"
+        },
+        {
+          "id": "C",
+          "label": "Grandfather existing prompts, apply limit only to new ones",
+          "pros": "No breaking changes, protects existing work, gradual transition",
+          "cons": "Doesn't solve immediate CI failure, inconsistent behavior, problem persists"
+        },
+        {
+          "id": "D",
+          "label": "Provide warning with automated suggestion for user confirmation",
+          "pros": "Balanced approach, automation with oversight, user can refine suggestions",
+          "cons": "Requires interactive process, may slow down operations"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Manual renaming with a migration script provides the best balance of quality and control. This ensures that shortened titles remain meaningful and descriptive, prevents duplicate names, and gives users the opportunity to choose the most appropriate abbreviations. For the immediate CI failure, the problematic prompt P-045 can be renamed as a one-time fix, and a migration script can be provided for any other long-titled prompts in archives.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

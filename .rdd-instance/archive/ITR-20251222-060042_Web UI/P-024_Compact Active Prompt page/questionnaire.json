@@ -1,0 +1,215 @@
+{
+  "context": "The Active Prompt page in the Web UI currently takes up significant vertical space, making it difficult to view all elements on a 14-inch screen without scrolling. This questionnaire helps decide the best approach for making the page more compact while preserving all functionality and improving the user experience. The key areas requiring attention are: prompt title/header, action buttons (Create New Prompt, Add Modification, Complete Prompt), Execution Mode selector, Progress Status indicators, and overall layout optimization.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "How should the three main action buttons (Create New Prompt, Add Modification, Complete Prompt) be organized?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Keep them in a single horizontal row with reduced padding and smaller size",
+          "pros": "Simple change, maintains current layout pattern, easy to scan left-to-right",
+          "cons": "May still take up too much horizontal space on narrow screens, less flexible for future button additions"
+        },
+        {
+          "id": "B",
+          "label": "Move them to a sticky header toolbar that remains visible while scrolling",
+          "pros": "Always accessible, makes efficient use of space, clear separation from content, modern UX pattern",
+          "cons": "Requires more significant HTML/CSS changes, reduces vertical space for content initially"
+        },
+        {
+          "id": "C",
+          "label": "Group them in a dropdown 'Actions' menu",
+          "pros": "Maximum space savings, clean interface, scalable for adding more actions",
+          "cons": "Requires extra click to access buttons, less discoverable, may slow down common operations"
+        },
+        {
+          "id": "D",
+          "label": "Use icon-only buttons with tooltips in a compact button group",
+          "pros": "Very space-efficient, modern appearance, works well on small screens",
+          "cons": "Less immediately clear what each button does, relies on icon recognition and tooltips"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "A sticky toolbar approach provides the best balance between space efficiency and usability. It keeps the most important actions always accessible while scrolling through long prompt content, and it establishes a clear visual hierarchy. This is a common pattern in modern web applications and would significantly improve the experience on 14-inch screens without sacrificing discoverability.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "How should the Execution Mode selector be made more compact while maintaining its functionality?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Convert to a dropdown select menu",
+          "pros": "Takes up minimal space, familiar UI pattern, easy to implement, clear current selection",
+          "cons": "Requires click to see all options, less visual indication of available modes"
+        },
+        {
+          "id": "B",
+          "label": "Use smaller buttons with icon-only display (icons from current implementation)",
+          "pros": "More compact than current, still shows all options at once, maintains quick access",
+          "cons": "May be harder to understand for new users, relies on icon/color recognition"
+        },
+        {
+          "id": "C",
+          "label": "Keep current button group but reduce padding, margins, and font size",
+          "pros": "Minimal code changes, maintains familiarity, all options visible",
+          "cons": "May not save enough space, could reduce readability if made too small"
+        },
+        {
+          "id": "D",
+          "label": "Move to a horizontal compact toggle with current mode displayed prominently and others in a collapsed menu",
+          "pros": "Shows active mode clearly, saves space, modern pattern",
+          "cons": "More complex interaction pattern, requires redesign of the component"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "A dropdown select menu is the most space-efficient solution and is a standard UI pattern that users understand. Since execution mode is not changed frequently during normal workflow, the extra click to open the dropdown is acceptable. It would reduce the component from taking up a full row to just a small select control, saving significant vertical space.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "How should the Progress Status section (Questionnaire, Plan, Implementation indicators) be made more compact?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Display as a single horizontal compact status bar with icons and colored indicators",
+          "pros": "Very space-efficient, quick visual scan, modern appearance, can show all statuses at once",
+          "cons": "May be less detailed, requires good icon and color choice for clarity"
+        },
+        {
+          "id": "B",
+          "label": "Convert to a small badge group showing only active/completed statuses",
+          "pros": "Minimal space usage, focuses on what matters, clean look",
+          "cons": "May hide information, less comprehensive view of progress"
+        },
+        {
+          "id": "C",
+          "label": "Keep three columns but reduce icon size, padding, and use smaller badges",
+          "pros": "Maintains current information structure, familiar layout, straightforward to implement",
+          "cons": "May not save enough space, still uses three columns"
+        },
+        {
+          "id": "D",
+          "label": "Show as a compact progress indicator (e.g., '2/3 complete') with detailed view on hover/click",
+          "pros": "Extremely compact, summarizes progress clearly, details available when needed",
+          "cons": "Less immediate visibility of individual component statuses, requires interaction for details"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "A horizontal status bar with icons and colored indicators provides the best balance of compactness and information visibility. It can show all three status indicators in a single line rather than across three columns, saving significant vertical space while maintaining at-a-glance readability through color coding and icons.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "How should the prompt title/name be displayed more compactly in the card header?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Reduce header padding and font size while keeping the same structure",
+          "pros": "Simple change, maintains readability, familiar layout",
+          "cons": "Limited space savings, may look cramped if reduced too much"
+        },
+        {
+          "id": "B",
+          "label": "Move prompt ID and title to same line with smaller, lighter styling",
+          "pros": "Consolidates information, saves vertical space, can fit in sticky toolbar",
+          "cons": "May be less prominent, needs careful styling to remain readable"
+        },
+        {
+          "id": "C",
+          "label": "Show only prompt ID in header with full title on hover tooltip",
+          "pros": "Maximum space savings, very compact",
+          "cons": "Reduces immediate visibility of prompt context, requires hovering to see full title"
+        },
+        {
+          "id": "D",
+          "label": "Eliminate the large card header and integrate prompt info into the toolbar/controls area",
+          "pros": "Significant space savings, modern flat design, better use of horizontal space",
+          "cons": "Requires more significant layout restructuring"
+        }
+      ],
+      "recommended-option": "D",
+      "recommendation-rationale": "Integrating the prompt info into a toolbar/controls area (potentially the sticky toolbar from Q1) would provide the most space savings and create a more modern, efficient layout. The large card header with background color takes up significant space for information that could be displayed more compactly inline with other controls.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "D"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "Which elements should remain visible (sticky) while scrolling through the prompt content?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Only the main navigation bar at the top",
+          "pros": "Standard behavior, maximum content space, no complexity",
+          "cons": "Lose access to action buttons and controls when scrolling, requires scrolling back up"
+        },
+        {
+          "id": "B",
+          "label": "Main navigation + a compact toolbar with action buttons and prompt info",
+          "pros": "Keeps most important controls accessible, good balance, aligns with Q1 and Q4 recommendations",
+          "cons": "Uses some vertical space, requires implementing sticky positioning"
+        },
+        {
+          "id": "C",
+          "label": "Main navigation + toolbar + execution mode and status indicators",
+          "pros": "Everything accessible while scrolling, maximum convenience",
+          "cons": "Takes up significant fixed vertical space, reduces content viewing area"
+        },
+        {
+          "id": "D",
+          "label": "No sticky elements except navigation (let user scroll freely)",
+          "pros": "Maximum content space, simple implementation",
+          "cons": "Poor UX for long prompts, need to scroll to access controls"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Making a compact toolbar sticky (in addition to the navigation) strikes the best balance. Users can access critical actions and see the prompt context without scrolling, while still having plenty of room for content. This is especially important on 14-inch screens where vertical space is limited. The execution mode and status can be accessed by scrolling up slightly if needed, but the most common actions should remain accessible.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q6",
+      "question-text": "Should the Execution Mode and Progress Status sections be combined into a single more compact control area?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes, combine them into a single horizontal toolbar/bar",
+          "pros": "Significant space savings, reduces visual clutter, groups related information, modern layout",
+          "cons": "Requires careful design to avoid cramming too much in one line, may need responsive breakpoints"
+        },
+        {
+          "id": "B",
+          "label": "No, keep them as separate sections but make each more compact",
+          "pros": "Clearer separation of concerns, easier to understand, less risky change",
+          "cons": "Won't save as much space, still uses vertical space for two separate sections"
+        },
+        {
+          "id": "C",
+          "label": "Combine them in a collapsible panel that can be toggled",
+          "pros": "Maximum space savings when collapsed, full detail when expanded, user control",
+          "cons": "Adds interaction complexity, may hide important information by default"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Combining these two sections into a single compact toolbar makes logical sense since both relate to the current state and mode of the prompt. Together with converting the execution mode to a dropdown and the progress status to a horizontal bar (from Q2 and Q3), they could fit in a single well-organized row, saving significant vertical space without losing functionality.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

@@ -436,7 +436,7 @@ pytest tests/ -v
 
 **With Coverage:**
 ```bash
-pytest tests/python/ --cov=.rdd/scripts --cov=scripts --cov-report=html
+pytest tests/python/ --cov=.rdd/src --cov=scripts --cov-report=html
 # Opens htmlcov/index.html for detailed coverage report
 ```
 
