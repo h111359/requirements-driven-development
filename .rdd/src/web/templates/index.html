@@ -77,7 +77,11 @@
                             <div class="d-flex align-items-center">
                                 <i class="bi bi-journal-check me-2"></i>
                                 <span id="active-prompt-title" class="flex-grow-1">Active Prompt</span>
-                                <span id="iteration-metadata" class="text-white-50 small" style="display:none;"></span>
+                                <button class="btn btn-sm btn-link text-white p-0 ms-2" onclick="showPageHelp('activePrompt')" 
+                                        data-bs-toggle="tooltip" title="Help for this page">
+                                    <i class="bi bi-info-circle fs-5"></i>
+                                </button>
+                                <span id="iteration-metadata" class="text-white-50 small ms-2" style="display:none;"></span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -389,7 +393,13 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header bg-success text-white">
-                            <h5 class="mb-0"><i class="bi bi-folder"></i> Prompts History</h5>
+                            <div class="d-flex align-items-center">
+                                <h5 class="mb-0 flex-grow-1"><i class="bi bi-folder"></i> Prompts History</h5>
+                                <button class="btn btn-sm btn-link text-white p-0" onclick="showPageHelp('promptsHistory')" 
+                                        data-bs-toggle="tooltip" title="Help for this page">
+                                    <i class="bi bi-info-circle fs-5"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="card-body">
                             <!-- Create Work Iteration Button (shown when no iteration exists) -->
@@ -417,7 +427,13 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header bg-info text-white">
-                            <h5><i class="bi bi-diagram-3"></i> Technical Design</h5>
+                            <div class="d-flex align-items-center">
+                                <h5 class="mb-0 flex-grow-1"><i class="bi bi-diagram-3"></i> Technical Design</h5>
+                                <button class="btn btn-sm btn-link text-white p-0" onclick="showPageHelp('technicalDesign')" 
+                                        data-bs-toggle="tooltip" title="Help for this page">
+                                    <i class="bi bi-info-circle fs-5"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
@@ -440,7 +456,13 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header bg-info text-white">
-                            <h5><i class="bi bi-file-text"></i> Requirements</h5>
+                            <div class="d-flex align-items-center">
+                                <h5 class="mb-0 flex-grow-1"><i class="bi bi-file-text"></i> Requirements</h5>
+                                <button class="btn btn-sm btn-link text-white p-0" onclick="showPageHelp('requirements')" 
+                                        data-bs-toggle="tooltip" title="Help for this page">
+                                    <i class="bi bi-info-circle fs-5"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="mb-3">

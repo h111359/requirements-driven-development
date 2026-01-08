@@ -91,6 +91,11 @@ async function initializeApp() {
         // Start background refresh of active prompt statuses and mode buttons
         startActivePromptRefresh();
         
+        // Setup help system
+        setupExecutionModeTooltips();
+        setupStatusFlagTooltips();
+        initializeTooltips();
+        
         // Restore previous section state if available
         const savedSection = StateManager.getSection();
         if (savedSection && savedSection !== 'active-prompt') {
@@ -594,6 +599,11 @@ async function loadActivePrompt() {
     if (implementationCompleted) {
         await loadModifications();
     }
+    
+    // Re-initialize tooltips after content updates
+    setupExecutionModeTooltips();
+    setupStatusFlagTooltips();
+    initializeTooltips();
 }
 
 /**
@@ -3036,4 +3046,261 @@ async function loadUserGuide() {
             </div>
         `;
     }
+}
+
+// ============================================================================
+// HELP SYSTEM - Tooltips and Context-Sensitive Help
+// ============================================================================
+
+/**
+ * Help content constants for tooltips and modals
+ */
+const HELP_CONTENT = {
+    // Execution mode tooltips
+    executionModes: {
+        clarify: {
+            title: "Clarify Mode",
+            description: "Generate questions to resolve ambiguities in the prompt. Use when the prompt lacks specific details like file paths, behavior descriptions, or design decisions. Produces questionnaire.json with questions for you to answer."
+        },
+        analyze: {
+            title: "Analyze Mode", 
+            description: "Analyze the prompt to identify requirements, constraints, and technical considerations. Use before planning or implementation to ensure thorough understanding. Produces analysis.md with detailed findings."
+        },
+        plan: {
+            title: "Plan Mode",
+            description: "Generate a detailed step-by-step implementation plan without executing it. Use when you want to review the approach before implementation. Produces plan.md with specific execution steps."
+        },
+        implement: {
+            title: "Implement Mode",
+            description: "Execute the full implementation of the prompt including code changes and file updates. Use when you're ready to apply changes to your codebase. Produces implementation.md with detailed change log."
+        },
+        modification: {
+            title: "Modification Mode",
+            description: "Create a small correction or enhancement to a completed prompt. Use for minor fixes without creating a full new prompt. Produces modification-XXX.md and modification-XXX-implementation.md files."
+        }
+    },
+    
+    // Status flag tooltips
+    statusFlags: {
+        questionnaireGenerated: {
+            label: "Questionnaire Generated",
+            explanation: "A questionnaire file (questionnaire.json) has been created with clarification questions",
+            trigger: "Set when Clarify mode execution completes successfully"
+        },
+        questionnaireAnswered: {
+            label: "Questionnaire Answered",
+            explanation: "All questions in the questionnaire have been answered by the user",
+            trigger: "Set when the user provides answers to all questionnaire questions via the Web UI"
+        },
+        analysisGenerated: {
+            label: "Analysis Generated",
+            explanation: "An analysis file (analysis.md) has been created with detailed prompt analysis",
+            trigger: "Set when Analyze mode execution completes successfully"
+        },
+        planGenerated: {
+            label: "Plan Generated",
+            explanation: "An implementation plan file (plan.md) has been created with step-by-step instructions",
+            trigger: "Set when Plan mode execution completes successfully"
+        },
+        implementationCompleted: {
+            label: "Implementation Completed",
+            explanation: "The prompt implementation has finished and an implementation log has been created",
+            trigger: "Set when Implement mode execution completes successfully"
+        },
+        executed: {
+            label: "Executed",
+            explanation: "The prompt has been executed at least once (any execution mode)",
+            trigger: "Set when any execution mode completes, tracking that work has been done on this prompt"
+        },
+        modificationsCount: {
+            label: "Modifications Count",
+            explanation: "Number of modifications created for this prompt",
+            trigger: "Incremented each time a new modification is created"
+        },
+        currentModification: {
+            label: "Current Modification ID",
+            explanation: "The ID of the modification currently being worked on",
+            trigger: "Set when a modification is created, cleared when modification completes"
+        }
+    },
+    
+    // Page-level help content
+    pages: {
+        activePrompt: {
+            title: "Active Prompt - Help",
+            purpose: "The Active Prompt page is your primary workspace for developing a single prompt through its lifecycle from clarification to implementation.",
+            workflows: [
+                "<strong>Clarify → Analyze → Plan → Implement:</strong> Standard workflow for complex prompts requiring clarification and planning",
+                "<strong>Quick Implementation:</strong> Skip directly to Implement mode for straightforward prompts",
+                "<strong>Modifications:</strong> After completing a prompt, use modifications for small corrections without creating a new prompt"
+            ],
+            userGuideLink: "/README.md"
+        },
+        promptsHistory: {
+            title: "Prompts History - Help",
+            purpose: "View and manage all prompts in the current work iteration, including their states, execution modes, and workflow progress.",
+            workflows: [
+                "<strong>Review Progress:</strong> See which prompts are active, completed, or in progress",
+                "<strong>Track Workflow:</strong> Monitor questionnaire, analysis, plan, and implementation flags for each prompt",
+                "<strong>Iteration Management:</strong> View iteration metadata and archive completed iterations"
+            ],
+            userGuideLink: "/README.md"
+        },
+        technicalDesign: {
+            title: "Technical Design - Help",
+            purpose: "Define and document architectural decisions, technology choices, and design constraints for your project in a structured format.",
+            workflows: [
+                "<strong>Set Defaults:</strong> Use 'Set Default Answers' to quickly populate common configuration choices",
+                "<strong>Interactive Form:</strong> Answer configuration questions that adapt based on your previous choices",
+                "<strong>JSON Export:</strong> Technical design is stored as JSON for programmatic access during implementation"
+            ],
+            userGuideLink: "/README.md"
+        },
+        requirements: {
+            title: "Requirements - Help",
+            purpose: "Manage user requirements (UR) and technical requirements (TR) that define what your system should do and how it should be built.",
+            workflows: [
+                "<strong>View Requirements:</strong> Browse all requirements with their IDs, text, and status",
+                "<strong>Traceability:</strong> Requirements are automatically updated during prompt implementation",
+                "<strong>Historical Record:</strong> Requirements file maintains complete history of project specifications"
+            ],
+            userGuideLink: "/README.md"
+        }
+    }
+};
+
+/**
+ * Initialize all tooltips on the page
+ * Should be called after DOM content is loaded and after dynamic content updates
+ */
+function initializeTooltips() {
+    // Dispose of existing tooltips to avoid duplicates
+    const existingTooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    existingTooltips.forEach(element => {
+        const tooltip = bootstrap.Tooltip.getInstance(element);
+        if (tooltip) {
+            tooltip.dispose();
+        }
+    });
+    
+    // Initialize all tooltips with configuration for touch devices
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltipTriggerList.forEach(element => {
+        new bootstrap.Tooltip(element, {
+            trigger: 'hover focus', // Works on both desktop (hover) and touch (focus on tap)
+            boundary: 'window',
+            placement: 'auto'
+        });
+    });
+}
+
+/**
+ * Setup execution mode tooltips
+ * Adds tooltips to the execution mode radio buttons
+ */
+function setupExecutionModeTooltips() {
+    const modes = ['clarify', 'analyze', 'plan', 'implement', 'modification'];
+    
+    modes.forEach(mode => {
+        const modeElement = document.getElementById(`mode-${mode}`);
+        const labelElement = document.querySelector(`label[for="mode-${mode}"]`);
+        
+        if (labelElement && HELP_CONTENT.executionModes[mode]) {
+            const content = HELP_CONTENT.executionModes[mode];
+            labelElement.setAttribute('data-bs-toggle', 'tooltip');
+            labelElement.setAttribute('data-bs-placement', 'top');
+            labelElement.setAttribute('title', content.description);
+            labelElement.style.cursor = 'help';
+        }
+    });
+}
+
+/**
+ * Setup enhanced status flag tooltips
+ * Updates existing status flag tooltips with detailed information
+ */
+function setupStatusFlagTooltips() {
+    const flagMappings = {
+        'flag-questionnaire-generated': 'questionnaireGenerated',
+        'flag-questionnaire-answered': 'questionnaireAnswered',
+        'flag-analysis-generated': 'analysisGenerated',
+        'flag-plan-generated': 'planGenerated',
+        'flag-implementation-completed': 'implementationCompleted',
+        'flag-executed': 'executed',
+        'flag-modifications-count': 'modificationsCount',
+        'flag-current-modification': 'currentModification'
+    };
+    
+    Object.entries(flagMappings).forEach(([elementId, contentKey]) => {
+        const element = document.getElementById(elementId);
+        if (element && HELP_CONTENT.statusFlags[contentKey]) {
+            const content = HELP_CONTENT.statusFlags[contentKey];
+            const tooltipText = `${content.label}: ${content.explanation}. ${content.trigger}`;
+            element.setAttribute('data-bs-toggle', 'tooltip');
+            element.setAttribute('data-bs-placement', 'top');
+            element.setAttribute('title', tooltipText);
+        }
+    });
+}
+
+/**
+ * Show page-level help modal
+ */
+function showPageHelp(pageName) {
+    const helpContent = HELP_CONTENT.pages[pageName];
+    if (!helpContent) {
+        console.error('No help content found for page:', pageName);
+        return;
+    }
+    
+    // Create modal HTML
+    const modalHtml = `
+        <div class="modal fade" id="pageHelpModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">
+                            <i class="bi bi-question-circle"></i> ${helpContent.title}
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <h6 class="text-primary">Purpose</h6>
+                            <p class="text-muted">${helpContent.purpose}</p>
+                        </div>
+                        <div class="mb-3">
+                            <h6 class="text-primary">Key Workflows</h6>
+                            <ul>
+                                ${helpContent.workflows.map(w => `<li>${w}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="mt-4">
+                            <a href="${helpContent.userGuideLink}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-book"></i> View Full User Guide
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Remove existing modal if present
+    const existingModal = document.getElementById('pageHelpModal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    // Add modal to page
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('pageHelpModal'));
+    modal.show();
+    
+    // Clean up modal after it's hidden
+    document.getElementById('pageHelpModal').addEventListener('hidden.bs.modal', function() {
+        this.remove();
+    });
 }

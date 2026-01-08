@@ -453,6 +453,50 @@ class RDDWebHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error_response(f"Failed to load user guide: {str(e)}")
             return
         
+        elif path == "/README.md":
+            # Serve README.md as HTML for help modals
+            try:
+                readme_path = _repo_root() / "README.md"
+                if not readme_path.exists():
+                    self.send_error(404, "README.md not found")
+                    return
+                
+                with open(readme_path, "r", encoding="utf-8") as f:
+                    markdown_content = f.read()
+                
+                html_content = _markdown_to_html(markdown_content)
+                
+                # Create a simple HTML page with the content
+                full_html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDD Framework - User Guide</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {{ padding: 20px; max-width: 900px; margin: 0 auto; }}
+        pre {{ background-color: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto; }}
+        code {{ background-color: #f5f5f5; padding: 2px 6px; border-radius: 3px; }}
+        h1, h2, h3, h4 {{ margin-top: 1.5em; margin-bottom: 0.5em; }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        {html_content}
+    </div>
+</body>
+</html>"""
+                
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", len(full_html.encode('utf-8')))
+                self.end_headers()
+                self.wfile.write(full_html.encode('utf-8'))
+            except Exception as e:
+                self.send_error(500, f"Failed to load README: {str(e)}")
+            return
+        
         elif path.startswith("/api/file/"):
             # Read a file
             if not self.verify_session_token(params):
