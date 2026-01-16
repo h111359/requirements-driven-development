@@ -1,0 +1,161 @@
+{
+  "context": "The current workdir archiving process (workdir_archive.py) creates a zip archive of the iteration but does not commit the repository changes to git. The prompt requests adding git commit functionality during the archive process when the git-enabled flag is true, using the iteration name as the commit message. This questionnaire clarifies implementation details for this enhancement.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Should the git commit happen before or after the workdir is archived to zip?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Commit before archiving",
+          "pros": "Ensures that the commit is made even if archiving fails; Repository state is preserved before destructive workdir cleanup; Matches the logical flow where git commit captures the work done, then archive preserves the iteration metadata",
+          "cons": "If archiving fails after commit, the commit remains in history without a corresponding archive; Git commit happens before we know if archive will succeed"
+        },
+        {
+          "id": "B",
+          "label": "Commit after archiving",
+          "pros": "Ensures archive exists before committing to git; Archive zip path could be included in commit message; More atomic operation - both archive and commit succeed or both fail",
+          "cons": "If commit fails, archive exists but changes aren't in git history; Workdir cleanup happens between archive and commit, which could complicate rollback"
+        },
+        {
+          "id": "C",
+          "label": "Commit after zip creation but before workdir cleanup",
+          "pros": "Guarantees archive exists before committing; Workdir still exists if commit fails, allowing manual recovery; Best of both worlds - archive verified, git committed, then cleanup",
+          "cons": "More complex error handling if commit fails after archive but before cleanup; Need to decide whether to proceed with cleanup if commit fails"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Committing after zip creation but before workdir cleanup provides the safest workflow. The archive is verified to exist, git commit captures the work done, and only then does the destructive workdir cleanup occur. If git commit fails, the workdir still exists for manual recovery. This matches the two-phase commit pattern already used in the archive script.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "What should be the exact format of the git commit message?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Just the iteration name: e.g., 'Tests failures fixes'",
+          "pros": "Simple and concise; Directly uses the user-provided iteration name; Easy to implement",
+          "cons": "Lacks context about what type of operation this is; Could be confused with regular commits; No indication this was an iteration completion"
+        },
+        {
+          "id": "B",
+          "label": "Iteration ID and name: e.g., 'ITR-20260116-153840: Tests failures fixes'",
+          "pros": "Provides full traceability to the iteration; Unique identifier included; Easy to search git history for specific iterations",
+          "cons": "More verbose; Iteration ID might be redundant information in git log"
+        },
+        {
+          "id": "C",
+          "label": "Prefixed with context: e.g., 'Archive iteration: Tests failures fixes'",
+          "pros": "Clear indication this is an archive operation; Maintains the iteration name; Searchable by prefix in git history",
+          "cons": "Adds extra text that might be considered noise; 'Archive' might be misleading since it refers to workdir archive, not code archive"
+        },
+        {
+          "id": "D",
+          "label": "Iteration name with ID in body: Title 'Tests failures fixes' with body 'Iteration: ITR-20260116-153840'",
+          "pros": "Clean commit title; Full traceability in commit body; Follows git convention of title/body separation",
+          "cons": "More complex to implement (requires multi-line commit message); Body might be overkill for simple automation"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Including both iteration ID and name provides the best balance of context and traceability. The iteration ID is unique and allows exact correlation between git history and archived workdir files. This format makes it easy to search git logs for specific iterations and understand when each iteration was completed.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "What should happen if the git commit fails (e.g., no changes to commit, git not configured)?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Fail the entire archive operation and preserve workdir",
+          "pros": "Ensures consistency - both archive and commit must succeed; Prevents situations where archive exists but commit doesn't; User is forced to fix git issues",
+          "cons": "Too strict - could block iteration completion due to minor git issues; Workdir remains cluttered if user doesn't care about git commit; Violates separation of concerns"
+        },
+        {
+          "id": "B",
+          "label": "Log a warning and continue with archive operation",
+          "pros": "Resilient to git configuration issues; Archive still succeeds even if git fails; User can manually commit later if needed; Matches behavior of prompt_complete.py which logs warnings on git failures",
+          "cons": "Silent failures might go unnoticed; Changes might not be committed when user expects them to be; Less strict about keeping git history synchronized"
+        },
+        {
+          "id": "C",
+          "label": "Skip commit silently if nothing to commit, but fail on other git errors",
+          "pros": "Handles the common case of 'no changes' gracefully; Still fails on real errors like git misconfiguration; Balances strictness and resilience",
+          "cons": "Need to distinguish between 'no changes' and other errors; More complex error handling logic"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Logging a warning and continuing matches the existing behavior in prompt_complete.py. Git commit is an enhancement feature controlled by a configuration flag, so it should not block the core archive operation. This approach is resilient to various git states (no changes, no git, misconfigured git) while still informing the user of issues through warnings.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "Should the git commit functionality be added to workdir_archive.py or in a separate script?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Add directly to workdir_archive.py",
+          "pros": "Single script handles complete archive workflow; Easier to maintain order of operations; No need for caller to orchestrate multiple scripts; Matches the all-in-one approach of current archive implementation",
+          "cons": "Increases complexity of archive script; Mixes git operations with file operations; Harder to test git logic independently"
+        },
+        {
+          "id": "B",
+          "label": "Create separate git_commit_iteration.py and call from Web UI or CLI",
+          "pros": "Separation of concerns - archive and git are independent; Easier to test each component; Can reuse git logic elsewhere; More modular architecture",
+          "cons": "Requires caller to orchestrate multiple scripts in correct order; Risk of forgetting to call git commit; Less atomic operation"
+        },
+        {
+          "id": "C",
+          "label": "Add to workdir_archive.py but make it call a shared git utility function",
+          "pros": "Keeps workflow atomic in one script; Git logic can be reused by importing utility; Good separation of concerns while maintaining workflow integrity",
+          "cons": "Need to create a shared git utility module; Slightly more complex than option A; Might be over-engineering for a simple git commit"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Adding git commit directly to workdir_archive.py keeps the archive workflow atomic and ensures the operations happen in the correct order. The script already handles multiple phases (directory copy, zip creation, verification, cleanup) so adding git commit as another phase is consistent with the existing architecture. This prevents the caller from needing to orchestrate multiple scripts and reduces the chance of missing the git commit step.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "Should the git commit include all repository changes or stage files automatically?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Commit all changes with 'git add -A' before committing",
+          "pros": "Ensures all work is captured; Matches user expectation that iteration completion commits everything; Simple and predictable; Matches behavior of prompt_complete.py",
+          "cons": "Could commit unintended files; User might have work in progress they don't want committed; Less control over what gets committed"
+        },
+        {
+          "id": "B",
+          "label": "Only commit already staged files",
+          "pros": "User has full control over what gets committed; Follows git best practices of explicit staging; Safer - won't commit unintended changes",
+          "cons": "Could result in 'nothing to commit' if user forgot to stage; Less convenient; Doesn't match typical RDD workflow where automation handles staging"
+        },
+        {
+          "id": "C",
+          "label": "Stage and commit only files in .rdd-instance/",
+          "pros": "Only commits RDD-related changes; Safe from committing unrelated work; Focused on framework artifacts",
+          "cons": "Won't commit actual code changes made during iteration; Defeats the purpose of capturing iteration work; Too restrictive"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Committing all changes with 'git add -A' matches the existing behavior in prompt_complete.py and aligns with the RDD workflow where iteration completion should capture all work done. Users expect that archiving an iteration means the work is fully saved, including in git history. This provides a clean checkpoint of the repository state at iteration completion.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

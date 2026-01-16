@@ -6,3 +6,13 @@ Fix the issue.
 The tests should succeed on 100%
 Explore the possibility to compress to a zip file the workdir during archive
 %%ENDPROMPT
+
+%%PROMPT P-002 "Commit during archive"
+When the workdir is archived, changes in the repo are generated and stay uncommitted.
+Add to the archive iteration functionality to make git commit (if git option is true) with the name of the itteration
+
+
+### Modification 001
+
+The git message should include iteration ID as well
+%%ENDPROMPT

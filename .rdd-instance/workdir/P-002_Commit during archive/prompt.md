@@ -1,0 +1,2 @@
+When the workdir is archived, changes in the repo are generated and stay uncommitted.
+Add to the archive iteration functionality to make git commit (if git option is true) with the name of the itteration

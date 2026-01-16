@@ -248,6 +248,9 @@ The framework enables:
 
 - [UR-0103] The Web UI Active Prompt page shall update file view button states (Questionnaire, Analysis, Plan, Implementation, Modifications) and their corresponding delete buttons in real-time via 2-second polling to reflect current workflow state from the work iteration registry
 
+- [UR-0104] The framework shall perform a git commit operation during workdir archiving when git-enabled configuration flag is true, using a commit message in the format 'Archive iteration: <iteration-id> - <iteration-name>'.
+
+
 
 
 
@@ -651,6 +654,9 @@ The framework enables:
 - [TR-0184] The workdir archive script shall use a two-phase commit approach: (1) create and verify archive completeness, (2) rename workdir to workdir.deleting, delete the renamed folder with retry logic, and create fresh empty workdir. This ensures atomic-like behavior and fail-fast error detection.
 
 - [TR-0185] The framework shall compress archived workdir directories into zip files using Python's zipfile module with ZIP_DEFLATED compression, verify zip integrity, and delete the directory-based archive after successful verification.
+
+- [TR-0186] The workdir_archive.py script shall execute git commit after zip archive creation and verification but before workdir cleanup, and shall fail the entire archive operation if git commit fails when git-enabled is true.
+
 
 
 

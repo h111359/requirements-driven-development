@@ -4,6 +4,8 @@
 Source of truth:
     `.rdd-instance/workdir/work-iteration-registry.json`
         keys: `iteration-id`, `iteration-name`
+    `.rdd-instance/config/instance-config.json`
+        keys: `git-enabled` (boolean)
 
 Behavior:
     - Reads `iteration-id` and `iteration-name` from the registry JSON.
@@ -11,14 +13,16 @@ Behavior:
             `.rdd-instance/archive/<iteration-id>_<iteration-name>/`
     - Creates a zip file from the archived directory
     - Verifies zip integrity and deletes the directory, keeping only the zip file
+    - If git-enabled is true, performs a git commit with message "Archive iteration: <iteration-id> - <iteration-name>"
     - Refuses to run if the destination archive zip file already exists.
     - Uses two-phase commit approach for safe cleanup:
         1. Archive to directory and verify completeness
         2. Create zip file and verify integrity
         3. Delete directory-based archive
-        4. Rename workdir to workdir.deleting
-        5. Delete the renamed folder with retry logic
-        6. Create fresh empty workdir
+        4. If git-enabled: perform git commit (fails entire operation if commit fails)
+        5. Rename workdir to workdir.deleting
+        6. Delete the renamed folder with retry logic
+        7. Create fresh empty workdir
     - Fails fast on errors rather than best-effort cleanup
 
 This script is intentionally deterministic and non-interactive.
@@ -28,6 +32,7 @@ from __future__ import annotations
 
 import json
 import shutil
+import subprocess
 import sys
 import time
 import zipfile
@@ -65,6 +70,119 @@ def _read_iteration_archive_name(registry_path: Path) -> str:
         )
 
     return archive_name
+
+
+def _read_iteration_name(registry_path: Path) -> str:
+    """Read just the iteration name from the registry.
+    
+    Args:
+        registry_path: Path to work-iteration-registry.json
+        
+    Returns:
+        The iteration name string
+    """
+    with registry_path.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    if not isinstance(data, dict):
+        raise ValueError(f"Registry JSON must be an object: {registry_path}")
+
+    iteration_name = data.get("iteration-name")
+
+    if not isinstance(iteration_name, str) or not iteration_name.strip():
+        raise ValueError(f"Missing or empty 'iteration-name' in {registry_path}")
+
+    return iteration_name.strip()
+
+
+def _read_iteration_id(registry_path: Path) -> str:
+    """Read just the iteration ID from the registry.
+    
+    Args:
+        registry_path: Path to work-iteration-registry.json
+        
+    Returns:
+        The iteration ID string
+    """
+    with registry_path.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    if not isinstance(data, dict):
+        raise ValueError(f"Registry JSON must be an object: {registry_path}")
+
+    iteration_id = data.get("iteration-id")
+
+    if not isinstance(iteration_id, str) or not iteration_id.strip():
+        raise ValueError(f"Missing or empty 'iteration-id' in {registry_path}")
+
+    return iteration_id.strip()
+
+
+def _read_git_enabled(config_path: Path) -> bool:
+    """Read the git-enabled flag from instance config.
+    
+    Args:
+        config_path: Path to instance-config.json
+        
+    Returns:
+        True if git integration is enabled, False otherwise
+    """
+    if not config_path.exists():
+        return False
+    
+    try:
+        with config_path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+        
+        if not isinstance(data, dict):
+            return False
+        
+        git_enabled = data.get("git-enabled", False)
+        return bool(git_enabled)
+    except Exception:
+        return False
+
+
+def _git_commit(repo_root: Path, message: str) -> None:
+    """Perform a git commit with the given message.
+    
+    Args:
+        repo_root: The repository root path
+        message: The commit message
+        
+    Raises:
+        Exception: If git commit fails
+    """
+    try:
+        # First, add all changes
+        result = subprocess.run(
+            ["git", "add", "-A"],
+            cwd=repo_root,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        
+        # Then commit
+        result = subprocess.run(
+            ["git", "commit", "-m", message],
+            cwd=repo_root,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        
+    except subprocess.CalledProcessError as e:
+        # Git commit failed - this fails the entire archive operation
+        raise Exception(
+            f"Git commit failed. The archive was created successfully, "
+            f"but the commit operation failed. "
+            f"Error: {e.stderr if e.stderr else e.stdout}"
+        ) from e
+    except FileNotFoundError:
+        raise Exception(
+            "Git command not found. Ensure git is installed and in your PATH."
+        )
 
 
 def _verify_archive_complete(source: Path, dest: Path) -> bool:
@@ -190,6 +308,7 @@ def main() -> int:
     workdir = repo_root / ".rdd-instance" / "workdir"
     registry_path = workdir / "work-iteration-registry.json"
     archive_root = repo_root / ".rdd-instance" / "archive"
+    config_path = repo_root / ".rdd-instance" / "config" / "instance-config.json"
 
     if not workdir.is_dir():
         raise FileNotFoundError(f"Workdir not found: {workdir}")
@@ -197,6 +316,10 @@ def main() -> int:
         raise FileNotFoundError(f"Work iteration registry not found: {registry_path}")
 
     archive_name = _read_iteration_archive_name(registry_path)
+    iteration_name = _read_iteration_name(registry_path)
+    iteration_id = _read_iteration_id(registry_path)
+    git_enabled = _read_git_enabled(config_path)
+    
     dest_dir = archive_root / archive_name
     zip_path = archive_root / f"{archive_name}.zip"
 
@@ -241,6 +364,12 @@ def main() -> int:
             f"You may manually delete the directory archive if needed. "
             f"Error: {e}"
         ) from e
+
+    # Phase 3.5: Git Commit (if enabled)
+    # After archive is created and verified, commit to git if configured
+    if git_enabled:
+        commit_message = f"Archive iteration: {iteration_id} - {iteration_name}"
+        _git_commit(repo_root, commit_message)
 
     # Phase 4: Two-Phase Commit Cleanup of Workdir
     # Rename workdir to mark it as being deleted (atomic operation)
