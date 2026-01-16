@@ -1,3 +1,0 @@
-I need a quick way to start the web ui both on Windows and Linux. I prefer to doublecklick on a file and to start the Web UI or some alternative but very easy way. If possible - avoid writing commands in the terminal. You should provide me with an analysis of the options I to choose from as a file in the active prompt folder. 
-
-Do not create other files than run.bat and run.sh as launchers placed in .rdd/ folder. These launchers should execute the respective scripts for launching the web interface.

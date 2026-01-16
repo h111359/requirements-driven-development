@@ -1,1 +1,0 @@
-In Active Prompt page - make the statuses and mode buttons to refresh (only them) on every 2 seconds automatically. No interruption of the user activities should be caused by this refreshes.

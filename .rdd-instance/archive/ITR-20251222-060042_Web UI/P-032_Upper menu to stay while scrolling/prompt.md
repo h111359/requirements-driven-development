@@ -1,1 +1,0 @@
-The menu in the Web UI with tabs (like Active Prompt, Prompts History, Workdir etc. should stay always visible while scrolling.

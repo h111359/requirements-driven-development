@@ -1,1 +1,0 @@
-In Insert Snippet modal, when press a snippet is chosen and press Insert - the snippet is not written in the prompt. Fix this bug and be careful not to break the auto-refreshes

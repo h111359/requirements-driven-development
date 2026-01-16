@@ -1,1 +1,0 @@
-When Complete prompt is pressed, the prompt.md and all modifications texts should be copied in `.rdd-instance/workdir/prompts-registry.md` following the `.rdd/conventions/prompts-registry.convention.md`.
