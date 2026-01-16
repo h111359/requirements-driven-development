@@ -1,40 +1,15 @@
 {
-    "iteration-id": "ITR-20260116-153840",
-    "iteration-name": "Tests failures fixes",
-    "prompt-id-sequence-next-value": 4,
+    "iteration-id": "ITR-20260116-220426",
+    "iteration-name": "Fix archiving",
+    "prompt-id-sequence-next-value": 2,
     "prompts": [
         {
             "prompt-id": "P-001",
-            "prompt-title": "Windows test failures",
-            "state": "completed",
-            "questionnaire-generated": true,
-            "questionnaire-answered": true,
-            "plan-generated": true,
-            "implementation-completed": true,
-            "execution-mode": "no-action",
-            "executed": true,
-            "analysis-generated": false
-        },
-        {
-            "prompt-id": "P-002",
-            "prompt-title": "Commit during archive",
+            "prompt-title": "Commit should be after the deletion of workdir",
             "state": "completed",
             "questionnaire-generated": true,
             "questionnaire-answered": true,
             "plan-generated": false,
-            "implementation-completed": true,
-            "execution-mode": "no-action",
-            "executed": true,
-            "modifications-count": 1,
-            "current-modification-id": null
-        },
-        {
-            "prompt-id": "P-003",
-            "prompt-title": "Archive operation failiure",
-            "state": "completed",
-            "questionnaire-generated": true,
-            "questionnaire-answered": true,
-            "plan-generated": true,
             "implementation-completed": true,
             "execution-mode": "no-action",
             "executed": true

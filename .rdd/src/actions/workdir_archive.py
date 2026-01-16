@@ -13,16 +13,17 @@ Behavior:
             `.rdd-instance/archive/<iteration-id>_<iteration-name>/`
     - Creates a zip file from the archived directory
     - Verifies zip integrity and deletes the directory, keeping only the zip file
+    - Clears the workdir, creates a fresh empty one, and verifies it's empty
     - If git-enabled is true, performs a git commit with message "Archive iteration: <iteration-id> - <iteration-name>"
     - Refuses to run if the destination archive zip file already exists.
     - Uses two-phase commit approach for safe cleanup:
         1. Archive to directory and verify completeness
         2. Create zip file and verify integrity
         3. Delete directory-based archive
-        4. If git-enabled: perform git commit (fails entire operation if commit fails)
-        5. Rename workdir to workdir.deleting
-        6. Delete the renamed folder with retry logic
-        7. Create fresh empty workdir
+        4. Rename workdir to workdir.deleting
+        5. Delete the renamed folder with retry logic
+        6. Create fresh empty workdir and verify it's empty
+        7. If git-enabled: perform git commit (fails entire operation if commit fails)
     - Fails fast on errors rather than best-effort cleanup
 
 This script is intentionally deterministic and non-interactive.
@@ -419,12 +420,6 @@ def main() -> int:
             f"Error: {e}"
         ) from e
 
-    # Phase 3.5: Git Commit (if enabled)
-    # After archive is created and verified, commit to git if configured
-    if git_enabled:
-        commit_message = f"Archive iteration: {iteration_id} - {iteration_name}"
-        _git_commit(repo_root, commit_message)
-
     # Phase 4: Two-Phase Commit Cleanup of Workdir
     # Rename workdir to mark it as being deleted (atomic operation)
     workdir_deleting = workdir.parent / f"{workdir.name}.deleting"
@@ -463,6 +458,13 @@ def main() -> int:
             f"but the new workdir at {workdir} is not empty. "
             f"Unexpected items: {remaining_names}"
         )
+
+    # Phase 5: Git Commit (if enabled)
+    # After all cleanup operations succeed and verification passes, commit to git if configured
+    # This ensures the commit represents the complete final state with a verified empty workdir
+    if git_enabled:
+        commit_message = f"Archive iteration: {iteration_id} - {iteration_name}"
+        _git_commit(repo_root, commit_message)
 
     # Keep stdout single-line and agent-friendly - return the zip path
     print(str(zip_path))

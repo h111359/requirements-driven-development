@@ -1,8 +1,0 @@
-2026-01-16T13:34:43.4290000Z Requested labels: windows-latest
-2026-01-16T13:34:43.4290000Z Job defined at: h111359/requirements-driven-development/.github/workflows/tests.yml@refs/pull/87/merge
-2026-01-16T13:34:43.4290000Z Waiting for a runner to pick up this job...
-2026-01-16T13:34:43.4280000Z Evaluating all-tests-windows.if
-2026-01-16T13:34:43.4280000Z Evaluating: success()
-2026-01-16T13:34:43.4280000Z Result: true
-2026-01-16T13:34:43.8940000Z Job is about to start running on the hosted runner: GitHub Actions 1000001002
-2026-01-16T13:34:43.9050000Z Job is waiting for a hosted runner to come online.
