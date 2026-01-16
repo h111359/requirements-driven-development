@@ -275,6 +275,24 @@ repo-root/scripts/
 
 ---
 
+### RDD Instance - Archive Folder Structure
+
+.rdd-instance/archive/
+├── <iteration-id>_<iteration-name>.zip    # Compressed archive of completed work iterations
+
+**Archive Zip Files**
+- **Path**: `.rdd-instance/archive/<iteration-id>_<iteration-name>.zip`
+- **Type**: ZIP archive
+- **Description**: Compressed archive of a completed work iteration's workdir content. Created when archiving an iteration via the workdir_archive.py script. Contains the complete state of the workdir folder including all prompts, plans, questionnaires, implementations, and the work iteration registry. Archives are stored as zip files (not directories) to reduce disk space usage and prevent Windows path length issues caused by deeply nested directory structures.
+- **Naming Convention**: `<iteration-id>_<iteration-name>.zip` where iteration-id follows format `ITR-YYYYMMDD-HHmmss` and iteration-name is the user-provided iteration name.
+- **Contents**: Complete copy of `.rdd-instance/workdir/` folder structure at the time of archiving, including:
+  - `work-iteration-registry.json` - Registry state at archive time
+  - `prompts-registry.md` - Prompts history up to archive time
+  - `<prompt-id>_<prompt-title>/` folders - All prompt working folders with their artifacts
+- **Access**: To access archived content, extract the zip file to a temporary location.
+
+---
+
 ### RDD Instance - Config Folder Structure
 
 .rdd-instance/config/

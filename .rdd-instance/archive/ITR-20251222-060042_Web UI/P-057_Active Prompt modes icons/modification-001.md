@@ -1,1 +1,0 @@
-When hover over the icons, the tooltip appears but do not disappears. Fix this bug.

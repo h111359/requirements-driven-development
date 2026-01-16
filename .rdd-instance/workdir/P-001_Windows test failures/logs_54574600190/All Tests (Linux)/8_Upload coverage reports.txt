@@ -1,0 +1,59 @@
+﻿2026-01-16T13:35:27.8882317Z ##[group]Run codecov/codecov-action@v4
+2026-01-16T13:35:27.8882607Z with:
+2026-01-16T13:35:27.8882794Z   file: ./coverage.xml
+2026-01-16T13:35:27.8882993Z   flags: python
+2026-01-16T13:35:27.8883187Z   name: python-coverage
+2026-01-16T13:35:27.8883392Z env:
+2026-01-16T13:35:27.8883625Z   pythonLocation: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-16T13:35:27.8884036Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib/pkgconfig
+2026-01-16T13:35:27.8884446Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-16T13:35:27.8884809Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-16T13:35:27.8885323Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-16T13:35:27.8885679Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib
+2026-01-16T13:35:27.8885973Z ##[endgroup]
+2026-01-16T13:35:27.9737743Z eventName: pull_request
+2026-01-16T13:35:27.9739684Z baseRef: h111359:dev | headRef: h111359:v2.0.1
+2026-01-16T13:35:27.9748007Z ==> linux OS detected
+2026-01-16T13:35:28.1320800Z https://cli.codecov.io/latest/linux/codecov.SHA256SUM
+2026-01-16T13:35:28.2314148Z gpg: directory '/home/runner/.gnupg' created
+2026-01-16T13:35:28.2359498Z gpg: keybox '/home/runner/.gnupg/pubring.kbx' created
+2026-01-16T13:35:28.2557003Z gpg: /home/runner/.gnupg/trustdb.gpg: trustdb created
+2026-01-16T13:35:28.2558267Z gpg: key 806BB28AED779869: public key "Codecov Uploader (Codecov Uploader Verification Key) <security@codecov.io>" imported
+2026-01-16T13:35:28.2916655Z gpg: Total number processed: 1
+2026-01-16T13:35:28.2917165Z gpg:               imported: 1
+2026-01-16T13:35:28.2976490Z gpg: Signature made Fri Dec  5 15:31:48 2025 UTC
+2026-01-16T13:35:28.2977343Z gpg:                using RSA key 27034E7FDB850E0BBC2C62FF806BB28AED779869
+2026-01-16T13:35:28.2980047Z gpg: Good signature from "Codecov Uploader (Codecov Uploader Verification Key) <security@codecov.io>" [unknown]
+2026-01-16T13:35:28.2981066Z gpg: WARNING: This key is not certified with a trusted signature!
+2026-01-16T13:35:28.2981825Z gpg:          There is no indication that the signature belongs to the owner.
+2026-01-16T13:35:28.2982624Z Primary key fingerprint: 2703 4E7F DB85 0E0B BC2C  62FF 806B B28A ED77 9869
+2026-01-16T13:35:28.3234843Z ==> Uploader SHASUM verified (fd34214e2b2c738e48e3ac90b2c23ec4e975d0e9aee51f2cebe81b5704af3f6c  codecov)
+2026-01-16T13:35:28.3235835Z ==> Running version latest
+2026-01-16T13:35:28.3954488Z Could not pull latest version information: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2026-01-16T13:35:28.3957237Z ==> Running git config --global --add safe.directory /home/runner/work/requirements-driven-development/requirements-driven-development
+2026-01-16T13:35:28.4067385Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/requirements-driven-development/requirements-driven-development
+2026-01-16T13:35:28.4118120Z ==> Running command '/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-commit'
+2026-01-16T13:35:28.4119889Z [command]/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-commit --git-service github -C e871f8cd4043eda6ec5807b1ba38449cb130ffe5
+2026-01-16T13:35:28.7586505Z info - 2026-01-16 13:35:28,758 -- ci service found: github-actions
+2026-01-16T13:35:28.7678652Z warning - 2026-01-16 13:35:28,767 -- No config file could be found. Ignoring config.
+2026-01-16T13:35:28.7990386Z warning - 2026-01-16 13:35:28,798 -- Branch `v2.0.1` is protected but no token was provided
+2026-01-16T13:35:28.7991725Z warning - 2026-01-16 13:35:28,798 -- For information on Codecov upload tokens, see https://docs.codecov.com/docs/codecov-tokens
+2026-01-16T13:35:28.9988580Z info - 2026-01-16 13:35:28,998 -- Process Commit creating complete
+2026-01-16T13:35:28.9989598Z error - 2026-01-16 13:35:28,998 -- Commit creating failed: {"message":"Token required - not valid tokenless upload"}
+2026-01-16T13:35:29.1208871Z ==> Running command '/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-report'
+2026-01-16T13:35:29.1211749Z [command]/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-report --git-service github -C e871f8cd4043eda6ec5807b1ba38449cb130ffe5
+2026-01-16T13:35:29.4731200Z info - 2026-01-16 13:35:29,472 -- ci service found: github-actions
+2026-01-16T13:35:29.4822881Z warning - 2026-01-16 13:35:29,481 -- No config file could be found. Ignoring config.
+2026-01-16T13:35:29.8035994Z info - 2026-01-16 13:35:29,803 -- Process Report creating complete
+2026-01-16T13:35:29.8041125Z error - 2026-01-16 13:35:29,803 -- Report creating failed: {"message":"Token required - not valid tokenless upload"}
+2026-01-16T13:35:29.9226976Z ==> Running command '/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov do-upload'
+2026-01-16T13:35:29.9229578Z [command]/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov do-upload -f ./coverage.xml -F python --git-service github -n python-coverage -C e871f8cd4043eda6ec5807b1ba38449cb130ffe5
+2026-01-16T13:35:30.2694460Z info - 2026-01-16 13:35:30,268 -- ci service found: github-actions
+2026-01-16T13:35:30.2803661Z warning - 2026-01-16 13:35:30,279 -- No config file could be found. Ignoring config.
+2026-01-16T13:35:30.3148071Z warning - 2026-01-16 13:35:30,314 -- xcrun is not installed or can't be found.
+2026-01-16T13:35:30.3754148Z warning - 2026-01-16 13:35:30,375 -- No gcov data found.
+2026-01-16T13:35:30.3758597Z warning - 2026-01-16 13:35:30,375 -- coverage.py is not installed or can't be found.
+2026-01-16T13:35:30.4632148Z info - 2026-01-16 13:35:30,462 -- Found 1 coverage files to report
+2026-01-16T13:35:30.4633392Z info - 2026-01-16 13:35:30,463 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/coverage.xml
+2026-01-16T13:35:30.7667864Z info - 2026-01-16 13:35:30,766 -- Process Upload complete
+2026-01-16T13:35:30.7668971Z error - 2026-01-16 13:35:30,766 -- Upload failed: {"message":"Token required - not valid tokenless upload"}

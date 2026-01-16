@@ -1,1 +1,0 @@
-When there are modifications already executed but not in modification mode, over the status mode stand only a single digit, which is not clear what it is. Make it more clear that this are the number of modifications executed so far

@@ -1,0 +1,19 @@
+{
+    "iteration-id": "ITR-20260116-153840",
+    "iteration-name": "Tests failures fixes",
+    "prompt-id-sequence-next-value": 2,
+    "prompts": [
+        {
+            "prompt-id": "P-001",
+            "prompt-title": "Windows test failures",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": true,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "analysis-generated": false
+        }
+    ]
+}

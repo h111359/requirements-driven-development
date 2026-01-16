@@ -1,4 +1,0 @@
-{
-  "context": "The prompt requests analysis and improvement of the workdir archiving functionality (issue 84) where folders without files remain after archiving. The prompt provides specific implementation requirements including verification steps, strict cleanup, retry logic, and a two-phase commit approach. The instructions are detailed and prescriptive, leaving minimal ambiguity for implementation decisions.",
-  "questions": []
-}

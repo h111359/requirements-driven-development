@@ -8,17 +8,21 @@ Key test scenarios covered:
 - Full iteration cycle (create → add prompts → complete → archive)
 - Workdir cleanup (archive → clear → verify registry preserved)
 - Archive integrity (verify archived files match source, folder naming)
+- Zip-based archives (verify zip creation and integrity)
 
 Special setup requirements:
 - Uses temp_rdd_instance fixture
-- Tests create real archive folders
+- Tests create real archive zip files
 - Validates complete archive structure
+- Cleans up test archives after completion
 """
 
 import pytest
 import subprocess
 import sys
 import json
+import zipfile
+import shutil
 from pathlib import Path
 
 
@@ -30,7 +34,7 @@ class TestIterationArchiving:
     """Tests for complete iteration archiving workflow"""
     
     def test_archive_creates_proper_structure(self, temp_rdd_instance):
-        """Test that archiving creates correct folder structure"""
+        """Test that archiving creates correct zip file structure"""
         test_dir = temp_rdd_instance
         instance_dir = test_dir / ".rdd-instance"
         actions_dir = test_dir / ".rdd" / "src" / "actions"
@@ -41,6 +45,8 @@ class TestIterationArchiving:
         original_cwd = Path.cwd()
         import os
         os.chdir(test_dir)
+        
+        created_archives = []
         
         try:
             # Read registry to get iteration info
@@ -64,7 +70,6 @@ class TestIterationArchiving:
             )
             
             # Archive iteration (if script exists)
-            # Note: Archive script may not exist yet
             archive_script = actions_dir / "workdir_archive.py"
             if archive_script.exists():
                 result = subprocess.run(
@@ -75,13 +80,32 @@ class TestIterationArchiving:
                 )
                 
                 if result.returncode == 0:
-                    # Verify archive folder created with correct naming
-                    expected_archive = archive_dir / f"{iteration_id}_{iteration_name}"
-                    assert expected_archive.exists(), f"Archive folder not found: {expected_archive}"
+                    # Verify archive zip file created with correct naming
+                    expected_archive_zip = archive_dir / f"{iteration_id}_{iteration_name}.zip"
+                    created_archives.append(expected_archive_zip)
                     
-                    # Verify registry preserved
-                    archived_registry = expected_archive / "work-iteration-registry.json"
-                    assert archived_registry.exists()
+                    assert expected_archive_zip.exists(), f"Archive zip file not found: {expected_archive_zip}"
+                    
+                    # Verify zip file integrity
+                    with zipfile.ZipFile(expected_archive_zip, 'r') as zipf:
+                        # Test zip integrity
+                        bad_file = zipf.testzip()
+                        assert bad_file is None, f"Zip file corrupted: {bad_file}"
+                        
+                        # Verify registry preserved in zip
+                        file_list = zipf.namelist()
+                        assert "work-iteration-registry.json" in file_list, "Registry not found in archive"
+                    
+                    # Verify directory-based archive was removed
+                    directory_archive = archive_dir / f"{iteration_id}_{iteration_name}"
+                    assert not directory_archive.exists(), f"Directory archive should be removed: {directory_archive}"
             
         finally:
             os.chdir(original_cwd)
+            # Clean up any created archives
+            for archive_path in created_archives:
+                if archive_path.exists():
+                    archive_path.unlink()
+            # Also clean up archive directory if empty
+            if archive_dir.exists() and not list(archive_dir.iterdir()):
+                archive_dir.rmdir()

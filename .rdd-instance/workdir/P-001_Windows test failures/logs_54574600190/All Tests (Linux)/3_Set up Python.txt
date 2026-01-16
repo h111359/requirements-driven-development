@@ -1,0 +1,37 @@
+﻿2026-01-16T13:34:49.9957745Z ##[group]Run actions/setup-python@v5
+2026-01-16T13:34:49.9958456Z with:
+2026-01-16T13:34:49.9959020Z   python-version: 3.9
+2026-01-16T13:34:49.9959606Z   check-latest: false
+2026-01-16T13:34:49.9960315Z   token: ***
+2026-01-16T13:34:49.9960872Z   update-environment: true
+2026-01-16T13:34:49.9961465Z   allow-prereleases: false
+2026-01-16T13:34:49.9962046Z   freethreaded: false
+2026-01-16T13:34:49.9962612Z ##[endgroup]
+2026-01-16T13:34:50.1614356Z ##[group]Installed versions
+2026-01-16T13:34:50.1706514Z Version 3.9 was not found in the local cache
+2026-01-16T13:34:50.8887457Z Version 3.9 is available for downloading
+2026-01-16T13:34:50.8889490Z Download from "https://github.com/actions/python-versions/releases/download/3.9.25-19039189640/python-3.9.25-linux-24.04-x64.tar.gz"
+2026-01-16T13:34:51.5292428Z Extract downloaded archive
+2026-01-16T13:34:51.5394553Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/c4add7c5-ac36-47e8-a0a6-a3daaf144fb8 -f /home/runner/work/_temp/5515cc36-0b60-4077-8ea1-6e5d9b313f7d
+2026-01-16T13:34:52.8883626Z Execute installation script
+2026-01-16T13:34:52.8971532Z Check if Python hostedtoolcache folder exist...
+2026-01-16T13:34:52.8972240Z Create Python 3.9.25 folder
+2026-01-16T13:34:52.8994519Z Copy Python binaries to hostedtoolcache folder
+2026-01-16T13:34:53.3973530Z Create additional symlinks (Required for the UsePythonVersion Azure Pipelines task and the setup-python GitHub Action)
+2026-01-16T13:34:53.4015137Z Upgrading pip...
+2026-01-16T13:34:55.7198200Z Looking in links: /tmp/tmp0s5p0t75
+2026-01-16T13:34:55.7202529Z Requirement already satisfied: setuptools in /opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/site-packages (79.0.1)
+2026-01-16T13:34:55.7206721Z Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/site-packages (23.0.1)
+2026-01-16T13:34:56.9435935Z Collecting pip
+2026-01-16T13:34:56.9744285Z Downloading pip-25.3-py3-none-any.whl (1.8 MB)
+2026-01-16T13:34:57.0122379Z ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 50.7 MB/s eta 0:00:00
+2026-01-16T13:34:57.0122919Z 
+2026-01-16T13:34:57.0720421Z Installing collected packages: pip
+2026-01-16T13:34:57.0721455Z Attempting uninstall: pip
+2026-01-16T13:34:57.0727463Z Found existing installation: pip 23.0.1
+2026-01-16T13:34:57.2564301Z Uninstalling pip-23.0.1:
+2026-01-16T13:34:57.2642436Z Successfully uninstalled pip-23.0.1
+2026-01-16T13:34:58.0865975Z Successfully installed pip-25.3
+2026-01-16T13:34:58.1479214Z Create complete file
+2026-01-16T13:34:58.1520314Z Successfully set up CPython (3.9.25)
+2026-01-16T13:34:58.1521628Z ##[endgroup]

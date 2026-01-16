@@ -1,1 +1,0 @@
-Currently the Create New Prompt button is in Prompt History page. Move it in Active Prompt page. Swap the menu entries "Prompt History" and "Active Prompt" so "Active Prompt" to be most left one. Make "Active Prompt" page to be the landing page of the web portal.

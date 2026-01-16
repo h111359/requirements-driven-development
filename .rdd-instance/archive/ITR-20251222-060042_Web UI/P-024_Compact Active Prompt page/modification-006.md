@@ -1,1 +1,0 @@
-The questionnaire is generated and even answered, but the state in Active Prompt is not reflecting that - stays in the same way as it is not generated at all. Fix that

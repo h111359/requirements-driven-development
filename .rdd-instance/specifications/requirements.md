@@ -307,7 +307,7 @@ The framework enables:
 
 - [TR-0019] The framework shall implement safety checks that prevent iteration creation unless the workdir is empty.
 
-- [TR-0020] The framework shall archive each completed iteration in `.rdd-instance/archive/<iteration-id>_<iteration-name>/`.
+- [TR-0020] The framework shall archive each completed iteration in .rdd-instance/archive/<iteration-id>_<iteration-name>.zip as a compressed zip file.
 
 - [TR-0021] All generated questions shall follow the question-formatting standards defined in `.rdd/conventions/questions-formatting.md`.
 
@@ -649,6 +649,9 @@ The framework enables:
 - [TR-0183] The framework shall enforce a maximum prompt title length of 80 characters to ensure cross-platform compatibility with Windows file path limitations (MAX_PATH = 260 characters).
 
 - [TR-0184] The workdir archive script shall use a two-phase commit approach: (1) create and verify archive completeness, (2) rename workdir to workdir.deleting, delete the renamed folder with retry logic, and create fresh empty workdir. This ensures atomic-like behavior and fail-fast error detection.
+
+- [TR-0185] The framework shall compress archived workdir directories into zip files using Python's zipfile module with ZIP_DEFLATED compression, verify zip integrity, and delete the directory-based archive after successful verification.
+
 
 
 

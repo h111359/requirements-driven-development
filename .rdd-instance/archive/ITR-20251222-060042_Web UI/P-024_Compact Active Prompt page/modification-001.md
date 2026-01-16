@@ -1,1 +1,0 @@
-In Q2 in the questionnaire I have chosen "C. Keep current button group but reduce padding, margins, and font size " but you have created a dropdown. Why? I want the button group back in the place of the current dropdown

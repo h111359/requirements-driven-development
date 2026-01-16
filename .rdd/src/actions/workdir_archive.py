@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Archive the current workdir into `.rdd-instance/archive/<iteration-id>_<iteration-name>/`.
+"""Archive the current workdir into `.rdd-instance/archive/<iteration-id>_<iteration-name>.zip`.
 
 Source of truth:
     `.rdd-instance/workdir/work-iteration-registry.json`
@@ -9,12 +9,16 @@ Behavior:
     - Reads `iteration-id` and `iteration-name` from the registry JSON.
     - Copies the entire contents of `.rdd-instance/workdir/` into a new folder:
             `.rdd-instance/archive/<iteration-id>_<iteration-name>/`
-    - Refuses to run if the destination archive folder already exists.
+    - Creates a zip file from the archived directory
+    - Verifies zip integrity and deletes the directory, keeping only the zip file
+    - Refuses to run if the destination archive zip file already exists.
     - Uses two-phase commit approach for safe cleanup:
-        1. Archive and verify completeness
-        2. Rename workdir to workdir.deleting
-        3. Delete the renamed folder with retry logic
-        4. Create fresh empty workdir
+        1. Archive to directory and verify completeness
+        2. Create zip file and verify integrity
+        3. Delete directory-based archive
+        4. Rename workdir to workdir.deleting
+        5. Delete the renamed folder with retry logic
+        6. Create fresh empty workdir
     - Fails fast on errors rather than best-effort cleanup
 
 This script is intentionally deterministic and non-interactive.
@@ -26,6 +30,7 @@ import json
 import shutil
 import sys
 import time
+import zipfile
 from pathlib import Path
 
 
@@ -131,6 +136,54 @@ def _delete_with_retry(
                 ) from last_error
 
 
+def _create_zip_archive(source_dir: Path, zip_path: Path) -> None:
+    """Create a zip file from a directory.
+    
+    Args:
+        source_dir: The directory to compress
+        zip_path: The destination zip file path
+        
+    Raises:
+        Exception: If zip creation fails
+    """
+    try:
+        with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for file_path in source_dir.rglob('*'):
+                if file_path.is_file():
+                    # Store the path relative to the source directory
+                    arcname = file_path.relative_to(source_dir)
+                    zipf.write(file_path, arcname)
+    except Exception as e:
+        # Clean up partial zip file on failure
+        if zip_path.exists():
+            zip_path.unlink()
+        raise Exception(
+            f"Failed to create zip archive at {zip_path}. Error: {e}"
+        ) from e
+
+
+def _verify_zip_integrity(zip_path: Path) -> bool:
+    """Verify that a zip file is valid and can be read.
+    
+    Args:
+        zip_path: Path to the zip file to verify
+        
+    Returns:
+        True if zip file is valid, False otherwise
+    """
+    try:
+        with zipfile.ZipFile(zip_path, 'r') as zipf:
+            # Test the zip file integrity
+            bad_file = zipf.testzip()
+            if bad_file is not None:
+                return False
+            # Ensure we can list all files
+            file_list = zipf.namelist()
+            return len(file_list) > 0  # Should have at least the registry file
+    except Exception:
+        return False
+
+
 def main() -> int:
     repo_root = _repo_root()
 
@@ -145,26 +198,51 @@ def main() -> int:
 
     archive_name = _read_iteration_archive_name(registry_path)
     dest_dir = archive_root / archive_name
+    zip_path = archive_root / f"{archive_name}.zip"
 
-    if dest_dir.exists():
-        print(f"Archive destination already exists ({dest_dir}); nothing to do.")
+    # Check if zip archive already exists
+    if zip_path.exists():
+        print(f"Archive zip file already exists ({zip_path}); nothing to do.")
         return 0
 
     archive_root.mkdir(parents=True, exist_ok=True)
 
-    # Phase 1: Archive and Verify
+    # Phase 1: Archive to Directory and Verify
     # Copy the entire directory tree to archive location
     shutil.copytree(workdir, dest_dir)
     
-    # Verify the archive copy is complete before proceeding to cleanup
+    # Verify the archive copy is complete before proceeding
     if not _verify_archive_complete(workdir, dest_dir):
         raise RuntimeError(
             f"Archive verification failed. The archive at {dest_dir} does not "
             f"match the source at {workdir}. File counts differ. "
-            f"Archive created but workdir cleanup skipped for safety."
+            f"Archive created but further processing aborted for safety."
         )
 
-    # Phase 2: Two-Phase Commit Cleanup
+    # Phase 2: Create Zip Archive and Verify
+    # Create zip file from the archived directory
+    _create_zip_archive(dest_dir, zip_path)
+    
+    # Verify the zip file integrity
+    if not _verify_zip_integrity(zip_path):
+        raise RuntimeError(
+            f"Zip archive verification failed. The zip file at {zip_path} "
+            f"failed integrity check. Directory archive at {dest_dir} preserved for safety."
+        )
+    
+    # Phase 3: Delete Directory-Based Archive
+    # Now that zip is verified, remove the directory-based archive
+    try:
+        _delete_with_retry(dest_dir, max_retries=3, delay=0.5)
+    except Exception as e:
+        raise RuntimeError(
+            f"Failed to delete directory archive at {dest_dir}. "
+            f"Zip archive successfully created at {zip_path}. "
+            f"You may manually delete the directory archive if needed. "
+            f"Error: {e}"
+        ) from e
+
+    # Phase 4: Two-Phase Commit Cleanup of Workdir
     # Rename workdir to mark it as being deleted (atomic operation)
     workdir_deleting = workdir.parent / f"{workdir.name}.deleting"
     
@@ -173,7 +251,7 @@ def main() -> int:
     except Exception as e:
         raise RuntimeError(
             f"Failed to rename {workdir} to {workdir_deleting}. "
-            f"Archive successfully created at {dest_dir}, but cleanup could not proceed. "
+            f"Archive successfully created at {zip_path}, but cleanup could not proceed. "
             f"Error: {e}"
         ) from e
     
@@ -183,7 +261,7 @@ def main() -> int:
     except Exception as e:
         raise RuntimeError(
             f"Failed to delete {workdir_deleting}. "
-            f"Archive successfully created at {dest_dir}. "
+            f"Archive successfully created at {zip_path}. "
             f"The folder has been renamed to indicate deletion failure. "
             f"Please manually investigate and remove {workdir_deleting}. "
             f"Error: {e}"
@@ -198,13 +276,13 @@ def main() -> int:
         remaining_names = [item.name for item in remaining_items]
         raise RuntimeError(
             f"Workdir cleanup verification failed. "
-            f"Archive created at {dest_dir} and old workdir deleted, "
+            f"Archive created at {zip_path} and old workdir deleted, "
             f"but the new workdir at {workdir} is not empty. "
             f"Unexpected items: {remaining_names}"
         )
 
-    # Keep stdout single-line and agent-friendly.
-    print(str(dest_dir))
+    # Keep stdout single-line and agent-friendly - return the zip path
+    print(str(zip_path))
     return 0
 
 

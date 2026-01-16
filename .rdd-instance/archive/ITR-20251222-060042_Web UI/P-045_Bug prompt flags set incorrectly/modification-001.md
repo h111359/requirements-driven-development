@@ -1,1 +1,0 @@
-Change the icon for Implementation completed = true with negated colors as it is not well visible now that it is active. Should be with filled green background as the other icons depicting true value of flags

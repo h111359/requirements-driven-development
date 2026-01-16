@@ -1,1 +1,0 @@
-Make the icons of statuses to be right above the buttons for the execution modes and to reflect the respective mode. Clarify will have two icons - for generated and answered
