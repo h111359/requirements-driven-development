@@ -1,1 +1,0 @@
-The radio buttons for execution mode in Active Prompt page should reflect always the value of "execution-mode" entry in `.rdd-instance/workdir/work-iteration-registry.json`. Every refresh of the statuses of the files in Active Prompt should include radio buttons update as well.

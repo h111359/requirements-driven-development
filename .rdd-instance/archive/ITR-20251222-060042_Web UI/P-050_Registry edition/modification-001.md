@@ -1,1 +1,0 @@
-Merge Prompt History to Workdir registry - take the view buttons from Prompt History with their full functionality and add it to the table of prompts in Workdir

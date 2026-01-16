@@ -1,1 +1,0 @@
-Remove " Archive Current: " label. Make the button for archiving smaller

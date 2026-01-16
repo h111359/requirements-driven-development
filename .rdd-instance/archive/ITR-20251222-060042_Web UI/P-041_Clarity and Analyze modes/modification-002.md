@@ -1,1 +1,0 @@
-Change the Plan icon as the current one is with too tiny lines and it is not visible is it ON or OFF. Increase with 10% the size of all the icons

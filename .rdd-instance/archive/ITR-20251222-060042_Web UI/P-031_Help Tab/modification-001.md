@@ -1,1 +1,0 @@
-Bug: I see the following in the User Guide text: "trong>" where in markdown is used "**". Fix it

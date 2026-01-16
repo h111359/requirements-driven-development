@@ -1,1 +1,0 @@
-Only the active Execution mode button should have solid backgroud. The rest should negate the colors so to be very clear which mode is the active one

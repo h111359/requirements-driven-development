@@ -1,1 +1,0 @@
-There should not be distinction between main and modification types of prompts. The type parameter of the prompt should be removed.

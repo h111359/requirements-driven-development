@@ -1,1 +1,0 @@
-In Questionnaire - make the context and the navigation of the questions on left and the current question and its answers on the right (changing the displayed question in the same placeholder). Keep all the current functionality. Reflect in requirements.md

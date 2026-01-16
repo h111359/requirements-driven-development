@@ -1,1 +1,0 @@
-Remove the empty "File Viewer" element at the bottom of Workdir page

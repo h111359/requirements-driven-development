@@ -1,2 +1,0 @@
-- Add/adjust deterministic scripts needed by “execute command” so Copilot isn’t doing file logic:
-  - `prompt_set_state.py` (change prompt state; enforce “single active prompt” invariant)
