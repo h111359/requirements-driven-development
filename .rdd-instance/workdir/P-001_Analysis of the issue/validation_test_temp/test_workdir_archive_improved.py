@@ -30,8 +30,8 @@ from pathlib import Path
 
 
 def _repo_root() -> Path:
-    # This file lives at: <repo>/.rdd/src/actions/workdir-archive.py
-    return Path(__file__).resolve().parents[3]
+    # Modified for testing
+    return Path(r'/home/hromar/Desktop/vscode/requirements-driven-development/.rdd-instance/workdir/P-001_Analysis of the issue/validation_test_temp')
 
 
 def _read_iteration_archive_name(registry_path: Path) -> str:

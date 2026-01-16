@@ -1,0 +1,19 @@
+{
+    "iteration-id": "ITR-20260113-195937",
+    "iteration-name": "Issue 84 archive workdir",
+    "prompt-id-sequence-next-value": 2,
+    "prompts": [
+        {
+            "prompt-id": "P-001",
+            "prompt-title": "Analysis of the issue",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": true,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "analysis-generated": false
+        }
+    ]
+}

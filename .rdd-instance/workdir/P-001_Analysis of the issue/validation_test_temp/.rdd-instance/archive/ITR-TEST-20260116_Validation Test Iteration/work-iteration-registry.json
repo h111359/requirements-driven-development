@@ -1,0 +1,17 @@
+{
+    "iteration-id": "ITR-TEST-20260116",
+    "iteration-name": "Validation Test Iteration",
+    "prompt-id-sequence-next-value": 3,
+    "prompts": [
+        {
+            "prompt-id": "P-001",
+            "prompt-title": "Test Prompt 1",
+            "state": "completed"
+        },
+        {
+            "prompt-id": "P-002",
+            "prompt-title": "Test Prompt 2",
+            "state": "active"
+        }
+    ]
+}

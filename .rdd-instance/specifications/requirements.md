@@ -648,6 +648,9 @@ The framework enables:
 
 - [TR-0183] The framework shall enforce a maximum prompt title length of 80 characters to ensure cross-platform compatibility with Windows file path limitations (MAX_PATH = 260 characters).
 
+- [TR-0184] The workdir archive script shall use a two-phase commit approach: (1) create and verify archive completeness, (2) rename workdir to workdir.deleting, delete the renamed folder with retry logic, and create fresh empty workdir. This ensures atomic-like behavior and fail-fast error detection.
+
+
 
 
 
