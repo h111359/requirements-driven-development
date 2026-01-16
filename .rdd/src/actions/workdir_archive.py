@@ -31,6 +31,7 @@ This script is intentionally deterministic and non-interactive.
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -254,6 +255,43 @@ def _delete_with_retry(
                 ) from last_error
 
 
+def _normalize_file_timestamp(file_path: Path) -> bool:
+    """Normalize file timestamp to be compatible with ZIP format.
+    
+    ZIP format does not support timestamps before 1980-01-01 00:00:00.
+    This function checks if a file has a pre-1980 timestamp and normalizes
+    it to 1980-01-01 00:00:00 if needed.
+    
+    Args:
+        file_path: Path to the file to normalize
+        
+    Returns:
+        True if the timestamp was normalized, False otherwise
+        
+    Raises:
+        Exception: If timestamp normalization fails
+    """
+    try:
+        # Get the current modification time
+        stat_info = os.stat(file_path)
+        mtime = stat_info.st_mtime
+        
+        # ZIP format minimum timestamp: 1980-01-01 00:00:00
+        # Unix timestamp for 1980-01-01 00:00:00 UTC is 315532800
+        MIN_ZIP_TIMESTAMP = 315532800
+        
+        if mtime < MIN_ZIP_TIMESTAMP:
+            # File has a pre-1980 timestamp, normalize it
+            os.utime(file_path, (MIN_ZIP_TIMESTAMP, MIN_ZIP_TIMESTAMP))
+            return True
+        
+        return False
+    except Exception as e:
+        raise Exception(
+            f"Failed to normalize timestamp for {file_path}. Error: {e}"
+        ) from e
+
+
 def _create_zip_archive(source_dir: Path, zip_path: Path) -> None:
     """Create a zip file from a directory.
     
@@ -264,13 +302,29 @@ def _create_zip_archive(source_dir: Path, zip_path: Path) -> None:
     Raises:
         Exception: If zip creation fails
     """
+    normalized_count = 0
+    
     try:
         with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for file_path in source_dir.rglob('*'):
                 if file_path.is_file():
+                    # Normalize timestamp before adding to zip to prevent
+                    # "ZIP does not support timestamps before 1980" errors
+                    if _normalize_file_timestamp(file_path):
+                        normalized_count += 1
+                    
                     # Store the path relative to the source directory
                     arcname = file_path.relative_to(source_dir)
                     zipf.write(file_path, arcname)
+        
+        # Log summary if any timestamps were normalized
+        if normalized_count > 0:
+            print(
+                f"INFO: Normalized {normalized_count} file(s) with pre-1980 timestamps "
+                f"to ensure ZIP format compatibility.",
+                file=sys.stderr
+            )
+            
     except Exception as e:
         # Clean up partial zip file on failure
         if zip_path.exists():
