@@ -2,17 +2,7 @@
 
 RDD Framework
 
-<!-- 
-Migration Note: On January 4, 2026, requirement IDs were migrated from timestamp-based 
-format (UR-YYYYMMDD-HHmm, TR-YYYYMMDD-HHmm) to sequential numeric format (UR-0001, TR-0001). 
-Git history preserves original IDs for traceability.
--->
-
-
-
 ## Product Overview
-
-The product is a system that serves to be installed the RDD framework in a software code repository (with or without git versioning).
 
 The RDD framework aims to standardize execution of user defined tasks to GitHub copilot in form of prompts, maintain full traceability of prompt history, and provide a simplified developer experience through a unified execution model and a web-based interface. 
 
