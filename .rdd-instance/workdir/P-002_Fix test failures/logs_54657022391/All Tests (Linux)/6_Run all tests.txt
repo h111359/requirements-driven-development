@@ -1,0 +1,157 @@
+﻿2026-01-17T16:24:46.2283184Z ##[group]Run python scripts/run-tests.py
+2026-01-17T16:24:46.2283651Z [36;1mpython scripts/run-tests.py[0m
+2026-01-17T16:24:46.2317250Z shell: /usr/bin/bash -e {0}
+2026-01-17T16:24:46.2317701Z env:
+2026-01-17T16:24:46.2318146Z   pythonLocation: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:46.2318789Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib/pkgconfig
+2026-01-17T16:24:46.2319531Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:46.2320113Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:46.2320716Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:46.2321363Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib
+2026-01-17T16:24:46.2321864Z ##[endgroup]
+2026-01-17T16:24:46.8973015Z ============================= test session starts ==============================
+2026-01-17T16:24:46.8974853Z platform linux -- Python 3.9.25, pytest-8.4.2, pluggy-1.6.0 -- /home/runner/work/requirements-driven-development/requirements-driven-development/.venv/bin/python
+2026-01-17T16:24:46.8977192Z cachedir: .pytest_cache
+2026-01-17T16:24:46.8978184Z rootdir: /home/runner/work/requirements-driven-development/requirements-driven-development
+2026-01-17T16:24:46.8979672Z plugins: timeout-2.4.0, cov-7.0.0, xdist-3.8.0, mock-3.15.1
+2026-01-17T16:24:47.0387517Z collecting ... collected 73 items
+2026-01-17T16:24:47.0388278Z 
+2026-01-17T16:24:47.0404675Z tests/rdd-framework/actions/test_execution_actions.py::TestExecutionModeManagement::test_set_execution_mode_valid_modes PASSED [  1%]
+2026-01-17T16:24:47.0416857Z tests/rdd-framework/actions/test_execution_actions.py::TestExecutionModeManagement::test_set_execution_mode_invalid_mode PASSED [  2%]
+2026-01-17T16:24:47.0428871Z tests/rdd-framework/actions/test_execution_actions.py::TestImplementationTracking::test_implementation_completed_on_sets_flag PASSED [  4%]
+2026-01-17T16:24:47.0440390Z tests/rdd-framework/actions/test_execution_actions.py::TestImplementationTracking::test_implementation_completed_off_unsets_flag PASSED [  5%]
+2026-01-17T16:24:47.0460230Z tests/rdd-framework/actions/test_execution_actions.py::TestExecutionTracking::test_set_executed_on_sets_flag PASSED [  6%]
+2026-01-17T16:24:47.0472421Z tests/rdd-framework/actions/test_misc_actions.py::TestFileListingGeneration::test_files_list_csv_refresh_creates_csv PASSED [  8%]
+2026-01-17T16:24:47.0484614Z tests/rdd-framework/actions/test_misc_actions.py::TestFileListingGeneration::test_files_list_csv_preserves_descriptions PASSED [  9%]
+2026-01-17T16:24:47.0497155Z tests/rdd-framework/actions/test_misc_actions.py::TestFileListingGeneration::test_files_list_csv_adds_new_files PASSED [ 10%]
+2026-01-17T16:24:47.0509330Z tests/rdd-framework/actions/test_misc_actions.py::TestCsvDescriptionUpdate::test_set_description_updates_entry PASSED [ 12%]
+2026-01-17T16:24:47.0521545Z tests/rdd-framework/actions/test_modification_actions.py::TestModificationCreation::test_create_modification_sequential_ids PASSED [ 13%]
+2026-01-17T16:24:47.0533807Z tests/rdd-framework/actions/test_modification_actions.py::TestModificationCreation::test_create_modification_requires_implementation_completed PASSED [ 15%]
+2026-01-17T16:24:47.0545556Z tests/rdd-framework/actions/test_modification_actions.py::TestModificationCreation::test_create_modification_enforces_single_active PASSED [ 16%]
+2026-01-17T16:24:47.0557254Z tests/rdd-framework/actions/test_modification_actions.py::TestModificationCompletion::test_complete_modification_updates_log PASSED [ 17%]
+2026-01-17T16:24:47.0569498Z tests/rdd-framework/actions/test_modification_actions.py::TestModificationCompletion::test_complete_modification_resets_current_id PASSED [ 19%]
+2026-01-17T16:24:47.0943722Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptCreate::test_create_prompt_with_auto_id PASSED [ 20%]
+2026-01-17T16:24:47.0963964Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptCreate::test_create_prompt_enforces_single_active PASSED [ 21%]
+2026-01-17T16:24:47.1002010Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptCreate::test_create_prompt_sanitizes_title_for_folder PASSED [ 23%]
+2026-01-17T16:24:47.1015990Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptSetState::test_set_state_to_completed PASSED [ 24%]
+2026-01-17T16:24:47.1027960Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptSetState::test_set_state_enforces_single_active PASSED [ 26%]
+2026-01-17T16:24:47.1039914Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptSetState::test_set_state_allows_bidirectional_transition PASSED [ 27%]
+2026-01-17T16:24:47.1051898Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptSetState::test_set_state_defaults_to_active_prompt PASSED [ 28%]
+2026-01-17T16:24:47.1078120Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptSetState::test_set_state_validates_state_parameter PASSED [ 30%]
+2026-01-17T16:24:47.1089789Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptComplete::test_complete_prompt_updates_state PASSED [ 31%]
+2026-01-17T16:24:47.1101581Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptComplete::test_complete_prompt_with_git_disabled PASSED [ 32%]
+2026-01-17T16:24:47.1113369Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptComplete::test_complete_prompt_with_git_enabled PASSED [ 34%]
+2026-01-17T16:24:47.1124934Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptComplete::test_complete_prompt_handles_git_failure_gracefully PASSED [ 35%]
+2026-01-17T16:24:47.1136564Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptListActions::test_find_active_prompt PASSED [ 36%]
+2026-01-17T16:24:47.1150608Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptValidation::test_validate_prompt_id_format PASSED [ 38%]
+2026-01-17T16:24:47.1162294Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptValidation::test_parse_params_from_argv PASSED [ 39%]
+2026-01-17T16:24:47.1182374Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptFolderCreation::test_ensure_prompt_workdir_artifacts PASSED [ 41%]
+2026-01-17T16:24:47.1195885Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementCreation::test_create_ur_with_validation PASSED [ 42%]
+2026-01-17T16:24:47.1207557Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementCreation::test_create_tr_with_validation PASSED [ 43%]
+2026-01-17T16:24:47.1219337Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementCreation::test_create_requirement_bypasses_validation PASSED [ 45%]
+2026-01-17T16:24:47.1230678Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementCreation::test_create_requirement_sequential_ids PASSED [ 46%]
+2026-01-17T16:24:47.1241991Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementModification::test_modify_ur_preserves_format PASSED [ 47%]
+2026-01-17T16:24:47.1253326Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementModification::test_modify_tr_preserves_format PASSED [ 49%]
+2026-01-17T16:24:47.1264761Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementModification::test_modify_nonexistent_requirement_fails PASSED [ 50%]
+2026-01-17T16:24:47.1275995Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementDeletion::test_delete_ur_marks_as_deleted PASSED [ 52%]
+2026-01-17T16:24:47.1287287Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementDeletion::test_delete_tr_marks_as_deleted PASSED [ 53%]
+2026-01-17T16:24:47.1299045Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementDeletion::test_delete_nonexistent_requirement_fails PASSED [ 54%]
+2026-01-17T16:24:47.1310210Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementValidation::test_validation_requires_shall PASSED [ 56%]
+2026-01-17T16:24:47.1322183Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementValidation::test_validation_checks_length PASSED [ 57%]
+2026-01-17T16:24:47.1333695Z tests/rdd-framework/actions/test_workdir_actions.py::TestWorkdirInitialization::test_workdir_new_setup_creates_structure PASSED [ 58%]
+2026-01-17T16:24:47.1345461Z tests/rdd-framework/actions/test_workdir_actions.py::TestIterationArchiving::test_archive_creates_proper_folder_structure PASSED [ 60%]
+2026-01-17T16:24:47.1357321Z tests/rdd-framework/actions/test_workdir_actions.py::TestIterationArchiving::test_archive_preserves_all_files PASSED [ 61%]
+2026-01-17T16:24:47.1368606Z tests/rdd-framework/actions/test_workdir_actions.py::TestIterationArchiving::test_archive_prevents_when_active_prompt_exists PASSED [ 63%]
+2026-01-17T16:24:47.1379862Z tests/rdd-framework/actions/test_workdir_actions.py::TestWorkdirClearing::test_clear_removes_prompt_folders PASSED [ 64%]
+2026-01-17T16:24:47.1392203Z tests/rdd-framework/actions/test_workdir_actions.py::TestWorkdirClearing::test_clear_preserves_registry_files PASSED [ 65%]
+2026-01-17T16:24:47.1403847Z tests/rdd-framework/actions/test_workflow_actions.py::TestQuestionnaireActions::test_questionnaire_check_complete_all_answered PASSED [ 67%]
+2026-01-17T16:24:47.1415198Z tests/rdd-framework/actions/test_workflow_actions.py::TestQuestionnaireActions::test_questionnaire_check_complete_partial PASSED [ 68%]
+2026-01-17T16:24:47.1426724Z tests/rdd-framework/actions/test_workflow_actions.py::TestQuestionnaireActions::test_questionnaire_delete_resets_flags PASSED [ 69%]
+2026-01-17T16:24:47.1438310Z tests/rdd-framework/actions/test_workflow_actions.py::TestPlanActions::test_plan_generated_on_sets_flag PASSED [ 71%]
+2026-01-17T16:24:47.1449914Z tests/rdd-framework/actions/test_workflow_actions.py::TestPlanActions::test_plan_generated_off_unsets_flag PASSED [ 72%]
+2026-01-17T16:24:47.1461262Z tests/rdd-framework/actions/test_workflow_actions.py::TestPlanActions::test_plan_delete_removes_file_and_resets_flag PASSED [ 73%]
+2026-01-17T16:24:47.1472548Z tests/rdd-framework/actions/test_workflow_actions.py::TestAnalysisActions::test_analysis_generated_on_sets_flag PASSED [ 75%]
+2026-01-17T16:24:47.1485147Z tests/rdd-framework/actions/test_workflow_actions.py::TestAnalysisActions::test_analysis_delete_removes_file_and_resets_flag PASSED [ 76%]
+2026-01-17T16:24:47.1500856Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_exists_and_valid_json PASSED [ 78%]
+2026-01-17T16:24:47.1515292Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_has_framework_version PASSED [ 79%]
+2026-01-17T16:24:47.1529174Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_has_required_paths PASSED [ 80%]
+2026-01-17T16:24:47.1540808Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_required_paths_exist PASSED [ 82%]
+2026-01-17T16:24:47.1560571Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_has_prompt_snippets PASSED [ 83%]
+2026-01-17T16:24:47.1575305Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_prompt_snippet_files_exist PASSED [ 84%]
+2026-01-17T16:24:47.1587086Z tests/rdd-framework/config/test_manifest_validation.py::TestConfigStructureValidation::test_instance_config_structure PASSED [ 86%]
+2026-01-17T16:24:47.1763098Z tests/rdd-framework/config/test_manifest_validation.py::TestConfigStructureValidation::test_technical_design_form_structure FAILED [ 87%]
+2026-01-17T16:24:47.2975584Z tests/rdd-framework/integration/test_iteration_archive.py::TestIterationArchiving::test_archive_creates_proper_structure PASSED [ 89%]
+2026-01-17T16:24:47.5256539Z tests/rdd-framework/integration/test_prompt_lifecycle.py::TestCompletePromptWorkflow::test_full_prompt_lifecycle PASSED [ 90%]
+2026-01-17T16:24:47.6044502Z tests/rdd-framework/integration/test_prompt_lifecycle.py::TestCompletePromptWorkflow::test_create_multiple_prompts_enforces_single_active PASSED [ 91%]
+2026-01-17T16:24:47.7660690Z tests/rdd-framework/integration/test_prompt_lifecycle.py::TestModificationWorkflow::test_modification_lifecycle PASSED [ 93%]
+2026-01-17T16:24:47.9297415Z tests/rdd-framework/integration/test_prompt_lifecycle.py::TestStateTransitions::test_bidirectional_state_transitions PASSED [ 94%]
+2026-01-17T16:24:48.0503093Z tests/rdd-framework/integration/test_requirement_workflows.py::TestRequirementCRUDCycle::test_create_modify_delete_ur PASSED [ 95%]
+2026-01-17T16:24:48.0996865Z tests/rdd-framework/integration/test_requirement_workflows.py::TestRequirementCRUDCycle::test_create_modify_delete_tr PASSED [ 97%]
+2026-01-17T16:24:48.2185632Z tests/rdd-framework/integration/test_requirement_workflows.py::TestRequirementIDSequencing::test_sequential_ur_ids PASSED [ 98%]
+2026-01-17T16:24:48.5000990Z tests/rdd-framework/integration/test_requirement_workflows.py::TestRequirementValidation::test_validation_bypass PASSED [100%]
+2026-01-17T16:24:48.5002246Z 
+2026-01-17T16:24:48.5002530Z =================================== FAILURES ===================================
+2026-01-17T16:24:48.5003581Z ______ TestConfigStructureValidation.test_technical_design_form_structure ______
+2026-01-17T16:24:48.5005030Z tests/rdd-framework/config/test_manifest_validation.py:125: in test_technical_design_form_structure
+2026-01-17T16:24:48.5006812Z     assert form_path.exists(), "technical-design-form.json must exist"
+2026-01-17T16:24:48.5007560Z E   AssertionError: technical-design-form.json must exist
+2026-01-17T16:24:48.5008109Z E   assert False
+2026-01-17T16:24:48.5008438Z E    +  where False = exists()
+2026-01-17T16:24:48.5009724Z E    +    where exists = PosixPath('/home/runner/work/requirements-driven-development/requirements-driven-development/.rdd/config/technical-design-form.json').exists
+2026-01-17T16:24:48.5011133Z ================================ tests coverage ================================
+2026-01-17T16:24:48.5011872Z _______________ coverage: platform linux, python 3.9.25-final-0 ________________
+2026-01-17T16:24:48.5012391Z 
+2026-01-17T16:24:48.5012625Z Name                                                            Stmts   Miss  Cover
+2026-01-17T16:24:48.5013325Z -----------------------------------------------------------------------------------
+2026-01-17T16:24:48.5014173Z .rdd/src/actions/prompt_create.py                                 116     78    33%
+2026-01-17T16:24:48.5015043Z .rdd/src/actions/prompt_set_state.py                               86     67    22%
+2026-01-17T16:24:48.5015942Z tests/rdd-framework/actions/test_execution_actions.py              14      0   100%
+2026-01-17T16:24:48.5016939Z tests/rdd-framework/actions/test_misc_actions.py                   11      0   100%
+2026-01-17T16:24:48.5017790Z tests/rdd-framework/actions/test_modification_actions.py           13      0   100%
+2026-01-17T16:24:48.5018637Z tests/rdd-framework/actions/test_prompt_actions.py                115      0   100%
+2026-01-17T16:24:48.5019473Z tests/rdd-framework/actions/test_requirement_actions.py            32      0   100%
+2026-01-17T16:24:48.5020299Z tests/rdd-framework/actions/test_workdir_actions.py                16      0   100%
+2026-01-17T16:24:48.5021133Z tests/rdd-framework/actions/test_workflow_actions.py               24      0   100%
+2026-01-17T16:24:48.5021955Z tests/rdd-framework/config/test_manifest_validation.py             66      4    94%
+2026-01-17T16:24:48.5022761Z tests/rdd-framework/conftest.py                                    98     39    60%
+2026-01-17T16:24:48.5023574Z tests/rdd-framework/integration/test_iteration_archive.py          48      0   100%
+2026-01-17T16:24:48.5024431Z tests/rdd-framework/integration/test_prompt_lifecycle.py          124      0   100%
+2026-01-17T16:24:48.5025290Z tests/rdd-framework/integration/test_requirement_workflows.py      75      0   100%
+2026-01-17T16:24:48.5026049Z -----------------------------------------------------------------------------------
+2026-01-17T16:24:48.5026785Z TOTAL                                                             838    188    78%
+2026-01-17T16:24:48.5027310Z Coverage XML written to file coverage.xml
+2026-01-17T16:24:48.5027726Z =========================== short test summary info ============================
+2026-01-17T16:24:48.5029109Z FAILED tests/rdd-framework/config/test_manifest_validation.py::TestConfigStructureValidation::test_technical_design_form_structure - AssertionError: technical-design-form.json must exist
+2026-01-17T16:24:48.5030175Z assert False
+2026-01-17T16:24:48.5030415Z  +  where False = exists()
+2026-01-17T16:24:48.5031308Z  +    where exists = PosixPath('/home/runner/work/requirements-driven-development/requirements-driven-development/.rdd/config/technical-design-form.json').exists
+2026-01-17T16:24:48.5032330Z ========================= 1 failed, 72 passed in 1.58s =========================
+2026-01-17T16:24:48.5386563Z [0;31m✗[0m RDD framework tests failed
+2026-01-17T16:24:48.5387622Z [0;31m✗[0m Some tests failed
+2026-01-17T16:24:48.5388118Z 
+2026-01-17T16:24:48.5388411Z ============================================================
+2026-01-17T16:24:48.5389279Z   RDD Framework Test Runner (Linux/macOS)
+2026-01-17T16:24:48.5390088Z ============================================================
+2026-01-17T16:24:48.5390686Z 
+2026-01-17T16:24:48.5391076Z [0;34mℹ[0m Checking prerequisites...
+2026-01-17T16:24:48.5392294Z [0;32m✓[0m Python found: 3.9.25
+2026-01-17T16:24:48.5393085Z [0;32m✓[0m Virtual environment found
+2026-01-17T16:24:48.5393863Z [0;32m✓[0m pytest 8.4.2
+2026-01-17T16:24:48.5394251Z 
+2026-01-17T16:24:48.5394262Z 
+2026-01-17T16:24:48.5394514Z ============================================================
+2026-01-17T16:24:48.5395228Z   Running Tests
+2026-01-17T16:24:48.5395773Z ============================================================
+2026-01-17T16:24:48.5396537Z 
+2026-01-17T16:24:48.5396925Z [0;34m[1/1][0m Running RDD framework tests
+2026-01-17T16:24:48.5397365Z 
+2026-01-17T16:24:48.5397374Z 
+2026-01-17T16:24:48.5397554Z ============================================================
+2026-01-17T16:24:48.5398083Z   Test Summary
+2026-01-17T16:24:48.5398432Z ============================================================
+2026-01-17T16:24:48.5398910Z 
+2026-01-17T16:24:48.5399099Z Total test suites: 1
+2026-01-17T16:24:48.5399644Z [0;32mPassed: 0[0m
+2026-01-17T16:24:48.5400136Z [0;31mFailed: 1[0m
+2026-01-17T16:24:48.5400416Z 
+2026-01-17T16:24:48.5466403Z ##[error]Process completed with exit code 1.

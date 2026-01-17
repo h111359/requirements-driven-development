@@ -1,0 +1,42 @@
+﻿2026-01-17T16:25:49.3786265Z ##[group]Run python scripts/setup-test-env.py
+2026-01-17T16:25:49.3786660Z [36;1mpython scripts/setup-test-env.py[0m
+2026-01-17T16:25:49.3856395Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-01-17T16:25:49.3856931Z env:
+2026-01-17T16:25:49.3857218Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:25:49.3857822Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.9.13\x64/lib/pkgconfig
+2026-01-17T16:25:49.3858233Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:25:49.3858608Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:25:49.3858983Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:25:49.3859268Z ##[endgroup]
+2026-01-17T16:26:06.2823609Z 
+2026-01-17T16:26:06.2824194Z ============================================================
+2026-01-17T16:26:06.2826881Z   RDD Test Environment Setup
+2026-01-17T16:26:06.2827286Z ============================================================
+2026-01-17T16:26:06.2828144Z 
+2026-01-17T16:26:06.2828493Z ✓ Python 3.9.13 detected
+2026-01-17T16:26:06.2828710Z 
+2026-01-17T16:26:06.2829119Z Repository root: D:\a\requirements-driven-development\requirements-driven-development
+2026-01-17T16:26:06.2830147Z Virtual environment: D:\a\requirements-driven-development\requirements-driven-development\.venv
+2026-01-17T16:26:06.2831354Z Requirements file: D:\a\requirements-driven-development\requirements-driven-development\tests\requirements.txt
+2026-01-17T16:26:06.2832079Z 
+2026-01-17T16:26:06.2832788Z ℹ Creating virtual environment at D:\a\requirements-driven-development\requirements-driven-development\.venv...
+2026-01-17T16:26:06.2833726Z ✓ Virtual environment created
+2026-01-17T16:26:06.2834098Z ℹ Upgrading pip...
+2026-01-17T16:26:06.2834597Z ✓ pip upgraded
+2026-01-17T16:26:06.2834987Z ℹ Installing/updating test dependencies...
+2026-01-17T16:26:06.2835476Z ✓ Test dependencies installed/updated
+2026-01-17T16:26:06.2835749Z 
+2026-01-17T16:26:06.2835902Z ============================================================
+2026-01-17T16:26:06.2836333Z Setup completed successfully!
+2026-01-17T16:26:06.2836692Z ============================================================
+2026-01-17T16:26:06.2836983Z 
+2026-01-17T16:26:06.2837113Z To activate the virtual environment:
+2026-01-17T16:26:06.2838258Z   D:\a\requirements-driven-development\requirements-driven-development\.venv\Scripts\activate          (Command Prompt)
+2026-01-17T16:26:06.2839678Z   D:\a\requirements-driven-development\requirements-driven-development\.venv\Scripts\Activate.ps1      (PowerShell)
+2026-01-17T16:26:06.2840796Z 
+2026-01-17T16:26:06.2840899Z To run tests:
+2026-01-17T16:26:06.2841147Z   pytest tests/python/
+2026-01-17T16:26:06.2841338Z 
+2026-01-17T16:26:06.2841650Z To deactivate:
+2026-01-17T16:26:06.2841887Z   deactivate
+2026-01-17T16:26:06.2842033Z 

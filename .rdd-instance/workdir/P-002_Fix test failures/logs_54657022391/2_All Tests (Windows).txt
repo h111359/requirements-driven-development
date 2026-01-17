@@ -1,0 +1,389 @@
+﻿2026-01-17T16:24:08.6764214Z Current runner version: '2.331.0'
+2026-01-17T16:24:08.6798079Z ##[group]Runner Image Provisioner
+2026-01-17T16:24:08.6799225Z Hosted Compute Agent
+2026-01-17T16:24:08.6799932Z Version: 20251211.462
+2026-01-17T16:24:08.6800781Z Commit: 6cbad8c2bb55d58165063d031ccabf57e2d2db61
+2026-01-17T16:24:08.6802539Z Build Date: 2025-12-11T16:28:49Z
+2026-01-17T16:24:08.6803547Z Worker ID: {ab82f114-29c2-431b-8927-2d99f9c90ace}
+2026-01-17T16:24:08.6804476Z ##[endgroup]
+2026-01-17T16:24:08.6805186Z ##[group]Operating System
+2026-01-17T16:24:08.6805957Z Microsoft Windows Server 2025
+2026-01-17T16:24:08.6806825Z 10.0.26100
+2026-01-17T16:24:08.6807434Z Datacenter
+2026-01-17T16:24:08.6807984Z ##[endgroup]
+2026-01-17T16:24:08.6808698Z ##[group]Runner Image
+2026-01-17T16:24:08.6809364Z Image: windows-2025
+2026-01-17T16:24:08.6810019Z Version: 20260111.179.1
+2026-01-17T16:24:08.6812080Z Included Software: https://github.com/actions/runner-images/blob/win25/20260111.179/images/windows/Windows2025-Readme.md
+2026-01-17T16:24:08.6814416Z Image Release: https://github.com/actions/runner-images/releases/tag/win25%2F20260111.179
+2026-01-17T16:24:08.6815739Z ##[endgroup]
+2026-01-17T16:24:08.6817307Z ##[group]GITHUB_TOKEN Permissions
+2026-01-17T16:24:08.6819596Z Contents: read
+2026-01-17T16:24:08.6820277Z Metadata: read
+2026-01-17T16:24:08.6820938Z Packages: read
+2026-01-17T16:24:08.6821941Z ##[endgroup]
+2026-01-17T16:24:08.6824513Z Secret source: Actions
+2026-01-17T16:24:08.6825409Z Prepare workflow directory
+2026-01-17T16:24:08.7310853Z Prepare all required actions
+2026-01-17T16:24:08.7370076Z Getting action download info
+2026-01-17T16:24:08.9993920Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-01-17T16:24:09.1424972Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-01-17T16:24:09.4477344Z Complete job name: All Tests (Windows)
+2026-01-17T16:24:09.6467755Z ##[group]Run actions/checkout@v4
+2026-01-17T16:24:09.6469910Z with:
+2026-01-17T16:24:09.6470688Z   repository: h111359/requirements-driven-development
+2026-01-17T16:24:09.6471902Z   token: ***
+2026-01-17T16:24:09.6472503Z   ssh-strict: true
+2026-01-17T16:24:09.6473150Z   ssh-user: git
+2026-01-17T16:24:09.6473780Z   persist-credentials: true
+2026-01-17T16:24:09.6474467Z   clean: true
+2026-01-17T16:24:09.6475091Z   sparse-checkout-cone-mode: true
+2026-01-17T16:24:09.6475894Z   fetch-depth: 1
+2026-01-17T16:24:09.6476508Z   fetch-tags: false
+2026-01-17T16:24:09.6477126Z   show-progress: true
+2026-01-17T16:24:09.6477764Z   lfs: false
+2026-01-17T16:24:09.6478352Z   submodules: false
+2026-01-17T16:24:09.6478979Z   set-safe-directory: true
+2026-01-17T16:24:09.6480022Z ##[endgroup]
+2026-01-17T16:24:09.8533884Z Syncing repository: h111359/requirements-driven-development
+2026-01-17T16:24:09.8536823Z ##[group]Getting Git version info
+2026-01-17T16:24:09.8538466Z Working directory is 'D:\a\requirements-driven-development\requirements-driven-development'
+2026-01-17T16:24:09.9756530Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-01-17T16:24:10.7349584Z git version 2.52.0.windows.1
+2026-01-17T16:24:10.7418492Z ##[endgroup]
+2026-01-17T16:24:10.7446182Z Temporarily overriding HOME='D:\a\_temp\8dc028f9-a666-4954-a042-e20c200d5ef3' before making global git config changes
+2026-01-17T16:24:10.7448524Z Adding repository directory to the temporary git global config as a safe directory
+2026-01-17T16:24:10.7459673Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\requirements-driven-development\requirements-driven-development
+2026-01-17T16:24:10.8571340Z Deleting the contents of 'D:\a\requirements-driven-development\requirements-driven-development'
+2026-01-17T16:24:10.8577757Z ##[group]Initializing the repository
+2026-01-17T16:24:10.8591830Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\requirements-driven-development\requirements-driven-development
+2026-01-17T16:24:11.0442270Z Initialized empty Git repository in D:/a/requirements-driven-development/requirements-driven-development/.git/
+2026-01-17T16:24:11.0488185Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/h111359/requirements-driven-development
+2026-01-17T16:24:11.1201916Z ##[endgroup]
+2026-01-17T16:24:11.1202727Z ##[group]Disabling automatic garbage collection
+2026-01-17T16:24:11.1211244Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-01-17T16:24:11.1507260Z ##[endgroup]
+2026-01-17T16:24:11.1508066Z ##[group]Setting up auth
+2026-01-17T16:24:11.1521574Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-01-17T16:24:11.1826479Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-01-17T16:24:13.3529920Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-01-17T16:24:13.3859123Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-01-17T16:24:13.9290147Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-01-17T16:24:13.9684749Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-01-17T16:24:14.5162580Z [command]"C:\Program Files\Git\bin\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-01-17T16:24:14.5492563Z ##[endgroup]
+2026-01-17T16:24:14.5494217Z ##[group]Fetching the repository
+2026-01-17T16:24:14.5516823Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +646fab66090250aa5d92bc244de36030d692ea05:refs/remotes/pull/91/merge
+2026-01-17T16:24:16.3594878Z From https://github.com/h111359/requirements-driven-development
+2026-01-17T16:24:16.3595489Z  * [new ref]         646fab66090250aa5d92bc244de36030d692ea05 -> pull/91/merge
+2026-01-17T16:24:16.4058543Z ##[endgroup]
+2026-01-17T16:24:16.4059165Z ##[group]Determining the checkout info
+2026-01-17T16:24:16.4060999Z ##[endgroup]
+2026-01-17T16:24:16.4072276Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-01-17T16:24:16.5246094Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-01-17T16:24:16.5595101Z ##[group]Checking out the ref
+2026-01-17T16:24:16.5606087Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force refs/remotes/pull/91/merge
+2026-01-17T16:24:16.7217368Z Note: switching to 'refs/remotes/pull/91/merge'.
+2026-01-17T16:24:16.7218340Z 
+2026-01-17T16:24:16.7218724Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-01-17T16:24:16.7219838Z changes and commit them, and you can discard any commits you make in this
+2026-01-17T16:24:16.7221310Z state without impacting any branches by switching back to a branch.
+2026-01-17T16:24:16.7221762Z 
+2026-01-17T16:24:16.7222427Z If you want to create a new branch to retain commits you create, you may
+2026-01-17T16:24:16.7223152Z do so (now or later) by using -c with the switch command. Example:
+2026-01-17T16:24:16.7223541Z 
+2026-01-17T16:24:16.7223704Z   git switch -c <new-branch-name>
+2026-01-17T16:24:16.7223961Z 
+2026-01-17T16:24:16.7224091Z Or undo this operation with:
+2026-01-17T16:24:16.7224329Z 
+2026-01-17T16:24:16.7224427Z   git switch -
+2026-01-17T16:24:16.7224584Z 
+2026-01-17T16:24:16.7224901Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-01-17T16:24:16.7225431Z 
+2026-01-17T16:24:16.7226010Z HEAD is now at 646fab6 Merge 86eae44ece44a39faad246a8cd98f12261416b10 into b85420ace31eebf9b352393b287de7a7c238636a
+2026-01-17T16:24:16.7263765Z ##[endgroup]
+2026-01-17T16:24:16.8054623Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-01-17T16:24:16.8580704Z 646fab66090250aa5d92bc244de36030d692ea05
+2026-01-17T16:24:16.9038852Z ##[group]Run actions/setup-python@v5
+2026-01-17T16:24:16.9039175Z with:
+2026-01-17T16:24:16.9039352Z   python-version: 3.9
+2026-01-17T16:24:16.9039544Z   check-latest: false
+2026-01-17T16:24:16.9039850Z   token: ***
+2026-01-17T16:24:16.9040018Z   update-environment: true
+2026-01-17T16:24:16.9040216Z   allow-prereleases: false
+2026-01-17T16:24:16.9040398Z   freethreaded: false
+2026-01-17T16:24:16.9040591Z ##[endgroup]
+2026-01-17T16:24:17.1527733Z ##[group]Installed versions
+2026-01-17T16:24:17.1821599Z Version 3.9 was not found in the local cache
+2026-01-17T16:24:17.7521832Z Version 3.9 is available for downloading
+2026-01-17T16:24:17.7524149Z Download from "https://github.com/actions/python-versions/releases/download/3.9.13-11183687820/python-3.9.13-win32-x64.zip"
+2026-01-17T16:24:18.2258924Z Extract downloaded archive
+2026-01-17T16:24:18.3323841Z [command]"C:\Program Files\PowerShell\7\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command "$ErrorActionPreference = 'Stop' ; try { Add-Type -AssemblyName System.IO.Compression.ZipFile } catch { } ; try { [System.IO.Compression.ZipFile]::ExtractToDirectory('D:\a\_temp\python-3.9.13-win32-x64.zip', 'D:\a\_temp\76e69f97-b676-4a4f-925d-8a9cf72ec6ed', $true) } catch { if (($_.Exception.GetType().FullName -eq 'System.Management.Automation.MethodException') -or ($_.Exception.GetType().FullName -eq 'System.Management.Automation.RuntimeException') ){ Expand-Archive -LiteralPath 'D:\a\_temp\python-3.9.13-win32-x64.zip' -DestinationPath 'D:\a\_temp\76e69f97-b676-4a4f-925d-8a9cf72ec6ed' -Force } else { throw $_ } } ;"
+2026-01-17T16:24:51.3895981Z Execute installation script
+2026-01-17T16:24:52.1352587Z Check if Python hostedtoolcache folder exist...
+2026-01-17T16:24:52.1354955Z 
+2026-01-17T16:24:52.1390695Z Check if current Python version is installed...
+2026-01-17T16:24:52.1392554Z 
+2026-01-17T16:24:52.1470727Z No Python3.9.* found
+2026-01-17T16:24:52.1472859Z 
+2026-01-17T16:24:52.1479936Z Remove registry entries for Python 3.9(x64)...
+2026-01-17T16:24:52.1480984Z 
+2026-01-17T16:24:52.8962424Z Create Python 3.9.13 folder in C:\hostedtoolcache\windows\Python
+2026-01-17T16:24:52.8963292Z 
+2026-01-17T16:24:52.9028745Z Copy Python binaries to C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:24:52.9029502Z 
+2026-01-17T16:24:52.9189572Z Install Python 3.9.13 in C:\hostedtoolcache\windows\Python...
+2026-01-17T16:24:52.9193500Z 
+2026-01-17T16:25:23.5354954Z Create python3 symlink
+2026-01-17T16:25:23.5355296Z 
+2026-01-17T16:25:23.5551714Z 
+2026-01-17T16:25:23.5553745Z 
+2026-01-17T16:25:23.5556972Z Directory: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:25:23.5616061Z 
+2026-01-17T16:25:23.5616361Z Mode                 LastWriteTime         Length Name
+2026-01-17T16:25:23.5616906Z ----                 -------------         ------ ----
+2026-01-17T16:25:23.5617453Z -a---l         1/17/2026   4:25 PM              0 python3.exe
+2026-01-17T16:25:23.5617945Z Install and upgrade Pip
+2026-01-17T16:25:23.5618131Z 
+2026-01-17T16:25:25.9898692Z Looking in links: c:\Users\RUNNER~1\AppData\Local\Temp\tmpgq5eylhd
+2026-01-17T16:25:25.9905160Z Requirement already satisfied: setuptools in c:\hostedtoolcache\windows\python\3.9.13\x64\lib\site-packages (58.1.0)
+2026-01-17T16:25:25.9911880Z Requirement already satisfied: pip in c:\hostedtoolcache\windows\python\3.9.13\x64\lib\site-packages (22.0.4)
+2026-01-17T16:25:27.5837690Z Collecting pip
+2026-01-17T16:25:27.6471833Z Downloading pip-25.3-py3-none-any.whl (1.8 MB)
+2026-01-17T16:25:27.8454820Z ---------------------------------------- 1.8/1.8 MB 9.5 MB/s eta 0:00:00
+2026-01-17T16:25:27.8455479Z 
+2026-01-17T16:25:27.8792355Z Installing collected packages: pip
+2026-01-17T16:25:27.8793221Z Attempting uninstall: pip
+2026-01-17T16:25:27.8800439Z Found existing installation: pip 22.0.4
+2026-01-17T16:25:28.4140230Z Uninstalling pip-22.0.4:
+2026-01-17T16:25:28.4451108Z Successfully uninstalled pip-22.0.4
+2026-01-17T16:25:31.5544902Z Successfully installed pip-25.3
+2026-01-17T16:25:32.3775432Z Create complete file
+2026-01-17T16:25:32.3776998Z 
+2026-01-17T16:25:32.3789319Z 
+2026-01-17T16:25:32.3789553Z 
+2026-01-17T16:25:32.4058298Z Successfully set up CPython (3.9.13)
+2026-01-17T16:25:32.4059471Z ##[endgroup]
+2026-01-17T16:25:32.4324445Z ##[group]Run Install-Module -Name Pester -Force -SkipPublisherCheck
+2026-01-17T16:25:32.4325035Z [36;1mInstall-Module -Name Pester -Force -SkipPublisherCheck[0m
+2026-01-17T16:25:32.4401615Z shell: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE -command ". '{0}'"
+2026-01-17T16:25:32.4402015Z env:
+2026-01-17T16:25:32.4402246Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:25:32.4402686Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.9.13\x64/lib/pkgconfig
+2026-01-17T16:25:32.4403124Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:25:32.4403484Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:25:32.4403845Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:25:32.4404119Z ##[endgroup]
+2026-01-17T16:25:49.3786289Z ##[group]Run python scripts/setup-test-env.py
+2026-01-17T16:25:49.3786663Z [36;1mpython scripts/setup-test-env.py[0m
+2026-01-17T16:25:49.3856405Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-01-17T16:25:49.3856937Z env:
+2026-01-17T16:25:49.3857221Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:25:49.3857825Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.9.13\x64/lib/pkgconfig
+2026-01-17T16:25:49.3858235Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:25:49.3858610Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:25:49.3858995Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:25:49.3859270Z ##[endgroup]
+2026-01-17T16:26:06.2823655Z 
+2026-01-17T16:26:06.2824208Z ============================================================
+2026-01-17T16:26:06.2826890Z   RDD Test Environment Setup
+2026-01-17T16:26:06.2827825Z ============================================================
+2026-01-17T16:26:06.2828149Z 
+2026-01-17T16:26:06.2828497Z ✓ Python 3.9.13 detected
+2026-01-17T16:26:06.2828715Z 
+2026-01-17T16:26:06.2829123Z Repository root: D:\a\requirements-driven-development\requirements-driven-development
+2026-01-17T16:26:06.2830151Z Virtual environment: D:\a\requirements-driven-development\requirements-driven-development\.venv
+2026-01-17T16:26:06.2831358Z Requirements file: D:\a\requirements-driven-development\requirements-driven-development\tests\requirements.txt
+2026-01-17T16:26:06.2832082Z 
+2026-01-17T16:26:06.2832794Z ℹ Creating virtual environment at D:\a\requirements-driven-development\requirements-driven-development\.venv...
+2026-01-17T16:26:06.2833731Z ✓ Virtual environment created
+2026-01-17T16:26:06.2834102Z ℹ Upgrading pip...
+2026-01-17T16:26:06.2834603Z ✓ pip upgraded
+2026-01-17T16:26:06.2834991Z ℹ Installing/updating test dependencies...
+2026-01-17T16:26:06.2835481Z ✓ Test dependencies installed/updated
+2026-01-17T16:26:06.2835767Z 
+2026-01-17T16:26:06.2835906Z ============================================================
+2026-01-17T16:26:06.2836336Z Setup completed successfully!
+2026-01-17T16:26:06.2836695Z ============================================================
+2026-01-17T16:26:06.2836995Z 
+2026-01-17T16:26:06.2837116Z To activate the virtual environment:
+2026-01-17T16:26:06.2838264Z   D:\a\requirements-driven-development\requirements-driven-development\.venv\Scripts\activate          (Command Prompt)
+2026-01-17T16:26:06.2839682Z   D:\a\requirements-driven-development\requirements-driven-development\.venv\Scripts\Activate.ps1      (PowerShell)
+2026-01-17T16:26:06.2840802Z 
+2026-01-17T16:26:06.2840902Z To run tests:
+2026-01-17T16:26:06.2841150Z   pytest tests/python/
+2026-01-17T16:26:06.2841341Z 
+2026-01-17T16:26:06.2841654Z To deactivate:
+2026-01-17T16:26:06.2841889Z   deactivate
+2026-01-17T16:26:06.2842035Z 
+2026-01-17T16:26:06.7162659Z ##[group]Run python scripts/run-tests.py
+2026-01-17T16:26:06.7163008Z [36;1mpython scripts/run-tests.py[0m
+2026-01-17T16:26:06.7231072Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-01-17T16:26:06.7231473Z env:
+2026-01-17T16:26:06.7231713Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:26:06.7232125Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.9.13\x64/lib/pkgconfig
+2026-01-17T16:26:06.7232537Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:26:06.7232901Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:26:06.7233275Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:26:06.7233571Z ##[endgroup]
+2026-01-17T16:26:07.9804085Z ============================= test session starts =============================
+2026-01-17T16:26:07.9805179Z platform win32 -- Python 3.9.13, pytest-8.4.2, pluggy-1.6.0 -- D:\a\requirements-driven-development\requirements-driven-development\.venv\Scripts\python.exe
+2026-01-17T16:26:07.9806169Z cachedir: .pytest_cache
+2026-01-17T16:26:07.9806677Z rootdir: D:\a\requirements-driven-development\requirements-driven-development
+2026-01-17T16:26:07.9807359Z plugins: cov-7.0.0, mock-3.15.1, timeout-2.4.0, xdist-3.8.0
+2026-01-17T16:26:08.1347695Z collecting ... collected 73 items
+2026-01-17T16:26:08.1348374Z 
+2026-01-17T16:26:08.1372569Z tests/rdd-framework/actions/test_execution_actions.py::TestExecutionModeManagement::test_set_execution_mode_valid_modes PASSED [  1%]
+2026-01-17T16:26:08.1387842Z tests/rdd-framework/actions/test_execution_actions.py::TestExecutionModeManagement::test_set_execution_mode_invalid_mode PASSED [  2%]
+2026-01-17T16:26:08.1403148Z tests/rdd-framework/actions/test_execution_actions.py::TestImplementationTracking::test_implementation_completed_on_sets_flag PASSED [  4%]
+2026-01-17T16:26:08.1418722Z tests/rdd-framework/actions/test_execution_actions.py::TestImplementationTracking::test_implementation_completed_off_unsets_flag PASSED [  5%]
+2026-01-17T16:26:08.1434435Z tests/rdd-framework/actions/test_execution_actions.py::TestExecutionTracking::test_set_executed_on_sets_flag PASSED [  6%]
+2026-01-17T16:26:08.1449761Z tests/rdd-framework/actions/test_misc_actions.py::TestFileListingGeneration::test_files_list_csv_refresh_creates_csv PASSED [  8%]
+2026-01-17T16:26:08.1464979Z tests/rdd-framework/actions/test_misc_actions.py::TestFileListingGeneration::test_files_list_csv_preserves_descriptions PASSED [  9%]
+2026-01-17T16:26:08.1479810Z tests/rdd-framework/actions/test_misc_actions.py::TestFileListingGeneration::test_files_list_csv_adds_new_files PASSED [ 10%]
+2026-01-17T16:26:08.1496286Z tests/rdd-framework/actions/test_misc_actions.py::TestCsvDescriptionUpdate::test_set_description_updates_entry PASSED [ 12%]
+2026-01-17T16:26:08.1511205Z tests/rdd-framework/actions/test_modification_actions.py::TestModificationCreation::test_create_modification_sequential_ids PASSED [ 13%]
+2026-01-17T16:26:08.1526200Z tests/rdd-framework/actions/test_modification_actions.py::TestModificationCreation::test_create_modification_requires_implementation_completed PASSED [ 15%]
+2026-01-17T16:26:08.1540453Z tests/rdd-framework/actions/test_modification_actions.py::TestModificationCreation::test_create_modification_enforces_single_active PASSED [ 16%]
+2026-01-17T16:26:08.1555223Z tests/rdd-framework/actions/test_modification_actions.py::TestModificationCompletion::test_complete_modification_updates_log PASSED [ 17%]
+2026-01-17T16:26:08.1571328Z tests/rdd-framework/actions/test_modification_actions.py::TestModificationCompletion::test_complete_modification_resets_current_id PASSED [ 19%]
+2026-01-17T16:26:08.2312791Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptCreate::test_create_prompt_with_auto_id PASSED [ 20%]
+2026-01-17T16:26:08.2343035Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptCreate::test_create_prompt_enforces_single_active PASSED [ 21%]
+2026-01-17T16:26:08.2398027Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptCreate::test_create_prompt_sanitizes_title_for_folder PASSED [ 23%]
+2026-01-17T16:26:08.2410831Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptSetState::test_set_state_to_completed PASSED [ 24%]
+2026-01-17T16:26:08.2426168Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptSetState::test_set_state_enforces_single_active PASSED [ 26%]
+2026-01-17T16:26:08.2440959Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptSetState::test_set_state_allows_bidirectional_transition PASSED [ 27%]
+2026-01-17T16:26:08.2455779Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptSetState::test_set_state_defaults_to_active_prompt PASSED [ 28%]
+2026-01-17T16:26:08.2490704Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptSetState::test_set_state_validates_state_parameter PASSED [ 30%]
+2026-01-17T16:26:08.2505870Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptComplete::test_complete_prompt_updates_state PASSED [ 31%]
+2026-01-17T16:26:08.2521679Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptComplete::test_complete_prompt_with_git_disabled PASSED [ 32%]
+2026-01-17T16:26:08.2545506Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptComplete::test_complete_prompt_with_git_enabled PASSED [ 34%]
+2026-01-17T16:26:08.2562012Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptComplete::test_complete_prompt_handles_git_failure_gracefully PASSED [ 35%]
+2026-01-17T16:26:08.2578049Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptListActions::test_find_active_prompt PASSED [ 36%]
+2026-01-17T16:26:08.2598215Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptValidation::test_validate_prompt_id_format PASSED [ 38%]
+2026-01-17T16:26:08.2614199Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptValidation::test_parse_params_from_argv PASSED [ 39%]
+2026-01-17T16:26:08.2658325Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptFolderCreation::test_ensure_prompt_workdir_artifacts PASSED [ 41%]
+2026-01-17T16:26:08.2673269Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementCreation::test_create_ur_with_validation PASSED [ 42%]
+2026-01-17T16:26:08.2688217Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementCreation::test_create_tr_with_validation PASSED [ 43%]
+2026-01-17T16:26:08.2704780Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementCreation::test_create_requirement_bypasses_validation PASSED [ 45%]
+2026-01-17T16:26:08.2719746Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementCreation::test_create_requirement_sequential_ids PASSED [ 46%]
+2026-01-17T16:26:08.2734312Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementModification::test_modify_ur_preserves_format PASSED [ 47%]
+2026-01-17T16:26:08.2748878Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementModification::test_modify_tr_preserves_format PASSED [ 49%]
+2026-01-17T16:26:08.2763923Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementModification::test_modify_nonexistent_requirement_fails PASSED [ 50%]
+2026-01-17T16:26:08.2778677Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementDeletion::test_delete_ur_marks_as_deleted PASSED [ 52%]
+2026-01-17T16:26:08.2793809Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementDeletion::test_delete_tr_marks_as_deleted PASSED [ 53%]
+2026-01-17T16:26:08.2808454Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementDeletion::test_delete_nonexistent_requirement_fails PASSED [ 54%]
+2026-01-17T16:26:08.2822751Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementValidation::test_validation_requires_shall PASSED [ 56%]
+2026-01-17T16:26:08.2838423Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementValidation::test_validation_checks_length PASSED [ 57%]
+2026-01-17T16:26:08.2854936Z tests/rdd-framework/actions/test_workdir_actions.py::TestWorkdirInitialization::test_workdir_new_setup_creates_structure PASSED [ 58%]
+2026-01-17T16:26:08.2868566Z tests/rdd-framework/actions/test_workdir_actions.py::TestIterationArchiving::test_archive_creates_proper_folder_structure PASSED [ 60%]
+2026-01-17T16:26:08.2883179Z tests/rdd-framework/actions/test_workdir_actions.py::TestIterationArchiving::test_archive_preserves_all_files PASSED [ 61%]
+2026-01-17T16:26:08.2898251Z tests/rdd-framework/actions/test_workdir_actions.py::TestIterationArchiving::test_archive_prevents_when_active_prompt_exists PASSED [ 63%]
+2026-01-17T16:26:08.2913209Z tests/rdd-framework/actions/test_workdir_actions.py::TestWorkdirClearing::test_clear_removes_prompt_folders PASSED [ 64%]
+2026-01-17T16:26:08.2928808Z tests/rdd-framework/actions/test_workdir_actions.py::TestWorkdirClearing::test_clear_preserves_registry_files PASSED [ 65%]
+2026-01-17T16:26:08.2943411Z tests/rdd-framework/actions/test_workflow_actions.py::TestQuestionnaireActions::test_questionnaire_check_complete_all_answered PASSED [ 67%]
+2026-01-17T16:26:08.2958500Z tests/rdd-framework/actions/test_workflow_actions.py::TestQuestionnaireActions::test_questionnaire_check_complete_partial PASSED [ 68%]
+2026-01-17T16:26:08.2973366Z tests/rdd-framework/actions/test_workflow_actions.py::TestQuestionnaireActions::test_questionnaire_delete_resets_flags PASSED [ 69%]
+2026-01-17T16:26:08.2987613Z tests/rdd-framework/actions/test_workflow_actions.py::TestPlanActions::test_plan_generated_on_sets_flag PASSED [ 71%]
+2026-01-17T16:26:08.3002192Z tests/rdd-framework/actions/test_workflow_actions.py::TestPlanActions::test_plan_generated_off_unsets_flag PASSED [ 72%]
+2026-01-17T16:26:08.3017536Z tests/rdd-framework/actions/test_workflow_actions.py::TestPlanActions::test_plan_delete_removes_file_and_resets_flag PASSED [ 73%]
+2026-01-17T16:26:08.3032634Z tests/rdd-framework/actions/test_workflow_actions.py::TestAnalysisActions::test_analysis_generated_on_sets_flag PASSED [ 75%]
+2026-01-17T16:26:08.3048654Z tests/rdd-framework/actions/test_workflow_actions.py::TestAnalysisActions::test_analysis_delete_removes_file_and_resets_flag PASSED [ 76%]
+2026-01-17T16:26:08.3070971Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_exists_and_valid_json PASSED [ 78%]
+2026-01-17T16:26:08.3089424Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_has_framework_version PASSED [ 79%]
+2026-01-17T16:26:08.3107532Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_has_required_paths PASSED [ 80%]
+2026-01-17T16:26:08.3127341Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_required_paths_exist PASSED [ 82%]
+2026-01-17T16:26:08.3145766Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_has_prompt_snippets PASSED [ 83%]
+2026-01-17T16:26:08.3167332Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_prompt_snippet_files_exist PASSED [ 84%]
+2026-01-17T16:26:08.3182421Z tests/rdd-framework/config/test_manifest_validation.py::TestConfigStructureValidation::test_instance_config_structure PASSED [ 86%]
+2026-01-17T16:26:08.3413162Z tests/rdd-framework/config/test_manifest_validation.py::TestConfigStructureValidation::test_technical_design_form_structure FAILED [ 87%]
+2026-01-17T16:26:08.6820760Z tests/rdd-framework/integration/test_iteration_archive.py::TestIterationArchiving::test_archive_creates_proper_structure PASSED [ 89%]
+2026-01-17T16:26:09.2069136Z tests/rdd-framework/integration/test_prompt_lifecycle.py::TestCompletePromptWorkflow::test_full_prompt_lifecycle PASSED [ 90%]
+2026-01-17T16:26:09.4413679Z tests/rdd-framework/integration/test_prompt_lifecycle.py::TestCompletePromptWorkflow::test_create_multiple_prompts_enforces_single_active PASSED [ 91%]
+2026-01-17T16:26:09.7538569Z tests/rdd-framework/integration/test_prompt_lifecycle.py::TestModificationWorkflow::test_modification_lifecycle PASSED [ 93%]
+2026-01-17T16:26:10.0276738Z tests/rdd-framework/integration/test_prompt_lifecycle.py::TestStateTransitions::test_bidirectional_state_transitions PASSED [ 94%]
+2026-01-17T16:26:10.3046913Z tests/rdd-framework/integration/test_requirement_workflows.py::TestRequirementCRUDCycle::test_create_modify_delete_ur PASSED [ 95%]
+2026-01-17T16:26:10.4740671Z tests/rdd-framework/integration/test_requirement_workflows.py::TestRequirementCRUDCycle::test_create_modify_delete_tr PASSED [ 97%]
+2026-01-17T16:26:10.7866399Z tests/rdd-framework/integration/test_requirement_workflows.py::TestRequirementIDSequencing::test_sequential_ur_ids PASSED [ 98%]
+2026-01-17T16:26:11.2966567Z tests/rdd-framework/integration/test_requirement_workflows.py::TestRequirementValidation::test_validation_bypass PASSED [100%]
+2026-01-17T16:26:11.2967159Z 
+2026-01-17T16:26:11.2967352Z ================================== FAILURES ===================================
+2026-01-17T16:26:11.2968140Z _____ TestConfigStructureValidation.test_technical_design_form_structure ______
+2026-01-17T16:26:11.2969085Z tests\rdd-framework\config\test_manifest_validation.py:125: in test_technical_design_form_structure
+2026-01-17T16:26:11.2969994Z     assert form_path.exists(), "technical-design-form.json must exist"
+2026-01-17T16:26:11.2970660Z E   AssertionError: technical-design-form.json must exist
+2026-01-17T16:26:11.2971133Z E   assert False
+2026-01-17T16:26:11.2971501Z E    +  where False = exists()
+2026-01-17T16:26:11.2972664Z E    +    where exists = WindowsPath('D:/a/requirements-driven-development/requirements-driven-development/.rdd/config/technical-design-form.json').exists
+2026-01-17T16:26:11.2974017Z =============================== tests coverage ================================
+2026-01-17T16:26:11.2974669Z _______________ coverage: platform win32, python 3.9.13-final-0 _______________
+2026-01-17T16:26:11.2975115Z 
+2026-01-17T16:26:11.2975339Z Name                                                            Stmts   Miss  Cover
+2026-01-17T16:26:11.2976279Z -----------------------------------------------------------------------------------
+2026-01-17T16:26:11.2976777Z .rdd\src\actions\prompt_create.py                                 116     78    33%
+2026-01-17T16:26:11.2977272Z .rdd\src\actions\prompt_set_state.py                               86     67    22%
+2026-01-17T16:26:11.2977804Z tests\rdd-framework\actions\test_execution_actions.py              14      0   100%
+2026-01-17T16:26:11.2978346Z tests\rdd-framework\actions\test_misc_actions.py                   11      0   100%
+2026-01-17T16:26:11.2978882Z tests\rdd-framework\actions\test_modification_actions.py           13      0   100%
+2026-01-17T16:26:11.2979345Z tests\rdd-framework\actions\test_prompt_actions.py                115      0   100%
+2026-01-17T16:26:11.2979836Z tests\rdd-framework\actions\test_requirement_actions.py            32      0   100%
+2026-01-17T16:26:11.2980337Z tests\rdd-framework\actions\test_workdir_actions.py                16      0   100%
+2026-01-17T16:26:11.2980816Z tests\rdd-framework\actions\test_workflow_actions.py               24      0   100%
+2026-01-17T16:26:11.2981294Z tests\rdd-framework\config\test_manifest_validation.py             66      4    94%
+2026-01-17T16:26:11.2981741Z tests\rdd-framework\conftest.py                                    98     39    60%
+2026-01-17T16:26:11.2982193Z tests\rdd-framework\integration\test_iteration_archive.py          48      0   100%
+2026-01-17T16:26:11.2982668Z tests\rdd-framework\integration\test_prompt_lifecycle.py          124      0   100%
+2026-01-17T16:26:11.2983134Z tests\rdd-framework\integration\test_requirement_workflows.py      75      0   100%
+2026-01-17T16:26:11.2983863Z -----------------------------------------------------------------------------------
+2026-01-17T16:26:11.2984199Z TOTAL                                                             838    188    78%
+2026-01-17T16:26:11.2984639Z Coverage XML written to file coverage.xml
+2026-01-17T16:26:11.2984929Z =========================== short test summary info ===========================
+2026-01-17T16:26:11.2986144Z FAILED tests/rdd-framework/config/test_manifest_validation.py::TestConfigStructureValidation::test_technical_design_form_structure - AssertionError: technical-design-form.json must exist
+2026-01-17T16:26:11.2987924Z assert False
+2026-01-17T16:26:11.2988217Z  +  where False = exists()
+2026-01-17T16:26:11.2988870Z  +    where exists = WindowsPath('D:/a/requirements-driven-development/requirements-driven-development/.rdd/config/technical-design-form.json').exists
+2026-01-17T16:26:11.2989570Z ======================== 1 failed, 72 passed in 3.31s =========================
+2026-01-17T16:26:11.3340133Z [0;31m✗[0m RDD framework tests failed
+2026-01-17T16:26:11.3340744Z [0;31m✗[0m Some tests failed
+2026-01-17T16:26:11.3340977Z 
+2026-01-17T16:26:11.3341143Z ============================================================
+2026-01-17T16:26:11.3341591Z   RDD Framework Test Runner (Windows)
+2026-01-17T16:26:11.3341966Z ============================================================
+2026-01-17T16:26:11.3342252Z 
+2026-01-17T16:26:11.3342459Z [0;34mℹ[0m Checking prerequisites...
+2026-01-17T16:26:11.3342894Z [0;32m✓[0m Python found: 3.9.13
+2026-01-17T16:26:11.3343284Z [0;32m✓[0m Virtual environment found
+2026-01-17T16:26:11.3343670Z [0;32m✓[0m pytest 8.4.2
+2026-01-17T16:26:11.3343863Z 
+2026-01-17T16:26:11.3343870Z 
+2026-01-17T16:26:11.3344334Z ============================================================
+2026-01-17T16:26:11.3344702Z   Running Tests
+2026-01-17T16:26:11.3344967Z ============================================================
+2026-01-17T16:26:11.3345257Z 
+2026-01-17T16:26:11.3345462Z [0;34m[1/1][0m Running RDD framework tests
+2026-01-17T16:26:11.3345734Z 
+2026-01-17T16:26:11.3345740Z 
+2026-01-17T16:26:11.3345856Z ============================================================
+2026-01-17T16:26:11.3346201Z   Test Summary
+2026-01-17T16:26:11.3346468Z ============================================================
+2026-01-17T16:26:11.3346736Z 
+2026-01-17T16:26:11.3346838Z Total test suites: 1
+2026-01-17T16:26:11.3347133Z [0;32mPassed: 0[0m
+2026-01-17T16:26:11.3347436Z [0;31mFailed: 1[0m
+2026-01-17T16:26:11.3347602Z 
+2026-01-17T16:26:11.4612032Z ##[error]Process completed with exit code 1.
+2026-01-17T16:26:11.4833658Z Post job cleanup.
+2026-01-17T16:26:11.7445261Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-01-17T16:26:11.7819575Z git version 2.52.0.windows.1
+2026-01-17T16:26:11.7930989Z Temporarily overriding HOME='D:\a\_temp\da5fe851-355c-47e1-beb3-049d58c25842' before making global git config changes
+2026-01-17T16:26:11.7933302Z Adding repository directory to the temporary git global config as a safe directory
+2026-01-17T16:26:11.7934975Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\requirements-driven-development\requirements-driven-development
+2026-01-17T16:26:11.8283309Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-01-17T16:26:11.8606291Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-01-17T16:26:12.4550509Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-01-17T16:26:12.4832952Z http.https://github.com/.extraheader
+2026-01-17T16:26:12.4882531Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all http.https://github.com/.extraheader
+2026-01-17T16:26:12.5216273Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-01-17T16:26:13.0948374Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-01-17T16:26:13.1267756Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-01-17T16:26:13.7389329Z Cleaning up orphan processes

@@ -284,7 +284,7 @@ The framework enables:
 
 - [TR-0006] The framework shall use `.rdd-instance/specifications/` for storing technical design files. 
 
-- [TR-0007] A technical design form JSON config file `.rdd/config/technical-design-form.json` shall define the content of Technical Specification page and should support definition of form elements with predefined options, multi-select fields, free-text values, conditional logic, and a default-answer mechanism. 
+- [TR-0007] A technical design schema JSON file .rdd/config/technical-design-schema.json shall define the content of Technical Specification page and should support definition of form elements with predefined options, multi-select fields, free-text values, conditional logic, and a default-answer mechanism.
 
 - [TR-0008] Web UI server shall be implemented using Python standard-library components (such as `http.server`) or equivalent, binding to `127.0.0.1` on an available port and automatically opening the user's default browser. 
 

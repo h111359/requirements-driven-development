@@ -211,3 +211,8 @@ Read `TechnicalDesignSchema.json` and carry forward ALL of the following:
 
 Error appeared: Error loading technical design: can't access property "value", textarea is null
 %%ENDPROMPT
+
+%%PROMPT P-002 "Fix test failures"
+Tests failed. Test log is in `.rdd-instance/workdir/P-002_Fix test failures/logs_54657022391`
+Troubleshoot, fix, test until all is fixed
+%%ENDPROMPT

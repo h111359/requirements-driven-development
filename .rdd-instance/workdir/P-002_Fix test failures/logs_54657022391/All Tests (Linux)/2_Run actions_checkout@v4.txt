@@ -1,0 +1,88 @@
+﻿2026-01-17T16:24:09.3497988Z ##[group]Run actions/checkout@v4
+2026-01-17T16:24:09.3498915Z with:
+2026-01-17T16:24:09.3499405Z   repository: h111359/requirements-driven-development
+2026-01-17T16:24:09.3500279Z   token: ***
+2026-01-17T16:24:09.3500665Z   ssh-strict: true
+2026-01-17T16:24:09.3501073Z   ssh-user: git
+2026-01-17T16:24:09.3501486Z   persist-credentials: true
+2026-01-17T16:24:09.3501945Z   clean: true
+2026-01-17T16:24:09.3502350Z   sparse-checkout-cone-mode: true
+2026-01-17T16:24:09.3502853Z   fetch-depth: 1
+2026-01-17T16:24:09.3503280Z   fetch-tags: false
+2026-01-17T16:24:09.3503702Z   show-progress: true
+2026-01-17T16:24:09.3504140Z   lfs: false
+2026-01-17T16:24:09.3504533Z   submodules: false
+2026-01-17T16:24:09.3504972Z   set-safe-directory: true
+2026-01-17T16:24:09.3505687Z ##[endgroup]
+2026-01-17T16:24:09.4645083Z Syncing repository: h111359/requirements-driven-development
+2026-01-17T16:24:09.4647412Z ##[group]Getting Git version info
+2026-01-17T16:24:09.4648444Z Working directory is '/home/runner/work/requirements-driven-development/requirements-driven-development'
+2026-01-17T16:24:09.4649810Z [command]/usr/bin/git version
+2026-01-17T16:24:09.4724032Z git version 2.52.0
+2026-01-17T16:24:09.4751200Z ##[endgroup]
+2026-01-17T16:24:09.4767231Z Temporarily overriding HOME='/home/runner/work/_temp/326a2e8e-6140-4f64-95fc-985c8125734c' before making global git config changes
+2026-01-17T16:24:09.4769578Z Adding repository directory to the temporary git global config as a safe directory
+2026-01-17T16:24:09.4773175Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/requirements-driven-development/requirements-driven-development
+2026-01-17T16:24:09.4816781Z Deleting the contents of '/home/runner/work/requirements-driven-development/requirements-driven-development'
+2026-01-17T16:24:09.4820242Z ##[group]Initializing the repository
+2026-01-17T16:24:09.4824925Z [command]/usr/bin/git init /home/runner/work/requirements-driven-development/requirements-driven-development
+2026-01-17T16:24:09.4922206Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-01-17T16:24:09.4924290Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-01-17T16:24:09.4926571Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-01-17T16:24:09.4928324Z hint: call:
+2026-01-17T16:24:09.4929011Z hint:
+2026-01-17T16:24:09.4929672Z hint: 	git config --global init.defaultBranch <name>
+2026-01-17T16:24:09.4930414Z hint:
+2026-01-17T16:24:09.4931111Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-01-17T16:24:09.4932288Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-01-17T16:24:09.4933217Z hint:
+2026-01-17T16:24:09.4933747Z hint: 	git branch -m <name>
+2026-01-17T16:24:09.4934617Z hint:
+2026-01-17T16:24:09.4935512Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-01-17T16:24:09.4937335Z Initialized empty Git repository in /home/runner/work/requirements-driven-development/requirements-driven-development/.git/
+2026-01-17T16:24:09.4941692Z [command]/usr/bin/git remote add origin https://github.com/h111359/requirements-driven-development
+2026-01-17T16:24:09.4978812Z ##[endgroup]
+2026-01-17T16:24:09.4979645Z ##[group]Disabling automatic garbage collection
+2026-01-17T16:24:09.4983441Z [command]/usr/bin/git config --local gc.auto 0
+2026-01-17T16:24:09.5014996Z ##[endgroup]
+2026-01-17T16:24:09.5015841Z ##[group]Setting up auth
+2026-01-17T16:24:09.5022642Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-01-17T16:24:09.5057463Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-01-17T16:24:09.5383350Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-01-17T16:24:09.5416121Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-01-17T16:24:09.5646689Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-01-17T16:24:09.5678519Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-01-17T16:24:09.5913442Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-01-17T16:24:09.5950509Z ##[endgroup]
+2026-01-17T16:24:09.5951904Z ##[group]Fetching the repository
+2026-01-17T16:24:09.5959611Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +646fab66090250aa5d92bc244de36030d692ea05:refs/remotes/pull/91/merge
+2026-01-17T16:24:09.9308032Z From https://github.com/h111359/requirements-driven-development
+2026-01-17T16:24:09.9311888Z  * [new ref]         646fab66090250aa5d92bc244de36030d692ea05 -> pull/91/merge
+2026-01-17T16:24:09.9342374Z ##[endgroup]
+2026-01-17T16:24:09.9344243Z ##[group]Determining the checkout info
+2026-01-17T16:24:09.9346582Z ##[endgroup]
+2026-01-17T16:24:09.9351059Z [command]/usr/bin/git sparse-checkout disable
+2026-01-17T16:24:09.9443773Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-01-17T16:24:09.9472535Z ##[group]Checking out the ref
+2026-01-17T16:24:09.9476531Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/91/merge
+2026-01-17T16:24:09.9808907Z Note: switching to 'refs/remotes/pull/91/merge'.
+2026-01-17T16:24:09.9810744Z 
+2026-01-17T16:24:09.9812233Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-01-17T16:24:09.9817157Z changes and commit them, and you can discard any commits you make in this
+2026-01-17T16:24:09.9820917Z state without impacting any branches by switching back to a branch.
+2026-01-17T16:24:09.9823756Z 
+2026-01-17T16:24:09.9825556Z If you want to create a new branch to retain commits you create, you may
+2026-01-17T16:24:09.9828700Z do so (now or later) by using -c with the switch command. Example:
+2026-01-17T16:24:09.9830381Z 
+2026-01-17T16:24:09.9830905Z   git switch -c <new-branch-name>
+2026-01-17T16:24:09.9831831Z 
+2026-01-17T16:24:09.9832421Z Or undo this operation with:
+2026-01-17T16:24:09.9833270Z 
+2026-01-17T16:24:09.9833730Z   git switch -
+2026-01-17T16:24:09.9834397Z 
+2026-01-17T16:24:09.9835509Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-01-17T16:24:09.9837207Z 
+2026-01-17T16:24:09.9838521Z HEAD is now at 646fab6 Merge 86eae44ece44a39faad246a8cd98f12261416b10 into b85420ace31eebf9b352393b287de7a7c238636a
+2026-01-17T16:24:09.9842533Z ##[endgroup]
+2026-01-17T16:24:09.9865958Z [command]/usr/bin/git log -1 --format=%H
+2026-01-17T16:24:09.9889047Z 646fab66090250aa5d92bc244de36030d692ea05

@@ -69,12 +69,11 @@ The Technical Design page enables you to record architectural decisions through 
 **Storage:**
 - Answers are stored in `.rdd-instance/specifications/technical-design.json`
 - Only answered questions are saved (sparse storage)
-- Each answer includes a timestamp and optional rationale
+- Each answer includes a timestamp
 - The schema defining all questions is in `.rdd/config/technical-design-schema.json`
 
 **Best Practices:**
 - Answer foundational questions first (Project Scale, Cloud Strategy, Enterprise Constraints)
-- Use the rationale field (planned feature) to document why you made certain choices
 - Review and update Technical Design when project requirements or constraints change
 - Don't feel obligated to answer every question—focus on what's relevant to your project
 

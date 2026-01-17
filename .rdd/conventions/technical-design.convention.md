@@ -9,7 +9,7 @@ The Technical Design artifact stores structured architectural decisions for RDD 
 - Only **explicitly answered** questions are stored (sparse storage model)
 - **Python scripts enforce all modifications** - never edit the file directly
 - Technical Design is optional: RDD execution flows continue if the file is empty or missing
-- When present, RDD execution modes (clarify/analyze/plan/implement) must comply with recorded decisions
+- When present, RDD execution modes (clarify/analyze/plan/implement/modify) must comply with recorded decisions
 
 ## File Locations
 
@@ -103,11 +103,6 @@ Questions can be conditionally shown/hidden based on answers to other questions 
 - Rule matches when the referenced question's current answer value equals the specified value
 - For multiselect questions, rule matches if the specified value is present in the answer array
 - Questions without `visibleWhen` are always visible
-
-**Future Extensions** (not currently implemented):
-- OR combinators
-- Complex boolean expressions
-- Value range checks
 
 ## Answers Storage Format
 
@@ -409,7 +404,4 @@ python .rdd/src/actions/technical_design_answer_remove.py questionId="Frontend_F
 - Removing questions: requires cleanup of orphaned answers
 - Renaming questionId: treat as remove + add (requires migration of answer data)
 
----
 
-**Version**: Created for RDD Framework 2.0.1  
-**Last Updated**: January 17, 2026

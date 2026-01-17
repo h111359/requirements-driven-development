@@ -1,0 +1,38 @@
+﻿2026-01-17T16:26:18.3849642Z Current runner version: '2.331.0'
+2026-01-17T16:26:18.3872345Z ##[group]Runner Image Provisioner
+2026-01-17T16:26:18.3873116Z Hosted Compute Agent
+2026-01-17T16:26:18.3873685Z Version: 20251211.462
+2026-01-17T16:26:18.3874349Z Commit: 6cbad8c2bb55d58165063d031ccabf57e2d2db61
+2026-01-17T16:26:18.3875078Z Build Date: 2025-12-11T16:28:49Z
+2026-01-17T16:26:18.3875746Z Worker ID: {6a4d2f4a-a4e6-42a8-bfd4-3ef02f765416}
+2026-01-17T16:26:18.3876385Z ##[endgroup]
+2026-01-17T16:26:18.3876994Z ##[group]Operating System
+2026-01-17T16:26:18.3877528Z Ubuntu
+2026-01-17T16:26:18.3878176Z 24.04.3
+2026-01-17T16:26:18.3878709Z LTS
+2026-01-17T16:26:18.3879179Z ##[endgroup]
+2026-01-17T16:26:18.3879661Z ##[group]Runner Image
+2026-01-17T16:26:18.3880232Z Image: ubuntu-24.04
+2026-01-17T16:26:18.3880743Z Version: 20260111.209.1
+2026-01-17T16:26:18.3881717Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260111.209/images/ubuntu/Ubuntu2404-Readme.md
+2026-01-17T16:26:18.3883346Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260111.209
+2026-01-17T16:26:18.3884300Z ##[endgroup]
+2026-01-17T16:26:18.3885454Z ##[group]GITHUB_TOKEN Permissions
+2026-01-17T16:26:18.3887503Z Contents: read
+2026-01-17T16:26:18.3888256Z Metadata: read
+2026-01-17T16:26:18.3888790Z Packages: read
+2026-01-17T16:26:18.3889257Z ##[endgroup]
+2026-01-17T16:26:18.3891321Z Secret source: Actions
+2026-01-17T16:26:18.3892269Z Prepare workflow directory
+2026-01-17T16:26:18.4296165Z Prepare all required actions
+2026-01-17T16:26:18.4429410Z Complete job name: Test Summary
+2026-01-17T16:26:18.5491994Z ##[group]Run echo "All tests completed"
+2026-01-17T16:26:18.5493140Z [36;1mecho "All tests completed"[0m
+2026-01-17T16:26:18.5494307Z [36;1mecho "All Tests (Linux): failure"[0m
+2026-01-17T16:26:18.5495365Z [36;1mecho "All Tests (Windows): failure"[0m
+2026-01-17T16:26:18.6366070Z shell: /usr/bin/bash -e {0}
+2026-01-17T16:26:18.6367612Z ##[endgroup]
+2026-01-17T16:26:18.6581931Z All tests completed
+2026-01-17T16:26:18.6583211Z All Tests (Linux): failure
+2026-01-17T16:26:18.6584191Z All Tests (Windows): failure
+2026-01-17T16:26:18.6768684Z Cleaning up orphan processes

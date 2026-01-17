@@ -119,10 +119,10 @@ class TestConfigStructureValidation:
         pass
     
     def test_technical_design_form_structure(self):
-        """Test that technical-design-form.json has valid structure"""
-        form_path = Path(__file__).resolve().parents[3] / ".rdd" / "config" / "technical-design-form.json"
+        """Test that technical-design-schema.json has valid structure"""
+        form_path = Path(__file__).resolve().parents[3] / ".rdd" / "config" / "technical-design-schema.json"
         
-        assert form_path.exists(), "technical-design-form.json must exist"
+        assert form_path.exists(), "technical-design-schema.json must exist"
         
         # File may be empty initially
         if form_path.stat().st_size > 0:

@@ -1,0 +1,533 @@
+﻿2026-01-17T16:24:08.1904565Z Current runner version: '2.331.0'
+2026-01-17T16:24:08.1930650Z ##[group]Runner Image Provisioner
+2026-01-17T16:24:08.1931482Z Hosted Compute Agent
+2026-01-17T16:24:08.1932031Z Version: 20251211.462
+2026-01-17T16:24:08.1932761Z Commit: 6cbad8c2bb55d58165063d031ccabf57e2d2db61
+2026-01-17T16:24:08.1933474Z Build Date: 2025-12-11T16:28:49Z
+2026-01-17T16:24:08.1934159Z Worker ID: {dbece522-49d3-4bbe-b64b-d77a7107d2c8}
+2026-01-17T16:24:08.1934925Z ##[endgroup]
+2026-01-17T16:24:08.1935491Z ##[group]Operating System
+2026-01-17T16:24:08.1936081Z Ubuntu
+2026-01-17T16:24:08.1936762Z 24.04.3
+2026-01-17T16:24:08.1937270Z LTS
+2026-01-17T16:24:08.1937712Z ##[endgroup]
+2026-01-17T16:24:08.1938335Z ##[group]Runner Image
+2026-01-17T16:24:08.1938884Z Image: ubuntu-24.04
+2026-01-17T16:24:08.1939417Z Version: 20260111.209.1
+2026-01-17T16:24:08.1940537Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260111.209/images/ubuntu/Ubuntu2404-Readme.md
+2026-01-17T16:24:08.1942276Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260111.209
+2026-01-17T16:24:08.1943370Z ##[endgroup]
+2026-01-17T16:24:08.1944456Z ##[group]GITHUB_TOKEN Permissions
+2026-01-17T16:24:08.1946593Z Contents: read
+2026-01-17T16:24:08.1947142Z Metadata: read
+2026-01-17T16:24:08.1947646Z Packages: read
+2026-01-17T16:24:08.1948261Z ##[endgroup]
+2026-01-17T16:24:08.1950319Z Secret source: Actions
+2026-01-17T16:24:08.1951031Z Prepare workflow directory
+2026-01-17T16:24:08.2277615Z Prepare all required actions
+2026-01-17T16:24:08.2315688Z Getting action download info
+2026-01-17T16:24:08.5553355Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-01-17T16:24:08.7251375Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-01-17T16:24:08.8614514Z Download action repository 'codecov/codecov-action@v4' (SHA:b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238)
+2026-01-17T16:24:09.2755864Z Complete job name: All Tests (Linux)
+2026-01-17T16:24:09.3498022Z ##[group]Run actions/checkout@v4
+2026-01-17T16:24:09.3498924Z with:
+2026-01-17T16:24:09.3499409Z   repository: h111359/requirements-driven-development
+2026-01-17T16:24:09.3500282Z   token: ***
+2026-01-17T16:24:09.3500668Z   ssh-strict: true
+2026-01-17T16:24:09.3501076Z   ssh-user: git
+2026-01-17T16:24:09.3501489Z   persist-credentials: true
+2026-01-17T16:24:09.3501948Z   clean: true
+2026-01-17T16:24:09.3502353Z   sparse-checkout-cone-mode: true
+2026-01-17T16:24:09.3502856Z   fetch-depth: 1
+2026-01-17T16:24:09.3503283Z   fetch-tags: false
+2026-01-17T16:24:09.3503704Z   show-progress: true
+2026-01-17T16:24:09.3504143Z   lfs: false
+2026-01-17T16:24:09.3504536Z   submodules: false
+2026-01-17T16:24:09.3504975Z   set-safe-directory: true
+2026-01-17T16:24:09.3505699Z ##[endgroup]
+2026-01-17T16:24:09.4645144Z Syncing repository: h111359/requirements-driven-development
+2026-01-17T16:24:09.4647431Z ##[group]Getting Git version info
+2026-01-17T16:24:09.4648542Z Working directory is '/home/runner/work/requirements-driven-development/requirements-driven-development'
+2026-01-17T16:24:09.4649814Z [command]/usr/bin/git version
+2026-01-17T16:24:09.4724074Z git version 2.52.0
+2026-01-17T16:24:09.4751221Z ##[endgroup]
+2026-01-17T16:24:09.4767253Z Temporarily overriding HOME='/home/runner/work/_temp/326a2e8e-6140-4f64-95fc-985c8125734c' before making global git config changes
+2026-01-17T16:24:09.4769583Z Adding repository directory to the temporary git global config as a safe directory
+2026-01-17T16:24:09.4773194Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/requirements-driven-development/requirements-driven-development
+2026-01-17T16:24:09.4816816Z Deleting the contents of '/home/runner/work/requirements-driven-development/requirements-driven-development'
+2026-01-17T16:24:09.4820255Z ##[group]Initializing the repository
+2026-01-17T16:24:09.4824937Z [command]/usr/bin/git init /home/runner/work/requirements-driven-development/requirements-driven-development
+2026-01-17T16:24:09.4922303Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-01-17T16:24:09.4924321Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-01-17T16:24:09.4926590Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-01-17T16:24:09.4928331Z hint: call:
+2026-01-17T16:24:09.4929020Z hint:
+2026-01-17T16:24:09.4929676Z hint: 	git config --global init.defaultBranch <name>
+2026-01-17T16:24:09.4930418Z hint:
+2026-01-17T16:24:09.4931115Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-01-17T16:24:09.4932291Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-01-17T16:24:09.4933220Z hint:
+2026-01-17T16:24:09.4933755Z hint: 	git branch -m <name>
+2026-01-17T16:24:09.4934625Z hint:
+2026-01-17T16:24:09.4935516Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-01-17T16:24:09.4937363Z Initialized empty Git repository in /home/runner/work/requirements-driven-development/requirements-driven-development/.git/
+2026-01-17T16:24:09.4941739Z [command]/usr/bin/git remote add origin https://github.com/h111359/requirements-driven-development
+2026-01-17T16:24:09.4978836Z ##[endgroup]
+2026-01-17T16:24:09.4979650Z ##[group]Disabling automatic garbage collection
+2026-01-17T16:24:09.4983457Z [command]/usr/bin/git config --local gc.auto 0
+2026-01-17T16:24:09.5015021Z ##[endgroup]
+2026-01-17T16:24:09.5015846Z ##[group]Setting up auth
+2026-01-17T16:24:09.5022666Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-01-17T16:24:09.5057491Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-01-17T16:24:09.5383425Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-01-17T16:24:09.5416799Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-01-17T16:24:09.5646780Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-01-17T16:24:09.5678548Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-01-17T16:24:09.5913511Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-01-17T16:24:09.5950551Z ##[endgroup]
+2026-01-17T16:24:09.5951913Z ##[group]Fetching the repository
+2026-01-17T16:24:09.5959632Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +646fab66090250aa5d92bc244de36030d692ea05:refs/remotes/pull/91/merge
+2026-01-17T16:24:09.9308153Z From https://github.com/h111359/requirements-driven-development
+2026-01-17T16:24:09.9311998Z  * [new ref]         646fab66090250aa5d92bc244de36030d692ea05 -> pull/91/merge
+2026-01-17T16:24:09.9342418Z ##[endgroup]
+2026-01-17T16:24:09.9344273Z ##[group]Determining the checkout info
+2026-01-17T16:24:09.9346604Z ##[endgroup]
+2026-01-17T16:24:09.9351089Z [command]/usr/bin/git sparse-checkout disable
+2026-01-17T16:24:09.9443820Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-01-17T16:24:09.9472567Z ##[group]Checking out the ref
+2026-01-17T16:24:09.9476569Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/91/merge
+2026-01-17T16:24:09.9809040Z Note: switching to 'refs/remotes/pull/91/merge'.
+2026-01-17T16:24:09.9810755Z 
+2026-01-17T16:24:09.9812256Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-01-17T16:24:09.9817208Z changes and commit them, and you can discard any commits you make in this
+2026-01-17T16:24:09.9820985Z state without impacting any branches by switching back to a branch.
+2026-01-17T16:24:09.9823791Z 
+2026-01-17T16:24:09.9825634Z If you want to create a new branch to retain commits you create, you may
+2026-01-17T16:24:09.9828733Z do so (now or later) by using -c with the switch command. Example:
+2026-01-17T16:24:09.9830398Z 
+2026-01-17T16:24:09.9830914Z   git switch -c <new-branch-name>
+2026-01-17T16:24:09.9831839Z 
+2026-01-17T16:24:09.9832428Z Or undo this operation with:
+2026-01-17T16:24:09.9833276Z 
+2026-01-17T16:24:09.9833737Z   git switch -
+2026-01-17T16:24:09.9834404Z 
+2026-01-17T16:24:09.9835517Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-01-17T16:24:09.9837224Z 
+2026-01-17T16:24:09.9838527Z HEAD is now at 646fab6 Merge 86eae44ece44a39faad246a8cd98f12261416b10 into b85420ace31eebf9b352393b287de7a7c238636a
+2026-01-17T16:24:09.9842545Z ##[endgroup]
+2026-01-17T16:24:09.9865991Z [command]/usr/bin/git log -1 --format=%H
+2026-01-17T16:24:09.9889081Z 646fab66090250aa5d92bc244de36030d692ea05
+2026-01-17T16:24:10.0228829Z ##[group]Run actions/setup-python@v5
+2026-01-17T16:24:10.0229941Z with:
+2026-01-17T16:24:10.0230669Z   python-version: 3.9
+2026-01-17T16:24:10.0231532Z   check-latest: false
+2026-01-17T16:24:10.0232689Z   token: ***
+2026-01-17T16:24:10.0233466Z   update-environment: true
+2026-01-17T16:24:10.0234418Z   allow-prereleases: false
+2026-01-17T16:24:10.0235360Z   freethreaded: false
+2026-01-17T16:24:10.0236178Z ##[endgroup]
+2026-01-17T16:24:10.2067060Z ##[group]Installed versions
+2026-01-17T16:24:10.2809723Z Version 3.9 was not found in the local cache
+2026-01-17T16:24:10.6001012Z Version 3.9 is available for downloading
+2026-01-17T16:24:10.6002963Z Download from "https://github.com/actions/python-versions/releases/download/3.9.25-19039189640/python-3.9.25-linux-24.04-x64.tar.gz"
+2026-01-17T16:24:11.1732838Z Extract downloaded archive
+2026-01-17T16:24:11.1850598Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/428474b0-cf63-4bb6-bafa-e952eee1f132 -f /home/runner/work/_temp/b2f3fbe8-81b6-43a2-a680-f223c8f98018
+2026-01-17T16:24:12.5607607Z Execute installation script
+2026-01-17T16:24:12.5704618Z Check if Python hostedtoolcache folder exist...
+2026-01-17T16:24:12.5818949Z Create Python 3.9.25 folder
+2026-01-17T16:24:12.5819779Z Copy Python binaries to hostedtoolcache folder
+2026-01-17T16:24:13.0970546Z Create additional symlinks (Required for the UsePythonVersion Azure Pipelines task and the setup-python GitHub Action)
+2026-01-17T16:24:13.1013583Z Upgrading pip...
+2026-01-17T16:24:15.6969198Z Looking in links: /tmp/tmpxvqlsczb
+2026-01-17T16:24:15.6974629Z Requirement already satisfied: setuptools in /opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/site-packages (79.0.1)
+2026-01-17T16:24:15.6979614Z Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/site-packages (23.0.1)
+2026-01-17T16:24:17.3952114Z Collecting pip
+2026-01-17T16:24:17.4287209Z Downloading pip-25.3-py3-none-any.whl (1.8 MB)
+2026-01-17T16:24:17.4635343Z ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 56.2 MB/s eta 0:00:00
+2026-01-17T16:24:17.4636113Z 
+2026-01-17T16:24:17.5238948Z Installing collected packages: pip
+2026-01-17T16:24:17.5239522Z Attempting uninstall: pip
+2026-01-17T16:24:17.5246048Z Found existing installation: pip 23.0.1
+2026-01-17T16:24:17.7067238Z Uninstalling pip-23.0.1:
+2026-01-17T16:24:17.7140642Z Successfully uninstalled pip-23.0.1
+2026-01-17T16:24:18.5445068Z Successfully installed pip-25.3
+2026-01-17T16:24:18.6020862Z Create complete file
+2026-01-17T16:24:18.6065433Z Successfully set up CPython (3.9.25)
+2026-01-17T16:24:18.6066589Z ##[endgroup]
+2026-01-17T16:24:18.6244081Z ##[group]Run sudo apt-get update
+2026-01-17T16:24:18.6244469Z [36;1msudo apt-get update[0m
+2026-01-17T16:24:18.6244767Z [36;1msudo apt-get install -y bats[0m
+2026-01-17T16:24:18.6283388Z shell: /usr/bin/bash -e {0}
+2026-01-17T16:24:18.6283695Z env:
+2026-01-17T16:24:18.6284007Z   pythonLocation: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:18.6284548Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib/pkgconfig
+2026-01-17T16:24:18.6285366Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:18.6285840Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:18.6286634Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:18.6287161Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib
+2026-01-17T16:24:18.6287555Z ##[endgroup]
+2026-01-17T16:24:18.7598099Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-01-17T16:24:18.7772702Z Get:6 https://packages.microsoft.com/repos/azure-cli noble InRelease [3564 B]
+2026-01-17T16:24:18.7990970Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-01-17T16:24:18.7994655Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-01-17T16:24:18.8005202Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-01-17T16:24:18.8034036Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-01-17T16:24:18.8055177Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-01-17T16:24:18.9121520Z Get:8 https://packages.microsoft.com/repos/azure-cli noble/main amd64 Packages [1948 B]
+2026-01-17T16:24:19.0186186Z Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [80.6 kB]
+2026-01-17T16:24:19.0229594Z Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [11.4 kB]
+2026-01-17T16:24:19.0253576Z Get:11 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [62.1 kB]
+2026-01-17T16:24:19.0720608Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1694 kB]
+2026-01-17T16:24:19.0828439Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [313 kB]
+2026-01-17T16:24:19.0877337Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [175 kB]
+2026-01-17T16:24:19.0888075Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 c-n-f Metadata [15.9 kB]
+2026-01-17T16:24:19.0900749Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1514 kB]
+2026-01-17T16:24:19.0985233Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [308 kB]
+2026-01-17T16:24:19.1013535Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [377 kB]
+2026-01-17T16:24:19.1046925Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 c-n-f Metadata [31.5 kB]
+2026-01-17T16:24:19.1055186Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2426 kB]
+2026-01-17T16:24:19.1177932Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [554 kB]
+2026-01-17T16:24:19.1697932Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Components [212 B]
+2026-01-17T16:24:19.1705636Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+2026-01-17T16:24:19.1715010Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [7284 B]
+2026-01-17T16:24:19.1730528Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [10.5 kB]
+2026-01-17T16:24:19.1747690Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-backports/restricted amd64 Components [216 B]
+2026-01-17T16:24:19.1751971Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Components [212 B]
+2026-01-17T16:24:19.1946059Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1404 kB]
+2026-01-17T16:24:19.2020233Z Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [228 kB]
+2026-01-17T16:24:19.2043076Z Get:30 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [21.6 kB]
+2026-01-17T16:24:19.2053083Z Get:31 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 c-n-f Metadata [9724 B]
+2026-01-17T16:24:19.2064108Z Get:32 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [922 kB]
+2026-01-17T16:24:19.2119231Z Get:33 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [209 kB]
+2026-01-17T16:24:19.2141450Z Get:34 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [71.4 kB]
+2026-01-17T16:24:19.2154658Z Get:35 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 c-n-f Metadata [19.7 kB]
+2026-01-17T16:24:19.2573470Z Get:36 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [2302 kB]
+2026-01-17T16:24:19.2691661Z Get:37 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [527 kB]
+2026-01-17T16:24:19.2731674Z Get:38 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Components [212 B]
+2026-01-17T16:24:19.2740424Z Get:39 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Components [212 B]
+2026-01-17T16:24:28.4758367Z Fetched 13.7 MB in 2s (7952 kB/s)
+2026-01-17T16:24:29.2249741Z Reading package lists...
+2026-01-17T16:24:29.2585842Z Reading package lists...
+2026-01-17T16:24:29.4308246Z Building dependency tree...
+2026-01-17T16:24:29.4315641Z Reading state information...
+2026-01-17T16:24:29.6007619Z The following NEW packages will be installed:
+2026-01-17T16:24:29.6015282Z   bats
+2026-01-17T16:24:29.6187995Z 0 upgraded, 1 newly installed, 0 to remove and 109 not upgraded.
+2026-01-17T16:24:29.6188801Z Need to get 45.5 kB of archives.
+2026-01-17T16:24:29.6189490Z After this operation, 166 kB of additional disk space will be used.
+2026-01-17T16:24:29.6190019Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-01-17T16:24:29.6463164Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 bats all 1.10.0-1 [45.5 kB]
+2026-01-17T16:24:29.9131459Z Fetched 45.5 kB in 0s (1150 kB/s)
+2026-01-17T16:24:29.9787116Z Selecting previously unselected package bats.
+2026-01-17T16:24:30.0921763Z (Reading database ... 
+2026-01-17T16:24:30.0922283Z (Reading database ... 5%
+2026-01-17T16:24:30.0922698Z (Reading database ... 10%
+2026-01-17T16:24:30.0923082Z (Reading database ... 15%
+2026-01-17T16:24:30.0923445Z (Reading database ... 20%
+2026-01-17T16:24:30.0923807Z (Reading database ... 25%
+2026-01-17T16:24:30.0924160Z (Reading database ... 30%
+2026-01-17T16:24:30.0924519Z (Reading database ... 35%
+2026-01-17T16:24:30.0924866Z (Reading database ... 40%
+2026-01-17T16:24:30.0925225Z (Reading database ... 45%
+2026-01-17T16:24:30.0925584Z (Reading database ... 50%
+2026-01-17T16:24:30.2045958Z (Reading database ... 55%
+2026-01-17T16:24:30.6239735Z (Reading database ... 60%
+2026-01-17T16:24:30.8065734Z (Reading database ... 65%
+2026-01-17T16:24:31.0557660Z (Reading database ... 70%
+2026-01-17T16:24:31.2399942Z (Reading database ... 75%
+2026-01-17T16:24:31.8574872Z (Reading database ... 80%
+2026-01-17T16:24:32.5567867Z (Reading database ... 85%
+2026-01-17T16:24:33.3016550Z (Reading database ... 90%
+2026-01-17T16:24:34.1193428Z (Reading database ... 95%
+2026-01-17T16:24:34.1194081Z (Reading database ... 100%
+2026-01-17T16:24:34.1194970Z (Reading database ... 217536 files and directories currently installed.)
+2026-01-17T16:24:34.1247658Z Preparing to unpack .../archives/bats_1.10.0-1_all.deb ...
+2026-01-17T16:24:34.1275443Z Unpacking bats (1.10.0-1) ...
+2026-01-17T16:24:34.2101540Z Setting up bats (1.10.0-1) ...
+2026-01-17T16:24:34.2131902Z Processing triggers for man-db (2.12.0-4build2) ...
+2026-01-17T16:24:34.2257711Z Not building database; man-db/auto-update is not 'true'.
+2026-01-17T16:24:35.5188606Z 
+2026-01-17T16:24:35.5189609Z Running kernel seems to be up-to-date.
+2026-01-17T16:24:35.5190224Z 
+2026-01-17T16:24:35.5190491Z No services need to be restarted.
+2026-01-17T16:24:35.5190980Z 
+2026-01-17T16:24:35.5191245Z No containers need to be restarted.
+2026-01-17T16:24:35.5191749Z 
+2026-01-17T16:24:35.5192076Z No user sessions are running outdated binaries.
+2026-01-17T16:24:35.5192697Z 
+2026-01-17T16:24:35.5193106Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-01-17T16:24:36.4656712Z ##[group]Run python scripts/setup-test-env.py
+2026-01-17T16:24:36.4657157Z [36;1mpython scripts/setup-test-env.py[0m
+2026-01-17T16:24:36.4690818Z shell: /usr/bin/bash -e {0}
+2026-01-17T16:24:36.4691099Z env:
+2026-01-17T16:24:36.4691402Z   pythonLocation: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:36.4691943Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib/pkgconfig
+2026-01-17T16:24:36.4692471Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:36.4692933Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:36.4693398Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:36.4693874Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib
+2026-01-17T16:24:36.4694311Z ##[endgroup]
+2026-01-17T16:24:46.2190823Z 
+2026-01-17T16:24:46.2191415Z ============================================================
+2026-01-17T16:24:46.2192445Z   RDD Test Environment Setup
+2026-01-17T16:24:46.2193100Z ============================================================
+2026-01-17T16:24:46.2193485Z 
+2026-01-17T16:24:46.2193992Z ✓ Python 3.9.25 detected
+2026-01-17T16:24:46.2194286Z 
+2026-01-17T16:24:46.2194887Z Repository root: /home/runner/work/requirements-driven-development/requirements-driven-development
+2026-01-17T16:24:46.2196697Z Virtual environment: /home/runner/work/requirements-driven-development/requirements-driven-development/.venv
+2026-01-17T16:24:46.2198322Z Requirements file: /home/runner/work/requirements-driven-development/requirements-driven-development/tests/requirements.txt
+2026-01-17T16:24:46.2199404Z 
+2026-01-17T16:24:46.2202303Z ℹ Creating virtual environment at /home/runner/work/requirements-driven-development/requirements-driven-development/.venv...
+2026-01-17T16:24:46.2204114Z ✓ Virtual environment created
+2026-01-17T16:24:46.2204918Z ℹ Upgrading pip...
+2026-01-17T16:24:46.2205770Z ✓ pip upgraded
+2026-01-17T16:24:46.2206964Z ℹ Installing/updating test dependencies...
+2026-01-17T16:24:46.2208163Z ✓ Test dependencies installed/updated
+2026-01-17T16:24:46.2208896Z 
+2026-01-17T16:24:46.2209320Z ============================================================
+2026-01-17T16:24:46.2210274Z Setup completed successfully!
+2026-01-17T16:24:46.2211026Z ============================================================
+2026-01-17T16:24:46.2211668Z 
+2026-01-17T16:24:46.2211882Z To activate the virtual environment:
+2026-01-17T16:24:46.2212956Z   source /home/runner/work/requirements-driven-development/requirements-driven-development/.venv/bin/activate
+2026-01-17T16:24:46.2213583Z 
+2026-01-17T16:24:46.2213701Z To run tests:
+2026-01-17T16:24:46.2214081Z   pytest tests/python/
+2026-01-17T16:24:46.2214277Z 
+2026-01-17T16:24:46.2214432Z To deactivate:
+2026-01-17T16:24:46.2214705Z   deactivate
+2026-01-17T16:24:46.2214925Z 
+2026-01-17T16:24:46.2283193Z ##[group]Run python scripts/run-tests.py
+2026-01-17T16:24:46.2283758Z [36;1mpython scripts/run-tests.py[0m
+2026-01-17T16:24:46.2317256Z shell: /usr/bin/bash -e {0}
+2026-01-17T16:24:46.2317704Z env:
+2026-01-17T16:24:46.2318148Z   pythonLocation: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:46.2318791Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib/pkgconfig
+2026-01-17T16:24:46.2319534Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:46.2320115Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:46.2320719Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:46.2321366Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib
+2026-01-17T16:24:46.2321867Z ##[endgroup]
+2026-01-17T16:24:46.8973066Z ============================= test session starts ==============================
+2026-01-17T16:24:46.8975126Z platform linux -- Python 3.9.25, pytest-8.4.2, pluggy-1.6.0 -- /home/runner/work/requirements-driven-development/requirements-driven-development/.venv/bin/python
+2026-01-17T16:24:46.8977199Z cachedir: .pytest_cache
+2026-01-17T16:24:46.8978189Z rootdir: /home/runner/work/requirements-driven-development/requirements-driven-development
+2026-01-17T16:24:46.8979677Z plugins: timeout-2.4.0, cov-7.0.0, xdist-3.8.0, mock-3.15.1
+2026-01-17T16:24:47.0387553Z collecting ... collected 73 items
+2026-01-17T16:24:47.0388284Z 
+2026-01-17T16:24:47.0404689Z tests/rdd-framework/actions/test_execution_actions.py::TestExecutionModeManagement::test_set_execution_mode_valid_modes PASSED [  1%]
+2026-01-17T16:24:47.0416871Z tests/rdd-framework/actions/test_execution_actions.py::TestExecutionModeManagement::test_set_execution_mode_invalid_mode PASSED [  2%]
+2026-01-17T16:24:47.0428885Z tests/rdd-framework/actions/test_execution_actions.py::TestImplementationTracking::test_implementation_completed_on_sets_flag PASSED [  4%]
+2026-01-17T16:24:47.0440424Z tests/rdd-framework/actions/test_execution_actions.py::TestImplementationTracking::test_implementation_completed_off_unsets_flag PASSED [  5%]
+2026-01-17T16:24:47.0460239Z tests/rdd-framework/actions/test_execution_actions.py::TestExecutionTracking::test_set_executed_on_sets_flag PASSED [  6%]
+2026-01-17T16:24:47.0472428Z tests/rdd-framework/actions/test_misc_actions.py::TestFileListingGeneration::test_files_list_csv_refresh_creates_csv PASSED [  8%]
+2026-01-17T16:24:47.0484629Z tests/rdd-framework/actions/test_misc_actions.py::TestFileListingGeneration::test_files_list_csv_preserves_descriptions PASSED [  9%]
+2026-01-17T16:24:47.0497172Z tests/rdd-framework/actions/test_misc_actions.py::TestFileListingGeneration::test_files_list_csv_adds_new_files PASSED [ 10%]
+2026-01-17T16:24:47.0509343Z tests/rdd-framework/actions/test_misc_actions.py::TestCsvDescriptionUpdate::test_set_description_updates_entry PASSED [ 12%]
+2026-01-17T16:24:47.0521571Z tests/rdd-framework/actions/test_modification_actions.py::TestModificationCreation::test_create_modification_sequential_ids PASSED [ 13%]
+2026-01-17T16:24:47.0533821Z tests/rdd-framework/actions/test_modification_actions.py::TestModificationCreation::test_create_modification_requires_implementation_completed PASSED [ 15%]
+2026-01-17T16:24:47.0545571Z tests/rdd-framework/actions/test_modification_actions.py::TestModificationCreation::test_create_modification_enforces_single_active PASSED [ 16%]
+2026-01-17T16:24:47.0557266Z tests/rdd-framework/actions/test_modification_actions.py::TestModificationCompletion::test_complete_modification_updates_log PASSED [ 17%]
+2026-01-17T16:24:47.0569509Z tests/rdd-framework/actions/test_modification_actions.py::TestModificationCompletion::test_complete_modification_resets_current_id PASSED [ 19%]
+2026-01-17T16:24:47.0943746Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptCreate::test_create_prompt_with_auto_id PASSED [ 20%]
+2026-01-17T16:24:47.0963976Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptCreate::test_create_prompt_enforces_single_active PASSED [ 21%]
+2026-01-17T16:24:47.1002277Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptCreate::test_create_prompt_sanitizes_title_for_folder PASSED [ 23%]
+2026-01-17T16:24:47.1016000Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptSetState::test_set_state_to_completed PASSED [ 24%]
+2026-01-17T16:24:47.1027967Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptSetState::test_set_state_enforces_single_active PASSED [ 26%]
+2026-01-17T16:24:47.1039921Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptSetState::test_set_state_allows_bidirectional_transition PASSED [ 27%]
+2026-01-17T16:24:47.1051909Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptSetState::test_set_state_defaults_to_active_prompt PASSED [ 28%]
+2026-01-17T16:24:47.1078128Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptSetState::test_set_state_validates_state_parameter PASSED [ 30%]
+2026-01-17T16:24:47.1089811Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptComplete::test_complete_prompt_updates_state PASSED [ 31%]
+2026-01-17T16:24:47.1101586Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptComplete::test_complete_prompt_with_git_disabled PASSED [ 32%]
+2026-01-17T16:24:47.1113380Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptComplete::test_complete_prompt_with_git_enabled PASSED [ 34%]
+2026-01-17T16:24:47.1124944Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptComplete::test_complete_prompt_handles_git_failure_gracefully PASSED [ 35%]
+2026-01-17T16:24:47.1136573Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptListActions::test_find_active_prompt PASSED [ 36%]
+2026-01-17T16:24:47.1150615Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptValidation::test_validate_prompt_id_format PASSED [ 38%]
+2026-01-17T16:24:47.1162306Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptValidation::test_parse_params_from_argv PASSED [ 39%]
+2026-01-17T16:24:47.1182397Z tests/rdd-framework/actions/test_prompt_actions.py::TestPromptFolderCreation::test_ensure_prompt_workdir_artifacts PASSED [ 41%]
+2026-01-17T16:24:47.1195892Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementCreation::test_create_ur_with_validation PASSED [ 42%]
+2026-01-17T16:24:47.1207568Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementCreation::test_create_tr_with_validation PASSED [ 43%]
+2026-01-17T16:24:47.1219343Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementCreation::test_create_requirement_bypasses_validation PASSED [ 45%]
+2026-01-17T16:24:47.1230684Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementCreation::test_create_requirement_sequential_ids PASSED [ 46%]
+2026-01-17T16:24:47.1241996Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementModification::test_modify_ur_preserves_format PASSED [ 47%]
+2026-01-17T16:24:47.1253341Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementModification::test_modify_tr_preserves_format PASSED [ 49%]
+2026-01-17T16:24:47.1264767Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementModification::test_modify_nonexistent_requirement_fails PASSED [ 50%]
+2026-01-17T16:24:47.1276004Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementDeletion::test_delete_ur_marks_as_deleted PASSED [ 52%]
+2026-01-17T16:24:47.1287294Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementDeletion::test_delete_tr_marks_as_deleted PASSED [ 53%]
+2026-01-17T16:24:47.1299051Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementDeletion::test_delete_nonexistent_requirement_fails PASSED [ 54%]
+2026-01-17T16:24:47.1310216Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementValidation::test_validation_requires_shall PASSED [ 56%]
+2026-01-17T16:24:47.1322188Z tests/rdd-framework/actions/test_requirement_actions.py::TestRequirementValidation::test_validation_checks_length PASSED [ 57%]
+2026-01-17T16:24:47.1333895Z tests/rdd-framework/actions/test_workdir_actions.py::TestWorkdirInitialization::test_workdir_new_setup_creates_structure PASSED [ 58%]
+2026-01-17T16:24:47.1345467Z tests/rdd-framework/actions/test_workdir_actions.py::TestIterationArchiving::test_archive_creates_proper_folder_structure PASSED [ 60%]
+2026-01-17T16:24:47.1357335Z tests/rdd-framework/actions/test_workdir_actions.py::TestIterationArchiving::test_archive_preserves_all_files PASSED [ 61%]
+2026-01-17T16:24:47.1368617Z tests/rdd-framework/actions/test_workdir_actions.py::TestIterationArchiving::test_archive_prevents_when_active_prompt_exists PASSED [ 63%]
+2026-01-17T16:24:47.1379882Z tests/rdd-framework/actions/test_workdir_actions.py::TestWorkdirClearing::test_clear_removes_prompt_folders PASSED [ 64%]
+2026-01-17T16:24:47.1392211Z tests/rdd-framework/actions/test_workdir_actions.py::TestWorkdirClearing::test_clear_preserves_registry_files PASSED [ 65%]
+2026-01-17T16:24:47.1403866Z tests/rdd-framework/actions/test_workflow_actions.py::TestQuestionnaireActions::test_questionnaire_check_complete_all_answered PASSED [ 67%]
+2026-01-17T16:24:47.1415209Z tests/rdd-framework/actions/test_workflow_actions.py::TestQuestionnaireActions::test_questionnaire_check_complete_partial PASSED [ 68%]
+2026-01-17T16:24:47.1426732Z tests/rdd-framework/actions/test_workflow_actions.py::TestQuestionnaireActions::test_questionnaire_delete_resets_flags PASSED [ 69%]
+2026-01-17T16:24:47.1438317Z tests/rdd-framework/actions/test_workflow_actions.py::TestPlanActions::test_plan_generated_on_sets_flag PASSED [ 71%]
+2026-01-17T16:24:47.1449924Z tests/rdd-framework/actions/test_workflow_actions.py::TestPlanActions::test_plan_generated_off_unsets_flag PASSED [ 72%]
+2026-01-17T16:24:47.1461269Z tests/rdd-framework/actions/test_workflow_actions.py::TestPlanActions::test_plan_delete_removes_file_and_resets_flag PASSED [ 73%]
+2026-01-17T16:24:47.1472556Z tests/rdd-framework/actions/test_workflow_actions.py::TestAnalysisActions::test_analysis_generated_on_sets_flag PASSED [ 75%]
+2026-01-17T16:24:47.1485162Z tests/rdd-framework/actions/test_workflow_actions.py::TestAnalysisActions::test_analysis_delete_removes_file_and_resets_flag PASSED [ 76%]
+2026-01-17T16:24:47.1500863Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_exists_and_valid_json PASSED [ 78%]
+2026-01-17T16:24:47.1515299Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_has_framework_version PASSED [ 79%]
+2026-01-17T16:24:47.1529184Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_has_required_paths PASSED [ 80%]
+2026-01-17T16:24:47.1540814Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_required_paths_exist PASSED [ 82%]
+2026-01-17T16:24:47.1560577Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_has_prompt_snippets PASSED [ 83%]
+2026-01-17T16:24:47.1575320Z tests/rdd-framework/config/test_manifest_validation.py::TestManifestValidation::test_manifest_prompt_snippet_files_exist PASSED [ 84%]
+2026-01-17T16:24:47.1587094Z tests/rdd-framework/config/test_manifest_validation.py::TestConfigStructureValidation::test_instance_config_structure PASSED [ 86%]
+2026-01-17T16:24:47.1763107Z tests/rdd-framework/config/test_manifest_validation.py::TestConfigStructureValidation::test_technical_design_form_structure FAILED [ 87%]
+2026-01-17T16:24:47.2975616Z tests/rdd-framework/integration/test_iteration_archive.py::TestIterationArchiving::test_archive_creates_proper_structure PASSED [ 89%]
+2026-01-17T16:24:47.5256579Z tests/rdd-framework/integration/test_prompt_lifecycle.py::TestCompletePromptWorkflow::test_full_prompt_lifecycle PASSED [ 90%]
+2026-01-17T16:24:47.6044555Z tests/rdd-framework/integration/test_prompt_lifecycle.py::TestCompletePromptWorkflow::test_create_multiple_prompts_enforces_single_active PASSED [ 91%]
+2026-01-17T16:24:47.7661023Z tests/rdd-framework/integration/test_prompt_lifecycle.py::TestModificationWorkflow::test_modification_lifecycle PASSED [ 93%]
+2026-01-17T16:24:47.9297455Z tests/rdd-framework/integration/test_prompt_lifecycle.py::TestStateTransitions::test_bidirectional_state_transitions PASSED [ 94%]
+2026-01-17T16:24:48.0503128Z tests/rdd-framework/integration/test_requirement_workflows.py::TestRequirementCRUDCycle::test_create_modify_delete_ur PASSED [ 95%]
+2026-01-17T16:24:48.0996908Z tests/rdd-framework/integration/test_requirement_workflows.py::TestRequirementCRUDCycle::test_create_modify_delete_tr PASSED [ 97%]
+2026-01-17T16:24:48.2185659Z tests/rdd-framework/integration/test_requirement_workflows.py::TestRequirementIDSequencing::test_sequential_ur_ids PASSED [ 98%]
+2026-01-17T16:24:48.5001029Z tests/rdd-framework/integration/test_requirement_workflows.py::TestRequirementValidation::test_validation_bypass PASSED [100%]
+2026-01-17T16:24:48.5002251Z 
+2026-01-17T16:24:48.5002535Z =================================== FAILURES ===================================
+2026-01-17T16:24:48.5003623Z ______ TestConfigStructureValidation.test_technical_design_form_structure ______
+2026-01-17T16:24:48.5005035Z tests/rdd-framework/config/test_manifest_validation.py:125: in test_technical_design_form_structure
+2026-01-17T16:24:48.5006816Z     assert form_path.exists(), "technical-design-form.json must exist"
+2026-01-17T16:24:48.5007564Z E   AssertionError: technical-design-form.json must exist
+2026-01-17T16:24:48.5008112Z E   assert False
+2026-01-17T16:24:48.5008441Z E    +  where False = exists()
+2026-01-17T16:24:48.5009729Z E    +    where exists = PosixPath('/home/runner/work/requirements-driven-development/requirements-driven-development/.rdd/config/technical-design-form.json').exists
+2026-01-17T16:24:48.5011136Z ================================ tests coverage ================================
+2026-01-17T16:24:48.5011875Z _______________ coverage: platform linux, python 3.9.25-final-0 ________________
+2026-01-17T16:24:48.5012394Z 
+2026-01-17T16:24:48.5012635Z Name                                                            Stmts   Miss  Cover
+2026-01-17T16:24:48.5013328Z -----------------------------------------------------------------------------------
+2026-01-17T16:24:48.5014175Z .rdd/src/actions/prompt_create.py                                 116     78    33%
+2026-01-17T16:24:48.5015046Z .rdd/src/actions/prompt_set_state.py                               86     67    22%
+2026-01-17T16:24:48.5015945Z tests/rdd-framework/actions/test_execution_actions.py              14      0   100%
+2026-01-17T16:24:48.5016942Z tests/rdd-framework/actions/test_misc_actions.py                   11      0   100%
+2026-01-17T16:24:48.5017792Z tests/rdd-framework/actions/test_modification_actions.py           13      0   100%
+2026-01-17T16:24:48.5018640Z tests/rdd-framework/actions/test_prompt_actions.py                115      0   100%
+2026-01-17T16:24:48.5019475Z tests/rdd-framework/actions/test_requirement_actions.py            32      0   100%
+2026-01-17T16:24:48.5020308Z tests/rdd-framework/actions/test_workdir_actions.py                16      0   100%
+2026-01-17T16:24:48.5021135Z tests/rdd-framework/actions/test_workflow_actions.py               24      0   100%
+2026-01-17T16:24:48.5021957Z tests/rdd-framework/config/test_manifest_validation.py             66      4    94%
+2026-01-17T16:24:48.5022764Z tests/rdd-framework/conftest.py                                    98     39    60%
+2026-01-17T16:24:48.5023576Z tests/rdd-framework/integration/test_iteration_archive.py          48      0   100%
+2026-01-17T16:24:48.5024433Z tests/rdd-framework/integration/test_prompt_lifecycle.py          124      0   100%
+2026-01-17T16:24:48.5025293Z tests/rdd-framework/integration/test_requirement_workflows.py      75      0   100%
+2026-01-17T16:24:48.5026051Z -----------------------------------------------------------------------------------
+2026-01-17T16:24:48.5026788Z TOTAL                                                             838    188    78%
+2026-01-17T16:24:48.5027313Z Coverage XML written to file coverage.xml
+2026-01-17T16:24:48.5027939Z =========================== short test summary info ============================
+2026-01-17T16:24:48.5029112Z FAILED tests/rdd-framework/config/test_manifest_validation.py::TestConfigStructureValidation::test_technical_design_form_structure - AssertionError: technical-design-form.json must exist
+2026-01-17T16:24:48.5030177Z assert False
+2026-01-17T16:24:48.5030418Z  +  where False = exists()
+2026-01-17T16:24:48.5031311Z  +    where exists = PosixPath('/home/runner/work/requirements-driven-development/requirements-driven-development/.rdd/config/technical-design-form.json').exists
+2026-01-17T16:24:48.5032332Z ========================= 1 failed, 72 passed in 1.58s =========================
+2026-01-17T16:24:48.5386600Z [0;31m✗[0m RDD framework tests failed
+2026-01-17T16:24:48.5387628Z [0;31m✗[0m Some tests failed
+2026-01-17T16:24:48.5388126Z 
+2026-01-17T16:24:48.5388417Z ============================================================
+2026-01-17T16:24:48.5389284Z   RDD Framework Test Runner (Linux/macOS)
+2026-01-17T16:24:48.5390132Z ============================================================
+2026-01-17T16:24:48.5390693Z 
+2026-01-17T16:24:48.5391083Z [0;34mℹ[0m Checking prerequisites...
+2026-01-17T16:24:48.5392300Z [0;32m✓[0m Python found: 3.9.25
+2026-01-17T16:24:48.5393089Z [0;32m✓[0m Virtual environment found
+2026-01-17T16:24:48.5393867Z [0;32m✓[0m pytest 8.4.2
+2026-01-17T16:24:48.5394255Z 
+2026-01-17T16:24:48.5394265Z 
+2026-01-17T16:24:48.5394519Z ============================================================
+2026-01-17T16:24:48.5395233Z   Running Tests
+2026-01-17T16:24:48.5395777Z ============================================================
+2026-01-17T16:24:48.5396543Z 
+2026-01-17T16:24:48.5396929Z [0;34m[1/1][0m Running RDD framework tests
+2026-01-17T16:24:48.5397368Z 
+2026-01-17T16:24:48.5397376Z 
+2026-01-17T16:24:48.5397558Z ============================================================
+2026-01-17T16:24:48.5398087Z   Test Summary
+2026-01-17T16:24:48.5398455Z ============================================================
+2026-01-17T16:24:48.5398915Z 
+2026-01-17T16:24:48.5399103Z Total test suites: 1
+2026-01-17T16:24:48.5399648Z [0;32mPassed: 0[0m
+2026-01-17T16:24:48.5400140Z [0;31mFailed: 1[0m
+2026-01-17T16:24:48.5400426Z 
+2026-01-17T16:24:48.5466418Z ##[error]Process completed with exit code 1.
+2026-01-17T16:24:48.5616494Z ##[group]Run codecov/codecov-action@v4
+2026-01-17T16:24:48.5617140Z with:
+2026-01-17T16:24:48.5617461Z   file: ./coverage.xml
+2026-01-17T16:24:48.5617809Z   flags: python
+2026-01-17T16:24:48.5618129Z   name: python-coverage
+2026-01-17T16:24:48.5618481Z env:
+2026-01-17T16:24:48.5618874Z   pythonLocation: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:48.5619604Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib/pkgconfig
+2026-01-17T16:24:48.5620321Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:48.5620970Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:48.5621618Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.9.25/x64
+2026-01-17T16:24:48.5622271Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.9.25/x64/lib
+2026-01-17T16:24:48.5622809Z ##[endgroup]
+2026-01-17T16:24:48.6477644Z eventName: pull_request
+2026-01-17T16:24:48.6479677Z baseRef: h111359:dev | headRef: h111359:89-implement-technical-design-specification
+2026-01-17T16:24:48.6486905Z ==> linux OS detected
+2026-01-17T16:24:49.0796702Z https://cli.codecov.io/latest/linux/codecov.SHA256SUM
+2026-01-17T16:24:49.1779008Z gpg: directory '/home/runner/.gnupg' created
+2026-01-17T16:24:49.1826852Z gpg: keybox '/home/runner/.gnupg/pubring.kbx' created
+2026-01-17T16:24:49.1996001Z gpg: /home/runner/.gnupg/trustdb.gpg: trustdb created
+2026-01-17T16:24:49.1997762Z gpg: key 806BB28AED779869: public key "Codecov Uploader (Codecov Uploader Verification Key) <security@codecov.io>" imported
+2026-01-17T16:24:49.2463134Z gpg: Total number processed: 1
+2026-01-17T16:24:49.2463560Z gpg:               imported: 1
+2026-01-17T16:24:49.2525562Z gpg: Signature made Fri Dec  5 15:31:48 2025 UTC
+2026-01-17T16:24:49.2526466Z gpg:                using RSA key 27034E7FDB850E0BBC2C62FF806BB28AED779869
+2026-01-17T16:24:49.2529396Z gpg: Good signature from "Codecov Uploader (Codecov Uploader Verification Key) <security@codecov.io>" [unknown]
+2026-01-17T16:24:49.2530720Z gpg: WARNING: This key is not certified with a trusted signature!
+2026-01-17T16:24:49.2531625Z gpg:          There is no indication that the signature belongs to the owner.
+2026-01-17T16:24:49.2532603Z Primary key fingerprint: 2703 4E7F DB85 0E0B BC2C  62FF 806B B28A ED77 9869
+2026-01-17T16:24:49.2764216Z ==> Uploader SHASUM verified (fd34214e2b2c738e48e3ac90b2c23ec4e975d0e9aee51f2cebe81b5704af3f6c  codecov)
+2026-01-17T16:24:49.2765120Z ==> Running version latest
+2026-01-17T16:24:49.3534704Z Could not pull latest version information: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+2026-01-17T16:24:49.3537115Z ==> Running git config --global --add safe.directory /home/runner/work/requirements-driven-development/requirements-driven-development
+2026-01-17T16:24:49.3635005Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/requirements-driven-development/requirements-driven-development
+2026-01-17T16:24:49.3684752Z ==> Running command '/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-commit'
+2026-01-17T16:24:49.3687959Z [command]/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-commit --git-service github -C 86eae44ece44a39faad246a8cd98f12261416b10
+2026-01-17T16:24:49.7258646Z info - 2026-01-17 16:24:49,725 -- ci service found: github-actions
+2026-01-17T16:24:49.7357089Z warning - 2026-01-17 16:24:49,735 -- No config file could be found. Ignoring config.
+2026-01-17T16:24:49.7661884Z warning - 2026-01-17 16:24:49,765 -- Branch `89-implement-technical-design-specification` is protected but no token was provided
+2026-01-17T16:24:49.7663865Z warning - 2026-01-17 16:24:49,765 -- For information on Codecov upload tokens, see https://docs.codecov.com/docs/codecov-tokens
+2026-01-17T16:24:50.0854707Z info - 2026-01-17 16:24:50,084 -- Process Commit creating complete
+2026-01-17T16:24:50.0856586Z error - 2026-01-17 16:24:50,085 -- Commit creating failed: {"message":"Token required - not valid tokenless upload"}
+2026-01-17T16:24:50.2179855Z ==> Running command '/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-report'
+2026-01-17T16:24:50.2183378Z [command]/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov create-report --git-service github -C 86eae44ece44a39faad246a8cd98f12261416b10
+2026-01-17T16:24:50.5717349Z info - 2026-01-17 16:24:50,571 -- ci service found: github-actions
+2026-01-17T16:24:50.5823902Z warning - 2026-01-17 16:24:50,581 -- No config file could be found. Ignoring config.
+2026-01-17T16:24:50.8195780Z info - 2026-01-17 16:24:50,819 -- Process Report creating complete
+2026-01-17T16:24:50.8203742Z error - 2026-01-17 16:24:50,820 -- Report creating failed: {"message":"Token required - not valid tokenless upload"}
+2026-01-17T16:24:50.8914861Z ==> Running command '/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov do-upload'
+2026-01-17T16:24:50.8917418Z [command]/home/runner/work/_actions/codecov/codecov-action/v4/dist/codecov do-upload -f ./coverage.xml -F python --git-service github -n python-coverage -C 86eae44ece44a39faad246a8cd98f12261416b10
+2026-01-17T16:24:51.2415625Z info - 2026-01-17 16:24:51,241 -- ci service found: github-actions
+2026-01-17T16:24:51.2512001Z warning - 2026-01-17 16:24:51,250 -- No config file could be found. Ignoring config.
+2026-01-17T16:24:51.2824287Z warning - 2026-01-17 16:24:51,282 -- xcrun is not installed or can't be found.
+2026-01-17T16:24:51.3340653Z warning - 2026-01-17 16:24:51,333 -- No gcov data found.
+2026-01-17T16:24:51.3343431Z warning - 2026-01-17 16:24:51,334 -- coverage.py is not installed or can't be found.
+2026-01-17T16:24:51.4101027Z info - 2026-01-17 16:24:51,409 -- Found 1 coverage files to report
+2026-01-17T16:24:51.4102608Z info - 2026-01-17 16:24:51,409 -- > /home/runner/work/requirements-driven-development/requirements-driven-development/coverage.xml
+2026-01-17T16:24:51.6147369Z info - 2026-01-17 16:24:51,614 -- Process Upload complete
+2026-01-17T16:24:51.6149278Z error - 2026-01-17 16:24:51,614 -- Upload failed: {"message":"Token required - not valid tokenless upload"}
+2026-01-17T16:24:51.7125532Z Post job cleanup.
+2026-01-17T16:24:51.8058393Z [command]/usr/bin/git version
+2026-01-17T16:24:51.8095472Z git version 2.52.0
+2026-01-17T16:24:51.8142047Z Copying '/home/runner/.gitconfig' to '/home/runner/work/_temp/b70263f4-0e71-4130-9707-3a1ff056cf93/.gitconfig'
+2026-01-17T16:24:51.8152055Z Temporarily overriding HOME='/home/runner/work/_temp/b70263f4-0e71-4130-9707-3a1ff056cf93' before making global git config changes
+2026-01-17T16:24:51.8153512Z Adding repository directory to the temporary git global config as a safe directory
+2026-01-17T16:24:51.8159214Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/requirements-driven-development/requirements-driven-development
+2026-01-17T16:24:51.8195643Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-01-17T16:24:51.8229040Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-01-17T16:24:51.8468420Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-01-17T16:24:51.8489333Z http.https://github.com/.extraheader
+2026-01-17T16:24:51.8502164Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-01-17T16:24:51.8533041Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-01-17T16:24:51.8764122Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-01-17T16:24:51.8797647Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-01-17T16:24:51.9153332Z Cleaning up orphan processes
