@@ -4,139 +4,138 @@
 
 Requirements-Driven Development (RDD) is a framework that helps you develop software with AI assistance (like GitHub Copilot) while keeping your requirements and documentation in sync with your code. Think of it as a structured workflow that guides you through clarifying what you want to build, planning how to build it, and documenting what you built.
 
-## Getting Started
-
-### Starting the Web Interface
-
-After installing RDD in your repository, start the web interface:
-
-**On Linux:**
-```bash
-./.rdd/run.sh
-```
-
-**On Windows:**
-```cmd
-.rdd\run.bat
-```
-
-Your browser will automatically open the RDD Web Interface. You can now manage your development workflow through this interface.
-
 ## Understanding the Web Interface
 
 The Web Interface has main sections accessible from the navigation bar:
 
 ### Active Prompt
-Your current work item. This is where you create new prompts, write instructions for what you want to build, answer clarification questions, review implementation plans, and track progress.
+Your current work item — the single prompt in [.rdd-instance/workdir/work-iteration-registry.json](.rdd-instance/workdir/work-iteration-registry.json) with state `active`. 
 
-### Workdir
-Manage your work iteration and view all prompts. You can create new iterations (work sessions), archive completed iterations, view iteration status, and browse all prompts (both active and completed) in the registry view. Click on any prompt to view its details.
+First step is to be created a new iteration. When an iteration is created - use this page to create a new prompt (it becomes the active prompt), author the prompt text and instructions, answer generated clarification questions (questionnaire), review and edit implementation plans, manage modifications, and track execution progress.
 
-### Files
-Browse and edit files in your `.rdd-instance` folder, which contains your requirements, technical specifications, and work files.
+When the work on the iteration is completed and all active prompts are closed, archive the iteration and start over with a new one.
+
+
+What each term means:
+
+- **Questionnaire**: A set of clarification questions generated during Clarify mode. Questions are presented as an interactive form (stored alongside the prompt) so you can provide exact answers that guide implementation and avoid redundant queries.
+
+The step inspects the prompt, current requirements, and repository context to surface ambiguities and produce the questionnaire.
+
+- **Analyze**: Makes extended review of the prompt, searches for best practices, proposes a new prompt text.
+
+- **Plan**: A step-by-step implementation plan produced in Plan mode. The plan is saved with the prompt and can be reviewed, edited, or approved before implementation begins.
+
+- **Implementation**: The execution step that applies changes (code and files) based on the prompt, questionnaire answers, and approved plan. Implementation outputs (logs, `implementation.md`) are stored in the prompt work folder.
+
+- **Modification**: A lightweight workflow for small fixes to a completed prompt. Modifications skip questionnaire and planning and go directly to implementation; each modification is tracked in `modification-<ID>.md` and recorded in the prompt's `modifications-log.json`.
+
+### Prompt History
+Browse the prompts in the current iteration and explore prompts statuses (active or completed) and the steps of their execution. Click any prompt to view its details.
+
+### Technical Design
+WIP
+
+### Requirements
+
+View and edit the project's authoritative requirements in [.rdd-instance/specifications/requirements.md](.rdd-instance/specifications/requirements.md). This file contains the user and technical requirements the framework loads during prompt execution to check constraints and avoid redundant clarification questions. Use this page to review requirements, edit name, overview and definition parts, and save changes — updates are persisted to the requirements file and are considered by subsequent Analyze and Execute operations. The requirements document follows the formatting conventions in [.rdd/conventions/requirements.convention.md](.rdd/conventions/requirements.convention.md).
+
+Caution!!!: Avoid editing the User Requirements and Technical Requirements parts. Despite possible, it is better they to be maintained by the copilot based on prompt requests.
+
+### Config
+Manage instance-level settings and runtime options for this RDD installation. The Config page displays and edits `.rdd-instance/config/instance-config.json` (for example the `git-enabled` flag that controls optional git integration during prompt completion). Use the provided toggles and save button to persist changes; saved settings are applied by the Web UI and influence behaviors such as automatic git commits on archive or prompt completion. Note: some configuration changes may require restarting the web server to take full effect.
+
+### Help
+
+The current document.
+
 
 ## Common Workflows
 
 ### Workflow 1: Creating and Executing Your First Prompt
 
-**Step 1: Create a New Prompt**
+**Step 1: Setup RDD**
+1. Click the "Config" tab
+2. Chose if git functionality should be on or off
+
+**Step 1: Create Work Iteration"**
 1. Click the "Active Prompt" tab
-2. If no active prompt exists, click "Create New Prompt"
-3. Enter a descriptive title (e.g., "Add user login feature")
-4. Click "Create"
+2. Click "Create Work Iteration" button
+3. Fulfill the iteration name in the dialog appeared and click "Create Work Iteration" button
+4. Two new buttons appear - "Create New Prompt" and "Archive Iteration"
 
-**Step 2: Write Your Prompt**
-1. In the "Prompt" tab, write clear instructions for what you want to build
-2. Be specific about the functionality you need
-3. Click "Save Prompt" when done
+**Step 3: Create New Prompt**
+1. Click the "Active Prompt" tab if you are not in it
+2. If no active prompt exists, the button "Create New Prompt" will be present. Click it.
+3. Enter a short descriptive title (e.g., "Add user login feature")
+4. State should stay "Active"
+5. Click "Create Prompt"
 
-**Step 3: Set Execution Mode to Analyze**
-1. In the execution mode selector, click "Analyze"
+**Step 4: Write Your Prompt**
+1. If not selected - click "Prompt" button
+2. Write clear instructions for what you want to build. Be specific about the functionality you need
+3. Optionaly you can use "Insert Snippet" button to add predefined prompt snippets to your prompt
+
+**Step 5: Execution Mode Clarify** (Optional)
+1. In the execution mode selector, click "Clarify"
 2. This tells the system you want clarifying questions before implementation
-
-**Step 4: Execute in VS Code**
-1. Open VS Code in your repository
-2. Open GitHub Copilot Chat
-3. Type: `@workspace /rdd.execute`
-4. Copilot will read your prompt and generate clarification questions
-
-**Step 5: Answer Questions**
-1. Return to the Web Interface
+3. Click on button "Copy Cmd" which will add an execute command in your clipboard
+4. Open VS Code in your repository
+5. Open a new GitHub Copilot Chat
+6. Paste the execute command storred in your clipboard
+7. Copilot will read your prompt and generate clarification questions
+1. Return to the Web Interface (and refresh the page)
 2. Click the "Questionnaire" tab
 3. Review and answer each question
-4. Click "Save Questionnaire" after answering
 
-**Step 6: Set Execution Mode to Implement**
+**Step 6: Execution Mode Analyze** (Optional)
+1. Change execution mode selector to "Analyze"
+2. This tells the system you want analysis to be created before implementation
+3. Click on button "Copy Cmd" which will add an execute command in your clipboard
+4. Open VS Code in your repository
+5. Open a new GitHub Copilot Chat
+6. Paste the execute command storred in your clipboard
+7. Copilot will read your prompt and questionnaire if created and will generate analysis file for you
+8. Read the analysis and modify your prompt if needed
+
+**Step 7: Execution Mode Plan** (Optional)
+1. Change execution mode selector to "Plan"
+2. This tells the system you want an execution plan to be created before implementation
+3. Click on button "Copy Cmd" which will add an execute command in your clipboard
+4. Open VS Code in your repository
+5. Open a new GitHub Copilot Chat
+6. Paste the execute command storred in your clipboard
+7. Copilot will read your prompt and questionnaire if created and will generate a plan file for you
+8. Read the plan in the Web UI and modify it if needed
+
+**Step 8: Execution Mode Implement**
 1. Change execution mode selector to "Implement"
+2. This tells the system you want to run the implementation
+3. Click on button "Copy Cmd" which will add an execute command in your clipboard
+4. Open VS Code in your repository
+5. Open a new GitHub Copilot Chat
+6. Paste the execute command storred in your clipboard
+7. Copilot will read your prompt, questionnaire and plan if created and will follow the instructions. While working - it will create implementation file
+8. Review the changes Copilot has made. Read the implementation file. Test the result yourself
 
-**Step 7: Execute Implementation**
-1. In VS Code Copilot Chat, type: `@workspace /rdd.execute`
-2. Copilot will implement the feature based on your prompt and answers
-3. Review the changes Copilot makes
+**Step 8: Execution Mode Modify** (Optional)
+1. In case you are satisfied with the result but want just small modification - click on "Create Modification" button (it is activated after the implementation is completed)
+2. In the modal explain the modification needed
+3. Change execution mode selector to "Modify"
+4. Click on button "Copy Cmd" which will add an execute command in your clipboard
+5. Open VS Code in your repository
+6. Open a new GitHub Copilot Chat
+7. Paste the execute command storred in your clipboard
+8. Copilot will read your modification text, the prompt, questionnaire and plan if created and will follow the instructions. While working - it will create modification implementation file
+9. Review the changes Copilot has made. Read the modiication implementation file. Test the result yourself
+10. If needed - create a new modification
+
 
 **Step 8: Complete the Prompt**
-1. After Copilot finishes, return to the Web Interface
-2. Click "Complete" button
-3. Your prompt becomes completed and appears in the Workdir registry view
+1. After you have completed the implementation and optionnaly modifications - click "Complete" button
+2. In case git is activated, RDD will commit the chages
+3. The "Active Prompt" page chanes to "no active prompt" mode and you can press "Create New Prompt" button
 
-### Workflow 2: Using Plan Mode
-
-Sometimes you want to see a detailed implementation plan before actual coding begins.
-
-**Step 1: Create a prompt as usual**
-
-**Step 2: Set Execution Mode to Plan**
-1. In the execution mode selector, click "Plan"
-
-**Step 3: Execute in VS Code**
-1. In Copilot Chat: `@workspace /rdd.execute`
-2. Copilot generates a detailed step-by-step plan
-
-**Step 4: Review the Plan**
-1. In Web Interface, click "Plan" tab
-2. Review each step of the proposed implementation
-3. Edit the plan if needed and save
-
-**Step 5: Proceed with Implementation**
-1. Change execution mode to "Implement"
-2. Execute again in VS Code: `@workspace /rdd.execute`
-3. Copilot follows the plan you reviewed
-
-### Workflow 3: Making Modifications
-
-After completing a prompt, you might need to adjust or fix something. Use modifications instead of creating a new prompt.
-
-**Step 1: Ensure Prompt is Implemented**
-1. The original prompt must be completed first
-
-**Step 2: Add a Modification**
-1. In Active Prompt tab, click "Mod" button
-2. Enter a description (e.g., "Fix validation error in login form")
-3. Click "Create Modification"
-
-**Step 3: Set Execution Mode to Modification**
-1. In execution mode selector, click "Modification"
-
-**Step 4: Execute the Modification**
-1. In VS Code Copilot Chat: `@workspace /rdd.execute`
-2. Copilot implements the modification
-
-**Step 5: Complete Modification**
-1. After Copilot finishes, click "Complete Modification" in the Modifications tab
-
-**Step 6: Add More Modifications**
-1. You can add multiple modifications to the same prompt
-2. Each modification is tracked separately in the Modifications tab
-
-## Understanding Execution Modes
-
-The execution mode selector controls what happens when you run `@workspace /rdd.execute`:
-
-- **No Action**: Nothing happens automatically - use this when you're still writing the prompt or working manually
-- **Analyze**: Copilot generates clarification questions
-- **Plan**: Copilot creates a detailed implementation plan
-- **Implement**: Copilot writes the actual code
-- **Modification**: Copilot implements the current modification
 
 ## File Organization
 
@@ -157,7 +156,7 @@ You'll mostly interact with files in `.rdd-instance` through the Web Interface.
 
 **Write Clear Prompts**: Be specific about what you want. Instead of "improve performance," write "optimize the search function to handle 10,000 records without lag."
 
-**Use Analyze Mode**: Answer the clarification questions thoughtfully. This helps Copilot understand exactly what you need.
+**Use Clarify Mode**: Answer the clarification questions thoughtfully. This helps Copilot understand exactly what you need.
 
 **Review Plans**: In complex implementations, use Plan mode to see what Copilot intends to do before it makes changes.
 
@@ -172,16 +171,12 @@ You'll mostly interact with files in `.rdd-instance` through the Web Interface.
 - Check if port 8080 is available (close other applications using it)
 - Look for error messages in the console
 
-**Copilot doesn't respond to @workspace /rdd.execute**
-- Ensure you're in VS Code with the repository open
-- Check that GitHub Copilot extension is installed and active
-- Verify `.github/prompts/rdd.execute.prompt.md` exists in your repository
-
 **No active prompt showing**
 - Create a new prompt using "Create New Prompt" button
 - Only one prompt can be active at a time
 
 **Can't complete prompt**
+- Refresh the page
 - Execute the prompt at least once before completing
 - Check that you're not in an execution mode (set to "No Action" first)
 
@@ -189,12 +184,4 @@ You'll mostly interact with files in `.rdd-instance` through the Web Interface.
 - Complete the main prompt implementation first
 - Ensure the prompt shows "Implementation Completed"
 
-## Next Steps
-
-- Create your first prompt and try the complete workflow
-- Explore the Workdir registry to see all prompts and their status
-- Review and update requirements in the Files section
-- Experiment with different execution modes
-
-For more information and updates, visit: https://github.com/h111359/requirements-driven-development
 
