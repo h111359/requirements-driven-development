@@ -2957,54 +2957,533 @@ async function saveGitEnabled() {
 }
 
 /**
+ * Technical Design Data
+ */
+let techDesignSchema = null;
+let techDesignAnswers = {};
+let techDesignCurrentCategory = null;
+
+/**
  * Load technical design content
  */
 async function loadTechnicalDesign() {
-    const textarea = document.getElementById('technical-design-content');
+    // Show loading state
+    document.getElementById('tech-design-loading').style.display = 'block';
+    document.getElementById('tech-design-no-category').style.display = 'none';
+    document.getElementById('tech-design-questions').style.display = 'none';
     
     try {
-        const response = await fetch('/api/file/specifications/technical-design.json?token=' + sessionToken);
-        const result = await response.json();
+        // Load schema
+        const schemaResponse = await fetch('/api/technical-design/schema');
+        const schemaResult = await schemaResponse.json();
         
-        if (result.success) {
-            textarea.value = result.content || '';
-        } else {
-            showAlert('danger', 'Failed to load technical design: ' + result.error);
+        if (!schemaResult.success) {
+            showAlert('danger', 'Failed to load technical design schema: ' + schemaResult.error);
+            return;
         }
+        
+        techDesignSchema = schemaResult.schema;
+        
+        // Load answers
+        const answersResponse = await fetch('/api/technical-design/answers');
+        const answersResult = await answersResponse.json();
+        
+        if (answersResult.success) {
+            techDesignAnswers = answersResult.answers || {};
+        }
+        
+        // Render category list
+        renderCategoryList();
+        
+        // Hide loading, show no category message
+        document.getElementById('tech-design-loading').style.display = 'none';
+        document.getElementById('tech-design-no-category').style.display = 'block';
+        
+        // Set up search and filter handlers
+        setupTechnicalDesignFilters();
+        
     } catch (error) {
         showAlert('danger', 'Error loading technical design: ' + error.message);
+        document.getElementById('tech-design-loading').style.display = 'none';
     }
 }
 
 /**
- * Save technical design content
+ * Render category list in sidebar
  */
-async function saveTechnicalDesign() {
-    const content = document.getElementById('technical-design-content').value;
+function renderCategoryList() {
+    const categoryList = document.getElementById('category-list');
+    categoryList.innerHTML = '';
     
+    techDesignSchema.categories.forEach((category, index) => {
+        const answeredCount = countAnsweredInCategory(category);
+        const totalCount = countQuestionsInCategory(category);
+        
+        const item = document.createElement('a');
+        item.href = '#';
+        item.className = 'list-group-item list-group-item-action';
+        item.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center">
+                <span>${category.label}</span>
+                <span class="badge bg-secondary">${answeredCount}/${totalCount}</span>
+            </div>
+        `;
+        item.onclick = (e) => {
+            e.preventDefault();
+            selectCategory(category.id);
+        };
+        
+        categoryList.appendChild(item);
+    });
+}
+
+/**
+ * Count answered questions in a category
+ */
+function countAnsweredInCategory(category) {
+    let count = 0;
+    category.groups.forEach(group => {
+        group.questions.forEach(question => {
+            if (techDesignAnswers[question.id]) {
+                count++;
+            }
+        });
+    });
+    return count;
+}
+
+/**
+ * Count total questions in a category
+ */
+function countQuestionsInCategory(category) {
+    let count = 0;
+    category.groups.forEach(group => {
+        count += group.questions.length;
+    });
+    return count;
+}
+
+/**
+ * Select a category and render its questions
+ */
+function selectCategory(categoryId) {
+    techDesignCurrentCategory = categoryId;
+    
+    // Update active state in sidebar
+    const items = document.querySelectorAll('#category-list .list-group-item');
+    items.forEach(item => item.classList.remove('active'));
+    
+    const activeIndex = techDesignSchema.categories.findIndex(c => c.id === categoryId);
+    if (activeIndex >= 0) {
+        items[activeIndex].classList.add('active');
+    }
+    
+    // Render questions for this category
+    renderCategoryQuestions(categoryId);
+    
+    // Show questions container
+    document.getElementById('tech-design-no-category').style.display = 'none';
+    document.getElementById('tech-design-questions').style.display = 'block';
+}
+
+/**
+ * Render questions for a category
+ */
+function renderCategoryQuestions(categoryId) {
+    const category = techDesignSchema.categories.find(c => c.id === categoryId);
+    if (!category) return;
+    
+    const accordion = document.getElementById('tech-design-accordion');
+    accordion.innerHTML = '';
+    
+    category.groups.forEach((group, groupIndex) => {
+        const groupId = `group-${categoryId}-${groupIndex}`;
+        
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'accordion-item';
+        
+        const headerDiv = document.createElement('h2');
+        headerDiv.className = 'accordion-header';
+        headerDiv.id = `heading-${groupId}`;
+        
+        const button = document.createElement('button');
+        button.className = 'accordion-button' + (groupIndex !== 0 ? ' collapsed' : '');
+        button.type = 'button';
+        button.setAttribute('data-bs-toggle', 'collapse');
+        button.setAttribute('data-bs-target', `#collapse-${groupId}`);
+        button.textContent = group.label;
+        
+        headerDiv.appendChild(button);
+        groupDiv.appendChild(headerDiv);
+        
+        const collapseDiv = document.createElement('div');
+        collapseDiv.id = `collapse-${groupId}`;
+        collapseDiv.className = 'accordion-collapse collapse' + (groupIndex === 0 ? ' show' : '');
+        collapseDiv.setAttribute('data-bs-parent', '#tech-design-accordion');
+        
+        const bodyDiv = document.createElement('div');
+        bodyDiv.className = 'accordion-body';
+        
+        // Render questions in this group
+        group.questions.forEach(question => {
+            if (isQuestionVisible(question)) {
+                bodyDiv.appendChild(renderQuestion(question));
+            }
+        });
+        
+        collapseDiv.appendChild(bodyDiv);
+        groupDiv.appendChild(collapseDiv);
+        
+        accordion.appendChild(groupDiv);
+    });
+}
+
+/**
+ * Check if a question should be visible based on visibleWhen rules
+ */
+function isQuestionVisible(question) {
+    if (!question.visibleWhen || question.visibleWhen.length === 0) {
+        return true;
+    }
+    
+    // All rules must be satisfied (AND logic)
+    for (const rule of question.visibleWhen) {
+        const dependentAnswer = techDesignAnswers[rule.questionId];
+        if (!dependentAnswer) {
+            return false;
+        }
+        
+        const value = dependentAnswer.value;
+        if (Array.isArray(value)) {
+            // Multiselect: check if equals value is in array
+            if (!value.includes(rule.equals)) {
+                return false;
+            }
+        } else {
+            // Radio/text: check exact match
+            if (value !== rule.equals) {
+                return false;
+            }
+        }
+    }
+    
+    return true;
+}
+
+/**
+ * Render a single question
+ */
+function renderQuestion(question) {
+    const questionDiv = document.createElement('div');
+    questionDiv.className = 'mb-4 p-3 border rounded';
+    questionDiv.setAttribute('data-question-id', question.id);
+    
+    // Question label
+    const label = document.createElement('div');
+    label.className = 'fw-bold mb-2';
+    label.textContent = question.label;
+    questionDiv.appendChild(label);
+    
+    // Help text
+    if (question.help) {
+        const help = document.createElement('div');
+        help.className = 'text-muted small mb-2';
+        help.textContent = question.help;
+        questionDiv.appendChild(help);
+    }
+    
+    // Current answer display
+    const currentAnswer = techDesignAnswers[question.id];
+    if (currentAnswer) {
+        const answerDisplay = document.createElement('div');
+        answerDisplay.className = 'alert alert-success small py-2 mb-2';
+        answerDisplay.innerHTML = `<strong>Current answer:</strong> ${formatAnswerValue(currentAnswer.value)}`;
+        questionDiv.appendChild(answerDisplay);
+    }
+    
+    // Question input based on type
+    if (question.type === 'radio' && question.options) {
+        const optionsDiv = document.createElement('div');
+        question.options.forEach(option => {
+            const radioDiv = document.createElement('div');
+            radioDiv.className = 'form-check';
+            
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.className = 'form-check-input';
+            input.name = question.id;
+            input.value = option.id;
+            input.id = `${question.id}-${option.id}`;
+            if (currentAnswer && currentAnswer.value === option.id) {
+                input.checked = true;
+            }
+            input.onchange = () => saveQuestionAnswer(question, option.id);
+            
+            const labelEl = document.createElement('label');
+            labelEl.className = 'form-check-label';
+            labelEl.htmlFor = input.id;
+            labelEl.textContent = option.label;
+            
+            radioDiv.appendChild(input);
+            radioDiv.appendChild(labelEl);
+            optionsDiv.appendChild(radioDiv);
+        });
+        questionDiv.appendChild(optionsDiv);
+    } else if (question.type === 'multiselect' && question.options) {
+        const optionsDiv = document.createElement('div');
+        question.options.forEach(option => {
+            const checkDiv = document.createElement('div');
+            checkDiv.className = 'form-check';
+            
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.className = 'form-check-input';
+            input.value = option.id;
+            input.id = `${question.id}-${option.id}`;
+            if (currentAnswer && Array.isArray(currentAnswer.value) && currentAnswer.value.includes(option.id)) {
+                input.checked = true;
+            }
+            input.onchange = () => saveMultiselectAnswer(question);
+            
+            const labelEl = document.createElement('label');
+            labelEl.className = 'form-check-label';
+            labelEl.htmlFor = input.id;
+            labelEl.textContent = option.label;
+            
+            checkDiv.appendChild(input);
+            checkDiv.appendChild(labelEl);
+            optionsDiv.appendChild(checkDiv);
+        });
+        questionDiv.appendChild(optionsDiv);
+    } else if (question.type === 'text') {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'form-control';
+        input.placeholder = question.placeholder || '';
+        input.value = currentAnswer ? currentAnswer.value : '';
+        input.onblur = () => saveQuestionAnswer(question, input.value);
+        questionDiv.appendChild(input);
+    }
+    
+    // Clear answer button
+    if (currentAnswer) {
+        const clearBtn = document.createElement('button');
+        clearBtn.className = 'btn btn-sm btn-outline-danger mt-2';
+        clearBtn.innerHTML = '<i class="bi bi-x-circle"></i> Clear Answer';
+        clearBtn.onclick = () => clearQuestionAnswer(question);
+        questionDiv.appendChild(clearBtn);
+    }
+    
+    return questionDiv;
+}
+
+/**
+ * Format answer value for display
+ */
+function formatAnswerValue(value) {
+    if (Array.isArray(value)) {
+        return value.join(', ');
+    }
+    return value;
+}
+
+/**
+ * Save question answer
+ */
+async function saveQuestionAnswer(question, value) {
     try {
-        const response = await fetch('/api/file/save', {
+        const response = await fetch('/api/technical-design/answer/set', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 token: sessionToken,
-                filepath: 'specifications/technical-design.json',
-                content: content
+                questionId: question.id,
+                type: question.type,
+                value: value
             })
         });
         
         const result = await response.json();
         
         if (result.success) {
-            showAlert('success', 'Technical design saved successfully');
+            // Reload answers and re-render
+            await reloadTechnicalDesignAnswers();
+            showAlert('success', 'Answer saved', 2000);
         } else {
-            showAlert('danger', 'Failed to save technical design: ' + result.error);
+            showAlert('danger', 'Failed to save answer: ' + (result.error || 'Unknown error'));
         }
     } catch (error) {
-        showAlert('danger', 'Error saving technical design: ' + error.message);
+        showAlert('danger', 'Error saving answer: ' + error.message);
     }
+}
+
+/**
+ * Save multiselect answer
+ */
+async function saveMultiselectAnswer(question) {
+    const checkboxes = document.querySelectorAll(`input[id^="${question.id}-"]:checked`);
+    const values = Array.from(checkboxes).map(cb => cb.value);
+    
+    if (values.length === 0) {
+        // No values selected - remove answer
+        await clearQuestionAnswer(question);
+    } else {
+        await saveQuestionAnswer(question, values);
+    }
+}
+
+/**
+ * Clear question answer
+ */
+async function clearQuestionAnswer(question) {
+    try {
+        const response = await fetch('/api/technical-design/answer/remove', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token: sessionToken,
+                questionId: question.id
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Reload answers and re-render
+            await reloadTechnicalDesignAnswers();
+            showAlert('success', 'Answer cleared', 2000);
+        } else {
+            showAlert('danger', 'Failed to clear answer: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        showAlert('danger', 'Error clearing answer: ' + error.message);
+    }
+}
+
+/**
+ * Reload technical design answers and re-render current category
+ */
+async function reloadTechnicalDesignAnswers() {
+    try {
+        const response = await fetch('/api/technical-design/answers');
+        const result = await response.json();
+        
+        if (result.success) {
+            techDesignAnswers = result.answers || {};
+            
+            // Re-render category list to update counters
+            renderCategoryList();
+            
+            // Re-render current category if one is selected
+            if (techDesignCurrentCategory) {
+                renderCategoryQuestions(techDesignCurrentCategory);
+                // Restore active state
+                const activeIndex = techDesignSchema.categories.findIndex(c => c.id === techDesignCurrentCategory);
+                const items = document.querySelectorAll('#category-list .list-group-item');
+                items.forEach(item => item.classList.remove('active'));
+                if (activeIndex >= 0) {
+                    items[activeIndex].classList.add('active');
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error reloading answers:', error);
+    }
+}
+
+/**
+ * Set up search and filter handlers
+ */
+function setupTechnicalDesignFilters() {
+    const searchInput = document.getElementById('tech-design-search');
+    const filterType = document.getElementById('tech-design-filter-type');
+    const filterStatus = document.getElementById('tech-design-filter-status');
+    
+    searchInput.addEventListener('input', applyTechnicalDesignFilters);
+    filterType.addEventListener('change', applyTechnicalDesignFilters);
+    filterStatus.addEventListener('change', applyTechnicalDesignFilters);
+}
+
+/**
+ * Apply filters to questions
+ */
+function applyTechnicalDesignFilters() {
+    const searchTerm = document.getElementById('tech-design-search').value.toLowerCase();
+    const filterType = document.getElementById('tech-design-filter-type').value;
+    const filterStatus = document.getElementById('tech-design-filter-status').value;
+    
+    const questions = document.querySelectorAll('[data-question-id]');
+    
+    questions.forEach(questionDiv => {
+        const questionId = questionDiv.getAttribute('data-question-id');
+        const question = findQuestionById(questionId);
+        
+        if (!question) {
+            questionDiv.style.display = 'none';
+            return;
+        }
+        
+        let show = true;
+        
+        // Apply search filter
+        if (searchTerm) {
+            const searchableText = [
+                question.label,
+                question.help || '',
+                ...(question.options || []).map(o => o.label)
+            ].join(' ').toLowerCase();
+            
+            if (!searchableText.includes(searchTerm)) {
+                show = false;
+            }
+        }
+        
+        // Apply type filter
+        if (filterType && question.type !== filterType) {
+            show = false;
+        }
+        
+        // Apply status filter
+        if (filterStatus) {
+            const isAnswered = !!techDesignAnswers[questionId];
+            if (filterStatus === 'answered' && !isAnswered) {
+                show = false;
+            } else if (filterStatus === 'unanswered' && isAnswered) {
+                show = false;
+            }
+        }
+        
+        questionDiv.style.display = show ? 'block' : 'none';
+    });
+}
+
+/**
+ * Find a question by ID across all categories
+ */
+function findQuestionById(questionId) {
+    for (const category of techDesignSchema.categories) {
+        for (const group of category.groups) {
+            for (const question of group.questions) {
+                if (question.id === questionId) {
+                    return question;
+                }
+            }
+        }
+    }
+    return null;
+}
+
+/**
+ * Save technical design content (legacy - kept for compatibility)
+ */
+async function saveTechnicalDesign() {
+    // This function is replaced by the new dynamic UI
+    // Kept for backwards compatibility but shows a message
+    showAlert('info', 'Technical Design now uses a dynamic form. Use the category navigation to answer questions.');
 }
 
 /**

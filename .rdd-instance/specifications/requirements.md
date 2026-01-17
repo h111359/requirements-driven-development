@@ -657,6 +657,30 @@ The framework enables:
 
 - [TR-0186] The workdir_archive.py script shall execute git commit after zip archive creation and verification but before workdir cleanup, and shall fail the entire archive operation if git commit fails when git-enabled is true.
 
+- [TR-0187] The framework shall provide a technical design schema at .rdd/config/technical-design-schema.json using a hierarchical structure with categories, groups, and questions to define all available architectural decision questions.
+
+- [TR-0188] The technical design schema shall support radio, multiselect, and text question types with options, help text, placeholders, and conditional visibility rules using simple questionId equals value objects.
+
+- [TR-0189] The framework shall store technical design answers in .rdd-instance/specifications/technical-design.json as a JSON object keyed by questionId containing only explicitly answered questions with questionId, type, value, answeredAt timestamp, and optional rationale fields.
+
+- [TR-0190] The framework shall provide Python action scripts technical_design_read.py, technical_design_answer_set.py, technical_design_answer_remove.py, technical_design_validate.py, and technical_design_migrate.py for all modifications to technical-design.json with atomic write operations using temp file plus rename pattern.
+
+- [TR-0191] The Web UI server shall provide REST API endpoints GET /api/technical-design/schema, GET /api/technical-design/answers, POST /api/technical-design/answer/set, POST /api/technical-design/answer/remove, POST /api/technical-design/validate, and POST /api/technical-design/migrate that invoke corresponding Python action scripts via subprocess.
+
+- [TR-0192] The Web UI Technical Design page shall render dynamically from the schema with a left sidebar showing categories with answered/total counters, accordion groups for questions, search and filter controls for type and status, and appropriate question widgets for radio buttons, checkboxes, and text inputs with immediate save functionality.
+
+- [TR-0193] The Web UI shall evaluate conditional visibility rules in real-time by checking visibleWhen arrays with AND logic where all rules must match either exact equals for radio/text or array includes for multiselect questions, re-rendering questions after each answer save or clear operation.
+
+- [TR-0194] The technical design schema shall contain 33 categories covering ProjectScale, ProductType, Criticality, ExpectedLifetime, EnterpriseConstraints, CloudStrategy, Compute, Frontend, Backend, Mobile, DataAnalytics, AI_ML, Security_IAM, Networking, CICD_DevOps, Observability, Compliance_Governance, DisasterRecovery, OperationalModel, DevelopmentProcess, ExpandedSecurity, ExpandedData, DataVisualization, DeepDisasterRecovery, IntegrationArchitecture, PerformanceScalability, NonFunctionalRequirements, EnvironmentStrategy, DeploymentStrategy, DataLifecycleRetention, SupportHoursSLAs, MonitoringMetrics, and Logging with approximately 490 total questions.
+
+
+
+
+
+
+
+
+
 
 
 

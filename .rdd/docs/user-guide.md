@@ -34,7 +34,49 @@ The step inspects the prompt, current requirements, and repository context to su
 Browse the prompts in the current iteration and explore prompts statuses (active or completed) and the steps of their execution. Click any prompt to view its details.
 
 ### Technical Design
-WIP
+
+The Technical Design page enables you to record architectural decisions through a comprehensive questionnaire covering 33 categories of technical choices.
+
+**Key Features:**
+- **Dynamic questionnaire**: 490+ questions organized into categories and groups
+- **Smart navigation**: Left sidebar shows categories with answered/total counts
+- **Search and filter**: Find questions by text, filter by type (radio/multiselect/text) or status (answered/unanswered)
+- **Conditional questions**: Questions appear based on previous answers (e.g., cloud-specific questions only show when you select a cloud deployment model)
+- **Immediate save**: Answers save automatically when you make a selection
+- **Optional**: Technical Design is not required; skip sections that don't apply to your project
+
+**Usage:**
+1. Select a category from the sidebar (e.g., "Project scale", "Cloud Strategy", "Frontend")
+2. Expand groups within the category to see questions
+3. Answer questions using radio buttons, checkboxes, or text inputs
+4. Use search to quickly find specific topics
+5. Filter by "Unanswered" to see what's left to complete
+6. Clear answers if decisions change using the "Clear Answer" button
+
+**Categories include:**
+- Project fundamentals: Scale, Product Type, Criticality, Lifetime, Enterprise Constraints
+- Infrastructure: Cloud Strategy, Compute, Networking, Disaster Recovery
+- Application stack: Frontend, Backend, Mobile, Data Analytics, AI/ML
+- Operations: CI/CD, DevOps, Observability, Monitoring, Logging
+- Governance: Security, Compliance, Support SLAs, Data Lifecycle
+
+**Technical Design and RDD Execution:**
+- When you run prompts in clarify/analyze/plan/implement modes, the copilot reads your technical design decisions
+- Clarify mode avoids asking questions already answered in Technical Design
+- Analyze and Plan modes align recommendations with your recorded choices
+- Implement mode ensures code complies with architectural constraints
+
+**Storage:**
+- Answers are stored in `.rdd-instance/specifications/technical-design.json`
+- Only answered questions are saved (sparse storage)
+- Each answer includes a timestamp and optional rationale
+- The schema defining all questions is in `.rdd/config/technical-design-schema.json`
+
+**Best Practices:**
+- Answer foundational questions first (Project Scale, Cloud Strategy, Enterprise Constraints)
+- Use the rationale field (planned feature) to document why you made certain choices
+- Review and update Technical Design when project requirements or constraints change
+- Don't feel obligated to answer every question—focus on what's relevant to your project
 
 ### Requirements
 
