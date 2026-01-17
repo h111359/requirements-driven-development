@@ -216,3 +216,7 @@ Error appeared: Error loading technical design: can't access property "value", t
 Tests failed. Test log is in `.rdd-instance/workdir/P-002_Fix test failures/logs_54657022391`
 Troubleshoot, fix, test until all is fixed
 %%ENDPROMPT
+
+%%PROMPT P-003 "Remove filter by type in Tech Design page"
+There is no need the questions in Tech Design page to be filtered by type. Remove this filter.
+%%ENDPROMPT

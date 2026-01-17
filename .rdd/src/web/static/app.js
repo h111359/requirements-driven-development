@@ -3400,11 +3400,9 @@ async function reloadTechnicalDesignAnswers() {
  */
 function setupTechnicalDesignFilters() {
     const searchInput = document.getElementById('tech-design-search');
-    const filterType = document.getElementById('tech-design-filter-type');
     const filterStatus = document.getElementById('tech-design-filter-status');
     
     searchInput.addEventListener('input', applyTechnicalDesignFilters);
-    filterType.addEventListener('change', applyTechnicalDesignFilters);
     filterStatus.addEventListener('change', applyTechnicalDesignFilters);
 }
 
@@ -3413,7 +3411,6 @@ function setupTechnicalDesignFilters() {
  */
 function applyTechnicalDesignFilters() {
     const searchTerm = document.getElementById('tech-design-search').value.toLowerCase();
-    const filterType = document.getElementById('tech-design-filter-type').value;
     const filterStatus = document.getElementById('tech-design-filter-status').value;
     
     const questions = document.querySelectorAll('[data-question-id]');
@@ -3440,11 +3437,6 @@ function applyTechnicalDesignFilters() {
             if (!searchableText.includes(searchTerm)) {
                 show = false;
             }
-        }
-        
-        // Apply type filter
-        if (filterType && question.type !== filterType) {
-            show = false;
         }
         
         // Apply status filter
