@@ -3629,7 +3629,6 @@ const HELP_CONTENT = {
             title: "Technical Design - Help",
             purpose: "Define and document architectural decisions, technology choices, and design constraints for your project in a structured format.",
             workflows: [
-                "<strong>Set Defaults:</strong> Use 'Set Default Answers' to quickly populate common configuration choices",
                 "<strong>Interactive Form:</strong> Answer configuration questions that adapt based on your previous choices",
                 "<strong>JSON Export:</strong> Technical design is stored as JSON for programmatic access during implementation"
             ],

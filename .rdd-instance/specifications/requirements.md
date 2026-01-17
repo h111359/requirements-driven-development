@@ -110,7 +110,7 @@ The framework enables:
 
 - [UR-0024] The `technical-design` configuration JSON shall support conditional and hierarchical logic, enabling form fields to appear or change behavior based on previously selected answers.
 
-- [UR-0025] The Web UI shall provide a Technical Specification page for editing of `technical-design`. It shall provide a “Set Default Answers” function that automatically populates all unanswered design fields with their configured default values.
+- [UR-0025] The Web UI shall provide a Technical Specification page for editing of `technical-design`.
 
 - [UR-0026] The framework shall provide smooth developer experience, minimizing technical overhead for requirement clarification
 
