@@ -673,6 +673,9 @@ The framework enables:
 
 - [TR-0194] The technical design schema shall contain 33 categories covering ProjectScale, ProductType, Criticality, ExpectedLifetime, EnterpriseConstraints, CloudStrategy, Compute, Frontend, Backend, Mobile, DataAnalytics, AI_ML, Security_IAM, Networking, CICD_DevOps, Observability, Compliance_Governance, DisasterRecovery, OperationalModel, DevelopmentProcess, ExpandedSecurity, ExpandedData, DataVisualization, DeepDisasterRecovery, IntegrationArchitecture, PerformanceScalability, NonFunctionalRequirements, EnvironmentStrategy, DeploymentStrategy, DataLifecycleRetention, SupportHoursSLAs, MonitoringMetrics, and Logging with approximately 490 total questions.
 
+- [TR-0195] The Web UI Technical Design page search functionality shall filter across all categories and questions simultaneously, displaying only categories with matches in the sidebar with match counts, presenting all matching questions in a flat list grouped by category with group labels, and restoring the previously selected category when search is cleared.
+
+
 
 
 

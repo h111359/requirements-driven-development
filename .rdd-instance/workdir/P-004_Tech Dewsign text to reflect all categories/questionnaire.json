@@ -1,0 +1,131 @@
+{
+  "context": "The current Technical Design page has a text search input field, but it only filters questions within the currently selected category in the sidebar. The prompt requests that the search should filter across all categories and questions, not just the current category. This requires clarification on how the UI should behave when searching across all categories.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "When a user enters text in the search box, should the category sidebar show only categories that contain matching questions, or should all categories remain visible?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Show only categories that have at least one matching question (filter categories)",
+          "pros": "Cleaner UI, easier to see which categories are relevant to the search, reduces visual noise",
+          "cons": "User loses overview of all available categories, may be confusing if search returns no results"
+        },
+        {
+          "id": "B",
+          "label": "Show all categories but highlight or mark those with matching questions",
+          "pros": "User maintains full context of all categories, clear indication of where matches are found",
+          "cons": "Categories without matches remain visible (more visual clutter), requires visual distinction mechanism"
+        },
+        {
+          "id": "C",
+          "label": "Show all categories unchanged, but display match counts next to categories with results",
+          "pros": "Minimal UI change, preserves full category list, shows quantitative information about matches",
+          "cons": "Less prominent visual feedback, categories without matches may confuse users"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Filtering categories to show only those with matches provides the clearest user experience and aligns with the prompt's intent to 'filter the categories'. This approach makes it immediately obvious which categories are relevant to the search term and reduces cognitive load.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "When a search is active, what should happen to the main content area (where questions are displayed)?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Auto-select the first category with matches and display its filtered questions",
+          "pros": "Immediate results visible without extra click, faster user workflow, shows content right away",
+          "cons": "Might be unexpected if user had a different category selected, requires handling when no matches found"
+        },
+        {
+          "id": "B",
+          "label": "Show all matching questions from all categories in a flat list, grouped by category",
+          "pros": "Complete search results in one view, no need to click through categories, best for comprehensive search",
+          "cons": "Loses accordion structure, may be long list, different UX from normal category browsing"
+        },
+        {
+          "id": "C",
+          "label": "Keep current category selection, but filter questions within it (current behavior) until user selects a different category",
+          "pros": "Minimal change from existing behavior, predictable interaction model, preserves context",
+          "cons": "Doesn't address the prompt requirement to search across all categories effectively"
+        },
+        {
+          "id": "D",
+          "label": "Show a message prompting the user to select a category from the filtered list",
+          "pros": "Explicit user action, clear what to do next, no automatic behavior changes",
+          "cons": "Extra click required, slower workflow, search results not immediately visible"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Displaying all matching questions from all categories in a unified view provides the most comprehensive search experience and fully addresses the requirement to search across categories. This approach eliminates the need to click through multiple categories to see all matches and gives users immediate visibility of all relevant questions.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "What should happen when the user clears the search input (removes all search text)?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Return to the previously selected category and restore normal view",
+          "pros": "Maintains user's working context, intuitive undo of search action, preserves workflow",
+          "cons": "Requires tracking previous state, slightly more complex implementation"
+        },
+        {
+          "id": "B",
+          "label": "Show all categories but keep the main area empty (no category selected state)",
+          "pros": "Clean slate, simple implementation, consistent with initial page load state",
+          "cons": "User loses their place, requires re-selecting category, disrupts workflow"
+        },
+        {
+          "id": "C",
+          "label": "Show all categories and auto-select the first category",
+          "pros": "Always shows content, predictable behavior, no empty state",
+          "cons": "Arbitrary category selection, may not be what user wants, inconsistent with initial load"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Returning to the previously selected category provides the best user experience by preserving context and allowing seamless toggling between search and normal browsing modes. This is consistent with standard search UI patterns where clearing search restores the previous view.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "Should the search match against question labels only, or also against other fields like options and help text?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Search in question labels, help text, and option labels (comprehensive search)",
+          "pros": "More thorough search results, finds relevant questions even if search term is in help text or options, better user experience",
+          "cons": "May return too many results, slightly slower search performance with large datasets"
+        },
+        {
+          "id": "B",
+          "label": "Search only in question labels",
+          "pros": "Faster search, more precise results, simpler implementation",
+          "cons": "Misses relevant questions where search term appears only in help text or options, less comprehensive"
+        },
+        {
+          "id": "C",
+          "label": "Search in question labels and help text, but not options",
+          "pros": "Balanced approach, captures most relevant content without option noise, reasonable performance",
+          "cons": "Still might miss some relevant questions, arbitrary distinction between help text and options"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The current implementation already searches across question labels, help text, and option labels (as seen in the existing code). Maintaining this comprehensive search approach is recommended as it provides the best user experience and aligns with user expectations for search functionality. The prompt doesn't request a change to what is being searched, only to expand the search scope across categories.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

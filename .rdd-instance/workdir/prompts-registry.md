@@ -220,3 +220,12 @@ Troubleshoot, fix, test until all is fixed
 %%PROMPT P-003 "Remove filter by type in Tech Design page"
 There is no need the questions in Tech Design page to be filtered by type. Remove this filter.
 %%ENDPROMPT
+
+%%PROMPT P-004 "Tech Dewsign text to reflect all categories"
+In Technical Design page, when text search is fulfilled, it should filter the categories and the questions in the categories, not only the current category
+
+
+### Modification 001
+
+Add a button for clearing the text filter (if possible inside the text field)
+%%ENDPROMPT

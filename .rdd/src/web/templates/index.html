@@ -454,8 +454,14 @@
                             <!-- Search and Filter Bar -->
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" id="tech-design-search" 
-                                           placeholder="🔍 Search questions, options, help text...">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="tech-design-search" 
+                                               placeholder="🔍 Search questions, options, help text...">
+                                        <button class="btn btn-outline-secondary" type="button" id="tech-design-search-clear" 
+                                                style="display: none;" title="Clear search">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <select class="form-select" id="tech-design-filter-status">
