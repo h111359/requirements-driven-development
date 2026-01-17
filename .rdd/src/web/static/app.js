@@ -3017,18 +3017,10 @@ function renderCategoryList() {
     categoryList.innerHTML = '';
     
     techDesignSchema.categories.forEach((category, index) => {
-        const answeredCount = countAnsweredInCategory(category);
-        const totalCount = countQuestionsInCategory(category);
-        
         const item = document.createElement('a');
         item.href = '#';
         item.className = 'list-group-item list-group-item-action';
-        item.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center">
-                <span>${category.label}</span>
-                <span class="badge bg-secondary">${answeredCount}/${totalCount}</span>
-            </div>
-        `;
+        item.innerHTML = `<span>${category.label}</span>`;
         item.onclick = (e) => {
             e.preventDefault();
             selectCategory(category.id);

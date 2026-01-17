@@ -1,0 +1,1 @@
+On Tech Design page each category has an indication how many questions are answered vs the total number of questions. Remove this indication as it is confusing

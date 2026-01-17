@@ -229,3 +229,7 @@ In Technical Design page, when text search is fulfilled, it should filter the ca
 
 Add a button for clearing the text filter (if possible inside the text field)
 %%ENDPROMPT
+
+%%PROMPT P-005 "Remove indication answered vs all question in Tech Design category"
+On Tech Design page each category has an indication how many questions are answered vs the total number of questions. Remove this indication as it is confusing
+%%ENDPROMPT
