@@ -233,3 +233,7 @@ Add a button for clearing the text filter (if possible inside the text field)
 %%PROMPT P-005 "Remove indication answered vs all question in Tech Design category"
 On Tech Design page each category has an indication how many questions are answered vs the total number of questions. Remove this indication as it is confusing
 %%ENDPROMPT
+
+%%PROMPT P-006 "Remove filter by status in Tech Design page"
+In Tech Design page the filter by status is not behaving properly - sometimes the shown question are not accordingly the choice. Remove this filter entirely
+%%ENDPROMPT

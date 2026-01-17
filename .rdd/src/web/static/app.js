@@ -3394,7 +3394,6 @@ async function reloadTechnicalDesignAnswers() {
 function setupTechnicalDesignFilters() {
     const searchInput = document.getElementById('tech-design-search');
     const searchClearBtn = document.getElementById('tech-design-search-clear');
-    const filterStatus = document.getElementById('tech-design-filter-status');
     
     searchInput.addEventListener('input', () => {
         // Show/hide clear button based on input value
@@ -3411,8 +3410,6 @@ function setupTechnicalDesignFilters() {
         searchClearBtn.style.display = 'none';
         applyTechnicalDesignFilters();
     });
-    
-    filterStatus.addEventListener('change', applyTechnicalDesignFilters);
 }
 
 /**
@@ -3420,21 +3417,15 @@ function setupTechnicalDesignFilters() {
  */
 function applyTechnicalDesignFilters() {
     const searchTerm = document.getElementById('tech-design-search').value.toLowerCase();
-    const filterStatus = document.getElementById('tech-design-filter-status').value;
     
-    if (!searchTerm && !filterStatus) {
+    if (!searchTerm) {
         // No filters active - restore normal view
         restoreNormalCategoryView();
         return;
     }
     
-    if (searchTerm) {
-        // Search mode: show cross-category results
-        applySearchFilter(searchTerm, filterStatus);
-    } else {
-        // Only status filter: apply to current category
-        applyStatusFilterToCurrentCategory(filterStatus);
-    }
+    // Search mode: show cross-category results
+    applySearchFilter(searchTerm);
 }
 
 /**
@@ -3461,7 +3452,7 @@ function restoreNormalCategoryView() {
 /**
  * Apply search filter across all categories
  */
-function applySearchFilter(searchTerm, filterStatus) {
+function applySearchFilter(searchTerm) {
     // Save current category before entering search mode
     if (techDesignCurrentCategory && !techDesignPreviousCategory) {
         techDesignPreviousCategory = techDesignCurrentCategory;
@@ -3490,16 +3481,6 @@ function applySearchFilter(searchTerm, filterStatus) {
                 
                 if (!searchableText.includes(searchTerm)) {
                     return; // Doesn't match search
-                }
-                
-                // Check status filter
-                if (filterStatus) {
-                    const isAnswered = !!techDesignAnswers[question.id];
-                    if (filterStatus === 'answered' && !isAnswered) {
-                        return;
-                    } else if (filterStatus === 'unanswered' && isAnswered) {
-                        return;
-                    }
                 }
                 
                 groupMatches.push({ question, group });
@@ -3629,27 +3610,6 @@ function renderSearchResults(matchingResults) {
     
     document.getElementById('tech-design-no-category').style.display = 'none';
     document.getElementById('tech-design-questions').style.display = 'block';
-}
-
-/**
- * Apply status filter to current category only
- */
-function applyStatusFilterToCurrentCategory(filterStatus) {
-    const questions = document.querySelectorAll('[data-question-id]');
-    
-    questions.forEach(questionDiv => {
-        const questionId = questionDiv.getAttribute('data-question-id');
-        const isAnswered = !!techDesignAnswers[questionId];
-        
-        let show = true;
-        if (filterStatus === 'answered' && !isAnswered) {
-            show = false;
-        } else if (filterStatus === 'unanswered' && isAnswered) {
-            show = false;
-        }
-        
-        questionDiv.style.display = show ? 'block' : 'none';
-    });
 }
 
 /**

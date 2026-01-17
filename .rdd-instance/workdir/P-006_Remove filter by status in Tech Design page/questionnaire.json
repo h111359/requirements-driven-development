@@ -1,0 +1,4 @@
+{
+  "context": "The prompt requests removal of the filter by status from the Tech Design page because it is not behaving properly. The task is straightforward: remove the HTML select element for status filtering, remove associated JavaScript functions (applyStatusFilterToCurrentCategory, references in applySearchFilter), and clean up event listeners. No design decisions or alternative implementations are needed - this is a pure removal task with clear scope.",
+  "questions": []
+}
