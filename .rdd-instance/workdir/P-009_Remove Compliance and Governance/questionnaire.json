@@ -1,0 +1,89 @@
+{
+  "context": "The active prompt requests removal of the 'Compliance & Governance' category from the Technical Design schema. This category contains 14 questions covering compliance frameworks, data residency/sovereignty, policy enforcement, auditing, retention policies, naming conventions, tagging, lifecycle management, and cost governance. The removal could be straightforward (delete the entire category) or may require consideration of what to do with existing answers or whether some questions should be relocated.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Should any questions from the Compliance & Governance category be relocated to other existing categories before removal, or should all questions be completely removed?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Remove all questions completely without relocating any",
+          "pros": "Clean removal, simplifies the schema, reduces complexity. Clear intent to eliminate all compliance-related questions from technical design.",
+          "cons": "Loses all compliance-related questions permanently. If these topics are needed in the future, they would need to be recreated."
+        },
+        {
+          "id": "B",
+          "label": "Relocate relevant questions to other categories (e.g., data retention to Data category, cost governance to OperationalModel, etc.) before removing the category",
+          "pros": "Preserves important architectural questions under different organization. Maintains coverage of important topics like data retention and cost governance.",
+          "cons": "More complex implementation. Requires decision on where each question belongs. May create inconsistency with the original P-001 prompt intent."
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The prompt explicitly states to remove the category 'with all questions in it', which indicates a complete removal. If question relocation was intended, the prompt would have specified it. A clean removal aligns with the explicit instruction.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "If there are existing answers to Compliance & Governance questions in technical-design.json, what should happen to them?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Remove all answers related to Compliance & Governance questions from technical-design.json",
+          "pros": "Clean data state, no orphaned answers, maintains data consistency with the schema.",
+          "cons": "Loses any previously captured compliance decisions permanently."
+        },
+        {
+          "id": "B",
+          "label": "Keep existing answers but mark them as deprecated or archived",
+          "pros": "Preserves historical data for reference, allows rollback if needed.",
+          "cons": "Creates inconsistency between schema and data. Answers without corresponding schema questions could cause confusion or errors."
+        },
+        {
+          "id": "C",
+          "label": "No action needed - technical-design.json is currently empty",
+          "pros": "No data cleanup required, simplest approach.",
+          "cons": "Only valid if the file is indeed empty, which needs verification."
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Based on the current state, technical-design.json is empty (as read from the specifications), so no data cleanup is required. If data exists, option A would be appropriate to maintain consistency.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "Should the technical-design convention documentation be updated to reflect the removal of Compliance & Governance category?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes, update the convention documentation to list the current categories and note that Compliance & Governance has been removed",
+          "pros": "Maintains accurate documentation, provides historical context for why the category is missing, helps future contributors understand the schema evolution.",
+          "cons": "Requires additional documentation effort."
+        },
+        {
+          "id": "B",
+          "label": "No, the convention documentation should only describe the current state without historical notes",
+          "pros": "Simpler documentation, focuses only on what exists now, avoids clutter from historical changes.",
+          "cons": "Loses context about why certain categories don't exist, may cause confusion if someone refers to old documentation or prompts."
+        },
+        {
+          "id": "C",
+          "label": "Update the documentation but keep the details minimal - just list current categories without mentioning the removal",
+          "pros": "Clean documentation, implicitly shows the category is gone by its absence from the list.",
+          "cons": "No explicit record of the change, which could cause confusion for anyone familiar with the previous schema."
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Documentation should reflect the current state. Simply listing the current categories (without Compliance & Governance) is sufficient. The git history and prompt registry provide the historical record of changes, so there's no need to clutter the convention document with change notes.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    }
+  ]
+}

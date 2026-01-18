@@ -257,3 +257,7 @@ Also in the console appears "Uncaught SyntaxError: Unexpected end of input (at (
 
 Nothing to be done - this is just a test
 %%ENDPROMPT
+
+%%PROMPT P-009 "Remove Compliance and Governance"
+Remove Technical Design category "Compliance & Governance" with all questions in it
+%%ENDPROMPT

@@ -1,0 +1,1 @@
+Remove Technical Design category "Compliance & Governance" with all questions in it
