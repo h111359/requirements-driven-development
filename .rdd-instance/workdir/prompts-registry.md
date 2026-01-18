@@ -241,3 +241,19 @@ In Tech Design page the filter by status is not behaving properly - sometimes th
 %%PROMPT P-007 "Flatten categories content of Tech Design"
 In Tech Design page - remove groups accordion representation and flatten questions in the categories. Chane the format of `.rdd/config/technical-design-schema.json`
 %%ENDPROMPT
+
+%%PROMPT P-008 "Tech Design - unite to Product"
+In Technical Design page unite the categories "Product scale", "Product type", "Criticality". Update all requirements, docstrigs, scripts, etc. where the old id and labels are present.
+
+
+### Modification 001
+
+When I edit the question "Product categories in scope (select all that apply)" - an error appears "Failed to save answer: Question ID not found in schema: Product_PrimaryProductCategory". Seems the changes introduced inconsistency. Troubleshoot, find the root cause, fix, test.
+
+Also in the console appears "Uncaught SyntaxError: Unexpected end of input (at (index):1:70)" when I press the button for editing a modification. The modification can not be edited. Fix that also.
+
+
+### Modification 002
+
+Nothing to be done - this is just a test
+%%ENDPROMPT

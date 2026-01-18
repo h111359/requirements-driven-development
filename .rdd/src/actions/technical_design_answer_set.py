@@ -53,6 +53,12 @@ def load_schema():
 def validate_question_id(schema, question_id):
     """Validate that questionId exists in schema."""
     for category in schema.get('categories', []):
+        # Support both flattened structure (categories → questions) and grouped structure (categories → groups → questions)
+        # Check direct questions in category (flattened structure)
+        for question in category.get('questions', []):
+            if question['id'] == question_id:
+                return question
+        # Check questions in groups (legacy grouped structure)
         for group in category.get('groups', []):
             for question in group.get('questions', []):
                 if question['id'] == question_id:

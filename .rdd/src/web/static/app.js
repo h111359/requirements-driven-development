@@ -2630,8 +2630,12 @@ function displayModificationsList(modifications) {
         const completed = mod.completed ? new Date(mod.completed).toLocaleString() : 'N/A';
         
         // Add edit button for in-progress modifications
+        // Store description in data attribute to avoid onclick syntax issues with special characters
         const editButton = mod.status !== 'completed' 
-            ? `<button class="btn btn-sm btn-outline-primary" onclick="editModification('${mod['modification-id']}', \`${escapeHtml(mod.description || '').replace(/`/g, '\`')}\`)">
+            ? `<button class="btn btn-sm btn-outline-primary" 
+                       data-mod-id="${mod['modification-id']}" 
+                       data-mod-desc="${escapeHtml(mod.description || '')}" 
+                       onclick="editModification(this.getAttribute('data-mod-id'), this.getAttribute('data-mod-desc'))">
                    <i class="bi bi-pencil"></i> Edit
                </button>` 
             : '';

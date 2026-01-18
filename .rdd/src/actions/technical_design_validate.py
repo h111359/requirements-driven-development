@@ -33,6 +33,11 @@ def get_all_question_ids(schema):
     """Extract all valid question IDs from schema."""
     question_map = {}
     for category in schema.get('categories', []):
+        # Support both flattened structure (categories → questions) and grouped structure (categories → groups → questions)
+        # Check direct questions in category (flattened structure)
+        for question in category.get('questions', []):
+            question_map[question['id']] = question
+        # Check questions in groups (legacy grouped structure)
         for group in category.get('groups', []):
             for question in group.get('questions', []):
                 question_map[question['id']] = question

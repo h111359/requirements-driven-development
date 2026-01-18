@@ -3,103 +3,12 @@
   "description": "Comprehensive architectural decision questionnaire for RDD framework projects",
   "categories": [
     {
-      "id": "ProjectScale",
-      "label": "Project scale",
-      "description": "Sizing signals (users, concurrency, usage pattern, growth, data volume) that influence architecture and cost posture",
+      "id": "Product",
+      "label": "Product definition",
+      "description": "Core product attributes that shape architectural decisions",
       "questions": [
         {
-          "id": "ProjectScale_OverallScaleCategory",
-          "label": "Overall project scale (high-level)",
-          "type": "radio",
-          "help": "Pick the closest framing; detailed sizing is captured below.",
-          "options": [
-            {
-              "id": "Small internal tool",
-              "label": "Small internal tool"
-            },
-            {
-              "id": "Department-level solution",
-              "label": "Department-level solution"
-            },
-            {
-              "id": "Enterprise-wide platform",
-              "label": "Enterprise-wide platform"
-            },
-            {
-              "id": "External customer-facing product",
-              "label": "External customer-facing product"
-            }
-          ]
-        },
-        {
-          "id": "ProjectScale_PeakConcurrency",
-          "label": "Peak concurrent users (interactive systems)",
-          "type": "radio",
-          "help": "If the system is non-interactive (batch-only), choose N/A.",
-          "options": [
-            {
-              "id": "N/A (non-interactive)",
-              "label": "N/A (non-interactive)"
-            },
-            {
-              "id": "< 25",
-              "label": "< 25"
-            },
-            {
-              "id": "25\u2013100",
-              "label": "25\u2013100"
-            },
-            {
-              "id": "100\u2013500",
-              "label": "100\u2013500"
-            },
-            {
-              "id": "> 500",
-              "label": "> 500"
-            }
-          ],
-          "allowOther": true,
-          "otherPlaceholder": "Other, e.g. ~2k during campaign peaks"
-        },
-        {
-          "id": "ProjectScale_DataVolumeCategory",
-          "label": "Approximate persisted data volume (current or year-1)",
-          "type": "radio",
-          "help": "High-level sizing only. Detailed retention/archival belongs to data lifecycle categories.",
-          "options": [
-            {
-              "id": "N/A (minimal persisted data)",
-              "label": "N/A (minimal persisted data)"
-            },
-            {
-              "id": "< 100 GB",
-              "label": "< 100 GB"
-            },
-            {
-              "id": "100 GB \u2013 1 TB",
-              "label": "100 GB \u2013 1 TB"
-            },
-            {
-              "id": "1\u201310 TB",
-              "label": "1\u201310 TB"
-            },
-            {
-              "id": "> 10 TB",
-              "label": "> 10 TB"
-            }
-          ],
-          "allowOther": true,
-          "otherPlaceholder": "Other, e.g. 50 TB with 10% monthly growth"
-        }
-      ]
-    },
-    {
-      "id": "ProductType",
-      "label": "Product type",
-      "description": "Nature of the solution being delivered (product archetype and how it is consumed)",
-      "questions": [
-        {
-          "id": "ProductType_PrimaryProductCategory",
+          "id": "Product_PrimaryProductCategory",
           "label": "Product categories in scope (select all that apply)",
           "type": "multiselect",
           "help": "Choose the product archetype(s). Detailed technology choices are covered in other categories.",
@@ -149,7 +58,7 @@
           "otherPlaceholder": "Other product category (free text), e.g. CMS, document management, RPA center of excellence"
         },
         {
-          "id": "ProductType_PrimaryConsumptionMode",
+          "id": "Product_PrimaryConsumptionMode",
           "label": "Consumption mode",
           "type": "multiselect",
           "help": "High-level product consumption. Detailed interface and protocol decisions belong to Frontend/Backend/Integration categories.",
@@ -183,7 +92,7 @@
           "otherPlaceholder": "Other (free text)"
         },
         {
-          "id": "ProductType_ProductLifecycleStage",
+          "id": "Product_ProductLifecycleStage",
           "label": "Product lifecycle stage",
           "type": "radio",
           "help": "Used to set expectations for agility vs rigor. Detailed governance belongs elsewhere.",
@@ -211,7 +120,7 @@
           ]
         },
         {
-          "id": "ProductType_Analytics_MainConsumersRoles",
+          "id": "Product_Analytics_MainConsumersRoles",
           "label": "Main consumer roles (select all that apply)",
           "type": "multiselect",
           "help": "",
@@ -247,7 +156,7 @@
           ],
           "visibleWhen": [
             {
-              "questionId": "ProductType_PrimaryProductCategory",
+              "questionId": "Product_PrimaryProductCategory",
               "equals": "Analytics / BI product"
             }
           ],
@@ -255,7 +164,7 @@
           "otherPlaceholder": "Other roles (free text)"
         },
         {
-          "id": "ProductType_Analytics_PrimaryOutcome",
+          "id": "Product_Analytics_PrimaryOutcome",
           "label": "Primary analytics outcome",
           "type": "radio",
           "help": "Visualization tooling and semantic layer details belong to DataVisualization / DataAnalytics categories.",
@@ -283,7 +192,7 @@
           ],
           "visibleWhen": [
             {
-              "questionId": "ProductType_PrimaryProductCategory",
+              "questionId": "Product_PrimaryProductCategory",
               "equals": "Analytics / BI product"
             }
           ],
@@ -291,7 +200,7 @@
           "otherPlaceholder": "Other (free text)"
         },
         {
-          "id": "ProductType_DataPlatform_ComponentType",
+          "id": "Product_DataPlatform_ComponentType",
           "label": "Data platform component type (select all that apply)",
           "type": "multiselect",
           "help": "High-level component type. Concrete services/tools are covered under DataAnalytics / ExpandedData / CloudStrategy.",
@@ -323,7 +232,7 @@
           ],
           "visibleWhen": [
             {
-              "questionId": "ProductType_PrimaryProductCategory",
+              "questionId": "Product_PrimaryProductCategory",
               "equals": "Data platform / data mesh component"
             }
           ],
@@ -331,7 +240,7 @@
           "otherPlaceholder": "Other component type (free text)"
         },
         {
-          "id": "ProductType_DataPlatform_OperatingModelHighLevel",
+          "id": "Product_DataPlatform_OperatingModelHighLevel",
           "label": "High-level operating model",
           "type": "radio",
           "help": "Detailed ownership/RACI belongs to OperationalModel; this is only the product archetype.",
@@ -351,13 +260,13 @@
           ],
           "visibleWhen": [
             {
-              "questionId": "ProductType_PrimaryProductCategory",
+              "questionId": "Product_PrimaryProductCategory",
               "equals": "Data platform / data mesh component"
             }
           ]
         },
         {
-          "id": "ProductType_IntegrationAutomation_UseCases",
+          "id": "Product_IntegrationAutomation_UseCases",
           "label": "Primary integration/automation use-cases (select all that apply)",
           "type": "multiselect",
           "help": "Specific protocols and middleware technologies belong to IntegrationArchitecture.",
@@ -389,7 +298,7 @@
           ],
           "visibleWhen": [
             {
-              "questionId": "ProductType_PrimaryProductCategory",
+              "questionId": "Product_PrimaryProductCategory",
               "equals": "Integration / middleware / automation"
             }
           ],
@@ -397,7 +306,7 @@
           "otherPlaceholder": "Other use-cases (free text)"
         },
         {
-          "id": "ProductType_AIML_ProductRole",
+          "id": "Product_AIML_ProductRole",
           "label": "AI/ML role in the product",
           "type": "multiselect",
           "help": "Detailed model choice, MLOps, monitoring, and responsible AI controls belong to AI_ML and related categories.",
@@ -425,7 +334,7 @@
           ],
           "visibleWhen": [
             {
-              "questionId": "ProductType_PrimaryProductCategory",
+              "questionId": "Product_PrimaryProductCategory",
               "equals": "AI/ML-enabled product"
             }
           ],
@@ -433,7 +342,7 @@
           "otherPlaceholder": "Other (free text)"
         },
         {
-          "id": "ProductType_IoTEdge_DeviceNature",
+          "id": "Product_IoTEdge_DeviceNature",
           "label": "Device/edge nature (select all that apply)",
           "type": "multiselect",
           "help": "Connectivity, protocol, and security specifics belong to Networking/Security categories.",
@@ -461,22 +370,99 @@
           ],
           "visibleWhen": [
             {
-              "questionId": "ProductType_PrimaryProductCategory",
+              "questionId": "Product_PrimaryProductCategory",
               "equals": "IoT / edge solution"
             }
           ],
           "allowOther": true,
           "otherPlaceholder": "Other device types (free text)"
-        }
-      ]
-    },
-    {
-      "id": "Criticality",
-      "label": "Criticality",
-      "description": "Business impact and availability expectations",
-      "questions": [
+        },
         {
-          "id": "Criticality_BusinessImpactCategory",
+          "id": "Product_OverallScaleCategory",
+          "label": "Overall project scale (high-level)",
+          "type": "radio",
+          "help": "Pick the closest framing; detailed sizing is captured below.",
+          "options": [
+            {
+              "id": "Small internal tool",
+              "label": "Small internal tool"
+            },
+            {
+              "id": "Department-level solution",
+              "label": "Department-level solution"
+            },
+            {
+              "id": "Enterprise-wide platform",
+              "label": "Enterprise-wide platform"
+            },
+            {
+              "id": "External customer-facing product",
+              "label": "External customer-facing product"
+            }
+          ]
+        },
+        {
+          "id": "Product_PeakConcurrency",
+          "label": "Peak concurrent users (interactive systems)",
+          "type": "radio",
+          "help": "If the system is non-interactive (batch-only), choose N/A.",
+          "options": [
+            {
+              "id": "N/A (non-interactive)",
+              "label": "N/A (non-interactive)"
+            },
+            {
+              "id": "< 25",
+              "label": "< 25"
+            },
+            {
+              "id": "25–100",
+              "label": "25–100"
+            },
+            {
+              "id": "100–500",
+              "label": "100–500"
+            },
+            {
+              "id": "> 500",
+              "label": "> 500"
+            }
+          ],
+          "allowOther": true,
+          "otherPlaceholder": "Other, e.g. ~2k during campaign peaks"
+        },
+        {
+          "id": "Product_DataVolumeCategory",
+          "label": "Approximate persisted data volume (current or year-1)",
+          "type": "radio",
+          "help": "High-level sizing only. Detailed retention/archival belongs to data lifecycle categories.",
+          "options": [
+            {
+              "id": "N/A (minimal persisted data)",
+              "label": "N/A (minimal persisted data)"
+            },
+            {
+              "id": "< 100 GB",
+              "label": "< 100 GB"
+            },
+            {
+              "id": "100 GB – 1 TB",
+              "label": "100 GB – 1 TB"
+            },
+            {
+              "id": "1–10 TB",
+              "label": "1–10 TB"
+            },
+            {
+              "id": "> 10 TB",
+              "label": "> 10 TB"
+            }
+          ],
+          "allowOther": true,
+          "otherPlaceholder": "Other, e.g. 50 TB with 10% monthly growth"
+        },
+        {
+          "id": "Product_BusinessImpactCategory",
           "label": "Business criticality category",
           "type": "radio",
           "help": "Example: Mission-critical / high financial impact",
@@ -500,7 +486,7 @@
           ]
         },
         {
-          "id": "Criticality_TargetAvailabilityPercentage",
+          "id": "Product_TargetAvailabilityPercentage",
           "label": "Target availability (percentage per year)",
           "type": "radio",
           "help": "",
@@ -531,7 +517,7 @@
           "otherPlaceholder": "Other availability target, e.g. 99.95%"
         },
         {
-          "id": "Criticality_RTO_TargetRecoveryTimeObjective",
+          "id": "Product_RTO_TargetRecoveryTimeObjective",
           "label": "Target Recovery Time Objective (RTO)",
           "type": "radio",
           "help": "",
@@ -541,16 +527,16 @@
               "label": "< 15 minutes"
             },
             {
-              "id": "15\u201360 minutes",
-              "label": "15\u201360 minutes"
+              "id": "15–60 minutes",
+              "label": "15–60 minutes"
             },
             {
-              "id": "1\u20134 hours",
-              "label": "1\u20134 hours"
+              "id": "1–4 hours",
+              "label": "1–4 hours"
             },
             {
-              "id": "4\u201324 hours",
-              "label": "4\u201324 hours"
+              "id": "4–24 hours",
+              "label": "4–24 hours"
             },
             {
               "id": "> 24 hours",
@@ -562,7 +548,7 @@
           "otherPlaceholder": "Other RTO description, e.g. 2 hours for APIs, 1 day for reports"
         },
         {
-          "id": "Criticality_RPO_TargetRecoveryPointObjective",
+          "id": "Product_RPO_TargetRecoveryPointObjective",
           "label": "Target Recovery Point Objective (RPO)",
           "type": "radio",
           "help": "",
@@ -572,16 +558,16 @@
               "label": "Real-time / synchronous"
             },
             {
-              "id": "\u2264 5 minutes",
-              "label": "\u2264 5 minutes"
+              "id": "≤ 5 minutes",
+              "label": "≤ 5 minutes"
             },
             {
-              "id": "15\u201360 minutes",
-              "label": "15\u201360 minutes"
+              "id": "15–60 minutes",
+              "label": "15–60 minutes"
             },
             {
-              "id": "1\u20134 hours",
-              "label": "1\u20134 hours"
+              "id": "1–4 hours",
+              "label": "1–4 hours"
             },
             {
               "id": "> 4 hours",
@@ -606,16 +592,16 @@
           "help": "",
           "options": [
             {
-              "id": "\u2264 2 years",
-              "label": "\u2264 2 years"
+              "id": "≤ 2 years",
+              "label": "≤ 2 years"
             },
             {
-              "id": "3\u20135 years",
-              "label": "3\u20135 years"
+              "id": "3–5 years",
+              "label": "3–5 years"
             },
             {
-              "id": "5\u201310 years",
-              "label": "5\u201310 years"
+              "id": "5–10 years",
+              "label": "5–10 years"
             },
             {
               "id": "> 10 years",
@@ -1173,8 +1159,8 @@
               "label": "GCP GKE"
             },
             {
-              "id": "No orchestrator \u2013 simple containers only",
-              "label": "No orchestrator \u2013 simple containers only"
+              "id": "No orchestrator – simple containers only",
+              "label": "No orchestrator – simple containers only"
             }
           ],
           "visibleWhen": [
@@ -1468,16 +1454,16 @@
               "label": "No"
             },
             {
-              "id": "Yes \u2013 for legacy workloads",
-              "label": "Yes \u2013 for legacy workloads"
+              "id": "Yes – for legacy workloads",
+              "label": "Yes – for legacy workloads"
             },
             {
-              "id": "Yes \u2013 for custom compute not supported by PaaS",
-              "label": "Yes \u2013 for custom compute not supported by PaaS"
+              "id": "Yes – for custom compute not supported by PaaS",
+              "label": "Yes – for custom compute not supported by PaaS"
             },
             {
-              "id": "Yes \u2013 as part of hybrid network",
-              "label": "Yes \u2013 as part of hybrid network"
+              "id": "Yes – as part of hybrid network",
+              "label": "Yes – as part of hybrid network"
             }
           ]
         },
@@ -1512,9 +1498,9 @@
             {
               "questionId": "Compute_UseVM",
               "equals": [
-                "Yes \u2013 for legacy workloads",
-                "Yes \u2013 for custom compute not supported by PaaS",
-                "Yes \u2013 as part of hybrid network"
+                "Yes – for legacy workloads",
+                "Yes – for custom compute not supported by PaaS",
+                "Yes – as part of hybrid network"
               ]
             }
           ],
@@ -1547,9 +1533,9 @@
             {
               "questionId": "Compute_UseVM",
               "equals": [
-                "Yes \u2013 for legacy workloads",
-                "Yes \u2013 for custom compute not supported by PaaS",
-                "Yes \u2013 as part of hybrid network"
+                "Yes – for legacy workloads",
+                "Yes – for custom compute not supported by PaaS",
+                "Yes – as part of hybrid network"
               ]
             }
           ]
@@ -1677,20 +1663,20 @@
           "help": "",
           "options": [
             {
-              "id": "SPA \u2013 Single Page Application",
-              "label": "SPA \u2013 Single Page Application"
+              "id": "SPA – Single Page Application",
+              "label": "SPA – Single Page Application"
             },
             {
-              "id": "SSR \u2013 Server Side Rendering",
-              "label": "SSR \u2013 Server Side Rendering"
+              "id": "SSR – Server Side Rendering",
+              "label": "SSR – Server Side Rendering"
             },
             {
-              "id": "SSG \u2013 Static Site Generation",
-              "label": "SSG \u2013 Static Site Generation"
+              "id": "SSG – Static Site Generation",
+              "label": "SSG – Static Site Generation"
             },
             {
-              "id": "CSR \u2013 Client Side Rendering only",
-              "label": "CSR \u2013 Client Side Rendering only"
+              "id": "CSR – Client Side Rendering only",
+              "label": "CSR – Client Side Rendering only"
             },
             {
               "id": "Mixed rendering model (hybrid)",
@@ -1915,8 +1901,8 @@
               "label": "Event-driven callbacks"
             },
             {
-              "id": "BFF \u2013 Backend for Frontend",
-              "label": "BFF \u2013 Backend for Frontend"
+              "id": "BFF – Backend for Frontend",
+              "label": "BFF – Backend for Frontend"
             }
           ],
           "allowOther": true
@@ -2273,8 +2259,8 @@
           "help": "",
           "options": [
             {
-              "id": "No \u2014 monolithic or modular monolith",
-              "label": "No \u2014 monolithic or modular monolith"
+              "id": "No — monolithic or modular monolith",
+              "label": "No — monolithic or modular monolith"
             },
             {
               "id": "Partial microservices architecture",
@@ -2398,8 +2384,8 @@
           "help": "",
           "options": [
             {
-              "id": "Yes \u2014 dedicated BFF",
-              "label": "Yes \u2014 dedicated BFF"
+              "id": "Yes — dedicated BFF",
+              "label": "Yes — dedicated BFF"
             },
             {
               "id": "No",
@@ -3022,16 +3008,16 @@
               "label": "No"
             },
             {
-              "id": "Yes \u2013 transactional notifications",
-              "label": "Yes \u2013 transactional notifications"
+              "id": "Yes – transactional notifications",
+              "label": "Yes – transactional notifications"
             },
             {
-              "id": "Yes \u2013 marketing notifications",
-              "label": "Yes \u2013 marketing notifications"
+              "id": "Yes – marketing notifications",
+              "label": "Yes – marketing notifications"
             },
             {
-              "id": "Yes \u2013 both transactional and marketing",
-              "label": "Yes \u2013 both transactional and marketing"
+              "id": "Yes – both transactional and marketing",
+              "label": "Yes – both transactional and marketing"
             }
           ]
         },
@@ -3070,9 +3056,9 @@
             {
               "questionId": "Mobile_PushNeeded",
               "equals": [
-                "Yes \u2013 transactional notifications",
-                "Yes \u2013 marketing notifications",
-                "Yes \u2013 both transactional and marketing"
+                "Yes – transactional notifications",
+                "Yes – marketing notifications",
+                "Yes – both transactional and marketing"
               ]
             }
           ],
@@ -3442,16 +3428,16 @@
               "label": "No"
             },
             {
-              "id": "Yes \u2013 periodic batch ingestion",
-              "label": "Yes \u2013 periodic batch ingestion"
+              "id": "Yes – periodic batch ingestion",
+              "label": "Yes – periodic batch ingestion"
             },
             {
-              "id": "Yes \u2013 nightly batch",
-              "label": "Yes \u2013 nightly batch"
+              "id": "Yes – nightly batch",
+              "label": "Yes – nightly batch"
             },
             {
-              "id": "Yes \u2013 intra-day scheduled ingestion",
-              "label": "Yes \u2013 intra-day scheduled ingestion"
+              "id": "Yes – intra-day scheduled ingestion",
+              "label": "Yes – intra-day scheduled ingestion"
             }
           ]
         },
@@ -3498,9 +3484,9 @@
             {
               "questionId": "DA_IngestionBatchNeeded",
               "equals": [
-                "Yes \u2013 periodic batch ingestion",
-                "Yes \u2013 nightly batch",
-                "Yes \u2013 intra-day scheduled ingestion"
+                "Yes – periodic batch ingestion",
+                "Yes – nightly batch",
+                "Yes – intra-day scheduled ingestion"
               ]
             }
           ],
@@ -3541,9 +3527,9 @@
             {
               "questionId": "DA_IngestionBatchNeeded",
               "equals": [
-                "Yes \u2013 periodic batch ingestion",
-                "Yes \u2013 nightly batch",
-                "Yes \u2013 intra-day scheduled ingestion"
+                "Yes – periodic batch ingestion",
+                "Yes – nightly batch",
+                "Yes – intra-day scheduled ingestion"
               ]
             }
           ],
@@ -3560,16 +3546,16 @@
               "label": "No"
             },
             {
-              "id": "Yes \u2013 real-time (seconds)",
-              "label": "Yes \u2013 real-time (seconds)"
+              "id": "Yes – real-time (seconds)",
+              "label": "Yes – real-time (seconds)"
             },
             {
-              "id": "Yes \u2013 near real-time (seconds\u2013minutes)",
-              "label": "Yes \u2013 near real-time (seconds\u2013minutes)"
+              "id": "Yes – near real-time (seconds–minutes)",
+              "label": "Yes – near real-time (seconds–minutes)"
             },
             {
-              "id": "Yes \u2013 event-driven ingestion only",
-              "label": "Yes \u2013 event-driven ingestion only"
+              "id": "Yes – event-driven ingestion only",
+              "label": "Yes – event-driven ingestion only"
             }
           ]
         },
@@ -3616,9 +3602,9 @@
             {
               "questionId": "DA_StreamingRequired",
               "equals": [
-                "Yes \u2013 real-time (seconds)",
-                "Yes \u2013 near real-time (seconds\u2013minutes)",
-                "Yes \u2013 event-driven ingestion only"
+                "Yes – real-time (seconds)",
+                "Yes – near real-time (seconds–minutes)",
+                "Yes – event-driven ingestion only"
               ]
             }
           ],
@@ -3663,9 +3649,9 @@
             {
               "questionId": "DA_StreamingRequired",
               "equals": [
-                "Yes \u2013 real-time (seconds)",
-                "Yes \u2013 near real-time (seconds\u2013minutes)",
-                "Yes \u2013 event-driven ingestion only"
+                "Yes – real-time (seconds)",
+                "Yes – near real-time (seconds–minutes)",
+                "Yes – event-driven ingestion only"
               ]
             }
           ],
@@ -3682,16 +3668,16 @@
               "label": "No"
             },
             {
-              "id": "Yes \u2013 database-native CDC",
-              "label": "Yes \u2013 database-native CDC"
+              "id": "Yes – database-native CDC",
+              "label": "Yes – database-native CDC"
             },
             {
-              "id": "Yes \u2013 log-based CDC",
-              "label": "Yes \u2013 log-based CDC"
+              "id": "Yes – log-based CDC",
+              "label": "Yes – log-based CDC"
             },
             {
-              "id": "Yes \u2013 application-level CDC",
-              "label": "Yes \u2013 application-level CDC"
+              "id": "Yes – application-level CDC",
+              "label": "Yes – application-level CDC"
             }
           ]
         },
@@ -3734,9 +3720,9 @@
             {
               "questionId": "DA_CDCNeeded",
               "equals": [
-                "Yes \u2013 database-native CDC",
-                "Yes \u2013 log-based CDC",
-                "Yes \u2013 application-level CDC"
+                "Yes – database-native CDC",
+                "Yes – log-based CDC",
+                "Yes – application-level CDC"
               ]
             }
           ],
@@ -4225,12 +4211,12 @@
               "label": "No"
             },
             {
-              "id": "Yes \u2013 manually maintained",
-              "label": "Yes \u2013 manually maintained"
+              "id": "Yes – manually maintained",
+              "label": "Yes – manually maintained"
             },
             {
-              "id": "Yes \u2013 integrated with data catalog",
-              "label": "Yes \u2013 integrated with data catalog"
+              "id": "Yes – integrated with data catalog",
+              "label": "Yes – integrated with data catalog"
             }
           ]
         },
@@ -5277,16 +5263,16 @@
               "label": "No"
             },
             {
-              "id": "Yes \u2013 internal users only",
-              "label": "Yes \u2013 internal users only"
+              "id": "Yes – internal users only",
+              "label": "Yes – internal users only"
             },
             {
-              "id": "Yes \u2013 internal and external users",
-              "label": "Yes \u2013 internal and external users"
+              "id": "Yes – internal and external users",
+              "label": "Yes – internal and external users"
             },
             {
-              "id": "Yes \u2013 multiple IdPs",
-              "label": "Yes \u2013 multiple IdPs"
+              "id": "Yes – multiple IdPs",
+              "label": "Yes – multiple IdPs"
             }
           ]
         },
@@ -5333,12 +5319,12 @@
               "label": "Partially"
             },
             {
-              "id": "Yes \u2013 documented",
-              "label": "Yes \u2013 documented"
+              "id": "Yes – documented",
+              "label": "Yes – documented"
             },
             {
-              "id": "Yes \u2013 integrated with IAM",
-              "label": "Yes \u2013 integrated with IAM"
+              "id": "Yes – integrated with IAM",
+              "label": "Yes – integrated with IAM"
             }
           ]
         },
@@ -5451,8 +5437,8 @@
               "label": "Partially"
             },
             {
-              "id": "Yes \u2013 widely used",
-              "label": "Yes \u2013 widely used"
+              "id": "Yes – widely used",
+              "label": "Yes – widely used"
             },
             {
               "id": "N/A (non-cloud system)",
@@ -5945,12 +5931,12 @@
               "label": "Partially"
             },
             {
-              "id": "Yes \u2013 all workloads private",
-              "label": "Yes \u2013 all workloads private"
+              "id": "Yes – all workloads private",
+              "label": "Yes – all workloads private"
             },
             {
-              "id": "Yes \u2013 strict private-only environment",
-              "label": "Yes \u2013 strict private-only environment"
+              "id": "Yes – strict private-only environment",
+              "label": "Yes – strict private-only environment"
             }
           ]
         },
@@ -5998,8 +5984,8 @@
               "questionId": "NET_PrivateAccessRequired",
               "equals": [
                 "Partially",
-                "Yes \u2013 all workloads private",
-                "Yes \u2013 strict private-only environment"
+                "Yes – all workloads private",
+                "Yes – strict private-only environment"
               ]
             }
           ],
@@ -6077,7 +6063,7 @@
         },
         {
           "id": "NET_HybridRequired",
-          "label": "Is hybrid connectivity (cloud \u2194 on-prem) required?",
+          "label": "Is hybrid connectivity (cloud ↔ on-prem) required?",
           "type": "radio",
           "help": "",
           "options": [
@@ -13226,12 +13212,12 @@
               "label": "Low concurrency (<100 concurrent)"
             },
             {
-              "id": "Medium concurrency (100\u20131,000)",
-              "label": "Medium concurrency (100\u20131,000)"
+              "id": "Medium concurrency (100–1,000)",
+              "label": "Medium concurrency (100–1,000)"
             },
             {
-              "id": "High concurrency (1,000\u201310,000)",
-              "label": "High concurrency (1,000\u201310,000)"
+              "id": "High concurrency (1,000–10,000)",
+              "label": "High concurrency (1,000–10,000)"
             },
             {
               "id": "Massive concurrency (>10,000)",
@@ -13254,12 +13240,12 @@
               "label": "Sub-second responses"
             },
             {
-              "id": "1\u20132 seconds",
-              "label": "1\u20132 seconds"
+              "id": "1–2 seconds",
+              "label": "1–2 seconds"
             },
             {
-              "id": "2\u20135 seconds",
-              "label": "2\u20135 seconds"
+              "id": "2–5 seconds",
+              "label": "2–5 seconds"
             },
             {
               "id": "5+ seconds acceptable",
@@ -13390,12 +13376,12 @@
               "label": "Sub-second responses"
             },
             {
-              "id": "1\u20132 seconds",
-              "label": "1\u20132 seconds"
+              "id": "1–2 seconds",
+              "label": "1–2 seconds"
             },
             {
-              "id": "3\u20135 seconds",
-              "label": "3\u20135 seconds"
+              "id": "3–5 seconds",
+              "label": "3–5 seconds"
             },
             {
               "id": "More than 5 seconds acceptable",
@@ -13796,16 +13782,16 @@
               "label": "Below 50%"
             },
             {
-              "id": "50%\u201370%",
-              "label": "50%\u201370%"
+              "id": "50%–70%",
+              "label": "50%–70%"
             },
             {
-              "id": "70%\u201385%",
-              "label": "70%\u201385%"
+              "id": "70%–85%",
+              "label": "70%–85%"
             },
             {
-              "id": "85%\u201395%",
-              "label": "85%\u201395%"
+              "id": "85%–95%",
+              "label": "85%–95%"
             },
             {
               "id": "Above 95%",
@@ -14040,12 +14026,12 @@
           "help": "",
           "options": [
             {
-              "id": "Dev \u2192 QA \u2192 UAT \u2192 Prod",
-              "label": "Dev \u2192 QA \u2192 UAT \u2192 Prod"
+              "id": "Dev → QA → UAT → Prod",
+              "label": "Dev → QA → UAT → Prod"
             },
             {
-              "id": "Dev \u2192 Integration \u2192 Stage \u2192 Prod",
-              "label": "Dev \u2192 Integration \u2192 Stage \u2192 Prod"
+              "id": "Dev → Integration → Stage → Prod",
+              "label": "Dev → Integration → Stage → Prod"
             },
             {
               "id": "Direct from Dev to Prod",
