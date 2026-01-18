@@ -1,0 +1,143 @@
+{
+  "context": "The prompt requests merging the 'Deep Disaster Recovery' category into the 'Disaster Recovery' category in the technical design schema. This requires decisions about how to handle the questions from both categories, their organization, and related documentation updates.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "How should questions from both categories be organized in the merged category?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Keep all Disaster Recovery questions first, then append all Deep Disaster Recovery questions",
+          "pros": "Simple to implement, preserves original grouping, clear separation between basic and advanced topics, easy to review changes",
+          "cons": "May not be logically organized, related questions could be separated, no semantic grouping"
+        },
+        {
+          "id": "B",
+          "label": "Group questions by logical topics (backup, replication, failover, testing, etc.) regardless of source",
+          "pros": "Better user experience, related questions are together, more intuitive navigation, easier to answer related questions at once",
+          "cons": "More complex implementation, requires careful analysis of question topics, harder to review what changed"
+        },
+        {
+          "id": "C",
+          "label": "Keep Disaster Recovery questions, append only unique Deep Disaster Recovery questions",
+          "pros": "Avoids duplication, maintains core questions in original order, simpler structure",
+          "cons": "May lose valuable detail from Deep DR questions, requires identifying what is truly unique"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Organizing by logical topics creates the best user experience when filling out the technical design questionnaire. Users think in terms of backup strategy, failover mechanisms, testing approaches, etc., not in terms of basic vs advanced. This approach also aligns with how technical design decisions are actually made in practice.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "Should the merged category retain the 'Disaster Recovery' ID or use a new ID?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Keep 'DisasterRecovery' as the category ID",
+          "pros": "No need to update existing technical design answers, maintains backward compatibility, simpler migration",
+          "cons": "Doesn't signal that this is an enhanced/merged category"
+        },
+        {
+          "id": "B",
+          "label": "Use new ID like 'ComprehensiveDisasterRecovery' or 'EnhancedDisasterRecovery'",
+          "pros": "Clear that this is a new, enhanced category, avoids confusion with old category, signals breaking change",
+          "cons": "Requires migrating existing answers, more complex implementation, breaks backward compatibility"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Keeping the existing 'DisasterRecovery' ID maintains backward compatibility and avoids the need to migrate existing technical design answers. Since this is a merge/consolidation rather than a fundamental change in purpose, retaining the ID makes sense. The description can be updated to reflect the comprehensive nature.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "How should the category description be updated for the merged category?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Keep the existing Disaster Recovery description unchanged",
+          "pros": "No changes needed, maintains consistency",
+          "cons": "Doesn't reflect the expanded scope with Deep DR questions, may mislead users about coverage"
+        },
+        {
+          "id": "B",
+          "label": "Combine both descriptions into a comprehensive one",
+          "pros": "Accurately reflects full scope, users understand what's covered, comprehensive guidance",
+          "cons": "May become too long, could be verbose"
+        },
+        {
+          "id": "C",
+          "label": "Write a new concise description covering all aspects",
+          "pros": "Clean, concise, tailored to the merged category, professional appearance",
+          "cons": "Requires careful writing, might miss some nuances from original descriptions"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "A new concise description is the best approach as it can accurately represent the comprehensive nature of the merged category without becoming overly verbose. This provides a clean slate to describe all DR aspects (backup, replication, failover, testing, documentation, compliance) in a cohesive way.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "Should any documentation or convention files be updated to reflect this merge?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Only update the technical design schema file itself",
+          "pros": "Minimal changes, focused on the core task, less work",
+          "cons": "Other documentation may reference Deep DR category, could cause confusion, incomplete solution"
+        },
+        {
+          "id": "B",
+          "label": "Update schema and scan for references in convention files and requirements",
+          "pros": "Comprehensive update, ensures consistency across all documentation, professional approach, prevents future confusion",
+          "cons": "More work required, need to identify all references, could be time-consuming"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "The prompt explicitly states 'Update configs, conventions, requirements', indicating that a comprehensive update is expected. This ensures the framework remains consistent and that no documentation still references the deprecated Deep Disaster Recovery category. It's the professional approach that maintains documentation integrity.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "How should question IDs be handled after the merge?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Renumber all questions sequentially in the merged category (DR_Q1, DR_Q2, etc.)",
+          "pros": "Clean, sequential IDs, professional appearance, easier to reference",
+          "cons": "Breaks existing technical design answers that use DDR_ prefixed IDs, requires migration of answered questions"
+        },
+        {
+          "id": "B",
+          "label": "Keep original IDs from both categories (DR_* and DDR_*)",
+          "pros": "Maintains backward compatibility, no need to migrate existing answers, preserves history",
+          "cons": "Mixed ID prefixes look inconsistent, non-sequential numbering, could be confusing"
+        },
+        {
+          "id": "C",
+          "label": "Keep DR_ IDs, rename DDR_ IDs to continue DR_ sequence",
+          "pros": "Consistent ID prefix, maintains DR answers, only DDR answers need migration (likely fewer)",
+          "cons": "Still requires some migration, mixed approach could be confusing during transition"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Keeping original IDs from both categories (DR_* and DDR_*) is the most pragmatic choice. It maintains backward compatibility with existing technical design answers, avoids complex migration logic, and while not aesthetically perfect, is fully functional. The mixed prefixes clearly show the question's origin, which can be useful for understanding the category evolution.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    }
+  ]
+}

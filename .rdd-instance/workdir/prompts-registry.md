@@ -264,3 +264,7 @@ Remove Technical Design category "Compliance & Governance" with all questions in
 %%PROMPT P-010 "Unite Technical Design security"
 In Technical Design - merge the questions from "Expanded Security" to "Security & IAM" and remove category "Expanded Security". Rename "Security & IAM" to simply "Security". Update the id and labels. Update the config, convention, requirements whenever needed.
 %%ENDPROMPT
+
+%%PROMPT P-011 "Technical Design - Merge Disaster Recovery"
+In Technical Design - merge the questions in category "Deep Disaster Recovery" in "Disaster Recovery". Update configs, conventions, requirements.
+%%ENDPROMPT
