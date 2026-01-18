@@ -15,8 +15,8 @@ The Technical Design artifact stores structured architectural decisions for RDD 
 
 ### Schema (Framework-level)
 - **Path**: `.rdd/config/technical-design-schema.json`
-- **Description**: Machine-readable schema defining all available questions, categories, groups, and conditional visibility rules
-- **Format**: JSON with hierarchical structure (categories → groups → questions)
+- **Description**: Machine-readable schema defining all available questions, categories, and conditional visibility rules
+- **Format**: JSON with hierarchical structure (categories → questions)
 - **Versioning**: No schema versioning; single authoritative schema
 
 ### Answers (Instance-level)
@@ -27,7 +27,7 @@ The Technical Design artifact stores structured architectural decisions for RDD 
 
 ## Schema Structure
 
-The schema follows a **hierarchical nested model**:
+The schema follows a **flattened model** where questions are direct children of categories:
 
 ```json
 {
@@ -38,22 +38,16 @@ The schema follows a **hierarchical nested model**:
       "id": "CategoryId",
       "label": "Category Display Name",
       "description": "Optional category description",
-      "groups": [
+      "questions": [
         {
-          "id": "GroupId",
-          "label": "Group Display Name",
-          "questions": [
-            {
-              "id": "QuestionId",
-              "label": "Question text",
-              "type": "radio|multiselect|text",
-              "help": "Optional helper text",
-              "options": [...],
-              "placeholder": "...",
-              "visibleWhen": [...],
-              "allowOther": true
-            }
-          ]
+          "id": "QuestionId",
+          "label": "Question text",
+          "type": "radio|multiselect|text",
+          "help": "Optional helper text",
+          "options": [...],
+          "placeholder": "...",
+          "visibleWhen": [...],
+          "allowOther": true
         }
       ]
     }
@@ -258,8 +252,8 @@ When Technical Design contains answered questions:
 
 ### Technical Design Page Requirements
 
-- **Navigation**: Left sidebar for categories, collapsible accordions for groups
-- **Rendering**: Dynamic rendering from schema
+- **Navigation**: Left sidebar for categories
+- **Rendering**: Dynamic rendering from schema with questions displayed in a flat list
 - **Search**: Full-text search across labels, options, help text
 - **Filter**: By category, answered/unanswered status, question type
 - **Editing**: Per-question widgets based on type (radio buttons, checkboxes, text inputs)
@@ -383,7 +377,7 @@ python .rdd/src/actions/technical_design_answer_remove.py questionId="Frontend_F
 ### Adding New Questions
 
 1. Edit `.rdd/config/technical-design-schema.json`
-2. Add question to appropriate category/group
+2. Add question to appropriate category's questions array
 3. Assign unique questionId
 4. Define type, label, options, help text
 5. Add `visibleWhen` rules if conditional

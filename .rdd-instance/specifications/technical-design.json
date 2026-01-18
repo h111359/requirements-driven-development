@@ -1,17 +1,19 @@
 {
-  "ProjectScale_OverallScaleCategory": {
-    "questionId": "ProjectScale_OverallScaleCategory",
-    "type": "radio",
-    "value": "External customer-facing product",
-    "answeredAt": "2026-01-17T14:41:29.085690+00:00"
-  },
-  "ProjectScale_KeyBusinessUnitsInScope": {
-    "questionId": "ProjectScale_KeyBusinessUnitsInScope",
+  "ProductType_PrimaryProductCategory": {
+    "questionId": "ProductType_PrimaryProductCategory",
     "type": "multiselect",
     "value": [
-      "IT / Technology",
-      "Data & Analytics / BI"
+      "Internal line-of-business application",
+      "External customer-facing application",
+      "Analytics / BI product",
+      "Data platform / data mesh component",
+      "API / backend service (headless)",
+      "Integration / middleware / automation",
+      "Mobile application",
+      "AI/ML-enabled product",
+      "IoT / edge solution",
+      "Developer platform / internal tooling"
     ],
-    "answeredAt": "2026-01-17T14:42:54.640725+00:00"
+    "answeredAt": "2026-01-18T16:13:33.799710+00:00"
   }
 }

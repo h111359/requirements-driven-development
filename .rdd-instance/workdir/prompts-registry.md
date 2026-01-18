@@ -237,3 +237,7 @@ On Tech Design page each category has an indication how many questions are answe
 %%PROMPT P-006 "Remove filter by status in Tech Design page"
 In Tech Design page the filter by status is not behaving properly - sometimes the shown question are not accordingly the choice. Remove this filter entirely
 %%ENDPROMPT
+
+%%PROMPT P-007 "Flatten categories content of Tech Design"
+In Tech Design page - remove groups accordion representation and flatten questions in the categories. Chane the format of `.rdd/config/technical-design-schema.json`
+%%ENDPROMPT

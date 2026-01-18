@@ -3035,12 +3035,10 @@ function renderCategoryList() {
  */
 function countAnsweredInCategory(category) {
     let count = 0;
-    category.groups.forEach(group => {
-        group.questions.forEach(question => {
-            if (techDesignAnswers[question.id]) {
-                count++;
-            }
-        });
+    category.questions.forEach(question => {
+        if (techDesignAnswers[question.id]) {
+            count++;
+        }
     });
     return count;
 }
@@ -3049,11 +3047,7 @@ function countAnsweredInCategory(category) {
  * Count total questions in a category
  */
 function countQuestionsInCategory(category) {
-    let count = 0;
-    category.groups.forEach(group => {
-        count += group.questions.length;
-    });
-    return count;
+    return category.questions.length;
 }
 
 /**
@@ -3089,46 +3083,17 @@ function renderCategoryQuestions(categoryId) {
     const accordion = document.getElementById('tech-design-accordion');
     accordion.innerHTML = '';
     
-    category.groups.forEach((group, groupIndex) => {
-        const groupId = `group-${categoryId}-${groupIndex}`;
-        
-        const groupDiv = document.createElement('div');
-        groupDiv.className = 'accordion-item';
-        
-        const headerDiv = document.createElement('h2');
-        headerDiv.className = 'accordion-header';
-        headerDiv.id = `heading-${groupId}`;
-        
-        const button = document.createElement('button');
-        button.className = 'accordion-button' + (groupIndex !== 0 ? ' collapsed' : '');
-        button.type = 'button';
-        button.setAttribute('data-bs-toggle', 'collapse');
-        button.setAttribute('data-bs-target', `#collapse-${groupId}`);
-        button.textContent = group.label;
-        
-        headerDiv.appendChild(button);
-        groupDiv.appendChild(headerDiv);
-        
-        const collapseDiv = document.createElement('div');
-        collapseDiv.id = `collapse-${groupId}`;
-        collapseDiv.className = 'accordion-collapse collapse' + (groupIndex === 0 ? ' show' : '');
-        collapseDiv.setAttribute('data-bs-parent', '#tech-design-accordion');
-        
-        const bodyDiv = document.createElement('div');
-        bodyDiv.className = 'accordion-body';
-        
-        // Render questions in this group
-        group.questions.forEach(question => {
-            if (isQuestionVisible(question)) {
-                bodyDiv.appendChild(renderQuestion(question));
-            }
-        });
-        
-        collapseDiv.appendChild(bodyDiv);
-        groupDiv.appendChild(collapseDiv);
-        
-        accordion.appendChild(groupDiv);
+    // Render all questions directly in a flat list
+    const questionsContainer = document.createElement('div');
+    questionsContainer.className = 'questions-list';
+    
+    category.questions.forEach(question => {
+        if (isQuestionVisible(question)) {
+            questionsContainer.appendChild(renderQuestion(question));
+        }
     });
+    
+    accordion.appendChild(questionsContainer);
 }
 
 /**
