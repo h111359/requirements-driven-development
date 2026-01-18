@@ -5174,9 +5174,9 @@
       ]
     },
     {
-      "id": "Security_IAM",
-      "label": "Security & IAM",
-      "description": "Identity, authentication, authorization, secrets, encryption, platform security, scanning, compliance",
+      "id": "Security",
+      "label": "Security",
+      "description": "Identity, authentication, authorization, secrets, encryption, platform security, scanning, compliance, hardening, and SDLC security",
       "questions": [
         {
           "id": "SEC_AuthProviders",
@@ -5211,6 +5211,22 @@
             {
               "id": "Custom identity provider",
               "label": "Custom identity provider"
+            },
+            {
+              "id": "Azure AD B2C",
+              "label": "Azure AD B2C"
+            },
+            {
+              "id": "ADFS",
+              "label": "ADFS"
+            },
+            {
+              "id": "SAML provider",
+              "label": "SAML provider"
+            },
+            {
+              "id": "Custom authentication",
+              "label": "Custom authentication"
             }
           ],
           "allowOther": true
@@ -5357,6 +5373,14 @@
             {
               "id": "No privileged access model",
               "label": "No privileged access model"
+            },
+            {
+              "id": "Zero Trust privileged access",
+              "label": "Zero Trust privileged access"
+            },
+            {
+              "id": "No privileged access controls",
+              "label": "No privileged access controls"
             }
           ],
           "allowOther": true
@@ -5394,6 +5418,14 @@
             {
               "id": "GCP Secret Manager",
               "label": "GCP Secret Manager"
+            },
+            {
+              "id": "Hardware Security Module (HSM)",
+              "label": "Hardware Security Module (HSM)"
+            },
+            {
+              "id": "No secret storage",
+              "label": "No secret storage"
             }
           ],
           "allowOther": true
@@ -5691,6 +5723,34 @@
             {
               "id": "None",
               "label": "None"
+            },
+            {
+              "id": "Defender for Cloud vulnerability scanning",
+              "label": "Defender for Cloud vulnerability scanning"
+            },
+            {
+              "id": "Container registry scanning",
+              "label": "Container registry scanning"
+            },
+            {
+              "id": "OS-level vulnerability scanning",
+              "label": "OS-level vulnerability scanning"
+            },
+            {
+              "id": "Dependency scanning",
+              "label": "Dependency scanning"
+            },
+            {
+              "id": "Network security scanning",
+              "label": "Network security scanning"
+            },
+            {
+              "id": "External penetration tests",
+              "label": "External penetration tests"
+            },
+            {
+              "id": "No vulnerability detection",
+              "label": "No vulnerability detection"
             }
           ],
           "allowOther": true
@@ -5805,6 +5865,466 @@
             {
               "id": "Regulated data",
               "label": "Regulated data"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "SEC_MFA",
+          "label": "Multi-factor authentication enforcement",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "No MFA",
+              "label": "No MFA"
+            },
+            {
+              "id": "MFA optional",
+              "label": "MFA optional"
+            },
+            {
+              "id": "MFA required for admins",
+              "label": "MFA required for admins"
+            },
+            {
+              "id": "MFA required for all users",
+              "label": "MFA required for all users"
+            }
+          ]
+        },
+        {
+          "id": "SEC_ConditionalAccess",
+          "label": "Conditional access policies",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Location-based access rules",
+              "label": "Location-based access rules"
+            },
+            {
+              "id": "Risk-based access controls",
+              "label": "Risk-based access controls"
+            },
+            {
+              "id": "Device compliance checks",
+              "label": "Device compliance checks"
+            },
+            {
+              "id": "Session risk evaluation",
+              "label": "Session risk evaluation"
+            },
+            {
+              "id": "Privileged access restrictions",
+              "label": "Privileged access restrictions"
+            },
+            {
+              "id": "No conditional access",
+              "label": "No conditional access"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "SEC_CertManagement",
+          "label": "Certificate management approach",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Auto-rotated certificates",
+              "label": "Auto-rotated certificates"
+            },
+            {
+              "id": "Manual certificate management",
+              "label": "Manual certificate management"
+            },
+            {
+              "id": "Key Vault certificate lifecycle",
+              "label": "Key Vault certificate lifecycle"
+            },
+            {
+              "id": "Third-party certificate authority",
+              "label": "Third-party certificate authority"
+            },
+            {
+              "id": "Self-signed certificates",
+              "label": "Self-signed certificates"
+            },
+            {
+              "id": "No certificate lifecycle management",
+              "label": "No certificate lifecycle management"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "SEC_StaticAnalysis",
+          "label": "Static security scanning (SAST)",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "GitHub Advanced Security",
+              "label": "GitHub Advanced Security"
+            },
+            {
+              "id": "SonarQube",
+              "label": "SonarQube"
+            },
+            {
+              "id": "Fortify",
+              "label": "Fortify"
+            },
+            {
+              "id": "Checkmarx",
+              "label": "Checkmarx"
+            },
+            {
+              "id": "Custom static scanning",
+              "label": "Custom static scanning"
+            },
+            {
+              "id": "No SAST",
+              "label": "No SAST"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "SEC_DependencyScanning",
+          "label": "Dependency & supply chain scanning",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "GitHub Dependabot",
+              "label": "GitHub Dependabot"
+            },
+            {
+              "id": "OWASP Dependency Check",
+              "label": "OWASP Dependency Check"
+            },
+            {
+              "id": "Snyk",
+              "label": "Snyk"
+            },
+            {
+              "id": "Whitesource",
+              "label": "Whitesource"
+            },
+            {
+              "id": "Container image scanning",
+              "label": "Container image scanning"
+            },
+            {
+              "id": "No dependency scanning",
+              "label": "No dependency scanning"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "SEC_IaCScanning",
+          "label": "IaC security scanning",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Terraform scanning",
+              "label": "Terraform scanning"
+            },
+            {
+              "id": "Bicep/ARM scanning",
+              "label": "Bicep/ARM scanning"
+            },
+            {
+              "id": "OPA/Conftest",
+              "label": "OPA/Conftest"
+            },
+            {
+              "id": "Checkov",
+              "label": "Checkov"
+            },
+            {
+              "id": "Custom scanning",
+              "label": "Custom scanning"
+            },
+            {
+              "id": "No IaC scanning",
+              "label": "No IaC scanning"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "SEC_VulnResponse",
+          "label": "Vulnerability response process",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "No response process",
+              "label": "No response process"
+            },
+            {
+              "id": "Ad-hoc remediation",
+              "label": "Ad-hoc remediation"
+            },
+            {
+              "id": "Defined remediation SLAs",
+              "label": "Defined remediation SLAs"
+            },
+            {
+              "id": "Automated + manual hybrid response",
+              "label": "Automated + manual hybrid response"
+            },
+            {
+              "id": "Fully automated remediation",
+              "label": "Fully automated remediation"
+            }
+          ]
+        },
+        {
+          "id": "SEC_SecurityInSDLC",
+          "label": "Security integration in SDLC",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Security review in design phase",
+              "label": "Security review in design phase"
+            },
+            {
+              "id": "Threat modeling performed",
+              "label": "Threat modeling performed"
+            },
+            {
+              "id": "Security tests in CI",
+              "label": "Security tests in CI"
+            },
+            {
+              "id": "Security gates in release pipeline",
+              "label": "Security gates in release pipeline"
+            },
+            {
+              "id": "Security approval required for deployment",
+              "label": "Security approval required for deployment"
+            },
+            {
+              "id": "No SDLC security integration",
+              "label": "No SDLC security integration"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "SEC_ThreatModelingTools",
+          "label": "Threat modeling tools",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Microsoft Threat Modeling Tool",
+              "label": "Microsoft Threat Modeling Tool"
+            },
+            {
+              "id": "OWASP Threat Dragon",
+              "label": "OWASP Threat Dragon"
+            },
+            {
+              "id": "Custom threat modeling",
+              "label": "Custom threat modeling"
+            },
+            {
+              "id": "Manual workshops",
+              "label": "Manual workshops"
+            },
+            {
+              "id": "No threat modeling",
+              "label": "No threat modeling"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "SEC_ContainerHardening",
+          "label": "Container hardening practices",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Minimal base images",
+              "label": "Minimal base images"
+            },
+            {
+              "id": "Non-root containers",
+              "label": "Non-root containers"
+            },
+            {
+              "id": "Read-only file systems",
+              "label": "Read-only file systems"
+            },
+            {
+              "id": "Network policy enforcement",
+              "label": "Network policy enforcement"
+            },
+            {
+              "id": "Image signing",
+              "label": "Image signing"
+            },
+            {
+              "id": "Runtime policy enforcement",
+              "label": "Runtime policy enforcement"
+            },
+            {
+              "id": "No container hardening",
+              "label": "No container hardening"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "SEC_ContainerRegistrySecurity",
+          "label": "Container registry security",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "ACR with RBAC",
+              "label": "ACR with RBAC"
+            },
+            {
+              "id": "Private endpoints for registry",
+              "label": "Private endpoints for registry"
+            },
+            {
+              "id": "Image scanning",
+              "label": "Image scanning"
+            },
+            {
+              "id": "Image retention policies",
+              "label": "Image retention policies"
+            },
+            {
+              "id": "Geo-replication",
+              "label": "Geo-replication"
+            },
+            {
+              "id": "Public container registry",
+              "label": "Public container registry"
+            },
+            {
+              "id": "No registry security",
+              "label": "No registry security"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "SEC_APISecurityLayers",
+          "label": "API security layers",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "OAuth2/OIDC enforcement",
+              "label": "OAuth2/OIDC enforcement"
+            },
+            {
+              "id": "API keys",
+              "label": "API keys"
+            },
+            {
+              "id": "mTLS",
+              "label": "mTLS"
+            },
+            {
+              "id": "WAF",
+              "label": "WAF"
+            },
+            {
+              "id": "Rate limiting",
+              "label": "Rate limiting"
+            },
+            {
+              "id": "IP allow/deny lists",
+              "label": "IP allow/deny lists"
+            },
+            {
+              "id": "Schema validation",
+              "label": "Schema validation"
+            },
+            {
+              "id": "No API security",
+              "label": "No API security"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "SEC_RuntimeThreatProtection",
+          "label": "Runtime threat protection",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Defender for Cloud runtime protection",
+              "label": "Defender for Cloud runtime protection"
+            },
+            {
+              "id": "Host-level malware scanning",
+              "label": "Host-level malware scanning"
+            },
+            {
+              "id": "Process anomaly detection",
+              "label": "Process anomaly detection"
+            },
+            {
+              "id": "File integrity monitoring",
+              "label": "File integrity monitoring"
+            },
+            {
+              "id": "Network anomaly detection",
+              "label": "Network anomaly detection"
+            },
+            {
+              "id": "No runtime protection",
+              "label": "No runtime protection"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "SEC_OSHardening",
+          "label": "OS/platform hardening",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "CIS benchmarks",
+              "label": "CIS benchmarks"
+            },
+            {
+              "id": "Custom baseline images",
+              "label": "Custom baseline images"
+            },
+            {
+              "id": "Patch automation",
+              "label": "Patch automation"
+            },
+            {
+              "id": "Restricted admin access",
+              "label": "Restricted admin access"
+            },
+            {
+              "id": "Application whitelisting",
+              "label": "Application whitelisting"
+            },
+            {
+              "id": "No OS hardening",
+              "label": "No OS hardening"
             }
           ],
           "allowOther": true
@@ -8971,689 +9491,6 @@
             {
               "id": "No local runtime",
               "label": "No local runtime"
-            }
-          ],
-          "allowOther": true
-        }
-      ]
-    },
-    {
-      "id": "ExpandedSecurity",
-      "label": "Expanded Security",
-      "description": "Authentication, authorization, secrets, scanning, vulnerabilities, encryption, hardening, SDLC security, platform controls",
-      "questions": [
-        {
-          "id": "ES_AuthProviders",
-          "label": "Authentication providers used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure AD / Entra ID",
-              "label": "Azure AD / Entra ID"
-            },
-            {
-              "id": "Azure AD B2C",
-              "label": "Azure AD B2C"
-            },
-            {
-              "id": "ADFS",
-              "label": "ADFS"
-            },
-            {
-              "id": "OAuth2/OIDC provider",
-              "label": "OAuth2/OIDC provider"
-            },
-            {
-              "id": "SAML provider",
-              "label": "SAML provider"
-            },
-            {
-              "id": "Social identity providers",
-              "label": "Social identity providers"
-            },
-            {
-              "id": "Custom authentication",
-              "label": "Custom authentication"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ES_MFA",
-          "label": "Multi-factor authentication enforcement",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No MFA",
-              "label": "No MFA"
-            },
-            {
-              "id": "MFA optional",
-              "label": "MFA optional"
-            },
-            {
-              "id": "MFA required for admins",
-              "label": "MFA required for admins"
-            },
-            {
-              "id": "MFA required for all users",
-              "label": "MFA required for all users"
-            }
-          ]
-        },
-        {
-          "id": "ES_ConditionalAccess",
-          "label": "Conditional access policies",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Location-based access rules",
-              "label": "Location-based access rules"
-            },
-            {
-              "id": "Risk-based access controls",
-              "label": "Risk-based access controls"
-            },
-            {
-              "id": "Device compliance checks",
-              "label": "Device compliance checks"
-            },
-            {
-              "id": "Session risk evaluation",
-              "label": "Session risk evaluation"
-            },
-            {
-              "id": "Privileged access restrictions",
-              "label": "Privileged access restrictions"
-            },
-            {
-              "id": "No conditional access",
-              "label": "No conditional access"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ES_AuthModel",
-          "label": "Authorization model",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "RBAC",
-              "label": "RBAC"
-            },
-            {
-              "id": "ABAC",
-              "label": "ABAC"
-            },
-            {
-              "id": "Claims-based authorization",
-              "label": "Claims-based authorization"
-            },
-            {
-              "id": "Custom in-application authorization",
-              "label": "Custom in-application authorization"
-            },
-            {
-              "id": "Hybrid authorization model",
-              "label": "Hybrid authorization model"
-            }
-          ]
-        },
-        {
-          "id": "ES_PrivilegedAccess",
-          "label": "Privileged access management",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "PIM (Privileged Identity Management)",
-              "label": "PIM (Privileged Identity Management)"
-            },
-            {
-              "id": "Just-in-time access",
-              "label": "Just-in-time access"
-            },
-            {
-              "id": "Break-glass accounts",
-              "label": "Break-glass accounts"
-            },
-            {
-              "id": "Separate admin accounts",
-              "label": "Separate admin accounts"
-            },
-            {
-              "id": "Zero Trust privileged access",
-              "label": "Zero Trust privileged access"
-            },
-            {
-              "id": "No privileged access controls",
-              "label": "No privileged access controls"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ES_SecretsStorage",
-          "label": "Where secrets are stored",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Key Vault",
-              "label": "Azure Key Vault"
-            },
-            {
-              "id": "Managed identities",
-              "label": "Managed identities"
-            },
-            {
-              "id": "Environment variables",
-              "label": "Environment variables"
-            },
-            {
-              "id": "Configuration files",
-              "label": "Configuration files"
-            },
-            {
-              "id": "HashiCorp Vault",
-              "label": "HashiCorp Vault"
-            },
-            {
-              "id": "Hardware Security Module (HSM)",
-              "label": "Hardware Security Module (HSM)"
-            },
-            {
-              "id": "No secret storage",
-              "label": "No secret storage"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ES_CertManagement",
-          "label": "Certificate management approach",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Auto-rotated certificates",
-              "label": "Auto-rotated certificates"
-            },
-            {
-              "id": "Manual certificate management",
-              "label": "Manual certificate management"
-            },
-            {
-              "id": "Key Vault certificate lifecycle",
-              "label": "Key Vault certificate lifecycle"
-            },
-            {
-              "id": "Third-party certificate authority",
-              "label": "Third-party certificate authority"
-            },
-            {
-              "id": "Self-signed certificates",
-              "label": "Self-signed certificates"
-            },
-            {
-              "id": "No certificate lifecycle management",
-              "label": "No certificate lifecycle management"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ES_EncryptionAtRest",
-          "label": "Encryption at rest",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Platform-managed encryption",
-              "label": "Platform-managed encryption"
-            },
-            {
-              "id": "Customer-managed keys (CMK)",
-              "label": "Customer-managed keys (CMK)"
-            },
-            {
-              "id": "Double encryption",
-              "label": "Double encryption"
-            },
-            {
-              "id": "No encryption at rest",
-              "label": "No encryption at rest"
-            }
-          ]
-        },
-        {
-          "id": "ES_EncryptionInTransit",
-          "label": "Encryption in transit",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "TLS 1.0/1.1 allowed",
-              "label": "TLS 1.0/1.1 allowed"
-            },
-            {
-              "id": "TLS 1.2 enforced",
-              "label": "TLS 1.2 enforced"
-            },
-            {
-              "id": "TLS 1.3 enforced",
-              "label": "TLS 1.3 enforced"
-            }
-          ]
-        },
-        {
-          "id": "ES_StaticAnalysis",
-          "label": "Static security scanning (SAST)",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "GitHub Advanced Security",
-              "label": "GitHub Advanced Security"
-            },
-            {
-              "id": "SonarQube",
-              "label": "SonarQube"
-            },
-            {
-              "id": "Fortify",
-              "label": "Fortify"
-            },
-            {
-              "id": "Checkmarx",
-              "label": "Checkmarx"
-            },
-            {
-              "id": "Custom static scanning",
-              "label": "Custom static scanning"
-            },
-            {
-              "id": "No SAST",
-              "label": "No SAST"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ES_DependencyScanning",
-          "label": "Dependency & supply chain scanning",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "GitHub Dependabot",
-              "label": "GitHub Dependabot"
-            },
-            {
-              "id": "OWASP Dependency Check",
-              "label": "OWASP Dependency Check"
-            },
-            {
-              "id": "Snyk",
-              "label": "Snyk"
-            },
-            {
-              "id": "Whitesource",
-              "label": "Whitesource"
-            },
-            {
-              "id": "Container image scanning",
-              "label": "Container image scanning"
-            },
-            {
-              "id": "No dependency scanning",
-              "label": "No dependency scanning"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ES_IaCScanning",
-          "label": "IaC security scanning",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Terraform scanning",
-              "label": "Terraform scanning"
-            },
-            {
-              "id": "Bicep/ARM scanning",
-              "label": "Bicep/ARM scanning"
-            },
-            {
-              "id": "OPA/Conftest",
-              "label": "OPA/Conftest"
-            },
-            {
-              "id": "Checkov",
-              "label": "Checkov"
-            },
-            {
-              "id": "Custom scanning",
-              "label": "Custom scanning"
-            },
-            {
-              "id": "No IaC scanning",
-              "label": "No IaC scanning"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ES_VulnDetection",
-          "label": "Vulnerability detection sources",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Defender for Cloud",
-              "label": "Defender for Cloud"
-            },
-            {
-              "id": "Container registry scanning",
-              "label": "Container registry scanning"
-            },
-            {
-              "id": "OS-level vulnerability scanning",
-              "label": "OS-level vulnerability scanning"
-            },
-            {
-              "id": "Dependency scanning",
-              "label": "Dependency scanning"
-            },
-            {
-              "id": "Network security scanning",
-              "label": "Network security scanning"
-            },
-            {
-              "id": "External penetration tests",
-              "label": "External penetration tests"
-            },
-            {
-              "id": "No vulnerability detection",
-              "label": "No vulnerability detection"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ES_VulnResponse",
-          "label": "Vulnerability response process",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No response process",
-              "label": "No response process"
-            },
-            {
-              "id": "Ad-hoc remediation",
-              "label": "Ad-hoc remediation"
-            },
-            {
-              "id": "Defined remediation SLAs",
-              "label": "Defined remediation SLAs"
-            },
-            {
-              "id": "Automated + manual hybrid response",
-              "label": "Automated + manual hybrid response"
-            },
-            {
-              "id": "Fully automated remediation",
-              "label": "Fully automated remediation"
-            }
-          ]
-        },
-        {
-          "id": "ES_SecurityInSDLC",
-          "label": "Security integration in SDLC",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Security review in design phase",
-              "label": "Security review in design phase"
-            },
-            {
-              "id": "Threat modeling performed",
-              "label": "Threat modeling performed"
-            },
-            {
-              "id": "Security tests in CI",
-              "label": "Security tests in CI"
-            },
-            {
-              "id": "Security gates in release pipeline",
-              "label": "Security gates in release pipeline"
-            },
-            {
-              "id": "Security approval required for deployment",
-              "label": "Security approval required for deployment"
-            },
-            {
-              "id": "No SDLC security integration",
-              "label": "No SDLC security integration"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ES_ThreatModelingTools",
-          "label": "Threat modeling tools",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Microsoft Threat Modeling Tool",
-              "label": "Microsoft Threat Modeling Tool"
-            },
-            {
-              "id": "OWASP Threat Dragon",
-              "label": "OWASP Threat Dragon"
-            },
-            {
-              "id": "Custom threat modeling",
-              "label": "Custom threat modeling"
-            },
-            {
-              "id": "Manual workshops",
-              "label": "Manual workshops"
-            },
-            {
-              "id": "No threat modeling",
-              "label": "No threat modeling"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ES_ContainerHardening",
-          "label": "Container hardening practices",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Minimal base images",
-              "label": "Minimal base images"
-            },
-            {
-              "id": "Non-root containers",
-              "label": "Non-root containers"
-            },
-            {
-              "id": "Read-only file systems",
-              "label": "Read-only file systems"
-            },
-            {
-              "id": "Network policy enforcement",
-              "label": "Network policy enforcement"
-            },
-            {
-              "id": "Image signing",
-              "label": "Image signing"
-            },
-            {
-              "id": "Runtime policy enforcement",
-              "label": "Runtime policy enforcement"
-            },
-            {
-              "id": "No container hardening",
-              "label": "No container hardening"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ES_ContainerRegistrySecurity",
-          "label": "Container registry security",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "ACR with RBAC",
-              "label": "ACR with RBAC"
-            },
-            {
-              "id": "Private endpoints for registry",
-              "label": "Private endpoints for registry"
-            },
-            {
-              "id": "Image scanning",
-              "label": "Image scanning"
-            },
-            {
-              "id": "Image retention policies",
-              "label": "Image retention policies"
-            },
-            {
-              "id": "Geo-replication",
-              "label": "Geo-replication"
-            },
-            {
-              "id": "Public container registry",
-              "label": "Public container registry"
-            },
-            {
-              "id": "No registry security",
-              "label": "No registry security"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ES_APISecurityLayers",
-          "label": "API security layers",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "OAuth2/OIDC enforcement",
-              "label": "OAuth2/OIDC enforcement"
-            },
-            {
-              "id": "API keys",
-              "label": "API keys"
-            },
-            {
-              "id": "mTLS",
-              "label": "mTLS"
-            },
-            {
-              "id": "WAF",
-              "label": "WAF"
-            },
-            {
-              "id": "Rate limiting",
-              "label": "Rate limiting"
-            },
-            {
-              "id": "IP allow/deny lists",
-              "label": "IP allow/deny lists"
-            },
-            {
-              "id": "Schema validation",
-              "label": "Schema validation"
-            },
-            {
-              "id": "No API security",
-              "label": "No API security"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ES_RuntimeThreatProtection",
-          "label": "Runtime threat protection",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Defender for Cloud runtime protection",
-              "label": "Defender for Cloud runtime protection"
-            },
-            {
-              "id": "Host-level malware scanning",
-              "label": "Host-level malware scanning"
-            },
-            {
-              "id": "Process anomaly detection",
-              "label": "Process anomaly detection"
-            },
-            {
-              "id": "File integrity monitoring",
-              "label": "File integrity monitoring"
-            },
-            {
-              "id": "Network anomaly detection",
-              "label": "Network anomaly detection"
-            },
-            {
-              "id": "No runtime protection",
-              "label": "No runtime protection"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ES_OSHardening",
-          "label": "OS/platform hardening",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "CIS benchmarks",
-              "label": "CIS benchmarks"
-            },
-            {
-              "id": "Custom baseline images",
-              "label": "Custom baseline images"
-            },
-            {
-              "id": "Patch automation",
-              "label": "Patch automation"
-            },
-            {
-              "id": "Restricted admin access",
-              "label": "Restricted admin access"
-            },
-            {
-              "id": "Application whitelisting",
-              "label": "Application whitelisting"
-            },
-            {
-              "id": "No OS hardening",
-              "label": "No OS hardening"
             }
           ],
           "allowOther": true

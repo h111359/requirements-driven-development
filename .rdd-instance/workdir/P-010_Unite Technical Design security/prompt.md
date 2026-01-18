@@ -1,0 +1,1 @@
+In Technical Design - merge the questions from "Expanded Security" to "Security & IAM" and remove category "Expanded Security". Rename "Security & IAM" to simply "Security". Update the id and labels. Update the config, convention, requirements whenever needed.

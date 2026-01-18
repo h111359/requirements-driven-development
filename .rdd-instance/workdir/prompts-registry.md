@@ -113,7 +113,7 @@ Read `TechnicalDesignSchema.json` and carry forward ALL of the following:
   - Mobile
   - DataAnalytics
   - AI_ML
-  - Security_IAM
+  - Security
   - Networking
   - CICD_DevOps
   - Observability
@@ -121,7 +121,6 @@ Read `TechnicalDesignSchema.json` and carry forward ALL of the following:
   - DisasterRecovery
   - OperationalModel
   - DevelopmentProcess
-  - ExpandedSecurity
   - ExpandedData
   - DataVisualization
   - DeepDisasterRecovery
@@ -260,4 +259,8 @@ Nothing to be done - this is just a test
 
 %%PROMPT P-009 "Remove Compliance and Governance"
 Remove Technical Design category "Compliance & Governance" with all questions in it
+%%ENDPROMPT
+
+%%PROMPT P-010 "Unite Technical Design security"
+In Technical Design - merge the questions from "Expanded Security" to "Security & IAM" and remove category "Expanded Security". Rename "Security & IAM" to simply "Security". Update the id and labels. Update the config, convention, requirements whenever needed.
 %%ENDPROMPT
