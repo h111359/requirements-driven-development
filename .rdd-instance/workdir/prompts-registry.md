@@ -272,3 +272,7 @@ In Technical Design - merge the questions in category "Deep Disaster Recovery" i
 %%PROMPT P-012 "Technical Design - Merge Data"
 In Technical Design page - merge in "Data & Analytics" the categories "Expanded Data", "Data Visualization", "Data Lifecycle & Retention"
 %%ENDPROMPT
+
+%%PROMPT P-013 "Unite observability"
+In Technical Design page - merge in "Observability" the categories "Monitoring Metrics", "Logging"
+%%ENDPROMPT

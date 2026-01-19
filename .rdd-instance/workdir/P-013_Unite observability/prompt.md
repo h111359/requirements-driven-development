@@ -1,0 +1,1 @@
+In Technical Design page - merge in "Observability" the categories "Monitoring Metrics", "Logging"

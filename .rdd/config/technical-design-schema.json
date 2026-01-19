@@ -9670,6 +9670,1207 @@
             }
           ],
           "allowOther": true
+        },
+        {
+          "id": "OBS_AppMetricsCollected",
+          "label": "Application-level metrics collected",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Request latency",
+              "label": "Request latency"
+            },
+            {
+              "id": "Request throughput (RPS)",
+              "label": "Request throughput (RPS)"
+            },
+            {
+              "id": "Error rate",
+              "label": "Error rate"
+            },
+            {
+              "id": "Dependency performance",
+              "label": "Dependency performance"
+            },
+            {
+              "id": "Queue processing time",
+              "label": "Queue processing time"
+            },
+            {
+              "id": "API call success/failure rates",
+              "label": "API call success/failure rates"
+            },
+            {
+              "id": "Garbage collection metrics",
+              "label": "Garbage collection metrics"
+            },
+            {
+              "id": "Thread pool metrics",
+              "label": "Thread pool metrics"
+            },
+            {
+              "id": "No application metrics",
+              "label": "No application metrics"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_AppHealthSignals",
+          "label": "Application health signals",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Liveness probes",
+              "label": "Liveness probes"
+            },
+            {
+              "id": "Readiness probes",
+              "label": "Readiness probes"
+            },
+            {
+              "id": "Startup probes",
+              "label": "Startup probes"
+            },
+            {
+              "id": "Synthetic monitoring",
+              "label": "Synthetic monitoring"
+            },
+            {
+              "id": "Heartbeat endpoints",
+              "label": "Heartbeat endpoints"
+            },
+            {
+              "id": "No health signals",
+              "label": "No health signals"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_InfraMetrics",
+          "label": "Infrastructure metrics collected",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "CPU usage",
+              "label": "CPU usage"
+            },
+            {
+              "id": "Memory usage",
+              "label": "Memory usage"
+            },
+            {
+              "id": "Disk I/O",
+              "label": "Disk I/O"
+            },
+            {
+              "id": "Network throughput",
+              "label": "Network throughput"
+            },
+            {
+              "id": "Node/pod health",
+              "label": "Node/pod health"
+            },
+            {
+              "id": "Container restart count",
+              "label": "Container restart count"
+            },
+            {
+              "id": "Autoscaling events",
+              "label": "Autoscaling events"
+            },
+            {
+              "id": "VM/Node performance metrics",
+              "label": "VM/Node performance metrics"
+            },
+            {
+              "id": "No infrastructure metrics",
+              "label": "No infrastructure metrics"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_InfraPerfTools",
+          "label": "Infrastructure monitoring tools used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure Monitor",
+              "label": "Azure Monitor"
+            },
+            {
+              "id": "Log Analytics",
+              "label": "Log Analytics"
+            },
+            {
+              "id": "Prometheus",
+              "label": "Prometheus"
+            },
+            {
+              "id": "Grafana",
+              "label": "Grafana"
+            },
+            {
+              "id": "Datadog",
+              "label": "Datadog"
+            },
+            {
+              "id": "Elastic Observability",
+              "label": "Elastic Observability"
+            },
+            {
+              "id": "Custom infra telemetry",
+              "label": "Custom infra telemetry"
+            },
+            {
+              "id": "No infra monitoring",
+              "label": "No infra monitoring"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_KPIsTracked",
+          "label": "Business KPIs monitored",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "User activity metrics",
+              "label": "User activity metrics"
+            },
+            {
+              "id": "Conversion metrics",
+              "label": "Conversion metrics"
+            },
+            {
+              "id": "Engagement metrics",
+              "label": "Engagement metrics"
+            },
+            {
+              "id": "Billing/revenue metrics",
+              "label": "Billing/revenue metrics"
+            },
+            {
+              "id": "Operational KPIs",
+              "label": "Operational KPIs"
+            },
+            {
+              "id": "SLA/SLO compliance",
+              "label": "SLA/SLO compliance"
+            },
+            {
+              "id": "Custom domain KPIs",
+              "label": "Custom domain KPIs"
+            },
+            {
+              "id": "No business KPIs",
+              "label": "No business KPIs"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_BizEvents",
+          "label": "Business events tracked",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "User transactions",
+              "label": "User transactions"
+            },
+            {
+              "id": "Order lifecycle events",
+              "label": "Order lifecycle events"
+            },
+            {
+              "id": "Login/authentication events",
+              "label": "Login/authentication events"
+            },
+            {
+              "id": "Workflow completion",
+              "label": "Workflow completion"
+            },
+            {
+              "id": "Domain-specific transactional events",
+              "label": "Domain-specific transactional events"
+            },
+            {
+              "id": "No business events",
+              "label": "No business events"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_QueueMonitoring",
+          "label": "Queue and streaming metrics collected",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Queue depth",
+              "label": "Queue depth"
+            },
+            {
+              "id": "Message latency",
+              "label": "Message latency"
+            },
+            {
+              "id": "Dead-letter queue count",
+              "label": "Dead-letter queue count"
+            },
+            {
+              "id": "Event lag (consumer group delay)",
+              "label": "Event lag (consumer group delay)"
+            },
+            {
+              "id": "Throughput per partition",
+              "label": "Throughput per partition"
+            },
+            {
+              "id": "Processing failures",
+              "label": "Processing failures"
+            },
+            {
+              "id": "Consumer health",
+              "label": "Consumer health"
+            },
+            {
+              "id": "No queue metrics",
+              "label": "No queue metrics"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_StreamTools",
+          "label": "Streaming observability tools",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Kafka monitoring",
+              "label": "Kafka monitoring"
+            },
+            {
+              "id": "Event Hub metrics",
+              "label": "Event Hub metrics"
+            },
+            {
+              "id": "Prometheus exporters",
+              "label": "Prometheus exporters"
+            },
+            {
+              "id": "Grafana dashboards",
+              "label": "Grafana dashboards"
+            },
+            {
+              "id": "Custom stream telemetry",
+              "label": "Custom stream telemetry"
+            },
+            {
+              "id": "No streaming monitoring",
+              "label": "No streaming monitoring"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_APIObservability",
+          "label": "API performance metrics monitored",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "API response time",
+              "label": "API response time"
+            },
+            {
+              "id": "API availability",
+              "label": "API availability"
+            },
+            {
+              "id": "Rate limiting events",
+              "label": "Rate limiting events"
+            },
+            {
+              "id": "Throttling events",
+              "label": "Throttling events"
+            },
+            {
+              "id": "Dependency call latency",
+              "label": "Dependency call latency"
+            },
+            {
+              "id": "API error rates",
+              "label": "API error rates"
+            },
+            {
+              "id": "Payload size metrics",
+              "label": "Payload size metrics"
+            },
+            {
+              "id": "No API metrics",
+              "label": "No API metrics"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_APIGatewayMetrics",
+          "label": "API gateway metrics collected",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Request counts",
+              "label": "Request counts"
+            },
+            {
+              "id": "Cache hit/miss rates",
+              "label": "Cache hit/miss rates"
+            },
+            {
+              "id": "Unauthorized requests",
+              "label": "Unauthorized requests"
+            },
+            {
+              "id": "Backend service latency",
+              "label": "Backend service latency"
+            },
+            {
+              "id": "Rate limit triggers",
+              "label": "Rate limit triggers"
+            },
+            {
+              "id": "Custom gateway metrics",
+              "label": "Custom gateway metrics"
+            },
+            {
+              "id": "No gateway metrics",
+              "label": "No gateway metrics"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_DataPipelineMetrics",
+          "label": "Pipeline/data processing metrics tracked",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Pipeline execution duration",
+              "label": "Pipeline execution duration"
+            },
+            {
+              "id": "Data freshness",
+              "label": "Data freshness"
+            },
+            {
+              "id": "Data completeness",
+              "label": "Data completeness"
+            },
+            {
+              "id": "Row-level error counts",
+              "label": "Row-level error counts"
+            },
+            {
+              "id": "Transformation failures",
+              "label": "Transformation failures"
+            },
+            {
+              "id": "Pipeline retry attempts",
+              "label": "Pipeline retry attempts"
+            },
+            {
+              "id": "Streaming consumer lag",
+              "label": "Streaming consumer lag"
+            },
+            {
+              "id": "No pipeline metrics",
+              "label": "No pipeline metrics"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_DataQualityMetrics",
+          "label": "Data quality KPIs monitored",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Completeness",
+              "label": "Completeness"
+            },
+            {
+              "id": "Accuracy",
+              "label": "Accuracy"
+            },
+            {
+              "id": "Consistency",
+              "label": "Consistency"
+            },
+            {
+              "id": "Uniqueness",
+              "label": "Uniqueness"
+            },
+            {
+              "id": "Timeliness",
+              "label": "Timeliness"
+            },
+            {
+              "id": "Schema drift detection",
+              "label": "Schema drift detection"
+            },
+            {
+              "id": "DQ rule violations",
+              "label": "DQ rule violations"
+            },
+            {
+              "id": "No data quality metrics",
+              "label": "No data quality metrics"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_LogTypes",
+          "label": "Types of logs collected",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Application logs",
+              "label": "Application logs"
+            },
+            {
+              "id": "Infrastructure logs",
+              "label": "Infrastructure logs"
+            },
+            {
+              "id": "Audit logs",
+              "label": "Audit logs"
+            },
+            {
+              "id": "Security logs",
+              "label": "Security logs"
+            },
+            {
+              "id": "API gateway logs",
+              "label": "API gateway logs"
+            },
+            {
+              "id": "Dependency logs",
+              "label": "Dependency logs"
+            },
+            {
+              "id": "Distributed trace logs",
+              "label": "Distributed trace logs"
+            },
+            {
+              "id": "No logs collected",
+              "label": "No logs collected"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_AlertRouting",
+          "label": "Alert routing destinations",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Email",
+              "label": "Email"
+            },
+            {
+              "id": "Teams",
+              "label": "Teams"
+            },
+            {
+              "id": "Slack",
+              "label": "Slack"
+            },
+            {
+              "id": "PagerDuty",
+              "label": "PagerDuty"
+            },
+            {
+              "id": "Ticketing systems",
+              "label": "Ticketing systems"
+            },
+            {
+              "id": "SMS/phone alerts",
+              "label": "SMS/phone alerts"
+            },
+            {
+              "id": "Custom webhook handlers",
+              "label": "Custom webhook handlers"
+            },
+            {
+              "id": "No alert routing",
+              "label": "No alert routing"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_TypesCollected",
+          "label": "Types of logs collected",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Application logs",
+              "label": "Application logs"
+            },
+            {
+              "id": "Infrastructure logs",
+              "label": "Infrastructure logs"
+            },
+            {
+              "id": "API gateway logs",
+              "label": "API gateway logs"
+            },
+            {
+              "id": "Security logs",
+              "label": "Security logs"
+            },
+            {
+              "id": "Audit logs",
+              "label": "Audit logs"
+            },
+            {
+              "id": "Data pipeline logs",
+              "label": "Data pipeline logs"
+            },
+            {
+              "id": "Batch job logs",
+              "label": "Batch job logs"
+            },
+            {
+              "id": "Streaming consumer logs",
+              "label": "Streaming consumer logs"
+            },
+            {
+              "id": "Container runtime logs",
+              "label": "Container runtime logs"
+            },
+            {
+              "id": "No logs collected",
+              "label": "No logs collected"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_OperationalEvents",
+          "label": "Operational and business events logged",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "User interactions",
+              "label": "User interactions"
+            },
+            {
+              "id": "Order/transaction lifecycle events",
+              "label": "Order/transaction lifecycle events"
+            },
+            {
+              "id": "Critical business events",
+              "label": "Critical business events"
+            },
+            {
+              "id": "System state changes",
+              "label": "System state changes"
+            },
+            {
+              "id": "Background job events",
+              "label": "Background job events"
+            },
+            {
+              "id": "Infrastructure events",
+              "label": "Infrastructure events"
+            },
+            {
+              "id": "No operational events logged",
+              "label": "No operational events logged"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_Structure",
+          "label": "Log structure",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Structured JSON logs",
+              "label": "Structured JSON logs"
+            },
+            {
+              "id": "Unstructured text logs",
+              "label": "Unstructured text logs"
+            },
+            {
+              "id": "Semi-structured logs",
+              "label": "Semi-structured logs"
+            },
+            {
+              "id": "W3C trace context format",
+              "label": "W3C trace context format"
+            },
+            {
+              "id": "Custom vendor logging format",
+              "label": "Custom vendor logging format"
+            },
+            {
+              "id": "No specific structure",
+              "label": "No specific structure"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_LogEnrichment",
+          "label": "Log enrichment",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Correlation ID",
+              "label": "Correlation ID"
+            },
+            {
+              "id": "Trace ID",
+              "label": "Trace ID"
+            },
+            {
+              "id": "Span ID",
+              "label": "Span ID"
+            },
+            {
+              "id": "User identity (if permitted)",
+              "label": "User identity (if permitted)"
+            },
+            {
+              "id": "Request metadata",
+              "label": "Request metadata"
+            },
+            {
+              "id": "Environment metadata",
+              "label": "Environment metadata"
+            },
+            {
+              "id": "Version/deployment metadata",
+              "label": "Version/deployment metadata"
+            },
+            {
+              "id": "No enrichment",
+              "label": "No enrichment"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_LogLevelPolicy",
+          "label": "Log level policy in production",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Debug",
+              "label": "Debug"
+            },
+            {
+              "id": "Information",
+              "label": "Information"
+            },
+            {
+              "id": "Warning",
+              "label": "Warning"
+            },
+            {
+              "id": "Error",
+              "label": "Error"
+            },
+            {
+              "id": "Critical",
+              "label": "Critical"
+            },
+            {
+              "id": "Mixed based on component",
+              "label": "Mixed based on component"
+            },
+            {
+              "id": "No log level policy",
+              "label": "No log level policy"
+            }
+          ]
+        },
+        {
+          "id": "OBS_VerbosityControl",
+          "label": "Verbosity control",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Dynamic log level switching",
+              "label": "Dynamic log level switching"
+            },
+            {
+              "id": "Configuration-driven verbosity",
+              "label": "Configuration-driven verbosity"
+            },
+            {
+              "id": "Feature-flagged verbosity",
+              "label": "Feature-flagged verbosity"
+            },
+            {
+              "id": "Environment-specific verbosity",
+              "label": "Environment-specific verbosity"
+            },
+            {
+              "id": "Manual configuration changes",
+              "label": "Manual configuration changes"
+            },
+            {
+              "id": "No verbosity control",
+              "label": "No verbosity control"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_RedactionStrategy",
+          "label": "Redaction strategy for logs",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "PII redaction",
+              "label": "PII redaction"
+            },
+            {
+              "id": "Tokenization",
+              "label": "Tokenization"
+            },
+            {
+              "id": "Hashing",
+              "label": "Hashing"
+            },
+            {
+              "id": "Field-level encryption",
+              "label": "Field-level encryption"
+            },
+            {
+              "id": "Blocklisting sensitive fields",
+              "label": "Blocklisting sensitive fields"
+            },
+            {
+              "id": "Monitoring for PII leakage",
+              "label": "Monitoring for PII leakage"
+            },
+            {
+              "id": "No redaction strategy",
+              "label": "No redaction strategy"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_Filtering",
+          "label": "Log filtering before storage",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Drop DEBUG logs in production",
+              "label": "Drop DEBUG logs in production"
+            },
+            {
+              "id": "Drop high-volume logs",
+              "label": "Drop high-volume logs"
+            },
+            {
+              "id": "Drop sensitive data",
+              "label": "Drop sensitive data"
+            },
+            {
+              "id": "Drop application health checks",
+              "label": "Drop application health checks"
+            },
+            {
+              "id": "Filter based on error-only",
+              "label": "Filter based on error-only"
+            },
+            {
+              "id": "No filtering",
+              "label": "No filtering"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_LogDestinations",
+          "label": "Log destinations used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure Monitor",
+              "label": "Azure Monitor"
+            },
+            {
+              "id": "Log Analytics",
+              "label": "Log Analytics"
+            },
+            {
+              "id": "Elastic Stack (ELK)",
+              "label": "Elastic Stack (ELK)"
+            },
+            {
+              "id": "Datadog Logs",
+              "label": "Datadog Logs"
+            },
+            {
+              "id": "Splunk",
+              "label": "Splunk"
+            },
+            {
+              "id": "Application Insights",
+              "label": "Application Insights"
+            },
+            {
+              "id": "Cloud-native logging (e.g., Container Insights)",
+              "label": "Cloud-native logging (e.g., Container Insights)"
+            },
+            {
+              "id": "Local file logs",
+              "label": "Local file logs"
+            },
+            {
+              "id": "SIEM systems",
+              "label": "SIEM systems"
+            },
+            {
+              "id": "No log destinations",
+              "label": "No log destinations"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_ExportPipelines",
+          "label": "Log export/forwarding mechanisms",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Diagnostic settings",
+              "label": "Diagnostic settings"
+            },
+            {
+              "id": "Agent-based forwarding",
+              "label": "Agent-based forwarding"
+            },
+            {
+              "id": "Fluentd/FluentBit",
+              "label": "Fluentd/FluentBit"
+            },
+            {
+              "id": "OpenTelemetry collector",
+              "label": "OpenTelemetry collector"
+            },
+            {
+              "id": "Custom log forwarder",
+              "label": "Custom log forwarder"
+            },
+            {
+              "id": "No export mechanism",
+              "label": "No export mechanism"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_RetentionDuration",
+          "label": "Log retention duration",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "30 days",
+              "label": "30 days"
+            },
+            {
+              "id": "90 days",
+              "label": "90 days"
+            },
+            {
+              "id": "180 days",
+              "label": "180 days"
+            },
+            {
+              "id": "1 year",
+              "label": "1 year"
+            },
+            {
+              "id": "3 years",
+              "label": "3 years"
+            },
+            {
+              "id": "7 years",
+              "label": "7 years"
+            },
+            {
+              "id": "Custom retention",
+              "label": "Custom retention"
+            },
+            {
+              "id": "No retention policy",
+              "label": "No retention policy"
+            }
+          ]
+        },
+        {
+          "id": "OBS_ArchiveStrategy",
+          "label": "Log archival strategy",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Cold storage archival",
+              "label": "Cold storage archival"
+            },
+            {
+              "id": "Archive blob tier",
+              "label": "Archive blob tier"
+            },
+            {
+              "id": "Long-term audit log storage",
+              "label": "Long-term audit log storage"
+            },
+            {
+              "id": "Backup-driven archival",
+              "label": "Backup-driven archival"
+            },
+            {
+              "id": "No archival strategy",
+              "label": "No archival strategy"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_TracingProtocols",
+          "label": "Distributed tracing protocols used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "OpenTelemetry",
+              "label": "OpenTelemetry"
+            },
+            {
+              "id": "W3C Trace Context",
+              "label": "W3C Trace Context"
+            },
+            {
+              "id": "Zipkin format",
+              "label": "Zipkin format"
+            },
+            {
+              "id": "Jaeger format",
+              "label": "Jaeger format"
+            },
+            {
+              "id": "Custom trace format",
+              "label": "Custom trace format"
+            },
+            {
+              "id": "No distributed tracing",
+              "label": "No distributed tracing"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_TracingCoverage",
+          "label": "Tracing coverage level",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "No tracing",
+              "label": "No tracing"
+            },
+            {
+              "id": "Minimal tracing",
+              "label": "Minimal tracing"
+            },
+            {
+              "id": "Tracing for critical paths",
+              "label": "Tracing for critical paths"
+            },
+            {
+              "id": "Full application tracing",
+              "label": "Full application tracing"
+            },
+            {
+              "id": "Full distributed tracing across services",
+              "label": "Full distributed tracing across services"
+            }
+          ]
+        },
+        {
+          "id": "OBS_SamplingStrategy",
+          "label": "Log sampling strategy",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "No sampling",
+              "label": "No sampling"
+            },
+            {
+              "id": "Fixed-rate sampling",
+              "label": "Fixed-rate sampling"
+            },
+            {
+              "id": "Adaptive sampling",
+              "label": "Adaptive sampling"
+            },
+            {
+              "id": "Dynamic sampling based on load",
+              "label": "Dynamic sampling based on load"
+            },
+            {
+              "id": "Exception-based sampling",
+              "label": "Exception-based sampling"
+            },
+            {
+              "id": "User-segment sampling",
+              "label": "User-segment sampling"
+            },
+            {
+              "id": "Request-path sampling",
+              "label": "Request-path sampling"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_LogVolumeControls",
+          "label": "Log volume control mechanisms",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Rate limiting logs",
+              "label": "Rate limiting logs"
+            },
+            {
+              "id": "Suppressing duplicates",
+              "label": "Suppressing duplicates"
+            },
+            {
+              "id": "Batching logs",
+              "label": "Batching logs"
+            },
+            {
+              "id": "Compression",
+              "label": "Compression"
+            },
+            {
+              "id": "Dropping low-value logs",
+              "label": "Dropping low-value logs"
+            },
+            {
+              "id": "No log volume controls",
+              "label": "No log volume controls"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_GovernancePractices",
+          "label": "Logging governance practices",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Enterprise logging standard",
+              "label": "Enterprise logging standard"
+            },
+            {
+              "id": "Mandatory structure for logs",
+              "label": "Mandatory structure for logs"
+            },
+            {
+              "id": "Security review of logs",
+              "label": "Security review of logs"
+            },
+            {
+              "id": "Anonymization checks",
+              "label": "Anonymization checks"
+            },
+            {
+              "id": "Logging maturity assessments",
+              "label": "Logging maturity assessments"
+            },
+            {
+              "id": "No governance",
+              "label": "No governance"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_LogResponsibility",
+          "label": "Responsibility for logging & monitoring",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Engineering team",
+              "label": "Engineering team"
+            },
+            {
+              "id": "Platform/Cloud team",
+              "label": "Platform/Cloud team"
+            },
+            {
+              "id": "Security team",
+              "label": "Security team"
+            },
+            {
+              "id": "Operations team",
+              "label": "Operations team"
+            },
+            {
+              "id": "Shared responsibility",
+              "label": "Shared responsibility"
+            },
+            {
+              "id": "No defined responsibility",
+              "label": "No defined responsibility"
+            }
+          ],
+          "allowOther": true
         }
       ]
     },
@@ -15026,1294 +16227,6 @@
             {
               "id": "No responsibilities defined",
               "label": "No responsibilities defined"
-            }
-          ],
-          "allowOther": true
-        }
-      ]
-    },
-    {
-      "id": "MonitoringMetrics",
-      "label": "Monitoring Metrics",
-      "description": "Application, infrastructure, business metrics, SLIs, KPIs, alerting, telemetry, thresholds, anomaly detection",
-      "questions": [
-        {
-          "id": "MM_AppMetricsCollected",
-          "label": "Application-level metrics collected",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Request latency",
-              "label": "Request latency"
-            },
-            {
-              "id": "Request throughput (RPS)",
-              "label": "Request throughput (RPS)"
-            },
-            {
-              "id": "Error rate",
-              "label": "Error rate"
-            },
-            {
-              "id": "Dependency performance",
-              "label": "Dependency performance"
-            },
-            {
-              "id": "Queue processing time",
-              "label": "Queue processing time"
-            },
-            {
-              "id": "API call success/failure rates",
-              "label": "API call success/failure rates"
-            },
-            {
-              "id": "Garbage collection metrics",
-              "label": "Garbage collection metrics"
-            },
-            {
-              "id": "Thread pool metrics",
-              "label": "Thread pool metrics"
-            },
-            {
-              "id": "No application metrics",
-              "label": "No application metrics"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "MM_AppHealthSignals",
-          "label": "Application health signals",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Liveness probes",
-              "label": "Liveness probes"
-            },
-            {
-              "id": "Readiness probes",
-              "label": "Readiness probes"
-            },
-            {
-              "id": "Startup probes",
-              "label": "Startup probes"
-            },
-            {
-              "id": "Synthetic monitoring",
-              "label": "Synthetic monitoring"
-            },
-            {
-              "id": "Heartbeat endpoints",
-              "label": "Heartbeat endpoints"
-            },
-            {
-              "id": "No health signals",
-              "label": "No health signals"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "MM_InfraMetrics",
-          "label": "Infrastructure metrics collected",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "CPU usage",
-              "label": "CPU usage"
-            },
-            {
-              "id": "Memory usage",
-              "label": "Memory usage"
-            },
-            {
-              "id": "Disk I/O",
-              "label": "Disk I/O"
-            },
-            {
-              "id": "Network throughput",
-              "label": "Network throughput"
-            },
-            {
-              "id": "Node/pod health",
-              "label": "Node/pod health"
-            },
-            {
-              "id": "Container restart count",
-              "label": "Container restart count"
-            },
-            {
-              "id": "Autoscaling events",
-              "label": "Autoscaling events"
-            },
-            {
-              "id": "VM/Node performance metrics",
-              "label": "VM/Node performance metrics"
-            },
-            {
-              "id": "No infrastructure metrics",
-              "label": "No infrastructure metrics"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "MM_InfraPerfTools",
-          "label": "Infrastructure monitoring tools used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Monitor",
-              "label": "Azure Monitor"
-            },
-            {
-              "id": "Log Analytics",
-              "label": "Log Analytics"
-            },
-            {
-              "id": "Prometheus",
-              "label": "Prometheus"
-            },
-            {
-              "id": "Grafana",
-              "label": "Grafana"
-            },
-            {
-              "id": "Datadog",
-              "label": "Datadog"
-            },
-            {
-              "id": "Elastic Observability",
-              "label": "Elastic Observability"
-            },
-            {
-              "id": "Custom infra telemetry",
-              "label": "Custom infra telemetry"
-            },
-            {
-              "id": "No infra monitoring",
-              "label": "No infra monitoring"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "MM_KPIsTracked",
-          "label": "Business KPIs monitored",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "User activity metrics",
-              "label": "User activity metrics"
-            },
-            {
-              "id": "Conversion metrics",
-              "label": "Conversion metrics"
-            },
-            {
-              "id": "Engagement metrics",
-              "label": "Engagement metrics"
-            },
-            {
-              "id": "Billing/revenue metrics",
-              "label": "Billing/revenue metrics"
-            },
-            {
-              "id": "Operational KPIs",
-              "label": "Operational KPIs"
-            },
-            {
-              "id": "SLA/SLO compliance",
-              "label": "SLA/SLO compliance"
-            },
-            {
-              "id": "Custom domain KPIs",
-              "label": "Custom domain KPIs"
-            },
-            {
-              "id": "No business KPIs",
-              "label": "No business KPIs"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "MM_BizEvents",
-          "label": "Business events tracked",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "User transactions",
-              "label": "User transactions"
-            },
-            {
-              "id": "Order lifecycle events",
-              "label": "Order lifecycle events"
-            },
-            {
-              "id": "Login/authentication events",
-              "label": "Login/authentication events"
-            },
-            {
-              "id": "Workflow completion",
-              "label": "Workflow completion"
-            },
-            {
-              "id": "Domain-specific transactional events",
-              "label": "Domain-specific transactional events"
-            },
-            {
-              "id": "No business events",
-              "label": "No business events"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "MM_QueueMonitoring",
-          "label": "Queue and streaming metrics collected",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Queue depth",
-              "label": "Queue depth"
-            },
-            {
-              "id": "Message latency",
-              "label": "Message latency"
-            },
-            {
-              "id": "Dead-letter queue count",
-              "label": "Dead-letter queue count"
-            },
-            {
-              "id": "Event lag (consumer group delay)",
-              "label": "Event lag (consumer group delay)"
-            },
-            {
-              "id": "Throughput per partition",
-              "label": "Throughput per partition"
-            },
-            {
-              "id": "Processing failures",
-              "label": "Processing failures"
-            },
-            {
-              "id": "Consumer health",
-              "label": "Consumer health"
-            },
-            {
-              "id": "No queue metrics",
-              "label": "No queue metrics"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "MM_StreamTools",
-          "label": "Streaming observability tools",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Kafka monitoring",
-              "label": "Kafka monitoring"
-            },
-            {
-              "id": "Event Hub metrics",
-              "label": "Event Hub metrics"
-            },
-            {
-              "id": "Prometheus exporters",
-              "label": "Prometheus exporters"
-            },
-            {
-              "id": "Grafana dashboards",
-              "label": "Grafana dashboards"
-            },
-            {
-              "id": "Custom stream telemetry",
-              "label": "Custom stream telemetry"
-            },
-            {
-              "id": "No streaming monitoring",
-              "label": "No streaming monitoring"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "MM_APIObservability",
-          "label": "API performance metrics monitored",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "API response time",
-              "label": "API response time"
-            },
-            {
-              "id": "API availability",
-              "label": "API availability"
-            },
-            {
-              "id": "Rate limiting events",
-              "label": "Rate limiting events"
-            },
-            {
-              "id": "Throttling events",
-              "label": "Throttling events"
-            },
-            {
-              "id": "Dependency call latency",
-              "label": "Dependency call latency"
-            },
-            {
-              "id": "API error rates",
-              "label": "API error rates"
-            },
-            {
-              "id": "Payload size metrics",
-              "label": "Payload size metrics"
-            },
-            {
-              "id": "No API metrics",
-              "label": "No API metrics"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "MM_APIGatewayMetrics",
-          "label": "API gateway metrics collected",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Request counts",
-              "label": "Request counts"
-            },
-            {
-              "id": "Cache hit/miss rates",
-              "label": "Cache hit/miss rates"
-            },
-            {
-              "id": "Unauthorized requests",
-              "label": "Unauthorized requests"
-            },
-            {
-              "id": "Backend service latency",
-              "label": "Backend service latency"
-            },
-            {
-              "id": "Rate limit triggers",
-              "label": "Rate limit triggers"
-            },
-            {
-              "id": "Custom gateway metrics",
-              "label": "Custom gateway metrics"
-            },
-            {
-              "id": "No gateway metrics",
-              "label": "No gateway metrics"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "MM_DataPipelineMetrics",
-          "label": "Pipeline/data processing metrics tracked",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Pipeline execution duration",
-              "label": "Pipeline execution duration"
-            },
-            {
-              "id": "Data freshness",
-              "label": "Data freshness"
-            },
-            {
-              "id": "Data completeness",
-              "label": "Data completeness"
-            },
-            {
-              "id": "Row-level error counts",
-              "label": "Row-level error counts"
-            },
-            {
-              "id": "Transformation failures",
-              "label": "Transformation failures"
-            },
-            {
-              "id": "Pipeline retry attempts",
-              "label": "Pipeline retry attempts"
-            },
-            {
-              "id": "Streaming consumer lag",
-              "label": "Streaming consumer lag"
-            },
-            {
-              "id": "No pipeline metrics",
-              "label": "No pipeline metrics"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "MM_DataQualityMetrics",
-          "label": "Data quality KPIs monitored",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Completeness",
-              "label": "Completeness"
-            },
-            {
-              "id": "Accuracy",
-              "label": "Accuracy"
-            },
-            {
-              "id": "Consistency",
-              "label": "Consistency"
-            },
-            {
-              "id": "Uniqueness",
-              "label": "Uniqueness"
-            },
-            {
-              "id": "Timeliness",
-              "label": "Timeliness"
-            },
-            {
-              "id": "Schema drift detection",
-              "label": "Schema drift detection"
-            },
-            {
-              "id": "DQ rule violations",
-              "label": "DQ rule violations"
-            },
-            {
-              "id": "No data quality metrics",
-              "label": "No data quality metrics"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "MM_LogTypes",
-          "label": "Types of logs collected",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Application logs",
-              "label": "Application logs"
-            },
-            {
-              "id": "Infrastructure logs",
-              "label": "Infrastructure logs"
-            },
-            {
-              "id": "Audit logs",
-              "label": "Audit logs"
-            },
-            {
-              "id": "Security logs",
-              "label": "Security logs"
-            },
-            {
-              "id": "API gateway logs",
-              "label": "API gateway logs"
-            },
-            {
-              "id": "Dependency logs",
-              "label": "Dependency logs"
-            },
-            {
-              "id": "Distributed trace logs",
-              "label": "Distributed trace logs"
-            },
-            {
-              "id": "No logs collected",
-              "label": "No logs collected"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "MM_LogRetention",
-          "label": "Log retention duration",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "30 days",
-              "label": "30 days"
-            },
-            {
-              "id": "90 days",
-              "label": "90 days"
-            },
-            {
-              "id": "6 months",
-              "label": "6 months"
-            },
-            {
-              "id": "1 year",
-              "label": "1 year"
-            },
-            {
-              "id": "7 years",
-              "label": "7 years"
-            },
-            {
-              "id": "Custom retention",
-              "label": "Custom retention"
-            },
-            {
-              "id": "No retention policy",
-              "label": "No retention policy"
-            }
-          ]
-        },
-        {
-          "id": "MM_AlertTypes",
-          "label": "Types of alerts configured",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Static threshold alerts",
-              "label": "Static threshold alerts"
-            },
-            {
-              "id": "Dynamic anomaly detection",
-              "label": "Dynamic anomaly detection"
-            },
-            {
-              "id": "Machine-learning-based alerts",
-              "label": "Machine-learning-based alerts"
-            },
-            {
-              "id": "SLO violation alerts",
-              "label": "SLO violation alerts"
-            },
-            {
-              "id": "Security alerts",
-              "label": "Security alerts"
-            },
-            {
-              "id": "Pipeline failure alerts",
-              "label": "Pipeline failure alerts"
-            },
-            {
-              "id": "No alerting",
-              "label": "No alerting"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "MM_AlertRouting",
-          "label": "Alert routing destinations",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Email",
-              "label": "Email"
-            },
-            {
-              "id": "Teams",
-              "label": "Teams"
-            },
-            {
-              "id": "Slack",
-              "label": "Slack"
-            },
-            {
-              "id": "PagerDuty",
-              "label": "PagerDuty"
-            },
-            {
-              "id": "Ticketing systems",
-              "label": "Ticketing systems"
-            },
-            {
-              "id": "SMS/phone alerts",
-              "label": "SMS/phone alerts"
-            },
-            {
-              "id": "Custom webhook handlers",
-              "label": "Custom webhook handlers"
-            },
-            {
-              "id": "No alert routing",
-              "label": "No alert routing"
-            }
-          ],
-          "allowOther": true
-        }
-      ]
-    },
-    {
-      "id": "Logging",
-      "label": "Logging",
-      "description": "Application logs, structured logging, retention, redaction, correlation, compliance, tracing, log enrichment, governance",
-      "questions": [
-        {
-          "id": "LOG_TypesCollected",
-          "label": "Types of logs collected",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Application logs",
-              "label": "Application logs"
-            },
-            {
-              "id": "Infrastructure logs",
-              "label": "Infrastructure logs"
-            },
-            {
-              "id": "API gateway logs",
-              "label": "API gateway logs"
-            },
-            {
-              "id": "Security logs",
-              "label": "Security logs"
-            },
-            {
-              "id": "Audit logs",
-              "label": "Audit logs"
-            },
-            {
-              "id": "Data pipeline logs",
-              "label": "Data pipeline logs"
-            },
-            {
-              "id": "Batch job logs",
-              "label": "Batch job logs"
-            },
-            {
-              "id": "Streaming consumer logs",
-              "label": "Streaming consumer logs"
-            },
-            {
-              "id": "Container runtime logs",
-              "label": "Container runtime logs"
-            },
-            {
-              "id": "No logs collected",
-              "label": "No logs collected"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "LOG_OperationalEvents",
-          "label": "Operational and business events logged",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "User interactions",
-              "label": "User interactions"
-            },
-            {
-              "id": "Order/transaction lifecycle events",
-              "label": "Order/transaction lifecycle events"
-            },
-            {
-              "id": "Critical business events",
-              "label": "Critical business events"
-            },
-            {
-              "id": "System state changes",
-              "label": "System state changes"
-            },
-            {
-              "id": "Background job events",
-              "label": "Background job events"
-            },
-            {
-              "id": "Infrastructure events",
-              "label": "Infrastructure events"
-            },
-            {
-              "id": "No operational events logged",
-              "label": "No operational events logged"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "LOG_Structure",
-          "label": "Log structure",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Structured JSON logs",
-              "label": "Structured JSON logs"
-            },
-            {
-              "id": "Unstructured text logs",
-              "label": "Unstructured text logs"
-            },
-            {
-              "id": "Semi-structured logs",
-              "label": "Semi-structured logs"
-            },
-            {
-              "id": "W3C trace context format",
-              "label": "W3C trace context format"
-            },
-            {
-              "id": "Custom vendor logging format",
-              "label": "Custom vendor logging format"
-            },
-            {
-              "id": "No specific structure",
-              "label": "No specific structure"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "LOG_LogEnrichment",
-          "label": "Log enrichment",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Correlation ID",
-              "label": "Correlation ID"
-            },
-            {
-              "id": "Trace ID",
-              "label": "Trace ID"
-            },
-            {
-              "id": "Span ID",
-              "label": "Span ID"
-            },
-            {
-              "id": "User identity (if permitted)",
-              "label": "User identity (if permitted)"
-            },
-            {
-              "id": "Request metadata",
-              "label": "Request metadata"
-            },
-            {
-              "id": "Environment metadata",
-              "label": "Environment metadata"
-            },
-            {
-              "id": "Version/deployment metadata",
-              "label": "Version/deployment metadata"
-            },
-            {
-              "id": "No enrichment",
-              "label": "No enrichment"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "LOG_LogLevelPolicy",
-          "label": "Log level policy in production",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Debug",
-              "label": "Debug"
-            },
-            {
-              "id": "Information",
-              "label": "Information"
-            },
-            {
-              "id": "Warning",
-              "label": "Warning"
-            },
-            {
-              "id": "Error",
-              "label": "Error"
-            },
-            {
-              "id": "Critical",
-              "label": "Critical"
-            },
-            {
-              "id": "Mixed based on component",
-              "label": "Mixed based on component"
-            },
-            {
-              "id": "No log level policy",
-              "label": "No log level policy"
-            }
-          ]
-        },
-        {
-          "id": "LOG_VerbosityControl",
-          "label": "Verbosity control",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Dynamic log level switching",
-              "label": "Dynamic log level switching"
-            },
-            {
-              "id": "Configuration-driven verbosity",
-              "label": "Configuration-driven verbosity"
-            },
-            {
-              "id": "Feature-flagged verbosity",
-              "label": "Feature-flagged verbosity"
-            },
-            {
-              "id": "Environment-specific verbosity",
-              "label": "Environment-specific verbosity"
-            },
-            {
-              "id": "Manual configuration changes",
-              "label": "Manual configuration changes"
-            },
-            {
-              "id": "No verbosity control",
-              "label": "No verbosity control"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "LOG_RedactionStrategy",
-          "label": "Redaction strategy for logs",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "PII redaction",
-              "label": "PII redaction"
-            },
-            {
-              "id": "Tokenization",
-              "label": "Tokenization"
-            },
-            {
-              "id": "Hashing",
-              "label": "Hashing"
-            },
-            {
-              "id": "Field-level encryption",
-              "label": "Field-level encryption"
-            },
-            {
-              "id": "Blocklisting sensitive fields",
-              "label": "Blocklisting sensitive fields"
-            },
-            {
-              "id": "Monitoring for PII leakage",
-              "label": "Monitoring for PII leakage"
-            },
-            {
-              "id": "No redaction strategy",
-              "label": "No redaction strategy"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "LOG_Filtering",
-          "label": "Log filtering before storage",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Drop DEBUG logs in production",
-              "label": "Drop DEBUG logs in production"
-            },
-            {
-              "id": "Drop high-volume logs",
-              "label": "Drop high-volume logs"
-            },
-            {
-              "id": "Drop sensitive data",
-              "label": "Drop sensitive data"
-            },
-            {
-              "id": "Drop application health checks",
-              "label": "Drop application health checks"
-            },
-            {
-              "id": "Filter based on error-only",
-              "label": "Filter based on error-only"
-            },
-            {
-              "id": "No filtering",
-              "label": "No filtering"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "LOG_LogDestinations",
-          "label": "Log destinations used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Monitor",
-              "label": "Azure Monitor"
-            },
-            {
-              "id": "Log Analytics",
-              "label": "Log Analytics"
-            },
-            {
-              "id": "Elastic Stack (ELK)",
-              "label": "Elastic Stack (ELK)"
-            },
-            {
-              "id": "Datadog Logs",
-              "label": "Datadog Logs"
-            },
-            {
-              "id": "Splunk",
-              "label": "Splunk"
-            },
-            {
-              "id": "Application Insights",
-              "label": "Application Insights"
-            },
-            {
-              "id": "Cloud-native logging (e.g., Container Insights)",
-              "label": "Cloud-native logging (e.g., Container Insights)"
-            },
-            {
-              "id": "Local file logs",
-              "label": "Local file logs"
-            },
-            {
-              "id": "SIEM systems",
-              "label": "SIEM systems"
-            },
-            {
-              "id": "No log destinations",
-              "label": "No log destinations"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "LOG_ExportPipelines",
-          "label": "Log export/forwarding mechanisms",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Diagnostic settings",
-              "label": "Diagnostic settings"
-            },
-            {
-              "id": "Agent-based forwarding",
-              "label": "Agent-based forwarding"
-            },
-            {
-              "id": "Fluentd/FluentBit",
-              "label": "Fluentd/FluentBit"
-            },
-            {
-              "id": "OpenTelemetry collector",
-              "label": "OpenTelemetry collector"
-            },
-            {
-              "id": "Custom log forwarder",
-              "label": "Custom log forwarder"
-            },
-            {
-              "id": "No export mechanism",
-              "label": "No export mechanism"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "LOG_RetentionDuration",
-          "label": "Log retention duration",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "30 days",
-              "label": "30 days"
-            },
-            {
-              "id": "90 days",
-              "label": "90 days"
-            },
-            {
-              "id": "180 days",
-              "label": "180 days"
-            },
-            {
-              "id": "1 year",
-              "label": "1 year"
-            },
-            {
-              "id": "3 years",
-              "label": "3 years"
-            },
-            {
-              "id": "7 years",
-              "label": "7 years"
-            },
-            {
-              "id": "Custom retention",
-              "label": "Custom retention"
-            },
-            {
-              "id": "No retention policy",
-              "label": "No retention policy"
-            }
-          ]
-        },
-        {
-          "id": "LOG_ArchiveStrategy",
-          "label": "Log archival strategy",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Cold storage archival",
-              "label": "Cold storage archival"
-            },
-            {
-              "id": "Archive blob tier",
-              "label": "Archive blob tier"
-            },
-            {
-              "id": "Long-term audit log storage",
-              "label": "Long-term audit log storage"
-            },
-            {
-              "id": "Backup-driven archival",
-              "label": "Backup-driven archival"
-            },
-            {
-              "id": "No archival strategy",
-              "label": "No archival strategy"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "LOG_TracingProtocols",
-          "label": "Distributed tracing protocols used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "OpenTelemetry",
-              "label": "OpenTelemetry"
-            },
-            {
-              "id": "W3C Trace Context",
-              "label": "W3C Trace Context"
-            },
-            {
-              "id": "Zipkin format",
-              "label": "Zipkin format"
-            },
-            {
-              "id": "Jaeger format",
-              "label": "Jaeger format"
-            },
-            {
-              "id": "Custom trace format",
-              "label": "Custom trace format"
-            },
-            {
-              "id": "No distributed tracing",
-              "label": "No distributed tracing"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "LOG_TracingCoverage",
-          "label": "Tracing coverage level",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No tracing",
-              "label": "No tracing"
-            },
-            {
-              "id": "Minimal tracing",
-              "label": "Minimal tracing"
-            },
-            {
-              "id": "Tracing for critical paths",
-              "label": "Tracing for critical paths"
-            },
-            {
-              "id": "Full application tracing",
-              "label": "Full application tracing"
-            },
-            {
-              "id": "Full distributed tracing across services",
-              "label": "Full distributed tracing across services"
-            }
-          ]
-        },
-        {
-          "id": "LOG_SamplingStrategy",
-          "label": "Log sampling strategy",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "No sampling",
-              "label": "No sampling"
-            },
-            {
-              "id": "Fixed-rate sampling",
-              "label": "Fixed-rate sampling"
-            },
-            {
-              "id": "Adaptive sampling",
-              "label": "Adaptive sampling"
-            },
-            {
-              "id": "Dynamic sampling based on load",
-              "label": "Dynamic sampling based on load"
-            },
-            {
-              "id": "Exception-based sampling",
-              "label": "Exception-based sampling"
-            },
-            {
-              "id": "User-segment sampling",
-              "label": "User-segment sampling"
-            },
-            {
-              "id": "Request-path sampling",
-              "label": "Request-path sampling"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "LOG_LogVolumeControls",
-          "label": "Log volume control mechanisms",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Rate limiting logs",
-              "label": "Rate limiting logs"
-            },
-            {
-              "id": "Suppressing duplicates",
-              "label": "Suppressing duplicates"
-            },
-            {
-              "id": "Batching logs",
-              "label": "Batching logs"
-            },
-            {
-              "id": "Compression",
-              "label": "Compression"
-            },
-            {
-              "id": "Dropping low-value logs",
-              "label": "Dropping low-value logs"
-            },
-            {
-              "id": "No log volume controls",
-              "label": "No log volume controls"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "LOG_GovernancePractices",
-          "label": "Logging governance practices",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Enterprise logging standard",
-              "label": "Enterprise logging standard"
-            },
-            {
-              "id": "Mandatory structure for logs",
-              "label": "Mandatory structure for logs"
-            },
-            {
-              "id": "Security review of logs",
-              "label": "Security review of logs"
-            },
-            {
-              "id": "Anonymization checks",
-              "label": "Anonymization checks"
-            },
-            {
-              "id": "Logging maturity assessments",
-              "label": "Logging maturity assessments"
-            },
-            {
-              "id": "No governance",
-              "label": "No governance"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "LOG_LogResponsibility",
-          "label": "Responsibility for logging & monitoring",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Engineering team",
-              "label": "Engineering team"
-            },
-            {
-              "id": "Platform/Cloud team",
-              "label": "Platform/Cloud team"
-            },
-            {
-              "id": "Security team",
-              "label": "Security team"
-            },
-            {
-              "id": "Operations team",
-              "label": "Operations team"
-            },
-            {
-              "id": "Shared responsibility",
-              "label": "Shared responsibility"
-            },
-            {
-              "id": "No defined responsibility",
-              "label": "No defined responsibility"
             }
           ],
           "allowOther": true
