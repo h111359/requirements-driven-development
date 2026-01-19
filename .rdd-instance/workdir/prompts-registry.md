@@ -276,3 +276,7 @@ In Technical Design page - merge in "Data & Analytics" the categories "Expanded 
 %%PROMPT P-013 "Unite observability"
 In Technical Design page - merge in "Observability" the categories "Monitoring Metrics", "Logging"
 %%ENDPROMPT
+
+%%PROMPT P-014 "Technical Design - Merge Deployment"
+In Technical Design page - merge the categories "CI/CD & DevOps" in "Deployment Strategy" and rename to simply "Deployment"
+%%ENDPROMPT

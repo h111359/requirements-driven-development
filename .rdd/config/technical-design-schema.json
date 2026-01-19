@@ -8546,12 +8546,12 @@
       ]
     },
     {
-      "id": "CICD_DevOps",
-      "label": "CI/CD & DevOps",
-      "description": "Continuous integration, continuous delivery, pipelines, automation, IaC, environments, release strategy, testing, governance",
+      "id": "Deployment",
+      "label": "Deployment",
+      "description": "End-to-end delivery: CI/CD pipelines, automation, infrastructure as code, deployment strategies, release orchestration, and operational governance",
       "questions": [
         {
-          "id": "CD_CITools",
+          "id": "D_CITools",
           "label": "CI tools used",
           "type": "multiselect",
           "help": "",
@@ -8588,7 +8588,7 @@
           "allowOther": true
         },
         {
-          "id": "CD_CIPractices",
+          "id": "D_CIPractices",
           "label": "CI practices in place",
           "type": "multiselect",
           "help": "",
@@ -8629,7 +8629,7 @@
           "allowOther": true
         },
         {
-          "id": "CD_CDTools",
+          "id": "D_CDTools",
           "label": "CD and release tools used",
           "type": "multiselect",
           "help": "",
@@ -8666,67 +8666,30 @@
           "allowOther": true
         },
         {
-          "id": "CD_DeploymentStrategy",
-          "label": "Deployment strategies",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Blue/green deployments",
-              "label": "Blue/green deployments"
-            },
-            {
-              "id": "Canary releases",
-              "label": "Canary releases"
-            },
-            {
-              "id": "Rolling deployments",
-              "label": "Rolling deployments"
-            },
-            {
-              "id": "Ring-based deployments",
-              "label": "Ring-based deployments"
-            },
-            {
-              "id": "Shadow deployments",
-              "label": "Shadow deployments"
-            },
-            {
-              "id": "Manual deployments",
-              "label": "Manual deployments"
-            },
-            {
-              "id": "Hotfix patching",
-              "label": "Hotfix patching"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "CD_IaCTools",
+          "id": "D_IaCTools",
           "label": "Infrastructure-as-Code tools used",
           "type": "multiselect",
           "help": "",
           "options": [
             {
-              "id": "Terraform",
-              "label": "Terraform"
-            },
-            {
-              "id": "Bicep",
-              "label": "Bicep"
+              "id": "ARM Templates",
+              "label": "ARM Templates"
             },
             {
               "id": "ARM templates",
               "label": "ARM templates"
             },
             {
-              "id": "Pulumi",
-              "label": "Pulumi"
-            },
-            {
               "id": "Ansible",
               "label": "Ansible"
+            },
+            {
+              "id": "Bicep",
+              "label": "Bicep"
+            },
+            {
+              "id": "Chef",
+              "label": "Chef"
             },
             {
               "id": "Chef/Puppet",
@@ -8739,12 +8702,20 @@
             {
               "id": "No IaC",
               "label": "No IaC"
+            },
+            {
+              "id": "Pulumi",
+              "label": "Pulumi"
+            },
+            {
+              "id": "Terraform",
+              "label": "Terraform"
             }
           ],
           "allowOther": true
         },
         {
-          "id": "CD_IaCPractices",
+          "id": "D_IaCPractices",
           "label": "IaC governance and practices",
           "type": "multiselect",
           "help": "",
@@ -8781,7 +8752,59 @@
           "allowOther": true
         },
         {
-          "id": "CD_EnvironmentSetup",
+          "id": "D_IaCDeploymentModel",
+          "label": "IaC deployment approach",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Fully automated IaC pipeline",
+              "label": "Fully automated IaC pipeline"
+            },
+            {
+              "id": "Semi-automated IaC with manual trigger",
+              "label": "Semi-automated IaC with manual trigger"
+            },
+            {
+              "id": "Manual IaC execution",
+              "label": "Manual IaC execution"
+            },
+            {
+              "id": "Mixed manual/automated process",
+              "label": "Mixed manual/automated process"
+            }
+          ]
+        },
+        {
+          "id": "D_ConfigManagement",
+          "label": "Configuration management approach",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Static config files",
+              "label": "Static config files"
+            },
+            {
+              "id": "Environment variables",
+              "label": "Environment variables"
+            },
+            {
+              "id": "Key Vault or secret manager",
+              "label": "Key Vault or secret manager"
+            },
+            {
+              "id": "Config service (centralized)",
+              "label": "Config service (centralized)"
+            },
+            {
+              "id": "Custom configuration tooling",
+              "label": "Custom configuration tooling"
+            }
+          ]
+        },
+        {
+          "id": "D_EnvironmentSetup",
           "label": "Environment setup",
           "type": "multiselect",
           "help": "",
@@ -8822,35 +8845,7 @@
           "allowOther": true
         },
         {
-          "id": "CD_ConfigManagement",
-          "label": "Configuration management approach",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Static config files",
-              "label": "Static config files"
-            },
-            {
-              "id": "Environment variables",
-              "label": "Environment variables"
-            },
-            {
-              "id": "Key Vault or secret manager",
-              "label": "Key Vault or secret manager"
-            },
-            {
-              "id": "Config service (centralized)",
-              "label": "Config service (centralized)"
-            },
-            {
-              "id": "Custom configuration tooling",
-              "label": "Custom configuration tooling"
-            }
-          ]
-        },
-        {
-          "id": "CD_TestCoverage",
+          "id": "D_TestCoverage",
           "label": "Test coverage types implemented",
           "type": "multiselect",
           "help": "",
@@ -8895,7 +8890,7 @@
           "allowOther": true
         },
         {
-          "id": "CD_TestAutomationTools",
+          "id": "D_TestAutomationTools",
           "label": "Testing automation tools",
           "type": "multiselect",
           "help": "",
@@ -8940,48 +8935,513 @@
           "allowOther": true
         },
         {
-          "id": "CD_DevOpsMonitoringTools",
-          "label": "DevOps monitoring tools",
+          "id": "D_DeploymentStrategy",
+          "label": "Deployment strategies",
           "type": "multiselect",
           "help": "",
           "options": [
             {
-              "id": "Azure Monitor",
-              "label": "Azure Monitor"
+              "id": "Blue/green deployments",
+              "label": "Blue/green deployments"
             },
             {
-              "id": "Application Insights",
-              "label": "Application Insights"
+              "id": "Canary releases",
+              "label": "Canary releases"
             },
             {
-              "id": "Log Analytics",
-              "label": "Log Analytics"
+              "id": "Rolling deployments",
+              "label": "Rolling deployments"
             },
             {
-              "id": "Grafana",
-              "label": "Grafana"
+              "id": "Ring-based deployments",
+              "label": "Ring-based deployments"
             },
             {
-              "id": "Prometheus",
-              "label": "Prometheus"
+              "id": "Shadow deployments",
+              "label": "Shadow deployments"
             },
             {
-              "id": "Elastic Stack",
-              "label": "Elastic Stack"
+              "id": "Manual deployments",
+              "label": "Manual deployments"
             },
             {
-              "id": "Custom monitoring dashboards",
-              "label": "Custom monitoring dashboards"
-            },
-            {
-              "id": "No monitoring",
-              "label": "No monitoring"
+              "id": "Hotfix patching",
+              "label": "Hotfix patching"
             }
           ],
           "allowOther": true
         },
         {
-          "id": "CD_DeploymentCompliance",
+          "id": "D_DeploymentModel",
+          "label": "Deployment model used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Blue/Green deployments",
+              "label": "Blue/Green deployments"
+            },
+            {
+              "id": "Rolling deployments",
+              "label": "Rolling deployments"
+            },
+            {
+              "id": "Canary releases",
+              "label": "Canary releases"
+            },
+            {
+              "id": "Ring-based deployments",
+              "label": "Ring-based deployments"
+            },
+            {
+              "id": "Shadow deployments",
+              "label": "Shadow deployments"
+            },
+            {
+              "id": "Recreate deployments",
+              "label": "Recreate deployments"
+            },
+            {
+              "id": "Hotfix direct-to-production",
+              "label": "Hotfix direct-to-production"
+            },
+            {
+              "id": "Manual deployments",
+              "label": "Manual deployments"
+            },
+            {
+              "id": "Fully automated deployments",
+              "label": "Fully automated deployments"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "D_DeploymentAutomationLevel",
+          "label": "Level of deployment automation",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Manual deployments only",
+              "label": "Manual deployments only"
+            },
+            {
+              "id": "Partially automated deployments",
+              "label": "Partially automated deployments"
+            },
+            {
+              "id": "Fully automated CI/CD pipelines",
+              "label": "Fully automated CI/CD pipelines"
+            },
+            {
+              "id": "Automated with manual approval step",
+              "label": "Automated with manual approval step"
+            },
+            {
+              "id": "No deployment automation",
+              "label": "No deployment automation"
+            }
+          ]
+        },
+        {
+          "id": "D_DeploymentTechnologies",
+          "label": "Deployment orchestrators / tools",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure DevOps Pipelines",
+              "label": "Azure DevOps Pipelines"
+            },
+            {
+              "id": "GitHub Actions",
+              "label": "GitHub Actions"
+            },
+            {
+              "id": "Octopus Deploy",
+              "label": "Octopus Deploy"
+            },
+            {
+              "id": "ArgoCD",
+              "label": "ArgoCD"
+            },
+            {
+              "id": "FluxCD",
+              "label": "FluxCD"
+            },
+            {
+              "id": "Spinnaker",
+              "label": "Spinnaker"
+            },
+            {
+              "id": "Custom deployment scripts",
+              "label": "Custom deployment scripts"
+            },
+            {
+              "id": "No deployment orchestrator",
+              "label": "No deployment orchestrator"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "D_DeploymentTiming",
+          "label": "Deployment timing strategy",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Anytime continuous deployment",
+              "label": "Anytime continuous deployment"
+            },
+            {
+              "id": "Business hours deployments",
+              "label": "Business hours deployments"
+            },
+            {
+              "id": "Evening deployments",
+              "label": "Evening deployments"
+            },
+            {
+              "id": "Weekend deployments",
+              "label": "Weekend deployments"
+            },
+            {
+              "id": "Change-freeze windows",
+              "label": "Change-freeze windows"
+            },
+            {
+              "id": "Custom deployment windows",
+              "label": "Custom deployment windows"
+            }
+          ]
+        },
+        {
+          "id": "D_ReleaseCadence",
+          "label": "Release/deployment cadence",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Continuous deployment",
+              "label": "Continuous deployment"
+            },
+            {
+              "id": "Weekly releases",
+              "label": "Weekly releases"
+            },
+            {
+              "id": "Bi-weekly releases",
+              "label": "Bi-weekly releases"
+            },
+            {
+              "id": "Monthly releases",
+              "label": "Monthly releases"
+            },
+            {
+              "id": "Ad-hoc releases",
+              "label": "Ad-hoc releases"
+            },
+            {
+              "id": "No defined cadence",
+              "label": "No defined cadence"
+            }
+          ]
+        },
+        {
+          "id": "D_ApprovalRequirements",
+          "label": "Approval requirements for deployments",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Peer code review approval",
+              "label": "Peer code review approval"
+            },
+            {
+              "id": "QA approval",
+              "label": "QA approval"
+            },
+            {
+              "id": "Product owner approval",
+              "label": "Product owner approval"
+            },
+            {
+              "id": "Security approval",
+              "label": "Security approval"
+            },
+            {
+              "id": "CAB approval",
+              "label": "CAB approval"
+            },
+            {
+              "id": "Automated quality gates",
+              "label": "Automated quality gates"
+            },
+            {
+              "id": "No approvals required",
+              "label": "No approvals required"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "D_FeatureFlags",
+          "label": "Feature flagging usage",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "No feature flags",
+              "label": "No feature flags"
+            },
+            {
+              "id": "Basic feature flagging",
+              "label": "Basic feature flagging"
+            },
+            {
+              "id": "Environment-based flagging",
+              "label": "Environment-based flagging"
+            },
+            {
+              "id": "User/segment-based flagging",
+              "label": "User/segment-based flagging"
+            },
+            {
+              "id": "Dynamic runtime flagging",
+              "label": "Dynamic runtime flagging"
+            }
+          ]
+        },
+        {
+          "id": "D_ProgressiveTechniques",
+          "label": "Progressive release techniques used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Traffic splitting",
+              "label": "Traffic splitting"
+            },
+            {
+              "id": "User cohort targeting",
+              "label": "User cohort targeting"
+            },
+            {
+              "id": "Gradual percentage rollout",
+              "label": "Gradual percentage rollout"
+            },
+            {
+              "id": "Shadow mode deployments",
+              "label": "Shadow mode deployments"
+            },
+            {
+              "id": "Ring-based releases",
+              "label": "Ring-based releases"
+            },
+            {
+              "id": "No progressive delivery",
+              "label": "No progressive delivery"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "D_RollbackStrategy",
+          "label": "Rollback strategy",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Manual rollback",
+              "label": "Manual rollback"
+            },
+            {
+              "id": "Automated rollback",
+              "label": "Automated rollback"
+            },
+            {
+              "id": "Blue/Green instant rollback",
+              "label": "Blue/Green instant rollback"
+            },
+            {
+              "id": "Version pinning rollback",
+              "label": "Version pinning rollback"
+            },
+            {
+              "id": "No rollback strategy",
+              "label": "No rollback strategy"
+            }
+          ]
+        },
+        {
+          "id": "D_FailbackApproach",
+          "label": "Failback strategy after rollback",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Automated failback",
+              "label": "Automated failback"
+            },
+            {
+              "id": "Manual failback",
+              "label": "Manual failback"
+            },
+            {
+              "id": "Phased failback",
+              "label": "Phased failback"
+            },
+            {
+              "id": "Dependency-aware failback",
+              "label": "Dependency-aware failback"
+            },
+            {
+              "id": "No failback defined",
+              "label": "No failback defined"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "D_MaintenanceWindows",
+          "label": "Maintenance window usage",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Scheduled maintenance windows",
+              "label": "Scheduled maintenance windows"
+            },
+            {
+              "id": "No-downtime maintenance",
+              "label": "No-downtime maintenance"
+            },
+            {
+              "id": "Zero-downtime deployment model",
+              "label": "Zero-downtime deployment model"
+            },
+            {
+              "id": "User communication required",
+              "label": "User communication required"
+            },
+            {
+              "id": "No maintenance windows",
+              "label": "No maintenance windows"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "D_MultiRegionStrategy",
+          "label": "Strategy for multi-region deployments",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Active/Active",
+              "label": "Active/Active"
+            },
+            {
+              "id": "Active/Passive",
+              "label": "Active/Passive"
+            },
+            {
+              "id": "Staged region rollout",
+              "label": "Staged region rollout"
+            },
+            {
+              "id": "Region-by-region deployment",
+              "label": "Region-by-region deployment"
+            },
+            {
+              "id": "Global blue/green",
+              "label": "Global blue/green"
+            },
+            {
+              "id": "No multi-region deployment",
+              "label": "No multi-region deployment"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "D_GlobalDependencies",
+          "label": "Global dependency handling",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Geo-distributed databases",
+              "label": "Geo-distributed databases"
+            },
+            {
+              "id": "Global cache invalidation",
+              "label": "Global cache invalidation"
+            },
+            {
+              "id": "Global load balancer",
+              "label": "Global load balancer"
+            },
+            {
+              "id": "Cross-region event replication",
+              "label": "Cross-region event replication"
+            },
+            {
+              "id": "DNS-based routing",
+              "label": "DNS-based routing"
+            },
+            {
+              "id": "No global dependency handling",
+              "label": "No global dependency handling"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "D_QualityGates",
+          "label": "Quality gates included in deployment pipelines",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Static code analysis",
+              "label": "Static code analysis"
+            },
+            {
+              "id": "Security scanning",
+              "label": "Security scanning"
+            },
+            {
+              "id": "Dependency scanning",
+              "label": "Dependency scanning"
+            },
+            {
+              "id": "Unit test thresholds",
+              "label": "Unit test thresholds"
+            },
+            {
+              "id": "Integration test pass criteria",
+              "label": "Integration test pass criteria"
+            },
+            {
+              "id": "Linting enforcement",
+              "label": "Linting enforcement"
+            },
+            {
+              "id": "Performance test gates",
+              "label": "Performance test gates"
+            },
+            {
+              "id": "No quality gates",
+              "label": "No quality gates"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "D_DeploymentCompliance",
           "label": "Deployment compliance checks",
           "type": "multiselect",
           "help": "",
@@ -9018,34 +9478,42 @@
           "allowOther": true
         },
         {
-          "id": "CD_ArtifactRepos",
+          "id": "D_ArtifactRepository",
           "label": "Artifact repositories used",
           "type": "multiselect",
           "help": "",
           "options": [
             {
-              "id": "Azure Artifacts",
-              "label": "Azure Artifacts"
-            },
-            {
-              "id": "GitHub Packages",
-              "label": "GitHub Packages"
-            },
-            {
               "id": "Artifactory",
               "label": "Artifactory"
             },
             {
-              "id": "Nexus",
-              "label": "Nexus"
+              "id": "Azure Artifacts",
+              "label": "Azure Artifacts"
             },
             {
               "id": "Container registry (ACR/ECR/GCR)",
               "label": "Container registry (ACR/ECR/GCR)"
             },
             {
+              "id": "File share artifact store",
+              "label": "File share artifact store"
+            },
+            {
+              "id": "GitHub Packages",
+              "label": "GitHub Packages"
+            },
+            {
+              "id": "JFrog Artifactory",
+              "label": "JFrog Artifactory"
+            },
+            {
               "id": "Local package feeds",
               "label": "Local package feeds"
+            },
+            {
+              "id": "Nexus",
+              "label": "Nexus"
             },
             {
               "id": "No artifact repository",
@@ -9055,7 +9523,7 @@
           "allowOther": true
         },
         {
-          "id": "CD_ArtifactTypes",
+          "id": "D_ArtifactTypes",
           "label": "Artifact types produced",
           "type": "multiselect",
           "help": "",
@@ -9091,6 +9559,75 @@
             {
               "id": "ZIP build artifacts",
               "label": "ZIP build artifacts"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "D_VersioningStrategy",
+          "label": "Versioning strategy",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Semantic versioning",
+              "label": "Semantic versioning"
+            },
+            {
+              "id": "Git commit-based versioning",
+              "label": "Git commit-based versioning"
+            },
+            {
+              "id": "Date-based versioning",
+              "label": "Date-based versioning"
+            },
+            {
+              "id": "Build-number versioning",
+              "label": "Build-number versioning"
+            },
+            {
+              "id": "No defined versioning",
+              "label": "No defined versioning"
+            }
+          ]
+        },
+        {
+          "id": "D_DevOpsMonitoringTools",
+          "label": "DevOps monitoring tools",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure Monitor",
+              "label": "Azure Monitor"
+            },
+            {
+              "id": "Application Insights",
+              "label": "Application Insights"
+            },
+            {
+              "id": "Log Analytics",
+              "label": "Log Analytics"
+            },
+            {
+              "id": "Grafana",
+              "label": "Grafana"
+            },
+            {
+              "id": "Prometheus",
+              "label": "Prometheus"
+            },
+            {
+              "id": "Elastic Stack",
+              "label": "Elastic Stack"
+            },
+            {
+              "id": "Custom monitoring dashboards",
+              "label": "Custom monitoring dashboards"
+            },
+            {
+              "id": "No monitoring",
+              "label": "No monitoring"
             }
           ],
           "allowOther": true
@@ -11560,537 +12097,6 @@
       ]
     },
     {
-      "id": "OperationalModel",
-      "label": "Operational Model",
-      "description": "Ownership, processes, support model, SLAs, responsibilities, runbooks, on-call, service management",
-      "questions": [
-        {
-          "id": "OP_OpsOwnership",
-          "label": "Primary ownership of operations",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Product/engineering team",
-              "label": "Product/engineering team"
-            },
-            {
-              "id": "Cloud/infrastructure team",
-              "label": "Cloud/infrastructure team"
-            },
-            {
-              "id": "SRE team",
-              "label": "SRE team"
-            },
-            {
-              "id": "DevOps team",
-              "label": "DevOps team"
-            },
-            {
-              "id": "Managed service provider",
-              "label": "Managed service provider"
-            },
-            {
-              "id": "Shared responsibility",
-              "label": "Shared responsibility"
-            }
-          ]
-        },
-        {
-          "id": "OP_Responsibilities",
-          "label": "Operational responsibilities included",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Monitoring and alerting",
-              "label": "Monitoring and alerting"
-            },
-            {
-              "id": "Patch management",
-              "label": "Patch management"
-            },
-            {
-              "id": "Security operations",
-              "label": "Security operations"
-            },
-            {
-              "id": "Platform maintenance",
-              "label": "Platform maintenance"
-            },
-            {
-              "id": "Incident response",
-              "label": "Incident response"
-            },
-            {
-              "id": "Cost optimization",
-              "label": "Cost optimization"
-            },
-            {
-              "id": "Capacity management",
-              "label": "Capacity management"
-            },
-            {
-              "id": "Service reviews",
-              "label": "Service reviews"
-            },
-            {
-              "id": "No formal responsibility model",
-              "label": "No formal responsibility model"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "OP_SupportHours",
-          "label": "Support hours",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Business hours only",
-              "label": "Business hours only"
-            },
-            {
-              "id": "Extended business hours",
-              "label": "Extended business hours"
-            },
-            {
-              "id": "24/7 support",
-              "label": "24/7 support"
-            },
-            {
-              "id": "Follow-the-sun support",
-              "label": "Follow-the-sun support"
-            },
-            {
-              "id": "No formal support",
-              "label": "No formal support"
-            }
-          ]
-        },
-        {
-          "id": "OP_OnCall",
-          "label": "On-call structure",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No on-call",
-              "label": "No on-call"
-            },
-            {
-              "id": "Single engineer on-call",
-              "label": "Single engineer on-call"
-            },
-            {
-              "id": "Rotational engineering on-call",
-              "label": "Rotational engineering on-call"
-            },
-            {
-              "id": "Dedicated SRE on-call",
-              "label": "Dedicated SRE on-call"
-            },
-            {
-              "id": "Vendor-managed on-call",
-              "label": "Vendor-managed on-call"
-            }
-          ]
-        },
-        {
-          "id": "OP_SupportChannels",
-          "label": "Support channels used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Ticketing system",
-              "label": "Ticketing system"
-            },
-            {
-              "id": "Chat-based operations channel",
-              "label": "Chat-based operations channel"
-            },
-            {
-              "id": "Phone hotline",
-              "label": "Phone hotline"
-            },
-            {
-              "id": "Email support",
-              "label": "Email support"
-            },
-            {
-              "id": "PagerDuty/alerting system",
-              "label": "PagerDuty/alerting system"
-            },
-            {
-              "id": "Service desk",
-              "label": "Service desk"
-            },
-            {
-              "id": "No formal support channels",
-              "label": "No formal support channels"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "OP_IncidentProcess",
-          "label": "Incident management maturity",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No formal incident process",
-              "label": "No formal incident process"
-            },
-            {
-              "id": "Basic manual process",
-              "label": "Basic manual process"
-            },
-            {
-              "id": "Defined incident response plan",
-              "label": "Defined incident response plan"
-            },
-            {
-              "id": "Automated + manual hybrid",
-              "label": "Automated + manual hybrid"
-            },
-            {
-              "id": "Fully automated incident management",
-              "label": "Fully automated incident management"
-            }
-          ]
-        },
-        {
-          "id": "OP_SeverityLevels",
-          "label": "Incident severity levels defined",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "None defined",
-              "label": "None defined"
-            },
-            {
-              "id": "Basic severity levels",
-              "label": "Basic severity levels"
-            },
-            {
-              "id": "Detailed severity matrix",
-              "label": "Detailed severity matrix"
-            },
-            {
-              "id": "Business-aligned severity taxonomy",
-              "label": "Business-aligned severity taxonomy"
-            }
-          ]
-        },
-        {
-          "id": "OP_IncidentRoles",
-          "label": "Roles involved in incident management",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Incident commander",
-              "label": "Incident commander"
-            },
-            {
-              "id": "Technical lead",
-              "label": "Technical lead"
-            },
-            {
-              "id": "Communications lead",
-              "label": "Communications lead"
-            },
-            {
-              "id": "SRE responder",
-              "label": "SRE responder"
-            },
-            {
-              "id": "Vendor support",
-              "label": "Vendor support"
-            },
-            {
-              "id": "Executive escalation",
-              "label": "Executive escalation"
-            },
-            {
-              "id": "No assigned roles",
-              "label": "No assigned roles"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "OP_ChangeProcess",
-          "label": "Change management process",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No change control",
-              "label": "No change control"
-            },
-            {
-              "id": "Basic change logging",
-              "label": "Basic change logging"
-            },
-            {
-              "id": "Formal CAB approval process",
-              "label": "Formal CAB approval process"
-            },
-            {
-              "id": "Automated approval rules",
-              "label": "Automated approval rules"
-            },
-            {
-              "id": "Hybrid model (automated + CAB)",
-              "label": "Hybrid model (automated + CAB)"
-            }
-          ]
-        },
-        {
-          "id": "OP_ChangeWindows",
-          "label": "Change windows used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "No change windows",
-              "label": "No change windows"
-            },
-            {
-              "id": "Business hours",
-              "label": "Business hours"
-            },
-            {
-              "id": "Evening windows",
-              "label": "Evening windows"
-            },
-            {
-              "id": "Weekend windows",
-              "label": "Weekend windows"
-            },
-            {
-              "id": "Freeze periods during peak events",
-              "label": "Freeze periods during peak events"
-            },
-            {
-              "id": "Emergency change windows",
-              "label": "Emergency change windows"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "OP_CapacityMonitoring",
-          "label": "Capacity and performance monitoring",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Manual monitoring",
-              "label": "Manual monitoring"
-            },
-            {
-              "id": "Automated monitoring",
-              "label": "Automated monitoring"
-            },
-            {
-              "id": "Predictive autoscaling",
-              "label": "Predictive autoscaling"
-            },
-            {
-              "id": "Threshold-based autoscaling",
-              "label": "Threshold-based autoscaling"
-            },
-            {
-              "id": "Capacity dashboards",
-              "label": "Capacity dashboards"
-            },
-            {
-              "id": "No capacity monitoring",
-              "label": "No capacity monitoring"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "OP_CapacityReviews",
-          "label": "Capacity review cadence",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No reviews",
-              "label": "No reviews"
-            },
-            {
-              "id": "Monthly",
-              "label": "Monthly"
-            },
-            {
-              "id": "Quarterly",
-              "label": "Quarterly"
-            },
-            {
-              "id": "Semi-annually",
-              "label": "Semi-annually"
-            },
-            {
-              "id": "Continuously automated",
-              "label": "Continuously automated"
-            }
-          ]
-        },
-        {
-          "id": "OP_RunbookTypes",
-          "label": "Types of runbooks available",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Operating procedures",
-              "label": "Operating procedures"
-            },
-            {
-              "id": "Troubleshooting procedures",
-              "label": "Troubleshooting procedures"
-            },
-            {
-              "id": "Failover runbooks",
-              "label": "Failover runbooks"
-            },
-            {
-              "id": "Startup/shutdown runbooks",
-              "label": "Startup/shutdown runbooks"
-            },
-            {
-              "id": "Monitoring and alerting runbooks",
-              "label": "Monitoring and alerting runbooks"
-            },
-            {
-              "id": "Automated remediation workflows",
-              "label": "Automated remediation workflows"
-            },
-            {
-              "id": "No runbooks",
-              "label": "No runbooks"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "OP_AutomationTools",
-          "label": "Automation tools used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Automation",
-              "label": "Azure Automation"
-            },
-            {
-              "id": "GitHub Actions",
-              "label": "GitHub Actions"
-            },
-            {
-              "id": "Azure Functions",
-              "label": "Azure Functions"
-            },
-            {
-              "id": "Logic Apps",
-              "label": "Logic Apps"
-            },
-            {
-              "id": "Runbook automation via IaC",
-              "label": "Runbook automation via IaC"
-            },
-            {
-              "id": "Third-party automation platform",
-              "label": "Third-party automation platform"
-            },
-            {
-              "id": "Custom automation scripts",
-              "label": "Custom automation scripts"
-            },
-            {
-              "id": "No automation tools",
-              "label": "No automation tools"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "OP_ITSM",
-          "label": "ITSM platform used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "ServiceNow",
-              "label": "ServiceNow"
-            },
-            {
-              "id": "Jira Service Management",
-              "label": "Jira Service Management"
-            },
-            {
-              "id": "Freshservice",
-              "label": "Freshservice"
-            },
-            {
-              "id": "BMC Remedy",
-              "label": "BMC Remedy"
-            },
-            {
-              "id": "Zendesk",
-              "label": "Zendesk"
-            },
-            {
-              "id": "Custom ITSM",
-              "label": "Custom ITSM"
-            },
-            {
-              "id": "No ITSM",
-              "label": "No ITSM"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "OP_ServiceReviews",
-          "label": "Service review cadence",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No reviews",
-              "label": "No reviews"
-            },
-            {
-              "id": "Monthly",
-              "label": "Monthly"
-            },
-            {
-              "id": "Quarterly",
-              "label": "Quarterly"
-            },
-            {
-              "id": "Semi-annually",
-              "label": "Semi-annually"
-            },
-            {
-              "id": "Annually",
-              "label": "Annually"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "DevelopmentProcess",
       "label": "Development Process",
       "description": "Methodology, branching, code reviews, workflows, standards, tooling, quality gates, documentation",
@@ -12625,1847 +12631,9 @@
             }
           ],
           "allowOther": true
-        }
-      ]
-    },
-    {
-      "id": "IntegrationArchitecture",
-      "label": "Integration Architecture",
-      "description": "Messaging, events, APIs, EDI, orchestration/choreography, partner integration, patterns, contracts, sync/async design",
-      "questions": [
-        {
-          "id": "IA_PatternTypes",
-          "label": "Integration patterns used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Synchronous request/response",
-              "label": "Synchronous request/response"
-            },
-            {
-              "id": "Asynchronous messaging",
-              "label": "Asynchronous messaging"
-            },
-            {
-              "id": "Event-driven architecture",
-              "label": "Event-driven architecture"
-            },
-            {
-              "id": "Pub/Sub communication",
-              "label": "Pub/Sub communication"
-            },
-            {
-              "id": "Batch integration",
-              "label": "Batch integration"
-            },
-            {
-              "id": "Micro-batch integration",
-              "label": "Micro-batch integration"
-            },
-            {
-              "id": "File-based integration",
-              "label": "File-based integration"
-            },
-            {
-              "id": "Point-to-point integration",
-              "label": "Point-to-point integration"
-            },
-            {
-              "id": "Choreography",
-              "label": "Choreography"
-            },
-            {
-              "id": "Orchestration",
-              "label": "Orchestration"
-            },
-            {
-              "id": "Change Data Capture (CDC)",
-              "label": "Change Data Capture (CDC)"
-            },
-            {
-              "id": "No defined pattern",
-              "label": "No defined pattern"
-            }
-          ],
-          "allowOther": true
         },
         {
-          "id": "IA_SyncAsyncSelection",
-          "label": "Choice between synchronous vs asynchronous communication",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Primarily synchronous",
-              "label": "Primarily synchronous"
-            },
-            {
-              "id": "Primarily asynchronous",
-              "label": "Primarily asynchronous"
-            },
-            {
-              "id": "Balanced hybrid",
-              "label": "Balanced hybrid"
-            },
-            {
-              "id": "Case-by-case per system",
-              "label": "Case-by-case per system"
-            }
-          ]
-        },
-        {
-          "id": "IA_MessageBrokers",
-          "label": "Messaging/event brokers used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Service Bus",
-              "label": "Azure Service Bus"
-            },
-            {
-              "id": "Azure Event Hubs",
-              "label": "Azure Event Hubs"
-            },
-            {
-              "id": "Kafka",
-              "label": "Kafka"
-            },
-            {
-              "id": "RabbitMQ",
-              "label": "RabbitMQ"
-            },
-            {
-              "id": "AWS SNS/SQS",
-              "label": "AWS SNS/SQS"
-            },
-            {
-              "id": "Google Pub/Sub",
-              "label": "Google Pub/Sub"
-            },
-            {
-              "id": "Custom broker",
-              "label": "Custom broker"
-            },
-            {
-              "id": "No broker",
-              "label": "No broker"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "IA_EventModels",
-          "label": "Event models used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Event notification",
-              "label": "Event notification"
-            },
-            {
-              "id": "Event-carried state transfer",
-              "label": "Event-carried state transfer"
-            },
-            {
-              "id": "Event sourcing",
-              "label": "Event sourcing"
-            },
-            {
-              "id": "Event streaming",
-              "label": "Event streaming"
-            },
-            {
-              "id": "CQRS event model",
-              "label": "CQRS event model"
-            },
-            {
-              "id": "Transactional outbox pattern",
-              "label": "Transactional outbox pattern"
-            },
-            {
-              "id": "No event model",
-              "label": "No event model"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "IA_MessageFormat",
-          "label": "Message formats used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "JSON",
-              "label": "JSON"
-            },
-            {
-              "id": "Avro",
-              "label": "Avro"
-            },
-            {
-              "id": "Protobuf",
-              "label": "Protobuf"
-            },
-            {
-              "id": "XML",
-              "label": "XML"
-            },
-            {
-              "id": "CSV",
-              "label": "CSV"
-            },
-            {
-              "id": "Binary/custom",
-              "label": "Binary/custom"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "IA_APIGateways",
-          "label": "API gateway technologies used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure API Management",
-              "label": "Azure API Management"
-            },
-            {
-              "id": "Kong",
-              "label": "Kong"
-            },
-            {
-              "id": "Apigee",
-              "label": "Apigee"
-            },
-            {
-              "id": "Nginx",
-              "label": "Nginx"
-            },
-            {
-              "id": "AWS API Gateway",
-              "label": "AWS API Gateway"
-            },
-            {
-              "id": "Custom gateway",
-              "label": "Custom gateway"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "IA_APIStrategies",
-          "label": "API strategies used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "REST APIs",
-              "label": "REST APIs"
-            },
-            {
-              "id": "GraphQL",
-              "label": "GraphQL"
-            },
-            {
-              "id": "gRPC",
-              "label": "gRPC"
-            },
-            {
-              "id": "Async APIs",
-              "label": "Async APIs"
-            },
-            {
-              "id": "Webhooks",
-              "label": "Webhooks"
-            },
-            {
-              "id": "SOAP",
-              "label": "SOAP"
-            },
-            {
-              "id": "Event-driven APIs",
-              "label": "Event-driven APIs"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "IA_ContractFormats",
-          "label": "API contract formats",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "OpenAPI/Swagger",
-              "label": "OpenAPI/Swagger"
-            },
-            {
-              "id": "AsyncAPI",
-              "label": "AsyncAPI"
-            },
-            {
-              "id": "GraphQL schema",
-              "label": "GraphQL schema"
-            },
-            {
-              "id": "JSON schema",
-              "label": "JSON schema"
-            },
-            {
-              "id": "WSDL",
-              "label": "WSDL"
-            },
-            {
-              "id": "Custom contract format",
-              "label": "Custom contract format"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "IA_ExternalIntegrationTypes",
-          "label": "Types of external partner integrations",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "EDI",
-              "label": "EDI"
-            },
-            {
-              "id": "SFTP file drops",
-              "label": "SFTP file drops"
-            },
-            {
-              "id": "API-based integration",
-              "label": "API-based integration"
-            },
-            {
-              "id": "Streaming integration",
-              "label": "Streaming integration"
-            },
-            {
-              "id": "Batch extracts",
-              "label": "Batch extracts"
-            },
-            {
-              "id": "Real-time events",
-              "label": "Real-time events"
-            },
-            {
-              "id": "Through API gateway",
-              "label": "Through API gateway"
-            },
-            {
-              "id": "VPN/private link integration",
-              "label": "VPN/private link integration"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "IA_PartnerSecurity",
-          "label": "Security controls for partner integrations",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "mTLS",
-              "label": "mTLS"
-            },
-            {
-              "id": "IP allow lists",
-              "label": "IP allow lists"
-            },
-            {
-              "id": "API keys",
-              "label": "API keys"
-            },
-            {
-              "id": "OAuth2",
-              "label": "OAuth2"
-            },
-            {
-              "id": "Private link",
-              "label": "Private link"
-            },
-            {
-              "id": "Network segmentation",
-              "label": "Network segmentation"
-            },
-            {
-              "id": "Pseudonymization",
-              "label": "Pseudonymization"
-            },
-            {
-              "id": "No partner security",
-              "label": "No partner security"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "IA_SyncApproaches",
-          "label": "Synchronization approaches used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Real-time sync",
-              "label": "Real-time sync"
-            },
-            {
-              "id": "Near-real-time sync",
-              "label": "Near-real-time sync"
-            },
-            {
-              "id": "Scheduled sync",
-              "label": "Scheduled sync"
-            },
-            {
-              "id": "API polling",
-              "label": "API polling"
-            },
-            {
-              "id": "CDC-based synchronization",
-              "label": "CDC-based synchronization"
-            },
-            {
-              "id": "Event-driven sync",
-              "label": "Event-driven sync"
-            },
-            {
-              "id": "Sync via data pipelines",
-              "label": "Sync via data pipelines"
-            },
-            {
-              "id": "No synchronization",
-              "label": "No synchronization"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "IA_SyncConflictHandling",
-          "label": "Conflict handling strategy",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Last write wins",
-              "label": "Last write wins"
-            },
-            {
-              "id": "First write wins",
-              "label": "First write wins"
-            },
-            {
-              "id": "Operational transform",
-              "label": "Operational transform"
-            },
-            {
-              "id": "Manual conflict resolution",
-              "label": "Manual conflict resolution"
-            },
-            {
-              "id": "Custom resolution logic",
-              "label": "Custom resolution logic"
-            }
-          ]
-        },
-        {
-          "id": "IA_IntegrationStyle",
-          "label": "Preferred integration style",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Orchestration",
-              "label": "Orchestration"
-            },
-            {
-              "id": "Choreography",
-              "label": "Choreography"
-            },
-            {
-              "id": "Hybrid model",
-              "label": "Hybrid model"
-            },
-            {
-              "id": "No preference",
-              "label": "No preference"
-            }
-          ]
-        },
-        {
-          "id": "IA_OrchestrationTools",
-          "label": "Orchestration tools used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Logic Apps",
-              "label": "Azure Logic Apps"
-            },
-            {
-              "id": "Durable Functions",
-              "label": "Durable Functions"
-            },
-            {
-              "id": "Azure Data Factory",
-              "label": "Azure Data Factory"
-            },
-            {
-              "id": "Apache Airflow",
-              "label": "Apache Airflow"
-            },
-            {
-              "id": "Temporal",
-              "label": "Temporal"
-            },
-            {
-              "id": "Custom orchestrator",
-              "label": "Custom orchestrator"
-            },
-            {
-              "id": "No orchestration",
-              "label": "No orchestration"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "IA_ContractValidation",
-          "label": "Contract validation methods",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Schema validation",
-              "label": "Schema validation"
-            },
-            {
-              "id": "Contract testing",
-              "label": "Contract testing"
-            },
-            {
-              "id": "Consumer-driven contract tests",
-              "label": "Consumer-driven contract tests"
-            },
-            {
-              "id": "API contract linting",
-              "label": "API contract linting"
-            },
-            {
-              "id": "Versioned contract repositories",
-              "label": "Versioned contract repositories"
-            },
-            {
-              "id": "Manual validation",
-              "label": "Manual validation"
-            },
-            {
-              "id": "No validation",
-              "label": "No validation"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "IA_IntegrationMonitoring",
-          "label": "Integration-level monitoring",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Message tracking",
-              "label": "Message tracking"
-            },
-            {
-              "id": "Dead-letter queue monitoring",
-              "label": "Dead-letter queue monitoring"
-            },
-            {
-              "id": "Pipeline failure alerts",
-              "label": "Pipeline failure alerts"
-            },
-            {
-              "id": "Latency monitoring",
-              "label": "Latency monitoring"
-            },
-            {
-              "id": "Schema drift detection",
-              "label": "Schema drift detection"
-            },
-            {
-              "id": "API usage monitoring",
-              "label": "API usage monitoring"
-            },
-            {
-              "id": "No monitoring",
-              "label": "No monitoring"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "IA_ErrorHandlingStrategies",
-          "label": "Error handling strategies",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Retry policies",
-              "label": "Retry policies"
-            },
-            {
-              "id": "Fallback logic",
-              "label": "Fallback logic"
-            },
-            {
-              "id": "Circuit breakers",
-              "label": "Circuit breakers"
-            },
-            {
-              "id": "Dead-letter queues",
-              "label": "Dead-letter queues"
-            },
-            {
-              "id": "Poison message handling",
-              "label": "Poison message handling"
-            },
-            {
-              "id": "Idempotent operations",
-              "label": "Idempotent operations"
-            },
-            {
-              "id": "Compensation logic",
-              "label": "Compensation logic"
-            },
-            {
-              "id": "No error handling strategy",
-              "label": "No error handling strategy"
-            }
-          ],
-          "allowOther": true
-        }
-      ]
-    },
-    {
-      "id": "PerformanceScalability",
-      "label": "Performance & Scalability",
-      "description": "Load testing, scaling strategies, optimization, concurrency, throughput, latency, queuing, capacity planning",
-      "questions": [
-        {
-          "id": "PS_WorkloadTypes",
-          "label": "Workload types",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Read-heavy",
-              "label": "Read-heavy"
-            },
-            {
-              "id": "Write-heavy",
-              "label": "Write-heavy"
-            },
-            {
-              "id": "Balanced read/write",
-              "label": "Balanced read/write"
-            },
-            {
-              "id": "Batch processing",
-              "label": "Batch processing"
-            },
-            {
-              "id": "Streaming ingestion",
-              "label": "Streaming ingestion"
-            },
-            {
-              "id": "High-concurrency workloads",
-              "label": "High-concurrency workloads"
-            },
-            {
-              "id": "Event-driven workloads",
-              "label": "Event-driven workloads"
-            },
-            {
-              "id": "Latency-sensitive workloads",
-              "label": "Latency-sensitive workloads"
-            },
-            {
-              "id": "Throughput-sensitive workloads",
-              "label": "Throughput-sensitive workloads"
-            },
-            {
-              "id": "Burst/seasonal workloads",
-              "label": "Burst/seasonal workloads"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "PS_LoadPatterns",
-          "label": "Load patterns",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Steady load",
-              "label": "Steady load"
-            },
-            {
-              "id": "Peak/valley load",
-              "label": "Peak/valley load"
-            },
-            {
-              "id": "Sudden spikes",
-              "label": "Sudden spikes"
-            },
-            {
-              "id": "Seasonal peaks",
-              "label": "Seasonal peaks"
-            },
-            {
-              "id": "Business-hour aligned load",
-              "label": "Business-hour aligned load"
-            },
-            {
-              "id": "Random burst patterns",
-              "label": "Random burst patterns"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "PS_TestTypes",
-          "label": "Types of performance tests executed",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Load testing",
-              "label": "Load testing"
-            },
-            {
-              "id": "Stress testing",
-              "label": "Stress testing"
-            },
-            {
-              "id": "Spike testing",
-              "label": "Spike testing"
-            },
-            {
-              "id": "Soak testing",
-              "label": "Soak testing"
-            },
-            {
-              "id": "Chaos engineering",
-              "label": "Chaos engineering"
-            },
-            {
-              "id": "Capacity tests",
-              "label": "Capacity tests"
-            },
-            {
-              "id": "Scalability tests",
-              "label": "Scalability tests"
-            },
-            {
-              "id": "No performance testing",
-              "label": "No performance testing"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "PS_TestTools",
-          "label": "Performance testing tools",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "JMeter",
-              "label": "JMeter"
-            },
-            {
-              "id": "k6",
-              "label": "k6"
-            },
-            {
-              "id": "Locust",
-              "label": "Locust"
-            },
-            {
-              "id": "Azure Load Testing",
-              "label": "Azure Load Testing"
-            },
-            {
-              "id": "Gatling",
-              "label": "Gatling"
-            },
-            {
-              "id": "Custom load tools",
-              "label": "Custom load tools"
-            },
-            {
-              "id": "No tools in use",
-              "label": "No tools in use"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "PS_PerfTargets",
-          "label": "Performance targets defined",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Latency thresholds",
-              "label": "Latency thresholds"
-            },
-            {
-              "id": "Throughput requirements",
-              "label": "Throughput requirements"
-            },
-            {
-              "id": "Error rate thresholds",
-              "label": "Error rate thresholds"
-            },
-            {
-              "id": "Concurrency limits",
-              "label": "Concurrency limits"
-            },
-            {
-              "id": "Resource usage limits",
-              "label": "Resource usage limits"
-            },
-            {
-              "id": "No performance targets",
-              "label": "No performance targets"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "PS_ScalingApproach",
-          "label": "Scaling approach",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Vertical scaling only",
-              "label": "Vertical scaling only"
-            },
-            {
-              "id": "Horizontal scaling only",
-              "label": "Horizontal scaling only"
-            },
-            {
-              "id": "Hybrid scaling",
-              "label": "Hybrid scaling"
-            },
-            {
-              "id": "Static scaling",
-              "label": "Static scaling"
-            },
-            {
-              "id": "No scaling strategy",
-              "label": "No scaling strategy"
-            }
-          ]
-        },
-        {
-          "id": "PS_Autoscaling",
-          "label": "Autoscaling capabilities",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "CPU-based autoscaling",
-              "label": "CPU-based autoscaling"
-            },
-            {
-              "id": "Memory-based autoscaling",
-              "label": "Memory-based autoscaling"
-            },
-            {
-              "id": "Queue-length-based autoscaling",
-              "label": "Queue-length-based autoscaling"
-            },
-            {
-              "id": "Custom metric autoscaling",
-              "label": "Custom metric autoscaling"
-            },
-            {
-              "id": "Predictive autoscaling",
-              "label": "Predictive autoscaling"
-            },
-            {
-              "id": "Scheduled autoscaling",
-              "label": "Scheduled autoscaling"
-            },
-            {
-              "id": "No autoscaling",
-              "label": "No autoscaling"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "PS_CapacityPlanning",
-          "label": "Capacity planning methodology",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No capacity planning",
-              "label": "No capacity planning"
-            },
-            {
-              "id": "Historical load analysis",
-              "label": "Historical load analysis"
-            },
-            {
-              "id": "Predictive capacity planning",
-              "label": "Predictive capacity planning"
-            },
-            {
-              "id": "Manual provisioning",
-              "label": "Manual provisioning"
-            },
-            {
-              "id": "Dynamic autoscaling with monitoring",
-              "label": "Dynamic autoscaling with monitoring"
-            }
-          ]
-        },
-        {
-          "id": "PS_CacheTypes",
-          "label": "Cache types used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "In-memory cache",
-              "label": "In-memory cache"
-            },
-            {
-              "id": "Distributed cache",
-              "label": "Distributed cache"
-            },
-            {
-              "id": "Redis",
-              "label": "Redis"
-            },
-            {
-              "id": "CDN caching",
-              "label": "CDN caching"
-            },
-            {
-              "id": "Application-level caching",
-              "label": "Application-level caching"
-            },
-            {
-              "id": "Query caching",
-              "label": "Query caching"
-            },
-            {
-              "id": "Object caching",
-              "label": "Object caching"
-            },
-            {
-              "id": "No caching",
-              "label": "No caching"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "PS_CacheInvalidation",
-          "label": "Cache invalidation strategy",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Time-to-live",
-              "label": "Time-to-live"
-            },
-            {
-              "id": "Write-through",
-              "label": "Write-through"
-            },
-            {
-              "id": "Write-around",
-              "label": "Write-around"
-            },
-            {
-              "id": "Write-back",
-              "label": "Write-back"
-            },
-            {
-              "id": "Manual invalidation",
-              "label": "Manual invalidation"
-            },
-            {
-              "id": "No invalidation strategy",
-              "label": "No invalidation strategy"
-            }
-          ]
-        },
-        {
-          "id": "PS_QueueTechnologies",
-          "label": "Queueing technologies used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Service Bus",
-              "label": "Azure Service Bus"
-            },
-            {
-              "id": "RabbitMQ",
-              "label": "RabbitMQ"
-            },
-            {
-              "id": "Kafka partitions",
-              "label": "Kafka partitions"
-            },
-            {
-              "id": "Azure Storage Queues",
-              "label": "Azure Storage Queues"
-            },
-            {
-              "id": "SQS",
-              "label": "SQS"
-            },
-            {
-              "id": "Custom queueing",
-              "label": "Custom queueing"
-            },
-            {
-              "id": "No queueing in architecture",
-              "label": "No queueing in architecture"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "PS_BackpressureStrategy",
-          "label": "Backpressure handling approach",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Retry logic",
-              "label": "Retry logic"
-            },
-            {
-              "id": "Dead-letter queues",
-              "label": "Dead-letter queues"
-            },
-            {
-              "id": "Circuit breakers",
-              "label": "Circuit breakers"
-            },
-            {
-              "id": "Queue length scaling",
-              "label": "Queue length scaling"
-            },
-            {
-              "id": "Adaptive load shedding",
-              "label": "Adaptive load shedding"
-            },
-            {
-              "id": "Fail-fast response",
-              "label": "Fail-fast response"
-            },
-            {
-              "id": "No backpressure handling",
-              "label": "No backpressure handling"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "PS_OptimizationTechniques",
-          "label": "Optimization techniques applied",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Database indexing",
-              "label": "Database indexing"
-            },
-            {
-              "id": "Query optimization",
-              "label": "Query optimization"
-            },
-            {
-              "id": "Parallelization",
-              "label": "Parallelization"
-            },
-            {
-              "id": "Batching",
-              "label": "Batching"
-            },
-            {
-              "id": "Lazy loading",
-              "label": "Lazy loading"
-            },
-            {
-              "id": "Micro-batching",
-              "label": "Micro-batching"
-            },
-            {
-              "id": "Circuit breaker patterns",
-              "label": "Circuit breaker patterns"
-            },
-            {
-              "id": "Thread pool tuning",
-              "label": "Thread pool tuning"
-            },
-            {
-              "id": "Connection pooling",
-              "label": "Connection pooling"
-            },
-            {
-              "id": "Compression",
-              "label": "Compression"
-            },
-            {
-              "id": "Profiling-driven optimizations",
-              "label": "Profiling-driven optimizations"
-            },
-            {
-              "id": "No optimization",
-              "label": "No optimization"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "PS_PerfBottleneckTools",
-          "label": "Tools for detecting bottlenecks",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Monitor",
-              "label": "Azure Monitor"
-            },
-            {
-              "id": "Application Insights Profiler",
-              "label": "Application Insights Profiler"
-            },
-            {
-              "id": "Datadog APM",
-              "label": "Datadog APM"
-            },
-            {
-              "id": "New Relic",
-              "label": "New Relic"
-            },
-            {
-              "id": "Elastic APM",
-              "label": "Elastic APM"
-            },
-            {
-              "id": "Perf counters",
-              "label": "Perf counters"
-            },
-            {
-              "id": "Custom profiling",
-              "label": "Custom profiling"
-            },
-            {
-              "id": "No bottleneck detection tools",
-              "label": "No bottleneck detection tools"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "PS_ConcurrencyLimits",
-          "label": "Concurrency limits",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Not evaluated",
-              "label": "Not evaluated"
-            },
-            {
-              "id": "Low concurrency (<100 concurrent)",
-              "label": "Low concurrency (<100 concurrent)"
-            },
-            {
-              "id": "Medium concurrency (100–1,000)",
-              "label": "Medium concurrency (100–1,000)"
-            },
-            {
-              "id": "High concurrency (1,000–10,000)",
-              "label": "High concurrency (1,000–10,000)"
-            },
-            {
-              "id": "Massive concurrency (>10,000)",
-              "label": "Massive concurrency (>10,000)"
-            }
-          ]
-        },
-        {
-          "id": "PS_LatencyTargets",
-          "label": "Latency targets",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No latency target",
-              "label": "No latency target"
-            },
-            {
-              "id": "Sub-second responses",
-              "label": "Sub-second responses"
-            },
-            {
-              "id": "1–2 seconds",
-              "label": "1–2 seconds"
-            },
-            {
-              "id": "2–5 seconds",
-              "label": "2–5 seconds"
-            },
-            {
-              "id": "5+ seconds acceptable",
-              "label": "5+ seconds acceptable"
-            }
-          ]
-        },
-        {
-          "id": "PS_ThroughputTargets",
-          "label": "Throughput targets",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Not defined",
-              "label": "Not defined"
-            },
-            {
-              "id": "Low throughput",
-              "label": "Low throughput"
-            },
-            {
-              "id": "Medium throughput",
-              "label": "Medium throughput"
-            },
-            {
-              "id": "High throughput",
-              "label": "High throughput"
-            },
-            {
-              "id": "Extreme throughput",
-              "label": "Extreme throughput"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "NonFunctionalRequirements",
-      "label": "Non-functional Requirements",
-      "description": "Availability, reliability, performance, usability, maintainability, supportability, compliance, accessibility, portability, interoperability",
-      "questions": [
-        {
-          "id": "NFR_AvailabilityTarget",
-          "label": "Availability target",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No defined target",
-              "label": "No defined target"
-            },
-            {
-              "id": "99% (two nines)",
-              "label": "99% (two nines)"
-            },
-            {
-              "id": "99.5%",
-              "label": "99.5%"
-            },
-            {
-              "id": "99.9% (three nines)",
-              "label": "99.9% (three nines)"
-            },
-            {
-              "id": "99.95%",
-              "label": "99.95%"
-            },
-            {
-              "id": "99.99% (four nines)",
-              "label": "99.99% (four nines)"
-            },
-            {
-              "id": "99.999% (five nines)",
-              "label": "99.999% (five nines)"
-            },
-            {
-              "id": "Custom availability SLA",
-              "label": "Custom availability SLA"
-            }
-          ]
-        },
-        {
-          "id": "NFR_ReliabilityReqs",
-          "label": "Reliability requirements",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Fault-tolerant architecture",
-              "label": "Fault-tolerant architecture"
-            },
-            {
-              "id": "Redundant components",
-              "label": "Redundant components"
-            },
-            {
-              "id": "Self-healing systems",
-              "label": "Self-healing systems"
-            },
-            {
-              "id": "Automated failover",
-              "label": "Automated failover"
-            },
-            {
-              "id": "Graceful degradation",
-              "label": "Graceful degradation"
-            },
-            {
-              "id": "No reliability requirements",
-              "label": "No reliability requirements"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "NFR_LatencyExpectations",
-          "label": "Latency expectations",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No latency requirement",
-              "label": "No latency requirement"
-            },
-            {
-              "id": "Sub-second responses",
-              "label": "Sub-second responses"
-            },
-            {
-              "id": "1–2 seconds",
-              "label": "1–2 seconds"
-            },
-            {
-              "id": "3–5 seconds",
-              "label": "3–5 seconds"
-            },
-            {
-              "id": "More than 5 seconds acceptable",
-              "label": "More than 5 seconds acceptable"
-            }
-          ]
-        },
-        {
-          "id": "NFR_ThroughputExpectations",
-          "label": "Throughput expectations",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No defined throughput requirement",
-              "label": "No defined throughput requirement"
-            },
-            {
-              "id": "Low throughput",
-              "label": "Low throughput"
-            },
-            {
-              "id": "Medium throughput",
-              "label": "Medium throughput"
-            },
-            {
-              "id": "High throughput",
-              "label": "High throughput"
-            },
-            {
-              "id": "Extreme throughput",
-              "label": "Extreme throughput"
-            }
-          ]
-        },
-        {
-          "id": "NFR_ScalabilityRequirements",
-          "label": "Scalability expectations",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Horizontal scaling",
-              "label": "Horizontal scaling"
-            },
-            {
-              "id": "Vertical scaling",
-              "label": "Vertical scaling"
-            },
-            {
-              "id": "Autoscaling",
-              "label": "Autoscaling"
-            },
-            {
-              "id": "Elastic load distribution",
-              "label": "Elastic load distribution"
-            },
-            {
-              "id": "Data partitioning/sharding",
-              "label": "Data partitioning/sharding"
-            },
-            {
-              "id": "Caching strategy required",
-              "label": "Caching strategy required"
-            },
-            {
-              "id": "No scalability expectations",
-              "label": "No scalability expectations"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "NFR_SecurityReqs",
-          "label": "Security expectations",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Encryption at rest",
-              "label": "Encryption at rest"
-            },
-            {
-              "id": "Encryption in transit",
-              "label": "Encryption in transit"
-            },
-            {
-              "id": "Zero Trust",
-              "label": "Zero Trust"
-            },
-            {
-              "id": "IAM/RBAC enforcement",
-              "label": "IAM/RBAC enforcement"
-            },
-            {
-              "id": "Auditing and monitoring",
-              "label": "Auditing and monitoring"
-            },
-            {
-              "id": "Secrets management",
-              "label": "Secrets management"
-            },
-            {
-              "id": "No security requirements",
-              "label": "No security requirements"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "NFR_ComplianceReqs",
-          "label": "Compliance frameworks required",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "ISO 27001",
-              "label": "ISO 27001"
-            },
-            {
-              "id": "SOC2",
-              "label": "SOC2"
-            },
-            {
-              "id": "PCI-DSS",
-              "label": "PCI-DSS"
-            },
-            {
-              "id": "HIPAA",
-              "label": "HIPAA"
-            },
-            {
-              "id": "GDPR",
-              "label": "GDPR"
-            },
-            {
-              "id": "Local regulatory compliance",
-              "label": "Local regulatory compliance"
-            },
-            {
-              "id": "Internal enterprise policies",
-              "label": "Internal enterprise policies"
-            },
-            {
-              "id": "No compliance requirements",
-              "label": "No compliance requirements"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "NFR_UsabilityReqs",
-          "label": "Usability expectations",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Easy navigation",
-              "label": "Easy navigation"
-            },
-            {
-              "id": "Minimal user training required",
-              "label": "Minimal user training required"
-            },
-            {
-              "id": "Consistent user experience",
-              "label": "Consistent user experience"
-            },
-            {
-              "id": "Responsive design",
-              "label": "Responsive design"
-            },
-            {
-              "id": "Multi-device compatibility",
-              "label": "Multi-device compatibility"
-            },
-            {
-              "id": "No usability requirements",
-              "label": "No usability requirements"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "NFR_AccessibilityReqs",
-          "label": "Accessibility requirements",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "WCAG 2.1 A",
-              "label": "WCAG 2.1 A"
-            },
-            {
-              "id": "WCAG 2.1 AA",
-              "label": "WCAG 2.1 AA"
-            },
-            {
-              "id": "WCAG 2.1 AAA",
-              "label": "WCAG 2.1 AAA"
-            },
-            {
-              "id": "Screen reader compatibility",
-              "label": "Screen reader compatibility"
-            },
-            {
-              "id": "High-contrast support",
-              "label": "High-contrast support"
-            },
-            {
-              "id": "Keyboard-only navigation",
-              "label": "Keyboard-only navigation"
-            },
-            {
-              "id": "No accessibility requirements",
-              "label": "No accessibility requirements"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "NFR_MaintainabilityReqs",
-          "label": "Maintainability requirements",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Clean codebase",
-              "label": "Clean codebase"
-            },
-            {
-              "id": "Modular architecture",
-              "label": "Modular architecture"
-            },
-            {
-              "id": "Automated testing",
-              "label": "Automated testing"
-            },
-            {
-              "id": "Versioned artifacts",
-              "label": "Versioned artifacts"
-            },
-            {
-              "id": "Upgradable with minimal downtime",
-              "label": "Upgradable with minimal downtime"
-            },
-            {
-              "id": "No maintainability expectations",
-              "label": "No maintainability expectations"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "NFR_OperabilityReqs",
-          "label": "Operability expectations",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Actionable logs",
-              "label": "Actionable logs"
-            },
-            {
-              "id": "Meaningful metrics",
-              "label": "Meaningful metrics"
-            },
-            {
-              "id": "Automated alerts",
-              "label": "Automated alerts"
-            },
-            {
-              "id": "Runbooks",
-              "label": "Runbooks"
-            },
-            {
-              "id": "Operational dashboards",
-              "label": "Operational dashboards"
-            },
-            {
-              "id": "No operability requirements",
-              "label": "No operability requirements"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "NFR_InteroperabilityReqs",
-          "label": "Interoperability requirements",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Standard APIs",
-              "label": "Standard APIs"
-            },
-            {
-              "id": "Open data formats",
-              "label": "Open data formats"
-            },
-            {
-              "id": "Event-driven interoperability",
-              "label": "Event-driven interoperability"
-            },
-            {
-              "id": "Integration with legacy systems",
-              "label": "Integration with legacy systems"
-            },
-            {
-              "id": "Cross-cloud compatibility",
-              "label": "Cross-cloud compatibility"
-            },
-            {
-              "id": "No interoperability requirements",
-              "label": "No interoperability requirements"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "NFR_PortabilityReqs",
-          "label": "Portability requirements",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Containerization",
-              "label": "Containerization"
-            },
-            {
-              "id": "Cloud vendor independence",
-              "label": "Cloud vendor independence"
-            },
-            {
-              "id": "Portable runtime environments",
-              "label": "Portable runtime environments"
-            },
-            {
-              "id": "Portable storage formats",
-              "label": "Portable storage formats"
-            },
-            {
-              "id": "Infrastructure-as-code",
-              "label": "Infrastructure-as-code"
-            },
-            {
-              "id": "No portability requirements",
-              "label": "No portability requirements"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "NFR_TestabilityExpectations",
-          "label": "Testability expectations",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Unit testability",
-              "label": "Unit testability"
-            },
-            {
-              "id": "Integration testability",
-              "label": "Integration testability"
-            },
-            {
-              "id": "Mockable external dependencies",
-              "label": "Mockable external dependencies"
-            },
-            {
-              "id": "Contract tests",
-              "label": "Contract tests"
-            },
-            {
-              "id": "End-to-end testability",
-              "label": "End-to-end testability"
-            },
-            {
-              "id": "No testability requirements",
-              "label": "No testability requirements"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "NFR_TestCoverage",
-          "label": "Test coverage targets",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No coverage target",
-              "label": "No coverage target"
-            },
-            {
-              "id": "Below 50%",
-              "label": "Below 50%"
-            },
-            {
-              "id": "50%–70%",
-              "label": "50%–70%"
-            },
-            {
-              "id": "70%–85%",
-              "label": "70%–85%"
-            },
-            {
-              "id": "85%–95%",
-              "label": "85%–95%"
-            },
-            {
-              "id": "Above 95%",
-              "label": "Above 95%"
-            }
-          ]
-        },
-        {
-          "id": "NFR_CostRequirements",
-          "label": "Cost-related requirements",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Cost optimization required",
-              "label": "Cost optimization required"
-            },
-            {
-              "id": "Autoscaling to reduce cost",
-              "label": "Autoscaling to reduce cost"
-            },
-            {
-              "id": "Reserved instances or savings plans",
-              "label": "Reserved instances or savings plans"
-            },
-            {
-              "id": "Tagging-based cost tracking",
-              "label": "Tagging-based cost tracking"
-            },
-            {
-              "id": "FinOps governance",
-              "label": "FinOps governance"
-            },
-            {
-              "id": "No cost requirements",
-              "label": "No cost requirements"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "NFR_Sustainability",
-          "label": "Sustainability and green IT goals",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Carbon-aware scaling",
-              "label": "Carbon-aware scaling"
-            },
-            {
-              "id": "Energy-efficient compute choices",
-              "label": "Energy-efficient compute choices"
-            },
-            {
-              "id": "Minimizing idle resources",
-              "label": "Minimizing idle resources"
-            },
-            {
-              "id": "Reserved or shared compute",
-              "label": "Reserved or shared compute"
-            },
-            {
-              "id": "Not applicable",
-              "label": "Not applicable"
-            }
-          ],
-          "allowOther": true
-        }
-      ]
-    },
-    {
-      "id": "EnvironmentStrategy",
-      "label": "Environment Strategy",
-      "description": "Topology, promotion flow, isolation, non-prod usage, test data, naming, networking, lifecycle, compliance",
-      "questions": [
-        {
-          "id": "ENV_EnvironmentsUsed",
+          "id": "DP_EnvironmentsUsed",
           "label": "Environments used",
           "type": "multiselect",
           "help": "",
@@ -14516,1721 +12684,7 @@
             }
           ],
           "allowOther": true
-        },
-        {
-          "id": "ENV_TopologyModel",
-          "label": "Environment topology model",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Single shared environment per tier",
-              "label": "Single shared environment per tier"
-            },
-            {
-              "id": "Multiple environments per tier",
-              "label": "Multiple environments per tier"
-            },
-            {
-              "id": "Ephemeral environments",
-              "label": "Ephemeral environments"
-            },
-            {
-              "id": "Hybrid static + ephemeral",
-              "label": "Hybrid static + ephemeral"
-            },
-            {
-              "id": "No formal topology",
-              "label": "No formal topology"
-            }
-          ]
-        },
-        {
-          "id": "ENV_IsolationLevels",
-          "label": "Environment isolation level",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Network isolation (VNET separation)",
-              "label": "Network isolation (VNET separation)"
-            },
-            {
-              "id": "Identity/RBAC isolation",
-              "label": "Identity/RBAC isolation"
-            },
-            {
-              "id": "Data-plane isolation",
-              "label": "Data-plane isolation"
-            },
-            {
-              "id": "Resource group isolation",
-              "label": "Resource group isolation"
-            },
-            {
-              "id": "Subscription isolation",
-              "label": "Subscription isolation"
-            },
-            {
-              "id": "Region-level separation",
-              "label": "Region-level separation"
-            },
-            {
-              "id": "No isolation",
-              "label": "No isolation"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ENV_SharedResources",
-          "label": "Shared resource usage",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Shared databases",
-              "label": "Shared databases"
-            },
-            {
-              "id": "Shared storage",
-              "label": "Shared storage"
-            },
-            {
-              "id": "Shared event/message brokers",
-              "label": "Shared event/message brokers"
-            },
-            {
-              "id": "Shared authentication provider",
-              "label": "Shared authentication provider"
-            },
-            {
-              "id": "Shared API gateways",
-              "label": "Shared API gateways"
-            },
-            {
-              "id": "Fully isolated resources per environment",
-              "label": "Fully isolated resources per environment"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ENV_PromotionModel",
-          "label": "Promotion flow model",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Dev → QA → UAT → Prod",
-              "label": "Dev → QA → UAT → Prod"
-            },
-            {
-              "id": "Dev → Integration → Stage → Prod",
-              "label": "Dev → Integration → Stage → Prod"
-            },
-            {
-              "id": "Direct from Dev to Prod",
-              "label": "Direct from Dev to Prod"
-            },
-            {
-              "id": "Trunk-based continuous delivery to Prod",
-              "label": "Trunk-based continuous delivery to Prod"
-            },
-            {
-              "id": "Custom promotion path",
-              "label": "Custom promotion path"
-            }
-          ]
-        },
-        {
-          "id": "ENV_Approvals",
-          "label": "Approvals required for promotion",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Peer review",
-              "label": "Peer review"
-            },
-            {
-              "id": "QA approval",
-              "label": "QA approval"
-            },
-            {
-              "id": "Product owner approval",
-              "label": "Product owner approval"
-            },
-            {
-              "id": "Release manager approval",
-              "label": "Release manager approval"
-            },
-            {
-              "id": "Security approval",
-              "label": "Security approval"
-            },
-            {
-              "id": "Automated gates",
-              "label": "Automated gates"
-            },
-            {
-              "id": "No approval required",
-              "label": "No approval required"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ENV_TestDataSources",
-          "label": "Sources of test data",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Synthetic generated data",
-              "label": "Synthetic generated data"
-            },
-            {
-              "id": "Masked/obfuscated prod data",
-              "label": "Masked/obfuscated prod data"
-            },
-            {
-              "id": "Subset of prod data",
-              "label": "Subset of prod data"
-            },
-            {
-              "id": "Partner-provided sample data",
-              "label": "Partner-provided sample data"
-            },
-            {
-              "id": "Shared test datasets",
-              "label": "Shared test datasets"
-            },
-            {
-              "id": "No test data strategy",
-              "label": "No test data strategy"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ENV_TestDataRefresh",
-          "label": "Test data refresh strategy",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No refresh",
-              "label": "No refresh"
-            },
-            {
-              "id": "On demand",
-              "label": "On demand"
-            },
-            {
-              "id": "Scheduled monthly",
-              "label": "Scheduled monthly"
-            },
-            {
-              "id": "Scheduled weekly",
-              "label": "Scheduled weekly"
-            },
-            {
-              "id": "Scheduled daily",
-              "label": "Scheduled daily"
-            },
-            {
-              "id": "Automated refresh pipeline",
-              "label": "Automated refresh pipeline"
-            }
-          ]
-        },
-        {
-          "id": "ENV_NamingConventions",
-          "label": "Naming conventions used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Environment prefixes",
-              "label": "Environment prefixes"
-            },
-            {
-              "id": "Global naming standard",
-              "label": "Global naming standard"
-            },
-            {
-              "id": "Resource-type-based naming",
-              "label": "Resource-type-based naming"
-            },
-            {
-              "id": "Subscription-level conventions",
-              "label": "Subscription-level conventions"
-            },
-            {
-              "id": "Region-level suffixes",
-              "label": "Region-level suffixes"
-            },
-            {
-              "id": "Random identifiers",
-              "label": "Random identifiers"
-            },
-            {
-              "id": "No naming conventions",
-              "label": "No naming conventions"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ENV_TaggingStandards",
-          "label": "Tagging standards",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Cost center tags",
-              "label": "Cost center tags"
-            },
-            {
-              "id": "Environment tags",
-              "label": "Environment tags"
-            },
-            {
-              "id": "Owner/Team tags",
-              "label": "Owner/Team tags"
-            },
-            {
-              "id": "Data sensitivity tags",
-              "label": "Data sensitivity tags"
-            },
-            {
-              "id": "Lifecycle/expiry tags",
-              "label": "Lifecycle/expiry tags"
-            },
-            {
-              "id": "Business unit tags",
-              "label": "Business unit tags"
-            },
-            {
-              "id": "No tagging strategy",
-              "label": "No tagging strategy"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ENV_DeploymentApproach",
-          "label": "Deployment approaches used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Blue/Green deployments",
-              "label": "Blue/Green deployments"
-            },
-            {
-              "id": "Canary releases",
-              "label": "Canary releases"
-            },
-            {
-              "id": "Rolling deployments",
-              "label": "Rolling deployments"
-            },
-            {
-              "id": "Shadow deployments",
-              "label": "Shadow deployments"
-            },
-            {
-              "id": "Hotfix-only deployments",
-              "label": "Hotfix-only deployments"
-            },
-            {
-              "id": "Manual deployments",
-              "label": "Manual deployments"
-            },
-            {
-              "id": "Fully automated deployments",
-              "label": "Fully automated deployments"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ENV_EnvironmentParity",
-          "label": "Environment parity level",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Full parity across all environments",
-              "label": "Full parity across all environments"
-            },
-            {
-              "id": "Partial parity",
-              "label": "Partial parity"
-            },
-            {
-              "id": "Minimal parity",
-              "label": "Minimal parity"
-            },
-            {
-              "id": "Environments differ significantly",
-              "label": "Environments differ significantly"
-            },
-            {
-              "id": "No parity strategy",
-              "label": "No parity strategy"
-            }
-          ]
-        },
-        {
-          "id": "ENV_NonProdCapacity",
-          "label": "Non-production environment capacity strategy",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Scaled-down compute",
-              "label": "Scaled-down compute"
-            },
-            {
-              "id": "Shared non-prod environments",
-              "label": "Shared non-prod environments"
-            },
-            {
-              "id": "Autoscaling non-prod",
-              "label": "Autoscaling non-prod"
-            },
-            {
-              "id": "Scheduled shutdowns",
-              "label": "Scheduled shutdowns"
-            },
-            {
-              "id": "Ephemeral PR-based environments",
-              "label": "Ephemeral PR-based environments"
-            },
-            {
-              "id": "No capacity strategy",
-              "label": "No capacity strategy"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ENV_CostOptimization",
-          "label": "Environment cost optimization",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Reserved instance usage",
-              "label": "Reserved instance usage"
-            },
-            {
-              "id": "Scaling down non-prod",
-              "label": "Scaling down non-prod"
-            },
-            {
-              "id": "Auto-stop workloads",
-              "label": "Auto-stop workloads"
-            },
-            {
-              "id": "Shared lower environments",
-              "label": "Shared lower environments"
-            },
-            {
-              "id": "Spot instances",
-              "label": "Spot instances"
-            },
-            {
-              "id": "No cost optimization",
-              "label": "No cost optimization"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ENV_SecurityDifferences",
-          "label": "Differences in security across environments",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Prod-only strict RBAC",
-              "label": "Prod-only strict RBAC"
-            },
-            {
-              "id": "Prod and stage hardened",
-              "label": "Prod and stage hardened"
-            },
-            {
-              "id": "Test envs with relaxed policies",
-              "label": "Test envs with relaxed policies"
-            },
-            {
-              "id": "Prod-only private endpoints",
-              "label": "Prod-only private endpoints"
-            },
-            {
-              "id": "Prod-only network isolation",
-              "label": "Prod-only network isolation"
-            },
-            {
-              "id": "Prod and non-prod identical",
-              "label": "Prod and non-prod identical"
-            },
-            {
-              "id": "No security distinctions",
-              "label": "No security distinctions"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ENV_TestDataCompliance",
-          "label": "Test environment data compliance",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "PII removed",
-              "label": "PII removed"
-            },
-            {
-              "id": "PII masked/obfuscated",
-              "label": "PII masked/obfuscated"
-            },
-            {
-              "id": "Synthetic PII created",
-              "label": "Synthetic PII created"
-            },
-            {
-              "id": "Encrypted test data",
-              "label": "Encrypted test data"
-            },
-            {
-              "id": "Unrestricted data",
-              "label": "Unrestricted data"
-            },
-            {
-              "id": "No compliance controls",
-              "label": "No compliance controls"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ENV_LifecycleAutomation",
-          "label": "Environment lifecycle automation",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "IaC-based provisioning",
-              "label": "IaC-based provisioning"
-            },
-            {
-              "id": "Automated environment teardown",
-              "label": "Automated environment teardown"
-            },
-            {
-              "id": "Ephemeral preview environments",
-              "label": "Ephemeral preview environments"
-            },
-            {
-              "id": "Full environment rebuild pipelines",
-              "label": "Full environment rebuild pipelines"
-            },
-            {
-              "id": "Manual provisioning",
-              "label": "Manual provisioning"
-            },
-            {
-              "id": "No lifecycle automation",
-              "label": "No lifecycle automation"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "ENV_EnvironmentRefresh",
-          "label": "Environment refresh frequency",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Never refreshed",
-              "label": "Never refreshed"
-            },
-            {
-              "id": "On demand",
-              "label": "On demand"
-            },
-            {
-              "id": "Monthly refresh",
-              "label": "Monthly refresh"
-            },
-            {
-              "id": "Weekly refresh",
-              "label": "Weekly refresh"
-            },
-            {
-              "id": "Daily refresh",
-              "label": "Daily refresh"
-            },
-            {
-              "id": "Automated continuous refresh",
-              "label": "Automated continuous refresh"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "DeploymentStrategy",
-      "label": "Deployment Strategy",
-      "description": "Release orchestration, deployment models, automation, rollbacks, approvals, pipelines, IaC, progressive delivery",
-      "questions": [
-        {
-          "id": "DS_DeploymentModel",
-          "label": "Deployment model used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Blue/Green deployments",
-              "label": "Blue/Green deployments"
-            },
-            {
-              "id": "Rolling deployments",
-              "label": "Rolling deployments"
-            },
-            {
-              "id": "Canary releases",
-              "label": "Canary releases"
-            },
-            {
-              "id": "Ring-based deployments",
-              "label": "Ring-based deployments"
-            },
-            {
-              "id": "Shadow deployments",
-              "label": "Shadow deployments"
-            },
-            {
-              "id": "Recreate deployments",
-              "label": "Recreate deployments"
-            },
-            {
-              "id": "Hotfix direct-to-production",
-              "label": "Hotfix direct-to-production"
-            },
-            {
-              "id": "Manual deployments",
-              "label": "Manual deployments"
-            },
-            {
-              "id": "Fully automated deployments",
-              "label": "Fully automated deployments"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DS_ReleaseCadence",
-          "label": "Release/deployment cadence",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Continuous deployment",
-              "label": "Continuous deployment"
-            },
-            {
-              "id": "Weekly releases",
-              "label": "Weekly releases"
-            },
-            {
-              "id": "Bi-weekly releases",
-              "label": "Bi-weekly releases"
-            },
-            {
-              "id": "Monthly releases",
-              "label": "Monthly releases"
-            },
-            {
-              "id": "Ad-hoc releases",
-              "label": "Ad-hoc releases"
-            },
-            {
-              "id": "No defined cadence",
-              "label": "No defined cadence"
-            }
-          ]
-        },
-        {
-          "id": "DS_DeploymentAutomationLevel",
-          "label": "Level of deployment automation",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Manual deployments only",
-              "label": "Manual deployments only"
-            },
-            {
-              "id": "Partially automated deployments",
-              "label": "Partially automated deployments"
-            },
-            {
-              "id": "Fully automated CI/CD pipelines",
-              "label": "Fully automated CI/CD pipelines"
-            },
-            {
-              "id": "Automated with manual approval step",
-              "label": "Automated with manual approval step"
-            },
-            {
-              "id": "No deployment automation",
-              "label": "No deployment automation"
-            }
-          ]
-        },
-        {
-          "id": "DS_DeploymentTechnologies",
-          "label": "Deployment orchestrators / tools",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure DevOps Pipelines",
-              "label": "Azure DevOps Pipelines"
-            },
-            {
-              "id": "GitHub Actions",
-              "label": "GitHub Actions"
-            },
-            {
-              "id": "Octopus Deploy",
-              "label": "Octopus Deploy"
-            },
-            {
-              "id": "ArgoCD",
-              "label": "ArgoCD"
-            },
-            {
-              "id": "FluxCD",
-              "label": "FluxCD"
-            },
-            {
-              "id": "Spinnaker",
-              "label": "Spinnaker"
-            },
-            {
-              "id": "Custom deployment scripts",
-              "label": "Custom deployment scripts"
-            },
-            {
-              "id": "No deployment orchestrator",
-              "label": "No deployment orchestrator"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DS_IaCTools",
-          "label": "IaC tools used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Terraform",
-              "label": "Terraform"
-            },
-            {
-              "id": "Bicep",
-              "label": "Bicep"
-            },
-            {
-              "id": "ARM Templates",
-              "label": "ARM Templates"
-            },
-            {
-              "id": "Pulumi",
-              "label": "Pulumi"
-            },
-            {
-              "id": "Ansible",
-              "label": "Ansible"
-            },
-            {
-              "id": "Chef",
-              "label": "Chef"
-            },
-            {
-              "id": "Custom provisioning scripts",
-              "label": "Custom provisioning scripts"
-            },
-            {
-              "id": "No IaC",
-              "label": "No IaC"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DS_IaCDeploymentModel",
-          "label": "IaC deployment approach",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Fully automated IaC pipeline",
-              "label": "Fully automated IaC pipeline"
-            },
-            {
-              "id": "Semi-automated IaC with manual trigger",
-              "label": "Semi-automated IaC with manual trigger"
-            },
-            {
-              "id": "Manual IaC execution",
-              "label": "Manual IaC execution"
-            },
-            {
-              "id": "Mixed manual/automated process",
-              "label": "Mixed manual/automated process"
-            }
-          ]
-        },
-        {
-          "id": "DS_ArtifactRepository",
-          "label": "Artifact repository used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Artifacts",
-              "label": "Azure Artifacts"
-            },
-            {
-              "id": "GitHub Packages",
-              "label": "GitHub Packages"
-            },
-            {
-              "id": "JFrog Artifactory",
-              "label": "JFrog Artifactory"
-            },
-            {
-              "id": "Nexus",
-              "label": "Nexus"
-            },
-            {
-              "id": "Container registry (ACR/ECR/GCR)",
-              "label": "Container registry (ACR/ECR/GCR)"
-            },
-            {
-              "id": "File share artifact store",
-              "label": "File share artifact store"
-            },
-            {
-              "id": "No artifact repository",
-              "label": "No artifact repository"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DS_VersioningStrategy",
-          "label": "Versioning strategy",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Semantic versioning",
-              "label": "Semantic versioning"
-            },
-            {
-              "id": "Git commit-based versioning",
-              "label": "Git commit-based versioning"
-            },
-            {
-              "id": "Date-based versioning",
-              "label": "Date-based versioning"
-            },
-            {
-              "id": "Build-number versioning",
-              "label": "Build-number versioning"
-            },
-            {
-              "id": "No defined versioning",
-              "label": "No defined versioning"
-            }
-          ]
-        },
-        {
-          "id": "DS_ApprovalRequirements",
-          "label": "Approval requirements for deployments",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Peer code review approval",
-              "label": "Peer code review approval"
-            },
-            {
-              "id": "QA approval",
-              "label": "QA approval"
-            },
-            {
-              "id": "Product owner approval",
-              "label": "Product owner approval"
-            },
-            {
-              "id": "Security approval",
-              "label": "Security approval"
-            },
-            {
-              "id": "CAB approval",
-              "label": "CAB approval"
-            },
-            {
-              "id": "Automated quality gates",
-              "label": "Automated quality gates"
-            },
-            {
-              "id": "No approvals required",
-              "label": "No approvals required"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DS_QualityGates",
-          "label": "Quality gates included in deployment pipelines",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Static code analysis",
-              "label": "Static code analysis"
-            },
-            {
-              "id": "Security scanning",
-              "label": "Security scanning"
-            },
-            {
-              "id": "Dependency scanning",
-              "label": "Dependency scanning"
-            },
-            {
-              "id": "Unit test thresholds",
-              "label": "Unit test thresholds"
-            },
-            {
-              "id": "Integration test pass criteria",
-              "label": "Integration test pass criteria"
-            },
-            {
-              "id": "Linting enforcement",
-              "label": "Linting enforcement"
-            },
-            {
-              "id": "Performance test gates",
-              "label": "Performance test gates"
-            },
-            {
-              "id": "No quality gates",
-              "label": "No quality gates"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DS_FeatureFlags",
-          "label": "Feature flagging usage",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No feature flags",
-              "label": "No feature flags"
-            },
-            {
-              "id": "Basic feature flagging",
-              "label": "Basic feature flagging"
-            },
-            {
-              "id": "Environment-based flagging",
-              "label": "Environment-based flagging"
-            },
-            {
-              "id": "User/segment-based flagging",
-              "label": "User/segment-based flagging"
-            },
-            {
-              "id": "Dynamic runtime flagging",
-              "label": "Dynamic runtime flagging"
-            }
-          ]
-        },
-        {
-          "id": "DS_ProgressiveTechniques",
-          "label": "Progressive release techniques used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Traffic splitting",
-              "label": "Traffic splitting"
-            },
-            {
-              "id": "User cohort targeting",
-              "label": "User cohort targeting"
-            },
-            {
-              "id": "Gradual percentage rollout",
-              "label": "Gradual percentage rollout"
-            },
-            {
-              "id": "Shadow mode deployments",
-              "label": "Shadow mode deployments"
-            },
-            {
-              "id": "Ring-based releases",
-              "label": "Ring-based releases"
-            },
-            {
-              "id": "No progressive delivery",
-              "label": "No progressive delivery"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DS_RollbackStrategy",
-          "label": "Rollback strategy",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Manual rollback",
-              "label": "Manual rollback"
-            },
-            {
-              "id": "Automated rollback",
-              "label": "Automated rollback"
-            },
-            {
-              "id": "Blue/Green instant rollback",
-              "label": "Blue/Green instant rollback"
-            },
-            {
-              "id": "Version pinning rollback",
-              "label": "Version pinning rollback"
-            },
-            {
-              "id": "No rollback strategy",
-              "label": "No rollback strategy"
-            }
-          ]
-        },
-        {
-          "id": "DS_FailbackApproach",
-          "label": "Failback strategy after rollback",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Automated failback",
-              "label": "Automated failback"
-            },
-            {
-              "id": "Manual failback",
-              "label": "Manual failback"
-            },
-            {
-              "id": "Phased failback",
-              "label": "Phased failback"
-            },
-            {
-              "id": "Dependency-aware failback",
-              "label": "Dependency-aware failback"
-            },
-            {
-              "id": "No failback defined",
-              "label": "No failback defined"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DS_DeploymentTiming",
-          "label": "Deployment timing strategy",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Anytime continuous deployment",
-              "label": "Anytime continuous deployment"
-            },
-            {
-              "id": "Business hours deployments",
-              "label": "Business hours deployments"
-            },
-            {
-              "id": "Evening deployments",
-              "label": "Evening deployments"
-            },
-            {
-              "id": "Weekend deployments",
-              "label": "Weekend deployments"
-            },
-            {
-              "id": "Change-freeze windows",
-              "label": "Change-freeze windows"
-            },
-            {
-              "id": "Custom deployment windows",
-              "label": "Custom deployment windows"
-            }
-          ]
-        },
-        {
-          "id": "DS_MaintenanceWindows",
-          "label": "Maintenance window usage",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Scheduled maintenance windows",
-              "label": "Scheduled maintenance windows"
-            },
-            {
-              "id": "No-downtime maintenance",
-              "label": "No-downtime maintenance"
-            },
-            {
-              "id": "Zero-downtime deployment model",
-              "label": "Zero-downtime deployment model"
-            },
-            {
-              "id": "User communication required",
-              "label": "User communication required"
-            },
-            {
-              "id": "No maintenance windows",
-              "label": "No maintenance windows"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DS_MultiRegionStrategy",
-          "label": "Strategy for multi-region deployments",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Active/Active",
-              "label": "Active/Active"
-            },
-            {
-              "id": "Active/Passive",
-              "label": "Active/Passive"
-            },
-            {
-              "id": "Staged region rollout",
-              "label": "Staged region rollout"
-            },
-            {
-              "id": "Region-by-region deployment",
-              "label": "Region-by-region deployment"
-            },
-            {
-              "id": "Global blue/green",
-              "label": "Global blue/green"
-            },
-            {
-              "id": "No multi-region deployment",
-              "label": "No multi-region deployment"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DS_GlobalDependencies",
-          "label": "Global dependency handling",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Geo-distributed databases",
-              "label": "Geo-distributed databases"
-            },
-            {
-              "id": "Global cache invalidation",
-              "label": "Global cache invalidation"
-            },
-            {
-              "id": "Global load balancer",
-              "label": "Global load balancer"
-            },
-            {
-              "id": "Cross-region event replication",
-              "label": "Cross-region event replication"
-            },
-            {
-              "id": "DNS-based routing",
-              "label": "DNS-based routing"
-            },
-            {
-              "id": "No global dependency handling",
-              "label": "No global dependency handling"
-            }
-          ],
-          "allowOther": true
-        }
-      ]
-    },
-    {
-      "id": "SupportHoursSLAs",
-      "label": "Support Hours & SLAs",
-      "description": "Support coverage, SLAs, SLOs, on-call, escalation, response & resolution time, service reliability expectations",
-      "questions": [
-        {
-          "id": "SLA_SupportHours",
-          "label": "Support coverage hours",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Business hours only",
-              "label": "Business hours only"
-            },
-            {
-              "id": "Extended business hours",
-              "label": "Extended business hours"
-            },
-            {
-              "id": "24x5 support",
-              "label": "24x5 support"
-            },
-            {
-              "id": "24x7 support",
-              "label": "24x7 support"
-            },
-            {
-              "id": "Follow-the-sun global support",
-              "label": "Follow-the-sun global support"
-            },
-            {
-              "id": "No formal support hours",
-              "label": "No formal support hours"
-            }
-          ]
-        },
-        {
-          "id": "SLA_SupportTeams",
-          "label": "Support team structure",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Dedicated support team",
-              "label": "Dedicated support team"
-            },
-            {
-              "id": "Shared enterprise support team",
-              "label": "Shared enterprise support team"
-            },
-            {
-              "id": "Engineering on-call rotation",
-              "label": "Engineering on-call rotation"
-            },
-            {
-              "id": "Third-party vendor support",
-              "label": "Third-party vendor support"
-            },
-            {
-              "id": "Self-service support",
-              "label": "Self-service support"
-            },
-            {
-              "id": "No formal support team",
-              "label": "No formal support team"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "SLA_OnCallCoverage",
-          "label": "On-call support model",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No on-call",
-              "label": "No on-call"
-            },
-            {
-              "id": "Business-hours on-call",
-              "label": "Business-hours on-call"
-            },
-            {
-              "id": "After-hours on-call",
-              "label": "After-hours on-call"
-            },
-            {
-              "id": "24x7 on-call rotation",
-              "label": "24x7 on-call rotation"
-            },
-            {
-              "id": "Follow-the-sun on-call",
-              "label": "Follow-the-sun on-call"
-            }
-          ]
-        },
-        {
-          "id": "SLA_EscalationPaths",
-          "label": "Escalation paths available",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Primary on-call engineer",
-              "label": "Primary on-call engineer"
-            },
-            {
-              "id": "Secondary on-call engineer",
-              "label": "Secondary on-call engineer"
-            },
-            {
-              "id": "Duty manager escalation",
-              "label": "Duty manager escalation"
-            },
-            {
-              "id": "Security team escalation",
-              "label": "Security team escalation"
-            },
-            {
-              "id": "Infrastructure escalation",
-              "label": "Infrastructure escalation"
-            },
-            {
-              "id": "Vendor escalation",
-              "label": "Vendor escalation"
-            },
-            {
-              "id": "No escalation process",
-              "label": "No escalation process"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "SLA_AvailabilityTarget",
-          "label": "Service availability SLA",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No availability guarantee",
-              "label": "No availability guarantee"
-            },
-            {
-              "id": "99% (two nines)",
-              "label": "99% (two nines)"
-            },
-            {
-              "id": "99.5%",
-              "label": "99.5%"
-            },
-            {
-              "id": "99.9% (three nines)",
-              "label": "99.9% (three nines)"
-            },
-            {
-              "id": "99.95%",
-              "label": "99.95%"
-            },
-            {
-              "id": "99.99% (four nines)",
-              "label": "99.99% (four nines)"
-            },
-            {
-              "id": "99.999% (five nines)",
-              "label": "99.999% (five nines)"
-            },
-            {
-              "id": "Custom availability SLA",
-              "label": "Custom availability SLA"
-            }
-          ]
-        },
-        {
-          "id": "SLA_SLITypes",
-          "label": "Key SLIs tracked",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Latency",
-              "label": "Latency"
-            },
-            {
-              "id": "Error rate",
-              "label": "Error rate"
-            },
-            {
-              "id": "Throughput",
-              "label": "Throughput"
-            },
-            {
-              "id": "Saturation/utilization",
-              "label": "Saturation/utilization"
-            },
-            {
-              "id": "Service uptime",
-              "label": "Service uptime"
-            },
-            {
-              "id": "Queue lengths",
-              "label": "Queue lengths"
-            },
-            {
-              "id": "No SLIs tracked",
-              "label": "No SLIs tracked"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "SLA_SLOTargets",
-          "label": "SLO targets defined",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Latency thresholds",
-              "label": "Latency thresholds"
-            },
-            {
-              "id": "Error rate thresholds",
-              "label": "Error rate thresholds"
-            },
-            {
-              "id": "Throughput thresholds",
-              "label": "Throughput thresholds"
-            },
-            {
-              "id": "Resource usage limits",
-              "label": "Resource usage limits"
-            },
-            {
-              "id": "Custom business KPIs",
-              "label": "Custom business KPIs"
-            },
-            {
-              "id": "No SLOs defined",
-              "label": "No SLOs defined"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "SLA_SeverityLevels",
-          "label": "Incident severity levels used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Severity 0 / Critical outage",
-              "label": "Severity 0 / Critical outage"
-            },
-            {
-              "id": "Severity 1 / Major incident",
-              "label": "Severity 1 / Major incident"
-            },
-            {
-              "id": "Severity 2 / Degraded functionality",
-              "label": "Severity 2 / Degraded functionality"
-            },
-            {
-              "id": "Severity 3 / Minor defect",
-              "label": "Severity 3 / Minor defect"
-            },
-            {
-              "id": "Severity 4 / Low priority",
-              "label": "Severity 4 / Low priority"
-            },
-            {
-              "id": "No severity model",
-              "label": "No severity model"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "SLA_ResponseTimes",
-          "label": "Target response times",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Immediate for all incidents",
-              "label": "Immediate for all incidents"
-            },
-            {
-              "id": "Within 15 minutes for critical incidents",
-              "label": "Within 15 minutes for critical incidents"
-            },
-            {
-              "id": "Within 1 hour for critical incidents",
-              "label": "Within 1 hour for critical incidents"
-            },
-            {
-              "id": "Within 4 hours for major incidents",
-              "label": "Within 4 hours for major incidents"
-            },
-            {
-              "id": "Next business day for non-critical issues",
-              "label": "Next business day for non-critical issues"
-            },
-            {
-              "id": "No defined response time",
-              "label": "No defined response time"
-            }
-          ]
-        },
-        {
-          "id": "SLA_ResolutionTimes",
-          "label": "Target resolution times",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Within 1 hour for critical issues",
-              "label": "Within 1 hour for critical issues"
-            },
-            {
-              "id": "Within 4 hours for critical issues",
-              "label": "Within 4 hours for critical issues"
-            },
-            {
-              "id": "Within 24 hours for major issues",
-              "label": "Within 24 hours for major issues"
-            },
-            {
-              "id": "Within 72 hours for minor issues",
-              "label": "Within 72 hours for minor issues"
-            },
-            {
-              "id": "Next release cycle",
-              "label": "Next release cycle"
-            },
-            {
-              "id": "No resolution SLA",
-              "label": "No resolution SLA"
-            }
-          ]
-        },
-        {
-          "id": "SLA_SupportTools",
-          "label": "Support & ticketing systems used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "ServiceNow",
-              "label": "ServiceNow"
-            },
-            {
-              "id": "Jira Service Management",
-              "label": "Jira Service Management"
-            },
-            {
-              "id": "Zendesk",
-              "label": "Zendesk"
-            },
-            {
-              "id": "Freshservice",
-              "label": "Freshservice"
-            },
-            {
-              "id": "Custom ticketing platform",
-              "label": "Custom ticketing platform"
-            },
-            {
-              "id": "Email-based support",
-              "label": "Email-based support"
-            },
-            {
-              "id": "No ticketing platform",
-              "label": "No ticketing platform"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "SLA_CommunicationChannels",
-          "label": "Communication channels for incidents",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Teams",
-              "label": "Teams"
-            },
-            {
-              "id": "Slack",
-              "label": "Slack"
-            },
-            {
-              "id": "PagerDuty",
-              "label": "PagerDuty"
-            },
-            {
-              "id": "Email",
-              "label": "Email"
-            },
-            {
-              "id": "Phone bridge/war room",
-              "label": "Phone bridge/war room"
-            },
-            {
-              "id": "Incident command center",
-              "label": "Incident command center"
-            },
-            {
-              "id": "No communication channels defined",
-              "label": "No communication channels defined"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "SLA_PlannedMaintenance",
-          "label": "Planned maintenance strategy",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Business-hour maintenance allowed",
-              "label": "Business-hour maintenance allowed"
-            },
-            {
-              "id": "Off-hours maintenance only",
-              "label": "Off-hours maintenance only"
-            },
-            {
-              "id": "Weekend maintenance windows",
-              "label": "Weekend maintenance windows"
-            },
-            {
-              "id": "Zero-downtime maintenance",
-              "label": "Zero-downtime maintenance"
-            },
-            {
-              "id": "Blue/Green or rolling maintenance",
-              "label": "Blue/Green or rolling maintenance"
-            },
-            {
-              "id": "No maintenance strategy",
-              "label": "No maintenance strategy"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "SLA_MaintenanceNotifications",
-          "label": "Maintenance notification policy",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No notifications",
-              "label": "No notifications"
-            },
-            {
-              "id": "Notification 24 hours before",
-              "label": "Notification 24 hours before"
-            },
-            {
-              "id": "Notification 72 hours before",
-              "label": "Notification 72 hours before"
-            },
-            {
-              "id": "Notification 1 week before",
-              "label": "Notification 1 week before"
-            },
-            {
-              "id": "Automated maintenance notifications",
-              "label": "Automated maintenance notifications"
-            }
-          ]
-        },
-        {
-          "id": "SLA_OwnerType",
-          "label": "Service ownership model",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Single dedicated owning team",
-              "label": "Single dedicated owning team"
-            },
-            {
-              "id": "Shared ownership between teams",
-              "label": "Shared ownership between teams"
-            },
-            {
-              "id": "Rotating ownership model",
-              "label": "Rotating ownership model"
-            },
-            {
-              "id": "Ownership not defined",
-              "label": "Ownership not defined"
-            }
-          ]
-        },
-        {
-          "id": "SLA_Responsibilities",
-          "label": "Responsibilities included in support",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Incident response",
-              "label": "Incident response"
-            },
-            {
-              "id": "Root-cause analysis",
-              "label": "Root-cause analysis"
-            },
-            {
-              "id": "Bug fixes",
-              "label": "Bug fixes"
-            },
-            {
-              "id": "Infrastructure support",
-              "label": "Infrastructure support"
-            },
-            {
-              "id": "Security incident handling",
-              "label": "Security incident handling"
-            },
-            {
-              "id": "User support",
-              "label": "User support"
-            },
-            {
-              "id": "No responsibilities defined",
-              "label": "No responsibilities defined"
-            }
-          ],
-          "allowOther": true
-        }
+        }        
       ]
     }
   ]

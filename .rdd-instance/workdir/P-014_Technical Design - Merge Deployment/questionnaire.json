@@ -1,0 +1,125 @@
+{
+  "context": "The prompt requests merging the 'CI/CD & DevOps' and 'Deployment Strategy' categories in the Technical Design schema into a single 'Deployment' category. This questionnaire clarifies implementation decisions about how to combine the two existing categories, which have separate sets of questions and potentially overlapping content.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "What should be the new category ID for the merged 'Deployment' category?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Keep 'DeploymentStrategy' ID and extend it",
+          "pros": "Minimal disruption to existing answered questions with 'DeploymentStrategy' prefix, simpler migration path for existing data, maintains existing question IDs that start with DS_",
+          "cons": "The ID is longer and more specific than the new broader category name 'Deployment', may be misleading since it now includes CI/CD content"
+        },
+        {
+          "id": "B",
+          "label": "Use 'CICD_DevOps' ID and extend it",
+          "pros": "Reflects that CI/CD content is being included, maintains existing question IDs that start with CD_",
+          "cons": "The ID doesn't match the new 'Deployment' category name at all, confusing for users, harder to understand the category scope from the ID"
+        },
+        {
+          "id": "C",
+          "label": "Create new 'Deployment' ID",
+          "pros": "Clean naming that perfectly matches the new category name, clear break from the old structure, semantically correct, easier to understand",
+          "cons": "Requires migrating or renaming all existing question IDs, more complex migration logic, potential data loss if not handled carefully"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "'DeploymentStrategy' is the most appropriate ID to keep because: (1) deployment strategy is the broader concept that naturally encompasses CI/CD practices, (2) it minimizes disruption to existing data, and (3) it keeps the question ID prefix 'DS_' which is more intuitive than 'CD_' for a category called 'Deployment'.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "How should questions from both categories be organized in the merged category?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Place all CI/CD & DevOps questions first, then all Deployment Strategy questions",
+          "pros": "Preserves original grouping, easier to implement, clear separation of concerns, users familiar with old structure can find questions easily",
+          "cons": "May not provide the most logical flow, related questions might be far apart, doesn't take advantage of the merge to improve organization"
+        },
+        {
+          "id": "B",
+          "label": "Interleave questions logically by topic (e.g., CI tools, CD practices, deployment models, etc.)",
+          "pros": "Better user experience with logical flow, related questions grouped together, takes advantage of merge to improve structure, more cohesive category",
+          "cons": "More complex implementation, requires careful analysis of question relationships, may disrupt familiar ordering for existing users"
+        },
+        {
+          "id": "C",
+          "label": "Keep all Deployment Strategy questions first, then add CI/CD & DevOps questions",
+          "pros": "Maintains the 'deployment' focus at the beginning which matches category name, straightforward implementation",
+          "cons": "CI/CD questions at the end may seem like an afterthought, doesn't optimize for logical flow, may create confusion about scope"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Placing CI/CD & DevOps questions first makes sense because: (1) CI/CD represents the pipeline and automation infrastructure that enables deployment, (2) it follows a natural progression from build/integration to deployment/delivery, (3) it's easier to implement and verify, and (4) it maintains clear boundaries between the original category content for easier troubleshooting.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "How should the merged category description be written?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Combine both original descriptions: 'Continuous integration, continuous delivery, pipelines, automation, IaC, environments, release strategy, testing, governance, release orchestration, deployment models, rollbacks, approvals, progressive delivery'",
+          "pros": "Comprehensive coverage of all topics, nothing is lost from original descriptions, users understand full scope immediately",
+          "cons": "Very long and somewhat redundant (pipelines, automation, IaC appear in both), harder to read, may feel overwhelming"
+        },
+        {
+          "id": "B",
+          "label": "Write a new concise description that captures the essence: 'End-to-end delivery: CI/CD pipelines, automation, infrastructure as code, deployment strategies, release orchestration, and operational governance'",
+          "pros": "Clean and professional, removes redundancy, easier to read, covers all essential topics, flows logically from development to deployment to operations",
+          "cons": "Requires careful wording to ensure nothing important is omitted, slightly more subjective than simply combining existing text"
+        },
+        {
+          "id": "C",
+          "label": "Use only the Deployment Strategy description since it's the target category: 'Release orchestration, deployment models, automation, rollbacks, approvals, pipelines, IaC, progressive delivery'",
+          "pros": "Simpler, focuses on the category name, shorter description",
+          "cons": "Loses explicit mention of CI/CD, testing, and governance aspects, may confuse users about whether CI/CD content belongs here"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "A new concise description is recommended because it: (1) eliminates redundancy from the two original descriptions, (2) presents a clear, logical flow from integration through deployment to operations, (3) explicitly includes both CI/CD and deployment aspects to clarify the merged scope, and (4) is professional and easy to understand while being comprehensive.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "Should question IDs from the CI/CD & DevOps category be renamed when merged?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Keep original question IDs unchanged (CD_ prefix from CI/CD & DevOps, DS_ prefix from Deployment Strategy)",
+          "pros": "No data migration needed, existing answered questions remain valid, simpler implementation, backward compatible",
+          "cons": "Inconsistent ID prefixes within one category (CD_ and DS_), may confuse users about which category a question belongs to"
+        },
+        {
+          "id": "B",
+          "label": "Rename all CI/CD & DevOps question IDs to use DS_ prefix to match Deployment Strategy",
+          "pros": "Consistent ID prefix across entire merged category, cleaner structure, clearer category ownership",
+          "cons": "Requires data migration for existing answered questions, more complex implementation, risk of losing existing user selections if migration fails"
+        },
+        {
+          "id": "C",
+          "label": "Rename all question IDs to use a new 'D_' (Deployment) prefix",
+          "pros": "Perfect alignment with new category name, fresh start with clear naming, most semantically correct",
+          "cons": "Requires migrating both sets of existing questions, highest implementation complexity, greatest risk of data loss"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Keeping original question IDs is recommended because: (1) it preserves all existing answered questions without requiring migration, (2) it's the safest approach with no risk of data loss, (3) while the mixed prefixes (CD_ and DS_) are slightly inconsistent, they actually help users identify the origin of each question, and (4) the implementation is straightforward with minimal risk.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    }
+  ]
+}
