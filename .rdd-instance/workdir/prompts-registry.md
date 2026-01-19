@@ -268,3 +268,7 @@ In Technical Design - merge the questions from "Expanded Security" to "Security 
 %%PROMPT P-011 "Technical Design - Merge Disaster Recovery"
 In Technical Design - merge the questions in category "Deep Disaster Recovery" in "Disaster Recovery". Update configs, conventions, requirements.
 %%ENDPROMPT
+
+%%PROMPT P-012 "Technical Design - Merge Data"
+In Technical Design page - merge in "Data & Analytics" the categories "Expanded Data", "Data Visualization", "Data Lifecycle & Retention"
+%%ENDPROMPT

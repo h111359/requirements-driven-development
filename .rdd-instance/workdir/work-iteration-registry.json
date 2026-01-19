@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20260117-120324",
     "iteration-name": "Creation of technical design",
-    "prompt-id-sequence-next-value": 12,
+    "prompt-id-sequence-next-value": 13,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -122,6 +122,17 @@
         {
             "prompt-id": "P-011",
             "prompt-title": "Technical Design - Merge Disaster Recovery",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
+        },
+        {
+            "prompt-id": "P-012",
+            "prompt-title": "Technical Design - Merge Data",
             "state": "completed",
             "questionnaire-generated": true,
             "questionnaire-answered": true,
