@@ -401,3 +401,19 @@ Copy the css for Technical Design page so to have same look and feel
 - Document any limitations or known issues
 - Provide examples of adding different question types
 %%ENDPROMPT
+
+%%PROMPT P-016 "Fix validation error of tech design schema editor"
+When validate the current schema in "Technical Design Schema Editor", it says categories[2].question[2].visibleWhen must be a string (3 times)
+This validation seems to be wrong
+Find the issue and fix it
+
+
+### Modification 001
+
+Currently the value of equals is expected to be array only. It could be a string as well. Modify
+
+
+### Modification 002
+
+In validation errors instead of indexes of categories and questions should be written the name of the category and the name of the question
+%%ENDPROMPT

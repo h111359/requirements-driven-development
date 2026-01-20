@@ -9,9 +9,9 @@
       "questions": [
         {
           "id": "Product_PrimaryProductCategory",
-          "label": "Product aspects",
+          "label": "Product categories in scope (select all that apply)",
           "type": "multiselect",
-          "help": "Choose the product archetype(s).",
+          "help": "Choose the product archetype(s). Detailed technology choices are covered in other categories.",
           "options": [
             {
               "id": "Internal line-of-business application",

@@ -665,6 +665,9 @@ The framework enables:
 
 - [TR-0195] The Web UI Technical Design page search functionality shall filter across all categories and questions simultaneously, displaying only categories with matches in the sidebar with match counts, presenting all matching questions in a flat list grouped by category with group labels, and restoring the previously selected category when search is cleared.
 
+- [TR-0196] The Technical Design Schema Editor shall validate visibleWhen fields as arrays of condition objects where each condition contains questionId (string) and equals (array of strings) fields, supporting AND logic across multiple conditions and OR logic within each condition's equals array.
+
+
 
 
 

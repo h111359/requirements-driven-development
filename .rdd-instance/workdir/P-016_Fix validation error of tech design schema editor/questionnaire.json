@@ -1,0 +1,95 @@
+{
+  "context": "The Technical Design Schema Editor validation is reporting that 'categories[2].question[2].visibleWhen must be a string (3 times)'. Analysis shows that the schema uses 'visibleWhen' as an array of condition objects (with questionId and equals fields) throughout the file, but the server validation code checks if it's a string. The prompt suggests the validation is wrong, not the schema.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Should we fix the validation to accept the array format, or change the schema to use strings?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Fix the validation code to accept arrays of condition objects",
+          "pros": "Preserves the existing schema structure with 20+ uses of visibleWhen as arrays; supports complex conditional logic with multiple conditions; aligns with the prompt's indication that the validation is wrong; no need to migrate existing schema data",
+          "cons": "Requires updating the validation logic to handle array structures; needs documentation of the expected array format"
+        },
+        {
+          "id": "B",
+          "label": "Change the schema to use string-based expressions instead of arrays",
+          "pros": "Simpler validation (just check if it's a string); potentially easier to read for simple conditions",
+          "cons": "Requires updating 20+ existing visibleWhen entries in the schema; loses structured format; harder to parse programmatically; contradicts the prompt's suggestion that validation is wrong; may limit expressiveness for complex conditions"
+        },
+        {
+          "id": "C",
+          "label": "Support both formats (array and string)",
+          "pros": "Maximum flexibility; backward compatible; allows migration over time",
+          "cons": "More complex validation logic; potential confusion about which format to use; maintenance burden of supporting two formats"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The prompt explicitly states 'This validation seems to be wrong', indicating the validation logic should be fixed rather than the schema. The schema already has 20+ instances using the array format with structured condition objects, which provides better type safety and expressiveness. Changing the schema would require extensive modifications and would contradict the user's assessment.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "What should be the expected structure for visibleWhen array entries?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Object with questionId (string) and equals (array of strings)",
+          "pros": "Matches the current schema structure; clear semantics (show if referenced question's answer equals any value in the array); easy to validate programmatically",
+          "cons": "Limited to equality checks; doesn't support other operators like not-equals, contains, etc."
+        },
+        {
+          "id": "B",
+          "label": "Object with questionId, operator, and value fields for more flexibility",
+          "pros": "Supports multiple operators (equals, not-equals, contains, greater-than, etc.); more expressive; future-proof for complex conditions",
+          "cons": "More complex to implement; may be overkill for current needs; requires updating existing schema entries"
+        },
+        {
+          "id": "C",
+          "label": "Simple object with questionId and value (single value, not array)",
+          "pros": "Simpler than array of values; easier to understand for simple cases",
+          "cons": "Doesn't support OR conditions (multiple valid values); would require changing existing schema entries that use arrays"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The current schema already uses this structure consistently across all 20+ visibleWhen entries. It supports the most common use case of 'show this question if another question's answer is one of these values'. Changing to option B or C would require modifying the existing schema.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "Should the validation support multiple conditions in a single visibleWhen array?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes, treat multiple array entries as AND conditions",
+          "pros": "Allows complex visibility rules like 'show if question1=A AND question2=B'; aligns with common conditional logic patterns; schema already has visibleWhen as array which suggests this was intended",
+          "cons": "More complex to validate and implement; need to clarify AND vs OR semantics"
+        },
+        {
+          "id": "B",
+          "label": "No, only allow single condition per visibleWhen (array with one object)",
+          "pros": "Simpler validation and implementation; easier to understand; sufficient for most use cases",
+          "cons": "Limits expressiveness; may require workarounds for complex conditions; wastes the array structure (could just be a single object)"
+        },
+        {
+          "id": "C",
+          "label": "Support both single and multiple conditions with explicit AND/OR logic",
+          "pros": "Maximum flexibility; can handle any conditional logic",
+          "cons": "Significantly more complex; may be overkill; requires additional schema fields for operators"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The schema uses an array structure for visibleWhen, which naturally supports multiple entries. Treating them as AND conditions is a common pattern and provides good expressiveness without excessive complexity. This allows questions to be shown only when multiple prerequisites are met.",
+      "user-selection": {
+        "type": "custom",
+        "value": "Multiple condition objects in visibleWhen array → AND logic, Multiple values in the equals array → OR logic"
+      }
+    }
+  ]
+}

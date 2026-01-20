@@ -249,8 +249,21 @@ The editor enforces these rules:
    - Option IDs must be unique within the question
 
 6. **visibleWhen (if present):**
-   - Must be a string
-   - Should be valid JavaScript expression
+   - Must be an array of condition objects
+   - Each condition must have:
+     - `questionId` (string): ID of the question to check
+     - `equals` (array of strings): Values that make this question visible
+   - Multiple conditions in array = AND logic (all must match)
+   - Multiple values in `equals` = OR logic (any can match)
+   - Example:
+     ```json
+     "visibleWhen": [
+       {
+         "questionId": "Product_Category",
+         "equals": ["WebApp", "MobileApp"]
+       }
+     ]
+     ```
 
 ## Tips and Best Practices
 

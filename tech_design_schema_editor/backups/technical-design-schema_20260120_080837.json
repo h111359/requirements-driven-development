@@ -4,14 +4,14 @@
   "categories": [
     {
       "id": "Product",
-      "label": "Product",
+      "label": "Product definition",
       "description": "Core product attributes that shape architectural decisions",
       "questions": [
         {
           "id": "Product_PrimaryProductCategory",
-          "label": "Product aspects",
+          "label": "Product categories in scope (select all that apply)",
           "type": "multiselect",
-          "help": "Choose the product archetype(s).",
+          "help": "Choose the product archetype(s). Detailed technology choices are covered in other categories.",
           "options": [
             {
               "id": "Internal line-of-business application",
@@ -206,14 +206,14 @@
       ]
     },
     {
-      "id": "Infra",
-      "label": "Infrastructure",
+      "id": "CloudStrategy",
+      "label": "Cloud Strategy",
       "description": "Cloud provider selection, regions, workload placement",
       "questions": [
         {
-          "id": "Infra_DeploymentModel",
+          "id": "CloudStrategy_DeploymentModel",
           "label": "Primary cloud deployment model",
-          "type": "multiselect",
+          "type": "radio",
           "help": "",
           "options": [
             {
@@ -232,11 +232,10 @@
               "id": "On-premises only",
               "label": "On-premises only"
             }
-          ],
-          "allowOther": false
+          ]
         },
         {
-          "id": "Infra_DeploymentDrivers",
+          "id": "CloudStrategy_DeploymentDrivers",
           "label": "Key business drivers for chosen cloud model (select all that apply)",
           "type": "multiselect",
           "help": "",
@@ -275,7 +274,7 @@
           "otherPlaceholder": "Other drivers, e.g. HPC capabilities, latency-sensitive workloads"
         },
         {
-          "id": "Infra_PrimaryProvider",
+          "id": "CloudStrategy_PrimaryProvider",
           "label": "Primary cloud provider",
           "type": "radio",
           "help": "",
@@ -295,7 +294,7 @@
           ]
         },
         {
-          "id": "Infra_SecondaryProviders",
+          "id": "CloudStrategy_SecondaryProviders",
           "label": "Secondary/optional cloud providers (if applicable) (select all that apply)",
           "type": "multiselect",
           "help": "",
@@ -322,7 +321,7 @@
           "otherPlaceholder": "Other providers or specific cloud services"
         },
         {
-          "id": "Infra_WorkloadTypes",
+          "id": "CloudStrategy_WorkloadTypes",
           "label": "Primary workloads planned for cloud (select all that apply)",
           "type": "multiselect",
           "help": "",
@@ -373,7 +372,7 @@
           "otherPlaceholder": "Other workload types, e.g. IoT telemetry processing, HPC workloads"
         },
         {
-          "id": "Infra_LandingZoneUsage",
+          "id": "CloudStrategy_LandingZoneUsage",
           "label": "Landing Zone components to be used (select all that apply)",
           "type": "multiselect",
           "help": "",
@@ -12070,7 +12069,7 @@
             }
           ],
           "allowOther": true
-        }
+        }        
       ]
     }
   ]

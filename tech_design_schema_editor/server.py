@@ -187,7 +187,9 @@ class SchemaEditorHandler(http.server.SimpleHTTPRequestHandler):
         
         # Validate categories
         for cat_idx, category in enumerate(schema['categories']):
-            cat_path = f"categories[{cat_idx}]"
+            # Use category label if available, otherwise use index
+            cat_label = category.get('label', f'index {cat_idx}') if isinstance(category, dict) else f'index {cat_idx}'
+            cat_path = f'categories["{cat_label}"]'
             
             if not isinstance(category, dict):
                 errors.append(f"{cat_path}: must be an object")
@@ -211,7 +213,13 @@ class SchemaEditorHandler(http.server.SimpleHTTPRequestHandler):
                 continue
             
             for q_idx, question in enumerate(questions):
-                q_path = f"{cat_path}.questions[{q_idx}]"
+                # Use question label or id if available, otherwise use index
+                q_label = None
+                if isinstance(question, dict):
+                    q_label = question.get('label', question.get('id', f'index {q_idx}'))
+                else:
+                    q_label = f'index {q_idx}'
+                q_path = f'{cat_path}.questions["{q_label}"]'
                 self.validate_question(question, q_path, question_ids, errors)
         
         return {
@@ -272,9 +280,29 @@ class SchemaEditorHandler(http.server.SimpleHTTPRequestHandler):
         
         # Validate visibleWhen if present
         if 'visibleWhen' in question:
-            if not isinstance(question['visibleWhen'], str):
-                errors.append(f"{path}.visibleWhen: must be a string")
-            # TODO: Add more sophisticated validation of visibleWhen expressions
+            if not isinstance(question['visibleWhen'], list):
+                errors.append(f"{path}.visibleWhen: must be an array")
+            else:
+                # Validate each condition in the array
+                for cond_idx, condition in enumerate(question['visibleWhen']):
+                    cond_path = f"{path}.visibleWhen[{cond_idx}]"
+                    if not isinstance(condition, dict):
+                        errors.append(f"{cond_path}: must be an object")
+                        continue
+                    
+                    if 'questionId' not in condition:
+                        errors.append(f"{cond_path}: missing 'questionId' field")
+                    elif not isinstance(condition['questionId'], str):
+                        errors.append(f"{cond_path}.questionId: must be a string")
+                    
+                    if 'equals' not in condition:
+                        errors.append(f"{cond_path}: missing 'equals' field")
+                    elif not isinstance(condition['equals'], (list, str)):
+                        errors.append(f"{cond_path}.equals: must be an array or string")
+                    elif isinstance(condition['equals'], list) and len(condition['equals']) == 0:
+                        errors.append(f"{cond_path}.equals: array must have at least one value")
+                    elif isinstance(condition['equals'], str) and len(condition['equals']) == 0:
+                        errors.append(f"{cond_path}.equals: string must not be empty")
     
     def create_backup(self):
         """Create a backup of the current schema"""

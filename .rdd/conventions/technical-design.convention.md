@@ -98,6 +98,14 @@ Questions can be conditionally shown/hidden based on answers to other questions 
 - For multiselect questions, rule matches if the specified value is present in the answer array
 - Questions without `visibleWhen` are always visible
 
+Multiple condition objects in visibleWhen array → AND logic
+
+- ALL conditions must be satisfied for the question to be visible
+  - Example: If visibleWhen has 2 rules, BOTH must be true
+
+- Multiple values in the equals array → OR logic, The answer must match ANY ONE of the values. 
+  - Example: "equals": ["Value A", "Value B"] means answer = "Value A" OR "Value B"
+
 ## Answers Storage Format
 
 The answers file stores **only explicitly answered questions** as a JSON object keyed by `questionId`:
