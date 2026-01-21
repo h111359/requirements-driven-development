@@ -13,7 +13,7 @@ See the definitions in `.rdd/prompt-snippets/execution.md`
      - Impact on existing functionality
      - Completeness of the prompt description
    
-   * **Best Practices** - Check what are the best practices currently available on the Internet. This is mandatory to search via MCP in Internet sources when available. List the URLs you have checked and make a short summary for each URL - what are the conclusions. If MCP is not available, provide general best practices based on your knowledge.
+   * **Best Practices** - Check what are the best practices currently available on the Internet. This is mandatory to search (via MCP or other available fetch tools) in Internet sources when available. List the URLs you have checked and make a short summary for each URL - what are the conclusions. If MCP is not available, provide general best practices based on your knowledge.
       
    * **Proposals** - Propose changes in the requirements and different options (even if they contradict to the prompt, but are better as approach). Include:
      - Alternative implementation strategies
