@@ -2601,6 +2601,317 @@
           "allowOther": true
         },
         {
+          "id": "DA_IngestionBatchNeeded",
+          "label": "Is batch ingestion required?",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "No",
+              "label": "No"
+            },
+            {
+              "id": "Yes – periodic batch ingestion",
+              "label": "Yes – periodic batch ingestion"
+            },
+            {
+              "id": "Yes – nightly batch",
+              "label": "Yes – nightly batch"
+            },
+            {
+              "id": "Yes – intra-day scheduled ingestion",
+              "label": "Yes – intra-day scheduled ingestion"
+            }
+          ]
+        },
+        {
+          "id": "DA_BatchTechnologies",
+          "label": "Batch ingestion technologies (select all that apply)",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure Data Factory",
+              "label": "Azure Data Factory"
+            },
+            {
+              "id": "Synapse pipelines",
+              "label": "Synapse pipelines"
+            },
+            {
+              "id": "Databricks workflows",
+              "label": "Databricks workflows"
+            },
+            {
+              "id": "ADF self-hosted IR",
+              "label": "ADF self-hosted IR"
+            },
+            {
+              "id": "Azure Functions batch triggers",
+              "label": "Azure Functions batch triggers"
+            },
+            {
+              "id": "Custom batch ingestion",
+              "label": "Custom batch ingestion"
+            },
+            {
+              "id": "AWS Glue",
+              "label": "AWS Glue"
+            },
+            {
+              "id": "GCP Dataflow (batch)",
+              "label": "GCP Dataflow (batch)"
+            }
+          ],
+          "visibleWhen": [
+            {
+              "questionId": "DA_IngestionBatchNeeded",
+              "equals": [
+                "Yes – periodic batch ingestion",
+                "Yes – nightly batch",
+                "Yes – intra-day scheduled ingestion"
+              ]
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_BatchFrequencies",
+          "label": "Batch ingestion frequency (select all that apply)",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Hourly",
+              "label": "Hourly"
+            },
+            {
+              "id": "Multiple times per day",
+              "label": "Multiple times per day"
+            },
+            {
+              "id": "Daily",
+              "label": "Daily"
+            },
+            {
+              "id": "Weekly",
+              "label": "Weekly"
+            },
+            {
+              "id": "Monthly",
+              "label": "Monthly"
+            },
+            {
+              "id": "Event-triggered batch",
+              "label": "Event-triggered batch"
+            }
+          ],
+          "visibleWhen": [
+            {
+              "questionId": "DA_IngestionBatchNeeded",
+              "equals": [
+                "Yes – periodic batch ingestion",
+                "Yes – nightly batch",
+                "Yes – intra-day scheduled ingestion"
+              ]
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_StreamingRequired",
+          "label": "Is real-time / streaming ingestion required?",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "No",
+              "label": "No"
+            },
+            {
+              "id": "Yes – real-time (seconds)",
+              "label": "Yes – real-time (seconds)"
+            },
+            {
+              "id": "Yes – near real-time (seconds–minutes)",
+              "label": "Yes – near real-time (seconds–minutes)"
+            },
+            {
+              "id": "Yes – event-driven ingestion only",
+              "label": "Yes – event-driven ingestion only"
+            }
+          ]
+        },
+        {
+          "id": "DA_StreamingTechnologies",
+          "label": "Streaming ingestion technologies (select all that apply)",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure Event Hubs",
+              "label": "Azure Event Hubs"
+            },
+            {
+              "id": "Azure IoT Hub",
+              "label": "Azure IoT Hub"
+            },
+            {
+              "id": "Azure Service Bus",
+              "label": "Azure Service Bus"
+            },
+            {
+              "id": "Kafka (self-managed)",
+              "label": "Kafka (self-managed)"
+            },
+            {
+              "id": "Confluent Cloud",
+              "label": "Confluent Cloud"
+            },
+            {
+              "id": "Kinesis",
+              "label": "Kinesis"
+            },
+            {
+              "id": "Pub/Sub",
+              "label": "Pub/Sub"
+            },
+            {
+              "id": "Databricks Auto Loader (streaming)",
+              "label": "Databricks Auto Loader (streaming)"
+            }
+          ],
+          "visibleWhen": [
+            {
+              "questionId": "DA_StreamingRequired",
+              "equals": [
+                "Yes – real-time (seconds)",
+                "Yes – near real-time (seconds–minutes)",
+                "Yes – event-driven ingestion only"
+              ]
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_StreamProcessingPatterns",
+          "label": "Streaming processing patterns used (select all that apply)",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Micro-batching",
+              "label": "Micro-batching"
+            },
+            {
+              "id": "Event-at-a-time processing",
+              "label": "Event-at-a-time processing"
+            },
+            {
+              "id": "Exactly-once",
+              "label": "Exactly-once"
+            },
+            {
+              "id": "At-least-once",
+              "label": "At-least-once"
+            },
+            {
+              "id": "Window aggregations",
+              "label": "Window aggregations"
+            },
+            {
+              "id": "Late arrival event handling",
+              "label": "Late arrival event handling"
+            },
+            {
+              "id": "Delta Lake streaming ingestion",
+              "label": "Delta Lake streaming ingestion"
+            }
+          ],
+          "visibleWhen": [
+            {
+              "questionId": "DA_StreamingRequired",
+              "equals": [
+                "Yes – real-time (seconds)",
+                "Yes – near real-time (seconds–minutes)",
+                "Yes – event-driven ingestion only"
+              ]
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_CDCNeeded",
+          "label": "Is Change Data Capture required?",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "No",
+              "label": "No"
+            },
+            {
+              "id": "Yes – database-native CDC",
+              "label": "Yes – database-native CDC"
+            },
+            {
+              "id": "Yes – log-based CDC",
+              "label": "Yes – log-based CDC"
+            },
+            {
+              "id": "Yes – application-level CDC",
+              "label": "Yes – application-level CDC"
+            }
+          ]
+        },
+        {
+          "id": "DA_CDCTechnologies",
+          "label": "CDC tools / platforms (select all that apply)",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure Data Factory CDC",
+              "label": "Azure Data Factory CDC"
+            },
+            {
+              "id": "Databricks Auto Loader incremental",
+              "label": "Databricks Auto Loader incremental"
+            },
+            {
+              "id": "Debezium",
+              "label": "Debezium"
+            },
+            {
+              "id": "Qlik Replicate",
+              "label": "Qlik Replicate"
+            },
+            {
+              "id": "Fivetran",
+              "label": "Fivetran"
+            },
+            {
+              "id": "Airbyte",
+              "label": "Airbyte"
+            },
+            {
+              "id": "Custom CDC logic",
+              "label": "Custom CDC logic"
+            }
+          ],
+          "visibleWhen": [
+            {
+              "questionId": "DA_CDCNeeded",
+              "equals": [
+                "Yes – database-native CDC",
+                "Yes – log-based CDC",
+                "Yes – application-level CDC"
+              ]
+            }
+          ],
+          "allowOther": true
+        },
+        {
           "id": "DA_FileIngestionTypes",
           "label": "File ingestion types (select all that apply)",
           "type": "multiselect",
@@ -2637,6 +2948,76 @@
             {
               "id": "Nested hierarchical files",
               "label": "Nested hierarchical files"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_FileArrivalMethods",
+          "label": "How files arrive (select all that apply)",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "SFTP",
+              "label": "SFTP"
+            },
+            {
+              "id": "API upload",
+              "label": "API upload"
+            },
+            {
+              "id": "Blob storage drop",
+              "label": "Blob storage drop"
+            },
+            {
+              "id": "EventGrid notifications",
+              "label": "EventGrid notifications"
+            },
+            {
+              "id": "Email attachments",
+              "label": "Email attachments"
+            },
+            {
+              "id": "Manual uploads",
+              "label": "Manual uploads"
+            },
+            {
+              "id": "Third-party file-share",
+              "label": "Third-party file-share"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_StorageLayers",
+          "label": "Data lake/lakehouse layers (select all that apply)",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Raw / Bronze",
+              "label": "Raw / Bronze"
+            },
+            {
+              "id": "Cleansed / Silver",
+              "label": "Cleansed / Silver"
+            },
+            {
+              "id": "Curated / Gold",
+              "label": "Curated / Gold"
+            },
+            {
+              "id": "Sandbox / Dev zone",
+              "label": "Sandbox / Dev zone"
+            },
+            {
+              "id": "Analytics zone",
+              "label": "Analytics zone"
+            },
+            {
+              "id": "Real-time zone",
+              "label": "Real-time zone"
             }
           ],
           "allowOther": true
@@ -2748,6 +3129,39 @@
           "allowOther": true
         },
         {
+          "id": "DA_PartitioningStrategy",
+          "label": "Partitioning strategies used (select all that apply)",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Date-based partitioning (YYYY/MM/DD)",
+              "label": "Date-based partitioning (YYYY/MM/DD)"
+            },
+            {
+              "id": "Hour-level partitioning",
+              "label": "Hour-level partitioning"
+            },
+            {
+              "id": "Hash partitioning",
+              "label": "Hash partitioning"
+            },
+            {
+              "id": "Range partitioning",
+              "label": "Range partitioning"
+            },
+            {
+              "id": "Domain-specific partitioning",
+              "label": "Domain-specific partitioning"
+            },
+            {
+              "id": "No partitioning",
+              "label": "No partitioning"
+            }
+          ],
+          "allowOther": true
+        },
+        {
           "id": "DA_ProcessingEngines",
           "label": "Data processing engines used (select all that apply)",
           "type": "multiselect",
@@ -2789,6 +3203,43 @@
           "allowOther": true
         },
         {
+          "id": "DA_PipelineTypes",
+          "label": "Types of pipelines used (select all that apply)",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Batch pipelines",
+              "label": "Batch pipelines"
+            },
+            {
+              "id": "Streaming pipelines",
+              "label": "Streaming pipelines"
+            },
+            {
+              "id": "ELT pipelines",
+              "label": "ELT pipelines"
+            },
+            {
+              "id": "ETL pipelines",
+              "label": "ETL pipelines"
+            },
+            {
+              "id": "Real-time transformations",
+              "label": "Real-time transformations"
+            },
+            {
+              "id": "Event-driven processing",
+              "label": "Event-driven processing"
+            },
+            {
+              "id": "Machine learning feature pipelines",
+              "label": "Machine learning feature pipelines"
+            }
+          ],
+          "allowOther": true
+        },
+        {
           "id": "DA_Orchestration",
           "label": "Orchestration tools used (select all that apply)",
           "type": "multiselect",
@@ -2821,6 +3272,39 @@
             {
               "id": "Custom scheduler",
               "label": "Custom scheduler"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_QualityTools",
+          "label": "Data quality tools/platforms (select all that apply)",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Great Expectations",
+              "label": "Great Expectations"
+            },
+            {
+              "id": "Databricks Expectations",
+              "label": "Databricks Expectations"
+            },
+            {
+              "id": "dbt tests",
+              "label": "dbt tests"
+            },
+            {
+              "id": "ADF pipeline validation",
+              "label": "ADF pipeline validation"
+            },
+            {
+              "id": "Custom rules engine",
+              "label": "Custom rules engine"
+            },
+            {
+              "id": "None",
+              "label": "None"
             }
           ],
           "allowOther": true
@@ -2985,6 +3469,72 @@
             {
               "id": "No semantic layer",
               "label": "No semantic layer"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_MetricsKPIs",
+          "label": "Types of metrics/KPIs defined (select all that apply)",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Operational metrics",
+              "label": "Operational metrics"
+            },
+            {
+              "id": "Financial KPIs",
+              "label": "Financial KPIs"
+            },
+            {
+              "id": "Customer KPIs",
+              "label": "Customer KPIs"
+            },
+            {
+              "id": "Supply chain KPIs",
+              "label": "Supply chain KPIs"
+            },
+            {
+              "id": "Custom domain metrics",
+              "label": "Custom domain metrics"
+            },
+            {
+              "id": "Machine learning performance metrics",
+              "label": "Machine learning performance metrics"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_DataAccessPatterns",
+          "label": "Data access patterns (select all that apply)",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "SQL-based ad-hoc queries",
+              "label": "SQL-based ad-hoc queries"
+            },
+            {
+              "id": "Dashboard consumption",
+              "label": "Dashboard consumption"
+            },
+            {
+              "id": "Scheduled report delivery",
+              "label": "Scheduled report delivery"
+            },
+            {
+              "id": "Embedded analytics",
+              "label": "Embedded analytics"
+            },
+            {
+              "id": "API-based data access",
+              "label": "API-based data access"
+            },
+            {
+              "id": "Data sharing / data products",
+              "label": "Data sharing / data products"
             }
           ],
           "allowOther": true
@@ -3260,6 +3810,39 @@
             {
               "id": "Hybrid modeling",
               "label": "Hybrid modeling"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_SemanticLayer",
+          "label": "Semantic/BI modeling layer",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Power BI semantic model",
+              "label": "Power BI semantic model"
+            },
+            {
+              "id": "Analysis Services",
+              "label": "Analysis Services"
+            },
+            {
+              "id": "dbt semantic layer",
+              "label": "dbt semantic layer"
+            },
+            {
+              "id": "Databricks semantic layer",
+              "label": "Databricks semantic layer"
+            },
+            {
+              "id": "Custom semantic layer",
+              "label": "Custom semantic layer"
+            },
+            {
+              "id": "No semantic layer",
+              "label": "No semantic layer"
             }
           ],
           "allowOther": true
