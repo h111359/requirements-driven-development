@@ -1,1 +1,10 @@
-{}
+{
+  "Product_PrimaryProductCategory": {
+    "questionId": "Product_PrimaryProductCategory",
+    "type": "multiselect",
+    "value": [
+      "Internal line-of-business application"
+    ],
+    "answeredAt": "2026-01-22T05:42:53.216838+00:00"
+  }
+}

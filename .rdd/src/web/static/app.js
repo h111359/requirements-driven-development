@@ -3227,6 +3227,24 @@ function renderQuestion(question) {
         questionDiv.appendChild(input);
     }
     
+    // Rationale textarea (only show when answer exists)
+    if (currentAnswer) {
+        const rationaleLabel = document.createElement('label');
+        rationaleLabel.className = 'form-label mt-3 mb-1';
+        rationaleLabel.textContent = 'Rationale (optional)';
+        questionDiv.appendChild(rationaleLabel);
+        
+        const rationaleTextarea = document.createElement('textarea');
+        rationaleTextarea.className = 'form-control';
+        rationaleTextarea.rows = 3;
+        rationaleTextarea.placeholder = 'Explain the reasoning for this answer...';
+        rationaleTextarea.value = currentAnswer.rationale || '';
+        rationaleTextarea.setAttribute('data-question-id', question.id);
+        rationaleTextarea.id = `rationale-${question.id}`;
+        rationaleTextarea.onblur = () => saveQuestionRationale(question);
+        questionDiv.appendChild(rationaleTextarea);
+    }
+    
     // Clear answer button
     if (currentAnswer) {
         const clearBtn = document.createElement('button');
@@ -3254,17 +3272,28 @@ function formatAnswerValue(value) {
  */
 async function saveQuestionAnswer(question, value) {
     try {
+        // Get rationale if it exists
+        const rationaleTextarea = document.getElementById(`rationale-${question.id}`);
+        const rationale = rationaleTextarea ? rationaleTextarea.value : undefined;
+        
+        const requestBody = {
+            token: sessionToken,
+            questionId: question.id,
+            type: question.type,
+            value: value
+        };
+        
+        // Only include rationale if it has a value
+        if (rationale && rationale.trim() !== '') {
+            requestBody.rationale = rationale;
+        }
+        
         const response = await fetch('/api/technical-design/answer/set', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                token: sessionToken,
-                questionId: question.id,
-                type: question.type,
-                value: value
-            })
+            body: JSON.stringify(requestBody)
         });
         
         const result = await response.json();
@@ -3278,6 +3307,58 @@ async function saveQuestionAnswer(question, value) {
         }
     } catch (error) {
         showAlert('danger', 'Error saving answer: ' + error.message);
+    }
+}
+
+/**
+ * Save question rationale
+ */
+async function saveQuestionRationale(question) {
+    try {
+        const rationaleTextarea = document.getElementById(`rationale-${question.id}`);
+        const rationale = rationaleTextarea ? rationaleTextarea.value : '';
+        
+        // Get current answer
+        const currentAnswer = techDesignAnswers[question.id];
+        if (!currentAnswer) {
+            console.warn('Cannot save rationale without an answer');
+            return;
+        }
+        
+        const requestBody = {
+            token: sessionToken,
+            questionId: question.id,
+            type: question.type,
+            value: currentAnswer.value
+        };
+        
+        // Only include rationale if it has a value
+        if (rationale && rationale.trim() !== '') {
+            requestBody.rationale = rationale;
+        }
+        
+        const response = await fetch('/api/technical-design/answer/set', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Update local cache without full re-render to avoid losing focus
+            techDesignAnswers[question.id] = {
+                ...currentAnswer,
+                rationale: rationale
+            };
+            showAlert('success', 'Rationale saved', 2000);
+        } else {
+            showAlert('danger', 'Failed to save rationale: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        showAlert('danger', 'Error saving rationale: ' + error.message);
     }
 }
 

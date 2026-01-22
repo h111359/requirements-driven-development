@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20260117-120324",
     "iteration-name": "Creation of technical design",
-    "prompt-id-sequence-next-value": 17,
+    "prompt-id-sequence-next-value": 18,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -187,6 +187,18 @@
             "executed": true,
             "modifications-count": 2,
             "current-modification-id": null
+        },
+        {
+            "prompt-id": "P-017",
+            "prompt-title": "Rationale",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "analysis-generated": true
         }
     ]
 }

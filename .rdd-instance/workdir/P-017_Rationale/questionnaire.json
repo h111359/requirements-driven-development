@@ -1,0 +1,137 @@
+{
+  "context": "The prompt requests implementation of rationale field functionality for editing in the Web UI. The technical design answers are stored in .rdd-instance/specifications/technical-design.json where each answer can have an optional 'rationale' field. The Web UI Technical Design page already supports editing answers, but it's unclear whether the rationale functionality is already implemented or needs to be added.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "What is the current state of rationale field support in the Technical Design page?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Rationale field is not implemented at all - need to add UI controls, backend API, and data persistence",
+          "pros": "Complete implementation from scratch ensures consistency and proper integration",
+          "cons": "More development effort required"
+        },
+        {
+          "id": "B",
+          "label": "Rationale field exists in data model but UI is missing - only need to add UI controls and wire to existing API",
+          "pros": "Less effort, backend already handles persistence",
+          "cons": "Need to verify backend compatibility first"
+        },
+        {
+          "id": "C",
+          "label": "Rationale field is already fully implemented - just needs testing and documentation",
+          "pros": "Minimal work required",
+          "cons": "May not address user's actual need if feature already exists"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Based on TR-0189 which specifies that technical-design.json answers include an 'optional rationale field', the data model already supports rationale. The question is whether the Web UI provides input controls for it.",
+      "user-selection": {
+        "type": "custom",
+        "value": "You should explore the code and verify if it is implemented and how"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "Where should the rationale input field appear in the Technical Design page UI?",
+      "options": [
+        {
+          "id": "A",
+          "label": "As a separate collapsible section below each question after an answer is selected",
+          "pros": "Keeps the interface clean, rationale is optional so it doesn't clutter the form, progressive disclosure improves UX",
+          "cons": "Requires extra click to access, might be overlooked by users"
+        },
+        {
+          "id": "B",
+          "label": "Always visible below the answer options for every question",
+          "pros": "Immediately visible, no interaction needed, encourages adding rationale",
+          "cons": "Takes up more space, makes form look cluttered when rationale is not needed"
+        },
+        {
+          "id": "C",
+          "label": "In a modal dialog that opens when clicking an 'Add Rationale' button",
+          "pros": "Doesn't take permanent screen space, focused editing experience",
+          "cons": "Extra clicks required, context switching between form and modal"
+        },
+        {
+          "id": "D",
+          "label": "As an inline textarea that appears only after an answer is selected",
+          "pros": "Balances visibility with space efficiency, natural flow from answer to rationale",
+          "cons": "Field appears/disappears based on selection state which might be confusing"
+        }
+      ],
+      "recommended-option": "D",
+      "recommendation-rationale": "Showing the rationale field inline after answer selection provides good UX balance - it's visible when relevant, doesn't clutter the form when no answer is selected, and maintains context without requiring modals or extra clicks.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "D"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "How should rationale be persisted to the backend?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Automatically save rationale on blur (when user clicks away from the textarea)",
+          "pros": "No manual save needed, consistent with prompt.md auto-save behavior, prevents data loss",
+          "cons": "More frequent API calls, could save incomplete thoughts"
+        },
+        {
+          "id": "B",
+          "label": "Save rationale together with the answer when answer is selected or changed",
+          "pros": "Fewer API calls, rationale and answer saved atomically, simpler state management",
+          "cons": "Rationale changes might not be saved if user doesn't change answer"
+        },
+        {
+          "id": "C",
+          "label": "Require explicit 'Save' button for rationale",
+          "pros": "User has full control, can edit without worrying about premature saves",
+          "cons": "Risk of forgetting to save, inconsistent with auto-save pattern used elsewhere"
+        },
+        {
+          "id": "D",
+          "label": "Debounced auto-save after 2 seconds of typing inactivity plus save on blur",
+          "pros": "Matches prompt.md pattern, balances responsiveness with API efficiency, saves incomplete work",
+          "cons": "Most complex to implement, might save incomplete rationale text"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Auto-save on blur is simple to implement and provides good UX - it saves when the user moves to another field, preventing data loss without requiring explicit save actions. This is less complex than debounced auto-save but still automatic.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "Should rationale be displayed in the category sidebar or question list views?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Show rationale icon indicator for questions that have rationale, with tooltip preview on hover",
+          "pros": "Provides quick visibility of which questions have rationale without cluttering the view",
+          "cons": "Requires additional UI elements and hover interactions"
+        },
+        {
+          "id": "B",
+          "label": "Don't show rationale in list views - only show when editing the specific question",
+          "pros": "Simpler UI, keeps focus on answers, rationale is details-level information",
+          "cons": "No way to know which questions have rationale without opening each one"
+        },
+        {
+          "id": "C",
+          "label": "Show truncated rationale text (first 50 chars) in the question list",
+          "pros": "Full visibility of rationale at a glance",
+          "cons": "Makes list view very dense, harder to scan, truncation might be misleading"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Rationale is supplementary detail that's most useful during editing. Keeping list views focused on questions and answers makes them easier to scan, and rationale can be viewed when expanding the specific question.",
+      "user-selection": {
+        "type": "custom",
+        "value": "Should be entirely visible"
+      }
+    }
+  ]
+}
