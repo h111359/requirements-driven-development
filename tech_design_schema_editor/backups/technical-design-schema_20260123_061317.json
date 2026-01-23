@@ -3402,6 +3402,39 @@
           "allowOther": true
         },
         {
+          "id": "DA_DAXPractices",
+          "label": "Calculation/query practices",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "DAX measures",
+              "label": "DAX measures"
+            },
+            {
+              "id": "Calculated columns",
+              "label": "Calculated columns"
+            },
+            {
+              "id": "SQL logic in backend",
+              "label": "SQL logic in backend"
+            },
+            {
+              "id": "dbt transformations",
+              "label": "dbt transformations"
+            },
+            {
+              "id": "Custom query logic",
+              "label": "Custom query logic"
+            },
+            {
+              "id": "No calculation layer",
+              "label": "No calculation layer"
+            }
+          ],
+          "allowOther": true
+        },
+        {
           "id": "DA_AccessControl",
           "label": "Access control strategies for reports",
           "type": "multiselect",
@@ -3438,6 +3471,43 @@
             {
               "id": "No access control",
               "label": "No access control"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_ContentGovernance",
+          "label": "Content governance practices",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Certified datasets",
+              "label": "Certified datasets"
+            },
+            {
+              "id": "Approved semantic models",
+              "label": "Approved semantic models"
+            },
+            {
+              "id": "Workspace management policies",
+              "label": "Workspace management policies"
+            },
+            {
+              "id": "Data lineage in catalog",
+              "label": "Data lineage in catalog"
+            },
+            {
+              "id": "Version control for reports",
+              "label": "Version control for reports"
+            },
+            {
+              "id": "Report publishing standards",
+              "label": "Report publishing standards"
+            },
+            {
+              "id": "No governance",
+              "label": "No governance"
             }
           ],
           "allowOther": true

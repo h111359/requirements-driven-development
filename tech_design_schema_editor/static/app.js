@@ -107,15 +107,25 @@ function attachEventListeners() {
     elements.btnAddQuestion.addEventListener('click', addNewQuestion);
     elements.btnDeleteCategory.addEventListener('click', deleteCategory);
     
+    // Category field updates on blur (validate and save)
+    elements.categoryId.addEventListener('blur', updateCategoryId);
+    elements.categoryLabel.addEventListener('blur', updateCategoryLabel);
+    elements.categoryDescription.addEventListener('blur', updateCategoryDescription);
+    
     // Question form
     elements.questionForm.addEventListener('submit', saveQuestionChanges);
     elements.questionType.addEventListener('change', handleQuestionTypeChange);
     elements.btnAddOption.addEventListener('click', addNewOption);
     elements.btnDeleteQuestion.addEventListener('click', deleteQuestion);
     
-    // Track modifications
-    elements.categoryForm.addEventListener('input', markAsModified);
-    elements.questionForm.addEventListener('input', markAsModified);
+    // Question field updates on blur (validate and save)
+    elements.questionId.addEventListener('blur', updateQuestionId);
+    elements.questionLabel.addEventListener('blur', updateQuestionLabel);
+    elements.questionType.addEventListener('blur', updateQuestionType);
+    elements.questionHelp.addEventListener('blur', updateQuestionHelp);
+    elements.questionVisibleWhen.addEventListener('blur', updateQuestionVisibleWhen);
+    elements.questionAllowOther.addEventListener('change', updateQuestionAllowOther);
+    elements.questionOtherPlaceholder.addEventListener('blur', updateQuestionOtherPlaceholder);
 }
 
 /**
@@ -547,6 +557,9 @@ function handleQuestionTypeChange() {
         const question = schema.categories[currentCategory].questions[currentQuestion];
         renderOptions(question.options || []);
     }
+    
+    // Save the type change when user changes it
+    updateQuestionType();
 }
 
 /**
@@ -678,23 +691,18 @@ function addNewOption() {
 }
 
 /**
- * Save category changes
+ * Update category ID (validate and save on blur)
  */
-function saveCategoryChanges(e) {
-    e.preventDefault();
+function updateCategoryId() {
+    if (currentView !== 'category' || currentCategory === null) return;
     
     const category = schema.categories[currentCategory];
     const newId = elements.categoryId.value.trim();
-    const newLabel = elements.categoryLabel.value.trim();
+    const errorElement = document.getElementById('categoryIdError');
     
-    // Validate
     if (!newId) {
-        showStatus('Category ID is required', 'error');
-        return;
-    }
-    
-    if (!newLabel) {
-        showStatus('Category label is required', 'error');
+        elements.categoryId.classList.add('is-invalid');
+        errorElement.textContent = 'Category ID is required';
         return;
     }
     
@@ -704,53 +712,302 @@ function saveCategoryChanges(e) {
             i !== currentCategory && c.id === newId
         );
         if (duplicate) {
-            showStatus('A category with this ID already exists', 'error');
+            elements.categoryId.classList.add('is-invalid');
+            errorElement.textContent = 'A category with this ID already exists';
             return;
         }
     }
     
-    // Update category
-    const oldId = category.id;
-    category.id = newId;
-    category.label = newLabel;
-    category.description = elements.categoryDescription.value.trim();
+    elements.categoryId.classList.remove('is-invalid');
+    errorElement.textContent = '';
     
-    // Update expanded categories set if ID changed
-    if (oldId !== newId && expandedCategories.has(oldId)) {
-        expandedCategories.delete(oldId);
-        expandedCategories.add(newId);
+    // Update schema if valid and changed
+    if (newId !== category.id) {
+        const oldId = category.id;
+        category.id = newId;
+        
+        // Update expanded categories set if ID changed
+        if (expandedCategories.has(oldId)) {
+            expandedCategories.delete(oldId);
+            expandedCategories.add(newId);
+        }
+        
+        markAsModified();
+        renderTree();
     }
-    
-    markAsModified();
-    renderTree();
-    showStatus('Category updated', 'success');
 }
 
 /**
- * Save question changes
+ * Update category label (validate and save on blur)
  */
-function saveQuestionChanges(e) {
-    e.preventDefault();
+function updateCategoryLabel() {
+    if (currentView !== 'category' || currentCategory === null) return;
+    
+    const category = schema.categories[currentCategory];
+    const newLabel = elements.categoryLabel.value.trim();
+    
+    if (!newLabel) {
+        elements.categoryLabel.classList.add('is-invalid');
+        return;
+    }
+    
+    elements.categoryLabel.classList.remove('is-invalid');
+    
+    // Update schema if changed
+    if (newLabel !== category.label) {
+        category.label = newLabel;
+        markAsModified();
+        renderTree();
+    }
+}
+
+/**
+ * Update category description (save on blur)
+ */
+function updateCategoryDescription() {
+    if (currentView !== 'category' || currentCategory === null) return;
+    
+    const category = schema.categories[currentCategory];
+    const newDescription = elements.categoryDescription.value.trim();
+    
+    // Update schema if changed
+    if (newDescription !== category.description) {
+        category.description = newDescription;
+        markAsModified();
+    }
+}
+
+/**
+ * Validate category ID field
+ */
+function validateCategoryId() {
+    const category = schema.categories[currentCategory];
+    const newId = elements.categoryId.value.trim();
+    const errorElement = document.getElementById('categoryIdError');
+    
+    if (!newId) {
+        elements.categoryId.classList.add('is-invalid');
+        errorElement.textContent = 'Category ID is required';
+        return false;
+    }
+    
+    // Check for duplicate ID (if changed)
+    if (newId !== category.id) {
+        const duplicate = schema.categories.find((c, i) => 
+            i !== currentCategory && c.id === newId
+        );
+        if (duplicate) {
+            elements.categoryId.classList.add('is-invalid');
+            errorElement.textContent = 'A category with this ID already exists';
+            return false;
+        }
+    }
+    
+    elements.categoryId.classList.remove('is-invalid');
+    errorElement.textContent = '';
+    return true;
+}
+
+/**
+ * Validate category label field
+ */
+function validateCategoryLabel() {
+    const newLabel = elements.categoryLabel.value.trim();
+    
+    if (!newLabel) {
+        elements.categoryLabel.classList.add('is-invalid');
+        return false;
+    }
+    
+    elements.categoryLabel.classList.remove('is-invalid');
+    return true;
+}
+
+/**
+ * Update question ID (validate and save on blur)
+ */
+function updateQuestionId() {
+    if (currentView !== 'question' || currentCategory === null || currentQuestion === null) return;
     
     const question = schema.categories[currentCategory].questions[currentQuestion];
     const newId = elements.questionId.value.trim();
-    const newLabel = elements.questionLabel.value.trim();
-    const newType = elements.questionType.value;
+    const errorElement = document.getElementById('questionIdError');
     
-    // Validate
     if (!newId) {
-        showStatus('Question ID is required', 'error');
+        elements.questionId.classList.add('is-invalid');
+        errorElement.textContent = 'Question ID is required';
         return;
     }
+    
+    // Check for duplicate ID (across all categories)
+    let duplicate = false;
+    for (let catIdx = 0; catIdx < schema.categories.length; catIdx++) {
+        const cat = schema.categories[catIdx];
+        for (let qIdx = 0; qIdx < (cat.questions || []).length; qIdx++) {
+            if (catIdx === currentCategory && qIdx === currentQuestion) continue;
+            if (cat.questions[qIdx].id === newId) {
+                duplicate = true;
+                break;
+            }
+        }
+        if (duplicate) break;
+    }
+    
+    if (duplicate) {
+        elements.questionId.classList.add('is-invalid');
+        errorElement.textContent = 'A question with this ID already exists';
+        return;
+    }
+    
+    elements.questionId.classList.remove('is-invalid');
+    errorElement.textContent = '';
+    
+    // Update schema if valid and changed
+    if (newId !== question.id) {
+        question.id = newId;
+        markAsModified();
+        renderTree();
+    }
+}
+
+/**
+ * Update question label (validate and save on blur)
+ */
+function updateQuestionLabel() {
+    if (currentView !== 'question' || currentCategory === null || currentQuestion === null) return;
+    
+    const question = schema.categories[currentCategory].questions[currentQuestion];
+    const newLabel = elements.questionLabel.value.trim();
     
     if (!newLabel) {
-        showStatus('Question label is required', 'error');
+        elements.questionLabel.classList.add('is-invalid');
         return;
     }
     
+    elements.questionLabel.classList.remove('is-invalid');
+    
+    // Update schema if changed
+    if (newLabel !== question.label) {
+        question.label = newLabel;
+        markAsModified();
+        renderTree();
+    }
+}
+
+/**
+ * Update question type (validate and save on blur/change)
+ */
+function updateQuestionType() {
+    if (currentView !== 'question' || currentCategory === null || currentQuestion === null) return;
+    
+    const question = schema.categories[currentCategory].questions[currentQuestion];
+    const newType = elements.questionType.value;
+    
     if (!newType) {
-        showStatus('Question type is required', 'error');
+        elements.questionType.classList.add('is-invalid');
         return;
+    }
+    
+    elements.questionType.classList.remove('is-invalid');
+    
+    // Update schema if changed
+    if (newType !== question.type) {
+        question.type = newType;
+        
+        // Handle options for choice-based questions
+        if (['radio', 'multiselect', 'dropdown'].includes(newType)) {
+            if (!question.options) {
+                question.options = [];
+            }
+        } else {
+            // Remove options-related fields for non-choice questions
+            delete question.options;
+            delete question.allowOther;
+            delete question.otherPlaceholder;
+        }
+        
+        markAsModified();
+        // Don't call handleQuestionTypeChange here as it will be called by the change event
+    }
+}
+
+/**
+ * Update question help text (save on blur)
+ */
+function updateQuestionHelp() {
+    if (currentView !== 'question' || currentCategory === null || currentQuestion === null) return;
+    
+    const question = schema.categories[currentCategory].questions[currentQuestion];
+    const newHelp = elements.questionHelp.value.trim();
+    
+    // Update schema if changed
+    if (newHelp !== (question.help || '')) {
+        question.help = newHelp;
+        markAsModified();
+    }
+}
+
+/**
+ * Update question visibleWhen (save on blur)
+ */
+function updateQuestionVisibleWhen() {
+    if (currentView !== 'question' || currentCategory === null || currentQuestion === null) return;
+    
+    const question = schema.categories[currentCategory].questions[currentQuestion];
+    const newVisibleWhen = elements.questionVisibleWhen.value.trim();
+    
+    // Update schema if changed
+    const currentValue = question.visibleWhen || '';
+    if (newVisibleWhen !== currentValue) {
+        question.visibleWhen = newVisibleWhen || undefined;
+        markAsModified();
+    }
+}
+
+/**
+ * Update question allowOther (save on change)
+ */
+function updateQuestionAllowOther() {
+    if (currentView !== 'question' || currentCategory === null || currentQuestion === null) return;
+    
+    const question = schema.categories[currentCategory].questions[currentQuestion];
+    const newAllowOther = elements.questionAllowOther.checked;
+    
+    // Update schema if changed
+    if (newAllowOther !== (question.allowOther || false)) {
+        question.allowOther = newAllowOther;
+        markAsModified();
+    }
+}
+
+/**
+ * Update question otherPlaceholder (save on blur)
+ */
+function updateQuestionOtherPlaceholder() {
+    if (currentView !== 'question' || currentCategory === null || currentQuestion === null) return;
+    
+    const question = schema.categories[currentCategory].questions[currentQuestion];
+    const newPlaceholder = elements.questionOtherPlaceholder.value.trim();
+    
+    // Update schema if changed
+    const currentValue = question.otherPlaceholder || '';
+    if (newPlaceholder !== currentValue) {
+        question.otherPlaceholder = newPlaceholder || undefined;
+        markAsModified();
+    }
+}
+
+/**
+ * Validate question ID field
+ */
+function validateQuestionId() {
+    const newId = elements.questionId.value.trim();
+    const errorElement = document.getElementById('questionIdError');
+    
+    if (!newId) {
+        elements.questionId.classList.add('is-invalid');
+        errorElement.textContent = 'Question ID is required';
+        return false;
     }
     
     // Check for duplicate ID (across all categories)
@@ -759,34 +1016,105 @@ function saveQuestionChanges(e) {
         for (let qIdx = 0; qIdx < (cat.questions || []).length; qIdx++) {
             if (catIdx === currentCategory && qIdx === currentQuestion) continue;
             if (cat.questions[qIdx].id === newId) {
-                showStatus('A question with this ID already exists', 'error');
-                return;
+                elements.questionId.classList.add('is-invalid');
+                errorElement.textContent = 'A question with this ID already exists';
+                return false;
             }
         }
     }
     
-    // Update question
-    question.id = newId;
-    question.label = newLabel;
-    question.type = newType;
-    question.help = elements.questionHelp.value.trim();
-    question.visibleWhen = elements.questionVisibleWhen.value.trim() || undefined;
+    elements.questionId.classList.remove('is-invalid');
+    errorElement.textContent = '';
+    return true;
+}
+
+/**
+ * Validate question label field
+ */
+function validateQuestionLabel() {
+    const newLabel = elements.questionLabel.value.trim();
     
-    // Handle options for choice-based questions
-    if (['radio', 'multiselect', 'dropdown'].includes(newType)) {
-        question.allowOther = elements.questionAllowOther.checked;
-        question.otherPlaceholder = elements.questionOtherPlaceholder.value.trim() || undefined;
-        // Options are already updated via handleOptionChange
-    } else {
-        // Remove options-related fields for non-choice questions
-        delete question.options;
-        delete question.allowOther;
-        delete question.otherPlaceholder;
+    if (!newLabel) {
+        elements.questionLabel.classList.add('is-invalid');
+        return false;
     }
     
-    markAsModified();
+    elements.questionLabel.classList.remove('is-invalid');
+    return true;
+}
+
+/**
+ * Validate question type field
+ */
+function validateQuestionType() {
+    const newType = elements.questionType.value;
+    
+    if (!newType) {
+        elements.questionType.classList.add('is-invalid');
+        return false;
+    }
+    
+    elements.questionType.classList.remove('is-invalid');
+    return true;
+}
+
+/**
+ * Save category changes
+ * Form submit handler - validates all fields (for Enter key support)
+ * Note: Individual fields are already saved on blur via update functions
+ */
+function saveCategoryChanges(e) {
+    e.preventDefault();
+    
+    // Validate all fields
+    const isIdValid = validateCategoryId();
+    const isLabelValid = validateCategoryLabel();
+    
+    if (!isIdValid || !isLabelValid) {
+        showStatus('Please fix validation errors', 'error');
+        return;
+    }
+    
+    // Data is already updated via blur handlers
+    // Just trigger a final update and re-render
+    updateCategoryId();
+    updateCategoryLabel();
+    updateCategoryDescription();
+    
     renderTree();
-    showStatus('Question updated', 'success');
+    showStatus('Category saved', 'success');
+}
+
+/**
+ * Save question changes
+ * Form submit handler - validates all fields (for Enter key support)
+ * Note: Individual fields are already saved on blur via update functions
+ */
+function saveQuestionChanges(e) {
+    e.preventDefault();
+    
+    // Validate all fields
+    const isIdValid = validateQuestionId();
+    const isLabelValid = validateQuestionLabel();
+    const isTypeValid = validateQuestionType();
+    
+    if (!isIdValid || !isLabelValid || !isTypeValid) {
+        showStatus('Please fix validation errors', 'error');
+        return;
+    }
+    
+    // Data is already updated via blur handlers
+    // Just trigger a final update and re-render
+    updateQuestionId();
+    updateQuestionLabel();
+    updateQuestionType();
+    updateQuestionHelp();
+    updateQuestionVisibleWhen();
+    updateQuestionAllowOther();
+    updateQuestionOtherPlaceholder();
+    
+    renderTree();
+    showStatus('Question saved', 'success');
 }
 
 /**

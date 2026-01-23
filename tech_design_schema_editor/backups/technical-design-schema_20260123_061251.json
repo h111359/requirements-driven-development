@@ -3402,6 +3402,39 @@
           "allowOther": true
         },
         {
+          "id": "DA_DAXPractices",
+          "label": "Calculation/query practices",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "DAX measures",
+              "label": "DAX measures"
+            },
+            {
+              "id": "Calculated columns",
+              "label": "Calculated columns"
+            },
+            {
+              "id": "SQL logic in backend",
+              "label": "SQL logic in backend"
+            },
+            {
+              "id": "dbt transformations",
+              "label": "dbt transformations"
+            },
+            {
+              "id": "Custom query logic",
+              "label": "Custom query logic"
+            },
+            {
+              "id": "No calculation layer",
+              "label": "No calculation layer"
+            }
+          ],
+          "allowOther": true
+        },
+        {
           "id": "DA_AccessControl",
           "label": "Access control strategies for reports",
           "type": "multiselect",
@@ -3438,6 +3471,153 @@
             {
               "id": "No access control",
               "label": "No access control"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_ContentGovernance",
+          "label": "Content governance practices",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Certified datasets",
+              "label": "Certified datasets"
+            },
+            {
+              "id": "Approved semantic models",
+              "label": "Approved semantic models"
+            },
+            {
+              "id": "Workspace management policies",
+              "label": "Workspace management policies"
+            },
+            {
+              "id": "Data lineage in catalog",
+              "label": "Data lineage in catalog"
+            },
+            {
+              "id": "Version control for reports",
+              "label": "Version control for reports"
+            },
+            {
+              "id": "Report publishing standards",
+              "label": "Report publishing standards"
+            },
+            {
+              "id": "No governance",
+              "label": "No governance"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_RefreshModes",
+          "label": "Data refresh modes used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Scheduled refresh",
+              "label": "Scheduled refresh"
+            },
+            {
+              "id": "Real-time refresh",
+              "label": "Real-time refresh"
+            },
+            {
+              "id": "On-demand refresh",
+              "label": "On-demand refresh"
+            },
+            {
+              "id": "Continuous ingestion-triggered refresh",
+              "label": "Continuous ingestion-triggered refresh"
+            },
+            {
+              "id": "Manual refresh",
+              "label": "Manual refresh"
+            },
+            {
+              "id": "No refresh process",
+              "label": "No refresh process"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_RefreshFrequency",
+          "label": "Typical dataset refresh frequency",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Real-time",
+              "label": "Real-time"
+            },
+            {
+              "id": "Every 15 minutes",
+              "label": "Every 15 minutes"
+            },
+            {
+              "id": "Hourly",
+              "label": "Hourly"
+            },
+            {
+              "id": "Every few hours",
+              "label": "Every few hours"
+            },
+            {
+              "id": "Daily",
+              "label": "Daily"
+            },
+            {
+              "id": "Weekly",
+              "label": "Weekly"
+            },
+            {
+              "id": "Custom frequency",
+              "label": "Custom frequency"
+            }
+          ]
+        },
+        {
+          "id": "DA_DistributionMethods",
+          "label": "Methods used to distribute dashboards/reports",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Power BI Apps",
+              "label": "Power BI Apps"
+            },
+            {
+              "id": "Shared workspaces",
+              "label": "Shared workspaces"
+            },
+            {
+              "id": "Email subscription",
+              "label": "Email subscription"
+            },
+            {
+              "id": "Embedded analytics",
+              "label": "Embedded analytics"
+            },
+            {
+              "id": "Public links",
+              "label": "Public links"
+            },
+            {
+              "id": "Export to PDF",
+              "label": "Export to PDF"
+            },
+            {
+              "id": "API-driven distribution",
+              "label": "API-driven distribution"
+            },
+            {
+              "id": "No distribution",
+              "label": "No distribution"
             }
           ],
           "allowOther": true

@@ -3402,6 +3402,39 @@
           "allowOther": true
         },
         {
+          "id": "DA_DAXPractices",
+          "label": "Calculation/query practices",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "DAX measures",
+              "label": "DAX measures"
+            },
+            {
+              "id": "Calculated columns",
+              "label": "Calculated columns"
+            },
+            {
+              "id": "SQL logic in backend",
+              "label": "SQL logic in backend"
+            },
+            {
+              "id": "dbt transformations",
+              "label": "dbt transformations"
+            },
+            {
+              "id": "Custom query logic",
+              "label": "Custom query logic"
+            },
+            {
+              "id": "No calculation layer",
+              "label": "No calculation layer"
+            }
+          ],
+          "allowOther": true
+        },
+        {
           "id": "DA_AccessControl",
           "label": "Access control strategies for reports",
           "type": "multiselect",

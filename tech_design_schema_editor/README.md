@@ -61,7 +61,8 @@ The editor uses a two-panel layout:
 
 **Right Panel:**
 - Form editor for the selected category or question
-- Save, validate, and delete buttons
+- Changes are automatically saved as you type
+- Validate and delete buttons available
 
 ### Working with Categories
 
@@ -70,12 +71,12 @@ The editor uses a two-panel layout:
 2. Fill in the Category ID (use PascalCase, e.g., "Product", "Architecture")
 3. Enter a display label
 4. Optionally add a description
-5. Click "Save Category"
+5. Changes are saved automatically
 
 **Edit an existing category:**
 1. Click the category name in the sidebar
 2. Modify the fields
-3. Click "Save Category"
+3. Changes are saved automatically
 
 **Delete a category:**
 1. Select the category
@@ -85,7 +86,7 @@ The editor uses a two-panel layout:
 **Reorder categories:**
 1. Click the ↑ (up) or ↓ (down) arrow buttons next to a category name
 2. Or select a category and use Alt+Up or Alt+Down keyboard shortcuts
-3. The schema will be marked as modified (remember to save)
+3. Changes are saved automatically
 
 ### Working with Questions
 
@@ -99,12 +100,12 @@ The editor uses a two-panel layout:
    - **Help Text**: Optional additional context
    - **Conditional Visibility**: JavaScript expression for when to show this question
 4. If using radio/multiselect/dropdown, add options
-5. Click "Save Question"
+5. Changes are saved automatically
 
 **Edit a question:**
 1. Click the question in the sidebar
 2. Modify the fields
-3. Click "Save Question"
+3. Changes are saved automatically
 
 **Delete a question:**
 1. Select the question
@@ -114,7 +115,7 @@ The editor uses a two-panel layout:
 **Reorder questions:**
 1. Click the ↑ (up) or ↓ (down) arrow buttons next to a question name
 2. Or select a question and use Alt+Up or Alt+Down keyboard shortcuts
-3. The schema will be marked as modified (remember to save)
+3. Changes are saved automatically
 
 ### Question Types
 
@@ -188,14 +189,13 @@ Click the "✓ Validate" button in the top toolbar to validate without saving.
 
 ### Saving Changes
 
-1. Click "💾 Save" in the top toolbar
-2. The editor will:
-   - Validate the schema
-   - Create an automatic backup in `./backups/`
-   - Save the schema to `.rdd/config/technical-design-schema.json`
-3. Success or error messages will appear in the status bar
+Changes are **automatically saved** as you edit:
+- When you modify category or question fields, changes are saved immediately
+- The status bar shows "Saving..." during save and "Saved" when complete
+- Automatic backups are created in `./backups/` before each save
+- The save operation uses atomic writes to prevent data corruption
 
-**Important:** The save operation uses atomic writes (write to temp file, then rename) to prevent data corruption.
+**Note:** You can press Enter in form fields to trigger validation and save immediately.
 
 ### Backups
 
@@ -209,7 +209,7 @@ Click "📦 Backup" in the top toolbar to create a backup without saving.
 
 ### Reloading
 
-Click "🔄 Reload" to reload the schema from the file system. You'll be warned if you have unsaved changes.
+Click "🔄 Reload" to reload the schema from the file system.
 
 ## Schema Structure
 
@@ -323,8 +323,8 @@ The editor enforces these rules:
 **Problem: Changes not saving**
 - Solution: Check the browser console (F12) for errors. Make sure you have write permissions to the schema file.
 
-**Problem: Validation errors after save**
-- Solution: Click "✓ Validate" to see specific errors. Fix the issues and save again.
+**Problem: Validation errors after editing**
+- Solution: Click "✓ Validate" to see specific errors. Fix the issues and changes will be saved automatically.
 
 **Problem: Browser doesn't open automatically**
 - Solution: Manually open http://localhost:8765 in your browser.

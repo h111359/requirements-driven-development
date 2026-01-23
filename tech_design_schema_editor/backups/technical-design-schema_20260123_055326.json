@@ -9,7 +9,7 @@
       "questions": [
         {
           "id": "Product_PrimaryProductCategory",
-          "label": "Product aspects",
+          "label": "Product aspects 2",
           "type": "multiselect",
           "help": "Choose the product archetype(s).",
           "options": [
@@ -2642,6 +2642,75 @@
           "allowOther": true
         },
         {
+          "id": "DA_FileFormats",
+          "label": "File formats used in the lake (select all that apply)",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Parquet",
+              "label": "Parquet"
+            },
+            {
+              "id": "Delta Lake (Delta)",
+              "label": "Delta Lake (Delta)"
+            },
+            {
+              "id": "CSV",
+              "label": "CSV"
+            },
+            {
+              "id": "JSON",
+              "label": "JSON"
+            },
+            {
+              "id": "Avro",
+              "label": "Avro"
+            },
+            {
+              "id": "ORC",
+              "label": "ORC"
+            },
+            {
+              "id": "Binary/other custom",
+              "label": "Binary/other custom"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_LakeStoragePlatform",
+          "label": "Primary storage platform",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure Data Lake Gen2",
+              "label": "Azure Data Lake Gen2"
+            },
+            {
+              "id": "Azure Blob Storage",
+              "label": "Azure Blob Storage"
+            },
+            {
+              "id": "S3",
+              "label": "S3"
+            },
+            {
+              "id": "GCP Cloud Storage",
+              "label": "GCP Cloud Storage"
+            },
+            {
+              "id": "HDFS",
+              "label": "HDFS"
+            },
+            {
+              "id": "Snowflake internal storage",
+              "label": "Snowflake internal storage"
+            }
+          ]
+        },
+        {
           "id": "DA_DataWarehouse",
           "label": "Enterprise data warehouse technologies (select all that apply)",
           "type": "multiselect",
@@ -2670,6 +2739,10 @@
             {
               "id": "Redshift",
               "label": "Redshift"
+            },
+            {
+              "id": "SQL Server (on-prem or VM)",
+              "label": "SQL Server (on-prem or VM)"
             }
           ],
           "allowOther": true
@@ -2746,19 +2819,105 @@
               "label": "Azure DevOps"
             },
             {
-              "id": "Azure Functions ",
-              "label": "Azure Functions "
-            },
-            {
               "id": "Custom scheduler",
               "label": "Custom scheduler"
-            },
-            {
-              "id": "No orchestration",
-              "label": "No orchestration"
             }
           ],
           "allowOther": true
+        },
+        {
+          "id": "DA_QualityDimensions",
+          "label": "Data quality dimensions evaluated (select all that apply)",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Accuracy",
+              "label": "Accuracy"
+            },
+            {
+              "id": "Completeness",
+              "label": "Completeness"
+            },
+            {
+              "id": "Consistency",
+              "label": "Consistency"
+            },
+            {
+              "id": "Timeliness",
+              "label": "Timeliness"
+            },
+            {
+              "id": "Uniqueness",
+              "label": "Uniqueness"
+            },
+            {
+              "id": "Validity",
+              "label": "Validity"
+            },
+            {
+              "id": "Freshness",
+              "label": "Freshness"
+            },
+            {
+              "id": "Referential integrity",
+              "label": "Referential integrity"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_LineageTools",
+          "label": "Lineage/collaboration tools (select all that apply)",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure Purview",
+              "label": "Azure Purview"
+            },
+            {
+              "id": "Databricks Unity Catalog",
+              "label": "Databricks Unity Catalog"
+            },
+            {
+              "id": "Collibra",
+              "label": "Collibra"
+            },
+            {
+              "id": "Alation",
+              "label": "Alation"
+            },
+            {
+              "id": "OpenMetadata",
+              "label": "OpenMetadata"
+            },
+            {
+              "id": "Custom metadata tracking",
+              "label": "Custom metadata tracking"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_BusinessGlossary",
+          "label": "Is a business glossary maintained?",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "No",
+              "label": "No"
+            },
+            {
+              "id": "Yes – manually maintained",
+              "label": "Yes – manually maintained"
+            },
+            {
+              "id": "Yes – integrated with data catalog",
+              "label": "Yes – integrated with data catalog"
+            }
+          ]
         },
         {
           "id": "DA_BIPlatforms",
@@ -2826,6 +2985,47 @@
             {
               "id": "No semantic layer",
               "label": "No semantic layer"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_SourceSystems",
+          "label": "Primary systems providing data",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "SAP",
+              "label": "SAP"
+            },
+            {
+              "id": "Salesforce",
+              "label": "Salesforce"
+            },
+            {
+              "id": "Dynamics 365",
+              "label": "Dynamics 365"
+            },
+            {
+              "id": "Custom line-of-business systems",
+              "label": "Custom line-of-business systems"
+            },
+            {
+              "id": "PostgreSQL/MySQL/SQL DBs",
+              "label": "PostgreSQL/MySQL/SQL DBs"
+            },
+            {
+              "id": "Legacy on-prem SQL servers",
+              "label": "Legacy on-prem SQL servers"
+            },
+            {
+              "id": "Third-party SaaS",
+              "label": "Third-party SaaS"
+            },
+            {
+              "id": "Cloud-native applications",
+              "label": "Cloud-native applications"
             }
           ],
           "allowOther": true
@@ -2985,8 +3185,8 @@
           "help": "",
           "options": [
             {
-              "id": "Azure Data Lake Gen2",
-              "label": "Azure Data Lake Gen2"
+              "id": "Azure Data Lake Storage Gen2",
+              "label": "Azure Data Lake Storage Gen2"
             },
             {
               "id": "Azure Blob Storage",
@@ -3009,20 +3209,16 @@
               "label": "Cosmos DB"
             },
             {
+              "id": "ElasticSearch",
+              "label": "ElasticSearch"
+            },
+            {
               "id": "On-prem storage",
               "label": "On-prem storage"
             },
             {
               "id": "External storage systems",
               "label": "External storage systems"
-            },
-            {
-              "id": "GCP Cloud Storage",
-              "label": "GCP Cloud Storage"
-            },
-            {
-              "id": "S3",
-              "label": "S3"
             }
           ],
           "allowOther": true
@@ -3102,34 +3298,66 @@
           "allowOther": true
         },
         {
-          "id": "DA_LineageTools",
-          "label": "Lineage / collaboration tools",
+          "id": "DA_LineageCoverage",
+          "label": "Lineage coverage",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "No lineage",
+              "label": "No lineage"
+            },
+            {
+              "id": "Partial lineage",
+              "label": "Partial lineage"
+            },
+            {
+              "id": "End-to-end lineage for key assets",
+              "label": "End-to-end lineage for key assets"
+            },
+            {
+              "id": "Full pipeline lineage",
+              "label": "Full pipeline lineage"
+            },
+            {
+              "id": "Automated lineage with catalog",
+              "label": "Automated lineage with catalog"
+            }
+          ]
+        },
+        {
+          "id": "DA_SensitiveDataTypes",
+          "label": "Types of sensitive data processed",
           "type": "multiselect",
           "help": "",
           "options": [
             {
-              "id": "Azure Purview",
-              "label": "Azure Purview"
+              "id": "PII",
+              "label": "PII"
             },
             {
-              "id": "Databricks Unity Catalog",
-              "label": "Databricks Unity Catalog"
+              "id": "Financial data",
+              "label": "Financial data"
             },
             {
-              "id": "Collibra",
-              "label": "Collibra"
+              "id": "Health data",
+              "label": "Health data"
             },
             {
-              "id": "Alation",
-              "label": "Alation"
+              "id": "Company confidential data",
+              "label": "Company confidential data"
             },
             {
-              "id": "OpenMetadata",
-              "label": "OpenMetadata"
+              "id": "Operational sensitive data",
+              "label": "Operational sensitive data"
             },
             {
-              "id": "Custom metadata tracking",
-              "label": "Custom metadata tracking"
+              "id": "User behavioral data",
+              "label": "User behavioral data"
+            },
+            {
+              "id": "No sensitive data",
+              "label": "No sensitive data"
             }
           ],
           "allowOther": true
@@ -3171,6 +3399,104 @@
             {
               "id": "No protection",
               "label": "No protection"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_WarehouseTech",
+          "label": "Warehouse technologies used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Synapse dedicated SQL pool",
+              "label": "Synapse dedicated SQL pool"
+            },
+            {
+              "id": "Databricks SQL Warehouse",
+              "label": "Databricks SQL Warehouse"
+            },
+            {
+              "id": "Snowflake",
+              "label": "Snowflake"
+            },
+            {
+              "id": "BigQuery",
+              "label": "BigQuery"
+            },
+            {
+              "id": "SQL Server",
+              "label": "SQL Server"
+            },
+            {
+              "id": "No warehouse",
+              "label": "No warehouse"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_LakehouseApproach",
+          "label": "Lakehouse approach",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "No lakehouse",
+              "label": "No lakehouse"
+            },
+            {
+              "id": "Basic Delta architecture",
+              "label": "Basic Delta architecture"
+            },
+            {
+              "id": "Full lakehouse architecture",
+              "label": "Full lakehouse architecture"
+            },
+            {
+              "id": "Lakehouse with compute federation",
+              "label": "Lakehouse with compute federation"
+            },
+            {
+              "id": "Hybrid warehouse + lakehouse",
+              "label": "Hybrid warehouse + lakehouse"
+            }
+          ]
+        },
+        {
+          "id": "DA_OrchestrationTools",
+          "label": "Pipeline orchestration tools",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure Data Factory",
+              "label": "Azure Data Factory"
+            },
+            {
+              "id": "Synapse Pipelines",
+              "label": "Synapse Pipelines"
+            },
+            {
+              "id": "Databricks Workflows",
+              "label": "Databricks Workflows"
+            },
+            {
+              "id": "Apache Airflow",
+              "label": "Apache Airflow"
+            },
+            {
+              "id": "Azure Functions orchestrators",
+              "label": "Azure Functions orchestrators"
+            },
+            {
+              "id": "Custom pipeline orchestrator",
+              "label": "Custom pipeline orchestrator"
+            },
+            {
+              "id": "No orchestration",
+              "label": "No orchestration"
             }
           ],
           "allowOther": true
@@ -3402,6 +3728,39 @@
           "allowOther": true
         },
         {
+          "id": "DA_DAXPractices",
+          "label": "Calculation/query practices",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "DAX measures",
+              "label": "DAX measures"
+            },
+            {
+              "id": "Calculated columns",
+              "label": "Calculated columns"
+            },
+            {
+              "id": "SQL logic in backend",
+              "label": "SQL logic in backend"
+            },
+            {
+              "id": "dbt transformations",
+              "label": "dbt transformations"
+            },
+            {
+              "id": "Custom query logic",
+              "label": "Custom query logic"
+            },
+            {
+              "id": "No calculation layer",
+              "label": "No calculation layer"
+            }
+          ],
+          "allowOther": true
+        },
+        {
           "id": "DA_AccessControl",
           "label": "Access control strategies for reports",
           "type": "multiselect",
@@ -3443,6 +3802,264 @@
           "allowOther": true
         },
         {
+          "id": "DA_ContentGovernance",
+          "label": "Content governance practices",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Certified datasets",
+              "label": "Certified datasets"
+            },
+            {
+              "id": "Approved semantic models",
+              "label": "Approved semantic models"
+            },
+            {
+              "id": "Workspace management policies",
+              "label": "Workspace management policies"
+            },
+            {
+              "id": "Data lineage in catalog",
+              "label": "Data lineage in catalog"
+            },
+            {
+              "id": "Version control for reports",
+              "label": "Version control for reports"
+            },
+            {
+              "id": "Report publishing standards",
+              "label": "Report publishing standards"
+            },
+            {
+              "id": "No governance",
+              "label": "No governance"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_RefreshModes",
+          "label": "Data refresh modes used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Scheduled refresh",
+              "label": "Scheduled refresh"
+            },
+            {
+              "id": "Real-time refresh",
+              "label": "Real-time refresh"
+            },
+            {
+              "id": "On-demand refresh",
+              "label": "On-demand refresh"
+            },
+            {
+              "id": "Continuous ingestion-triggered refresh",
+              "label": "Continuous ingestion-triggered refresh"
+            },
+            {
+              "id": "Manual refresh",
+              "label": "Manual refresh"
+            },
+            {
+              "id": "No refresh process",
+              "label": "No refresh process"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_RefreshFrequency",
+          "label": "Typical dataset refresh frequency",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Real-time",
+              "label": "Real-time"
+            },
+            {
+              "id": "Every 15 minutes",
+              "label": "Every 15 minutes"
+            },
+            {
+              "id": "Hourly",
+              "label": "Hourly"
+            },
+            {
+              "id": "Every few hours",
+              "label": "Every few hours"
+            },
+            {
+              "id": "Daily",
+              "label": "Daily"
+            },
+            {
+              "id": "Weekly",
+              "label": "Weekly"
+            },
+            {
+              "id": "Custom frequency",
+              "label": "Custom frequency"
+            }
+          ]
+        },
+        {
+          "id": "DA_DistributionMethods",
+          "label": "Methods used to distribute dashboards/reports",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Power BI Apps",
+              "label": "Power BI Apps"
+            },
+            {
+              "id": "Shared workspaces",
+              "label": "Shared workspaces"
+            },
+            {
+              "id": "Email subscription",
+              "label": "Email subscription"
+            },
+            {
+              "id": "Embedded analytics",
+              "label": "Embedded analytics"
+            },
+            {
+              "id": "Public links",
+              "label": "Public links"
+            },
+            {
+              "id": "Export to PDF",
+              "label": "Export to PDF"
+            },
+            {
+              "id": "API-driven distribution",
+              "label": "API-driven distribution"
+            },
+            {
+              "id": "No distribution",
+              "label": "No distribution"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_TargetAudiences",
+          "label": "Report/dashboard target audiences",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Executives",
+              "label": "Executives"
+            },
+            {
+              "id": "Business stakeholders",
+              "label": "Business stakeholders"
+            },
+            {
+              "id": "Team leaders",
+              "label": "Team leaders"
+            },
+            {
+              "id": "Operational teams",
+              "label": "Operational teams"
+            },
+            {
+              "id": "External partners",
+              "label": "External partners"
+            },
+            {
+              "id": "Customers",
+              "label": "Customers"
+            },
+            {
+              "id": "General employees",
+              "label": "General employees"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_PerformanceTechniques",
+          "label": "Performance optimization techniques used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Aggregation tables",
+              "label": "Aggregation tables"
+            },
+            {
+              "id": "Data model optimization",
+              "label": "Data model optimization"
+            },
+            {
+              "id": "Direct Lake",
+              "label": "Direct Lake"
+            },
+            {
+              "id": "Optimized DAX",
+              "label": "Optimized DAX"
+            },
+            {
+              "id": "Query folding",
+              "label": "Query folding"
+            },
+            {
+              "id": "Incremental refresh",
+              "label": "Incremental refresh"
+            },
+            {
+              "id": "Semantic model tuning",
+              "label": "Semantic model tuning"
+            },
+            {
+              "id": "No optimization techniques",
+              "label": "No optimization techniques"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_PerfMonitoring",
+          "label": "Performance monitoring tools",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Power BI Performance Analyzer",
+              "label": "Power BI Performance Analyzer"
+            },
+            {
+              "id": "Azure Monitor",
+              "label": "Azure Monitor"
+            },
+            {
+              "id": "Log Analytics",
+              "label": "Log Analytics"
+            },
+            {
+              "id": "Custom perf telemetry",
+              "label": "Custom perf telemetry"
+            },
+            {
+              "id": "Embedded usage analytics",
+              "label": "Embedded usage analytics"
+            },
+            {
+              "id": "No performance monitoring",
+              "label": "No performance monitoring"
+            }
+          ],
+          "allowOther": true
+        },
+        {
           "id": "DA_AdvancedFeatures",
           "label": "Advanced visualization features used",
           "type": "multiselect",
@@ -3479,6 +4096,39 @@
             {
               "id": "None",
               "label": "None"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_MLIntegration",
+          "label": "ML/AI integration into dashboards",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "ML predictions embedded in visuals",
+              "label": "ML predictions embedded in visuals"
+            },
+            {
+              "id": "Semantic search",
+              "label": "Semantic search"
+            },
+            {
+              "id": "Natural language Q&A",
+              "label": "Natural language Q&A"
+            },
+            {
+              "id": "RAG-based explanations",
+              "label": "RAG-based explanations"
+            },
+            {
+              "id": "Custom ML scoring APIs",
+              "label": "Custom ML scoring APIs"
+            },
+            {
+              "id": "No ML integration",
+              "label": "No ML integration"
             }
           ],
           "allowOther": true
@@ -3622,14 +4272,51 @@
           ]
         },
         {
-          "id": "DA_PIITypes",
-          "label": "Types of sensitive data processed",
+          "id": "DA_RetentionPolicyTypes",
+          "label": "Retention policy types applicable",
           "type": "multiselect",
           "help": "",
           "options": [
             {
-              "id": "Personal identifiers PII",
-              "label": "Personal identifiers PII"
+              "id": "Business retention",
+              "label": "Business retention"
+            },
+            {
+              "id": "Regulatory retention",
+              "label": "Regulatory retention"
+            },
+            {
+              "id": "Security-driven retention",
+              "label": "Security-driven retention"
+            },
+            {
+              "id": "Operational retention",
+              "label": "Operational retention"
+            },
+            {
+              "id": "Analytics retention",
+              "label": "Analytics retention"
+            },
+            {
+              "id": "Statutory records management",
+              "label": "Statutory records management"
+            },
+            {
+              "id": "No defined policy",
+              "label": "No defined policy"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_PIITypes",
+          "label": "PII/sensitive data types involved",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Personal identifiers",
+              "label": "Personal identifiers"
             },
             {
               "id": "Financial information",
@@ -3652,20 +4339,114 @@
               "label": "Biometric data"
             },
             {
-              "id": "User behavioral data",
-              "label": "User behavioral data"
-            },
-            {
               "id": "Authentication data",
               "label": "Authentication data"
             },
             {
-              "id": "Company confidential data",
-              "label": "Company confidential data"
+              "id": "No PII involved",
+              "label": "No PII involved"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_PIIRetention",
+          "label": "PII retention strategy",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Follow global retention policy",
+              "label": "Follow global retention policy"
             },
             {
-              "id": "No sensitive data",
-              "label": "No sensitive data"
+              "id": "Shorter retention for PII",
+              "label": "Shorter retention for PII"
+            },
+            {
+              "id": "Minimize PII retention to legal minimum",
+              "label": "Minimize PII retention to legal minimum"
+            },
+            {
+              "id": "Immediately anonymize after use",
+              "label": "Immediately anonymize after use"
+            },
+            {
+              "id": "No PII retention policy",
+              "label": "No PII retention policy"
+            }
+          ]
+        },
+        {
+          "id": "DA_RightToBeForgotten",
+          "label": "GDPR/Right-to-be-forgotten implementation",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Hard delete",
+              "label": "Hard delete"
+            },
+            {
+              "id": "Soft delete with purge",
+              "label": "Soft delete with purge"
+            },
+            {
+              "id": "Pseudonymization",
+              "label": "Pseudonymization"
+            },
+            {
+              "id": "Anonymization",
+              "label": "Anonymization"
+            },
+            {
+              "id": "Automated deletion workflows",
+              "label": "Automated deletion workflows"
+            },
+            {
+              "id": "Manual deletion process",
+              "label": "Manual deletion process"
+            },
+            {
+              "id": "Not applicable",
+              "label": "Not applicable"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_ArchiveCriteria",
+          "label": "Criteria for data archival",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Age-based criteria",
+              "label": "Age-based criteria"
+            },
+            {
+              "id": "Usage frequency-based criteria",
+              "label": "Usage frequency-based criteria"
+            },
+            {
+              "id": "Regulatory criteria",
+              "label": "Regulatory criteria"
+            },
+            {
+              "id": "Cost optimization",
+              "label": "Cost optimization"
+            },
+            {
+              "id": "Business-defined criteria",
+              "label": "Business-defined criteria"
+            },
+            {
+              "id": "Manual archival decisions",
+              "label": "Manual archival decisions"
+            },
+            {
+              "id": "No archival strategy",
+              "label": "No archival strategy"
             }
           ],
           "allowOther": true
@@ -3756,6 +4537,134 @@
             {
               "id": "No purge automation",
               "label": "No purge automation"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_LegalHoldTriggers",
+          "label": "Triggers for legal hold",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Regulatory investigation",
+              "label": "Regulatory investigation"
+            },
+            {
+              "id": "Active litigation",
+              "label": "Active litigation"
+            },
+            {
+              "id": "Audit preparation",
+              "label": "Audit preparation"
+            },
+            {
+              "id": "Security incident review",
+              "label": "Security incident review"
+            },
+            {
+              "id": "Internal governance requirement",
+              "label": "Internal governance requirement"
+            },
+            {
+              "id": "No legal hold triggers",
+              "label": "No legal hold triggers"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_LegalHoldMechanisms",
+          "label": "Mechanisms for legal hold",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Blocking deletion",
+              "label": "Blocking deletion"
+            },
+            {
+              "id": "Retention extension",
+              "label": "Retention extension"
+            },
+            {
+              "id": "Tag-based legal hold",
+              "label": "Tag-based legal hold"
+            },
+            {
+              "id": "Data classification-driven lock",
+              "label": "Data classification-driven lock"
+            },
+            {
+              "id": "Policy-driven lock",
+              "label": "Policy-driven lock"
+            },
+            {
+              "id": "No legal hold mechanism",
+              "label": "No legal hold mechanism"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_RetentionAudit",
+          "label": "Auditing of retention enforcement",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Retention policy logs",
+              "label": "Retention policy logs"
+            },
+            {
+              "id": "Deletion/purge logs",
+              "label": "Deletion/purge logs"
+            },
+            {
+              "id": "Data access logs",
+              "label": "Data access logs"
+            },
+            {
+              "id": "Data transformation lineage",
+              "label": "Data transformation lineage"
+            },
+            {
+              "id": "Policy change logs",
+              "label": "Policy change logs"
+            },
+            {
+              "id": "No retention audit",
+              "label": "No retention audit"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_DataContracts",
+          "label": "Data contracts enforcing lifecycle/retention rules",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Contract-defined retention",
+              "label": "Contract-defined retention"
+            },
+            {
+              "id": "Contract-defined expiration",
+              "label": "Contract-defined expiration"
+            },
+            {
+              "id": "Contract-defined data ownership",
+              "label": "Contract-defined data ownership"
+            },
+            {
+              "id": "Contract-defined deletion policies",
+              "label": "Contract-defined deletion policies"
+            },
+            {
+              "id": "No data contracts",
+              "label": "No data contracts"
             }
           ],
           "allowOther": true

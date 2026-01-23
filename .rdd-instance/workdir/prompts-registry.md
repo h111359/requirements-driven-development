@@ -633,3 +633,12 @@ Add reordering functionality to the Technical Design Schema Editor (`tech_design
 %%PROMPT P-020 "Tech design schema editor - auto save"
 I want the Technical Design Schema Editor in `tech_design_schema_editor` to save automatically the changes made by the user in the Web UI. There should be no need of save buttons.
 %%ENDPROMPT
+
+%%PROMPT P-021 "Remove Save Question button"
+In Technical Design Schema Editor remove "Save Question" button as the question modifications should be automatically saved
+
+
+### Modification 001
+
+The auto-save functionality is not working when I edit the fields of a category. Similar issue exists for questions as well - when I edit a question, no autosave. Troubleshoot and fix
+%%ENDPROMPT

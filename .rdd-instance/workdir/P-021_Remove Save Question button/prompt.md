@@ -1,0 +1,1 @@
+In Technical Design Schema Editor remove "Save Question" button as the question modifications should be automatically saved

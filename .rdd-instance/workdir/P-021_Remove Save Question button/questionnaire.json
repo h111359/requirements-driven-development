@@ -1,0 +1,131 @@
+{
+  "context": "The Technical Design Schema Editor currently has a 'Save Question' button in the question editor form. The prompt requests removing this button because question modifications should be automatically saved (auto-save functionality is already implemented). This questionnaire clarifies the scope of changes and user experience expectations.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Should we also remove the 'Save Category' button, or only remove the 'Save Question' button?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Remove both 'Save Question' and 'Save Category' buttons - apply auto-save consistently across the entire editor",
+          "pros": "Consistent user experience, simpler UI, aligns with modern auto-save UX patterns, reduces cognitive load",
+          "cons": "Larger scope of change, users might initially expect explicit save buttons, requires testing both category and question editing flows"
+        },
+        {
+          "id": "B",
+          "label": "Remove only the 'Save Question' button as specified in the prompt",
+          "pros": "Minimal scope matching exact prompt requirement, lower risk of unintended changes, faster implementation",
+          "cons": "Inconsistent UX (categories have save button but questions don't), might confuse users about when changes are saved"
+        },
+        {
+          "id": "C",
+          "label": "Keep both buttons but change them to informational labels (e.g., 'Auto-saved')",
+          "pros": "Provides clear feedback about auto-save status, maintains form structure, minimal UX disruption",
+          "cons": "Doesn't truly remove the button as requested, clutters UI with non-interactive element in button position"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Removing both buttons provides the most consistent and modern user experience. Since auto-save is already implemented and working, there's no technical reason to keep explicit save buttons. This aligns with the framework principle of providing a simplified developer experience (per UR-0004).",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "After removing the save button(s), how should form validation and error handling work?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Validate on blur (when user leaves each field) and show inline errors immediately",
+          "pros": "Instant feedback, catches errors early, prevents invalid data from being saved, better UX for required fields",
+          "cons": "Can be distracting if errors show while user is still typing, requires more event handlers"
+        },
+        {
+          "id": "B",
+          "label": "Validate only when auto-save is triggered and show errors in status bar",
+          "pros": "Less intrusive, validates complete form state, simpler implementation leveraging existing auto-save flow",
+          "cons": "User might not notice validation errors, invalid state could be temporarily saved"
+        },
+        {
+          "id": "C",
+          "label": "Keep existing form submit handler but trigger it automatically on field changes (debounced)",
+          "pros": "Reuses existing validation logic, maintains form semantics, debouncing reduces validation frequency",
+          "cons": "More complex event handling, form submit without explicit button might be confusing to maintain"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Field-level validation on blur provides the best user experience by giving immediate feedback when users make mistakes, while debouncing auto-save prevents excessive server calls. This approach is widely used in modern web applications and feels natural.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "How should we handle the form submit event after removing the submit button?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Remove the form submit event handler entirely and rely only on input event handlers for auto-save",
+          "pros": "Clean separation of concerns, simpler code, no duplicate save logic",
+          "cons": "Loses ability to save via Enter key, changes expected form behavior"
+        },
+        {
+          "id": "B",
+          "label": "Keep the form submit handler to support Enter key submission but don't display a submit button",
+          "pros": "Maintains keyboard accessibility, allows power users to trigger save with Enter, preserves form semantics",
+          "cons": "Hidden behavior might confuse some users, requires maintaining both submit handler and auto-save"
+        },
+        {
+          "id": "C",
+          "label": "Convert the form to a div container since it no longer has a submit button",
+          "pros": "Semantically correct (not a form if no submission), prevents accidental form submissions",
+          "cons": "Loses form-specific features like field validation states, more significant HTML restructuring"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Keeping the form submit handler (preventDefault) but hiding the button maintains good keyboard accessibility while supporting auto-save. This is a common pattern in modern web apps and preserves semantic HTML structure.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "Should we add any additional visual feedback to indicate auto-save is active?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Keep only the existing status bar indicator showing 'Saved' / 'Modified' / 'Saving...'",
+          "pros": "Already implemented, minimal changes required, status bar is always visible, consistent with current design",
+          "cons": "Status bar is at bottom of screen, might be missed by users focused on form, less prominent feedback"
+        },
+        {
+          "id": "B",
+          "label": "Add inline 'Auto-saved' text near form fields that updates when changes are saved",
+          "pros": "More visible to users actively editing, provides contextual feedback right where they're working",
+          "cons": "Can clutter the form UI, requires additional DOM elements, might be distracting"
+        },
+        {
+          "id": "C",
+          "label": "Show a temporary toast notification each time auto-save completes",
+          "pros": "Very visible confirmation, clear user feedback, modern UX pattern",
+          "cons": "Can be annoying with frequent auto-saves, requires implementing toast notification system if not present"
+        },
+        {
+          "id": "D",
+          "label": "Add a subtle icon animation (e.g., spinning save icon) only in the editor header during save",
+          "pros": "Non-intrusive, professional look, provides feedback without text clutter, good middle ground",
+          "cons": "Requires CSS animations, might be too subtle for some users"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The existing status bar already provides clear feedback about save state. Adding more visual indicators would clutter the UI without significant benefit. The status bar approach is proven to work well in similar editors (like VS Code itself).",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}
