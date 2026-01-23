@@ -1,0 +1,1 @@
+I want the Technical Design Schema Editor in `tech_design_schema_editor` to save automatically the changes made by the user in the Web UI. There should be no need of save buttons.

@@ -240,6 +240,9 @@ The framework enables:
 
 - [UR-0104] The framework shall perform a git commit operation during workdir archiving when git-enabled configuration flag is true, using a commit message in the format 'Archive iteration: <iteration-id> - <iteration-name>'.
 
+- [UR-0105] The Technical Design Schema Editor shall automatically save changes without requiring manual save button clicks, triggering immediate saves on every change with visual feedback
+
+
 
 
 

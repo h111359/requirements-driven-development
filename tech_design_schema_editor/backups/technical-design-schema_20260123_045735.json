@@ -46,12 +46,12 @@
               "label": "AI/ML-enabled product"
             },
             {
-              "id": "Developer platform / internal tooling",
-              "label": "Developer platform / internal tooling"
-            },
-            {
               "id": "IoT / edge solution",
               "label": "IoT / edge solution"
+            },
+            {
+              "id": "Developer platform / internal tooling",
+              "label": "Developer platform / internal tooling"
             }
           ],
           "allowOther": true,
@@ -8325,691 +8325,6 @@
       ]
     },
     {
-      "id": "DisasterRecovery",
-      "label": "Disaster Recovery",
-      "description": "Comprehensive disaster recovery strategy including backup, replication, failover, testing, recovery processes, data integrity, compliance, and business continuity planning",
-      "questions": [
-        {
-          "id": "DR_RPO",
-          "label": "Recovery Point Objective (RPO)",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Seconds",
-              "label": "Seconds"
-            },
-            {
-              "id": "Minutes",
-              "label": "Minutes"
-            },
-            {
-              "id": "1 hour",
-              "label": "1 hour"
-            },
-            {
-              "id": "4 hours",
-              "label": "4 hours"
-            },
-            {
-              "id": "24 hours",
-              "label": "24 hours"
-            },
-            {
-              "id": "Custom RPO",
-              "label": "Custom RPO"
-            }
-          ]
-        },
-        {
-          "id": "DR_RTO",
-          "label": "Recovery Time Objective (RTO)",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Seconds",
-              "label": "Seconds"
-            },
-            {
-              "id": "Minutes",
-              "label": "Minutes"
-            },
-            {
-              "id": "1 hour",
-              "label": "1 hour"
-            },
-            {
-              "id": "4 hours",
-              "label": "4 hours"
-            },
-            {
-              "id": "24 hours",
-              "label": "24 hours"
-            },
-            {
-              "id": "Custom RTO",
-              "label": "Custom RTO"
-            }
-          ]
-        },
-        {
-          "id": "DR_BackupTypes",
-          "label": "Backup types used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Full backups",
-              "label": "Full backups"
-            },
-            {
-              "id": "Incremental backups",
-              "label": "Incremental backups"
-            },
-            {
-              "id": "Differential backups",
-              "label": "Differential backups"
-            },
-            {
-              "id": "Transaction log backups",
-              "label": "Transaction log backups"
-            },
-            {
-              "id": "Snapshot-based backups",
-              "label": "Snapshot-based backups"
-            },
-            {
-              "id": "Continuous backup/point-in-time restore",
-              "label": "Continuous backup/point-in-time restore"
-            },
-            {
-              "id": "No backup",
-              "label": "No backup"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DR_BackupLocations",
-          "label": "Backup storage locations",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Same region",
-              "label": "Same region"
-            },
-            {
-              "id": "Paired region",
-              "label": "Paired region"
-            },
-            {
-              "id": "Multiple regions",
-              "label": "Multiple regions"
-            },
-            {
-              "id": "On-prem secondary location",
-              "label": "On-prem secondary location"
-            },
-            {
-              "id": "Cold/offline storage",
-              "label": "Cold/offline storage"
-            },
-            {
-              "id": "Third-party backup provider",
-              "label": "Third-party backup provider"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DR_BackupFrequency",
-          "label": "Backup frequency",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Continuous",
-              "label": "Continuous"
-            },
-            {
-              "id": "Hourly",
-              "label": "Hourly"
-            },
-            {
-              "id": "Every 4 hours",
-              "label": "Every 4 hours"
-            },
-            {
-              "id": "Daily",
-              "label": "Daily"
-            },
-            {
-              "id": "Weekly",
-              "label": "Weekly"
-            },
-            {
-              "id": "Custom schedule",
-              "label": "Custom schedule"
-            }
-          ]
-        },
-        {
-          "id": "DR_GeoReplication",
-          "label": "Geo-replication level",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No geo-replication",
-              "label": "No geo-replication"
-            },
-            {
-              "id": "Zone-redundant replication (ZRS)",
-              "label": "Zone-redundant replication (ZRS)"
-            },
-            {
-              "id": "Geo-redundant replication (GRS)",
-              "label": "Geo-redundant replication (GRS)"
-            },
-            {
-              "id": "Read-access geo-redundant replication (RA-GRS)",
-              "label": "Read-access geo-redundant replication (RA-GRS)"
-            },
-            {
-              "id": "Active-active multi-region",
-              "label": "Active-active multi-region"
-            },
-            {
-              "id": "Custom replication strategy",
-              "label": "Custom replication strategy"
-            }
-          ]
-        },
-        {
-          "id": "DR_FailoverType",
-          "label": "Failover type",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Manual failover",
-              "label": "Manual failover"
-            },
-            {
-              "id": "Automated failover",
-              "label": "Automated failover"
-            },
-            {
-              "id": "Application-managed failover",
-              "label": "Application-managed failover"
-            },
-            {
-              "id": "Hybrid failover approach",
-              "label": "Hybrid failover approach"
-            }
-          ]
-        },
-        {
-          "id": "DR_ContinuityMethods",
-          "label": "Continuity methods used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Active-passive architecture",
-              "label": "Active-passive architecture"
-            },
-            {
-              "id": "Active-active architecture",
-              "label": "Active-active architecture"
-            },
-            {
-              "id": "Stateless compute replication",
-              "label": "Stateless compute replication"
-            },
-            {
-              "id": "Session replication",
-              "label": "Session replication"
-            },
-            {
-              "id": "Message queue replication",
-              "label": "Message queue replication"
-            },
-            {
-              "id": "Graceful degradation strategy",
-              "label": "Graceful degradation strategy"
-            },
-            {
-              "id": "No continuity planning",
-              "label": "No continuity planning"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DR_CriticalDependencies",
-          "label": "Critical dependencies covered by DR",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Databases",
-              "label": "Databases"
-            },
-            {
-              "id": "Blob/file storage",
-              "label": "Blob/file storage"
-            },
-            {
-              "id": "Message queues",
-              "label": "Message queues"
-            },
-            {
-              "id": "Cache layer",
-              "label": "Cache layer"
-            },
-            {
-              "id": "Authentication provider",
-              "label": "Authentication provider"
-            },
-            {
-              "id": "External integrations",
-              "label": "External integrations"
-            },
-            {
-              "id": "Networking components",
-              "label": "Networking components"
-            },
-            {
-              "id": "DNS",
-              "label": "DNS"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DR_TestFrequency",
-          "label": "DR test frequency",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No DR tests",
-              "label": "No DR tests"
-            },
-            {
-              "id": "Annual tests",
-              "label": "Annual tests"
-            },
-            {
-              "id": "Semi-annual tests",
-              "label": "Semi-annual tests"
-            },
-            {
-              "id": "Quarterly tests",
-              "label": "Quarterly tests"
-            },
-            {
-              "id": "Continuous validation",
-              "label": "Continuous validation"
-            },
-            {
-              "id": "On-demand drills",
-              "label": "On-demand drills"
-            }
-          ]
-        },
-        {
-          "id": "DR_TestTypes",
-          "label": "Types of DR tests performed",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Failover simulation",
-              "label": "Failover simulation"
-            },
-            {
-              "id": "Full-region outage simulation",
-              "label": "Full-region outage simulation"
-            },
-            {
-              "id": "Data corruption simulation",
-              "label": "Data corruption simulation"
-            },
-            {
-              "id": "Network isolation test",
-              "label": "Network isolation test"
-            },
-            {
-              "id": "Application dependency failure test",
-              "label": "Application dependency failure test"
-            },
-            {
-              "id": "Chaos engineering",
-              "label": "Chaos engineering"
-            },
-            {
-              "id": "Tabletop exercises",
-              "label": "Tabletop exercises"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DR_Runbooks",
-          "label": "Runbooks and recovery documentation",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Recovery runbooks documented",
-              "label": "Recovery runbooks documented"
-            },
-            {
-              "id": "Recovery runbooks automated",
-              "label": "Recovery runbooks automated"
-            },
-            {
-              "id": "Communication procedures defined",
-              "label": "Communication procedures defined"
-            },
-            {
-              "id": "Escalation matrix defined",
-              "label": "Escalation matrix defined"
-            },
-            {
-              "id": "Testing procedures documented",
-              "label": "Testing procedures documented"
-            },
-            {
-              "id": "No documentation",
-              "label": "No documentation"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DR_Ownership",
-          "label": "Who owns the DR process?",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Engineering team",
-              "label": "Engineering team"
-            },
-            {
-              "id": "Infrastructure/Cloud team",
-              "label": "Infrastructure/Cloud team"
-            },
-            {
-              "id": "SRE team",
-              "label": "SRE team"
-            },
-            {
-              "id": "Shared responsibility",
-              "label": "Shared responsibility"
-            },
-            {
-              "id": "Third-party service provider",
-              "label": "Third-party service provider"
-            }
-          ]
-        },
-        {
-          "id": "DR_BackupEncryption",
-          "label": "Backup encryption strategy",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Platform-managed keys",
-              "label": "Platform-managed keys"
-            },
-            {
-              "id": "Customer-managed keys (CMK)",
-              "label": "Customer-managed keys (CMK)"
-            },
-            {
-              "id": "HSM-backed encryption keys",
-              "label": "HSM-backed encryption keys"
-            },
-            {
-              "id": "Double encryption",
-              "label": "Double encryption"
-            },
-            {
-              "id": "No encryption",
-              "label": "No encryption"
-            }
-          ]
-        },
-        {
-          "id": "DR_IntegrityValidation",
-          "label": "Data integrity validation methods",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Checksums",
-              "label": "Checksums"
-            },
-            {
-              "id": "Delta comparisons",
-              "label": "Delta comparisons"
-            },
-            {
-              "id": "Schema validation",
-              "label": "Schema validation"
-            },
-            {
-              "id": "Metadata validation",
-              "label": "Metadata validation"
-            },
-            {
-              "id": "Application-level data validation",
-              "label": "Application-level data validation"
-            },
-            {
-              "id": "Automated post-recovery validation",
-              "label": "Automated post-recovery validation"
-            },
-            {
-              "id": "No integrity validation",
-              "label": "No integrity validation"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DR_CorruptionDetection",
-          "label": "Corruption detection mechanisms",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Database integrity checks",
-              "label": "Database integrity checks"
-            },
-            {
-              "id": "Blob/file hash validation",
-              "label": "Blob/file hash validation"
-            },
-            {
-              "id": "Pipeline-level validation",
-              "label": "Pipeline-level validation"
-            },
-            {
-              "id": "Storage event consistency",
-              "label": "Storage event consistency"
-            },
-            {
-              "id": "AI-assisted anomaly detection",
-              "label": "AI-assisted anomaly detection"
-            },
-            {
-              "id": "No corruption detection",
-              "label": "No corruption detection"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DR_RecoverySequence",
-          "label": "Recovery sequence definition",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No defined sequence",
-              "label": "No defined sequence"
-            },
-            {
-              "id": "Basic documented recovery order",
-              "label": "Basic documented recovery order"
-            },
-            {
-              "id": "Dependency-based ordered recovery",
-              "label": "Dependency-based ordered recovery"
-            },
-            {
-              "id": "Fully automated orchestrated recovery",
-              "label": "Fully automated orchestrated recovery"
-            },
-            {
-              "id": "Self-healing recovery logic",
-              "label": "Self-healing recovery logic"
-            }
-          ]
-        },
-        {
-          "id": "DR_SessionStateStrategy",
-          "label": "Session state strategy during failover",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "No session state",
-              "label": "No session state"
-            },
-            {
-              "id": "Stateless application",
-              "label": "Stateless application"
-            },
-            {
-              "id": "Region-replicated session store",
-              "label": "Region-replicated session store"
-            },
-            {
-              "id": "Database-backed session state",
-              "label": "Database-backed session state"
-            },
-            {
-              "id": "Distributed cache replication",
-              "label": "Distributed cache replication"
-            },
-            {
-              "id": "Session loss acceptable",
-              "label": "Session loss acceptable"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DR_TestAutomation",
-          "label": "DR test automation level",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No automation",
-              "label": "No automation"
-            },
-            {
-              "id": "Partially automated tests",
-              "label": "Partially automated tests"
-            },
-            {
-              "id": "Fully automated DR tests",
-              "label": "Fully automated DR tests"
-            },
-            {
-              "id": "Continuous DR validation",
-              "label": "Continuous DR validation"
-            }
-          ]
-        },
-        {
-          "id": "DR_BCIntegration",
-          "label": "Integration with business continuity plans",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No integration",
-              "label": "No integration"
-            },
-            {
-              "id": "Basic alignment",
-              "label": "Basic alignment"
-            },
-            {
-              "id": "Fully integrated BC/DR strategy",
-              "label": "Fully integrated BC/DR strategy"
-            },
-            {
-              "id": "Continuous business continuity validation",
-              "label": "Continuous business continuity validation"
-            }
-          ]
-        },
-        {
-          "id": "DR_ComplianceDrivenDR",
-          "label": "Compliance frameworks influencing DR",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "ISO 22301",
-              "label": "ISO 22301"
-            },
-            {
-              "id": "ISO 27001",
-              "label": "ISO 27001"
-            },
-            {
-              "id": "SOC2",
-              "label": "SOC2"
-            },
-            {
-              "id": "PCI-DSS",
-              "label": "PCI-DSS"
-            },
-            {
-              "id": "HIPAA",
-              "label": "HIPAA"
-            },
-            {
-              "id": "GDPR",
-              "label": "GDPR"
-            },
-            {
-              "id": "Local regulatory requirements",
-              "label": "Local regulatory requirements"
-            },
-            {
-              "id": "No compliance requirements",
-              "label": "No compliance requirements"
-            }
-          ],
-          "allowOther": true
-        }
-      ]
-    },
-    {
       "id": "Observability",
       "label": "Observability",
       "description": "Monitoring, logging, metrics, traces, alerts, dashboards, health checks and diagnostics",
@@ -9816,6 +9131,691 @@
             {
               "id": "No archival strategy",
               "label": "No archival strategy"
+            }
+          ],
+          "allowOther": true
+        }
+      ]
+    },
+    {
+      "id": "DisasterRecovery",
+      "label": "Disaster Recovery",
+      "description": "Comprehensive disaster recovery strategy including backup, replication, failover, testing, recovery processes, data integrity, compliance, and business continuity planning",
+      "questions": [
+        {
+          "id": "DR_RPO",
+          "label": "Recovery Point Objective (RPO)",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Seconds",
+              "label": "Seconds"
+            },
+            {
+              "id": "Minutes",
+              "label": "Minutes"
+            },
+            {
+              "id": "1 hour",
+              "label": "1 hour"
+            },
+            {
+              "id": "4 hours",
+              "label": "4 hours"
+            },
+            {
+              "id": "24 hours",
+              "label": "24 hours"
+            },
+            {
+              "id": "Custom RPO",
+              "label": "Custom RPO"
+            }
+          ]
+        },
+        {
+          "id": "DR_RTO",
+          "label": "Recovery Time Objective (RTO)",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Seconds",
+              "label": "Seconds"
+            },
+            {
+              "id": "Minutes",
+              "label": "Minutes"
+            },
+            {
+              "id": "1 hour",
+              "label": "1 hour"
+            },
+            {
+              "id": "4 hours",
+              "label": "4 hours"
+            },
+            {
+              "id": "24 hours",
+              "label": "24 hours"
+            },
+            {
+              "id": "Custom RTO",
+              "label": "Custom RTO"
+            }
+          ]
+        },
+        {
+          "id": "DR_BackupTypes",
+          "label": "Backup types used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Full backups",
+              "label": "Full backups"
+            },
+            {
+              "id": "Incremental backups",
+              "label": "Incremental backups"
+            },
+            {
+              "id": "Differential backups",
+              "label": "Differential backups"
+            },
+            {
+              "id": "Transaction log backups",
+              "label": "Transaction log backups"
+            },
+            {
+              "id": "Snapshot-based backups",
+              "label": "Snapshot-based backups"
+            },
+            {
+              "id": "Continuous backup/point-in-time restore",
+              "label": "Continuous backup/point-in-time restore"
+            },
+            {
+              "id": "No backup",
+              "label": "No backup"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DR_BackupLocations",
+          "label": "Backup storage locations",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Same region",
+              "label": "Same region"
+            },
+            {
+              "id": "Paired region",
+              "label": "Paired region"
+            },
+            {
+              "id": "Multiple regions",
+              "label": "Multiple regions"
+            },
+            {
+              "id": "On-prem secondary location",
+              "label": "On-prem secondary location"
+            },
+            {
+              "id": "Cold/offline storage",
+              "label": "Cold/offline storage"
+            },
+            {
+              "id": "Third-party backup provider",
+              "label": "Third-party backup provider"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DR_BackupFrequency",
+          "label": "Backup frequency",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Continuous",
+              "label": "Continuous"
+            },
+            {
+              "id": "Hourly",
+              "label": "Hourly"
+            },
+            {
+              "id": "Every 4 hours",
+              "label": "Every 4 hours"
+            },
+            {
+              "id": "Daily",
+              "label": "Daily"
+            },
+            {
+              "id": "Weekly",
+              "label": "Weekly"
+            },
+            {
+              "id": "Custom schedule",
+              "label": "Custom schedule"
+            }
+          ]
+        },
+        {
+          "id": "DR_GeoReplication",
+          "label": "Geo-replication level",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "No geo-replication",
+              "label": "No geo-replication"
+            },
+            {
+              "id": "Zone-redundant replication (ZRS)",
+              "label": "Zone-redundant replication (ZRS)"
+            },
+            {
+              "id": "Geo-redundant replication (GRS)",
+              "label": "Geo-redundant replication (GRS)"
+            },
+            {
+              "id": "Read-access geo-redundant replication (RA-GRS)",
+              "label": "Read-access geo-redundant replication (RA-GRS)"
+            },
+            {
+              "id": "Active-active multi-region",
+              "label": "Active-active multi-region"
+            },
+            {
+              "id": "Custom replication strategy",
+              "label": "Custom replication strategy"
+            }
+          ]
+        },
+        {
+          "id": "DR_FailoverType",
+          "label": "Failover type",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Manual failover",
+              "label": "Manual failover"
+            },
+            {
+              "id": "Automated failover",
+              "label": "Automated failover"
+            },
+            {
+              "id": "Application-managed failover",
+              "label": "Application-managed failover"
+            },
+            {
+              "id": "Hybrid failover approach",
+              "label": "Hybrid failover approach"
+            }
+          ]
+        },
+        {
+          "id": "DR_ContinuityMethods",
+          "label": "Continuity methods used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Active-passive architecture",
+              "label": "Active-passive architecture"
+            },
+            {
+              "id": "Active-active architecture",
+              "label": "Active-active architecture"
+            },
+            {
+              "id": "Stateless compute replication",
+              "label": "Stateless compute replication"
+            },
+            {
+              "id": "Session replication",
+              "label": "Session replication"
+            },
+            {
+              "id": "Message queue replication",
+              "label": "Message queue replication"
+            },
+            {
+              "id": "Graceful degradation strategy",
+              "label": "Graceful degradation strategy"
+            },
+            {
+              "id": "No continuity planning",
+              "label": "No continuity planning"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DR_CriticalDependencies",
+          "label": "Critical dependencies covered by DR",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Databases",
+              "label": "Databases"
+            },
+            {
+              "id": "Blob/file storage",
+              "label": "Blob/file storage"
+            },
+            {
+              "id": "Message queues",
+              "label": "Message queues"
+            },
+            {
+              "id": "Cache layer",
+              "label": "Cache layer"
+            },
+            {
+              "id": "Authentication provider",
+              "label": "Authentication provider"
+            },
+            {
+              "id": "External integrations",
+              "label": "External integrations"
+            },
+            {
+              "id": "Networking components",
+              "label": "Networking components"
+            },
+            {
+              "id": "DNS",
+              "label": "DNS"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DR_TestFrequency",
+          "label": "DR test frequency",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "No DR tests",
+              "label": "No DR tests"
+            },
+            {
+              "id": "Annual tests",
+              "label": "Annual tests"
+            },
+            {
+              "id": "Semi-annual tests",
+              "label": "Semi-annual tests"
+            },
+            {
+              "id": "Quarterly tests",
+              "label": "Quarterly tests"
+            },
+            {
+              "id": "Continuous validation",
+              "label": "Continuous validation"
+            },
+            {
+              "id": "On-demand drills",
+              "label": "On-demand drills"
+            }
+          ]
+        },
+        {
+          "id": "DR_TestTypes",
+          "label": "Types of DR tests performed",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Failover simulation",
+              "label": "Failover simulation"
+            },
+            {
+              "id": "Full-region outage simulation",
+              "label": "Full-region outage simulation"
+            },
+            {
+              "id": "Data corruption simulation",
+              "label": "Data corruption simulation"
+            },
+            {
+              "id": "Network isolation test",
+              "label": "Network isolation test"
+            },
+            {
+              "id": "Application dependency failure test",
+              "label": "Application dependency failure test"
+            },
+            {
+              "id": "Chaos engineering",
+              "label": "Chaos engineering"
+            },
+            {
+              "id": "Tabletop exercises",
+              "label": "Tabletop exercises"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DR_Runbooks",
+          "label": "Runbooks and recovery documentation",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Recovery runbooks documented",
+              "label": "Recovery runbooks documented"
+            },
+            {
+              "id": "Recovery runbooks automated",
+              "label": "Recovery runbooks automated"
+            },
+            {
+              "id": "Communication procedures defined",
+              "label": "Communication procedures defined"
+            },
+            {
+              "id": "Escalation matrix defined",
+              "label": "Escalation matrix defined"
+            },
+            {
+              "id": "Testing procedures documented",
+              "label": "Testing procedures documented"
+            },
+            {
+              "id": "No documentation",
+              "label": "No documentation"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DR_Ownership",
+          "label": "Who owns the DR process?",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Engineering team",
+              "label": "Engineering team"
+            },
+            {
+              "id": "Infrastructure/Cloud team",
+              "label": "Infrastructure/Cloud team"
+            },
+            {
+              "id": "SRE team",
+              "label": "SRE team"
+            },
+            {
+              "id": "Shared responsibility",
+              "label": "Shared responsibility"
+            },
+            {
+              "id": "Third-party service provider",
+              "label": "Third-party service provider"
+            }
+          ]
+        },
+        {
+          "id": "DR_BackupEncryption",
+          "label": "Backup encryption strategy",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Platform-managed keys",
+              "label": "Platform-managed keys"
+            },
+            {
+              "id": "Customer-managed keys (CMK)",
+              "label": "Customer-managed keys (CMK)"
+            },
+            {
+              "id": "HSM-backed encryption keys",
+              "label": "HSM-backed encryption keys"
+            },
+            {
+              "id": "Double encryption",
+              "label": "Double encryption"
+            },
+            {
+              "id": "No encryption",
+              "label": "No encryption"
+            }
+          ]
+        },
+        {
+          "id": "DR_IntegrityValidation",
+          "label": "Data integrity validation methods",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Checksums",
+              "label": "Checksums"
+            },
+            {
+              "id": "Delta comparisons",
+              "label": "Delta comparisons"
+            },
+            {
+              "id": "Schema validation",
+              "label": "Schema validation"
+            },
+            {
+              "id": "Metadata validation",
+              "label": "Metadata validation"
+            },
+            {
+              "id": "Application-level data validation",
+              "label": "Application-level data validation"
+            },
+            {
+              "id": "Automated post-recovery validation",
+              "label": "Automated post-recovery validation"
+            },
+            {
+              "id": "No integrity validation",
+              "label": "No integrity validation"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DR_CorruptionDetection",
+          "label": "Corruption detection mechanisms",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Database integrity checks",
+              "label": "Database integrity checks"
+            },
+            {
+              "id": "Blob/file hash validation",
+              "label": "Blob/file hash validation"
+            },
+            {
+              "id": "Pipeline-level validation",
+              "label": "Pipeline-level validation"
+            },
+            {
+              "id": "Storage event consistency",
+              "label": "Storage event consistency"
+            },
+            {
+              "id": "AI-assisted anomaly detection",
+              "label": "AI-assisted anomaly detection"
+            },
+            {
+              "id": "No corruption detection",
+              "label": "No corruption detection"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DR_RecoverySequence",
+          "label": "Recovery sequence definition",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "No defined sequence",
+              "label": "No defined sequence"
+            },
+            {
+              "id": "Basic documented recovery order",
+              "label": "Basic documented recovery order"
+            },
+            {
+              "id": "Dependency-based ordered recovery",
+              "label": "Dependency-based ordered recovery"
+            },
+            {
+              "id": "Fully automated orchestrated recovery",
+              "label": "Fully automated orchestrated recovery"
+            },
+            {
+              "id": "Self-healing recovery logic",
+              "label": "Self-healing recovery logic"
+            }
+          ]
+        },
+        {
+          "id": "DR_SessionStateStrategy",
+          "label": "Session state strategy during failover",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "No session state",
+              "label": "No session state"
+            },
+            {
+              "id": "Stateless application",
+              "label": "Stateless application"
+            },
+            {
+              "id": "Region-replicated session store",
+              "label": "Region-replicated session store"
+            },
+            {
+              "id": "Database-backed session state",
+              "label": "Database-backed session state"
+            },
+            {
+              "id": "Distributed cache replication",
+              "label": "Distributed cache replication"
+            },
+            {
+              "id": "Session loss acceptable",
+              "label": "Session loss acceptable"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DR_TestAutomation",
+          "label": "DR test automation level",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "No automation",
+              "label": "No automation"
+            },
+            {
+              "id": "Partially automated tests",
+              "label": "Partially automated tests"
+            },
+            {
+              "id": "Fully automated DR tests",
+              "label": "Fully automated DR tests"
+            },
+            {
+              "id": "Continuous DR validation",
+              "label": "Continuous DR validation"
+            }
+          ]
+        },
+        {
+          "id": "DR_BCIntegration",
+          "label": "Integration with business continuity plans",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "No integration",
+              "label": "No integration"
+            },
+            {
+              "id": "Basic alignment",
+              "label": "Basic alignment"
+            },
+            {
+              "id": "Fully integrated BC/DR strategy",
+              "label": "Fully integrated BC/DR strategy"
+            },
+            {
+              "id": "Continuous business continuity validation",
+              "label": "Continuous business continuity validation"
+            }
+          ]
+        },
+        {
+          "id": "DR_ComplianceDrivenDR",
+          "label": "Compliance frameworks influencing DR",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "ISO 22301",
+              "label": "ISO 22301"
+            },
+            {
+              "id": "ISO 27001",
+              "label": "ISO 27001"
+            },
+            {
+              "id": "SOC2",
+              "label": "SOC2"
+            },
+            {
+              "id": "PCI-DSS",
+              "label": "PCI-DSS"
+            },
+            {
+              "id": "HIPAA",
+              "label": "HIPAA"
+            },
+            {
+              "id": "GDPR",
+              "label": "GDPR"
+            },
+            {
+              "id": "Local regulatory requirements",
+              "label": "Local regulatory requirements"
+            },
+            {
+              "id": "No compliance requirements",
+              "label": "No compliance requirements"
             }
           ],
           "allowOther": true

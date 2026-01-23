@@ -10,6 +10,7 @@ let currentView = 'welcome'; // 'welcome', 'category', 'question'
 let currentCategory = null;
 let currentQuestion = null;
 let isModified = false;
+let isSaving = false;
 let expandedCategories = new Set();
 let selectedItem = null; // Track selected item for keyboard shortcuts: {type: 'category'|'question'|'option', data: {...}}
 
@@ -44,10 +45,8 @@ function moveItemDown(array, index) {
  */
 function initElements() {
     // Navigation buttons
-    elements.btnSave = document.getElementById('btnSave');
     elements.btnValidate = document.getElementById('btnValidate');
     elements.btnBackup = document.getElementById('btnBackup');
-    elements.btnReload = document.getElementById('btnReload');
     
     // Sidebar
     elements.searchInput = document.getElementById('searchInput');
@@ -95,15 +94,8 @@ function initElements() {
  */
 function attachEventListeners() {
     // Navigation buttons
-    elements.btnSave.addEventListener('click', saveSchema);
     elements.btnValidate.addEventListener('click', validateSchema);
     elements.btnBackup.addEventListener('click', createBackup);
-    elements.btnReload.addEventListener('click', () => {
-        if (isModified && !confirm('You have unsaved changes. Are you sure you want to reload?')) {
-            return;
-        }
-        loadSchema();
-    });
     
     // Sidebar
     elements.searchInput.addEventListener('input', handleSearch);
@@ -211,37 +203,8 @@ async function loadSchema() {
  * Save schema to server
  */
 async function saveSchema() {
-    try {
-        showStatus('Saving schema...', 'info');
-        elements.btnSave.disabled = true;
-        
-        const response = await fetch('/api/schema', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ schema })
-        });
-        
-        const data = await response.json();
-        
-        if (!response.ok) {
-            if (data.errors) {
-                showValidationErrors(data.errors);
-            }
-            throw new Error(data.error || 'Failed to save schema');
-        }
-        
-        isModified = false;
-        updateStatusBar();
-        showStatus('Schema saved successfully!', 'success');
-        
-    } catch (error) {
-        console.error('Error saving schema:', error);
-        showStatus(`Error: ${error.message}`, 'error');
-    } finally {
-        elements.btnSave.disabled = false;
-    }
+    // Auto-save handles all saves now
+    await autoSave();
 }
 
 /**
@@ -940,11 +903,66 @@ function toggleExpandAll() {
 }
 
 /**
- * Mark schema as modified
+ * Mark schema as modified and trigger auto-save
+ */
+function setModified(modified) {
+    isModified = modified;
+    updateStatusBar();
+    
+    // Trigger auto-save immediately when modified
+    if (modified && !isSaving) {
+        autoSave();
+    }
+}
+
+/**
+ * Mark schema as modified (alias for setModified(true))
  */
 function markAsModified() {
-    isModified = true;
-    updateStatusBar();
+    setModified(true);
+}
+
+/**
+ * Auto-save schema (called when changes are made)
+ */
+async function autoSave() {
+    if (isSaving) {
+        return; // Prevent concurrent saves
+    }
+    
+    try {
+        isSaving = true;
+        showStatus('Saving...', 'info');
+        
+        const response = await fetch('/api/schema', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ schema })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            // Show validation warnings but don't block
+            if (data.errors) {
+                showValidationWarning(data.errors);
+            }
+            showStatus('Saved with warnings', 'warning');
+        } else {
+            showStatus('Saved', 'success');
+        }
+        
+        isModified = false;
+        updateStatusBar();
+        
+    } catch (error) {
+        console.error('Error auto-saving schema:', error);
+        showStatus(`Auto-save failed: ${error.message}`, 'error');
+    } finally {
+        isSaving = false;
+    }
 }
 
 /**
@@ -988,6 +1006,14 @@ function showStatus(message, type = 'info') {
 function showValidationErrors(errors) {
     const errorList = errors.map(e => `• ${e}`).join('\n');
     alert(`Validation Errors:\n\n${errorList}`);
+}
+
+/**
+ * Show validation warnings (non-blocking)
+ */
+function showValidationWarning(errors) {
+    console.warn('Validation warnings:', errors);
+    // Don't show alert for warnings, just log them
 }
 
 /**

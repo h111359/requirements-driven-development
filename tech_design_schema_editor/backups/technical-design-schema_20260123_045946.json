@@ -46,12 +46,12 @@
               "label": "AI/ML-enabled product"
             },
             {
-              "id": "Developer platform / internal tooling",
-              "label": "Developer platform / internal tooling"
-            },
-            {
               "id": "IoT / edge solution",
               "label": "IoT / edge solution"
+            },
+            {
+              "id": "Developer platform / internal tooling",
+              "label": "Developer platform / internal tooling"
             }
           ],
           "allowOther": true,

@@ -8,6 +8,40 @@
       "description": "Core product attributes that shape architectural decisions",
       "questions": [
         {
+          "id": "Product_PrimaryConsumptionMode",
+          "label": "Consumption mode",
+          "type": "multiselect",
+          "help": "High-level product consumption. Detailed interface and protocol decisions belong to Frontend/Backend/Integration categories.",
+          "options": [
+            {
+              "id": "Human-facing UI",
+              "label": "Human-facing UI"
+            },
+            {
+              "id": "API-first (consumed by other systems)",
+              "label": "API-first (consumed by other systems)"
+            },
+            {
+              "id": "Data product (datasets/metrics/features)",
+              "label": "Data product (datasets/metrics/features)"
+            },
+            {
+              "id": "Event/message-driven consumption",
+              "label": "Event/message-driven consumption"
+            },
+            {
+              "id": "Batch/job-oriented",
+              "label": "Batch/job-oriented"
+            },
+            {
+              "id": "Mixed",
+              "label": "Mixed"
+            }
+          ],
+          "allowOther": true,
+          "otherPlaceholder": "Other (free text)"
+        },
+        {
           "id": "Product_PrimaryProductCategory",
           "label": "Product aspects",
           "type": "multiselect",
@@ -46,50 +80,16 @@
               "label": "AI/ML-enabled product"
             },
             {
-              "id": "Developer platform / internal tooling",
-              "label": "Developer platform / internal tooling"
-            },
-            {
               "id": "IoT / edge solution",
               "label": "IoT / edge solution"
+            },
+            {
+              "id": "Developer platform / internal tooling",
+              "label": "Developer platform / internal tooling"
             }
           ],
           "allowOther": true,
           "otherPlaceholder": "Other product category (free text), e.g. CMS, document management, RPA center of excellence"
-        },
-        {
-          "id": "Product_PrimaryConsumptionMode",
-          "label": "Consumption mode",
-          "type": "multiselect",
-          "help": "High-level product consumption. Detailed interface and protocol decisions belong to Frontend/Backend/Integration categories.",
-          "options": [
-            {
-              "id": "Human-facing UI",
-              "label": "Human-facing UI"
-            },
-            {
-              "id": "API-first (consumed by other systems)",
-              "label": "API-first (consumed by other systems)"
-            },
-            {
-              "id": "Data product (datasets/metrics/features)",
-              "label": "Data product (datasets/metrics/features)"
-            },
-            {
-              "id": "Event/message-driven consumption",
-              "label": "Event/message-driven consumption"
-            },
-            {
-              "id": "Batch/job-oriented",
-              "label": "Batch/job-oriented"
-            },
-            {
-              "id": "Mixed",
-              "label": "Mixed"
-            }
-          ],
-          "allowOther": true,
-          "otherPlaceholder": "Other (free text)"
         },
         {
           "id": "Product_ProductLifecycleStage",
