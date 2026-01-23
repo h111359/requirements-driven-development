@@ -3514,31 +3514,23 @@ function applySearchFilter(searchTerm) {
     techDesignSchema.categories.forEach(category => {
         const categoryMatches = [];
         
-        category.groups.forEach(group => {
-            const groupMatches = [];
-            
-            group.questions.forEach(question => {
-                if (!isQuestionVisible(question)) {
-                    return; // Skip questions that don't meet visibleWhen conditions
-                }
-                
-                // Check search term match
-                const searchableText = [
-                    question.label,
-                    question.help || '',
-                    ...(question.options || []).map(o => o.label)
-                ].join(' ').toLowerCase();
-                
-                if (!searchableText.includes(searchTerm)) {
-                    return; // Doesn't match search
-                }
-                
-                groupMatches.push({ question, group });
-            });
-            
-            if (groupMatches.length > 0) {
-                categoryMatches.push(...groupMatches);
+        category.questions.forEach(question => {
+            if (!isQuestionVisible(question)) {
+                return; // Skip questions that don't meet visibleWhen conditions
             }
+            
+            // Check search term match
+            const searchableText = [
+                question.label,
+                question.help || '',
+                ...(question.options || []).map(o => o.label)
+            ].join(' ').toLowerCase();
+            
+            if (!searchableText.includes(searchTerm)) {
+                return; // Doesn't match search
+            }
+            
+            categoryMatches.push({ question });
         });
         
         if (categoryMatches.length > 0) {
@@ -3631,25 +3623,9 @@ function renderSearchResults(matchingResults) {
         const bodyDiv = document.createElement('div');
         bodyDiv.className = 'accordion-body';
         
-        // Group questions by their original group
-        const groupedMatches = new Map();
-        matches.forEach(({ question, group }) => {
-            if (!groupedMatches.has(group.id)) {
-                groupedMatches.set(group.id, { group, questions: [] });
-            }
-            groupedMatches.get(group.id).questions.push(question);
-        });
-        
-        // Render each group's questions
-        groupedMatches.forEach(({ group, questions }) => {
-            const groupHeader = document.createElement('div');
-            groupHeader.className = 'fw-bold text-muted mb-2 mt-3';
-            groupHeader.textContent = group.label;
-            bodyDiv.appendChild(groupHeader);
-            
-            questions.forEach(question => {
-                bodyDiv.appendChild(renderQuestion(question));
-            });
+        // Render all matching questions for this category
+        matches.forEach(({ question }) => {
+            bodyDiv.appendChild(renderQuestion(question));
         });
         
         collapseDiv.appendChild(bodyDiv);
@@ -3667,11 +3643,9 @@ function renderSearchResults(matchingResults) {
  */
 function findQuestionById(questionId) {
     for (const category of techDesignSchema.categories) {
-        for (const group of category.groups) {
-            for (const question of group.questions) {
-                if (question.id === questionId) {
-                    return question;
-                }
+        for (const question of category.questions) {
+            if (question.id === questionId) {
+                return question;
             }
         }
     }
