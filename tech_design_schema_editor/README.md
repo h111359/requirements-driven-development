@@ -8,6 +8,8 @@ This editor provides a user-friendly interface for creating, editing, and managi
 
 **Key Features:**
 - ✅ Full CRUD operations on categories and questions
+- ✅ Reorder categories, questions, and options with up/down arrows
+- ✅ Keyboard shortcuts (Alt+Up/Down) for quick reordering
 - ✅ Real-time validation with detailed error messages
 - ✅ Automatic backup creation before saves
 - ✅ Two-panel layout with tree navigation
@@ -80,6 +82,11 @@ The editor uses a two-panel layout:
 2. Click "🗑️ Delete Category"
 3. Confirm the deletion (this will also delete all questions in the category)
 
+**Reorder categories:**
+1. Click the ↑ (up) or ↓ (down) arrow buttons next to a category name
+2. Or select a category and use Alt+Up or Alt+Down keyboard shortcuts
+3. The schema will be marked as modified (remember to save)
+
 ### Working with Questions
 
 **Add a question to a category:**
@@ -104,6 +111,11 @@ The editor uses a two-panel layout:
 2. Click "🗑️ Delete Question"
 3. Confirm the deletion
 
+**Reorder questions:**
+1. Click the ↑ (up) or ↓ (down) arrow buttons next to a question name
+2. Or select a question and use Alt+Up or Alt+Down keyboard shortcuts
+3. The schema will be marked as modified (remember to save)
+
 ### Question Types
 
 The editor supports the following question types:
@@ -122,8 +134,18 @@ For questions with types `radio`, `multiselect`, or `dropdown`:
 
 1. Each option needs an **ID** and **Label**
 2. Click "+ Add Option" to add more options
-3. Use the 🗑️ button to delete an option
-4. Enable "Allow Other" to let users enter custom text
+3. Use the ↑↓ arrow buttons to reorder options
+4. Use the 🗑️ button to delete an option
+5. Enable "Allow Other" to let users enter custom text
+
+### Keyboard Shortcuts
+
+The editor supports keyboard shortcuts for efficient editing:
+
+- **Alt+Up**: Move the currently selected category or question up
+- **Alt+Down**: Move the currently selected category or question down
+
+These shortcuts work when viewing a category or question in the editor panel.
 
 ### Conditional Visibility
 

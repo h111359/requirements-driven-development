@@ -11,6 +11,7 @@ let currentCategory = null;
 let currentQuestion = null;
 let isModified = false;
 let expandedCategories = new Set();
+let selectedItem = null; // Track selected item for keyboard shortcuts: {type: 'category'|'question'|'option', data: {...}}
 
 // DOM elements
 const elements = {};
@@ -19,8 +20,24 @@ const elements = {};
 document.addEventListener('DOMContentLoaded', () => {
     initElements();
     attachEventListeners();
+    attachKeyboardShortcuts();
     loadSchema();
 });
+
+/**
+ * Array reordering helper functions
+ */
+function moveItemUp(array, index) {
+    if (index <= 0 || index >= array.length) return false;
+    [array[index - 1], array[index]] = [array[index], array[index - 1]];
+    return true;
+}
+
+function moveItemDown(array, index) {
+    if (index < 0 || index >= array.length - 1) return false;
+    [array[index], array[index + 1]] = [array[index + 1], array[index]];
+    return true;
+}
 
 /**
  * Cache DOM elements for faster access
@@ -107,6 +124,60 @@ function attachEventListeners() {
     // Track modifications
     elements.categoryForm.addEventListener('input', markAsModified);
     elements.questionForm.addEventListener('input', markAsModified);
+}
+
+/**
+ * Attach global keyboard shortcuts
+ */
+function attachKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+        // Alt+Up or Alt+Down for reordering
+        if (e.altKey && (e.code === 'ArrowUp' || e.code === 'ArrowDown')) {
+            e.preventDefault();
+            
+            const direction = e.code === 'ArrowUp' ? 'up' : 'down';
+            
+            // Determine what to move based on current view
+            if (currentView === 'category' && currentCategory !== null) {
+                // Move current category
+                const catIndex = currentCategory;
+                if (direction === 'up') {
+                    if (moveItemUp(schema.categories, catIndex)) {
+                        currentCategory = catIndex - 1;
+                        setModified(true);
+                        renderTree();
+                        showCategoryEditor(currentCategory);
+                    }
+                } else {
+                    if (moveItemDown(schema.categories, catIndex)) {
+                        currentCategory = catIndex + 1;
+                        setModified(true);
+                        renderTree();
+                        showCategoryEditor(currentCategory);
+                    }
+                }
+            } else if (currentView === 'question' && currentCategory !== null && currentQuestion !== null) {
+                // Move current question
+                const qIndex = currentQuestion;
+                const questions = schema.categories[currentCategory].questions;
+                if (direction === 'up') {
+                    if (moveItemUp(questions, qIndex)) {
+                        currentQuestion = qIndex - 1;
+                        setModified(true);
+                        renderTree();
+                        showQuestionEditor(currentCategory, currentQuestion);
+                    }
+                } else {
+                    if (moveItemDown(questions, qIndex)) {
+                        currentQuestion = qIndex + 1;
+                        setModified(true);
+                        renderTree();
+                        showQuestionEditor(currentCategory, currentQuestion);
+                    }
+                }
+            }
+        }
+    });
 }
 
 /**
@@ -265,6 +336,12 @@ function renderTree() {
                     <span class="tree-toggle ${isExpanded ? 'expanded' : ''}">▶</span>
                     <span class="tree-category-label">${escapeHtml(category.label || category.id)}</span>
                     <span class="tree-item-count">${questions.length}</span>
+                    <span class="tree-reorder-buttons">
+                        <button class="btn-reorder" data-action="move-up" data-category="${catIndex}" 
+                                aria-label="Move category up" ${catIndex === 0 ? 'disabled' : ''}>↑</button>
+                        <button class="btn-reorder" data-action="move-down" data-category="${catIndex}" 
+                                aria-label="Move category down" ${catIndex === schema.categories.length - 1 ? 'disabled' : ''}>↓</button>
+                    </span>
                 </div>
                 <div class="tree-questions ${isExpanded ? 'expanded' : ''}">
         `;
@@ -280,6 +357,14 @@ function renderTree() {
                      data-category="${catIndex}" data-question="${questionIndex}">
                     <span class="tree-question-label">${escapeHtml(question.label || question.id)}</span>
                     <span class="tree-question-type">${question.type || 'text'}</span>
+                    <span class="tree-reorder-buttons">
+                        <button class="btn-reorder" data-action="move-up" data-category="${catIndex}" 
+                                data-question="${questionIndex}" aria-label="Move question up" 
+                                ${questionIndex === 0 ? 'disabled' : ''}>↑</button>
+                        <button class="btn-reorder" data-action="move-down" data-category="${catIndex}" 
+                                data-question="${questionIndex}" aria-label="Move question down" 
+                                ${questionIndex === questions.length - 1 ? 'disabled' : ''}>↓</button>
+                    </span>
                 </div>
             `;
         });
@@ -295,6 +380,9 @@ function renderTree() {
     // Attach click handlers
     document.querySelectorAll('.tree-category-header').forEach(el => {
         el.addEventListener('click', (e) => {
+            // Skip if clicking on reorder buttons
+            if (e.target.classList.contains('btn-reorder')) return;
+            
             const catIndex = parseInt(e.currentTarget.dataset.category);
             const category = schema.categories[catIndex];
             
@@ -313,11 +401,106 @@ function renderTree() {
     
     document.querySelectorAll('.tree-question').forEach(el => {
         el.addEventListener('click', (e) => {
+            // Skip if clicking on reorder buttons
+            if (e.target.classList.contains('btn-reorder')) return;
+            
             const catIndex = parseInt(e.currentTarget.dataset.category);
             const qIndex = parseInt(e.currentTarget.dataset.question);
             showQuestionEditor(catIndex, qIndex);
         });
     });
+    
+    // Attach reorder button handlers
+    document.querySelectorAll('.btn-reorder').forEach(btn => {
+        btn.addEventListener('click', handleReorderClick);
+    });
+}
+
+/**
+ * Handle reorder button clicks
+ */
+function handleReorderClick(e) {
+    e.stopPropagation(); // Prevent triggering parent element clicks
+    
+    const btn = e.currentTarget;
+    const action = btn.dataset.action;
+    const catIndex = parseInt(btn.dataset.category);
+    
+    if (btn.dataset.question !== undefined) {
+        // Reordering a question
+        const qIndex = parseInt(btn.dataset.question);
+        const category = schema.categories[catIndex];
+        const questions = category.questions;
+        
+        if (action === 'move-up') {
+            if (moveItemUp(questions, qIndex)) {
+                setModified(true);
+                // Update currentQuestion if we're viewing it
+                if (currentView === 'question' && currentCategory === catIndex) {
+                    if (currentQuestion === qIndex) {
+                        currentQuestion = qIndex - 1;
+                    } else if (currentQuestion === qIndex - 1) {
+                        currentQuestion = qIndex;
+                    }
+                }
+                renderTree();
+                if (currentView === 'question') {
+                    showQuestionEditor(currentCategory, currentQuestion);
+                }
+            }
+        } else if (action === 'move-down') {
+            if (moveItemDown(questions, qIndex)) {
+                setModified(true);
+                // Update currentQuestion if we're viewing it
+                if (currentView === 'question' && currentCategory === catIndex) {
+                    if (currentQuestion === qIndex) {
+                        currentQuestion = qIndex + 1;
+                    } else if (currentQuestion === qIndex + 1) {
+                        currentQuestion = qIndex;
+                    }
+                }
+                renderTree();
+                if (currentView === 'question') {
+                    showQuestionEditor(currentCategory, currentQuestion);
+                }
+            }
+        }
+    } else {
+        // Reordering a category
+        if (action === 'move-up') {
+            if (moveItemUp(schema.categories, catIndex)) {
+                setModified(true);
+                // Update currentCategory if we're viewing it
+                if (currentCategory === catIndex) {
+                    currentCategory = catIndex - 1;
+                } else if (currentCategory === catIndex - 1) {
+                    currentCategory = catIndex;
+                }
+                renderTree();
+                if (currentView === 'category') {
+                    showCategoryEditor(currentCategory);
+                } else if (currentView === 'question') {
+                    showQuestionEditor(currentCategory, currentQuestion);
+                }
+            }
+        } else if (action === 'move-down') {
+            if (moveItemDown(schema.categories, catIndex)) {
+                setModified(true);
+                // Update currentCategory if we're viewing it
+                if (currentCategory === catIndex) {
+                    currentCategory = catIndex + 1;
+                } else if (currentCategory === catIndex + 1) {
+                    currentCategory = catIndex;
+                }
+                renderTree();
+                if (currentView === 'category') {
+                    showCategoryEditor(currentCategory);
+                } else if (currentView === 'question') {
+                    showQuestionEditor(currentCategory, currentQuestion);
+                }
+            }
+        }
+    }
 }
 
 /**
@@ -419,6 +602,14 @@ function renderOptions(options) {
         
         html += `
             <div class="option-item" data-index="${index}">
+                <div class="option-item-reorder">
+                    <button type="button" class="btn-reorder" data-action="move-up" 
+                            data-index="${index}" aria-label="Move option up" 
+                            ${index === 0 ? 'disabled' : ''}>↑</button>
+                    <button type="button" class="btn-reorder" data-action="move-down" 
+                            data-index="${index}" aria-label="Move option down" 
+                            ${index === options.length - 1 ? 'disabled' : ''}>↓</button>
+                </div>
                 <div class="option-item-content">
                     <input type="text" class="form-control mb-1" 
                            placeholder="Option ID" 
@@ -446,6 +637,10 @@ function renderOptions(options) {
     
     elements.optionsList.querySelectorAll('[data-action="delete"]').forEach(btn => {
         btn.addEventListener('click', handleOptionDelete);
+    });
+    
+    elements.optionsList.querySelectorAll('.btn-reorder').forEach(btn => {
+        btn.addEventListener('click', handleOptionReorder);
     });
 }
 
@@ -476,6 +671,30 @@ function handleOptionDelete(e) {
         question.options.splice(index, 1);
         renderOptions(question.options);
         markAsModified();
+    }
+}
+
+/**
+ * Handle option reordering
+ */
+function handleOptionReorder(e) {
+    const btn = e.currentTarget;
+    const action = btn.dataset.action;
+    const index = parseInt(btn.dataset.index);
+    
+    const question = schema.categories[currentCategory].questions[currentQuestion];
+    const options = question.options;
+    
+    if (action === 'move-up') {
+        if (moveItemUp(options, index)) {
+            setModified(true);
+            renderOptions(options);
+        }
+    } else if (action === 'move-down') {
+        if (moveItemDown(options, index)) {
+            setModified(true);
+            renderOptions(options);
+        }
     }
 }
 

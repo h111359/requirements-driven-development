@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20260117-120324",
     "iteration-name": "Creation of technical design",
-    "prompt-id-sequence-next-value": 19,
+    "prompt-id-sequence-next-value": 20,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -207,6 +207,18 @@
             "questionnaire-generated": false,
             "questionnaire-answered": false,
             "plan-generated": true,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true,
+            "analysis-generated": true
+        },
+        {
+            "prompt-id": "P-019",
+            "prompt-title": "Move question options up and down",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
             "implementation-completed": true,
             "execution-mode": "no-action",
             "executed": true,
