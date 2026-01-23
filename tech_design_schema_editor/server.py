@@ -110,9 +110,6 @@ class SchemaEditorHandler(http.server.SimpleHTTPRequestHandler):
                 }, 400)
                 return
             
-            # Create backup before saving
-            backup_path = self.create_backup_file()
-            
             # Atomic write: write to temp file, then rename
             schema_file = Path(SCHEMA_PATH)
             temp_file = schema_file.with_suffix('.tmp')
@@ -125,8 +122,7 @@ class SchemaEditorHandler(http.server.SimpleHTTPRequestHandler):
             
             self.send_json_response({
                 "success": True,
-                "message": "Schema saved successfully",
-                "backup": backup_path
+                "message": "Schema saved successfully"
             })
         except json.JSONDecodeError as e:
             self.send_json_response({
@@ -305,14 +301,47 @@ class SchemaEditorHandler(http.server.SimpleHTTPRequestHandler):
                         errors.append(f"{cond_path}.equals: string must not be empty")
     
     def create_backup(self):
-        """Create a backup of the current schema"""
+        """Create a backup of the current schema with validation warnings"""
         try:
+            # Load and validate schema before backing up
+            schema_file = Path(SCHEMA_PATH)
+            if not schema_file.exists():
+                self.send_json_response({
+                    "error": "Schema file not found"
+                }, 404)
+                return
+            
+            # Load schema for validation
+            with open(schema_file, 'r', encoding='utf-8') as f:
+                schema = json.load(f)
+            
+            # Validate schema
+            validation_result = self.validate_schema_data(schema)
+            
+            # Create backup regardless of validation status
             backup_path = self.create_backup_file()
-            self.send_json_response({
+            
+            # Extract just the filename from the path
+            backup_filename = Path(backup_path).name if backup_path else None
+            
+            # Return response with validation warnings if present
+            response = {
                 "success": True,
-                "message": "Backup created successfully",
-                "path": backup_path
-            })
+                "filename": backup_filename
+            }
+            
+            if validation_result['valid']:
+                response["message"] = f"Backup created: {backup_filename}"
+            else:
+                response["message"] = f"Backup created: {backup_filename} (with validation warnings)"
+                response["warnings"] = validation_result['errors']
+            
+            self.send_json_response(response)
+            
+        except json.JSONDecodeError as e:
+            self.send_json_response({
+                "error": f"Invalid JSON in schema file: {str(e)}"
+            }, 400)
         except Exception as e:
             self.send_json_response({
                 "error": f"Error creating backup: {str(e)}"

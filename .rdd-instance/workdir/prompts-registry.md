@@ -642,3 +642,7 @@ In Technical Design Schema Editor remove "Save Question" button as the question 
 
 The auto-save functionality is not working when I edit the fields of a category. Similar issue exists for questions as well - when I edit a question, no autosave. Troubleshoot and fix
 %%ENDPROMPT
+
+%%PROMPT P-022 "Stop Technical Design backup on every change"
+`Currently Technical Design editor makes a backup file on every change of `.rdd/config/technical-design-schema.json`. Remove this functionality and keep only the button for manual backup
+%%ENDPROMPT

@@ -264,7 +264,13 @@ async function createBackup() {
             throw new Error(data.error || 'Failed to create backup');
         }
         
-        showStatus(`Backup created: ${data.path}`, 'success');
+        // Show validation warnings if present
+        if (data.warnings && data.warnings.length > 0) {
+            console.warn('Backup created with validation warnings:', data.warnings);
+            showValidationErrors(data.warnings);
+        }
+        
+        showStatus(data.message, data.warnings ? 'warning' : 'success');
         
     } catch (error) {
         console.error('Error creating backup:', error);

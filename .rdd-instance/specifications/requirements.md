@@ -670,6 +670,12 @@ The framework enables:
 
 - [TR-0196] The Technical Design Schema Editor shall validate visibleWhen fields as arrays of condition objects where each condition contains questionId (string) and equals (array of strings) fields, supporting AND logic across multiple conditions and OR logic within each condition's equals array.
 
+- [TR-0197] The Technical Design Schema Editor shall provide a manual backup button that validates the schema, creates a timestamped backup file regardless of validation status, and displays validation warnings if the schema is invalid
+
+- [TR-0198] The Technical Design Schema Editor auto-save functionality shall save schema changes to disk immediately without creating automatic backup files
+
+
+
 
 
 
