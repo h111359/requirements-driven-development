@@ -763,3 +763,8 @@ Check the implemented logic
 Check the conventions
 The results should be listed in report file (markdown format) in the prompt workdir
 %%ENDPROMPT
+
+%%PROMPT P-027 "Check 2"
+Check what are the possible operators expected in the "visibleWhen" section of questions expected by web application in .rdd and the conventions. I am interested only from the RDD, not the editor.
+The results should be listed in report file (markdown format) in the prompt workdir
+%%ENDPROMPT
