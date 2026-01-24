@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20260117-120324",
     "iteration-name": "Creation of technical design",
-    "prompt-id-sequence-next-value": 29,
+    "prompt-id-sequence-next-value": 30,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -321,6 +321,17 @@
         {
             "prompt-id": "P-028",
             "prompt-title": "Check 3",
+            "state": "completed",
+            "questionnaire-generated": false,
+            "questionnaire-answered": false,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
+        },
+        {
+            "prompt-id": "P-029",
+            "prompt-title": "Check 4",
             "state": "completed",
             "questionnaire-generated": false,
             "questionnaire-answered": false,
