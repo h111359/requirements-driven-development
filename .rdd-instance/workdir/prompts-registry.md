@@ -768,3 +768,8 @@ The results should be listed in report file (markdown format) in the prompt work
 Check what are the possible operators expected in the "visibleWhen" section of questions expected by web application in .rdd and the conventions. I am interested only from the RDD, not the editor.
 The results should be listed in report file (markdown format) in the prompt workdir
 %%ENDPROMPT
+
+%%PROMPT P-028 "Check 3"
+Check what are the possible operators expected in the "visibleWhen" section of questions which are recognized by web application in `.rdd/src/web/static/app.js` and the conventions. I am interested only from the RDD, not the editor.
+The results should be listed in report file (markdown format) in the prompt workdir
+%%ENDPROMPT
