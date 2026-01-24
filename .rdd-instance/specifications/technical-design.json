@@ -1,1 +1,10 @@
-{}
+{
+  "Infra_DeploymentModel": {
+    "questionId": "Infra_DeploymentModel",
+    "type": "multiselect",
+    "value": [
+      "Personal machine"
+    ],
+    "answeredAt": "2026-01-24T16:29:22.866870+00:00"
+  }
+}

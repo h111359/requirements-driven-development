@@ -291,14 +291,35 @@ class SchemaEditorHandler(http.server.SimpleHTTPRequestHandler):
                     elif not isinstance(condition['questionId'], str):
                         errors.append(f"{cond_path}.questionId: must be a string")
                     
-                    if 'equals' not in condition:
-                        errors.append(f"{cond_path}: missing 'equals' field")
-                    elif not isinstance(condition['equals'], (list, str)):
-                        errors.append(f"{cond_path}.equals: must be an array or string")
-                    elif isinstance(condition['equals'], list) and len(condition['equals']) == 0:
-                        errors.append(f"{cond_path}.equals: array must have at least one value")
-                    elif isinstance(condition['equals'], str) and len(condition['equals']) == 0:
-                        errors.append(f"{cond_path}.equals: string must not be empty")
+                    # Support both old format (equals) and new format (operator + value)
+                    has_old_format = 'equals' in condition
+                    has_new_format = 'operator' in condition and 'value' in condition
+                    
+                    if not has_old_format and not has_new_format:
+                        errors.append(f"{cond_path}: must have either 'equals' field (old format) or both 'operator' and 'value' fields (new format)")
+                    
+                    # Validate old format (equals field)
+                    if has_old_format:
+                        if not isinstance(condition['equals'], (list, str)):
+                            errors.append(f"{cond_path}.equals: must be an array or string")
+                        elif isinstance(condition['equals'], list) and len(condition['equals']) == 0:
+                            errors.append(f"{cond_path}.equals: array must have at least one value")
+                        elif isinstance(condition['equals'], str) and len(condition['equals']) == 0:
+                            errors.append(f"{cond_path}.equals: string must not be empty")
+                    
+                    # Validate new format (operator + value fields)
+                    if has_new_format:
+                        valid_operators = ['equals', 'notEquals', 'contains', 'notContains', 'startsWith', 'greaterThan', 'lessThan']
+                        if condition['operator'] not in valid_operators:
+                            errors.append(f"{cond_path}.operator: must be one of {', '.join(valid_operators)}")
+                        
+                        # Value can be string, array, or number depending on operator
+                        if not isinstance(condition['value'], (str, list, int, float)):
+                            errors.append(f"{cond_path}.value: must be a string, number, or array")
+                        elif isinstance(condition['value'], list) and len(condition['value']) == 0:
+                            errors.append(f"{cond_path}.value: array must have at least one value")
+                        elif isinstance(condition['value'], str) and len(condition['value']) == 0:
+                            errors.append(f"{cond_path}.value: string must not be empty")
     
     def create_backup(self):
         """Create a backup of the current schema with validation warnings"""

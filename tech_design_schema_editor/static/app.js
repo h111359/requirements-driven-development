@@ -986,6 +986,34 @@ function updateQuestionVisibleWhen() {
  */
 
 /**
+ * Normalize visibleWhen conditions from old format to new format
+ * Old format: {questionId, equals: [...]}
+ * New format: {questionId, operator, value}
+ */
+function normalizeVisibleWhenConditions(conditions) {
+    if (!Array.isArray(conditions)) return [];
+    
+    return conditions.map(cond => {
+        // Check if old format (has 'equals' property)
+        if (cond.equals !== undefined) {
+            console.log('Converting old format condition to new format:', cond);
+            return {
+                questionId: cond.questionId || '',
+                operator: 'equals',
+                value: cond.equals // Keep as array or single value
+            };
+        }
+        
+        // Already in new format or needs other handling
+        return {
+            questionId: cond.questionId || '',
+            operator: cond.operator || 'equals',
+            value: cond.value || ''
+        };
+    });
+}
+
+/**
  * Initialize the condition builder UI
  */
 function initConditionBuilder(visibleWhenData) {
@@ -1022,8 +1050,9 @@ function initConditionBuilder(visibleWhenData) {
             }
         }
     } else if (Array.isArray(visibleWhenData)) {
-        // New structured format
-        conditions = visibleWhenData;
+        // Array format - could be old or new
+        // Normalize to new format {questionId, operator, value}
+        conditions = normalizeVisibleWhenConditions(visibleWhenData);
     }
     
     // Store conditions in global state

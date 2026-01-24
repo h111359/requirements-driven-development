@@ -749,3 +749,10 @@ In "Technical Design Schema Editor" when Category is selected and the list of qu
 Enhance value selection in Conditional Visibility part of Technical Design Schema
 When the type of the question is with predfined options like for radio or multiselect - the form should give the user convenient way to select the value, not to write it. The form should suggest the values currently available as options to the referenced question.
 %%ENDPROMPT
+
+%%PROMPT P-025 "Saving the Conditional Visibility"
+The editor "Technical Design Schema Editor" does not record the chosen visibility conditions in the json schema.
+Troubleshoot and fix the issue
+
+The Technical Design Schema Editor’s conditional visibility rule builder is not persisting changes. Investigate and fix saving of `visibleWhen` rules so edits in the rule builder are written to `.rdd/config/technical-design-schema.json` using the structured array format `{questionId, operator, value}`. Ensure validation rejects missing/invalid question references or option values, provide clear user feedback (success/error), and preserve backward compatibility with legacy string rules. Describe tests covering add/edit/delete of rules, autosave behavior, and reload correctness.
+%%ENDPROMPT

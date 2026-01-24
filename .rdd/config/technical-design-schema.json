@@ -169,8 +169,8 @@
               "label": "On-premises"
             },
             {
-              "id": "Public cloud only",
-              "label": "Public cloud only"
+              "id": "Public cloud",
+              "label": "Public cloud"
             },
             {
               "id": "Hybrid cloud",
@@ -202,7 +202,16 @@
               "label": "GCP"
             }
           ],
-          "allowOther": false
+          "allowOther": false,
+          "visibleWhen": [
+            {
+              "questionId": "Infra_DeploymentModel",
+              "operator": "contains",
+              "value": [
+                "Public cloud"
+              ]
+            }
+          ]
         },
         {
           "id": "Infra_UsesVNet",
