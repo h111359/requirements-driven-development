@@ -1,0 +1,2 @@
+Enhance value selection in Conditional Visibility part of Technical Design Schema
+When the type of the question is with predfined options like for radio or multiselect - the form should give the user convenient way to select the value, not to write it. The form should suggest the values currently available as options to the referenced question.

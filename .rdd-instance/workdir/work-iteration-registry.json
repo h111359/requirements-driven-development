@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20260117-120324",
     "iteration-name": "Creation of technical design",
-    "prompt-id-sequence-next-value": 24,
+    "prompt-id-sequence-next-value": 25,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -272,6 +272,17 @@
             "analysis-generated": true,
             "modifications-count": 2,
             "current-modification-id": null
+        },
+        {
+            "prompt-id": "P-024",
+            "prompt-title": "Enhance value selection in Conditional Visibility part of Technical Design Schem",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
         }
     ]
 }

@@ -1,0 +1,125 @@
+{
+  "context": "P-024 aims to enhance the value selection component in the conditional visibility builder. Currently, the value field is a plain text input, which requires users to manually type option values. The goal is to provide a convenient way to select values from the referenced question's available options. This questionnaire clarifies the UI/UX approach for the improved value selector and how to handle different question types.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "What type of UI component should be used for the value selector when the referenced question has predefined options?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Simple dropdown showing all available option labels",
+          "pros": "Simple implementation, familiar pattern for users, fast selection for small option lists, prevents typos completely",
+          "cons": "Dropdown can become long and unwieldy if question has many options (100+), no search capability for large lists, space consumption in the UI"
+        },
+        {
+          "id": "B",
+          "label": "Searchable/autocomplete dropdown that filters options as user types",
+          "pros": "Efficient for large option lists, users can quickly find options by typing, prevents typos, modern UX pattern, space-efficient",
+          "cons": "More complex implementation, requires debounced search logic, may be overkill for questions with few options (3-5)"
+        },
+        {
+          "id": "C",
+          "label": "Smart selector: use simple dropdown for small lists (≤10 options), autocomplete dropdown for larger lists (>10 options)",
+          "pros": "Best of both worlds - simple for small lists, scalable for large lists, adapts to question complexity",
+          "cons": "More complex conditional logic, different behavior for different questions might confuse some users, requires careful threshold selection"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Searchable/autocomplete dropdown provides the best user experience across different question types and option list sizes. It prevents typos while remaining efficient even for large option lists. This aligns with modern UI patterns and provides a consistent experience regardless of the number of options available.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "For question types without predefined options (text, textarea, number), how should the value field behave in the conditional visibility builder?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Show a simple text input field (current behavior) with placeholder text like 'enter value'",
+          "pros": "No change needed for non-option questions, simple and consistent, users understand they need to type freely, minimal implementation",
+          "cons": "Inconsistent UX between option-based and free-text questions, users cannot see patterns or examples easily, potentially error-prone for complex values"
+        },
+        {
+          "id": "B",
+          "label": "Show a text input field with a helper tooltip or info icon explaining the expected format (e.g., 'Enter any text value', 'Enter a number', 'Use case-sensitive matching')",
+          "pros": "Clearer guidance for users, explains what values are valid, reduces confusion about syntax requirements, minimal implementation overhead",
+          "cons": "Requires tooltip/help text implementation, still relies on manual typing without suggestions"
+        },
+        {
+          "id": "C",
+          "label": "Disable or gray out the value field with a message like 'This question type accepts any value' and show the input as read-only text area",
+          "pros": "Very clear that free-form entry is allowed, prevents accidental modifications, makes it explicit that no validation is possible",
+          "cons": "Users cannot enter/modify values if read-only, confusing UX if users expect to edit, may require modal dialog for input"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "For free-text questions, a simple text input field is most appropriate. These questions accept any value, so predefined options don't apply. The current behavior already handles this well. No change is needed to maintain consistency - option-based questions will have smart selectors while free-text questions retain simple text inputs.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "What should be displayed in the value selector - option labels, option IDs, or both?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Display and store option labels only (e.g., 'Mobile App', 'Web Platform')",
+          "pros": "Most user-friendly display, labels are descriptive and meaningful to users, readable conditions in documentation",
+          "cons": "If labels change, conditions may break or become confusing, labels may not be unique (two options with same label in different categories)"
+        },
+        {
+          "id": "B",
+          "label": "Display and store option IDs only (e.g., 'OPT-001', 'OPT-002')",
+          "pros": "Stable references independent of label changes, unique identifiers, appropriate for data storage",
+          "cons": "Not user-friendly for display, hard for users to understand which option they selected, requires mental mapping between IDs and labels"
+        },
+        {
+          "id": "C",
+          "label": "Display option labels to users but store option IDs internally (show 'Mobile App' in dropdown, store 'option-id-123' in condition)",
+          "pros": "Best of both worlds - users see friendly labels, conditions remain stable when labels change, no breakage if labels are duplicated",
+          "cons": "More complex implementation, requires mapping between display and storage values, potential confusion if labels change after condition is set"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Displaying labels while storing IDs provides the best user experience and data stability. Users see meaningful, readable labels in the UI, while the underlying condition references stable, unique option IDs. This prevents issues if option labels are modified later and ensures robust condition semantics.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "For multiselect questions, how should the value field handle condition specification?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Allow selecting only a single option value, condition checks if the multiselect answer contains that value (current 'contains' operator behavior)",
+          "pros": "Simple implementation, clear semantics (check if array contains value), consistent with existing operator design, easy to understand",
+          "cons": "Cannot create conditions requiring multiple values (e.g., 'Features contains both AI/ML AND Database'), requires multiple conditions"
+        },
+        {
+          "id": "B",
+          "label": "Allow selecting multiple values in the value field, condition checks if multiselect answer contains ANY of the selected values (OR semantics)",
+          "pros": "More powerful conditions, reduce number of rows needed for complex rules, natural extension of 'contains' operator",
+          "cons": "More complex to implement and understand, introduces OR logic at row level (conflicts with AND-only philosophy), confusing semantics"
+        },
+        {
+          "id": "C",
+          "label": "Show a note that for multiselect questions the value field accepts a single option, and if checking for multiple values they should create separate condition rows (one per option with AND logic)",
+          "pros": "Maintains simplicity and consistency with AND-only philosophy, clear and explicit, no additional complexity, easier to understand",
+          "cons": "More verbose conditions (multiple rows), may seem inefficient for complex multiselect checks"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A maintains the existing 'contains' operator semantics which is appropriate for multiselect. A single value selection per row aligns with the AND-only logic philosophy and keeps implementation simple. Users can create multiple condition rows if they need to check for multiple values in a multiselect field.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    }
+  ]
+}

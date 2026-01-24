@@ -1034,6 +1034,59 @@ function initConditionBuilder(visibleWhenData) {
 }
 
 /**
+ * Get options for a specific question
+ * Returns array of {id, label} objects
+ */
+function getOptionsForQuestion(questionId) {
+    if (!questionId) return [];
+    
+    for (let cat of schema.categories) {
+        const q = cat.questions.find(q => q.id === questionId);
+        if (q && q.options && Array.isArray(q.options)) {
+            // Convert options to {id, label} format if needed
+            return q.options.map(opt => {
+                if (typeof opt === 'string') {
+                    return { id: opt, label: opt };
+                } else if (opt.id && opt.label) {
+                    return { id: opt.id, label: opt.label };
+                }
+                return null;
+            }).filter(opt => opt !== null);
+        }
+    }
+    
+    return [];
+}
+
+/**
+ * Get a question by ID
+ */
+function getQuestionById(questionId) {
+    if (!questionId) return null;
+    
+    for (let cat of schema.categories) {
+        const q = cat.questions.find(q => q.id === questionId);
+        if (q) return q;
+    }
+    
+    return null;
+}
+
+/**
+ * Check if a question has predefined options
+ */
+function hasOptionsQuestion(questionId) {
+    const question = getQuestionById(questionId);
+    if (!question) return false;
+    
+    const optionBasedTypes = ['radio', 'dropdown', 'multiselect'];
+    return optionBasedTypes.includes(question.type) && 
+           question.options && 
+           Array.isArray(question.options) && 
+           question.options.length > 0;
+}
+
+/**
  * Render condition rows in the builder
  */
 function renderConditionRows() {
@@ -1109,13 +1162,56 @@ function createConditionRow(condition, index) {
         </select>
     `;
     
-    // Value field
+    // Value field - dynamic based on question type
     const valueField = document.createElement('div');
     valueField.className = 'condition-row-field';
-    valueField.innerHTML = `
-        <label>Value</label>
-        <input type="text" class="condition-value-input" data-index="${index}" value="${escapeHtml(selectedValue)}" placeholder="Value...">
-    `;
+    
+    // Check if the referenced question has predefined options
+    if (selectedQuestion && hasOptionsQuestion(selectedQuestion)) {
+        // Question has options - create dropdown selector (Q3 decision: display labels, store IDs)
+        const options = getOptionsForQuestion(selectedQuestion);
+        const question = getQuestionById(selectedQuestion);
+        const isMultiselect = question && question.type === 'multiselect';
+        
+        // For multiselect questions, we need to handle array values
+        let selectedValues = [];
+        if (Array.isArray(selectedValue)) {
+            selectedValues = selectedValue;
+        } else if (selectedValue) {
+            selectedValues = [selectedValue];
+        }
+        
+        if (isMultiselect) {
+            // Multiple select dropdown for multiselect questions (Q4 decision: support multiple values with OR logic)
+            valueField.innerHTML = `
+                <label>Value</label>
+                <select class="condition-value-select condition-value-multiselect" data-index="${index}" multiple>
+                    ${options.map(opt => 
+                        `<option value="${escapeHtml(opt.id)}" ${selectedValues.includes(opt.id) ? 'selected' : ''}>${escapeHtml(opt.label)}</option>`
+                    ).join('')}
+                </select>
+                <div class="form-text" style="font-size: 0.75rem; margin-top: 0.25rem;">Select one or more values (OR logic)</div>
+            `;
+        } else {
+            // Regular single-select dropdown for radio/dropdown questions
+            valueField.innerHTML = `
+                <label>Value</label>
+                <select class="condition-value-select" data-index="${index}">
+                    <option value="">-- Select Value --</option>
+                    ${options.map(opt => 
+                        `<option value="${escapeHtml(opt.id)}" ${selectedValues[0] === opt.id ? 'selected' : ''}>${escapeHtml(opt.label)}</option>`
+                    ).join('')}
+                </select>
+            `;
+        }
+    } else {
+        // Question has no options or no question selected - use text input (Q2 decision: keep text input for free-text questions)
+        const valueStr = Array.isArray(selectedValue) ? JSON.stringify(selectedValue) : selectedValue;
+        valueField.innerHTML = `
+            <label>Value</label>
+            <input type="text" class="condition-value-input" data-index="${index}" value="${escapeHtml(valueStr)}" placeholder="Value...">
+        `;
+    }
     
     // Remove button
     const removeField = document.createElement('div');
@@ -1133,12 +1229,26 @@ function createConditionRow(condition, index) {
     const questionSelect = row.querySelector('.condition-question-select');
     const operatorSelect = row.querySelector('.condition-operator-select');
     const valueInput = row.querySelector('.condition-value-input');
+    const valueSelect = row.querySelector('.condition-value-select');
+    const valueMultiselect = row.querySelector('.condition-value-multiselect');
     const removeBtn = row.querySelector('.btn-remove-condition');
     
     categorySelect.addEventListener('change', (e) => handleConditionCategoryChange(e, index));
     questionSelect.addEventListener('change', (e) => handleConditionQuestionChange(e, index));
     operatorSelect.addEventListener('change', (e) => handleConditionOperatorChange(e, index));
-    valueInput.addEventListener('blur', (e) => handleConditionValueChange(e, index));
+    
+    // Attach appropriate value field listener based on type
+    if (valueMultiselect) {
+        // Multiselect dropdown - store as array
+        valueMultiselect.addEventListener('change', (e) => handleConditionValueChangeMultiselect(e, index));
+    } else if (valueSelect) {
+        // Single-select dropdown for options
+        valueSelect.addEventListener('change', (e) => handleConditionValueChangeSelect(e, index));
+    } else if (valueInput) {
+        // Text input for free-text questions
+        valueInput.addEventListener('blur', (e) => handleConditionValueChange(e, index));
+    }
+    
     removeBtn.addEventListener('click', (e) => {
         e.preventDefault();
         removeConditionRow(index);
@@ -1196,6 +1306,40 @@ function handleConditionQuestionChange(event, index) {
     
     saveConditionsToQuestion();
     renderConditionRows();
+}
+
+/**
+ * Handle condition value change for select dropdown (option-based questions)
+ * Stores the option ID (Q3 decision: store IDs for stability)
+ */
+function handleConditionValueChangeSelect(event, index) {
+    if (!window.currentConditions[index]) {
+        window.currentConditions[index] = {};
+    }
+    
+    const selectedValue = event.target.value;
+    window.currentConditions[index].value = selectedValue;
+    
+    saveConditionsToQuestion();
+}
+
+/**
+ * Handle condition value change for multiselect dropdown
+ * Stores as array to support OR logic (Q4 decision: "B" - Allow selecting multiple values)
+ */
+function handleConditionValueChangeMultiselect(event, index) {
+    if (!window.currentConditions[index]) {
+        window.currentConditions[index] = {};
+    }
+    
+    // Get selected values from multiselect dropdown (option IDs)
+    const selectedOptions = Array.from(event.target.selectedOptions);
+    const selectedValues = selectedOptions.map(opt => opt.value);
+    
+    // Store as array (empty array if nothing selected, or as array of IDs)
+    window.currentConditions[index].value = selectedValues.length > 0 ? selectedValues : '';
+    
+    saveConditionsToQuestion();
 }
 
 /**
