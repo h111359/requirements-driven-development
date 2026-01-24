@@ -756,3 +756,10 @@ Troubleshoot and fix the issue
 
 The Technical Design Schema Editor’s conditional visibility rule builder is not persisting changes. Investigate and fix saving of `visibleWhen` rules so edits in the rule builder are written to `.rdd/config/technical-design-schema.json` using the structured array format `{questionId, operator, value}`. Ensure validation rejects missing/invalid question references or option values, provide clear user feedback (success/error), and preserve backward compatibility with legacy string rules. Describe tests covering add/edit/delete of rules, autosave behavior, and reload correctness.
 %%ENDPROMPT
+
+%%PROMPT P-026 "Check possible operators for Conditional Visibility"
+Check what are the possible operators expected in the "visibleWhen" section of questions.
+Check the implemented logic
+Check the conventions
+The results should be listed in report file (markdown format) in the prompt workdir
+%%ENDPROMPT
