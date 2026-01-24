@@ -126,6 +126,14 @@ function attachEventListeners() {
     elements.questionVisibleWhen.addEventListener('blur', updateQuestionVisibleWhen);
     elements.questionAllowOther.addEventListener('change', updateQuestionAllowOther);
     elements.questionOtherPlaceholder.addEventListener('blur', updateQuestionOtherPlaceholder);
+    
+    // Condition builder event listeners
+    const btnToggleVisibleWhenMode = document.getElementById('btnToggleVisibleWhenMode');
+    const btnAddCondition = document.getElementById('btnAddCondition');
+    const btnConvertLegacy = document.getElementById('btnConvertLegacy');
+    if (btnToggleVisibleWhenMode) btnToggleVisibleWhenMode.addEventListener('click', toggleVisibleWhenMode);
+    if (btnAddCondition) btnAddCondition.addEventListener('click', addConditionRow);
+    if (btnConvertLegacy) btnConvertLegacy.addEventListener('click', convertLegacyExpressionToBuilder);
 }
 
 /**
@@ -540,6 +548,9 @@ function showQuestionEditor(categoryIndex, questionIndex) {
     
     // Handle question type-specific fields
     handleQuestionTypeChange();
+    
+    // Initialize condition builder
+    initConditionBuilder(question.visibleWhen);
     
     // Render options if applicable
     if (['radio', 'multiselect', 'dropdown'].includes(question.type)) {
@@ -968,6 +979,499 @@ function updateQuestionVisibleWhen() {
         question.visibleWhen = newVisibleWhen || undefined;
         markAsModified();
     }
+}
+
+/**
+ * Condition Builder Functions
+ */
+
+/**
+ * Initialize the condition builder UI
+ */
+function initConditionBuilder(visibleWhenData) {
+    if (!schema || !schema.categories) return;
+    
+    const container = document.getElementById('conditionBuilderContainer');
+    const legacyContainer = document.getElementById('legacyVisibleWhenContainer');
+    if (!container || !legacyContainer) return;
+    
+    // Parse visibleWhenData - could be array (new format) or string (legacy format)
+    let conditions = [];
+    let isLegacy = false;
+    
+    if (typeof visibleWhenData === 'string' && visibleWhenData.trim()) {
+        // Legacy string format - attempt to parse
+        isLegacy = true;
+        elements.questionVisibleWhen.value = visibleWhenData;
+        
+        // Attempt to convert legacy expression
+        conditions = parseLegacyExpression(visibleWhenData);
+        
+        // Show warning if legacy format detected
+        const legacyWarning = document.getElementById('legacyWarning');
+        if (legacyWarning) {
+            if (conditions.length === 0) {
+                // Parsing failed
+                legacyWarning.style.display = 'block';
+                container.style.display = 'none';
+                legacyContainer.style.display = 'block';
+                return;
+            } else {
+                // Parsing succeeded - show option to convert
+                legacyWarning.style.display = 'block';
+            }
+        }
+    } else if (Array.isArray(visibleWhenData)) {
+        // New structured format
+        conditions = visibleWhenData;
+    }
+    
+    // Store conditions in global state
+    window.currentConditions = conditions;
+    
+    // Render condition rows
+    renderConditionRows();
+}
+
+/**
+ * Render condition rows in the builder
+ */
+function renderConditionRows() {
+    const container = document.getElementById('conditionRowsContainer');
+    const countSpan = document.getElementById('conditionCount');
+    if (!container) return;
+    
+    const conditions = window.currentConditions || [];
+    
+    // Update count
+    if (countSpan) countSpan.textContent = conditions.length;
+    
+    // Clear existing rows
+    container.innerHTML = '';
+    
+    // Render each condition
+    conditions.forEach((condition, index) => {
+        const row = createConditionRow(condition, index);
+        container.appendChild(row);
+    });
+}
+
+/**
+ * Create a single condition row element
+ */
+function createConditionRow(condition, index) {
+    const row = document.createElement('div');
+    row.className = 'condition-row';
+    row.dataset.index = index;
+    
+    const condition_obj = condition || {};
+    const selectedCategory = getCurrentCategoryForQuestion(condition_obj.questionId);
+    const selectedQuestion = condition_obj.questionId || '';
+    const selectedOperator = condition_obj.operator || 'equals';
+    const selectedValue = condition_obj.value || '';
+    
+    // Category selector
+    const categoryField = document.createElement('div');
+    categoryField.className = 'condition-row-field';
+    categoryField.innerHTML = `
+        <label>Category</label>
+        <select class="condition-category-select" data-index="${index}">
+            <option value="">-- Select Category --</option>
+            ${getCategories().map(cat => 
+                `<option value="${cat.id}" ${cat.id === selectedCategory ? 'selected' : ''}>${cat.label}</option>`
+            ).join('')}
+        </select>
+    `;
+    
+    // Question selector
+    const questionField = document.createElement('div');
+    questionField.className = 'condition-row-field';
+    questionField.innerHTML = `
+        <label>Question</label>
+        <select class="condition-question-select" data-index="${index}">
+            <option value="">-- Select Question --</option>
+            ${getQuestionsForCategory(selectedCategory).map(q => 
+                `<option value="${q.id}" ${q.id === selectedQuestion ? 'selected' : ''}>${q.label} (${q.id})</option>`
+            ).join('')}
+        </select>
+    `;
+    
+    // Operator selector (will be updated based on question type)
+    const operatorField = document.createElement('div');
+    operatorField.className = 'condition-row-field';
+    operatorField.innerHTML = `
+        <label>Operator</label>
+        <select class="condition-operator-select" data-index="${index}">
+            <option value="">-- Select Operator --</option>
+            ${getOperatorsForQuestion(selectedQuestion).map(op => 
+                `<option value="${op.value}" ${op.value === selectedOperator ? 'selected' : ''}>${op.label}</option>`
+            ).join('')}
+        </select>
+    `;
+    
+    // Value field
+    const valueField = document.createElement('div');
+    valueField.className = 'condition-row-field';
+    valueField.innerHTML = `
+        <label>Value</label>
+        <input type="text" class="condition-value-input" data-index="${index}" value="${escapeHtml(selectedValue)}" placeholder="Value...">
+    `;
+    
+    // Remove button
+    const removeField = document.createElement('div');
+    removeField.className = 'condition-row-field';
+    removeField.innerHTML = `<button type="button" class="btn-remove-condition" data-index="${index}">✕</button>`;
+    
+    row.appendChild(categoryField);
+    row.appendChild(questionField);
+    row.appendChild(operatorField);
+    row.appendChild(valueField);
+    row.appendChild(removeField);
+    
+    // Attach event listeners
+    const categorySelect = row.querySelector('.condition-category-select');
+    const questionSelect = row.querySelector('.condition-question-select');
+    const operatorSelect = row.querySelector('.condition-operator-select');
+    const valueInput = row.querySelector('.condition-value-input');
+    const removeBtn = row.querySelector('.btn-remove-condition');
+    
+    categorySelect.addEventListener('change', (e) => handleConditionCategoryChange(e, index));
+    questionSelect.addEventListener('change', (e) => handleConditionQuestionChange(e, index));
+    operatorSelect.addEventListener('change', (e) => handleConditionOperatorChange(e, index));
+    valueInput.addEventListener('blur', (e) => handleConditionValueChange(e, index));
+    removeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        removeConditionRow(index);
+    });
+    
+    return row;
+}
+
+/**
+ * Handle condition category change
+ */
+function handleConditionCategoryChange(event, index) {
+    const category = event.target.value;
+    // Update questions dropdown when category changes
+    const row = document.querySelector(`.condition-row[data-index="${index}"]`);
+    const questionSelect = row.querySelector('.condition-question-select');
+    
+    const questions = getQuestionsForCategory(category);
+    questionSelect.innerHTML = '<option value="">-- Select Question --</option>' + 
+        questions.map(q => `<option value="${q.id}">${q.label} (${q.id})</option>`).join('');
+    
+    // Clear condition when category changes
+    if (window.currentConditions[index]) {
+        window.currentConditions[index].questionId = '';
+        window.currentConditions[index].operator = '';
+        window.currentConditions[index].value = '';
+    }
+    
+    saveConditionsToQuestion();
+}
+
+/**
+ * Handle condition question change
+ */
+function handleConditionQuestionChange(event, index) {
+    const questionId = event.target.value;
+    
+    if (!window.currentConditions[index]) {
+        window.currentConditions[index] = {};
+    }
+    
+    window.currentConditions[index].questionId = questionId;
+    
+    // Update operator dropdown based on question type
+    const row = document.querySelector(`[data-index="${index}"]`);
+    const operatorSelect = row.querySelector('.condition-operator-select');
+    const operators = getOperatorsForQuestion(questionId);
+    
+    operatorSelect.innerHTML = '<option value="">-- Select Operator --</option>' + 
+        operators.map(op => `<option value="${op.value}">${op.label}</option>`).join('');
+    
+    // Reset operator and value
+    window.currentConditions[index].operator = '';
+    window.currentConditions[index].value = '';
+    
+    saveConditionsToQuestion();
+    renderConditionRows();
+}
+
+/**
+ * Handle condition operator change
+ */
+function handleConditionOperatorChange(event, index) {
+    if (!window.currentConditions[index]) {
+        window.currentConditions[index] = {};
+    }
+    
+    window.currentConditions[index].operator = event.target.value;
+    saveConditionsToQuestion();
+}
+
+/**
+ * Handle condition value change
+ */
+function handleConditionValueChange(event, index) {
+    if (!window.currentConditions[index]) {
+        window.currentConditions[index] = {};
+    }
+    
+    window.currentConditions[index].value = event.target.value;
+    saveConditionsToQuestion();
+}
+
+/**
+ * Add a new condition row
+ */
+function addConditionRow() {
+    if (!window.currentConditions) {
+        window.currentConditions = [];
+    }
+    
+    window.currentConditions.push({
+        questionId: '',
+        operator: '',
+        value: ''
+    });
+    
+    renderConditionRows();
+}
+
+/**
+ * Remove a condition row
+ */
+function removeConditionRow(index) {
+    if (!window.currentConditions) return;
+    
+    window.currentConditions.splice(index, 1);
+    renderConditionRows();
+    saveConditionsToQuestion();
+}
+
+/**
+ * Save conditions to the current question's visibleWhen property
+ */
+function saveConditionsToQuestion() {
+    if (currentView !== 'question' || currentCategory === null || currentQuestion === null) return;
+    
+    const question = schema.categories[currentCategory].questions[currentQuestion];
+    const conditions = window.currentConditions || [];
+    
+    if (conditions.length > 0) {
+        // Convert to legacy format if all conditions are simple equals
+        question.visibleWhen = conditions;
+    } else {
+        question.visibleWhen = undefined;
+    }
+    
+    // Update textarea
+    elements.questionVisibleWhen.value = JSON.stringify(conditions, null, 2);
+    markAsModified();
+}
+
+/**
+ * Toggle between builder mode and advanced (textarea) mode
+ */
+function toggleVisibleWhenMode() {
+    const builderContainer = document.getElementById('conditionBuilderContainer');
+    const legacyContainer = document.getElementById('legacyVisibleWhenContainer');
+    
+    if (builderContainer && legacyContainer) {
+        const isBuilderVisible = builderContainer.style.display !== 'none';
+        
+        if (isBuilderVisible) {
+            // Switch to legacy mode
+            builderContainer.style.display = 'none';
+            legacyContainer.style.display = 'block';
+        } else {
+            // Switch to builder mode
+            legacyContainer.style.display = 'none';
+            builderContainer.style.display = 'block';
+        }
+    }
+}
+
+/**
+ * Get all categories
+ */
+function getCategories() {
+    if (!schema || !schema.categories) return [];
+    return schema.categories;
+}
+
+/**
+ * Get questions for a specific category
+ */
+function getQuestionsForCategory(categoryId) {
+    if (!schema || !schema.categories) return [];
+    
+    const category = schema.categories.find(c => c.id === categoryId);
+    if (!category || !category.questions) return [];
+    
+    // Exclude the current question being edited
+    return category.questions.filter(q => q.id !== currentQuestion);
+}
+
+/**
+ * Get valid operators for a specific question
+ */
+function getOperatorsForQuestion(questionId) {
+    if (!questionId) {
+        return [
+            { value: 'equals', label: 'Equals' },
+            { value: 'notEquals', label: 'Not Equals' }
+        ];
+    }
+    
+    // Find the question to determine its type
+    let questionType = 'text';
+    for (let cat of schema.categories) {
+        const q = cat.questions.find(q => q.id === questionId);
+        if (q) {
+            questionType = q.type;
+            break;
+        }
+    }
+    
+    // Return operators based on question type
+    const operatorMap = {
+        'radio': [
+            { value: 'equals', label: 'Equals' },
+            { value: 'notEquals', label: 'Not Equals' }
+        ],
+        'dropdown': [
+            { value: 'equals', label: 'Equals' },
+            { value: 'notEquals', label: 'Not Equals' }
+        ],
+        'multiselect': [
+            { value: 'contains', label: 'Contains' },
+            { value: 'notContains', label: 'Does Not Contain' }
+        ],
+        'checkbox': [
+            { value: 'equals', label: 'Equals' }
+        ],
+        'text': [
+            { value: 'equals', label: 'Equals' },
+            { value: 'contains', label: 'Contains' },
+            { value: 'startsWith', label: 'Starts With' }
+        ],
+        'textarea': [
+            { value: 'contains', label: 'Contains' }
+        ],
+        'number': [
+            { value: 'equals', label: 'Equals' },
+            { value: 'greaterThan', label: 'Greater Than' },
+            { value: 'lessThan', label: 'Less Than' }
+        ]
+    };
+    
+    return operatorMap[questionType] || [
+        { value: 'equals', label: 'Equals' },
+        { value: 'notEquals', label: 'Not Equals' }
+    ];
+}
+
+/**
+ * Get the current category for a question
+ */
+function getCurrentCategoryForQuestion(questionId) {
+    if (!questionId) return '';
+    
+    for (let cat of schema.categories) {
+        const q = cat.questions.find(q => q.id === questionId);
+        if (q) return cat.id;
+    }
+    
+    return '';
+}
+
+/**
+ * Attempt to parse legacy expression string into conditions
+ */
+function parseLegacyExpression(expression) {
+    // This is a simplified parser for common patterns
+    // Pattern 1: answers["QuestionID"] === "Value"
+    // Pattern 2: answers["QuestionID"] == "Value"
+    
+    const conditions = [];
+    
+    // Split by && to get individual conditions
+    const parts = expression.split('&&');
+    
+    for (let part of parts) {
+        part = part.trim();
+        
+        // Try to match pattern: answers["QuestionID"] OPERATOR "Value"
+        const match = part.match(/answers\["([^"]+)"\]\s*(===|==|===|\!==|!==|\.includes\(|\.contains\()\s*"?([^"]+)"?/);
+        
+        if (match) {
+            const questionId = match[1];
+            let operator = match[2];
+            const value = match[3];
+            
+            // Normalize operator
+            if (operator === '===' || operator === '==') {
+                operator = 'equals';
+            } else if (operator === '!==' || operator === '!=') {
+                operator = 'notEquals';
+            } else if (operator.includes('includes') || operator.includes('contains')) {
+                operator = 'contains';
+            }
+            
+            conditions.push({
+                questionId: questionId,
+                operator: operator,
+                value: value
+            });
+        }
+    }
+    
+    return conditions;
+}
+
+/**
+ * Convert legacy expression to builder UI
+ */
+function convertLegacyExpressionToBuilder() {
+    const expression = elements.questionVisibleWhen.value.trim();
+    const conditions = parseLegacyExpression(expression);
+    
+    if (conditions.length > 0) {
+        window.currentConditions = conditions;
+        renderConditionRows();
+        
+        // Switch to builder mode
+        const builderContainer = document.getElementById('conditionBuilderContainer');
+        const legacyContainer = document.getElementById('legacyVisibleWhenContainer');
+        const legacyWarning = document.getElementById('legacyWarning');
+        
+        if (builderContainer && legacyContainer) {
+            builderContainer.style.display = 'block';
+            legacyContainer.style.display = 'none';
+            if (legacyWarning) legacyWarning.style.display = 'none';
+        }
+        
+        saveConditionsToQuestion();
+        showStatus('Expression converted to builder format', 'success');
+    } else {
+        showStatus('Could not convert expression. Please enter it manually in advanced mode.', 'warning');
+    }
+}
+
+/**
+ * HTML escape helper
+ */
+function escapeHtml(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
 }
 
 /**

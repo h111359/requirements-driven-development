@@ -152,10 +152,22 @@
       "questions": [
         {
           "id": "Infra_DeploymentModel",
-          "label": "Primary cloud deployment model",
+          "label": "Primary deployment model",
           "type": "multiselect",
           "help": "",
           "options": [
+            {
+              "id": "Personal machine",
+              "label": "Personal machine"
+            },
+            {
+              "id": "Mobile device",
+              "label": "Mobile device"
+            },
+            {
+              "id": "On-premises",
+              "label": "On-premises"
+            },
             {
               "id": "Public cloud only",
               "label": "Public cloud only"
@@ -167,10 +179,6 @@
             {
               "id": "Private-cloud",
               "label": "Private-cloud"
-            },
-            {
-              "id": "On-premises",
-              "label": "On-premises"
             }
           ],
           "allowOther": false

@@ -156,12 +156,39 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" for="questionVisibleWhen">Conditional Visibility (visibleWhen)</label>
-                                <textarea class="form-control font-monospace" id="questionVisibleWhen" rows="3" 
-                                    placeholder='e.g., answers["OtherQuestion_ID"] === "SomeValue"'></textarea>
-                                <div class="form-text">
-                                    JavaScript expression that determines when this question is visible.
-                                    Use <code>answers["QuestionID"]</code> to reference other answers.
+                                <div class="form-group-header">
+                                    <label class="form-label">Conditional Visibility (visibleWhen)</label>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="btnToggleVisibleWhenMode" title="Toggle between builder and advanced mode">
+                                        🔧 Mode
+                                    </button>
+                                </div>
+                                
+                                <!-- Condition Builder (default view) -->
+                                <div id="conditionBuilderContainer" class="condition-builder">
+                                    <div class="condition-builder-header">
+                                        <span class="condition-count">Conditions: <span id="conditionCount">0</span></span>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" id="btnAddCondition">+ Add Condition</button>
+                                    </div>
+                                    <div id="conditionRowsContainer" class="condition-rows">
+                                        <!-- Condition rows will be rendered here -->
+                                    </div>
+                                    <div class="form-text">
+                                        All conditions must be true (AND logic) for the question to be visible.
+                                    </div>
+                                </div>
+
+                                <!-- Legacy Expression (advanced mode) -->
+                                <div id="legacyVisibleWhenContainer" class="d-none">
+                                    <div class="alert alert-warning" id="legacyWarning" style="display: none;">
+                                        <strong>Legacy Format Detected:</strong> This question uses a string-based JavaScript expression. 
+                                        <button type="button" class="btn btn-sm btn-outline-warning" id="btnConvertLegacy">Convert to Builder</button>
+                                    </div>
+                                    <textarea class="form-control font-monospace" id="questionVisibleWhen" rows="3" 
+                                        placeholder='e.g., answers["OtherQuestion_ID"] === "SomeValue"'></textarea>
+                                    <div class="form-text">
+                                        JavaScript expression that determines when this question is visible.
+                                        Use <code>answers["QuestionID"]</code> to reference other answers.
+                                    </div>
                                 </div>
                             </div>
 

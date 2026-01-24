@@ -242,6 +242,12 @@ The framework enables:
 
 - [UR-0105] The Technical Design Schema Editor shall automatically save changes without requiring manual save button clicks, triggering immediate saves on every change with visual feedback
 
+- [UR-0106] The Technical Design Schema Editor shall provide a visual condition builder UI for setting question visibility rules with dropdowns for question selection, operator selection, and value selection, replacing the plain text input.
+
+- [UR-0107] The Technical Design Schema Editor shall support backward compatibility with existing string-based visibleWhen expressions, automatically detecting legacy format and providing options to convert or edit manually.
+
+
+
 
 
 
@@ -673,6 +679,12 @@ The framework enables:
 - [TR-0197] The Technical Design Schema Editor shall provide a manual backup button that validates the schema, creates a timestamped backup file regardless of validation status, and displays validation warnings if the schema is invalid
 
 - [TR-0198] The Technical Design Schema Editor auto-save functionality shall save schema changes to disk immediately without creating automatic backup files
+
+- [TR-0199] The Technical Design Schema shall store conditional visibility rules in structured JSON format with fields: questionId, operator, and value, supporting operators: equals, notEquals, contains, notContains, startsWith, greaterThan, lessThan.
+
+- [TR-0200] The Technical Design Schema Editor shall dynamically determine valid operators for condition rows based on the selected question type, showing only applicable operators (e.g., equals/notEquals for radio, contains for multiselect).
+
+
 
 
 
