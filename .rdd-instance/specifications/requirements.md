@@ -684,6 +684,15 @@ The framework enables:
 
 - [TR-0200] The Technical Design Schema Editor shall dynamically determine valid operators for condition rows based on the selected question type, showing only applicable operators (e.g., equals/notEquals for radio, contains for multiselect).
 
+- [TR-0201] The Technical Design Schema Editor shall use specific CSS selectors when querying DOM elements to avoid ambiguous matches, combining class names with attributes for uniqueness.
+
+- [TR-0202] The Technical Design Schema Editor shall minimize DOM re-rendering by updating individual fields when possible, reserving full re-renders for structural changes like adding or removing condition rows.
+
+- [TR-0203] The Technical Design Schema Editor shall implement defensive programming with null checks before accessing DOM element properties, preventing null reference errors.
+
+
+
+
 
 
 

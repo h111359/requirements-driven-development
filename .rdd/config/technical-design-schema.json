@@ -202,7 +202,16 @@
               "label": "GCP"
             }
           ],
-          "allowOther": false
+          "allowOther": false,
+          "visibleWhen": [
+            {
+              "questionId": "Infra_DeploymentModel",
+              "equals": [
+                "Public cloud",
+                "Hybrid cloud"
+              ]
+            }
+          ]
         },
         {
           "id": "HostingPlatform",

@@ -1116,6 +1116,86 @@ function hasOptionsQuestion(questionId) {
 }
 
 /**
+ * Update the value field for a condition row based on the selected question
+ * This allows updating just the value field without re-rendering the entire row
+ */
+function updateConditionValueField(index, questionId) {
+    const row = document.querySelector(`.condition-row[data-index="${index}"]`);
+    if (!row) return;
+    
+    const valueFieldContainer = row.querySelector('.condition-row-field:nth-child(4)');
+    if (!valueFieldContainer) return;
+    
+    const condition = window.currentConditions[index] || {};
+    const selectedValue = condition.value || '';
+    
+    // Check if the referenced question has predefined options
+    if (questionId && hasOptionsQuestion(questionId)) {
+        // Question has options - create dropdown selector
+        const options = getOptionsForQuestion(questionId);
+        const question = getQuestionById(questionId);
+        const isMultiselect = question && question.type === 'multiselect';
+        
+        // For multiselect questions, handle array values
+        let selectedValues = [];
+        if (Array.isArray(selectedValue)) {
+            selectedValues = selectedValue;
+        } else if (selectedValue) {
+            selectedValues = [selectedValue];
+        }
+        
+        if (isMultiselect) {
+            // Multiple select dropdown for multiselect questions
+            valueFieldContainer.innerHTML = `
+                <label>Value</label>
+                <select class="condition-value-select condition-value-multiselect" data-index="${index}" multiple>
+                    ${options.map(opt => 
+                        `<option value="${escapeHtml(opt.id)}" ${selectedValues.includes(opt.id) ? 'selected' : ''}>${escapeHtml(opt.label)}</option>`
+                    ).join('')}
+                </select>
+                <div class="form-text" style="font-size: 0.75rem; margin-top: 0.25rem;">Select one or more values (OR logic)</div>
+            `;
+            
+            // Re-attach event listener for the new multiselect element
+            const valueMultiselect = valueFieldContainer.querySelector('.condition-value-multiselect');
+            if (valueMultiselect) {
+                valueMultiselect.addEventListener('change', (e) => handleConditionValueChangeMultiselect(e, index));
+            }
+        } else {
+            // Regular single-select dropdown for radio/dropdown questions
+            valueFieldContainer.innerHTML = `
+                <label>Value</label>
+                <select class="condition-value-select" data-index="${index}">
+                    <option value="">-- Select Value --</option>
+                    ${options.map(opt => 
+                        `<option value="${escapeHtml(opt.id)}" ${selectedValues[0] === opt.id ? 'selected' : ''}>${escapeHtml(opt.label)}</option>`
+                    ).join('')}
+                </select>
+            `;
+            
+            // Re-attach event listener for the new select element
+            const valueSelect = valueFieldContainer.querySelector('.condition-value-select');
+            if (valueSelect) {
+                valueSelect.addEventListener('change', (e) => handleConditionValueChangeSelect(e, index));
+            }
+        }
+    } else {
+        // Question has no options or no question selected - use text input
+        const valueStr = Array.isArray(selectedValue) ? JSON.stringify(selectedValue) : selectedValue;
+        valueFieldContainer.innerHTML = `
+            <label>Value</label>
+            <input type="text" class="condition-value-input" data-index="${index}" value="${escapeHtml(valueStr)}" placeholder="Value...">
+        `;
+        
+        // Re-attach event listener for the new input element
+        const valueInput = valueFieldContainer.querySelector('.condition-value-input');
+        if (valueInput) {
+            valueInput.addEventListener('blur', (e) => handleConditionValueChange(e, index));
+        }
+    }
+}
+
+/**
  * Render condition rows in the builder
  */
 function renderConditionRows() {
@@ -1293,7 +1373,10 @@ function handleConditionCategoryChange(event, index) {
     const category = event.target.value;
     // Update questions dropdown when category changes
     const row = document.querySelector(`.condition-row[data-index="${index}"]`);
+    if (!row) return;
+    
     const questionSelect = row.querySelector('.condition-question-select');
+    if (!questionSelect) return;
     
     const questions = getQuestionsForCategory(category);
     questionSelect.innerHTML = '<option value="">-- Select Question --</option>' + 
@@ -1322,8 +1405,12 @@ function handleConditionQuestionChange(event, index) {
     window.currentConditions[index].questionId = questionId;
     
     // Update operator dropdown based on question type
-    const row = document.querySelector(`[data-index="${index}"]`);
+    const row = document.querySelector(`.condition-row[data-index="${index}"]`);
+    if (!row) return;
+    
     const operatorSelect = row.querySelector('.condition-operator-select');
+    if (!operatorSelect) return;
+    
     const operators = getOperatorsForQuestion(questionId);
     
     operatorSelect.innerHTML = '<option value="">-- Select Operator --</option>' + 
@@ -1333,8 +1420,11 @@ function handleConditionQuestionChange(event, index) {
     window.currentConditions[index].operator = '';
     window.currentConditions[index].value = '';
     
+    // Update the value field based on the selected question type
+    // This updates only the value field without re-rendering the entire row
+    updateConditionValueField(index, questionId);
+    
     saveConditionsToQuestion();
-    renderConditionRows();
 }
 
 /**

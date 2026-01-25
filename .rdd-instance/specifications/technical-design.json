@@ -3,8 +3,8 @@
     "questionId": "Infra_DeploymentModel",
     "type": "multiselect",
     "value": [
-      "Personal machine"
+      "Public cloud"
     ],
-    "answeredAt": "2026-01-24T16:29:22.866870+00:00"
+    "answeredAt": "2026-01-25T11:12:16.805826+00:00"
   }
 }
