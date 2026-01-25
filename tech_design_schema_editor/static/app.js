@@ -1129,12 +1129,14 @@ function updateConditionValueField(index, questionId) {
     const condition = window.currentConditions[index] || {};
     const selectedValue = condition.value || '';
     
+    // Get the question to determine its type
+    const question = getQuestionById(questionId);
+    
     // Check if the referenced question has predefined options
     if (questionId && hasOptionsQuestion(questionId)) {
-        // Question has options - create dropdown selector
+        // Question has options - create appropriate control based on question type
         const options = getOptionsForQuestion(questionId);
-        const question = getQuestionById(questionId);
-        const isMultiselect = question && question.type === 'multiselect';
+        const questionType = question ? question.type : 'radio';
         
         // For multiselect questions, handle array values
         let selectedValues = [];
@@ -1144,25 +1146,64 @@ function updateConditionValueField(index, questionId) {
             selectedValues = [selectedValue];
         }
         
-        if (isMultiselect) {
-            // Multiple select dropdown for multiselect questions
+        if (questionType === 'multiselect') {
+            // Checkboxes for multiselect questions (Q1: match exact control type)
+            const checkboxesHtml = options.map(opt => {
+                const isChecked = selectedValues.includes(opt.id);
+                return `
+                    <div class="form-check">
+                        <input class="form-check-input condition-value-checkbox" type="checkbox" 
+                               value="${escapeHtml(opt.id)}" id="cond-${index}-${escapeHtml(opt.id)}" 
+                               data-index="${index}" ${isChecked ? 'checked' : ''}>
+                        <label class="form-check-label" for="cond-${index}-${escapeHtml(opt.id)}">
+                            ${escapeHtml(opt.label)}
+                        </label>
+                    </div>
+                `;
+            }).join('');
+            
             valueFieldContainer.innerHTML = `
                 <label>Value</label>
-                <select class="condition-value-select condition-value-multiselect" data-index="${index}" multiple>
-                    ${options.map(opt => 
-                        `<option value="${escapeHtml(opt.id)}" ${selectedValues.includes(opt.id) ? 'selected' : ''}>${escapeHtml(opt.label)}</option>`
-                    ).join('')}
-                </select>
+                <div class="condition-value-checkboxes" data-index="${index}">
+                    ${checkboxesHtml}
+                </div>
                 <div class="form-text" style="font-size: 0.75rem; margin-top: 0.25rem;">Select one or more values (OR logic)</div>
             `;
             
-            // Re-attach event listener for the new multiselect element
-            const valueMultiselect = valueFieldContainer.querySelector('.condition-value-multiselect');
-            if (valueMultiselect) {
-                valueMultiselect.addEventListener('change', (e) => handleConditionValueChangeMultiselect(e, index));
-            }
+            // Re-attach event listeners for checkboxes
+            valueFieldContainer.querySelectorAll('.condition-value-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => handleConditionValueChangeCheckbox(e, index));
+            });
+        } else if (questionType === 'radio') {
+            // Radio buttons for radio questions (Q1: match exact control type)
+            const radiosHtml = options.map(opt => {
+                const isChecked = selectedValues[0] === opt.id;
+                return `
+                    <div class="form-check">
+                        <input class="form-check-input condition-value-radio" type="radio" 
+                               name="cond-radio-${index}" value="${escapeHtml(opt.id)}" 
+                               id="cond-${index}-${escapeHtml(opt.id)}" data-index="${index}" 
+                               ${isChecked ? 'checked' : ''}>
+                        <label class="form-check-label" for="cond-${index}-${escapeHtml(opt.id)}">
+                            ${escapeHtml(opt.label)}
+                        </label>
+                    </div>
+                `;
+            }).join('');
+            
+            valueFieldContainer.innerHTML = `
+                <label>Value</label>
+                <div class="condition-value-radios" data-index="${index}">
+                    ${radiosHtml}
+                </div>
+            `;
+            
+            // Re-attach event listeners for radio buttons
+            valueFieldContainer.querySelectorAll('.condition-value-radio').forEach(radio => {
+                radio.addEventListener('change', (e) => handleConditionValueChangeRadio(e, index));
+            });
         } else {
-            // Regular single-select dropdown for radio/dropdown questions
+            // Dropdown for dropdown questions (Q1: keep dropdown for dropdown type)
             valueFieldContainer.innerHTML = `
                 <label>Value</label>
                 <select class="condition-value-select" data-index="${index}">
@@ -1178,6 +1219,48 @@ function updateConditionValueField(index, questionId) {
             if (valueSelect) {
                 valueSelect.addEventListener('change', (e) => handleConditionValueChangeSelect(e, index));
             }
+        }
+    } else if (questionId && question) {
+        // Question has no options - use type-specific input control (Q2: type-specific controls)
+        const questionType = question.type || 'text';
+        const valueStr = Array.isArray(selectedValue) ? JSON.stringify(selectedValue) : selectedValue;
+        
+        if (questionType === 'number') {
+            // Number input for number questions
+            valueFieldContainer.innerHTML = `
+                <label>Value</label>
+                <input type="number" class="condition-value-input" data-index="${index}" value="${escapeHtml(valueStr)}" placeholder="Enter number...">
+            `;
+        } else if (questionType === 'checkbox') {
+            // Checkbox for checkbox questions
+            const isChecked = selectedValue === 'true' || selectedValue === true;
+            valueFieldContainer.innerHTML = `
+                <label>Value</label>
+                <div class="form-check">
+                    <input class="form-check-input condition-value-checkbox-single" type="checkbox" 
+                           id="cond-${index}-checkbox" data-index="${index}" ${isChecked ? 'checked' : ''}>
+                    <label class="form-check-label" for="cond-${index}-checkbox">
+                        Checked
+                    </label>
+                </div>
+            `;
+            
+            const checkbox = valueFieldContainer.querySelector('.condition-value-checkbox-single');
+            if (checkbox) {
+                checkbox.addEventListener('change', (e) => handleConditionValueChangeCheckboxSingle(e, index));
+            }
+        } else {
+            // Text input for text/textarea and other types
+            valueFieldContainer.innerHTML = `
+                <label>Value</label>
+                <input type="text" class="condition-value-input" data-index="${index}" value="${escapeHtml(valueStr)}" placeholder="Value...">
+            `;
+        }
+        
+        // Re-attach event listener for text/number inputs
+        const valueInput = valueFieldContainer.querySelector('.condition-value-input');
+        if (valueInput) {
+            valueInput.addEventListener('blur', (e) => handleConditionValueChange(e, index));
         }
     } else {
         // Question has no options or no question selected - use text input
@@ -1261,12 +1344,14 @@ function createConditionRow(condition, index) {
     const valueField = document.createElement('div');
     valueField.className = 'condition-row-field';
     
+    // Get the question to determine its type
+    const question = getQuestionById(selectedQuestion);
+    
     // Check if the referenced question has predefined options
     if (selectedQuestion && hasOptionsQuestion(selectedQuestion)) {
-        // Question has options - create dropdown selector (Q3 decision: display labels, store IDs)
+        // Question has options - create appropriate control based on question type (Q1: match exact control type)
         const options = getOptionsForQuestion(selectedQuestion);
-        const question = getQuestionById(selectedQuestion);
-        const isMultiselect = question && question.type === 'multiselect';
+        const questionType = question ? question.type : 'radio';
         
         // For multiselect questions, we need to handle array values
         let selectedValues = [];
@@ -1276,19 +1361,54 @@ function createConditionRow(condition, index) {
             selectedValues = [selectedValue];
         }
         
-        if (isMultiselect) {
-            // Multiple select dropdown for multiselect questions (Q4 decision: support multiple values with OR logic)
+        if (questionType === 'multiselect') {
+            // Checkboxes for multiselect questions (Q1: match exact control type)
+            const checkboxesHtml = options.map(opt => {
+                const isChecked = selectedValues.includes(opt.id);
+                return `
+                    <div class="form-check">
+                        <input class="form-check-input condition-value-checkbox" type="checkbox" 
+                               value="${escapeHtml(opt.id)}" id="cond-${index}-${escapeHtml(opt.id)}" 
+                               data-index="${index}" ${isChecked ? 'checked' : ''}>
+                        <label class="form-check-label" for="cond-${index}-${escapeHtml(opt.id)}">
+                            ${escapeHtml(opt.label)}
+                        </label>
+                    </div>
+                `;
+            }).join('');
+            
             valueField.innerHTML = `
                 <label>Value</label>
-                <select class="condition-value-select condition-value-multiselect" data-index="${index}" multiple>
-                    ${options.map(opt => 
-                        `<option value="${escapeHtml(opt.id)}" ${selectedValues.includes(opt.id) ? 'selected' : ''}>${escapeHtml(opt.label)}</option>`
-                    ).join('')}
-                </select>
+                <div class="condition-value-checkboxes" data-index="${index}">
+                    ${checkboxesHtml}
+                </div>
                 <div class="form-text" style="font-size: 0.75rem; margin-top: 0.25rem;">Select one or more values (OR logic)</div>
             `;
+        } else if (questionType === 'radio') {
+            // Radio buttons for radio questions (Q1: match exact control type)
+            const radiosHtml = options.map(opt => {
+                const isChecked = selectedValues[0] === opt.id;
+                return `
+                    <div class="form-check">
+                        <input class="form-check-input condition-value-radio" type="radio" 
+                               name="cond-radio-${index}" value="${escapeHtml(opt.id)}" 
+                               id="cond-${index}-${escapeHtml(opt.id)}" data-index="${index}" 
+                               ${isChecked ? 'checked' : ''}>
+                        <label class="form-check-label" for="cond-${index}-${escapeHtml(opt.id)}">
+                            ${escapeHtml(opt.label)}
+                        </label>
+                    </div>
+                `;
+            }).join('');
+            
+            valueField.innerHTML = `
+                <label>Value</label>
+                <div class="condition-value-radios" data-index="${index}">
+                    ${radiosHtml}
+                </div>
+            `;
         } else {
-            // Regular single-select dropdown for radio/dropdown questions
+            // Dropdown for dropdown questions (Q1: keep dropdown for dropdown type)
             valueField.innerHTML = `
                 <label>Value</label>
                 <select class="condition-value-select" data-index="${index}">
@@ -1297,6 +1417,37 @@ function createConditionRow(condition, index) {
                         `<option value="${escapeHtml(opt.id)}" ${selectedValues[0] === opt.id ? 'selected' : ''}>${escapeHtml(opt.label)}</option>`
                     ).join('')}
                 </select>
+            `;
+        }
+    } else if (selectedQuestion && question) {
+        // Question has no options - use type-specific input control (Q2: type-specific controls)
+        const questionType = question.type || 'text';
+        const valueStr = Array.isArray(selectedValue) ? JSON.stringify(selectedValue) : selectedValue;
+        
+        if (questionType === 'number') {
+            // Number input for number questions
+            valueField.innerHTML = `
+                <label>Value</label>
+                <input type="number" class="condition-value-input" data-index="${index}" value="${escapeHtml(valueStr)}" placeholder="Enter number...">
+            `;
+        } else if (questionType === 'checkbox') {
+            // Checkbox for checkbox questions
+            const isChecked = selectedValue === 'true' || selectedValue === true;
+            valueField.innerHTML = `
+                <label>Value</label>
+                <div class="form-check">
+                    <input class="form-check-input condition-value-checkbox-single" type="checkbox" 
+                           id="cond-${index}-checkbox" data-index="${index}" ${isChecked ? 'checked' : ''}>
+                    <label class="form-check-label" for="cond-${index}-checkbox">
+                        Checked
+                    </label>
+                </div>
+            `;
+        } else {
+            // Text input for text/textarea and other types
+            valueField.innerHTML = `
+                <label>Value</label>
+                <input type="text" class="condition-value-input" data-index="${index}" value="${escapeHtml(valueStr)}" placeholder="Value...">
             `;
         }
     } else {
@@ -1323,21 +1474,33 @@ function createConditionRow(condition, index) {
     const questionSelect = row.querySelector('.condition-question-select');
     const valueInput = row.querySelector('.condition-value-input');
     const valueSelect = row.querySelector('.condition-value-select');
-    const valueMultiselect = row.querySelector('.condition-value-multiselect');
+    const valueCheckboxes = row.querySelectorAll('.condition-value-checkbox');
+    const valueRadios = row.querySelectorAll('.condition-value-radio');
+    const valueCheckboxSingle = row.querySelector('.condition-value-checkbox-single');
     const removeBtn = row.querySelector('.btn-remove-condition');
     
     categorySelect.addEventListener('change', (e) => handleConditionCategoryChange(e, index));
     questionSelect.addEventListener('change', (e) => handleConditionQuestionChange(e, index));
     
     // Attach appropriate value field listener based on type
-    if (valueMultiselect) {
-        // Multiselect dropdown - store as array
-        valueMultiselect.addEventListener('change', (e) => handleConditionValueChangeMultiselect(e, index));
+    if (valueCheckboxes.length > 0) {
+        // Multiple checkboxes for multiselect questions
+        valueCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => handleConditionValueChangeCheckbox(e, index));
+        });
+    } else if (valueRadios.length > 0) {
+        // Radio buttons for radio questions
+        valueRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => handleConditionValueChangeRadio(e, index));
+        });
+    } else if (valueCheckboxSingle) {
+        // Single checkbox for checkbox questions
+        valueCheckboxSingle.addEventListener('change', (e) => handleConditionValueChangeCheckboxSingle(e, index));
     } else if (valueSelect) {
-        // Single-select dropdown for options
+        // Dropdown for dropdown questions
         valueSelect.addEventListener('change', (e) => handleConditionValueChangeSelect(e, index));
     } else if (valueInput) {
-        // Text input for free-text questions
+        // Text/number input for text/number/textarea questions
         valueInput.addEventListener('blur', (e) => handleConditionValueChange(e, index));
     }
     
@@ -1425,6 +1588,60 @@ function handleConditionValueChangeMultiselect(event, index) {
     
     // Store as array (empty array if nothing selected, or as array of IDs)
     window.currentConditions[index].value = selectedValues.length > 0 ? selectedValues : '';
+    
+    saveConditionsToQuestion();
+}
+
+/**
+ * Handle condition value change for checkboxes (multiselect questions)
+ * Stores as array to support OR logic
+ */
+function handleConditionValueChangeCheckbox(event, index) {
+    if (!window.currentConditions[index]) {
+        window.currentConditions[index] = {};
+    }
+    
+    // Get all checkboxes for this condition row
+    const row = document.querySelector(`.condition-row[data-index="${index}"]`);
+    const checkboxes = row.querySelectorAll('.condition-value-checkbox');
+    
+    // Get selected values (option IDs)
+    const selectedValues = Array.from(checkboxes)
+        .filter(cb => cb.checked)
+        .map(cb => cb.value);
+    
+    // Store as array (empty string if nothing selected, or as array of IDs)
+    window.currentConditions[index].value = selectedValues.length > 0 ? selectedValues : '';
+    
+    saveConditionsToQuestion();
+}
+
+/**
+ * Handle condition value change for radio buttons (radio questions)
+ * Stores the selected option ID
+ */
+function handleConditionValueChangeRadio(event, index) {
+    if (!window.currentConditions[index]) {
+        window.currentConditions[index] = {};
+    }
+    
+    const selectedValue = event.target.value;
+    window.currentConditions[index].value = selectedValue;
+    
+    saveConditionsToQuestion();
+}
+
+/**
+ * Handle condition value change for single checkbox (checkbox question type)
+ * Stores boolean as string
+ */
+function handleConditionValueChangeCheckboxSingle(event, index) {
+    if (!window.currentConditions[index]) {
+        window.currentConditions[index] = {};
+    }
+    
+    const isChecked = event.target.checked;
+    window.currentConditions[index].value = isChecked ? 'true' : 'false';
     
     saveConditionsToQuestion();
 }

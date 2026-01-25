@@ -709,6 +709,46 @@ select.form-control {
     background-color: #c82333;
 }
 
+/* Conditional visibility value editors - checkboxes and radios */
+.condition-value-checkboxes,
+.condition-value-radios {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 3px;
+    padding: 0.5rem;
+    background-color: white;
+}
+
+.condition-value-checkboxes .form-check,
+.condition-value-radios .form-check {
+    margin-bottom: 0.5rem;
+}
+
+.condition-value-checkboxes .form-check:last-child,
+.condition-value-radios .form-check:last-child {
+    margin-bottom: 0;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-check-input {
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+    cursor: pointer;
+}
+
+.form-check-label {
+    cursor: pointer;
+    font-size: 0.875rem;
+    margin: 0;
+}
+
 .form-text {
     display: block;
     margin-top: 0.25rem;

@@ -860,3 +860,7 @@ Follow the questionnaire decisions made in questionnaire.json for this prompt, p
 %%PROMPT P-032 "Fix equals operator logic"
 Currently `tech_design_schema_editor/static/app.js` visualize in Conditional Visibility section of the question possibility operator to be chosen. But actually only "equals" operator is realized as functionality. This causes misleading for the user. Simplify the UI - no need operator to be chosen, if it is always "equals"
 %%ENDPROMPT
+
+%%PROMPT P-033 "Conditional visibility value editor"
+The value editor in "Conditional Visibility" in "Technical Design Schema Editor" should reflect the type of the corresponding question and represent text value as text field, radio as radio, multiselect as multiselect and so on
+%%ENDPROMPT

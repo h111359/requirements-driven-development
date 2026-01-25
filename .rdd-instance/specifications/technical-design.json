@@ -1,10 +1,1 @@
-{
-  "Infra_DeploymentModel": {
-    "questionId": "Infra_DeploymentModel",
-    "type": "multiselect",
-    "value": [
-      "Public cloud"
-    ],
-    "answeredAt": "2026-01-25T11:12:16.805826+00:00"
-  }
-}
+{}

@@ -206,184 +206,39 @@
           "visibleWhen": [
             {
               "questionId": "Infra_DeploymentModel",
-              "equals": "Hybrid cloud"
+              "equals": [
+                "Public cloud",
+                "Hybrid cloud"
+              ]
             }
           ]
         },
         {
-          "id": "HostingPlatform",
-          "label": "Hosting platform",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure App Service",
-              "label": "Azure App Service"
-            },
-            {
-              "id": "Azure Kubernetes Service (AKS)",
-              "label": "Azure Kubernetes Service (AKS)"
-            },
-            {
-              "id": "Azure Container Apps",
-              "label": "Azure Container Apps"
-            },
-            {
-              "id": "Azure Functions (API mode)",
-              "label": "Azure Functions (API mode)"
-            },
-            {
-              "id": "Azure API Management (managed backend)",
-              "label": "Azure API Management (managed backend)"
-            },
-            {
-              "id": "VM-based hosting",
-              "label": "VM-based hosting"
-            },
-            {
-              "id": "On-premises",
-              "label": "On-premises"
-            },
-            {
-              "id": "Other cloud provider",
-              "label": "Other cloud provider"
-            }
-          ]
-        },
-        {
-          "id": "Infra_IngressMethods",
-          "label": "Ingress control methods used",
+          "id": "Infra_AzureServices",
+          "label": "Azure Services Used",
           "type": "multiselect",
           "help": "",
           "options": [
             {
-              "id": "Application Gateway (WAF)",
-              "label": "Application Gateway (WAF)"
+              "id": "Azure Synapse",
+              "label": "Azure Synapse"
+            },
+            {
+              "id": "Azure Functions",
+              "label": "Azure Functions"
             },
             {
               "id": "Azure Front Door",
               "label": "Azure Front Door"
-            },
-            {
-              "id": "API Management Gateway",
-              "label": "API Management Gateway"
-            },
-            {
-              "id": "Load Balancer",
-              "label": "Load Balancer"
-            },
-            {
-              "id": "NGINX ingress (AKS)",
-              "label": "NGINX ingress (AKS)"
-            },
-            {
-              "id": "Cloudflare",
-              "label": "Cloudflare"
-            },
-            {
-              "id": "Direct public exposure",
-              "label": "Direct public exposure"
             }
           ],
-          "allowOther": true
-        },
-        {
-          "id": "Infra_EgressMethods",
-          "label": "Egress control methods used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
+          "allowOther": true,
+          "visibleWhen": [
             {
-              "id": "Azure Firewall",
-              "label": "Azure Firewall"
-            },
-            {
-              "id": "Custom firewall appliances",
-              "label": "Custom firewall appliances"
-            },
-            {
-              "id": "Force tunneling",
-              "label": "Force tunneling"
-            },
-            {
-              "id": "NAT Gateway",
-              "label": "NAT Gateway"
-            },
-            {
-              "id": "Outbound rules on NSG",
-              "label": "Outbound rules on NSG"
-            },
-            {
-              "id": "Unrestricted outbound internet",
-              "label": "Unrestricted outbound internet"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "Infra_APIExposureModel",
-          "label": "API exposure model",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Internal-only APIs",
-              "label": "Internal-only APIs"
-            },
-            {
-              "id": "Private APIs exposed via APIM",
-              "label": "Private APIs exposed via APIM"
-            },
-            {
-              "id": "Public APIs via APIM",
-              "label": "Public APIs via APIM"
-            },
-            {
-              "id": "Public APIs without gateway",
-              "label": "Public APIs without gateway"
-            },
-            {
-              "id": "Hybrid (mix of private/public)",
-              "label": "Hybrid (mix of private/public)"
+              "questionId": "Infra_PrimaryProvider",
+              "equals": "Azure"
             }
           ]
-        },
-        {
-          "id": "Infra_MonitoringTools",
-          "label": "Network monitoring & diagnostics tools",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Network Watcher",
-              "label": "Azure Network Watcher"
-            },
-            {
-              "id": "Connection Monitor",
-              "label": "Connection Monitor"
-            },
-            {
-              "id": "Traffic Analytics",
-              "label": "Traffic Analytics"
-            },
-            {
-              "id": "Firewall logs",
-              "label": "Firewall logs"
-            },
-            {
-              "id": "VM network monitoring",
-              "label": "VM network monitoring"
-            },
-            {
-              "id": "Third-party NPM tools",
-              "label": "Third-party NPM tools"
-            },
-            {
-              "id": "No network monitoring",
-              "label": "No network monitoring"
-            }
-          ],
-          "allowOther": true
         }
       ]
     },
@@ -393,36 +248,8 @@
       "description": "Execution model, workload types, orchestration, and scaling",
       "questions": [
         {
-          "id": "Compute_PrimaryModel",
-          "label": "Primary compute model for the solution",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Serverless / event-driven",
-              "label": "Serverless / event-driven"
-            },
-            {
-              "id": "Containers / Kubernetes",
-              "label": "Containers / Kubernetes"
-            },
-            {
-              "id": "Traditional VMs",
-              "label": "Traditional VMs"
-            },
-            {
-              "id": "Batch processing engine",
-              "label": "Batch processing engine"
-            },
-            {
-              "id": "Mixed model (hybrid compute)",
-              "label": "Mixed model (hybrid compute)"
-            }
-          ]
-        },
-        {
-          "id": "Compute_SecondaryModels",
-          "label": "Additional compute models used",
+          "id": "Compute_Model",
+          "label": "Compute models",
           "type": "multiselect",
           "help": "",
           "options": [
@@ -435,445 +262,23 @@
               "label": "Containerized applications"
             },
             {
-              "id": "Kubernetes operator workloads",
-              "label": "Kubernetes operator workloads"
-            },
-            {
-              "id": "Azure Batch / HPC",
-              "label": "Azure Batch / HPC"
-            },
-            {
-              "id": "Azure Databricks Jobs",
-              "label": "Azure Databricks Jobs"
-            },
-            {
-              "id": "Synapse Spark",
-              "label": "Synapse Spark"
-            },
-            {
               "id": "Virtual Machines",
               "label": "Virtual Machines"
             },
             {
-              "id": "Web Apps / App Services",
-              "label": "Web Apps / App Services"
+              "id": "Batch processing engine",
+              "label": "Batch processing engine"
             },
             {
-              "id": "Logic Apps",
-              "label": "Logic Apps"
-            }
-          ],
-          "placeholder": "Other compute models, e.g. Azure Container Apps, internal HPC clusters",
-          "allowOther": true,
-          "otherPlaceholder": "Other compute models, e.g. Azure Container Apps, internal HPC clusters"
-        },
-        {
-          "id": "Compute_ContainerOrchestrator",
-          "label": "Container orchestration platform",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Kubernetes Service (AKS)",
-              "label": "Azure Kubernetes Service (AKS)"
+              "id": "Spark",
+              "label": "Spark"
             },
             {
-              "id": "Azure Container Apps",
-              "label": "Azure Container Apps"
-            },
-            {
-              "id": "AWS ECS",
-              "label": "AWS ECS"
-            },
-            {
-              "id": "AWS EKS",
-              "label": "AWS EKS"
-            },
-            {
-              "id": "GCP GKE",
-              "label": "GCP GKE"
-            },
-            {
-              "id": "No orchestrator – simple containers only",
-              "label": "No orchestrator – simple containers only"
-            }
-          ],
-          "visibleWhen": [
-            {
-              "questionId": "Compute_PrimaryModel",
-              "equals": [
-                "Containers / Kubernetes",
-                "Mixed model (hybrid compute)"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "Compute_ContainerRegistry",
-          "label": "Container registry used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Container Registry (ACR)",
-              "label": "Azure Container Registry (ACR)"
-            },
-            {
-              "id": "GitHub Container Registry",
-              "label": "GitHub Container Registry"
-            },
-            {
-              "id": "Docker Hub (public)",
-              "label": "Docker Hub (public)"
-            },
-            {
-              "id": "Amazon ECR",
-              "label": "Amazon ECR"
-            },
-            {
-              "id": "Google GCR",
-              "label": "Google GCR"
-            },
-            {
-              "id": "Self-hosted registry",
-              "label": "Self-hosted registry"
-            }
-          ],
-          "visibleWhen": [
-            {
-              "questionId": "Compute_PrimaryModel",
-              "equals": [
-                "Containers / Kubernetes",
-                "Mixed model (hybrid compute)"
-              ]
+              "id": "Low Code Applications",
+              "label": "Low Code Applications"
             }
           ],
           "allowOther": true
-        },
-        {
-          "id": "Compute_AKS_Features",
-          "label": "AKS features / patterns used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Node pools (Linux)",
-              "label": "Node pools (Linux)"
-            },
-            {
-              "id": "Node pools (Windows)",
-              "label": "Node pools (Windows)"
-            },
-            {
-              "id": "Autoscaling (Cluster Autoscaler)",
-              "label": "Autoscaling (Cluster Autoscaler)"
-            },
-            {
-              "id": "KEDA event-driven scaling",
-              "label": "KEDA event-driven scaling"
-            },
-            {
-              "id": "Managed identities / Workload Identity",
-              "label": "Managed identities / Workload Identity"
-            },
-            {
-              "id": "Private clusters only",
-              "label": "Private clusters only"
-            },
-            {
-              "id": "Azure CNI",
-              "label": "Azure CNI"
-            },
-            {
-              "id": "Ingress with NGINX",
-              "label": "Ingress with NGINX"
-            },
-            {
-              "id": "Ingress with Application Gateway (AGIC)",
-              "label": "Ingress with Application Gateway (AGIC)"
-            },
-            {
-              "id": "Ingress with Azure Front Door",
-              "label": "Ingress with Azure Front Door"
-            },
-            {
-              "id": "Secrets via Key Vault CSI",
-              "label": "Secrets via Key Vault CSI"
-            },
-            {
-              "id": "Istio / service mesh",
-              "label": "Istio / service mesh"
-            }
-          ],
-          "placeholder": "Other AKS features",
-          "visibleWhen": [
-            {
-              "questionId": "Compute_ContainerOrchestrator",
-              "equals": "Azure Kubernetes Service (AKS)"
-            }
-          ],
-          "allowOther": true,
-          "otherPlaceholder": "Other AKS features"
-        },
-        {
-          "id": "Compute_ServerlessServices",
-          "label": "Serverless services used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Functions",
-              "label": "Azure Functions"
-            },
-            {
-              "id": "Azure Logic Apps",
-              "label": "Azure Logic Apps"
-            },
-            {
-              "id": "Azure Event Grid",
-              "label": "Azure Event Grid"
-            },
-            {
-              "id": "Azure API Management Consumption Tier",
-              "label": "Azure API Management Consumption Tier"
-            },
-            {
-              "id": "AWS Lambda",
-              "label": "AWS Lambda"
-            },
-            {
-              "id": "GCP Cloud Functions",
-              "label": "GCP Cloud Functions"
-            }
-          ],
-          "placeholder": "Other serverless platforms",
-          "visibleWhen": [
-            {
-              "questionId": "Compute_PrimaryModel",
-              "equals": [
-                "Serverless / event-driven",
-                "Mixed model (hybrid compute)"
-              ]
-            }
-          ],
-          "allowOther": true,
-          "otherPlaceholder": "Other serverless platforms"
-        },
-        {
-          "id": "Compute_ServerlessTriggers",
-          "label": "Serverless triggers planned",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "HTTP trigger",
-              "label": "HTTP trigger"
-            },
-            {
-              "id": "Timer trigger",
-              "label": "Timer trigger"
-            },
-            {
-              "id": "Event Hub trigger",
-              "label": "Event Hub trigger"
-            },
-            {
-              "id": "Service Bus trigger",
-              "label": "Service Bus trigger"
-            },
-            {
-              "id": "Storage queue trigger",
-              "label": "Storage queue trigger"
-            },
-            {
-              "id": "Blob trigger",
-              "label": "Blob trigger"
-            },
-            {
-              "id": "Cosmos DB change feed",
-              "label": "Cosmos DB change feed"
-            },
-            {
-              "id": "Custom events via Event Grid",
-              "label": "Custom events via Event Grid"
-            }
-          ],
-          "visibleWhen": [
-            {
-              "questionId": "Compute_ServerlessServices",
-              "equals": "Azure Functions"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "Compute_BatchServices",
-          "label": "Batch processing engines used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Batch",
-              "label": "Azure Batch"
-            },
-            {
-              "id": "Databricks Jobs",
-              "label": "Databricks Jobs"
-            },
-            {
-              "id": "Synapse Spark Pools",
-              "label": "Synapse Spark Pools"
-            },
-            {
-              "id": "Azure Data Factory Integration Runtime",
-              "label": "Azure Data Factory Integration Runtime"
-            },
-            {
-              "id": "AWS Batch",
-              "label": "AWS Batch"
-            },
-            {
-              "id": "GCP Dataflow (batch mode)",
-              "label": "GCP Dataflow (batch mode)"
-            }
-          ],
-          "placeholder": "Other batch engines",
-          "allowOther": true,
-          "otherPlaceholder": "Other batch engines"
-        },
-        {
-          "id": "Compute_BatchWorkloadTypes",
-          "label": "Batch workload types",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "ETL / ELT transformations",
-              "label": "ETL / ELT transformations"
-            },
-            {
-              "id": "Machine learning training",
-              "label": "Machine learning training"
-            },
-            {
-              "id": "Data quality processing",
-              "label": "Data quality processing"
-            },
-            {
-              "id": "File ingestion and cleanup",
-              "label": "File ingestion and cleanup"
-            },
-            {
-              "id": "Aggregation jobs",
-              "label": "Aggregation jobs"
-            },
-            {
-              "id": "Data publishing / export jobs",
-              "label": "Data publishing / export jobs"
-            },
-            {
-              "id": "Heavy compute HPC workloads",
-              "label": "Heavy compute HPC workloads"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "Compute_UseVM",
-          "label": "Are virtual machines required?",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No",
-              "label": "No"
-            },
-            {
-              "id": "Yes – for legacy workloads",
-              "label": "Yes – for legacy workloads"
-            },
-            {
-              "id": "Yes – for custom compute not supported by PaaS",
-              "label": "Yes – for custom compute not supported by PaaS"
-            },
-            {
-              "id": "Yes – as part of hybrid network",
-              "label": "Yes – as part of hybrid network"
-            }
-          ]
-        },
-        {
-          "id": "Compute_VM_OS",
-          "label": "VM operating systems used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Windows Server",
-              "label": "Windows Server"
-            },
-            {
-              "id": "Linux (Ubuntu)",
-              "label": "Linux (Ubuntu)"
-            },
-            {
-              "id": "Linux (Red Hat)",
-              "label": "Linux (Red Hat)"
-            },
-            {
-              "id": "Linux (CentOS / Alma)",
-              "label": "Linux (CentOS / Alma)"
-            },
-            {
-              "id": "Custom image",
-              "label": "Custom image"
-            }
-          ],
-          "visibleWhen": [
-            {
-              "questionId": "Compute_UseVM",
-              "equals": [
-                "Yes – for legacy workloads",
-                "Yes – for custom compute not supported by PaaS",
-                "Yes – as part of hybrid network"
-              ]
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "Compute_VM_ManagementModel",
-          "label": "VM management model",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Manual configuration",
-              "label": "Manual configuration"
-            },
-            {
-              "id": "Infrastructure-as-code (Terraform/Bicep)",
-              "label": "Infrastructure-as-code (Terraform/Bicep)"
-            },
-            {
-              "id": "Golden image deployment",
-              "label": "Golden image deployment"
-            },
-            {
-              "id": "VM Scale Set",
-              "label": "VM Scale Set"
-            }
-          ],
-          "visibleWhen": [
-            {
-              "questionId": "Compute_UseVM",
-              "equals": [
-                "Yes – for legacy workloads",
-                "Yes – for custom compute not supported by PaaS",
-                "Yes – as part of hybrid network"
-              ]
-            }
-          ]
         }
       ]
     },
@@ -884,7 +289,7 @@
       "questions": [
         {
           "id": "Frontend_FrameworkType",
-          "label": "Frontend framework / application type",
+          "label": "Frontend framework",
           "type": "multiselect",
           "help": "",
           "options": [
@@ -897,28 +302,8 @@
               "label": "Angular"
             },
             {
-              "id": "Vue",
-              "label": "Vue"
-            },
-            {
-              "id": "Next.js (React SSR)",
-              "label": "Next.js (React SSR)"
-            },
-            {
-              "id": "Nuxt.js (Vue SSR)",
-              "label": "Nuxt.js (Vue SSR)"
-            },
-            {
-              "id": "Svelte",
-              "label": "Svelte"
-            },
-            {
-              "id": "Blazor",
-              "label": "Blazor"
-            },
-            {
-              "id": "ASP.NET MVC / Razor",
-              "label": "ASP.NET MVC / Razor"
+              "id": "ASP.NET",
+              "label": "ASP.NET"
             },
             {
               "id": "Static HTML/JS (no framework)",
@@ -948,166 +333,14 @@
               "label": "SSG – Static Site Generation"
             },
             {
-              "id": "CSR – Client Side Rendering only",
-              "label": "CSR – Client Side Rendering only"
+              "id": "CSR – Client Side Rendering",
+              "label": "CSR – Client Side Rendering"
             },
             {
               "id": "Mixed rendering model (hybrid)",
               "label": "Mixed rendering model (hybrid)"
             }
           ]
-        },
-        {
-          "id": "Frontend_HostingPlatform",
-          "label": "Primary hosting platform",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Static Web Apps",
-              "label": "Azure Static Web Apps"
-            },
-            {
-              "id": "Azure App Service",
-              "label": "Azure App Service"
-            },
-            {
-              "id": "Azure Blob Storage static site",
-              "label": "Azure Blob Storage static site"
-            },
-            {
-              "id": "Azure Container Apps",
-              "label": "Azure Container Apps"
-            },
-            {
-              "id": "Azure Front Door as global entry",
-              "label": "Azure Front Door as global entry"
-            },
-            {
-              "id": "On-prem server",
-              "label": "On-prem server"
-            },
-            {
-              "id": "Third-party hosting (Vercel, Netlify, Cloudflare Pages)",
-              "label": "Third-party hosting (Vercel, Netlify, Cloudflare Pages)"
-            }
-          ]
-        },
-        {
-          "id": "Frontend_UseCdn",
-          "label": "CDN usage",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure CDN (Standard Microsoft)",
-              "label": "Azure CDN (Standard Microsoft)"
-            },
-            {
-              "id": "Azure CDN (Standard Verizon/Akamai)",
-              "label": "Azure CDN (Standard Verizon/Akamai)"
-            },
-            {
-              "id": "Azure Front Door CDN",
-              "label": "Azure Front Door CDN"
-            },
-            {
-              "id": "Cloudflare CDN",
-              "label": "Cloudflare CDN"
-            },
-            {
-              "id": "AWS CloudFront",
-              "label": "AWS CloudFront"
-            },
-            {
-              "id": "GCP Cloud CDN",
-              "label": "GCP Cloud CDN"
-            },
-            {
-              "id": "No CDN required",
-              "label": "No CDN required"
-            }
-          ],
-          "placeholder": "Other CDN solutions",
-          "visibleWhen": [
-            {
-              "questionId": "Frontend_HostingPlatform",
-              "equals": [
-                "Azure Static Web Apps",
-                "Azure App Service",
-                "Azure Front Door as global entry",
-                "Azure Blob Storage static site"
-              ]
-            }
-          ],
-          "allowOther": true,
-          "otherPlaceholder": "Other CDN solutions"
-        },
-        {
-          "id": "Frontend_GlobalRouting",
-          "label": "Frontend routing / traffic distribution",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Front Door",
-              "label": "Azure Front Door"
-            },
-            {
-              "id": "Traffic Manager",
-              "label": "Traffic Manager"
-            },
-            {
-              "id": "Custom domain routing",
-              "label": "Custom domain routing"
-            },
-            {
-              "id": "Geo-based routing",
-              "label": "Geo-based routing"
-            },
-            {
-              "id": "Canary routing",
-              "label": "Canary routing"
-            },
-            {
-              "id": "Path-based routing",
-              "label": "Path-based routing"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "Frontend_ApiIntegrationPatterns",
-          "label": "API integration patterns",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "REST APIs",
-              "label": "REST APIs"
-            },
-            {
-              "id": "GraphQL APIs",
-              "label": "GraphQL APIs"
-            },
-            {
-              "id": "gRPC (Web-compatible)",
-              "label": "gRPC (Web-compatible)"
-            },
-            {
-              "id": "WebSockets",
-              "label": "WebSockets"
-            },
-            {
-              "id": "Event-driven callbacks",
-              "label": "Event-driven callbacks"
-            },
-            {
-              "id": "BFF – Backend for Frontend",
-              "label": "BFF – Backend for Frontend"
-            }
-          ],
-          "allowOther": true
         }
       ]
     },
@@ -1196,34 +429,14 @@
           ]
         },
         {
-          "id": "Backend_UseMicroservices",
-          "label": "Are microservices used?",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No — monolithic or modular monolith",
-              "label": "No — monolithic or modular monolith"
-            },
-            {
-              "id": "Partial microservices architecture",
-              "label": "Partial microservices architecture"
-            },
-            {
-              "id": "Full microservices architecture",
-              "label": "Full microservices architecture"
-            }
-          ]
-        },
-        {
           "id": "Backend_APIProtocol",
           "label": "API communication protocols",
           "type": "multiselect",
           "help": "",
           "options": [
             {
-              "id": "REST (JSON)",
-              "label": "REST (JSON)"
+              "id": "REST",
+              "label": "REST"
             },
             {
               "id": "GraphQL",
@@ -1234,82 +447,12 @@
               "label": "gRPC"
             },
             {
-              "id": "gRPC-Web",
-              "label": "gRPC-Web"
-            },
-            {
               "id": "WebSockets",
               "label": "WebSockets"
             },
             {
               "id": "Event-driven messaging",
               "label": "Event-driven messaging"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "Backend_EventBrokers",
-          "label": "Event brokers / messaging systems",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Event Hubs",
-              "label": "Azure Event Hubs"
-            },
-            {
-              "id": "Azure Service Bus",
-              "label": "Azure Service Bus"
-            },
-            {
-              "id": "Kafka",
-              "label": "Kafka"
-            },
-            {
-              "id": "RabbitMQ",
-              "label": "RabbitMQ"
-            },
-            {
-              "id": "AWS SNS/SQS",
-              "label": "AWS SNS/SQS"
-            },
-            {
-              "id": "GCP Pub/Sub",
-              "label": "GCP Pub/Sub"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "Backend_Caching",
-          "label": "Caching strategies",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "In-memory cache",
-              "label": "In-memory cache"
-            },
-            {
-              "id": "Distributed cache",
-              "label": "Distributed cache"
-            },
-            {
-              "id": "Redis cache",
-              "label": "Redis cache"
-            },
-            {
-              "id": "CDN caching",
-              "label": "CDN caching"
-            },
-            {
-              "id": "Application-level cache",
-              "label": "Application-level cache"
-            },
-            {
-              "id": "Database query caching",
-              "label": "Database query caching"
             }
           ],
           "allowOther": true
@@ -1378,24 +521,12 @@
               "label": "GraphQL APIs"
             },
             {
-              "id": "gRPC / binary API feeds",
-              "label": "gRPC / binary API feeds"
-            },
-            {
               "id": "File-based sources",
               "label": "File-based sources"
             },
             {
               "id": "Streaming sources",
               "label": "Streaming sources"
-            },
-            {
-              "id": "IoT telemetry",
-              "label": "IoT telemetry"
-            },
-            {
-              "id": "Third-party data providers",
-              "label": "Third-party data providers"
             },
             {
               "id": "Manual uploads",
@@ -1442,47 +573,6 @@
           "allowOther": true
         },
         {
-          "id": "DA_IngestionTools",
-          "label": "Tools used for ingestion",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Data Factory",
-              "label": "Azure Data Factory"
-            },
-            {
-              "id": "Azure Synapse Pipelines",
-              "label": "Azure Synapse Pipelines"
-            },
-            {
-              "id": "Databricks Workflows",
-              "label": "Databricks Workflows"
-            },
-            {
-              "id": "Event Hubs",
-              "label": "Event Hubs"
-            },
-            {
-              "id": "Kafka",
-              "label": "Kafka"
-            },
-            {
-              "id": "Stream Analytics",
-              "label": "Stream Analytics"
-            },
-            {
-              "id": "Logic Apps",
-              "label": "Logic Apps"
-            },
-            {
-              "id": "Custom ingestion code",
-              "label": "Custom ingestion code"
-            }
-          ],
-          "allowOther": true
-        },
-        {
           "id": "DA_ProcessingEngines",
           "label": "Data processing engines used",
           "type": "multiselect",
@@ -1497,8 +587,8 @@
               "label": "Synapse Spark"
             },
             {
-              "id": "ADF Mapping Data Flows",
-              "label": "ADF Mapping Data Flows"
+              "id": "Microsoft Fabric",
+              "label": "Microsoft Fabric"
             },
             {
               "id": "SQL-based ELT",
@@ -1507,14 +597,6 @@
             {
               "id": "Custom Python ETL",
               "label": "Custom Python ETL"
-            },
-            {
-              "id": "Fivetran / Airbyte",
-              "label": "Fivetran / Airbyte"
-            },
-            {
-              "id": "dbt",
-              "label": "dbt"
             },
             {
               "id": "Azure Functions",
@@ -1569,8 +651,8 @@
           "allowOther": true
         },
         {
-          "id": "DA_BIPlatforms",
-          "label": "BI / analytics platforms used",
+          "id": "DA_ReportingAnalyticsTools",
+          "label": "Reporting and Analytics Tools",
           "type": "multiselect",
           "help": "",
           "options": [
@@ -1583,90 +665,8 @@
               "label": "Tableau"
             },
             {
-              "id": "Qlik",
-              "label": "Qlik"
-            },
-            {
-              "id": "Looker",
-              "label": "Looker"
-            },
-            {
               "id": "Excel-based analytics",
               "label": "Excel-based analytics"
-            },
-            {
-              "id": "Custom dashboards",
-              "label": "Custom dashboards"
-            },
-            {
-              "id": "Embedded analytics",
-              "label": "Embedded analytics"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DA_SemanticModels",
-          "label": "Semantic modeling",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Power BI dataset",
-              "label": "Power BI dataset"
-            },
-            {
-              "id": "SSAS / Azure Analysis Services",
-              "label": "SSAS / Azure Analysis Services"
-            },
-            {
-              "id": "dbt metrics",
-              "label": "dbt metrics"
-            },
-            {
-              "id": "LookML",
-              "label": "LookML"
-            },
-            {
-              "id": "Custom semantic layer",
-              "label": "Custom semantic layer"
-            },
-            {
-              "id": "No semantic layer",
-              "label": "No semantic layer"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DA_StorageZones",
-          "label": "Data lake zones used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Raw/Bronze",
-              "label": "Raw/Bronze"
-            },
-            {
-              "id": "Cleaned/Silver",
-              "label": "Cleaned/Silver"
-            },
-            {
-              "id": "Curated/Gold",
-              "label": "Curated/Gold"
-            },
-            {
-              "id": "Sandbox",
-              "label": "Sandbox"
-            },
-            {
-              "id": "ML feature zone",
-              "label": "ML feature zone"
-            },
-            {
-              "id": " Archive zone",
-              "label": " Archive zone"
             }
           ],
           "allowOther": true
@@ -1678,44 +678,28 @@
           "help": "",
           "options": [
             {
-              "id": "Azure Data Lake Gen2",
-              "label": "Azure Data Lake Gen2"
+              "id": "BLOB",
+              "label": "BLOB"
             },
             {
-              "id": "Azure Blob Storage",
-              "label": "Azure Blob Storage"
+              "id": "Data Lake",
+              "label": "Data Lake"
             },
             {
-              "id": "Azure SQL Database",
-              "label": "Azure SQL Database"
+              "id": "Relational Database",
+              "label": "Relational Database"
             },
             {
-              "id": "Azure Synapse dedicated SQL pool",
-              "label": "Azure Synapse dedicated SQL pool"
+              "id": "Text Files",
+              "label": "Text Files"
             },
             {
-              "id": "Databricks Delta Lake",
-              "label": "Databricks Delta Lake"
+              "id": "Excel Files",
+              "label": "Excel Files"
             },
             {
-              "id": "Cosmos DB",
-              "label": "Cosmos DB"
-            },
-            {
-              "id": "On-prem storage",
-              "label": "On-prem storage"
-            },
-            {
-              "id": "External storage systems",
-              "label": "External storage systems"
-            },
-            {
-              "id": "GCP Cloud Storage",
-              "label": "GCP Cloud Storage"
-            },
-            {
-              "id": "S3",
-              "label": "S3"
+              "id": "NoSQL Database",
+              "label": "NoSQL Database"
             }
           ],
           "allowOther": true
@@ -1727,8 +711,8 @@
           "help": "",
           "options": [
             {
-              "id": "Dimensional modeling (star schema)",
-              "label": "Dimensional modeling (star schema)"
+              "id": "Dimensional modeling",
+              "label": "Dimensional modeling"
             },
             {
               "id": "Data vault",
@@ -1757,281 +741,6 @@
             {
               "id": "Hybrid modeling",
               "label": "Hybrid modeling"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DA_DataCatalog",
-          "label": "Data catalog used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Microsoft Purview",
-              "label": "Microsoft Purview"
-            },
-            {
-              "id": "Databricks Unity Catalog",
-              "label": "Databricks Unity Catalog"
-            },
-            {
-              "id": "Collibra",
-              "label": "Collibra"
-            },
-            {
-              "id": "Alation",
-              "label": "Alation"
-            },
-            {
-              "id": "Custom data catalog",
-              "label": "Custom data catalog"
-            },
-            {
-              "id": "No data catalog",
-              "label": "No data catalog"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DA_LineageTools",
-          "label": "Lineage / collaboration tools",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Purview",
-              "label": "Azure Purview"
-            },
-            {
-              "id": "Databricks Unity Catalog",
-              "label": "Databricks Unity Catalog"
-            },
-            {
-              "id": "Collibra",
-              "label": "Collibra"
-            },
-            {
-              "id": "Alation",
-              "label": "Alation"
-            },
-            {
-              "id": "OpenMetadata",
-              "label": "OpenMetadata"
-            },
-            {
-              "id": "Custom metadata tracking",
-              "label": "Custom metadata tracking"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DA_BITools",
-          "label": "Business intelligence / visualization tools used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Power BI",
-              "label": "Power BI"
-            },
-            {
-              "id": "Tableau",
-              "label": "Tableau"
-            },
-            {
-              "id": "Qlik",
-              "label": "Qlik"
-            },
-            {
-              "id": "Looker",
-              "label": "Looker"
-            },
-            {
-              "id": "Superset",
-              "label": "Superset"
-            },
-            {
-              "id": "Custom dashboards",
-              "label": "Custom dashboards"
-            },
-            {
-              "id": "Excel-based dashboards",
-              "label": "Excel-based dashboards"
-            },
-            {
-              "id": "No BI tools",
-              "label": "No BI tools"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DA_BIModeling",
-          "label": "Modeling approaches used in BI layer",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Star schema",
-              "label": "Star schema"
-            },
-            {
-              "id": "Snowflake schema",
-              "label": "Snowflake schema"
-            },
-            {
-              "id": "Flat tables",
-              "label": "Flat tables"
-            },
-            {
-              "id": "Semantic model",
-              "label": "Semantic model"
-            },
-            {
-              "id": "Composite models",
-              "label": "Composite models"
-            },
-            {
-              "id": "Direct Lake",
-              "label": "Direct Lake"
-            },
-            {
-              "id": "Hybrid modeling",
-              "label": "Hybrid modeling"
-            },
-            {
-              "id": "No formal modeling",
-              "label": "No formal modeling"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DA_AdvancedFeatures",
-          "label": "Advanced visualization features used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "AI visuals (Power BI)",
-              "label": "AI visuals (Power BI)"
-            },
-            {
-              "id": "Custom visuals",
-              "label": "Custom visuals"
-            },
-            {
-              "id": "R/Python visuals",
-              "label": "R/Python visuals"
-            },
-            {
-              "id": "Embedded predictive outputs",
-              "label": "Embedded predictive outputs"
-            },
-            {
-              "id": "Drill-through/Drill-down",
-              "label": "Drill-through/Drill-down"
-            },
-            {
-              "id": "Bookmarks & storytelling",
-              "label": "Bookmarks & storytelling"
-            },
-            {
-              "id": "Paginated reports",
-              "label": "Paginated reports"
-            },
-            {
-              "id": "None",
-              "label": "None"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DA_LifecycleStages",
-          "label": "Lifecycle stages applicable to this system",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Data ingestion",
-              "label": "Data ingestion"
-            },
-            {
-              "id": "Data processing/enrichment",
-              "label": "Data processing/enrichment"
-            },
-            {
-              "id": "Operational storage",
-              "label": "Operational storage"
-            },
-            {
-              "id": "Analytics storage",
-              "label": "Analytics storage"
-            },
-            {
-              "id": "Hot data access",
-              "label": "Hot data access"
-            },
-            {
-              "id": "Warm data access",
-              "label": "Warm data access"
-            },
-            {
-              "id": "Cold/archive storage",
-              "label": "Cold/archive storage"
-            },
-            {
-              "id": "Data sharing/consumption",
-              "label": "Data sharing/consumption"
-            },
-            {
-              "id": "Data archival",
-              "label": "Data archival"
-            },
-            {
-              "id": "Data deletion/destruction",
-              "label": "Data deletion/destruction"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DA_TieringStrategy",
-          "label": "Storage tiering strategy",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Hot storage",
-              "label": "Hot storage"
-            },
-            {
-              "id": "Warm storage",
-              "label": "Warm storage"
-            },
-            {
-              "id": "Cold storage",
-              "label": "Cold storage"
-            },
-            {
-              "id": "Archive storage",
-              "label": "Archive storage"
-            },
-            {
-              "id": "Lifecycle-based tier transitions",
-              "label": "Lifecycle-based tier transitions"
-            },
-            {
-              "id": "Manual tier transitions",
-              "label": "Manual tier transitions"
-            },
-            {
-              "id": "No tiering strategy",
-              "label": "No tiering strategy"
             }
           ],
           "allowOther": true
@@ -2136,579 +845,6 @@
             }
           ],
           "allowOther": true
-        },
-        {
-          "id": "DA_ArchiveStorage",
-          "label": "Archival storage used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Cold blob storage",
-              "label": "Cold blob storage"
-            },
-            {
-              "id": "Archive blob storage",
-              "label": "Archive blob storage"
-            },
-            {
-              "id": "Tape/long-term archival",
-              "label": "Tape/long-term archival"
-            },
-            {
-              "id": "Offline storage",
-              "label": "Offline storage"
-            },
-            {
-              "id": "Specialized archival systems",
-              "label": "Specialized archival systems"
-            },
-            {
-              "id": "No archival storage",
-              "label": "No archival storage"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DA_DeletionModel",
-          "label": "Deletion model",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Soft delete only",
-              "label": "Soft delete only"
-            },
-            {
-              "id": "Soft delete with scheduled purge",
-              "label": "Soft delete with scheduled purge"
-            },
-            {
-              "id": "Hard delete only",
-              "label": "Hard delete only"
-            },
-            {
-              "id": "Hybrid model (soft + hard delete)",
-              "label": "Hybrid model (soft + hard delete)"
-            },
-            {
-              "id": "No deletion model",
-              "label": "No deletion model"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "AI_ML",
-      "label": "AI / Machine Learning",
-      "description": "ML workloads, MLOps, training, inference, LLMs, feature stores, vector search, governance, safety and monitoring",
-      "questions": [
-        {
-          "id": "AI_WorkloadCategories",
-          "label": "AI/ML workload categories",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Predictive modeling (regression/classification)",
-              "label": "Predictive modeling (regression/classification)"
-            },
-            {
-              "id": "Forecasting",
-              "label": "Forecasting"
-            },
-            {
-              "id": "Recommendation engines",
-              "label": "Recommendation engines"
-            },
-            {
-              "id": "Clustering / segmentation",
-              "label": "Clustering / segmentation"
-            },
-            {
-              "id": "NLP (traditional ML)",
-              "label": "NLP (traditional ML)"
-            },
-            {
-              "id": "LLMs / generative AI",
-              "label": "LLMs / generative AI"
-            },
-            {
-              "id": "Computer vision",
-              "label": "Computer vision"
-            },
-            {
-              "id": "Anomaly detection",
-              "label": "Anomaly detection"
-            },
-            {
-              "id": "Optimization / prescriptive models",
-              "label": "Optimization / prescriptive models"
-            },
-            {
-              "id": "Reinforcement learning",
-              "label": "Reinforcement learning"
-            },
-            {
-              "id": "Feature engineering pipelines",
-              "label": "Feature engineering pipelines"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "AI_TrainingPlatforms",
-          "label": "Training platform(s) used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Machine Learning",
-              "label": "Azure Machine Learning"
-            },
-            {
-              "id": "Databricks ML Runtime",
-              "label": "Databricks ML Runtime"
-            },
-            {
-              "id": "Synapse Spark",
-              "label": "Synapse Spark"
-            },
-            {
-              "id": "Local workstation",
-              "label": "Local workstation"
-            },
-            {
-              "id": "On-prem GPU servers",
-              "label": "On-prem GPU servers"
-            },
-            {
-              "id": "AWS SageMaker",
-              "label": "AWS SageMaker"
-            },
-            {
-              "id": "GCP Vertex AI",
-              "label": "GCP Vertex AI"
-            },
-            {
-              "id": "Custom training cluster (Kubernetes)",
-              "label": "Custom training cluster (Kubernetes)"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "AI_ComputeTypes",
-          "label": "Compute types used for training",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "CPU compute",
-              "label": "CPU compute"
-            },
-            {
-              "id": "GPU compute",
-              "label": "GPU compute"
-            },
-            {
-              "id": "High-memory nodes",
-              "label": "High-memory nodes"
-            },
-            {
-              "id": "Serverless Spark compute",
-              "label": "Serverless Spark compute"
-            },
-            {
-              "id": "Cluster auto-scaling compute",
-              "label": "Cluster auto-scaling compute"
-            },
-            {
-              "id": "Dedicated GPU clusters",
-              "label": "Dedicated GPU clusters"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "AI_FeatureEngineeringTools",
-          "label": "Feature engineering tools",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Databricks (Spark)",
-              "label": "Databricks (Spark)"
-            },
-            {
-              "id": "Synapse Spark",
-              "label": "Synapse Spark"
-            },
-            {
-              "id": "Azure Machine Learning pipelines",
-              "label": "Azure Machine Learning pipelines"
-            },
-            {
-              "id": "Python (pandas)",
-              "label": "Python (pandas)"
-            },
-            {
-              "id": "SQL-based computations",
-              "label": "SQL-based computations"
-            },
-            {
-              "id": "Custom feature engineering code",
-              "label": "Custom feature engineering code"
-            },
-            {
-              "id": "dbt transformations",
-              "label": "dbt transformations"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "AI_FeatureStoreUsage",
-          "label": "Feature store usage",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No feature store",
-              "label": "No feature store"
-            },
-            {
-              "id": "Azure Machine Learning Feature Store",
-              "label": "Azure Machine Learning Feature Store"
-            },
-            {
-              "id": "Databricks Feature Store",
-              "label": "Databricks Feature Store"
-            },
-            {
-              "id": "Feast",
-              "label": "Feast"
-            },
-            {
-              "id": "Custom-built feature store",
-              "label": "Custom-built feature store"
-            }
-          ]
-        },
-        {
-          "id": "AI_ExperimentTrackingTools",
-          "label": "Experiment tracking tools",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure ML Experiment Tracking",
-              "label": "Azure ML Experiment Tracking"
-            },
-            {
-              "id": "MLflow",
-              "label": "MLflow"
-            },
-            {
-              "id": "Weights & Biases",
-              "label": "Weights & Biases"
-            },
-            {
-              "id": "TensorBoard",
-              "label": "TensorBoard"
-            },
-            {
-              "id": "Custom experiment logging",
-              "label": "Custom experiment logging"
-            },
-            {
-              "id": "No experiment tracking",
-              "label": "No experiment tracking"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "AI_HyperparameterTuning",
-          "label": "Hyperparameter tuning methods",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Manual tuning",
-              "label": "Manual tuning"
-            },
-            {
-              "id": "Random search",
-              "label": "Random search"
-            },
-            {
-              "id": "Grid search",
-              "label": "Grid search"
-            },
-            {
-              "id": "Bayesian optimization",
-              "label": "Bayesian optimization"
-            },
-            {
-              "id": "HyperDrive (Azure)",
-              "label": "HyperDrive (Azure)"
-            },
-            {
-              "id": "Ray Tune",
-              "label": "Ray Tune"
-            },
-            {
-              "id": "No hyperparameter tuning",
-              "label": "No hyperparameter tuning"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "AI_InferenceType",
-          "label": "Inference model type",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Real-time inference",
-              "label": "Real-time inference"
-            },
-            {
-              "id": "Batch inference",
-              "label": "Batch inference"
-            },
-            {
-              "id": "Streaming inference",
-              "label": "Streaming inference"
-            },
-            {
-              "id": "Hybrid (real-time + batch)",
-              "label": "Hybrid (real-time + batch)"
-            }
-          ]
-        },
-        {
-          "id": "AI_ModelRegistry",
-          "label": "Model registry used",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Machine Learning registry",
-              "label": "Azure Machine Learning registry"
-            },
-            {
-              "id": "Databricks MLflow registry",
-              "label": "Databricks MLflow registry"
-            },
-            {
-              "id": "AWS SageMaker registry",
-              "label": "AWS SageMaker registry"
-            },
-            {
-              "id": "GCP Vertex AI registry",
-              "label": "GCP Vertex AI registry"
-            },
-            {
-              "id": "Custom model registry",
-              "label": "Custom model registry"
-            },
-            {
-              "id": "No model registry",
-              "label": "No model registry"
-            }
-          ]
-        },
-        {
-          "id": "AI_LLMUsageTypes",
-          "label": "LLM usage types",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "RAG (Retrieval-Augmented Generation)",
-              "label": "RAG (Retrieval-Augmented Generation)"
-            },
-            {
-              "id": "Chatbots / assistants",
-              "label": "Chatbots / assistants"
-            },
-            {
-              "id": "Document Q&A",
-              "label": "Document Q&A"
-            },
-            {
-              "id": "Text summarization",
-              "label": "Text summarization"
-            },
-            {
-              "id": "Code generation",
-              "label": "Code generation"
-            },
-            {
-              "id": "Classification",
-              "label": "Classification"
-            },
-            {
-              "id": "Translation",
-              "label": "Translation"
-            },
-            {
-              "id": "Custom fine-tuning",
-              "label": "Custom fine-tuning"
-            },
-            {
-              "id": "Embedding generation / semantic search",
-              "label": "Embedding generation / semantic search"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "AI_LLMProviders",
-          "label": "LLM provider(s) used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure OpenAI",
-              "label": "Azure OpenAI"
-            },
-            {
-              "id": "OpenAI (public)",
-              "label": "OpenAI (public)"
-            },
-            {
-              "id": "HuggingFace",
-              "label": "HuggingFace"
-            },
-            {
-              "id": "Cohere",
-              "label": "Cohere"
-            },
-            {
-              "id": "Anthropic",
-              "label": "Anthropic"
-            },
-            {
-              "id": "Custom self-hosted LLM",
-              "label": "Custom self-hosted LLM"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "AI_RAGComponents",
-          "label": "RAG components used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Vector database",
-              "label": "Vector database"
-            },
-            {
-              "id": "Embeddings model",
-              "label": "Embeddings model"
-            },
-            {
-              "id": "Document chunking pipeline",
-              "label": "Document chunking pipeline"
-            },
-            {
-              "id": "Metadata storage",
-              "label": "Metadata storage"
-            },
-            {
-              "id": "Hybrid search (vector + keyword)",
-              "label": "Hybrid search (vector + keyword)"
-            },
-            {
-              "id": "Prompt orchestration layer",
-              "label": "Prompt orchestration layer"
-            },
-            {
-              "id": "Evaluation framework",
-              "label": "Evaluation framework"
-            }
-          ],
-          "visibleWhen": [
-            {
-              "questionId": "AI_LLMUsageTypes",
-              "equals": "RAG (Retrieval-Augmented Generation)"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "AI_EmbeddingModels",
-          "label": "Embedding models used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure OpenAI embeddings",
-              "label": "Azure OpenAI embeddings"
-            },
-            {
-              "id": "OpenAI text-embedding models",
-              "label": "OpenAI text-embedding models"
-            },
-            {
-              "id": "HuggingFace Sentence Transformers",
-              "label": "HuggingFace Sentence Transformers"
-            },
-            {
-              "id": "Cohere embeddings",
-              "label": "Cohere embeddings"
-            },
-            {
-              "id": "Self-hosted embeddings model",
-              "label": "Self-hosted embeddings model"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "AI_VectorDatabases",
-          "label": "Vector DB technologies used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure AI Search (Vector Search)",
-              "label": "Azure AI Search (Vector Search)"
-            },
-            {
-              "id": "Pinecone",
-              "label": "Pinecone"
-            },
-            {
-              "id": "Weaviate",
-              "label": "Weaviate"
-            },
-            {
-              "id": "ChromaDB",
-              "label": "ChromaDB"
-            },
-            {
-              "id": "Milvus",
-              "label": "Milvus"
-            },
-            {
-              "id": "Elasticsearch vector search",
-              "label": "Elasticsearch vector search"
-            },
-            {
-              "id": "Postgres pgvector",
-              "label": "Postgres pgvector"
-            }
-          ],
-          "allowOther": true
         }
       ]
     },
@@ -2719,7 +855,7 @@
       "questions": [
         {
           "id": "SEC_AuthProviders",
-          "label": "Primary authentication provider(s)",
+          "label": "Authentication providers",
           "type": "multiselect",
           "help": "",
           "options": [
@@ -2771,45 +907,8 @@
           "allowOther": true
         },
         {
-          "id": "SEC_AuthMethods",
-          "label": "Authentication methods used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "OAuth2/OIDC authorization code flow",
-              "label": "OAuth2/OIDC authorization code flow"
-            },
-            {
-              "id": "OAuth2/OIDC PKCE",
-              "label": "OAuth2/OIDC PKCE"
-            },
-            {
-              "id": "Client credentials flow",
-              "label": "Client credentials flow"
-            },
-            {
-              "id": "On-behalf-of flow",
-              "label": "On-behalf-of flow"
-            },
-            {
-              "id": "SAML",
-              "label": "SAML"
-            },
-            {
-              "id": "Basic authentication",
-              "label": "Basic authentication"
-            },
-            {
-              "id": "API key authentication",
-              "label": "API key authentication"
-            }
-          ],
-          "allowOther": true
-        },
-        {
           "id": "SEC_SecretsStorage",
-          "label": "Secrets storage mechanism(s)",
+          "label": "Secrets storage",
           "type": "multiselect",
           "help": "",
           "options": [
@@ -2830,10 +929,6 @@
               "label": "Configuration files"
             },
             {
-              "id": "HashiCorp Vault",
-              "label": "HashiCorp Vault"
-            },
-            {
               "id": "AWS Secrets Manager",
               "label": "AWS Secrets Manager"
             },
@@ -2851,30 +946,6 @@
             }
           ],
           "allowOther": true
-        },
-        {
-          "id": "SEC_KeyRotation",
-          "label": "Key, secret and certificate rotation",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Manual rotation",
-              "label": "Manual rotation"
-            },
-            {
-              "id": "Automated rotation via platform",
-              "label": "Automated rotation via platform"
-            },
-            {
-              "id": "Automated rotation via custom scripts",
-              "label": "Automated rotation via custom scripts"
-            },
-            {
-              "id": "No rotation",
-              "label": "No rotation"
-            }
-          ]
         },
         {
           "id": "SEC_DataEncryptionAtRest",
@@ -2919,71 +990,6 @@
               "label": "TLS 1.3 enforced"
             }
           ]
-        },
-        {
-          "id": "SEC_ComplianceFrameworks",
-          "label": "Applicable compliance frameworks",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "GDPR",
-              "label": "GDPR"
-            },
-            {
-              "id": "ISO 27001",
-              "label": "ISO 27001"
-            },
-            {
-              "id": "SOC 2",
-              "label": "SOC 2"
-            },
-            {
-              "id": "HIPAA",
-              "label": "HIPAA"
-            },
-            {
-              "id": "PCI-DSS",
-              "label": "PCI-DSS"
-            },
-            {
-              "id": "FedRAMP",
-              "label": "FedRAMP"
-            },
-            {
-              "id": "Internal enterprise security policies",
-              "label": "Internal enterprise security policies"
-            },
-            {
-              "id": "No compliance requirements",
-              "label": "No compliance requirements"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "SEC_MFA",
-          "label": "Multi-factor authentication enforcement",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No MFA",
-              "label": "No MFA"
-            },
-            {
-              "id": "MFA optional",
-              "label": "MFA optional"
-            },
-            {
-              "id": "MFA required for admins",
-              "label": "MFA required for admins"
-            },
-            {
-              "id": "MFA required for all users",
-              "label": "MFA required for all users"
-            }
-          ]
         }
       ]
     },
@@ -2992,38 +998,6 @@
       "label": "Development",
       "description": "Methodology, branching, code reviews, workflows, standards, tooling, quality gates, documentation",
       "questions": [
-        {
-          "id": "DP_Approach",
-          "label": "Development methodology used",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Agile (Scrum)",
-              "label": "Agile (Scrum)"
-            },
-            {
-              "id": "Agile (Kanban)",
-              "label": "Agile (Kanban)"
-            },
-            {
-              "id": "Agile (ScrumBan)",
-              "label": "Agile (ScrumBan)"
-            },
-            {
-              "id": "Waterfall",
-              "label": "Waterfall"
-            },
-            {
-              "id": "Iterative/Hybrid",
-              "label": "Iterative/Hybrid"
-            },
-            {
-              "id": "No defined methodology",
-              "label": "No defined methodology"
-            }
-          ]
-        },
         {
           "id": "DP_RepoProvider",
           "label": "Repository provider",
@@ -3039,14 +1013,6 @@
               "label": "GitHub"
             },
             {
-              "id": "GitLab",
-              "label": "GitLab"
-            },
-            {
-              "id": "Bitbucket",
-              "label": "Bitbucket"
-            },
-            {
               "id": "On-prem Git server",
               "label": "On-prem Git server"
             }
@@ -3054,7 +1020,7 @@
         },
         {
           "id": "DP_AutomationTools",
-          "label": "Automation tools used in development workflow",
+          "label": "Automation tools",
           "type": "multiselect",
           "help": "",
           "options": [
@@ -3067,102 +1033,12 @@
               "label": "GitHub Actions"
             },
             {
-              "id": "Pre-commit hooks",
-              "label": "Pre-commit hooks"
-            },
-            {
-              "id": "Makefiles/task runners",
-              "label": "Makefiles/task runners"
-            },
-            {
               "id": "Local automation scripts",
               "label": "Local automation scripts"
             },
             {
-              "id": "Code generation tools",
-              "label": "Code generation tools"
-            },
-            {
               "id": "No automation",
               "label": "No automation"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DP_DevelopmentPractices",
-          "label": "Development practices used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Test-driven development",
-              "label": "Test-driven development"
-            },
-            {
-              "id": "Behavior-driven development",
-              "label": "Behavior-driven development"
-            },
-            {
-              "id": "Pair programming",
-              "label": "Pair programming"
-            },
-            {
-              "id": "Mob programming",
-              "label": "Mob programming"
-            },
-            {
-              "id": "Feature toggles",
-              "label": "Feature toggles"
-            },
-            {
-              "id": "API-first development",
-              "label": "API-first development"
-            },
-            {
-              "id": "Design-first development",
-              "label": "Design-first development"
-            },
-            {
-              "id": "Contract testing",
-              "label": "Contract testing"
-            },
-            {
-              "id": "None of the above",
-              "label": "None of the above"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DP_DevEnvironmentTypes",
-          "label": "Development environment types used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Local development (desktop/laptop)",
-              "label": "Local development (desktop/laptop)"
-            },
-            {
-              "id": "Containerized local development",
-              "label": "Containerized local development"
-            },
-            {
-              "id": "Remote dev environments",
-              "label": "Remote dev environments"
-            },
-            {
-              "id": "Cloud-based development environments",
-              "label": "Cloud-based development environments"
-            },
-            {
-              "id": "Ephemeral development environments",
-              "label": "Ephemeral development environments"
-            },
-            {
-              "id": "No standard development environment",
-              "label": "No standard development environment"
             }
           ],
           "allowOther": true
@@ -3188,75 +1064,6 @@
             {
               "id": "IntelliJ",
               "label": "IntelliJ"
-            },
-            {
-              "id": "Rider",
-              "label": "Rider"
-            },
-            {
-              "id": "DataGrip",
-              "label": "DataGrip"
-            },
-            {
-              "id": "JetBrains Fleet",
-              "label": "JetBrains Fleet"
-            },
-            {
-              "id": "Custom IDE setup",
-              "label": "Custom IDE setup"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "DP_EnvironmentsUsed",
-          "label": "Environments used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Local development",
-              "label": "Local development"
-            },
-            {
-              "id": "Dev",
-              "label": "Dev"
-            },
-            {
-              "id": "Integration",
-              "label": "Integration"
-            },
-            {
-              "id": "QA",
-              "label": "QA"
-            },
-            {
-              "id": "UAT",
-              "label": "UAT"
-            },
-            {
-              "id": "Performance/Load test",
-              "label": "Performance/Load test"
-            },
-            {
-              "id": "Security test",
-              "label": "Security test"
-            },
-            {
-              "id": "Pre-production/Stage",
-              "label": "Pre-production/Stage"
-            },
-            {
-              "id": "Production",
-              "label": "Production"
-            },
-            {
-              "id": "Disaster recovery",
-              "label": "Disaster recovery"
-            },
-            {
-              "id": "Sandbox/Preview environments",
-              "label": "Sandbox/Preview environments"
             }
           ],
           "allowOther": true
@@ -3268,211 +1075,6 @@
       "label": "Deployment",
       "description": "End-to-end delivery: CI/CD pipelines, automation, infrastructure as code, deployment strategies, release orchestration, and operational governance",
       "questions": [
-        {
-          "id": "D_CITools",
-          "label": "CI tools used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure DevOps Pipelines",
-              "label": "Azure DevOps Pipelines"
-            },
-            {
-              "id": "GitHub Actions",
-              "label": "GitHub Actions"
-            },
-            {
-              "id": "GitLab CI",
-              "label": "GitLab CI"
-            },
-            {
-              "id": "Bitbucket Pipelines",
-              "label": "Bitbucket Pipelines"
-            },
-            {
-              "id": "Jenkins",
-              "label": "Jenkins"
-            },
-            {
-              "id": "TeamCity",
-              "label": "TeamCity"
-            },
-            {
-              "id": "No CI",
-              "label": "No CI"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "D_CIPractices",
-          "label": "CI practices in place",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Automated builds",
-              "label": "Automated builds"
-            },
-            {
-              "id": "Pull request validation",
-              "label": "Pull request validation"
-            },
-            {
-              "id": "Automated code analysis",
-              "label": "Automated code analysis"
-            },
-            {
-              "id": "Automated dependency scanning",
-              "label": "Automated dependency scanning"
-            },
-            {
-              "id": "Automated unit tests",
-              "label": "Automated unit tests"
-            },
-            {
-              "id": "Pipeline caching",
-              "label": "Pipeline caching"
-            },
-            {
-              "id": "Ephemeral build agents",
-              "label": "Ephemeral build agents"
-            },
-            {
-              "id": "None",
-              "label": "None"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "D_CDTools",
-          "label": "CD and release tools used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure DevOps Release Pipelines",
-              "label": "Azure DevOps Release Pipelines"
-            },
-            {
-              "id": "GitHub Actions Deployments",
-              "label": "GitHub Actions Deployments"
-            },
-            {
-              "id": "ArgoCD",
-              "label": "ArgoCD"
-            },
-            {
-              "id": "FluxCD",
-              "label": "FluxCD"
-            },
-            {
-              "id": "Octopus Deploy",
-              "label": "Octopus Deploy"
-            },
-            {
-              "id": "Spinnaker",
-              "label": "Spinnaker"
-            },
-            {
-              "id": "No CD",
-              "label": "No CD"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "D_TestCoverage",
-          "label": "Test coverage types implemented",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Unit tests",
-              "label": "Unit tests"
-            },
-            {
-              "id": "Integration tests",
-              "label": "Integration tests"
-            },
-            {
-              "id": "API contract tests",
-              "label": "API contract tests"
-            },
-            {
-              "id": "UI automation tests",
-              "label": "UI automation tests"
-            },
-            {
-              "id": "Performance tests",
-              "label": "Performance tests"
-            },
-            {
-              "id": "Load/stress tests",
-              "label": "Load/stress tests"
-            },
-            {
-              "id": "Security tests",
-              "label": "Security tests"
-            },
-            {
-              "id": "Smoke tests",
-              "label": "Smoke tests"
-            },
-            {
-              "id": "Manual exploratory testing",
-              "label": "Manual exploratory testing"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "D_TestAutomationTools",
-          "label": "Testing automation tools",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Selenium",
-              "label": "Selenium"
-            },
-            {
-              "id": "Playwright",
-              "label": "Playwright"
-            },
-            {
-              "id": "Cypress",
-              "label": "Cypress"
-            },
-            {
-              "id": "JUnit/TestNG/NUnit",
-              "label": "JUnit/TestNG/NUnit"
-            },
-            {
-              "id": "Postman Collection Runner",
-              "label": "Postman Collection Runner"
-            },
-            {
-              "id": "K6",
-              "label": "K6"
-            },
-            {
-              "id": "JMeter",
-              "label": "JMeter"
-            },
-            {
-              "id": "Custom automation tooling",
-              "label": "Custom automation tooling"
-            },
-            {
-              "id": "No automated tests",
-              "label": "No automated tests"
-            }
-          ],
-          "allowOther": true
-        },
         {
           "id": "D_DeploymentStrategy",
           "label": "Deployment strategies",
@@ -3506,51 +1108,6 @@
             {
               "id": "Hotfix patching",
               "label": "Hotfix patching"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "D_DeploymentModel",
-          "label": "Deployment model used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Blue/Green deployments",
-              "label": "Blue/Green deployments"
-            },
-            {
-              "id": "Rolling deployments",
-              "label": "Rolling deployments"
-            },
-            {
-              "id": "Canary releases",
-              "label": "Canary releases"
-            },
-            {
-              "id": "Ring-based deployments",
-              "label": "Ring-based deployments"
-            },
-            {
-              "id": "Shadow deployments",
-              "label": "Shadow deployments"
-            },
-            {
-              "id": "Recreate deployments",
-              "label": "Recreate deployments"
-            },
-            {
-              "id": "Hotfix direct-to-production",
-              "label": "Hotfix direct-to-production"
-            },
-            {
-              "id": "Manual deployments",
-              "label": "Manual deployments"
-            },
-            {
-              "id": "Fully automated deployments",
-              "label": "Fully automated deployments"
             }
           ],
           "allowOther": true
@@ -3623,34 +1180,6 @@
             }
           ],
           "allowOther": true
-        },
-        {
-          "id": "D_VersioningStrategy",
-          "label": "Versioning strategy",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Semantic versioning",
-              "label": "Semantic versioning"
-            },
-            {
-              "id": "Git commit-based versioning",
-              "label": "Git commit-based versioning"
-            },
-            {
-              "id": "Date-based versioning",
-              "label": "Date-based versioning"
-            },
-            {
-              "id": "Build-number versioning",
-              "label": "Build-number versioning"
-            },
-            {
-              "id": "No defined versioning",
-              "label": "No defined versioning"
-            }
-          ]
         }
       ]
     },
@@ -3791,99 +1320,6 @@
               "label": "Custom schedule"
             }
           ]
-        },
-        {
-          "id": "DR_GeoReplication",
-          "label": "Geo-replication level",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No geo-replication",
-              "label": "No geo-replication"
-            },
-            {
-              "id": "Zone-redundant replication (ZRS)",
-              "label": "Zone-redundant replication (ZRS)"
-            },
-            {
-              "id": "Geo-redundant replication (GRS)",
-              "label": "Geo-redundant replication (GRS)"
-            },
-            {
-              "id": "Read-access geo-redundant replication (RA-GRS)",
-              "label": "Read-access geo-redundant replication (RA-GRS)"
-            },
-            {
-              "id": "Active-active multi-region",
-              "label": "Active-active multi-region"
-            },
-            {
-              "id": "Custom replication strategy",
-              "label": "Custom replication strategy"
-            }
-          ]
-        },
-        {
-          "id": "DR_FailoverType",
-          "label": "Failover type",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "Manual failover",
-              "label": "Manual failover"
-            },
-            {
-              "id": "Automated failover",
-              "label": "Automated failover"
-            },
-            {
-              "id": "Application-managed failover",
-              "label": "Application-managed failover"
-            },
-            {
-              "id": "Hybrid failover approach",
-              "label": "Hybrid failover approach"
-            }
-          ]
-        },
-        {
-          "id": "DR_ContinuityMethods",
-          "label": "Continuity methods used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Active-passive architecture",
-              "label": "Active-passive architecture"
-            },
-            {
-              "id": "Active-active architecture",
-              "label": "Active-active architecture"
-            },
-            {
-              "id": "Stateless compute replication",
-              "label": "Stateless compute replication"
-            },
-            {
-              "id": "Session replication",
-              "label": "Session replication"
-            },
-            {
-              "id": "Message queue replication",
-              "label": "Message queue replication"
-            },
-            {
-              "id": "Graceful degradation strategy",
-              "label": "Graceful degradation strategy"
-            },
-            {
-              "id": "No continuity planning",
-              "label": "No continuity planning"
-            }
-          ],
-          "allowOther": true
         }
       ]
     },
@@ -4029,85 +1465,12 @@
               "label": "Grafana Alerts"
             },
             {
-              "id": "PagerDuty",
-              "label": "PagerDuty"
-            },
-            {
-              "id": "OpsGenie",
-              "label": "OpsGenie"
-            },
-            {
-              "id": "ServiceNow integration",
-              "label": "ServiceNow integration"
-            },
-            {
               "id": "Custom alert process",
               "label": "Custom alert process"
             },
             {
               "id": "No alerting",
               "label": "No alerting"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "OBS_IncidentProcess",
-          "label": "Incident response process",
-          "type": "radio",
-          "help": "",
-          "options": [
-            {
-              "id": "No incident response process",
-              "label": "No incident response process"
-            },
-            {
-              "id": "Basic manual response",
-              "label": "Basic manual response"
-            },
-            {
-              "id": "Defined incident response plan",
-              "label": "Defined incident response plan"
-            },
-            {
-              "id": "Automated + manual hybrid process",
-              "label": "Automated + manual hybrid process"
-            }
-          ]
-        },
-        {
-          "id": "OBS_HealthCheckTypes",
-          "label": "Health checks implemented",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Liveness probes",
-              "label": "Liveness probes"
-            },
-            {
-              "id": "Readiness probes",
-              "label": "Readiness probes"
-            },
-            {
-              "id": "Startup probes",
-              "label": "Startup probes"
-            },
-            {
-              "id": "Application-level health endpoint",
-              "label": "Application-level health endpoint"
-            },
-            {
-              "id": "Dependency health checks",
-              "label": "Dependency health checks"
-            },
-            {
-              "id": "Database connectivity checks",
-              "label": "Database connectivity checks"
-            },
-            {
-              "id": "No health checks",
-              "label": "No health checks"
             }
           ],
           "allowOther": true
@@ -4149,158 +1512,6 @@
             {
               "id": "No diagnostics",
               "label": "No diagnostics"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "OBS_InfraPerfTools",
-          "label": "Infrastructure monitoring tools used",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Azure Monitor",
-              "label": "Azure Monitor"
-            },
-            {
-              "id": "Log Analytics",
-              "label": "Log Analytics"
-            },
-            {
-              "id": "Prometheus",
-              "label": "Prometheus"
-            },
-            {
-              "id": "Grafana",
-              "label": "Grafana"
-            },
-            {
-              "id": "Datadog",
-              "label": "Datadog"
-            },
-            {
-              "id": "Elastic Observability",
-              "label": "Elastic Observability"
-            },
-            {
-              "id": "Custom infra telemetry",
-              "label": "Custom infra telemetry"
-            },
-            {
-              "id": "No infra monitoring",
-              "label": "No infra monitoring"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "OBS_DataQualityMetrics",
-          "label": "Data quality KPIs monitored",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Completeness",
-              "label": "Completeness"
-            },
-            {
-              "id": "Accuracy",
-              "label": "Accuracy"
-            },
-            {
-              "id": "Consistency",
-              "label": "Consistency"
-            },
-            {
-              "id": "Uniqueness",
-              "label": "Uniqueness"
-            },
-            {
-              "id": "Timeliness",
-              "label": "Timeliness"
-            },
-            {
-              "id": "Schema drift detection",
-              "label": "Schema drift detection"
-            },
-            {
-              "id": "DQ rule violations",
-              "label": "DQ rule violations"
-            },
-            {
-              "id": "No data quality metrics",
-              "label": "No data quality metrics"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "OBS_LogTypes",
-          "label": "Types of logs collected",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Application logs",
-              "label": "Application logs"
-            },
-            {
-              "id": "Infrastructure logs",
-              "label": "Infrastructure logs"
-            },
-            {
-              "id": "Audit logs",
-              "label": "Audit logs"
-            },
-            {
-              "id": "Security logs",
-              "label": "Security logs"
-            },
-            {
-              "id": "API gateway logs",
-              "label": "API gateway logs"
-            },
-            {
-              "id": "Dependency logs",
-              "label": "Dependency logs"
-            },
-            {
-              "id": "Distributed trace logs",
-              "label": "Distributed trace logs"
-            },
-            {
-              "id": "No logs collected",
-              "label": "No logs collected"
-            }
-          ],
-          "allowOther": true
-        },
-        {
-          "id": "OBS_ArchiveStrategy",
-          "label": "Log archival strategy",
-          "type": "multiselect",
-          "help": "",
-          "options": [
-            {
-              "id": "Cold storage archival",
-              "label": "Cold storage archival"
-            },
-            {
-              "id": "Archive blob tier",
-              "label": "Archive blob tier"
-            },
-            {
-              "id": "Long-term audit log storage",
-              "label": "Long-term audit log storage"
-            },
-            {
-              "id": "Backup-driven archival",
-              "label": "Backup-driven archival"
-            },
-            {
-              "id": "No archival strategy",
-              "label": "No archival strategy"
             }
           ],
           "allowOther": true
