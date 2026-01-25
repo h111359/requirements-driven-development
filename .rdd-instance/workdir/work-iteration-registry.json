@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20260117-120324",
     "iteration-name": "Creation of technical design",
-    "prompt-id-sequence-next-value": 34,
+    "prompt-id-sequence-next-value": 35,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -380,6 +380,17 @@
             "state": "completed",
             "questionnaire-generated": true,
             "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
+        },
+        {
+            "prompt-id": "P-034",
+            "prompt-title": "Release automation",
+            "state": "completed",
+            "questionnaire-generated": false,
+            "questionnaire-answered": false,
             "plan-generated": false,
             "implementation-completed": true,
             "execution-mode": "no-action",

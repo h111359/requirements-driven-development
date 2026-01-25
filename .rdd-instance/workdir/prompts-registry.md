@@ -864,3 +864,12 @@ Currently `tech_design_schema_editor/static/app.js` visualize in Conditional Vis
 %%PROMPT P-033 "Conditional visibility value editor"
 The value editor in "Conditional Visibility" in "Technical Design Schema Editor" should reflect the type of the corresponding question and represent text value as text field, radio as radio, multiselect as multiselect and so on
 %%ENDPROMPT
+
+%%PROMPT P-034 "Release automation"
+Create in the prompt workdir a file release_automation_analysis.md
+The file should contain detail analysis of the options during PR to main branch to be executed generation of a new release with the respective needed artefacts attached.
+The source of the release version should be `.rdd/config/manifest.json` - framework.version
+Check for options to be assigned tag to the release in format for example: v2.1.0
+Provide best practices for generation of release notes - where to take them from and how to persist them?
+Currently the releases are created in `build` folder by a script `build/build.py`
+%%ENDPROMPT
