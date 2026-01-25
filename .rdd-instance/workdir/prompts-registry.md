@@ -873,3 +873,9 @@ Check for options to be assigned tag to the release in format for example: v2.1.
 Provide best practices for generation of release notes - where to take them from and how to persist them?
 Currently the releases are created in `build` folder by a script `build/build.py`
 %%ENDPROMPT
+
+%%PROMPT P-035 "Split on prompts the release analysis"
+Read `.rdd-instance/workdir/P-034_Release automation/release_automation_analysis.md` and based on it create in the current prompt workdir a file release_prompts.md where:
+- Write a series of prompts based on the analysis
+- Prompts should be executed in sequence by GitHub Copilot agent
+%%ENDPROMPT
