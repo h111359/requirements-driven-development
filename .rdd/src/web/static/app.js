@@ -3102,13 +3102,20 @@ function renderCategoryQuestions(categoryId) {
 
 /**
  * Check if a question should be visible based on visibleWhen rules
+ * 
+ * Supports both string and array formats for rule.equals:
+ * - String: exact match (e.g., "equals": "Cloud")
+ * - Array: OR logic - answer must match ANY value (e.g., "equals": ["Cloud", "Hybrid"])
+ * 
+ * For multiselect answers, uses ANY match logic:
+ * - If equals is ["A", "B"] and answer is ["B", "C"], rule matches (B is in both)
  */
 function isQuestionVisible(question) {
     if (!question.visibleWhen || question.visibleWhen.length === 0) {
         return true;
     }
     
-    // All rules must be satisfied (AND logic)
+    // All rules must be satisfied (AND logic between rules)
     for (const rule of question.visibleWhen) {
         const dependentAnswer = techDesignAnswers[rule.questionId];
         if (!dependentAnswer) {
@@ -3116,16 +3123,28 @@ function isQuestionVisible(question) {
         }
         
         const value = dependentAnswer.value;
+        
+        // Support both string and array formats for rule.equals
+        const equalsValues = Array.isArray(rule.equals) ? rule.equals : [rule.equals];
+        
+        // Check if answer matches ANY of the equals values (OR logic)
+        let ruleMatches = false;
+        
         if (Array.isArray(value)) {
-            // Multiselect: check if equals value is in array
-            if (!value.includes(rule.equals)) {
-                return false;
+            // Multiselect answer: check if ANY equals value is in the answer array
+            for (const equalsValue of equalsValues) {
+                if (value.includes(equalsValue)) {
+                    ruleMatches = true;
+                    break;
+                }
             }
         } else {
-            // Radio/text: check exact match
-            if (value !== rule.equals) {
-                return false;
-            }
+            // Single value answer (radio/text): check if value matches ANY equals value
+            ruleMatches = equalsValues.includes(value);
+        }
+        
+        if (!ruleMatches) {
+            return false;
         }
     }
     

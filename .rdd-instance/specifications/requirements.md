@@ -668,13 +668,13 @@ The framework enables:
 
 - [TR-0192] The Web UI Technical Design page shall render dynamically from the schema with a left sidebar showing categories with answered/total counters, accordion groups for questions, search and filter controls for type and status, and appropriate question widgets for radio buttons, checkboxes, and text inputs with immediate save functionality.
 
-- [TR-0193] The Web UI shall evaluate conditional visibility rules in real-time by checking visibleWhen arrays with AND logic where all rules must match either exact equals for radio/text or array includes for multiselect questions, re-rendering questions after each answer save or clear operation.
+- [TR-0193] The Web UI shall evaluate conditional visibility rules in real-time by checking visibleWhen arrays with AND logic where all rules must match, supporting both string and array formats for the equals field where arrays use OR logic (answer must match ANY value), handling exact equals for radio/text and array includes for multiselect questions, and re-rendering questions after each answer save or clear operation.
 
 - [TR-0194] The technical design schema shall contain categories covering Product, CloudStrategy, Compute, Frontend, Backend, Mobile, DataAnalytics, AI_ML, Security, Networking, Deployment, Observability, DisasterRecovery, OperationalModel, DevelopmentProcess, IntegrationArchitecture, PerformanceScalability, NonFunctionalRequirements, EnvironmentStrategy, and SupportHoursSLAs.
 
 - [TR-0195] The Web UI Technical Design page search functionality shall filter across all categories and questions simultaneously, displaying only categories with matches in the sidebar with match counts, presenting all matching questions in a flat list grouped by category with group labels, and restoring the previously selected category when search is cleared.
 
-- [TR-0196] The Technical Design Schema Editor shall validate visibleWhen fields as arrays of condition objects where each condition contains questionId (string) and equals (array of strings) fields, supporting AND logic across multiple conditions and OR logic within each condition's equals array.
+- [TR-0196] The Technical Design Schema Editor shall validate visibleWhen fields as arrays of condition objects where each condition contains questionId (string) and equals (string or array of strings) fields, supporting AND logic across multiple conditions and OR logic when equals is an array, with validation to check for duplicate values and valid option IDs.
 
 - [TR-0197] The Technical Design Schema Editor shall provide a manual backup button that validates the schema, creates a timestamped backup file regardless of validation status, and displays validation warnings if the schema is invalid
 

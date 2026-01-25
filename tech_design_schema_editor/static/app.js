@@ -542,7 +542,7 @@ function showQuestionEditor(categoryIndex, questionIndex) {
     elements.questionOtherPlaceholder.value = question.otherPlaceholder || '';
     
     document.getElementById('questionEditorTitle').textContent = 
-        `Edit Question: ${question.label || question.id}`;
+        `${question.label || question.id}`;
     document.getElementById('questionEditorSubtitle').textContent = 
         `Category: ${category.label || category.id}`;
     
@@ -1425,6 +1425,7 @@ function removeConditionRow(index) {
 
 /**
  * Save conditions to the current question's visibleWhen property
+ * Includes validation for equals arrays (Q4 decision: validate for duplicates and valid option IDs)
  */
 function saveConditionsToQuestion() {
     if (currentView !== 'question' || currentCategory === null || currentQuestion === null) return;
@@ -1433,14 +1434,78 @@ function saveConditionsToQuestion() {
     const conditions = window.currentConditions || [];
     
     if (conditions.length > 0) {
-        // Convert to legacy format if all conditions are simple equals
-        question.visibleWhen = conditions;
+        // Validate and transform conditions to visibleWhen format
+        const visibleWhenRules = [];
+        const errors = [];
+        
+        conditions.forEach((condition, index) => {
+            // Skip incomplete conditions
+            if (!condition.questionId || !condition.operator) {
+                return;
+            }
+            
+            // Currently only 'equals' operator is implemented in the runtime
+            // Store the rule with 'equals' field
+            const rule = {
+                questionId: condition.questionId,
+                equals: condition.value
+            };
+            
+            // Validate if value is an array (OR logic case)
+            if (Array.isArray(condition.value)) {
+                // Q4 validation: Check for duplicates
+                const uniqueValues = [...new Set(condition.value)];
+                if (uniqueValues.length !== condition.value.length) {
+                    errors.push(`Condition ${index + 1}: Duplicate values detected in equals array`);
+                }
+                
+                // Q4 validation: Check for valid option IDs if the question has options
+                const referencedQuestion = getQuestionById(condition.questionId);
+                if (referencedQuestion && hasOptionsQuestion(condition.questionId)) {
+                    const validOptionIds = getOptionsForQuestion(condition.questionId).map(opt => opt.id);
+                    const invalidValues = condition.value.filter(val => !validOptionIds.includes(val));
+                    
+                    if (invalidValues.length > 0) {
+                        errors.push(`Condition ${index + 1}: Invalid option IDs: ${invalidValues.join(', ')}`);
+                    }
+                }
+                
+                // Q1 decision: Support both string and array
+                // Convert single-element array to string for cleaner JSON
+                if (condition.value.length === 1) {
+                    rule.equals = condition.value[0];
+                } else if (condition.value.length === 0) {
+                    // Empty array - skip this condition
+                    return;
+                }
+                // else: keep as array for OR logic
+            } else if (condition.value) {
+                // String value - validate if question has options
+                const referencedQuestion = getQuestionById(condition.questionId);
+                if (referencedQuestion && hasOptionsQuestion(condition.questionId)) {
+                    const validOptionIds = getOptionsForQuestion(condition.questionId).map(opt => opt.id);
+                    if (!validOptionIds.includes(condition.value)) {
+                        errors.push(`Condition ${index + 1}: Invalid option ID: ${condition.value}`);
+                    }
+                }
+            }
+            
+            visibleWhenRules.push(rule);
+        });
+        
+        // Display errors if any
+        if (errors.length > 0) {
+            console.error('Conditional visibility validation errors:', errors);
+            console.warn('Validation errors in conditional visibility: ' + errors.join('; '));
+        }
+        
+        question.visibleWhen = visibleWhenRules.length > 0 ? visibleWhenRules : undefined;
     } else {
         question.visibleWhen = undefined;
     }
     
     // Update textarea
-    elements.questionVisibleWhen.value = JSON.stringify(conditions, null, 2);
+    elements.questionVisibleWhen.value = JSON.stringify(question.visibleWhen || [], null, 2);
     markAsModified();
 }
 

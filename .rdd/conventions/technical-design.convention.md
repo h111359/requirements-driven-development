@@ -93,18 +93,55 @@ Questions can be conditionally shown/hidden based on answers to other questions 
 ```
 
 **Evaluation Logic**:
-- All rules in `visibleWhen` array must be satisfied (AND logic)
+- All rules in `visibleWhen` array must be satisfied (AND logic between rules)
 - Rule matches when the referenced question's current answer value equals the specified value
 - For multiselect questions, rule matches if the specified value is present in the answer array
 - Questions without `visibleWhen` are always visible
 
-Multiple condition objects in visibleWhen array → AND logic
+**Format Support for `equals` Field**:
 
-- ALL conditions must be satisfied for the question to be visible
+The `equals` field supports both **string** and **array** formats:
+
+1. **String format** (single value match):
+   ```json
+   "equals": "Cloud"
+   ```
+   - Matches if the answer exactly equals "Cloud"
+   - For multiselect answers: matches if "Cloud" is one of the selected values
+
+2. **Array format** (OR logic - multiple value match):
+   ```json
+   "equals": ["Cloud", "Hybrid"]
+   ```
+   - Matches if the answer equals ANY value in the array (OR logic)
+   - For single-select answers: matches if value is "Cloud" OR "Hybrid"
+   - For multiselect answers: matches if ANY value from the equals array is present in the answer array
+
+**Multiple Conditions Logic**:
+
+- Multiple condition objects in visibleWhen array → AND logic
+  - ALL conditions must be satisfied for the question to be visible
   - Example: If visibleWhen has 2 rules, BOTH must be true
 
-- Multiple values in the equals array → OR logic, The answer must match ANY ONE of the values. 
-  - Example: "equals": ["Value A", "Value B"] means answer = "Value A" OR "Value B"
+- Multiple values in the equals array → OR logic
+  - The answer must match ANY ONE of the values
+  - Example: `"equals": ["Value A", "Value B"]` means answer = "Value A" OR "Value B"
+
+**Example with OR Logic**:
+```json
+{
+  "id": "Security_CloudProvider",
+  "label": "Which cloud security features?",
+  "type": "radio",
+  "visibleWhen": [
+    {
+      "questionId": "Infra_DeploymentModel",
+      "equals": ["Cloud", "Hybrid"]
+    }
+  ]
+}
+```
+This question appears if deployment model is "Cloud" OR "Hybrid".
 
 ## Answers Storage Format
 
