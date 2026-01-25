@@ -856,3 +856,7 @@ Initial investigation suggests the querySelector at line 1325 may be matching th
 **Implementation Guidance**:
 Follow the questionnaire decisions made in questionnaire.json for this prompt, particularly regarding refactoring scope (moderate), error handling (inline messages), defensive programming (yes), and DOM lifecycle management (avoid unnecessary re-renders).
 %%ENDPROMPT
+
+%%PROMPT P-032 "Fix equals operator logic"
+Currently `tech_design_schema_editor/static/app.js` visualize in Conditional Visibility section of the question possibility operator to be chosen. But actually only "equals" operator is realized as functionality. This causes misleading for the user. Simplify the UI - no need operator to be chosen, if it is always "equals"
+%%ENDPROMPT

@@ -1229,7 +1229,6 @@ function createConditionRow(condition, index) {
     const condition_obj = condition || {};
     const selectedCategory = getCurrentCategoryForQuestion(condition_obj.questionId);
     const selectedQuestion = condition_obj.questionId || '';
-    const selectedOperator = condition_obj.operator || 'equals';
     const selectedValue = condition_obj.value || '';
     
     // Category selector
@@ -1254,19 +1253,6 @@ function createConditionRow(condition, index) {
             <option value="">-- Select Question --</option>
             ${getQuestionsForCategory(selectedCategory).map(q => 
                 `<option value="${q.id}" ${q.id === selectedQuestion ? 'selected' : ''}>${q.label} (${q.id})</option>`
-            ).join('')}
-        </select>
-    `;
-    
-    // Operator selector (will be updated based on question type)
-    const operatorField = document.createElement('div');
-    operatorField.className = 'condition-row-field';
-    operatorField.innerHTML = `
-        <label>Operator</label>
-        <select class="condition-operator-select" data-index="${index}">
-            <option value="">-- Select Operator --</option>
-            ${getOperatorsForQuestion(selectedQuestion).map(op => 
-                `<option value="${op.value}" ${op.value === selectedOperator ? 'selected' : ''}>${op.label}</option>`
             ).join('')}
         </select>
     `;
@@ -1329,14 +1315,12 @@ function createConditionRow(condition, index) {
     
     row.appendChild(categoryField);
     row.appendChild(questionField);
-    row.appendChild(operatorField);
     row.appendChild(valueField);
     row.appendChild(removeField);
     
     // Attach event listeners
     const categorySelect = row.querySelector('.condition-category-select');
     const questionSelect = row.querySelector('.condition-question-select');
-    const operatorSelect = row.querySelector('.condition-operator-select');
     const valueInput = row.querySelector('.condition-value-input');
     const valueSelect = row.querySelector('.condition-value-select');
     const valueMultiselect = row.querySelector('.condition-value-multiselect');
@@ -1344,7 +1328,6 @@ function createConditionRow(condition, index) {
     
     categorySelect.addEventListener('change', (e) => handleConditionCategoryChange(e, index));
     questionSelect.addEventListener('change', (e) => handleConditionQuestionChange(e, index));
-    operatorSelect.addEventListener('change', (e) => handleConditionOperatorChange(e, index));
     
     // Attach appropriate value field listener based on type
     if (valueMultiselect) {
@@ -1382,10 +1365,10 @@ function handleConditionCategoryChange(event, index) {
     questionSelect.innerHTML = '<option value="">-- Select Question --</option>' + 
         questions.map(q => `<option value="${q.id}">${q.label} (${q.id})</option>`).join('');
     
-    // Clear condition when category changes
+    // Clear condition when category changes (operator always 'equals')
     if (window.currentConditions[index]) {
         window.currentConditions[index].questionId = '';
-        window.currentConditions[index].operator = '';
+        window.currentConditions[index].operator = 'equals';
         window.currentConditions[index].value = '';
     }
     
@@ -1403,25 +1386,10 @@ function handleConditionQuestionChange(event, index) {
     }
     
     window.currentConditions[index].questionId = questionId;
-    
-    // Update operator dropdown based on question type
-    const row = document.querySelector(`.condition-row[data-index="${index}"]`);
-    if (!row) return;
-    
-    const operatorSelect = row.querySelector('.condition-operator-select');
-    if (!operatorSelect) return;
-    
-    const operators = getOperatorsForQuestion(questionId);
-    
-    operatorSelect.innerHTML = '<option value="">-- Select Operator --</option>' + 
-        operators.map(op => `<option value="${op.value}">${op.label}</option>`).join('');
-    
-    // Reset operator and value
-    window.currentConditions[index].operator = '';
+    window.currentConditions[index].operator = 'equals';
     window.currentConditions[index].value = '';
     
     // Update the value field based on the selected question type
-    // This updates only the value field without re-rendering the entire row
     updateConditionValueField(index, questionId);
     
     saveConditionsToQuestion();
@@ -1462,18 +1430,6 @@ function handleConditionValueChangeMultiselect(event, index) {
 }
 
 /**
- * Handle condition operator change
- */
-function handleConditionOperatorChange(event, index) {
-    if (!window.currentConditions[index]) {
-        window.currentConditions[index] = {};
-    }
-    
-    window.currentConditions[index].operator = event.target.value;
-    saveConditionsToQuestion();
-}
-
-/**
  * Handle condition value change
  */
 function handleConditionValueChange(event, index) {
@@ -1495,7 +1451,7 @@ function addConditionRow() {
     
     window.currentConditions.push({
         questionId: '',
-        operator: '',
+        operator: 'equals',
         value: ''
     });
     
@@ -1530,11 +1486,13 @@ function saveConditionsToQuestion() {
         
         conditions.forEach((condition, index) => {
             // Skip incomplete conditions
-            if (!condition.questionId || !condition.operator) {
+            if (!condition.questionId) {
                 return;
             }
             
-            // Currently only 'equals' operator is implemented in the runtime
+            // Ensure operator is always 'equals' (only implemented operator)
+            condition.operator = 'equals';
+            
             // Store the rule with 'equals' field
             const rule = {
                 questionId: condition.questionId,
@@ -1640,65 +1598,6 @@ function getQuestionsForCategory(categoryId) {
     
     // Exclude the current question being edited
     return category.questions.filter(q => q.id !== currentQuestion);
-}
-
-/**
- * Get valid operators for a specific question
- */
-function getOperatorsForQuestion(questionId) {
-    if (!questionId) {
-        return [
-            { value: 'equals', label: 'Equals' },
-            { value: 'notEquals', label: 'Not Equals' }
-        ];
-    }
-    
-    // Find the question to determine its type
-    let questionType = 'text';
-    for (let cat of schema.categories) {
-        const q = cat.questions.find(q => q.id === questionId);
-        if (q) {
-            questionType = q.type;
-            break;
-        }
-    }
-    
-    // Return operators based on question type
-    const operatorMap = {
-        'radio': [
-            { value: 'equals', label: 'Equals' },
-            { value: 'notEquals', label: 'Not Equals' }
-        ],
-        'dropdown': [
-            { value: 'equals', label: 'Equals' },
-            { value: 'notEquals', label: 'Not Equals' }
-        ],
-        'multiselect': [
-            { value: 'contains', label: 'Contains' },
-            { value: 'notContains', label: 'Does Not Contain' }
-        ],
-        'checkbox': [
-            { value: 'equals', label: 'Equals' }
-        ],
-        'text': [
-            { value: 'equals', label: 'Equals' },
-            { value: 'contains', label: 'Contains' },
-            { value: 'startsWith', label: 'Starts With' }
-        ],
-        'textarea': [
-            { value: 'contains', label: 'Contains' }
-        ],
-        'number': [
-            { value: 'equals', label: 'Equals' },
-            { value: 'greaterThan', label: 'Greater Than' },
-            { value: 'lessThan', label: 'Less Than' }
-        ]
-    };
-    
-    return operatorMap[questionType] || [
-        { value: 'equals', label: 'Equals' },
-        { value: 'notEquals', label: 'Not Equals' }
-    ];
 }
 
 /**

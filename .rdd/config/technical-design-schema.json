@@ -206,10 +206,7 @@
           "visibleWhen": [
             {
               "questionId": "Infra_DeploymentModel",
-              "equals": [
-                "Public cloud",
-                "Hybrid cloud"
-              ]
+              "equals": "Hybrid cloud"
             }
           ]
         },

@@ -1,0 +1,1 @@
+Currently `tech_design_schema_editor/static/app.js` visualize in Conditional Visibility section of the question possibility operator to be chosen. But actually only "equals" operator is realized as functionality. This causes misleading for the user. Simplify the UI - no need operator to be chosen, if it is always "equals"
