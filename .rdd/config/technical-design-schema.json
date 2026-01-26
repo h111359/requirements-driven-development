@@ -216,7 +216,7 @@
         {
           "id": "Infra_AzureServices",
           "label": "Azure Services Used",
-          "type": "multiselect",
+          "type": "radio",
           "help": "",
           "options": [
             {

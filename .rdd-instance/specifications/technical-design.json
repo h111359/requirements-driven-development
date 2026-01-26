@@ -1,1 +1,18 @@
-{}
+{
+  "Infra_DeploymentModel": {
+    "questionId": "Infra_DeploymentModel",
+    "type": "multiselect",
+    "value": [
+      "Public cloud"
+    ],
+    "answeredAt": "2026-01-26T06:29:56.834579+00:00"
+  },
+  "Infra_PrimaryProvider": {
+    "questionId": "Infra_PrimaryProvider",
+    "type": "multiselect",
+    "value": [
+      "Azure"
+    ],
+    "answeredAt": "2026-01-26T06:29:58.168841+00:00"
+  }
+}
