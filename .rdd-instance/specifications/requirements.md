@@ -2,17 +2,7 @@
 
 RDD Framework
 
-<!-- 
-Migration Note: On January 4, 2026, requirement IDs were migrated from timestamp-based 
-format (UR-YYYYMMDD-HHmm, TR-YYYYMMDD-HHmm) to sequential numeric format (UR-0001, TR-0001). 
-Git history preserves original IDs for traceability.
--->
-
-
-
 ## Product Overview
-
-The product is a system that serves to be installed the RDD framework in a software code repository (with or without git versioning).
 
 The RDD framework aims to standardize execution of user defined tasks to GitHub copilot in form of prompts, maintain full traceability of prompt history, and provide a simplified developer experience through a unified execution model and a web-based interface. 
 
@@ -110,7 +100,7 @@ The framework enables:
 
 - [UR-0024] The `technical-design` configuration JSON shall support conditional and hierarchical logic, enabling form fields to appear or change behavior based on previously selected answers.
 
-- [UR-0025] The Web UI shall provide a Technical Specification page for editing of `technical-design`. It shall provide a “Set Default Answers” function that automatically populates all unanswered design fields with their configured default values.
+- [UR-0025] The Web UI shall provide a Technical Specification page for editing of `technical-design`.
 
 - [UR-0026] The framework shall provide smooth developer experience, minimizing technical overhead for requirement clarification
 
@@ -250,6 +240,15 @@ The framework enables:
 
 - [UR-0104] The framework shall perform a git commit operation during workdir archiving when git-enabled configuration flag is true, using a commit message in the format 'Archive iteration: <iteration-id> - <iteration-name>'.
 
+- [UR-0105] The Technical Design Schema Editor shall automatically save changes without requiring manual save button clicks, triggering immediate saves on every change with visual feedback
+
+- [UR-0106] The Technical Design Schema Editor shall provide a visual condition builder UI for setting question visibility rules with dropdowns for question selection, operator selection, and value selection, replacing the plain text input.
+
+- [UR-0107] The Technical Design Schema Editor shall support backward compatibility with existing string-based visibleWhen expressions, automatically detecting legacy format and providing options to convert or edit manually.
+
+
+
+
 
 
 
@@ -284,7 +283,7 @@ The framework enables:
 
 - [TR-0006] The framework shall use `.rdd-instance/specifications/` for storing technical design files. 
 
-- [TR-0007] A technical design form JSON config file `.rdd/config/technical-design-form.json` shall define the content of Technical Specification page and should support definition of form elements with predefined options, multi-select fields, free-text values, conditional logic, and a default-answer mechanism. 
+- [TR-0007] A technical design schema JSON file .rdd/config/technical-design-schema.json shall define the content of Technical Specification page and should support definition of form elements with predefined options, multi-select fields, free-text values, conditional logic, and a default-answer mechanism.
 
 - [TR-0008] Web UI server shall be implemented using Python standard-library components (such as `http.server`) or equivalent, binding to `127.0.0.1` on an available port and automatically opening the user's default browser. 
 
@@ -656,6 +655,57 @@ The framework enables:
 - [TR-0185] The framework shall compress archived workdir directories into zip files using Python's zipfile module with ZIP_DEFLATED compression, verify zip integrity, and delete the directory-based archive after successful verification.
 
 - [TR-0186] The workdir_archive.py script shall execute git commit after zip archive creation and verification but before workdir cleanup, and shall fail the entire archive operation if git commit fails when git-enabled is true.
+
+- [TR-0187] The framework shall provide a technical design schema at .rdd/config/technical-design-schema.json using a hierarchical structure with categories, groups, and questions to define all available architectural decision questions.
+
+- [TR-0188] The technical design schema shall support radio, multiselect, and text question types with options, help text, placeholders, and conditional visibility rules using simple questionId equals value objects.
+
+- [TR-0189] The framework shall store technical design answers in .rdd-instance/specifications/technical-design.json as a JSON object keyed by questionId containing only explicitly answered questions with questionId, type, value, answeredAt timestamp, and optional rationale fields.
+
+- [TR-0190] The framework shall provide Python action scripts technical_design_read.py, technical_design_answer_set.py, technical_design_answer_remove.py, technical_design_validate.py, and technical_design_migrate.py for all modifications to technical-design.json with atomic write operations using temp file plus rename pattern.
+
+- [TR-0191] The Web UI server shall provide REST API endpoints GET /api/technical-design/schema, GET /api/technical-design/answers, POST /api/technical-design/answer/set, POST /api/technical-design/answer/remove, POST /api/technical-design/validate, and POST /api/technical-design/migrate that invoke corresponding Python action scripts via subprocess.
+
+- [TR-0192] The Web UI Technical Design page shall render dynamically from the schema with a left sidebar showing categories with answered/total counters, accordion groups for questions, search and filter controls for type and status, and appropriate question widgets for radio buttons, checkboxes, and text inputs with immediate save functionality.
+
+- [TR-0193] The Web UI shall evaluate conditional visibility rules in real-time by checking visibleWhen arrays with AND logic where all rules must match, supporting both string and array formats for the equals field where arrays use OR logic (answer must match ANY value), handling exact equals for radio/text and array includes for multiselect questions, and re-rendering questions after each answer save or clear operation.
+
+- [TR-0194] The technical design schema shall contain categories covering Product, CloudStrategy, Compute, Frontend, Backend, Mobile, DataAnalytics, AI_ML, Security, Networking, Deployment, Observability, DisasterRecovery, OperationalModel, DevelopmentProcess, IntegrationArchitecture, PerformanceScalability, NonFunctionalRequirements, EnvironmentStrategy, and SupportHoursSLAs.
+
+- [TR-0195] The Web UI Technical Design page search functionality shall filter across all categories and questions simultaneously, displaying only categories with matches in the sidebar with match counts, presenting all matching questions in a flat list grouped by category with group labels, and restoring the previously selected category when search is cleared.
+
+- [TR-0196] The Technical Design Schema Editor shall validate visibleWhen fields as arrays of condition objects where each condition contains questionId (string) and equals (string or array of strings) fields, supporting AND logic across multiple conditions and OR logic when equals is an array, with validation to check for duplicate values and valid option IDs.
+
+- [TR-0197] The Technical Design Schema Editor shall provide a manual backup button that validates the schema, creates a timestamped backup file regardless of validation status, and displays validation warnings if the schema is invalid
+
+- [TR-0198] The Technical Design Schema Editor auto-save functionality shall save schema changes to disk immediately without creating automatic backup files
+
+- [TR-0199] The Technical Design Schema shall store conditional visibility rules in structured JSON format with fields: questionId, operator, and value, supporting operators: equals, notEquals, contains, notContains, startsWith, greaterThan, lessThan.
+
+- [TR-0200] The Technical Design Schema Editor shall dynamically determine valid operators for condition rows based on the selected question type, showing only applicable operators (e.g., equals/notEquals for radio, contains for multiselect).
+
+- [TR-0201] The Technical Design Schema Editor shall use specific CSS selectors when querying DOM elements to avoid ambiguous matches, combining class names with attributes for uniqueness.
+
+- [TR-0202] The Technical Design Schema Editor shall minimize DOM re-rendering by updating individual fields when possible, reserving full re-renders for structural changes like adding or removing condition rows.
+
+- [TR-0203] The Technical Design Schema Editor shall implement defensive programming with null checks before accessing DOM element properties, preventing null reference errors.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

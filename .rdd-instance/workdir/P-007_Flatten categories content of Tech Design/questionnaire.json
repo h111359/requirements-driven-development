@@ -1,0 +1,95 @@
+{
+  "context": "The Technical Design page currently displays questions organized in two levels: categories (sidebar navigation) and groups (accordion sections within each category). The prompt requests 'flattening' this structure, which could mean different UI approaches. These questions help clarify the desired UI behavior and schema changes.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "How should questions be displayed after removing the groups accordion?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Display all questions in a category as a flat list without any grouping",
+          "pros": "Simplest implementation, easiest to scan all questions at once, no extra navigation required",
+          "cons": "Long categories become harder to navigate, loss of logical organization within categories, potential visual clutter"
+        },
+        {
+          "id": "B",
+          "label": "Display questions in collapsible sections labeled by group name, but styled as simple expandable sections rather than accordions",
+          "pros": "Retains logical organization, allows progressive disclosure, can show group headers as visual anchors",
+          "cons": "Still has expandable UI elements (just different styling), not truly 'flat'"
+        },
+        {
+          "id": "C",
+          "label": "Display all questions in a flat list but add visual separators or headers between groups",
+          "pros": "Flat single-scroll experience, maintains some group organization through visual cues, no collapsing/expanding needed",
+          "cons": "Group boundaries less clear, harder to hide/show sections, longer scroll distance"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Option C provides the best balance for 'flattening' - it removes the interactive accordion elements while preserving the logical grouping through visual headers. This gives users a continuous scrolling experience while maintaining the organizational structure created in the original schema.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "What changes are needed to the technical-design-schema.json format?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Remove the 'groups' nesting level entirely - questions should be direct children of categories",
+          "pros": "Simplifies schema structure, easier to parse, matches a truly flat UI, reduces nesting depth",
+          "cons": "Loses logical organization metadata, breaks existing data model, requires migration of current schema, loses ability to group related questions"
+        },
+        {
+          "id": "B",
+          "label": "Keep groups in the schema but mark them as display-only (not interactive)",
+          "pros": "Preserves logical organization in data, no migration needed, groups can still be used for rendering visual separators, maintains backward compatibility",
+          "cons": "Schema still has nesting that doesn't match 'flat' concept, may confuse future developers about purpose of groups"
+        },
+        {
+          "id": "C",
+          "label": "No schema changes - only modify the UI rendering logic",
+          "pros": "Zero schema changes, no migration, data structure unchanged, only UI behavior changes",
+          "cons": "Schema will still reference 'groups' which might mislead about UI behavior, disconnect between schema structure and UI"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Option C is recommended because the prompt mentions changing the schema format but the primary goal is UI flattening. Keeping the schema unchanged preserves the logical organization of questions (groups are semantically useful metadata) while only changing how they're rendered. This avoids breaking changes and data migration while achieving the visual goal.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "Should the category sidebar navigation remain unchanged?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes, keep the category sidebar exactly as it is - only flatten the content area",
+          "pros": "Maintains primary navigation structure, users can still jump between categories easily, minimal changes",
+          "cons": "Two-level structure remains (categories vs questions), not fully 'flat'"
+        },
+        {
+          "id": "B",
+          "label": "Remove the sidebar and show all categories and questions in a single long scrollable list",
+          "pros": "Truly flat single-page experience, continuous scrolling, no navigation clicks needed",
+          "cons": "Very long page, difficult navigation, loss of category-based organization, harder to find specific questions"
+        },
+        {
+          "id": "C",
+          "label": "Replace sidebar with a horizontal tab bar or dropdown for category selection",
+          "pros": "Still allows category navigation, more compact header space, modern UI pattern",
+          "cons": "Different navigation pattern from current design, may require more UI changes, less visual clarity about available categories"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A is recommended because the prompt specifically mentions removing 'groups accordion representation' but doesn't mention changing the category sidebar. Keeping the sidebar maintains the proven navigation pattern while flattening only the content within each category, which is likely what 'flatten categories content' means.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

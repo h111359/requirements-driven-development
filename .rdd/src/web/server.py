@@ -453,6 +453,46 @@ class RDDWebHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error_response(f"Failed to load user guide: {str(e)}")
             return
         
+        elif path == "/api/technical-design/schema":
+            # Get technical design schema
+            try:
+                schema_path = _repo_root() / ".rdd" / "config" / "technical-design-schema.json"
+                if not schema_path.exists():
+                    self.send_error_response("Schema file not found")
+                    return
+                
+                with open(schema_path, "r", encoding="utf-8") as f:
+                    schema = json.load(f)
+                
+                self.send_json_response({"success": True, "schema": schema})
+            except Exception as e:
+                self.send_error_response(f"Failed to load schema: {str(e)}")
+            return
+        
+        elif path == "/api/technical-design/answers":
+            # Get technical design answers
+            script_path = _actions_dir() / "technical_design_read.py"
+            if not script_path.exists():
+                self.send_error_response("technical_design_read.py not found")
+                return
+            
+            try:
+                result = subprocess.run(
+                    [sys.executable, str(script_path)],
+                    capture_output=True,
+                    text=True,
+                    cwd=_repo_root()
+                )
+                
+                if result.returncode == 0:
+                    answers = json.loads(result.stdout) if result.stdout.strip() else {}
+                    self.send_json_response({"success": True, "answers": answers})
+                else:
+                    self.send_error_response(f"Failed to read answers: {result.stderr}")
+            except Exception as e:
+                self.send_error_response(f"Failed to read answers: {str(e)}")
+            return
+        
         elif path == "/README.md":
             # Serve README.md as HTML for help modals
             try:
@@ -563,6 +603,132 @@ class RDDWebHandler(http.server.SimpleHTTPRequestHandler):
             
             result = self.execute_action(domain, action, action_params)
             self.send_json_response(result)
+            return
+        
+        elif path == "/api/technical-design/answer/set":
+            # Set technical design answer
+            question_id = params.get("questionId", "")
+            question_type = params.get("type", "")
+            value = params.get("value", "")
+            rationale = params.get("rationale", "")
+            
+            if not question_id or not question_type or value == "":
+                self.send_error_response("Missing questionId, type, or value")
+                return
+            
+            script_path = _actions_dir() / "technical_design_answer_set.py"
+            if not script_path.exists():
+                self.send_error_response("technical_design_answer_set.py not found")
+                return
+            
+            # Build command
+            cmd = [sys.executable, str(script_path)]
+            cmd.append(f"questionId={question_id}")
+            cmd.append(f"type={question_type}")
+            
+            # Handle value based on type
+            if question_type == "multiselect" and isinstance(value, list):
+                cmd.append(f"value={','.join(value)}")
+            else:
+                cmd.append(f"value={value}")
+            
+            if rationale:
+                cmd.append(f"rationale={rationale}")
+            
+            try:
+                result = subprocess.run(
+                    cmd,
+                    capture_output=True,
+                    text=True,
+                    cwd=_repo_root()
+                )
+                
+                if result.returncode == 0:
+                    self.send_json_response(json.loads(result.stdout))
+                else:
+                    error_data = json.loads(result.stderr) if result.stderr.strip() else {"error": "Unknown error"}
+                    self.send_json_response(error_data)
+            except Exception as e:
+                self.send_error_response(f"Failed to set answer: {str(e)}")
+            return
+        
+        elif path == "/api/technical-design/answer/remove":
+            # Remove technical design answer
+            question_id = params.get("questionId", "")
+            
+            if not question_id:
+                self.send_error_response("Missing questionId")
+                return
+            
+            script_path = _actions_dir() / "technical_design_answer_remove.py"
+            if not script_path.exists():
+                self.send_error_response("technical_design_answer_remove.py not found")
+                return
+            
+            try:
+                result = subprocess.run(
+                    [sys.executable, str(script_path), f"questionId={question_id}"],
+                    capture_output=True,
+                    text=True,
+                    cwd=_repo_root()
+                )
+                
+                if result.returncode == 0:
+                    self.send_json_response(json.loads(result.stdout))
+                else:
+                    error_data = json.loads(result.stderr) if result.stderr.strip() else {"error": "Unknown error"}
+                    self.send_json_response(error_data)
+            except Exception as e:
+                self.send_error_response(f"Failed to remove answer: {str(e)}")
+            return
+        
+        elif path == "/api/technical-design/validate":
+            # Validate technical design answers
+            script_path = _actions_dir() / "technical_design_validate.py"
+            if not script_path.exists():
+                self.send_error_response("technical_design_validate.py not found")
+                return
+            
+            try:
+                result = subprocess.run(
+                    [sys.executable, str(script_path)],
+                    capture_output=True,
+                    text=True,
+                    cwd=_repo_root()
+                )
+                
+                if result.returncode == 0:
+                    self.send_json_response(json.loads(result.stdout))
+                else:
+                    # Validation failed - return validation errors
+                    error_data = json.loads(result.stderr) if result.stderr.strip() else {"valid": False, "error": "Unknown error"}
+                    self.send_json_response(error_data)
+            except Exception as e:
+                self.send_error_response(f"Failed to validate: {str(e)}")
+            return
+        
+        elif path == "/api/technical-design/migrate":
+            # Migrate technical design format
+            script_path = _actions_dir() / "technical_design_migrate.py"
+            if not script_path.exists():
+                self.send_error_response("technical_design_migrate.py not found")
+                return
+            
+            try:
+                result = subprocess.run(
+                    [sys.executable, str(script_path)],
+                    capture_output=True,
+                    text=True,
+                    cwd=_repo_root()
+                )
+                
+                if result.returncode == 0:
+                    self.send_json_response(json.loads(result.stdout))
+                else:
+                    error_data = json.loads(result.stderr) if result.stderr.strip() else {"error": "Unknown error"}
+                    self.send_json_response(error_data)
+            except Exception as e:
+                self.send_error_response(f"Failed to migrate: {str(e)}")
             return
         
         elif path == "/api/config/save":

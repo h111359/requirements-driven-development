@@ -1,0 +1,2 @@
+Check what are the possible operators expected in the "visibleWhen" section of questions which are recognized by web application in `.rdd/src/web/static/app.js` and the conventions. I am interested only from the RDD, not the editor.
+The results should be listed in report file (markdown format) in the prompt workdir

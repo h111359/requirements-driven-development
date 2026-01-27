@@ -8,6 +8,7 @@ repo-root/
 ├── build/                         # Build and release artifacts
 ├── researches/                    # Research and analysis documents
 ├── scripts/                       # Utility scripts for testing and environment setup
+├── tech_design_schema_editor/     # Standalone web-based editor for technical design schema
 └── tests/                         # Test suite for the RDD framework
 
 **LICENSE**
@@ -96,6 +97,61 @@ repo-root/researches/
 - **Path**: `repo-root/researches/20251228-1537-plan-further-work/plan.md`
 - **Type**: Markdown
 - **Description**: Detailed development plan for further work on the RDD framework
+
+---
+
+### Tech Design Schema Editor Folder Structure
+
+repo-root/tech_design_schema_editor/
+├── server.py                      # Python HTTP server with REST API for schema file operations
+├── index.html                     # Main HTML page with two-panel layout (tree navigation + editor)
+├── run_editor.sh                  # Launcher script for Linux/Mac - starts server and opens browser
+├── run_editor.bat                 # Launcher script for Windows - starts server and opens browser
+├── README.md                      # Comprehensive documentation with usage guide, schema structure, and validation rules
+├── static/
+│   ├── style.css                  # Stylesheet extracted and adapted from RDD Web UI
+│   └── app.js                     # JavaScript application for schema editing and validation
+└── backups/                       # Directory for automatic schema backups (created by server)
+
+**server.py**
+- **Path**: `repo-root/tech_design_schema_editor/server.py`
+- **Type**: Python script
+- **Description**: Python HTTP server with REST API for schema file operations including load, save with validation, backup creation, and atomic file writes
+
+**index.html**
+- **Path**: `repo-root/tech_design_schema_editor/index.html`
+- **Type**: HTML
+- **Description**: Main HTML page with two-panel layout featuring tree navigation sidebar and form-based editor panel
+
+**run_editor.sh**
+- **Path**: `repo-root/tech_design_schema_editor/run_editor.sh`
+- **Type**: Bash script
+- **Description**: Launcher script for Linux/Mac that starts the server and automatically opens the browser
+
+**run_editor.bat**
+- **Path**: `repo-root/tech_design_schema_editor/run_editor.bat`
+- **Type**: Batch script
+- **Description**: Launcher script for Windows that starts the server and opens the browser
+
+**README.md**
+- **Path**: `repo-root/tech_design_schema_editor/README.md`
+- **Type**: Markdown
+- **Description**: Comprehensive documentation including quick start guide, usage instructions, schema structure, validation rules, and troubleshooting
+
+**static/style.css**
+- **Path**: `repo-root/tech_design_schema_editor/static/style.css`
+- **Type**: CSS
+- **Description**: Stylesheet extracted and adapted from RDD Web UI for consistent look and feel with editor-specific components
+
+**static/app.js**
+- **Path**: `repo-root/tech_design_schema_editor/static/app.js`
+- **Type**: JavaScript
+- **Description**: Client application implementing schema loading, tree rendering, CRUD operations, validation, and status management
+
+**backups/**
+- **Path**: `repo-root/tech_design_schema_editor/backups/`
+- **Type**: Directory
+- **Description**: Directory for automatic timestamped schema backups created before each save operation
 
 ---
 

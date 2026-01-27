@@ -1,0 +1,89 @@
+{
+  "context": "The Technical Design schema editor currently creates an automatic backup file every time the schema is saved (which happens on every change due to auto-save). The prompt requests removing automatic backups while keeping only the manual backup button. This questionnaire clarifies implementation details for this change.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Should the manual backup button also validate the schema before creating a backup, or should it backup the current state regardless of validation status?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Validate before backup - Only create backup if schema is valid",
+          "pros": "Ensures all backups are guaranteed to be valid schemas, prevents backing up broken states, cleaner backup history",
+          "cons": "User cannot create a backup of work-in-progress that doesn't yet validate, might lose work if they need to close the editor with invalid schema"
+        },
+        {
+          "id": "B",
+          "label": "Backup without validation - Always create backup regardless of validation status",
+          "pros": "User can save work-in-progress states, flexibility to backup even incomplete work, no data loss risk",
+          "cons": "Backup directory may contain invalid schemas, user needs to be aware which backups are valid"
+        },
+        {
+          "id": "C",
+          "label": "Validate and warn - Create backup but show validation warnings if invalid",
+          "pros": "Best of both worlds - allows backing up invalid states while informing user of issues, flexible and safe",
+          "cons": "Slightly more complex implementation, user must acknowledge warnings"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Option C provides the best user experience by allowing backups of any state while keeping users informed about validation issues. This matches the pattern already used in the auto-save function which saves with warnings.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "Should the UI provide any confirmation or success message after creating a manual backup, and if so, should it include the backup file path?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Show detailed message with full backup path",
+          "pros": "User knows exactly where the backup was saved, easy to locate the file if needed immediately, transparent",
+          "cons": "Path might be too long for status message, could clutter UI with technical details"
+        },
+        {
+          "id": "B",
+          "label": "Show simple success message only (e.g., 'Backup created successfully')",
+          "pros": "Clean UI, less clutter, backup location is already known (backups folder), sufficient feedback",
+          "cons": "User doesn't know exact filename, would need to check backups folder to find latest"
+        },
+        {
+          "id": "C",
+          "label": "Show message with just the filename and timestamp",
+          "pros": "Balance between detail and clarity, filename with timestamp is most useful info, cleaner than full path",
+          "cons": "User still needs to know backups folder location to find the file"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Option C provides useful information (filename with timestamp) without overwhelming the user with the full path. This matches the current pattern where the backup path is shown in the status message, but a filename-only message is cleaner and more user-friendly.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "The auto-save function is still useful for preventing data loss during editing. Should we keep auto-save but remove only the automatic backup from it?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Keep auto-save, remove automatic backup - Best of both worlds",
+          "pros": "Schema is still automatically saved to disk on changes (no data loss), but no backup clutter from every tiny change, user can manually backup at meaningful checkpoints",
+          "cons": "None significant - this is the most logical interpretation of the prompt"
+        },
+        {
+          "id": "B",
+          "label": "Remove auto-save entirely - Require manual save",
+          "pros": "User has full control over when saves happen, no unexpected file operations",
+          "cons": "Risk of data loss if user forgets to save, poor user experience, breaks existing workflow, not what the prompt asks for"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A is the correct interpretation of the prompt requirement. The issue is not with auto-save itself, but with the automatic backup that happens on every save. Removing the backup from auto-save while keeping the auto-save feature preserves the good user experience while solving the backup clutter problem.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

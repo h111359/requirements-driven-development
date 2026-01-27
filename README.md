@@ -6,27 +6,34 @@
 
 > A structured workflow framework for AI-assisted software development based on your requirements and documentation.
 
+
+
 ## 📖 Overview
 
-Requirements-Driven Development (RDD) is a framework for development augmented with GitHub Copilot. It provides:
+Requirements-Driven Development (RDD) is a framework for development augmented with AI copilot (like GitHub Copilot). It provides:
 
 - **📝 Structured Documentation** - Keep requirements, technical specs, and architecture docs organized and up-to-date
 - **🔄 Guided Workflows** - Step-by-step process from requirement clarification, prompts generations, prompts execution and documentation update
-- **🤖 AI-Optimized** - Designed specifically for GitHub Copilot
-- **🎯 Change Management** - Built in change managemetn and version control using git and github
+- **🤖 AI-Optimized** - Designed specifically for GitHub Copilot but kept loose coupled to it so to be used with others as well
 - **⚡ Cross-Platform** - Pure Python implementation works seamlessly on Windows and Linux
 
 **Why RDD?** To boost and speed the traditional development while keeping documentation synchronized with the code changes. 
 
+
+
 ## 📋 System Requirements
+
+### Mandatory
 
 - **Python 3.7+** - Cross-platform runtime for RDD scripts
 - **AI assistant** - (optionally to be GitHub Copilot but recommended)
 
-## Recommended  
+### Recommended  
 
 - **Git 2.23+** - Version control operations
 - **VS Code** - Recommended editor (optional but enhances experience)
+
+
 
 ## 🚀 Installation
 
@@ -71,15 +78,8 @@ The Web UI will automatically open in your browser at `http://127.0.0.1:8080/`. 
 
 ### Optional setup for GitHub
 
-The following steps are not included in the installation. They add additional convinience in case you are using GitHub Copilot in Visual Studio Code, but are not mandatory so RDD to work.
+The following steps are not included in the installation. They add additional convinience but are not mandatory so RDD to work.
 
-#### GitHub execute prompt
-
-For convenience (if you work with GitHub copilot) you can create a file `.github/prompts/rdd.execute.promppt.md` with the following content:
-
-```
-Follow the instructions in `.rdd/prompt-snippets/execution.md`
-```
 
 #### VSCode shortcuts and script autoapprove
 
@@ -87,9 +87,6 @@ Add in `.vscode/settings.json` the following entries (if not exist already):
 
 ```
 {
-  "chat.promptFilesRecommendations": {
-    "rdd.execute": true
-  },
   "chat.tools.terminal.autoApprove": {
     "python .rdd/src/": true
   }
@@ -102,10 +99,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 💬 Support
 
-### Documentation
-- **GitHub Repository**: [requirements-driven-development](https://github.com/h111359/requirements-driven-development)
 - **Issues**: [Report bugs or request features](https://github.com/h111359/requirements-driven-development/issues)
-- **Releases**: [Download latest version](https://github.com/h111359/requirements-driven-development/releases)
 
 ### Contact
 - **Author**: Hristo M. Hristov

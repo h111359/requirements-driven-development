@@ -1,0 +1,4 @@
+{
+  "context": "The prompt requests removal of the answered vs total questions indication displayed in each category on the Technical Design page. The requirement is straightforward: remove the badge showing '${answeredCount}/${totalCount}' from the category list rendering in app.js line 3029. No ambiguities exist that would lead to materially different implementation approaches.",
+  "questions": []
+}

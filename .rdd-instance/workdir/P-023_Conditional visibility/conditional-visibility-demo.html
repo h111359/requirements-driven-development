@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditional Visibility Demo - RDD Technical Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .example {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .example-header {
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .example-title {
+            color: #3498db;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .example-description {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .visual-builder {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 15px;
+        }
+        
+        .condition-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        .condition-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .condition-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            font-weight: 600;
+            min-width: 60px;
+        }
+        
+        .condition-value {
+            flex: 1;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #2c3e50;
+        }
+        
+        .operator {
+            background: #3498db;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .and-label {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 0;
+            text-transform: uppercase;
+        }
+        
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        code {
+            font-family: 'Monaco', 'Consolas', monospace;
+        }
+        
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+        }
+        
+        .btn-secondary {
+            background: #95a5a6;
+        }
+        
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+        
+        .result-indicator {
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .visible {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .hidden {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .ui-component-code {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .code-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 8px;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Conditional Visibility Demo</h1>
+        <p class="subtitle">Visual examples of different conditional visibility patterns for RDD Technical Design Schema Editor</p>
+        
+        <!-- Example 1: Simple Single Condition -->
+        <div class="example">
+            <div class="example-header">
+                <div class="example-title">Example 1: Simple Single Condition</div>
+                <div class="example-description">
+                    Show "Mobile Platform" question only when Product Type is "Mobile application"
+                </div>
+            </div>
+            
+            <div class="content-grid">
+                <div class="section">
+                    <div class="section-title">Visual Builder UI</div>
+                    <div class="visual-builder">
+                        <div class="condition-row">
+                            <span class="condition-label">Question:</span>
+                            <div class="condition-value">Product: Product aspects (Product_PrimaryProductCategory)</div>
+                        </div>
+                        <div class="condition-row">
+                            <span class="condition-label">Operator:</span>
+                            <div class="condition-value operator">equals</div>
+                        </div>
+                        <div class="condition-row">
+                            <span class="condition-label">Value:</span>
+                            <div class="condition-value">Mobile application</div>
+                        </div>
+                        <button class="btn">+ Add Condition</button>
+                        <button class="btn btn-secondary">Clear All</button>
+                    </div>
+                    <div class="result-indicator visible">
+                        ✓ Question is VISIBLE when condition is met
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">JSON Format</div>
+                    <pre><code>{
+  "id": "Product_MobilePlatform",
+  "label": "Mobile Platform",
+  "type": "radio",
+  "visibleWhen": [
+    {
+      "questionId": "Product_PrimaryProductCategory",
+      "operator": "equals",
+      "value": "Mobile application"
+    }
+  ],
+  "options": [
+    {"id": "iOS", "label": "iOS"},
+    {"id": "Android", "label": "Android"},
+    {"id": "Cross-platform", "label": "Cross-platform"}
+  ]
+}</code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Example 2: Multiple AND Conditions -->
+        <div class="example">
+            <div class="example-header">
+                <div class="example-title">Example 2: Multiple AND Conditions</div>
+                <div class="example-description">
+                    Show "Compliance Requirements" only when Cloud Provider is "Azure" <strong>AND</strong> Region includes "US"
+                </div>
+            </div>
+            
+            <div class="content-grid">
+                <div class="section">
+                    <div class="section-title">Visual Builder UI</div>
+                    <div class="visual-builder">
+                        <div class="condition-row">
+                            <span class="condition-label">Question:</span>
+                            <div class="condition-value">Infrastructure: Cloud Provider (Infra_CloudProvider)</div>
+                        </div>
+                        <div class="condition-row">
+                            <span class="condition-label">Operator:</span>
+                            <div class="condition-value operator">equals</div>
+                        </div>
+                        <div class="condition-row">
+                            <span class="condition-label">Value:</span>
+                            <div class="condition-value">Azure</div>
+                        </div>
+                        
+                        <div class="and-label">AND</div>
+                        
+                        <div class="condition-row">
+                            <span class="condition-label">Question:</span>
+                            <div class="condition-value">Infrastructure: Deployment Regions (Infra_Regions)</div>
+                        </div>
+                        <div class="condition-row">
+                            <span class="condition-label">Operator:</span>
+                            <div class="condition-value operator">contains</div>
+                        </div>
+                        <div class="condition-row">
+                            <span class="condition-label">Value:</span>
+                            <div class="condition-value">US</div>
+                        </div>
+                        
+                        <button class="btn">+ Add Condition</button>
+                        <button class="btn btn-secondary">Clear All</button>
+                    </div>
+                    <div class="result-indicator visible">
+                        ✓ Question is VISIBLE only when ALL conditions are met
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">JSON Format</div>
+                    <pre><code>{
+  "id": "Security_ComplianceRequirements",
+  "label": "US Compliance Requirements",
+  "type": "multiselect",
+  "visibleWhen": [
+    {
+      "questionId": "Infra_CloudProvider",
+      "operator": "equals",
+      "value": "Azure"
+    },
+    {
+      "questionId": "Infra_Regions",
+      "operator": "contains",
+      "value": "US"
+    }
+  ],
+  "options": [
+    {"id": "HIPAA", "label": "HIPAA"},
+    {"id": "FedRAMP", "label": "FedRAMP"},
+    {"id": "SOC2", "label": "SOC 2 Type II"}
+  ]
+}</code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Example 3: Multiselect Contains Check -->
+        <div class="example">
+            <div class="example-header">
+                <div class="example-title">Example 3: Multiselect Contains Check</div>
+                <div class="example-description">
+                    Show "ML Platform Details" when Product Features <span class="highlight">contains</span> "AI/ML-enabled product"
+                </div>
+            </div>
+            
+            <div class="content-grid">
+                <div class="section">
+                    <div class="section-title">Visual Builder UI</div>
+                    <div class="visual-builder">
+                        <div class="condition-row">
+                            <span class="condition-label">Question:</span>
+                            <div class="condition-value">Product: Product aspects (Product_PrimaryProductCategory)</div>
+                        </div>
+                        <div class="condition-row">
+                            <span class="condition-label">Operator:</span>
+                            <div class="condition-value operator">contains</div>
+                        </div>
+                        <div class="condition-row">
+                            <span class="condition-label">Value:</span>
+                            <div class="condition-value">AI/ML-enabled product</div>
+                        </div>
+                        <button class="btn">+ Add Condition</button>
+                        <button class="btn btn-secondary">Clear All</button>
+                    </div>
+                    <div class="result-indicator visible">
+                        ✓ Question is VISIBLE when multiselect array includes this value
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">JSON Format</div>
+                    <pre><code>{
+  "id": "AI_MLPlatform",
+  "label": "ML Platform Details",
+  "type": "radio",
+  "visibleWhen": [
+    {
+      "questionId": "Product_PrimaryProductCategory",
+      "operator": "contains",
+      "value": "AI/ML-enabled product"
+    }
+  ],
+  "options": [
+    {"id": "AzureML", "label": "Azure Machine Learning"},
+    {"id": "Databricks", "label": "Azure Databricks"},
+    {"id": "OpenAI", "label": "Azure OpenAI Service"},
+    {"id": "Custom", "label": "Custom ML platform"}
+  ]
+}</code></pre>
+                    <div class="ui-component-code">
+                        <div class="code-title">📌 Note: contains vs equals for multiselect</div>
+                        <pre style="margin-top: 8px;"><code>// For multiselect questions:
+// - Use "contains" to check if array includes value
+// - Use "equals" to check exact match (rarely used)
+
+// Example:
+answers["Product_PrimaryProductCategory"] = [
+  "Mobile application", 
+  "AI/ML-enabled product"
+];
+
+// This condition returns TRUE:
+{"operator": "contains", "value": "AI/ML-enabled product"}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- UI Component Code Examples -->
+        <div class="example">
+            <div class="example-header">
+                <div class="example-title">UI Component Code Snippets</div>
+                <div class="example-description">
+                    Sample code for implementing the visual condition builder
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">HTML Structure</div>
+                <pre><code>&lt;div class="condition-builder"&gt;
+  &lt;div class="condition-group" id="conditionsContainer"&gt;
+    &lt;!-- Dynamically added condition rows --&gt;
+  &lt;/div&gt;
+  &lt;div class="builder-actions"&gt;
+    &lt;button class="btn btn-primary" id="btnAddCondition"&gt;+ Add Condition&lt;/button&gt;
+    &lt;button class="btn btn-secondary" id="btnClearAll"&gt;Clear All&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            
+            <div class="section" style="margin-top: 20px;">
+                <div class="section-title">JavaScript: Add Condition Row</div>
+                <pre><code>function addConditionRow(condition = {}) {
+  const row = document.createElement('div');
+  row.className = 'condition-row';
+  
+  // Question selector
+  const questionSelect = document.createElement('select');
+  questionSelect.className = 'form-control';
+  schema.categories.forEach(cat => {
+    cat.questions.forEach(q => {
+      if (q.id !== currentQuestionId) {
+        const opt = new Option(
+          `${cat.label}: ${q.label} (${q.id})`,
+          q.id
+        );
+        questionSelect.add(opt);
+      }
+    });
+  });
+  questionSelect.value = condition.questionId || '';
+  
+  // Operator selector
+  const operatorSelect = document.createElement('select');
+  operatorSelect.className = 'form-control';
+  ['equals', 'notEquals', 'contains', 'notContains'].forEach(op => {
+    operatorSelect.add(new Option(op, op));
+  });
+  operatorSelect.value = condition.operator || 'equals';
+  
+  // Value input (populate based on question type)
+  const valueInput = createValueInput(condition);
+  
+  // Remove button
+  const removeBtn = document.createElement('button');
+  removeBtn.className = 'btn btn-danger btn-sm';
+  removeBtn.textContent = '×';
+  removeBtn.onclick = () => row.remove();
+  
+  row.append(questionSelect, operatorSelect, valueInput, removeBtn);
+  document.getElementById('conditionsContainer').appendChild(row);
+}</code></pre>
+            </div>
+            
+            <div class="section" style="margin-top: 20px;">
+                <div class="section-title">JavaScript: Save Conditions</div>
+                <pre><code>function saveVisibleWhen() {
+  const conditions = [];
+  
+  document.querySelectorAll('.condition-row').forEach(row => {
+    const inputs = row.querySelectorAll('select, input');
+    conditions.push({
+      questionId: inputs[0].value,
+      operator: inputs[1].value,
+      value: inputs[2].value
+    });
+  });
+  
+  // Update question object
+  currentQuestion.visibleWhen = conditions.length > 0 
+    ? conditions 
+    : undefined;
+  
+  // Save to backend
+  saveSchema();
+}</code></pre>
+            </div>
+            
+            <div class="section" style="margin-top: 20px;">
+                <div class="section-title">JavaScript: Evaluate Visibility</div>
+                <pre><code>function isQuestionVisible(question, answers) {
+  if (!question.visibleWhen || question.visibleWhen.length === 0) {
+    return true; // No conditions = always visible
+  }
+  
+  // ALL conditions must be true (AND logic)
+  return question.visibleWhen.every(condition => {
+    const answerValue = answers[condition.questionId];
+    
+    switch (condition.operator) {
+      case 'equals':
+        return answerValue === condition.value;
+      
+      case 'notEquals':
+        return answerValue !== condition.value;
+      
+      case 'contains':
+        // For multiselect (array values)
+        return Array.isArray(answerValue) 
+          ? answerValue.includes(condition.value)
+          : answerValue === condition.value;
+      
+      case 'notContains':
+        return Array.isArray(answerValue)
+          ? !answerValue.includes(condition.value)
+          : answerValue !== condition.value;
+      
+      default:
+        return false;
+    }
+  });
+}</code></pre>
+            </div>
+        </div>
+        
+        <!-- Supported Operators Reference -->
+        <div class="example">
+            <div class="example-header">
+                <div class="example-title">Supported Operators Reference</div>
+                <div class="example-description">
+                    Complete list of conditional operators with use cases
+                </div>
+            </div>
+            
+            <div class="content-grid">
+                <div class="section">
+                    <div class="section-title">equals</div>
+                    <p style="margin-bottom: 10px; font-size: 13px; color: #555;">
+                        Checks if the answer exactly matches the specified value. Use for radio buttons and dropdowns.
+                    </p>
+                    <pre><code>{
+  "operator": "equals",
+  "value": "Azure"
+}</code></pre>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">notEquals</div>
+                    <p style="margin-bottom: 10px; font-size: 13px; color: #555;">
+                        Checks if the answer is different from the specified value. Use for exclusion logic.
+                    </p>
+                    <pre><code>{
+  "operator": "notEquals",
+  "value": "None"
+}</code></pre>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">contains</div>
+                    <p style="margin-bottom: 10px; font-size: 13px; color: #555;">
+                        For multiselect answers, checks if the array includes the value. Most common for multiselect questions.
+                    </p>
+                    <pre><code>{
+  "operator": "contains",
+  "value": "Mobile application"
+}</code></pre>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">notContains</div>
+                    <p style="margin-bottom: 10px; font-size: 13px; color: #555;">
+                        For multiselect answers, checks if the array does NOT include the value.
+                    </p>
+                    <pre><code>{
+  "operator": "notContains",
+  "value": "Legacy system"
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

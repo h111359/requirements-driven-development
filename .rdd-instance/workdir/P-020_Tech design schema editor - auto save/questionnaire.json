@@ -1,0 +1,185 @@
+{
+  "context": "The prompt requests adding auto-save functionality to the Technical Design Schema Editor, removing save buttons. However, this contradicts the previous prompt P-019 where manual save was explicitly chosen (Q5, option A) to maintain consistency with the existing editor workflow and allow batch changes before persisting. This questionnaire clarifies the desired auto-save behavior and how to handle conflicts with the existing workflow.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Should auto-save completely replace the manual save button or work alongside it?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Replace - Remove save button, only auto-save",
+          "pros": "Simpler UI, no user action needed, automatic data persistence, modern UX pattern",
+          "cons": "No way to discard changes, harder to batch multiple edits, no confirmation before save, conflicts with P-019 decision"
+        },
+        {
+          "id": "B",
+          "label": "Hybrid - Auto-save but keep save button for manual control",
+          "pros": "Safety net with manual save option, allows batch edits, user control over when to persist",
+          "cons": "Confusing UX (two save mechanisms), may be redundant, unclear when to use which"
+        },
+        {
+          "id": "C",
+          "label": "Replace with undo/redo - Auto-save with undo/redo functionality",
+          "pros": "Modern pattern, allows mistake correction, no save button needed, automatic persistence",
+          "cons": "Complex to implement, requires change history tracking, significant scope increase"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The prompt explicitly states 'There should be no need of save buttons', indicating complete replacement with auto-save. This provides the cleanest UX and matches the stated requirement, despite conflicting with P-019's manual save decision.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "When should auto-save trigger?",
+      "options": [
+        {
+          "id": "A",
+          "label": "On every change (immediate)",
+          "pros": "Maximum data safety, no data loss possible, instant persistence",
+          "cons": "Many server requests, performance impact, harder to batch edits, validation errors interrupt workflow"
+        },
+        {
+          "id": "B",
+          "label": "Debounced after inactivity (e.g., 2 seconds after last change)",
+          "pros": "Balances safety and performance, allows typing/editing without interruption, fewer server requests",
+          "cons": "Slight delay before save, possible data loss in 2-second window, requires debounce logic"
+        },
+        {
+          "id": "C",
+          "label": "On blur/navigation (when leaving field or switching items)",
+          "pros": "Natural save points, completes logical edit units, fewer saves than immediate",
+          "cons": "Data loss if browser crashes during editing, may miss some changes, less obvious when save happens"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Debounced auto-save (2-3 seconds) provides the best balance between data safety and user experience. It allows users to complete their thoughts while typing without triggering saves on every keystroke, while still providing near-immediate persistence.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "How should validation errors be handled with auto-save?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Block auto-save until validation passes",
+          "pros": "Ensures data integrity, prevents saving invalid schemas, catches errors early",
+          "cons": "Interrupts workflow with error messages, may prevent saving partial work, frustrating for users"
+        },
+        {
+          "id": "B",
+          "label": "Save anyway, show validation warnings",
+          "pros": "Doesn't interrupt workflow, allows saving work-in-progress, user can fix errors later",
+          "cons": "May save invalid schemas, could break schema loading, data integrity concerns"
+        },
+        {
+          "id": "C",
+          "label": "Save locally, validate before server save",
+          "pros": "Preserves work locally, validates before actual persistence, catches errors without losing edits",
+          "cons": "Complex implementation, requires local storage, may confuse users about save state"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "For a development tool like the schema editor, allowing auto-save of work-in-progress is more important than strict validation. Users can fix validation errors before using the schema. This prevents frustration from blocked saves while editing.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "Should there be visual feedback when auto-save occurs?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Show save indicator (e.g., 'Saving...' then 'Saved')",
+          "pros": "Clear feedback to user, confirms data persistence, builds trust in auto-save",
+          "cons": "May be distracting, adds visual clutter, needs UI space"
+        },
+        {
+          "id": "B",
+          "label": "Silent auto-save (no feedback)",
+          "pros": "Cleaner UI, no distractions, seamless experience",
+          "cons": "User uncertainty about whether changes are saved, no confirmation of persistence"
+        },
+        {
+          "id": "C",
+          "label": "Minimal feedback (small icon or status bar only)",
+          "pros": "Subtle confirmation, doesn't interrupt workflow, provides reassurance",
+          "cons": "Easy to miss, may not be noticed by users"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Users need confidence that their changes are being saved automatically. A clear 'Saving...' / 'Saved' indicator in the status bar provides reassurance without being intrusive. This is especially important when removing the manual save button.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "What happens to the backup functionality with auto-save?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Keep backup button, create backup before each auto-save",
+          "pros": "Maximum safety, can recover from any auto-save, preserves backup feature",
+          "cons": "Many backup files, storage bloat, may slow down auto-save"
+        },
+        {
+          "id": "B",
+          "label": "Keep backup button, manual backups only",
+          "pros": "User control over backups, prevents backup bloat, backups remain intentional",
+          "cons": "Auto-saves not backed up, can't recover from automatic save errors"
+        },
+        {
+          "id": "C",
+          "label": "Remove backup button, periodic auto-backups (e.g., hourly)",
+          "pros": "Automatic backup safety net, no user action needed, time-based recovery points",
+          "cons": "Loss of manual backup control, may not backup before critical changes"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Keep the manual backup button for intentional backup creation (e.g., before major changes). Creating backups on every auto-save would generate too many files. This balances safety with practicality.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q6",
+      "question-text": "Should the reload button behavior change with auto-save?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Keep reload button, no unsaved changes warning (since auto-save)",
+          "pros": "Consistent with auto-save model, no false warnings, cleaner UX",
+          "cons": "May reload after unsaved changes if auto-save hasn't triggered yet, potential data loss in edge cases"
+        },
+        {
+          "id": "B",
+          "label": "Keep reload button with warning if changes pending auto-save",
+          "pros": "Protects against data loss, warns if debounce timer active, safety net",
+          "cons": "May show warnings even with auto-save active, potentially confusing"
+        },
+        {
+          "id": "C",
+          "label": "Remove reload button (not needed with auto-save)",
+          "pros": "Simplifies UI, removes confusion, auto-save makes reload less useful",
+          "cons": "No way to reset to saved state, useful feature removed"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "With auto-save active, the reload button can simply reload without warnings. The debounce delay is short enough that the risk is minimal. This provides a clean way to refresh the editor state from the file.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    }
+  ]
+}

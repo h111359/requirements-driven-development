@@ -1,0 +1,197 @@
+{
+  "context": "The prompt asks to create a series of prompts for GitHub Copilot agent to execute release automation based on the detailed analysis in P-034. The analysis provides comprehensive recommendations with multiple phases and approaches. This questionnaire clarifies key implementation decisions for creating the prompt sequence.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Which phase of the release automation implementation should the prompts target?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Phase 1: Basic Automation - Automate basic release creation with automatic version increment (patch only), run build.py in non-interactive mode, create GitHub release with artifacts, and auto-generate basic release notes from commits",
+          "pros": "Quickest to implement (1-2 days effort), provides immediate value, establishes foundation for future enhancements, minimal risk",
+          "cons": "Limited version control flexibility (patch only), basic release notes without RDD context, no advanced features"
+        },
+        {
+          "id": "B",
+          "label": "Phase 2: Enhanced Release Notes - Leverage RDD workdir for rich release notes by analyzing workdir changes, extracting prompt titles and implementation details, categorizing changes by prompt type",
+          "pros": "Rich, contextual release notes using RDD metadata, better documentation of changes, prompt-based categorization provides clear feature tracking",
+          "cons": "More complex implementation (2-3 days), requires Phase 1 foundation, depends on consistent workdir structure"
+        },
+        {
+          "id": "C",
+          "label": "Phase 3: Advanced Features - Full-featured release automation with major/minor version increment via PR labels/keywords, release preview comments, automatic changelog, validation checks, and rollback capabilities",
+          "pros": "Complete solution with maximum flexibility, robust validation and rollback, best long-term solution",
+          "cons": "Significant effort (3-5 days), complex to implement and test, requires Phases 1 and 2 foundation"
+        },
+        {
+          "id": "D",
+          "label": "All Phases - Create prompts for complete end-to-end implementation of all three phases",
+          "pros": "Complete solution delivered in single iteration, consistent architecture across all phases, no need for future follow-up prompts",
+          "cons": "Very large scope, longer implementation time, higher complexity and risk, harder to validate incrementally"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Phase 1 provides immediate value with minimal risk and establishes the foundation for future enhancements. The analysis document explicitly recommends starting with Phase 1 and building incrementally. This approach allows validation at each stage and ensures basic automation is working before adding complexity.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "D"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "How should the build.py script modifications be handled?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Modify build.py to add --version and --non-interactive flags as recommended in the analysis",
+          "pros": "Enables CI/CD automation, preserves existing interactive functionality, follows analysis recommendations, straightforward implementation",
+          "cons": "Modifies existing script, requires testing both interactive and non-interactive modes"
+        },
+        {
+          "id": "B",
+          "label": "Create a separate build_ci.py script for CI/CD use and keep build.py unchanged",
+          "pros": "No risk to existing build.py functionality, clear separation of concerns, existing users unaffected",
+          "cons": "Code duplication, two scripts to maintain, may diverge over time"
+        },
+        {
+          "id": "C",
+          "label": "Rewrite build.py from scratch to be CI-first with optional interactive mode",
+          "pros": "Modern architecture, CI-optimized design, better long-term maintainability",
+          "cons": "High risk of breaking existing workflows, significant refactoring effort, requires extensive testing"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Modifying build.py to add CI flags is the approach recommended in the analysis document. It provides the necessary automation capabilities while preserving backward compatibility with existing interactive usage. This is the lowest-risk approach that meets automation requirements.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "What should be the version increment strategy in the automated workflow?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Automatic patch increment only - Always increment patch version on every main merge",
+          "pros": "Simple and predictable, no decision required, works for most releases, aligns with Phase 1 recommendation",
+          "cons": "No flexibility for major or minor releases, requires manual manifest updates for breaking changes"
+        },
+        {
+          "id": "B",
+          "label": "PR keyword-based increment - Check PR title/body for [major], [minor], or default to patch",
+          "pros": "Flexible versioning, developer controlled, no manual manifest edits needed, simple syntax",
+          "cons": "Requires discipline to use keywords, easy to forget, Phase 3 feature"
+        },
+        {
+          "id": "C",
+          "label": "Manual manifest version - User must update manifest.json version before merge, workflow uses that version",
+          "pros": "Explicit version control, no magic behavior, clear in PR what version will be released",
+          "cons": "Manual step required, can be forgotten, defeats some automation benefits"
+        },
+        {
+          "id": "D",
+          "label": "Conventional commits parsing - Analyze commit messages (feat/fix/BREAKING) to determine version increment",
+          "pros": "Fully automatic, follows standard conventions, no keywords needed",
+          "cons": "Requires commit message discipline, complex parsing, may misinterpret commits"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "For Phase 1 basic automation, automatic patch increment is the simplest and most reliable approach. The analysis recommends starting with this and adding keyword-based increment in Phase 3. This provides immediate automation benefits while keeping complexity low.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "How should release notes be generated in the automated workflow?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Simple git commit list - Generate release notes from git log showing commits since last tag",
+          "pros": "Simple to implement, no dependencies, reliable, works for Phase 1, standard approach",
+          "cons": "Basic information only, no rich context, not leveraging RDD metadata"
+        },
+        {
+          "id": "B",
+          "label": "RDD workdir analysis - Analyze .rdd-instance/workdir for changed prompts and extract implementation details",
+          "pros": "Rich contextual information, leverages RDD metadata, prompt titles as features, implementation summaries included",
+          "cons": "More complex, Phase 2 feature, requires workdir parsing logic"
+        },
+        {
+          "id": "C",
+          "label": "Hybrid approach - Combine git commits with RDD workdir analysis for comprehensive notes",
+          "pros": "Best of both worlds, complete information, professional release notes",
+          "cons": "Most complex, requires both implementations, Phase 2/3 feature"
+        },
+        {
+          "id": "D",
+          "label": "Manual release notes - Require user to create release-notes-v{version}.md file before merge",
+          "pros": "Full control over content, high quality notes, user writes exactly what they want",
+          "cons": "Manual step defeats automation goal, can be forgotten, effort required"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "For Phase 1, simple git commit list provides immediate automation while staying within scope. The analysis recommends starting simple and enhancing with RDD workdir analysis in Phase 2. This approach delivers working automation quickly.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "D"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "Should the prompts include testing strategy for the automation workflow?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes - Include prompts for creating test workflow on dev branch and validation checklist",
+          "pros": "Safer implementation, validates before production, follows analysis recommendations, reduces risk",
+          "cons": "More prompts to create, longer implementation sequence"
+        },
+        {
+          "id": "B",
+          "label": "No - Create production workflow directly, trust implementation",
+          "pros": "Faster delivery, fewer prompts, simpler sequence",
+          "cons": "Higher risk, no validation before production use, may cause failed releases"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The analysis document explicitly recommends testing on a non-production branch before deploying to main. Including testing strategy in the prompts ensures safe deployment and follows best practices for CI/CD implementation.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q6",
+      "question-text": "What format should the release_prompts.md file use?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Sequential numbered prompts - Each prompt numbered (Prompt 1, Prompt 2, etc.) with clear title, objective, and detailed instructions",
+          "pros": "Clear execution order, easy to follow, professional format, good for documentation",
+          "cons": "More formal structure, might be verbose"
+        },
+        {
+          "id": "B",
+          "label": "Simple bulleted task list - Bullet points with each task as a prompt instruction",
+          "pros": "Concise, quick to scan, simple format",
+          "cons": "Less structured, harder to track progress, missing context"
+        },
+        {
+          "id": "C",
+          "label": "GitHub Copilot chat format - Prompts formatted exactly as they should be pasted into Copilot chat",
+          "pros": "Ready to use immediately, no translation needed, optimized for Copilot",
+          "cons": "May be too verbose for planning document, less readable as documentation"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Sequential numbered prompts with clear structure provide the best balance of clarity, documentation value, and ease of execution. This format is professional, trackable, and can be easily converted to actual Copilot prompts.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "context": "The prompt requests creating a series of prompts based on the P-034 release automation analysis. This questionnaire clarifies how to structure and organize these prompts for optimal execution by GitHub Copilot agents.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "How should the prompts be organized and sequenced?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Sequential prompts following the phased rollout approach (Phase 1, Phase 2, Phase 3) from the analysis",
+          "pros": "Aligns with the analysis structure, allows incremental implementation and validation, easier to track progress, can stop after any phase if needed",
+          "cons": "May create many prompts, dependencies between phases need careful management"
+        },
+        {
+          "id": "B",
+          "label": "Functional grouping by component (build.py modifications, GitHub Actions workflow, release notes generation, testing)",
+          "pros": "Clear separation of concerns, each prompt is self-contained, can be executed in parallel if needed, easier to assign ownership",
+          "cons": "May not follow natural implementation flow, integration between components needs coordination"
+        },
+        {
+          "id": "C",
+          "label": "Single comprehensive prompt covering all aspects",
+          "pros": "Complete context in one place, no coordination needed, ensures consistency",
+          "cons": "Very large and complex prompt, harder to review and validate, all-or-nothing approach, difficult to recover from errors"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The phased rollout approach from the analysis is the most practical because it allows for incremental delivery, testing at each phase, and the ability to validate basic functionality before adding complexity. This aligns with RDD's iterative development model.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "What level of detail should each prompt contain?",
+      "options": [
+        {
+          "id": "A",
+          "label": "High-level instructions referencing the analysis document for details",
+          "pros": "Prompts remain concise, avoids duplication of analysis content, easier to maintain",
+          "cons": "Requires agent to read and interpret the analysis, potential for missed details, less self-contained"
+        },
+        {
+          "id": "B",
+          "label": "Detailed step-by-step instructions extracted from the analysis",
+          "pros": "Self-contained prompts, clear actionable steps, less interpretation needed, easier to execute",
+          "cons": "Longer prompts, duplication of analysis content, harder to maintain if analysis changes"
+        },
+        {
+          "id": "C",
+          "label": "Mixed approach: key steps in prompt with references to analysis for background",
+          "pros": "Balanced detail level, self-contained for execution while providing context, moderate length",
+          "cons": "Requires careful judgment on what to include vs reference, may vary in quality across prompts"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Detailed step-by-step instructions ensure each prompt is executable without ambiguity. Since these prompts will be executed by GitHub Copilot agents in sequence, having explicit steps reduces interpretation errors and ensures consistency. The analysis has already done the thinking work, so extracting concrete steps is straightforward.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "Should the prompts include testing and validation steps?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Each prompt includes its own testing and validation requirements",
+          "pros": "Ensures quality at each step, catches issues early, self-contained validation, follows best practices",
+          "cons": "Makes prompts longer, may duplicate some test setup, requires test infrastructure early"
+        },
+        {
+          "id": "B",
+          "label": "Separate dedicated testing prompts after implementation prompts",
+          "pros": "Separates implementation from testing concerns, can focus on building first, consolidated test strategy",
+          "cons": "Delays error detection, may need to revisit earlier prompts, less incremental validation"
+        },
+        {
+          "id": "C",
+          "label": "No explicit testing in prompts, rely on manual testing",
+          "pros": "Faster prompt execution, simpler prompts, more flexible testing approach",
+          "cons": "No automated validation, potential for regressions, inconsistent quality checks"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Including testing and validation in each prompt ensures quality is built in from the start. The analysis emphasizes validation as critical for release automation, and catching issues early is much cheaper than fixing them after integration. This approach aligns with the RDD framework's quality standards.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "How should dependencies and prerequisites be handled between prompts?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Explicit prerequisites listed at the start of each prompt",
+          "pros": "Clear execution order, easy to verify readiness, prevents out-of-order execution, good documentation",
+          "cons": "Adds overhead to each prompt, requires maintaining dependency list"
+        },
+        {
+          "id": "B",
+          "label": "Implicit dependencies based on prompt sequence number",
+          "pros": "Simple and clean, just execute in order, minimal overhead",
+          "cons": "Fragile if prompts are reordered, unclear what each prompt needs, harder to parallelize"
+        },
+        {
+          "id": "C",
+          "label": "Self-contained prompts with dependency checks built in",
+          "pros": "Robust execution, can detect missing prerequisites automatically, safer, more resilient",
+          "cons": "More complex prompts, requires implementing dependency checks, may duplicate validation logic"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Explicit prerequisites provide clarity and safety without excessive complexity. This is especially important for release automation where certain steps (like modifying build.py) must happen before others (like creating the GitHub Actions workflow). Clear documentation of dependencies helps both during execution and future maintenance.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "Should the prompts cover rollback and error handling procedures?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Include rollback instructions in each prompt",
+          "pros": "Safety built in, can recover from failures easily, complete error handling, professional approach",
+          "cons": "Makes prompts longer and more complex, may not be needed if validation is thorough"
+        },
+        {
+          "id": "B",
+          "label": "Single dedicated rollback/troubleshooting prompt at the end",
+          "pros": "Consolidated error handling knowledge, cleaner implementation prompts, easier to maintain",
+          "cons": "Can't recover during execution, need to complete all prompts first, reactive rather than proactive"
+        },
+        {
+          "id": "C",
+          "label": "No explicit rollback procedures in prompts",
+          "pros": "Simpler prompts, faster execution, assumes things will work correctly",
+          "cons": "No recovery plan, risky for critical infrastructure like release automation, unprofessional"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Release automation is critical infrastructure that directly impacts the project's delivery pipeline. Including rollback instructions ensures that if something goes wrong, there's a clear path to recover. The analysis document already provides a rollback strategy section, so incorporating this into prompts is straightforward and adds significant value.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+`Currently Technical Design editor makes a backup file on every change of `.rdd/config/technical-design-schema.json`. Remove this functionality and keep only the button for manual backup

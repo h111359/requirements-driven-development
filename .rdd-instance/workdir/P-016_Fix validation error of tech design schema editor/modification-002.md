@@ -1,0 +1,1 @@
+In validation errors instead of indexes of categories and questions should be written the name of the category and the name of the question

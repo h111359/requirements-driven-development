@@ -1,0 +1,155 @@
+{
+  "context": "The prompt requests to 'unite' the categories 'Product scale', 'Product type', and 'Criticality' in the Technical Design page. This requires clarification on the intended approach, as there are multiple ways to interpret 'unite' - from simple renaming to full restructuring. The implementation will affect the schema structure, question IDs, UI rendering, and existing answered data.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "What does 'unite' mean in the context of these three categories?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Merge all three categories into a single category called 'Product' containing all questions from the three categories",
+          "pros": "Simplifies the category list; groups related product-level questions together; reduces navigation depth in the UI",
+          "cons": "Creates a very large category with potentially 10+ questions; questions about scale, type, and criticality are semantically different; may reduce clarity of organization"
+        },
+        {
+          "id": "B",
+          "label": "Keep them as separate categories but rename them all to be subcategories under a parent 'Product' grouping",
+          "pros": "Maintains semantic separation; allows for future expansion with more product-related categories; clear hierarchical organization",
+          "cons": "Requires adding a new grouping/hierarchy level to the schema; more complex UI changes; may conflict with the 'flattened' structure from P-007"
+        },
+        {
+          "id": "C",
+          "label": "Rename all question IDs to use 'Product' prefix instead of 'ProjectScale', 'ProductType', and 'Criticality' prefixes, but keep categories separate",
+          "pros": "Minimal structural changes; maintains category separation; consistent naming; backward compatible with answered data",
+          "cons": "Does not truly 'unite' the categories; question IDs would be inconsistent with category IDs; confusing naming scheme"
+        },
+        {
+          "id": "D",
+          "label": "Remove 'Product scale' and 'Criticality' categories entirely and move their questions into the 'Product type' category, then rename it to 'Product'",
+          "pros": "Achieves unification under a single 'Product' category; leverages existing 'ProductType' structure; clear naming; one consolidated category",
+          "cons": "Mixes semantically different questions (scale metrics, type classification, business impact); loses clear organization by topic; potentially confusing UX"
+        }
+      ],
+      "recommended-option": "D",
+      "recommendation-rationale": "Option D best matches the literal interpretation of 'unite' by consolidating all three categories into one. Since P-007 already flattened the groups, having one 'Product' category with all product-level questions is the most straightforward approach. The questions can be reordered within the category to maintain logical flow. This also simplifies the schema and UI while achieving the unification goal.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "D"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "How should question IDs be updated after uniting the categories?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Change all question IDs to use 'Product_' prefix (e.g., 'ProjectScale_OverallScaleCategory' becomes 'Product_OverallScaleCategory')",
+          "pros": "Consistent with new unified category name; clear identification of product-related questions; simplifies naming scheme",
+          "cons": "Requires migration of existing answered data in technical-design.json; updates needed in all conditional visibility rules; potential for ID conflicts if questions from different original categories had similar names"
+        },
+        {
+          "id": "B",
+          "label": "Keep existing question IDs unchanged (e.g., 'ProjectScale_OverallScaleCategory', 'ProductType_PrimaryProductCategory', 'Criticality_BusinessImpactCategory')",
+          "pros": "No data migration needed; existing answers preserved; no changes to conditional visibility rules; minimal implementation effort",
+          "cons": "Question IDs won't match the unified category name; inconsistent naming (questions in 'Product' category with different prefixes); may confuse future maintainers"
+        },
+        {
+          "id": "C",
+          "label": "Create new question IDs with 'Product_' prefix and provide a migration script to update answered data",
+          "pros": "Clean, consistent naming throughout; proper alignment between category and question IDs; one-time migration handles data correctly",
+          "cons": "More complex implementation requiring migration logic; risk of data loss if migration fails; additional testing burden; temporary breaking change during migration"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Option C provides the cleanest long-term solution by ensuring question IDs align with the new unified category structure. While it requires a migration script, the framework already has migration capabilities (technical_design_migrate.py), and this ensures consistency. The migration can update the questionId field in technical-design.json entries, making the implementation complete and maintainable. This is the most professional approach for a framework focused on maintainability.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "How should the category be labeled and described in the schema?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Use 'Product' as both id and label, with description: 'Product characteristics including scale, type, and business criticality'",
+          "pros": "Clear, concise naming; single word is easy to reference; description explains the unified scope; matches the prompt's intent",
+          "cons": "Very generic name; might be too broad for future expansion; description is wordy"
+        },
+        {
+          "id": "B",
+          "label": "Use id='Product' and label='Product characteristics', with description: 'Defines the product scale, type, and criticality'",
+          "pros": "Label is more descriptive than just 'Product'; clear scope in description; aligns with technical design conventions",
+          "cons": "Slightly longer label; description is still explicitly listing the three merged topics"
+        },
+        {
+          "id": "C",
+          "label": "Use id='Product' and label='Product definition', with description: 'Core product attributes that shape architectural decisions'",
+          "pros": "Professional label; description focuses on purpose rather than listing merged categories; forward-looking; less tied to the merger history",
+          "cons": "More abstract description; users might not immediately understand it includes scale/type/criticality"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Option C provides the most professional and future-proof approach. The label 'Product definition' is clear and purposeful, while the description emphasizes why these questions matter ('shape architectural decisions') rather than just listing what was merged. This makes the category feel intentional rather than the result of a refactoring. It also leaves room for adding other product-related questions in the future without the description feeling stale.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "In what order should the questions appear within the unified 'Product' category?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Follow the original order: all ProjectScale questions, then all ProductType questions, then all Criticality questions",
+          "pros": "Maintains original grouping; minimal reordering work; easy to implement; preserves existing question flow",
+          "cons": "May not be the most logical flow for users; retains the 'merged' feeling rather than a natural unified category"
+        },
+        {
+          "id": "B",
+          "label": "Reorder questions based on logical flow: start with ProductType questions (what is it), then ProjectScale (how big), then Criticality (how important)",
+          "pros": "Natural progression from classification to sizing to impact; better UX; feels like a cohesive category rather than a merger; follows 'what-how-why' pattern",
+          "cons": "Requires manual reordering of questions in schema; slightly more implementation work; changes the established question sequence"
+        },
+        {
+          "id": "C",
+          "label": "Interleave questions to create topical groups (e.g., basic classification, then scale+lifecycle, then criticality+availability)",
+          "pros": "Creates thematic mini-sections within the category; optimized user flow for related decisions; modern UX approach",
+          "cons": "Most complex reordering; requires careful thought about groupings; may confuse users familiar with the old structure; breaks from simple sequential approach"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Option B provides the best balance between implementation effort and UX improvement. The logical flow of 'what is it' (type) → 'how big' (scale) → 'how important' (criticality) is intuitive and makes the unified category feel like a natural entity rather than a forced merge. This ordering helps users progress through related decisions in a sensible sequence. It's a moderate implementation effort with clear UX benefits.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "Should the requirement TR-0194 be updated to reflect the category change?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes, update TR-0194 to list 'Product' instead of 'ProjectScale, ProductType, Criticality' and adjust the total count to 31 categories",
+          "pros": "Keeps requirements synchronized with implementation; accurate category count; maintains documentation integrity; follows good practice",
+          "cons": "Requires running requirement modification script; adds to implementation scope; creates a new requirement version"
+        },
+        {
+          "id": "B",
+          "label": "No, leave TR-0194 as-is since it's a historical record of what was originally designed",
+          "pros": "Preserves design history; no requirement updates needed; simpler implementation; avoids requirement churn",
+          "cons": "Requirements will be out of sync with actual schema; confusing for future developers; violates the prompt's instruction to 'update all requirements'"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A is the correct choice because the prompt explicitly states 'Update all requirements, docstrings, scripts, etc. where the old id and labels are present.' TR-0194 directly lists the category names and count, so it must be updated to reflect the new structure. Keeping requirements synchronized with implementation is a core principle of the RDD framework. The framework provides requirement modification scripts for exactly this purpose.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

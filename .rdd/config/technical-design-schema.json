@@ -1,0 +1,1537 @@
+{
+  "title": "Technical Design Questionnaire",
+  "description": "Comprehensive architectural decision questionnaire for RDD framework projects",
+  "categories": [
+    {
+      "id": "Product",
+      "label": "Product",
+      "description": "Core product attributes that shape architectural decisions",
+      "questions": [
+        {
+          "id": "Product_GeneralDescription",
+          "label": "General Description",
+          "type": "text",
+          "help": ""
+        },
+        {
+          "id": "Product_PrimaryProductCategory",
+          "label": "Product aspects",
+          "type": "multiselect",
+          "help": "Choose the product archetype(s).",
+          "options": [
+            {
+              "id": "Internal line-of-business application",
+              "label": "Internal line-of-business application"
+            },
+            {
+              "id": "External customer-facing application",
+              "label": "External customer-facing application"
+            },
+            {
+              "id": "Analytics / BI product",
+              "label": "Analytics / BI product"
+            },
+            {
+              "id": "Data platform / data mesh component",
+              "label": "Data platform / data mesh component"
+            },
+            {
+              "id": "API / backend service (headless)",
+              "label": "API / backend service (headless)"
+            },
+            {
+              "id": "Integration / middleware / automation",
+              "label": "Integration / middleware / automation"
+            },
+            {
+              "id": "Mobile application",
+              "label": "Mobile application"
+            },
+            {
+              "id": "AI/ML-enabled product",
+              "label": "AI/ML-enabled product"
+            },
+            {
+              "id": "Developer platform / internal tooling",
+              "label": "Developer platform / internal tooling"
+            },
+            {
+              "id": "IoT / edge solution",
+              "label": "IoT / edge solution"
+            }
+          ],
+          "allowOther": true,
+          "otherPlaceholder": "Other product category (free text), e.g. CMS, document management, RPA center of excellence"
+        },
+        {
+          "id": "Product_PrimaryConsumptionMode",
+          "label": "Consumption mode",
+          "type": "multiselect",
+          "help": "High-level product consumption. Detailed interface and protocol decisions belong to Frontend/Backend/Integration categories.",
+          "options": [
+            {
+              "id": "Human-facing UI",
+              "label": "Human-facing UI"
+            },
+            {
+              "id": "API (consumed by other systems)",
+              "label": "API (consumed by other systems)"
+            },
+            {
+              "id": "Data product",
+              "label": "Data product"
+            },
+            {
+              "id": "Event/message-driven consumption",
+              "label": "Event/message-driven consumption"
+            },
+            {
+              "id": "Batch/job-oriented",
+              "label": "Batch/job-oriented"
+            },
+            {
+              "id": "Mixed",
+              "label": "Mixed"
+            }
+          ],
+          "allowOther": true,
+          "otherPlaceholder": "Other (free text)"
+        },
+        {
+          "id": "Product_ProductLifecycleStage",
+          "label": "Product lifecycle stage",
+          "type": "radio",
+          "help": "Used to set expectations for agility vs rigor. Detailed governance belongs elsewhere.",
+          "options": [
+            {
+              "id": "Prototype / PoC",
+              "label": "Prototype / PoC"
+            },
+            {
+              "id": "MVP / initial release",
+              "label": "MVP / initial release"
+            },
+            {
+              "id": "Growth / feature expansion",
+              "label": "Growth / feature expansion"
+            },
+            {
+              "id": "Mature / steady-state",
+              "label": "Mature / steady-state"
+            },
+            {
+              "id": "Modernization / replacement",
+              "label": "Modernization / replacement"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "Product_OverallScaleCategory",
+          "label": "Overall project scale",
+          "type": "radio",
+          "help": "Pick the closest framing; detailed sizing is captured below.",
+          "options": [
+            {
+              "id": "Small internal tool",
+              "label": "Small internal tool"
+            },
+            {
+              "id": "Department-level solution",
+              "label": "Department-level solution"
+            },
+            {
+              "id": "Enterprise-wide platform",
+              "label": "Enterprise-wide platform"
+            },
+            {
+              "id": "External customer-facing product",
+              "label": "External customer-facing product"
+            }
+          ],
+          "allowOther": true
+        }
+      ]
+    },
+    {
+      "id": "Infra",
+      "label": "Infrastructure",
+      "description": "Cloud provider selection, regions, workload placement",
+      "questions": [
+        {
+          "id": "Infra_DeploymentModel",
+          "label": "Primary deployment model",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Personal machine",
+              "label": "Personal machine"
+            },
+            {
+              "id": "Mobile device",
+              "label": "Mobile device"
+            },
+            {
+              "id": "On-premises",
+              "label": "On-premises"
+            },
+            {
+              "id": "Public cloud",
+              "label": "Public cloud"
+            },
+            {
+              "id": "Hybrid cloud",
+              "label": "Hybrid cloud"
+            },
+            {
+              "id": "Private-cloud",
+              "label": "Private-cloud"
+            }
+          ],
+          "allowOther": false
+        },
+        {
+          "id": "Infra_PrimaryProvider",
+          "label": "Cloud providers",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure",
+              "label": "Azure"
+            },
+            {
+              "id": "AWS",
+              "label": "AWS"
+            },
+            {
+              "id": "GCP",
+              "label": "GCP"
+            }
+          ],
+          "allowOther": true,
+          "visibleWhen": [
+            {
+              "questionId": "Infra_DeploymentModel",
+              "equals": [
+                "Public cloud",
+                "Hybrid cloud"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "Infra_AzureServices",
+          "label": "Azure Services Used",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure Synapse",
+              "label": "Azure Synapse"
+            },
+            {
+              "id": "Azure Functions",
+              "label": "Azure Functions"
+            },
+            {
+              "id": "Azure Front Door",
+              "label": "Azure Front Door"
+            }
+          ],
+          "allowOther": true,
+          "visibleWhen": [
+            {
+              "questionId": "Infra_PrimaryProvider",
+              "equals": "Azure"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Compute",
+      "label": "Compute",
+      "description": "Execution model, workload types, orchestration, and scaling",
+      "questions": [
+        {
+          "id": "Compute_Model",
+          "label": "Compute models",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Serverless functions",
+              "label": "Serverless functions"
+            },
+            {
+              "id": "Containerized applications",
+              "label": "Containerized applications"
+            },
+            {
+              "id": "Virtual Machines",
+              "label": "Virtual Machines"
+            },
+            {
+              "id": "Batch processing engine",
+              "label": "Batch processing engine"
+            },
+            {
+              "id": "Spark",
+              "label": "Spark"
+            },
+            {
+              "id": "Low Code Applications",
+              "label": "Low Code Applications"
+            }
+          ],
+          "allowOther": true
+        }
+      ]
+    },
+    {
+      "id": "Frontend",
+      "label": "Frontend",
+      "description": "UI frameworks, hosting, delivery model, security, CDN, and integration patterns",
+      "questions": [
+        {
+          "id": "Frontend_FrameworkType",
+          "label": "Frontend framework",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "React",
+              "label": "React"
+            },
+            {
+              "id": "Angular",
+              "label": "Angular"
+            },
+            {
+              "id": "ASP.NET",
+              "label": "ASP.NET"
+            },
+            {
+              "id": "Static HTML/JS (no framework)",
+              "label": "Static HTML/JS (no framework)"
+            }
+          ],
+          "placeholder": "Other frameworks (free text), e.g. Qwik, Astro, Stencil",
+          "allowOther": true,
+          "otherPlaceholder": "Other frameworks (free text), e.g. Qwik, Astro, Stencil"
+        },
+        {
+          "id": "Frontend_AppType",
+          "label": "Application rendering model",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "SPA – Single Page Application",
+              "label": "SPA – Single Page Application"
+            },
+            {
+              "id": "SSR – Server Side Rendering",
+              "label": "SSR – Server Side Rendering"
+            },
+            {
+              "id": "SSG – Static Site Generation",
+              "label": "SSG – Static Site Generation"
+            },
+            {
+              "id": "CSR – Client Side Rendering",
+              "label": "CSR – Client Side Rendering"
+            },
+            {
+              "id": "Mixed rendering model (hybrid)",
+              "label": "Mixed rendering model (hybrid)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Backend",
+      "label": "Backend",
+      "description": "API frameworks, runtime hosting, microservices, messaging, caching, integration patterns",
+      "questions": [
+        {
+          "id": "Backend_RuntimeFrameworks",
+          "label": "Backend programming language",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Python",
+              "label": "Python"
+            },
+            {
+              "id": ".NET",
+              "label": ".NET"
+            },
+            {
+              "id": "Node.js",
+              "label": "Node.js"
+            },
+            {
+              "id": "Java",
+              "label": "Java"
+            },
+            {
+              "id": "Go",
+              "label": "Go"
+            },
+            {
+              "id": "Rust",
+              "label": "Rust"
+            },
+            {
+              "id": "PHP",
+              "label": "PHP"
+            },
+            {
+              "id": "Ruby on Rails",
+              "label": "Ruby on Rails"
+            },
+            {
+              "id": "C++",
+              "label": "C++"
+            }
+          ],
+          "placeholder": "Other backend runtime, e.g. Elixir/OTP",
+          "allowOther": true,
+          "otherPlaceholder": "Other backend runtime, e.g. Elixir/OTP"
+        },
+        {
+          "id": "Backend_ArchitectureStyle",
+          "label": "Architecture style",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Monolithic application",
+              "label": "Monolithic application"
+            },
+            {
+              "id": "Modular monolith",
+              "label": "Modular monolith"
+            },
+            {
+              "id": "Microservices",
+              "label": "Microservices"
+            },
+            {
+              "id": "Event-driven architecture",
+              "label": "Event-driven architecture"
+            },
+            {
+              "id": "Serverless backend",
+              "label": "Serverless backend"
+            },
+            {
+              "id": "Hybrid (mixed architecture)",
+              "label": "Hybrid (mixed architecture)"
+            }
+          ]
+        },
+        {
+          "id": "Backend_APIProtocol",
+          "label": "API communication protocols",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "REST",
+              "label": "REST"
+            },
+            {
+              "id": "GraphQL",
+              "label": "GraphQL"
+            },
+            {
+              "id": "gRPC",
+              "label": "gRPC"
+            },
+            {
+              "id": "WebSockets",
+              "label": "WebSockets"
+            },
+            {
+              "id": "Event-driven messaging",
+              "label": "Event-driven messaging"
+            }
+          ],
+          "allowOther": true
+        }
+      ]
+    },
+    {
+      "id": "DataAnalytics",
+      "label": "Data",
+      "description": "Data sources, ingestion, storage, processing, modeling, quality, lineage, governance, analytics, BI and consumption",
+      "questions": [
+        {
+          "id": "PA_DataVolumeCategory",
+          "label": "Data volume",
+          "type": "radio",
+          "help": "High-level sizing",
+          "options": [
+            {
+              "id": "N/A (minimal persisted data)",
+              "label": "N/A (minimal persisted data)"
+            },
+            {
+              "id": "< 100 GB",
+              "label": "< 100 GB"
+            },
+            {
+              "id": "100 GB – 1 TB",
+              "label": "100 GB – 1 TB"
+            },
+            {
+              "id": "1–10 TB",
+              "label": "1–10 TB"
+            },
+            {
+              "id": "> 10 TB",
+              "label": "> 10 TB"
+            }
+          ],
+          "allowOther": true,
+          "otherPlaceholder": "Other, e.g. 50 TB with 10% monthly growth"
+        },
+        {
+          "id": "DA_SourceTypes",
+          "label": "Types of data sources",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Operational databases (OLTP)",
+              "label": "Operational databases (OLTP)"
+            },
+            {
+              "id": "Data warehouses",
+              "label": "Data warehouses"
+            },
+            {
+              "id": "SaaS systems (CRM, ERP, HRM)",
+              "label": "SaaS systems (CRM, ERP, HRM)"
+            },
+            {
+              "id": "REST APIs",
+              "label": "REST APIs"
+            },
+            {
+              "id": "GraphQL APIs",
+              "label": "GraphQL APIs"
+            },
+            {
+              "id": "File-based sources",
+              "label": "File-based sources"
+            },
+            {
+              "id": "Streaming sources",
+              "label": "Streaming sources"
+            },
+            {
+              "id": "Manual uploads",
+              "label": "Manual uploads"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_IngestionModes",
+          "label": "Ingestion modes",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Batch ingestion",
+              "label": "Batch ingestion"
+            },
+            {
+              "id": "Micro-batch ingestion",
+              "label": "Micro-batch ingestion"
+            },
+            {
+              "id": "Real-time streaming",
+              "label": "Real-time streaming"
+            },
+            {
+              "id": "CDC (Change Data Capture)",
+              "label": "CDC (Change Data Capture)"
+            },
+            {
+              "id": "Event-driven ingestion",
+              "label": "Event-driven ingestion"
+            },
+            {
+              "id": "Manual file ingestion",
+              "label": "Manual file ingestion"
+            },
+            {
+              "id": "API-based ingestion",
+              "label": "API-based ingestion"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_ProcessingEngines",
+          "label": "Data processing engines used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Databricks Spark",
+              "label": "Databricks Spark"
+            },
+            {
+              "id": "Synapse Spark",
+              "label": "Synapse Spark"
+            },
+            {
+              "id": "Microsoft Fabric",
+              "label": "Microsoft Fabric"
+            },
+            {
+              "id": "SQL-based ELT",
+              "label": "SQL-based ELT"
+            },
+            {
+              "id": "Custom Python ETL",
+              "label": "Custom Python ETL"
+            },
+            {
+              "id": "Azure Functions",
+              "label": "Azure Functions"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_Orchestration",
+          "label": "Orchestration tools used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure Data Factory",
+              "label": "Azure Data Factory"
+            },
+            {
+              "id": "Synapse Pipelines",
+              "label": "Synapse Pipelines"
+            },
+            {
+              "id": "Databricks Workflows",
+              "label": "Databricks Workflows"
+            },
+            {
+              "id": "Apache Airflow",
+              "label": "Apache Airflow"
+            },
+            {
+              "id": "GitHub Actions",
+              "label": "GitHub Actions"
+            },
+            {
+              "id": "Azure DevOps",
+              "label": "Azure DevOps"
+            },
+            {
+              "id": "Azure Functions ",
+              "label": "Azure Functions "
+            },
+            {
+              "id": "Custom scheduler",
+              "label": "Custom scheduler"
+            },
+            {
+              "id": "No orchestration",
+              "label": "No orchestration"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_ReportingAnalyticsTools",
+          "label": "Reporting and Analytics Tools",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Power BI",
+              "label": "Power BI"
+            },
+            {
+              "id": "Tableau",
+              "label": "Tableau"
+            },
+            {
+              "id": "Excel-based analytics",
+              "label": "Excel-based analytics"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_StorageTechnologies",
+          "label": "Storage technologies",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "BLOB",
+              "label": "BLOB"
+            },
+            {
+              "id": "Data Lake",
+              "label": "Data Lake"
+            },
+            {
+              "id": "Relational Database",
+              "label": "Relational Database"
+            },
+            {
+              "id": "Text Files",
+              "label": "Text Files"
+            },
+            {
+              "id": "Excel Files",
+              "label": "Excel Files"
+            },
+            {
+              "id": "NoSQL Database",
+              "label": "NoSQL Database"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_ModelingApproach",
+          "label": "Modeling approaches used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Dimensional modeling",
+              "label": "Dimensional modeling"
+            },
+            {
+              "id": "Data vault",
+              "label": "Data vault"
+            },
+            {
+              "id": "3rd normal form",
+              "label": "3rd normal form"
+            },
+            {
+              "id": "Lakehouse Delta modeling",
+              "label": "Lakehouse Delta modeling"
+            },
+            {
+              "id": "Document model",
+              "label": "Document model"
+            },
+            {
+              "id": "Graph model",
+              "label": "Graph model"
+            },
+            {
+              "id": "Wide tables",
+              "label": "Wide tables"
+            },
+            {
+              "id": "Hybrid modeling",
+              "label": "Hybrid modeling"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DA_RetentionDuration",
+          "label": "General data retention duration",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "No retention policy",
+              "label": "No retention policy"
+            },
+            {
+              "id": "30 days",
+              "label": "30 days"
+            },
+            {
+              "id": "90 days",
+              "label": "90 days"
+            },
+            {
+              "id": "6 months",
+              "label": "6 months"
+            },
+            {
+              "id": "1 year",
+              "label": "1 year"
+            },
+            {
+              "id": "2 years",
+              "label": "2 years"
+            },
+            {
+              "id": "3 years",
+              "label": "3 years"
+            },
+            {
+              "id": "5 years",
+              "label": "5 years"
+            },
+            {
+              "id": "7 years",
+              "label": "7 years"
+            },
+            {
+              "id": "10+ years",
+              "label": "10+ years"
+            },
+            {
+              "id": "Custom retention",
+              "label": "Custom retention"
+            }
+          ]
+        },
+        {
+          "id": "DA_DataSensitivity",
+          "label": "Data sensitivity",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Personal identifiers PII",
+              "label": "Personal identifiers PII"
+            },
+            {
+              "id": "Financial information",
+              "label": "Financial information"
+            },
+            {
+              "id": "Health information",
+              "label": "Health information"
+            },
+            {
+              "id": "Behavioral data",
+              "label": "Behavioral data"
+            },
+            {
+              "id": "Location data",
+              "label": "Location data"
+            },
+            {
+              "id": "Biometric data",
+              "label": "Biometric data"
+            },
+            {
+              "id": "User behavioral data",
+              "label": "User behavioral data"
+            },
+            {
+              "id": "Authentication data",
+              "label": "Authentication data"
+            },
+            {
+              "id": "Company confidential data",
+              "label": "Company confidential data"
+            },
+            {
+              "id": "No sensitive data",
+              "label": "No sensitive data"
+            }
+          ],
+          "allowOther": true
+        }
+      ]
+    },
+    {
+      "id": "Security",
+      "label": "Security",
+      "description": "Identity, authentication, authorization, secrets, encryption, platform security, scanning, compliance, hardening, and SDLC security",
+      "questions": [
+        {
+          "id": "SEC_AuthProviders",
+          "label": "Authentication providers",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure AD / Entra ID",
+              "label": "Azure AD / Entra ID"
+            },
+            {
+              "id": "Azure B2C",
+              "label": "Azure B2C"
+            },
+            {
+              "id": "ADFS / legacy federation",
+              "label": "ADFS / legacy federation"
+            },
+            {
+              "id": "OAuth2/OIDC provider",
+              "label": "OAuth2/OIDC provider"
+            },
+            {
+              "id": "SAML identity provider",
+              "label": "SAML identity provider"
+            },
+            {
+              "id": "Social identity providers",
+              "label": "Social identity providers"
+            },
+            {
+              "id": "Custom identity provider",
+              "label": "Custom identity provider"
+            },
+            {
+              "id": "Azure AD B2C",
+              "label": "Azure AD B2C"
+            },
+            {
+              "id": "ADFS",
+              "label": "ADFS"
+            },
+            {
+              "id": "SAML provider",
+              "label": "SAML provider"
+            },
+            {
+              "id": "Custom authentication",
+              "label": "Custom authentication"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "SEC_SecretsStorage",
+          "label": "Secrets storage",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure Key Vault",
+              "label": "Azure Key Vault"
+            },
+            {
+              "id": "Managed identities",
+              "label": "Managed identities"
+            },
+            {
+              "id": "Environment variables",
+              "label": "Environment variables"
+            },
+            {
+              "id": "Configuration files",
+              "label": "Configuration files"
+            },
+            {
+              "id": "AWS Secrets Manager",
+              "label": "AWS Secrets Manager"
+            },
+            {
+              "id": "GCP Secret Manager",
+              "label": "GCP Secret Manager"
+            },
+            {
+              "id": "Hardware Security Module (HSM)",
+              "label": "Hardware Security Module (HSM)"
+            },
+            {
+              "id": "No secret storage",
+              "label": "No secret storage"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "SEC_DataEncryptionAtRest",
+          "label": "Encryption at rest",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Platform-default encryption only",
+              "label": "Platform-default encryption only"
+            },
+            {
+              "id": "Customer-managed keys (CMK)",
+              "label": "Customer-managed keys (CMK)"
+            },
+            {
+              "id": "Double encryption",
+              "label": "Double encryption"
+            },
+            {
+              "id": "Not encrypted at rest",
+              "label": "Not encrypted at rest"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "SEC_EncryptionInTransit",
+          "label": "Encryption in transit",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "TLS 1.0/1.1 allowed",
+              "label": "TLS 1.0/1.1 allowed"
+            },
+            {
+              "id": "TLS 1.2 enforced",
+              "label": "TLS 1.2 enforced"
+            },
+            {
+              "id": "TLS 1.3 enforced",
+              "label": "TLS 1.3 enforced"
+            },
+            {
+              "id": "No encryption in transit ",
+              "label": "No encryption in transit "
+            }
+          ],
+          "allowOther": true
+        }
+      ]
+    },
+    {
+      "id": "DevelopmentProcess",
+      "label": "Development",
+      "description": "Methodology, branching, code reviews, workflows, standards, tooling, quality gates, documentation",
+      "questions": [
+        {
+          "id": "DP_RepoProvider",
+          "label": "Repository provider",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure DevOps Repos",
+              "label": "Azure DevOps Repos"
+            },
+            {
+              "id": "GitHub",
+              "label": "GitHub"
+            },
+            {
+              "id": "On-prem Git server",
+              "label": "On-prem Git server"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DP_AutomationTools",
+          "label": "Automation tools",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure DevOps Pipelines",
+              "label": "Azure DevOps Pipelines"
+            },
+            {
+              "id": "GitHub Actions",
+              "label": "GitHub Actions"
+            },
+            {
+              "id": "Local automation scripts",
+              "label": "Local automation scripts"
+            },
+            {
+              "id": "No automation",
+              "label": "No automation"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DP_IDEs",
+          "label": "Primary IDEs and tools used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "VS Code",
+              "label": "VS Code"
+            },
+            {
+              "id": "Visual Studio",
+              "label": "Visual Studio"
+            },
+            {
+              "id": "PyCharm",
+              "label": "PyCharm"
+            },
+            {
+              "id": "IntelliJ",
+              "label": "IntelliJ"
+            }
+          ],
+          "allowOther": true
+        }
+      ]
+    },
+    {
+      "id": "Deployment",
+      "label": "Deployment",
+      "description": "End-to-end delivery: CI/CD pipelines, automation, infrastructure as code, deployment strategies, release orchestration, and operational governance",
+      "questions": [
+        {
+          "id": "D_DeploymentStrategy",
+          "label": "Deployment strategies",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Blue/green deployments",
+              "label": "Blue/green deployments"
+            },
+            {
+              "id": "Canary releases",
+              "label": "Canary releases"
+            },
+            {
+              "id": "Rolling deployments",
+              "label": "Rolling deployments"
+            },
+            {
+              "id": "Ring-based deployments",
+              "label": "Ring-based deployments"
+            },
+            {
+              "id": "Shadow deployments",
+              "label": "Shadow deployments"
+            },
+            {
+              "id": "Manual deployments",
+              "label": "Manual deployments"
+            },
+            {
+              "id": "Hotfix patching",
+              "label": "Hotfix patching"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "D_RollbackStrategy",
+          "label": "Rollback strategy",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Manual rollback",
+              "label": "Manual rollback"
+            },
+            {
+              "id": "Automated rollback",
+              "label": "Automated rollback"
+            },
+            {
+              "id": "Blue/Green instant rollback",
+              "label": "Blue/Green instant rollback"
+            },
+            {
+              "id": "Version pinning rollback",
+              "label": "Version pinning rollback"
+            },
+            {
+              "id": "No rollback strategy",
+              "label": "No rollback strategy"
+            }
+          ]
+        },
+        {
+          "id": "D_ArtifactTypes",
+          "label": "Artifact types produced",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Docker images",
+              "label": "Docker images"
+            },
+            {
+              "id": "NuGet packages",
+              "label": "NuGet packages"
+            },
+            {
+              "id": "NPM packages",
+              "label": "NPM packages"
+            },
+            {
+              "id": "Python wheels",
+              "label": "Python wheels"
+            },
+            {
+              "id": "Helm charts",
+              "label": "Helm charts"
+            },
+            {
+              "id": "Infrastructure packages (IaC)",
+              "label": "Infrastructure packages (IaC)"
+            },
+            {
+              "id": "Binary executables",
+              "label": "Binary executables"
+            },
+            {
+              "id": "ZIP build artifacts",
+              "label": "ZIP build artifacts"
+            }
+          ],
+          "allowOther": true
+        }
+      ]
+    },
+    {
+      "id": "DisasterRecovery",
+      "label": "Disaster Recovery",
+      "description": "Comprehensive disaster recovery strategy including backup, replication, failover, testing, recovery processes, data integrity, compliance, and business continuity planning",
+      "questions": [
+        {
+          "id": "DR_RPO",
+          "label": "Recovery Point Objective (RPO)",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Seconds",
+              "label": "Seconds"
+            },
+            {
+              "id": "Minutes",
+              "label": "Minutes"
+            },
+            {
+              "id": "1 hour",
+              "label": "1 hour"
+            },
+            {
+              "id": "4 hours",
+              "label": "4 hours"
+            },
+            {
+              "id": "24 hours",
+              "label": "24 hours"
+            },
+            {
+              "id": "Custom RPO",
+              "label": "Custom RPO"
+            }
+          ]
+        },
+        {
+          "id": "DR_RTO",
+          "label": "Recovery Time Objective (RTO)",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Seconds",
+              "label": "Seconds"
+            },
+            {
+              "id": "Minutes",
+              "label": "Minutes"
+            },
+            {
+              "id": "1 hour",
+              "label": "1 hour"
+            },
+            {
+              "id": "4 hours",
+              "label": "4 hours"
+            },
+            {
+              "id": "24 hours",
+              "label": "24 hours"
+            },
+            {
+              "id": "Custom RTO",
+              "label": "Custom RTO"
+            }
+          ]
+        },
+        {
+          "id": "DR_BackupTypes",
+          "label": "Backup types used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Full backups",
+              "label": "Full backups"
+            },
+            {
+              "id": "Incremental backups",
+              "label": "Incremental backups"
+            },
+            {
+              "id": "Differential backups",
+              "label": "Differential backups"
+            },
+            {
+              "id": "Transaction log backups",
+              "label": "Transaction log backups"
+            },
+            {
+              "id": "Snapshot-based backups",
+              "label": "Snapshot-based backups"
+            },
+            {
+              "id": "Continuous backup/point-in-time restore",
+              "label": "Continuous backup/point-in-time restore"
+            },
+            {
+              "id": "No backup",
+              "label": "No backup"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "DR_BackupFrequency",
+          "label": "Backup frequency",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "Continuous",
+              "label": "Continuous"
+            },
+            {
+              "id": "Hourly",
+              "label": "Hourly"
+            },
+            {
+              "id": "Every 4 hours",
+              "label": "Every 4 hours"
+            },
+            {
+              "id": "Daily",
+              "label": "Daily"
+            },
+            {
+              "id": "Weekly",
+              "label": "Weekly"
+            },
+            {
+              "id": "Custom schedule",
+              "label": "Custom schedule"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Observability",
+      "label": "Observability",
+      "description": "Monitoring, logging, metrics, traces, alerts, dashboards, health checks and diagnostics",
+      "questions": [
+        {
+          "id": "OBS_MonitoringTools",
+          "label": "Monitoring and observability platforms used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure Monitor",
+              "label": "Azure Monitor"
+            },
+            {
+              "id": "Application Insights",
+              "label": "Application Insights"
+            },
+            {
+              "id": "Log Analytics",
+              "label": "Log Analytics"
+            },
+            {
+              "id": "Prometheus",
+              "label": "Prometheus"
+            },
+            {
+              "id": "Grafana",
+              "label": "Grafana"
+            },
+            {
+              "id": "Elastic Stack (ELK)",
+              "label": "Elastic Stack (ELK)"
+            },
+            {
+              "id": "Datadog",
+              "label": "Datadog"
+            },
+            {
+              "id": "New Relic",
+              "label": "New Relic"
+            },
+            {
+              "id": "Dynatrace",
+              "label": "Dynatrace"
+            },
+            {
+              "id": "Custom monitoring tooling",
+              "label": "Custom monitoring tooling"
+            },
+            {
+              "id": "No monitoring",
+              "label": "No monitoring"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_LoggingStrategy",
+          "label": "Logging strategy",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Structured logging",
+              "label": "Structured logging"
+            },
+            {
+              "id": "JSON logs",
+              "label": "JSON logs"
+            },
+            {
+              "id": "Custom log schema",
+              "label": "Custom log schema"
+            },
+            {
+              "id": "Distributed logging correlation",
+              "label": "Distributed logging correlation"
+            },
+            {
+              "id": "Console logs only",
+              "label": "Console logs only"
+            },
+            {
+              "id": "No defined logging",
+              "label": "No defined logging"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_LogRetention",
+          "label": "Log retention period",
+          "type": "radio",
+          "help": "",
+          "options": [
+            {
+              "id": "7 days",
+              "label": "7 days"
+            },
+            {
+              "id": "30 days",
+              "label": "30 days"
+            },
+            {
+              "id": "90 days",
+              "label": "90 days"
+            },
+            {
+              "id": "180 days",
+              "label": "180 days"
+            },
+            {
+              "id": "1 year",
+              "label": "1 year"
+            },
+            {
+              "id": "Custom retention policy",
+              "label": "Custom retention policy"
+            }
+          ]
+        },
+        {
+          "id": "OBS_AlertingTools",
+          "label": "Alerting platforms used",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Azure Monitor Alerts",
+              "label": "Azure Monitor Alerts"
+            },
+            {
+              "id": "Log Analytics Alerts",
+              "label": "Log Analytics Alerts"
+            },
+            {
+              "id": "Grafana Alerts",
+              "label": "Grafana Alerts"
+            },
+            {
+              "id": "Custom alert process",
+              "label": "Custom alert process"
+            },
+            {
+              "id": "No alerting",
+              "label": "No alerting"
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "id": "OBS_Diagnostics",
+          "label": "Diagnostics data collected",
+          "type": "multiselect",
+          "help": "",
+          "options": [
+            {
+              "id": "Exception traces",
+              "label": "Exception traces"
+            },
+            {
+              "id": "Request/response logs",
+              "label": "Request/response logs"
+            },
+            {
+              "id": "Execution traces",
+              "label": "Execution traces"
+            },
+            {
+              "id": "Database diagnostics",
+              "label": "Database diagnostics"
+            },
+            {
+              "id": "Network diagnostics",
+              "label": "Network diagnostics"
+            },
+            {
+              "id": "Heap/memory dumps",
+              "label": "Heap/memory dumps"
+            },
+            {
+              "id": "Profiling metrics",
+              "label": "Profiling metrics"
+            },
+            {
+              "id": "No diagnostics",
+              "label": "No diagnostics"
+            }
+          ],
+          "allowOther": true
+        }
+      ]
+    }
+  ]
+}

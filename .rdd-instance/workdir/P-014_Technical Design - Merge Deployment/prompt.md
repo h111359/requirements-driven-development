@@ -1,0 +1,1 @@
+In Technical Design page - merge the categories "CI/CD & DevOps" in "Deployment Strategy" and rename to simply "Deployment"

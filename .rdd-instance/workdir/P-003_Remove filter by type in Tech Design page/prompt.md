@@ -1,0 +1,1 @@
+There is no need the questions in Tech Design page to be filtered by type. Remove this filter.

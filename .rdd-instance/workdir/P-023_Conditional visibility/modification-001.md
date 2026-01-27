@@ -1,0 +1,2 @@
+No fill of the questions when select category in condition editor. When Conditional Visibility (visibleWhen) section is started and the user selects a category, the list of questions remains empty. Troubleshoot and fix.
+Also the value filed is too small

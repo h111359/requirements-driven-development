@@ -1,0 +1,119 @@
+{
+  "context": "The conditional visibility feature in the Technical Design Schema Editor is experiencing bugs where setting conditions is not recorded in the JSON file and the multiselect editor is not appearing. Browser console errors indicate null reference issues at line 1329 in app.js. This questionnaire clarifies the scope and approach for fixing these issues.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "What should be the scope of the code refactoring?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Minimal fix - Only fix the immediate null reference error and ensure conditions save correctly",
+          "pros": "Faster to implement, minimal risk of introducing new bugs, focused solution",
+          "cons": "May leave underlying code quality issues, technical debt remains, may need future fixes"
+        },
+        {
+          "id": "B",
+          "label": "Moderate refactoring - Fix the bugs and improve the conditional visibility code structure for better maintainability",
+          "pros": "Better code quality, easier to maintain and extend, reduces future bugs, improves readability",
+          "cons": "Takes more time, slightly higher risk of introducing regressions, requires more testing"
+        },
+        {
+          "id": "C",
+          "label": "Comprehensive refactoring - Restructure the entire condition handling system with proper error handling and validation",
+          "pros": "Robust solution, excellent error handling, future-proof design, best practices applied",
+          "cons": "Significant time investment, highest risk of regressions, may require extensive testing"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Moderate refactoring provides the best balance. It fixes the immediate issues while improving code quality to prevent similar bugs in the future. This approach addresses the root causes without the risk and time investment of a complete rewrite.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "How should the UI handle errors when conditional visibility rules fail to save?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Silent failure - Log to console only, don't show user notifications",
+          "pros": "Non-intrusive, doesn't interrupt workflow, simple to implement",
+          "cons": "User may not know something went wrong, data loss possible, poor user experience"
+        },
+        {
+          "id": "B",
+          "label": "Inline validation messages - Show error messages near the affected fields",
+          "pros": "Clear feedback, user knows exactly what went wrong, guides correction, good UX",
+          "cons": "Requires UI changes, more complex implementation, needs styling"
+        },
+        {
+          "id": "C",
+          "label": "Alert/toast notifications - Display temporary notifications for errors",
+          "pros": "Visible feedback, doesn't clutter interface, familiar pattern to users",
+          "cons": "May be dismissed too quickly, less specific about which field has issue"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Inline validation messages provide the best user experience for a form-based interface. Users can immediately see what's wrong and where, enabling them to fix issues efficiently. This is standard practice for complex forms.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "Should the fix include adding defensive programming checks throughout the condition handling code?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes - Add null checks and defensive programming throughout",
+          "pros": "Prevents similar errors, more robust code, catches edge cases, better error handling",
+          "cons": "More verbose code, slightly lower performance, takes more time to implement"
+        },
+        {
+          "id": "B",
+          "label": "No - Only fix the specific null reference issues identified",
+          "pros": "Faster implementation, cleaner code without excessive checks, targets known issues",
+          "cons": "May miss other edge cases, less defensive against future changes, potential for similar bugs"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Adding defensive programming checks is a best practice that prevents future errors. Given that a null reference error already occurred, it's likely there are other potential null reference issues in the condition handling code. The small performance overhead is negligible compared to the robustness gained.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "How should we handle the DOM element lifecycle when renderConditionRows() is called?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Avoid calling renderConditionRows() during individual field changes - only call it when adding/removing rows",
+          "pros": "Preserves DOM elements and event listeners, better performance, simpler state management",
+          "cons": "Need to manually update specific fields, more complex update logic, potential for state inconsistency"
+        },
+        {
+          "id": "B",
+          "label": "Continue calling renderConditionRows() but fix the querySelector to be more specific",
+          "pros": "Simpler logic, complete refresh ensures consistency, easier to reason about state",
+          "cons": "Recreates all DOM elements on every change, loses focus/selection state, potential performance impact"
+        },
+        {
+          "id": "C",
+          "label": "Implement a hybrid approach - update individual fields when possible, full re-render when necessary",
+          "pros": "Best performance, preserves user interaction state, flexible approach",
+          "cons": "Most complex to implement, requires careful state management, more code to maintain"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Avoiding unnecessary re-renders prevents the null reference issue and improves performance. For a condition builder interface, users typically interact with one field at a time, so targeted updates are more appropriate than full re-renders. This also prevents losing focus and selection state.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

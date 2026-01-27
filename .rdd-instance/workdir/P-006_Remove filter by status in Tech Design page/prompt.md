@@ -1,0 +1,1 @@
+In Tech Design page the filter by status is not behaving properly - sometimes the shown question are not accordingly the choice. Remove this filter entirely

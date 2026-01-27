@@ -1,0 +1,155 @@
+{
+  "context": "The prompt requests merging three data-related categories ('Expanded Data', 'Data Visualization', and 'Data Lifecycle & Retention') into the existing 'Data & Analytics' category in the Technical Design page. This consolidation will simplify the schema structure and reduce navigation complexity for users. Several design decisions need clarification to ensure the merge is implemented correctly and consistently with previous similar changes.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Should the merged questions from 'Expanded Data', 'Data Visualization', and 'Data Lifecycle & Retention' be appended at the end of 'Data & Analytics', or should they be organized in a specific logical order?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Append all questions from the three categories at the end of 'Data & Analytics' in the order: Expanded Data, then Data Visualization, then Data Lifecycle & Retention",
+          "pros": "Simple and straightforward implementation, maintains original grouping of questions, minimal reorganization effort, easy to verify completeness",
+          "cons": "May result in less logical flow of questions, related questions might not be adjacent, user experience might not be optimal"
+        },
+        {
+          "id": "B",
+          "label": "Reorganize all questions in 'Data & Analytics' (existing plus merged) into a logical thematic order that groups related topics together",
+          "pros": "Best user experience with logical flow, related questions grouped together, professional organization, easier for users to answer related questions in sequence",
+          "cons": "More complex implementation, requires careful analysis of question relationships, higher risk of errors, more difficult to verify all questions were included"
+        },
+        {
+          "id": "C",
+          "label": "Keep existing 'Data & Analytics' questions first, then add merged questions organized by their original category sections with comment markers",
+          "pros": "Maintains stability for existing questions, shows clear source of merged content, moderate complexity, preserves some original structure",
+          "cons": "Still somewhat arbitrary ordering, comment markers may clutter the schema, not as clean as full reorganization"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A is recommended because it follows the pattern used in previous similar prompts (P-008, P-010, P-011) where questions were simply appended. This approach is consistent with established practices, minimizes implementation complexity and risk, and can be completed quickly. While the logical organization of Option B would be ideal, the simpler approach has proven effective in previous merges.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "How should question IDs be updated when merging the three categories into 'Data & Analytics'?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Keep all existing question IDs unchanged (e.g., questions from 'Expanded Data' retain their original IDs, just moved to the 'Data & Analytics' category)",
+          "pros": "No breaking changes for existing answered questions, preserves historical data in technical-design.json, simplest implementation, no need to update existing answers",
+          "cons": "Question IDs won't match the new category name pattern (ED_ instead of DA_), inconsistent naming scheme, less clear which category questions belong to"
+        },
+        {
+          "id": "B",
+          "label": "Update all question IDs to follow the 'DA_' prefix pattern to match the 'Data & Analytics' category, with sequential numbering or descriptive names",
+          "pros": "Consistent naming scheme, clear category ownership, professional and maintainable, follows best practices for schema design",
+          "cons": "Requires migration of existing answered questions in technical-design.json, more complex implementation, risk of breaking existing saved answers if migration is incorrect"
+        },
+        {
+          "id": "C",
+          "label": "Use a hybrid approach: keep IDs for questions that already exist in technical-design.json (have answers), rename only unanswered questions",
+          "pros": "Preserves existing user data, achieves partial consistency, balances migration complexity with schema cleanliness",
+          "cons": "Results in mixed naming patterns which is confusing, still requires migration logic, doesn't fully solve the consistency problem"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Option B is recommended because previous prompts (P-008, P-010, P-011) all updated question IDs to match the merged category's prefix pattern. The convention established in those prompts was to provide consistent, clean schema with proper ID naming. A proper migration script should be implemented to update the technical-design.json file, ensuring that existing answers are preserved with their new question IDs. This maintains consistency with the framework's established practices.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "Should any of the questions from the three categories being merged be excluded or marked as deprecated rather than merged into 'Data & Analytics'?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Merge ALL questions from all three categories without any exclusions",
+          "pros": "Complete data preservation, no information loss, comprehensive coverage, users keep access to all configuration options",
+          "cons": "May result in very long category with many questions, possible duplication of similar questions, could overwhelm users"
+        },
+        {
+          "id": "B",
+          "label": "Review questions for duplicates or overlap with existing 'Data & Analytics' questions and exclude redundant ones",
+          "pros": "Cleaner result, eliminates redundancy, better user experience, more maintainable schema",
+          "cons": "Requires careful analysis of all questions, risk of excluding needed questions, subjective judgment on what constitutes duplication, more time-consuming"
+        },
+        {
+          "id": "C",
+          "label": "Merge all questions initially, but flag potential duplicates in the implementation log for future review",
+          "pros": "Preserves all content immediately, provides documentation for future optimization, allows gradual refinement, lower risk",
+          "cons": "Doesn't address the duplication issue now, requires follow-up work, temporary suboptimal state"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A is recommended to ensure no data or functionality is lost during the merge. The prompt instruction is clear: 'merge in' the categories, which implies including all content. Previous similar prompts (P-008, P-010, P-011) merged all questions without exclusions. If duplicates are later identified, they can be addressed in a separate prompt. This approach is safest and most aligned with the explicit instruction.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "After merging the questions, should the three source categories ('Expanded Data', 'Data Visualization', 'Data Lifecycle & Retention') be completely removed from the schema file?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes, completely remove all three category definitions from the schema file after merging their questions",
+          "pros": "Clean schema, no confusion about which categories exist, follows the clear intent of 'merge' operation, consistent with previous category merges",
+          "cons": "Permanent removal requires careful verification that all questions were migrated, cannot be easily undone"
+        },
+        {
+          "id": "B",
+          "label": "Mark the three categories as deprecated but keep them in the schema temporarily with a note pointing to 'Data & Analytics'",
+          "pros": "Safer transition, allows users to see where questions went, can be removed later, reversible",
+          "cons": "Clutters the schema, creates confusion about which categories to use, inconsistent with previous merges, extends the transition period unnecessarily"
+        },
+        {
+          "id": "C",
+          "label": "Remove the categories from the schema but keep them documented in a separate migration notes file",
+          "pros": "Clean schema, documented history, good for future reference, professional approach",
+          "cons": "Extra file to maintain, may be unnecessary given git history already provides this information"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A is recommended because it matches the pattern from previous prompts (P-008, P-010, P-011) where merged categories were completely removed from the schema. The merge operation is meant to consolidate and simplify the structure. Complete removal is the expected outcome when categories are merged. Git history will preserve the removed categories for reference if needed.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "What updates are needed beyond the schema file itself?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Update only the technical-design-schema.json file and the technical-design.json (migrate existing answers), no other changes needed",
+          "pros": "Minimal scope, focused changes, lower risk of introducing bugs elsewhere, fastest implementation",
+          "cons": "May miss references to old category names in requirements, conventions, or comments that should be updated for consistency"
+        },
+        {
+          "id": "B",
+          "label": "Update schema, migrate answers, update requirements.md to reflect merged categories, update technical-design.convention.md if it references specific categories, search codebase for hardcoded category references",
+          "pros": "Comprehensive update, maintains consistency across all documentation, professional approach, prevents future confusion",
+          "cons": "Larger scope of changes, more testing required, takes longer to implement"
+        },
+        {
+          "id": "C",
+          "label": "Update schema and migrate answers, then search for and list any other references to the old category names in a report for manual review",
+          "pros": "Ensures schema and data are correct, identifies other areas needing attention, allows prioritization of additional updates, balanced approach",
+          "cons": "Still requires follow-up work, doesn't complete all updates in one go, intermediate state with inconsistencies"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Option B is recommended because the prompt explicitly states 'Update configs, conventions, requirements' indicating a comprehensive update is expected. Previous prompts (P-008, P-010, P-011) included similar comprehensive updates to maintain consistency. Updating all references ensures the system remains coherent and professional, preventing future confusion when old category names appear in some places but not others.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    }
+  ]
+}

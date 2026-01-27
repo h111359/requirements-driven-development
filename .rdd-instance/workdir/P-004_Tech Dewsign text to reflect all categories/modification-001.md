@@ -1,0 +1,1 @@
+Add a button for clearing the text filter (if possible inside the text field)

@@ -1,0 +1,3 @@
+When I edit the question "Product categories in scope (select all that apply)" - an error appears "Failed to save answer: Question ID not found in schema: Product_PrimaryProductCategory". Seems the changes introduced inconsistency. Troubleshoot, find the root cause, fix, test.
+
+Also in the console appears "Uncaught SyntaxError: Unexpected end of input (at (index):1:70)" when I press the button for editing a modification. The modification can not be edited. Fix that also.

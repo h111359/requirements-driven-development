@@ -1,0 +1,75 @@
+﻿2026-01-17T16:24:09.6467717Z ##[group]Run actions/checkout@v4
+2026-01-17T16:24:09.6469879Z with:
+2026-01-17T16:24:09.6470679Z   repository: h111359/requirements-driven-development
+2026-01-17T16:24:09.6471885Z   token: ***
+2026-01-17T16:24:09.6472491Z   ssh-strict: true
+2026-01-17T16:24:09.6473128Z   ssh-user: git
+2026-01-17T16:24:09.6473770Z   persist-credentials: true
+2026-01-17T16:24:09.6474457Z   clean: true
+2026-01-17T16:24:09.6475079Z   sparse-checkout-cone-mode: true
+2026-01-17T16:24:09.6475882Z   fetch-depth: 1
+2026-01-17T16:24:09.6476499Z   fetch-tags: false
+2026-01-17T16:24:09.6477116Z   show-progress: true
+2026-01-17T16:24:09.6477755Z   lfs: false
+2026-01-17T16:24:09.6478330Z   submodules: false
+2026-01-17T16:24:09.6478972Z   set-safe-directory: true
+2026-01-17T16:24:09.6480008Z ##[endgroup]
+2026-01-17T16:24:09.8533812Z Syncing repository: h111359/requirements-driven-development
+2026-01-17T16:24:09.8536797Z ##[group]Getting Git version info
+2026-01-17T16:24:09.8538362Z Working directory is 'D:\a\requirements-driven-development\requirements-driven-development'
+2026-01-17T16:24:09.9756463Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-01-17T16:24:10.7349456Z git version 2.52.0.windows.1
+2026-01-17T16:24:10.7418455Z ##[endgroup]
+2026-01-17T16:24:10.7446143Z Temporarily overriding HOME='D:\a\_temp\8dc028f9-a666-4954-a042-e20c200d5ef3' before making global git config changes
+2026-01-17T16:24:10.7448510Z Adding repository directory to the temporary git global config as a safe directory
+2026-01-17T16:24:10.7459639Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\requirements-driven-development\requirements-driven-development
+2026-01-17T16:24:10.8571248Z Deleting the contents of 'D:\a\requirements-driven-development\requirements-driven-development'
+2026-01-17T16:24:10.8577734Z ##[group]Initializing the repository
+2026-01-17T16:24:10.8591731Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\requirements-driven-development\requirements-driven-development
+2026-01-17T16:24:11.0442163Z Initialized empty Git repository in D:/a/requirements-driven-development/requirements-driven-development/.git/
+2026-01-17T16:24:11.0488142Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/h111359/requirements-driven-development
+2026-01-17T16:24:11.1201842Z ##[endgroup]
+2026-01-17T16:24:11.1202720Z ##[group]Disabling automatic garbage collection
+2026-01-17T16:24:11.1211189Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-01-17T16:24:11.1507196Z ##[endgroup]
+2026-01-17T16:24:11.1508052Z ##[group]Setting up auth
+2026-01-17T16:24:11.1521525Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-01-17T16:24:11.1826434Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-01-17T16:24:13.3529805Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-01-17T16:24:13.3859078Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-01-17T16:24:13.9290093Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-01-17T16:24:13.9684695Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-01-17T16:24:14.5162529Z [command]"C:\Program Files\Git\bin\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-01-17T16:24:14.5492520Z ##[endgroup]
+2026-01-17T16:24:14.5494187Z ##[group]Fetching the repository
+2026-01-17T16:24:14.5513613Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +646fab66090250aa5d92bc244de36030d692ea05:refs/remotes/pull/91/merge
+2026-01-17T16:24:16.3594831Z From https://github.com/h111359/requirements-driven-development
+2026-01-17T16:24:16.3595478Z  * [new ref]         646fab66090250aa5d92bc244de36030d692ea05 -> pull/91/merge
+2026-01-17T16:24:16.4058494Z ##[endgroup]
+2026-01-17T16:24:16.4059155Z ##[group]Determining the checkout info
+2026-01-17T16:24:16.4060972Z ##[endgroup]
+2026-01-17T16:24:16.4072244Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-01-17T16:24:16.5246026Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-01-17T16:24:16.5595048Z ##[group]Checking out the ref
+2026-01-17T16:24:16.5606062Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force refs/remotes/pull/91/merge
+2026-01-17T16:24:16.7217248Z Note: switching to 'refs/remotes/pull/91/merge'.
+2026-01-17T16:24:16.7218324Z 
+2026-01-17T16:24:16.7218719Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-01-17T16:24:16.7219823Z changes and commit them, and you can discard any commits you make in this
+2026-01-17T16:24:16.7221299Z state without impacting any branches by switching back to a branch.
+2026-01-17T16:24:16.7221757Z 
+2026-01-17T16:24:16.7222044Z If you want to create a new branch to retain commits you create, you may
+2026-01-17T16:24:16.7223146Z do so (now or later) by using -c with the switch command. Example:
+2026-01-17T16:24:16.7223525Z 
+2026-01-17T16:24:16.7223700Z   git switch -c <new-branch-name>
+2026-01-17T16:24:16.7223958Z 
+2026-01-17T16:24:16.7224087Z Or undo this operation with:
+2026-01-17T16:24:16.7224326Z 
+2026-01-17T16:24:16.7224423Z   git switch -
+2026-01-17T16:24:16.7224580Z 
+2026-01-17T16:24:16.7224896Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-01-17T16:24:16.7225428Z 
+2026-01-17T16:24:16.7225982Z HEAD is now at 646fab6 Merge 86eae44ece44a39faad246a8cd98f12261416b10 into b85420ace31eebf9b352393b287de7a7c238636a
+2026-01-17T16:24:16.7263753Z ##[endgroup]
+2026-01-17T16:24:16.8054580Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-01-17T16:24:16.8580666Z 646fab66090250aa5d92bc244de36030d692ea05

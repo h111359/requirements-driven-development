@@ -1,0 +1,1 @@
+In Technical Design - merge the questions in category "Deep Disaster Recovery" in "Disaster Recovery". Update configs, conventions, requirements.

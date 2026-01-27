@@ -1,0 +1,95 @@
+{
+  "context": "The conditional visibility feature in the Technical Design Schema Editor allows questions to be shown/hidden based on answers to other questions. The value editor is the UI control where users specify which value(s) should trigger the visibility. Currently, it uses dropdown selects for option-based questions and text input for free-text questions. The prompt asks for the value editor to 'reflect the type of the corresponding question' which could mean different things.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Should the value editor match the exact UI control type of the referenced question (e.g., radio buttons for radio questions, checkboxes for multiselect), or continue using dropdown selects?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Match exact control type - use radio buttons for radio questions, checkboxes for multiselect questions, and appropriate controls for each question type",
+          "pros": "More intuitive and consistent with the question's own UI; users see the same interface they'd use to answer the question; clearer visual representation of what values are being matched",
+          "cons": "More complex implementation; requires handling many different control types; radio buttons and checkboxes take more space; may be awkward when questions have many options"
+        },
+        {
+          "id": "B",
+          "label": "Keep dropdown approach but make it single-select for radio questions and multi-select for multiselect questions",
+          "pros": "Simple and space-efficient; already partially implemented; consistent compact UI; works well for questions with many options; easier to maintain",
+          "cons": "Less visually obvious what control type the referenced question uses; doesn't match the exact UI of the question being referenced"
+        },
+        {
+          "id": "C",
+          "label": "Use dropdown by default but add visual indicators (icons/badges) showing the referenced question's type",
+          "pros": "Combines space efficiency with visual clarity; helps users understand the question type; minimal UI changes required; provides context without complex controls",
+          "cons": "Still doesn't match exact control type; requires additional UI elements for indicators; may not fully satisfy the 'reflect type' requirement"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "The current implementation already distinguishes between single-select (radio/dropdown) and multi-select questions, which is the most important functional difference. Dropdowns are more space-efficient and easier to use, especially for questions with many options. Matching exact control types would be complex without clear functional benefit, as dropdowns adequately represent the selection behavior.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "What should be done for question types beyond radio, multiselect, and dropdown (e.g., text, number, date, etc.)?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Keep using text input for all non-option-based question types",
+          "pros": "Simple and flexible; already implemented; works for all text-based types; allows manual entry of any value; minimal code changes",
+          "cons": "Doesn't provide type-specific validation or formatting; users could enter invalid values; no guidance for expected format"
+        },
+        {
+          "id": "B",
+          "label": "Add type-specific input controls (number input for number fields, date picker for dates, etc.)",
+          "pros": "Provides appropriate validation and formatting; prevents invalid entries; better user experience; matches the question type exactly; helps users understand expected format",
+          "cons": "More complex implementation; need to handle many different input types; may not cover all custom question types; requires comprehensive testing"
+        },
+        {
+          "id": "C",
+          "label": "Use text input but add placeholder text indicating the expected format/type",
+          "pros": "Simple implementation; provides user guidance; flexible for all types; minimal code changes; clear expected format",
+          "cons": "No enforcement of validation; users can still enter wrong format; less robust than type-specific controls"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The current implementation using text input is sufficient for conditional visibility purposes. The value is used for comparison, not as actual data entry, so strict type validation is less critical. This keeps the implementation simple while remaining functional. Type-specific controls would add complexity without significant benefit for this use case.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "Should the value editor display option labels (human-readable) or option IDs (technical identifiers) for option-based questions?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Display labels only (current behavior)",
+          "pros": "More user-friendly and readable; easier for users to understand; matches what users see when answering questions; no technical details exposed",
+          "cons": "Could be confusing if multiple options have similar labels; harder to debug if IDs are needed"
+        },
+        {
+          "id": "B",
+          "label": "Display IDs only",
+          "pros": "Unambiguous and precise; useful for debugging; matches the stored format; no confusion with similar labels",
+          "cons": "Less user-friendly; requires users to know technical IDs; harder to understand at a glance"
+        },
+        {
+          "id": "C",
+          "label": "Display both labels and IDs in format: 'Label (ID)'",
+          "pros": "Combines readability with precision; helps users identify exact option; useful for debugging; clear and unambiguous",
+          "cons": "Takes more space; could be visually cluttered for long labels; may be unnecessary detail for most users"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Displaying labels makes the UI more user-friendly and intuitive. Users work with human-readable labels when answering questions, so they should see the same labels in the conditional visibility editor. The current implementation already stores IDs internally for stability while showing labels to users, which is the best balance.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}
