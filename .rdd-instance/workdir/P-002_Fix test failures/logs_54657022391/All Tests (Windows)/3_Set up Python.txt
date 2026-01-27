@@ -1,0 +1,60 @@
+﻿2026-01-17T16:24:16.9038829Z ##[group]Run actions/setup-python@v5
+2026-01-17T16:24:16.9039171Z with:
+2026-01-17T16:24:16.9039349Z   python-version: 3.9
+2026-01-17T16:24:16.9039541Z   check-latest: false
+2026-01-17T16:24:16.9039848Z   token: ***
+2026-01-17T16:24:16.9040016Z   update-environment: true
+2026-01-17T16:24:16.9040214Z   allow-prereleases: false
+2026-01-17T16:24:16.9040396Z   freethreaded: false
+2026-01-17T16:24:16.9040589Z ##[endgroup]
+2026-01-17T16:24:17.1527690Z ##[group]Installed versions
+2026-01-17T16:24:17.1821559Z Version 3.9 was not found in the local cache
+2026-01-17T16:24:17.7521797Z Version 3.9 is available for downloading
+2026-01-17T16:24:17.7524139Z Download from "https://github.com/actions/python-versions/releases/download/3.9.13-11183687820/python-3.9.13-win32-x64.zip"
+2026-01-17T16:24:18.2258888Z Extract downloaded archive
+2026-01-17T16:24:18.3323720Z [command]"C:\Program Files\PowerShell\7\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command "$ErrorActionPreference = 'Stop' ; try { Add-Type -AssemblyName System.IO.Compression.ZipFile } catch { } ; try { [System.IO.Compression.ZipFile]::ExtractToDirectory('D:\a\_temp\python-3.9.13-win32-x64.zip', 'D:\a\_temp\76e69f97-b676-4a4f-925d-8a9cf72ec6ed', $true) } catch { if (($_.Exception.GetType().FullName -eq 'System.Management.Automation.MethodException') -or ($_.Exception.GetType().FullName -eq 'System.Management.Automation.RuntimeException') ){ Expand-Archive -LiteralPath 'D:\a\_temp\python-3.9.13-win32-x64.zip' -DestinationPath 'D:\a\_temp\76e69f97-b676-4a4f-925d-8a9cf72ec6ed' -Force } else { throw $_ } } ;"
+2026-01-17T16:24:51.3895930Z Execute installation script
+2026-01-17T16:24:52.1352545Z Check if Python hostedtoolcache folder exist...
+2026-01-17T16:24:52.1354939Z 
+2026-01-17T16:24:52.1390681Z Check if current Python version is installed...
+2026-01-17T16:24:52.1392545Z 
+2026-01-17T16:24:52.1470709Z No Python3.9.* found
+2026-01-17T16:24:52.1472843Z 
+2026-01-17T16:24:52.1479902Z Remove registry entries for Python 3.9(x64)...
+2026-01-17T16:24:52.1480978Z 
+2026-01-17T16:24:52.8962375Z Create Python 3.9.13 folder in C:\hostedtoolcache\windows\Python
+2026-01-17T16:24:52.8963284Z 
+2026-01-17T16:24:52.9028727Z Copy Python binaries to C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:24:52.9029495Z 
+2026-01-17T16:24:52.9189523Z Install Python 3.9.13 in C:\hostedtoolcache\windows\Python...
+2026-01-17T16:24:52.9193486Z 
+2026-01-17T16:25:23.5354904Z Create python3 symlink
+2026-01-17T16:25:23.5355289Z 
+2026-01-17T16:25:23.5551689Z 
+2026-01-17T16:25:23.5553726Z 
+2026-01-17T16:25:23.5556957Z Directory: C:\hostedtoolcache\windows\Python\3.9.13\x64
+2026-01-17T16:25:23.5616045Z 
+2026-01-17T16:25:23.5616357Z Mode                 LastWriteTime         Length Name
+2026-01-17T16:25:23.5616900Z ----                 -------------         ------ ----
+2026-01-17T16:25:23.5617450Z -a---l         1/17/2026   4:25 PM              0 python3.exe
+2026-01-17T16:25:23.5617932Z Install and upgrade Pip
+2026-01-17T16:25:23.5618127Z 
+2026-01-17T16:25:25.9898645Z Looking in links: c:\Users\RUNNER~1\AppData\Local\Temp\tmpgq5eylhd
+2026-01-17T16:25:25.9905146Z Requirement already satisfied: setuptools in c:\hostedtoolcache\windows\python\3.9.13\x64\lib\site-packages (58.1.0)
+2026-01-17T16:25:25.9911857Z Requirement already satisfied: pip in c:\hostedtoolcache\windows\python\3.9.13\x64\lib\site-packages (22.0.4)
+2026-01-17T16:25:27.5837654Z Collecting pip
+2026-01-17T16:25:27.6471793Z Downloading pip-25.3-py3-none-any.whl (1.8 MB)
+2026-01-17T16:25:27.8454776Z ---------------------------------------- 1.8/1.8 MB 9.5 MB/s eta 0:00:00
+2026-01-17T16:25:27.8455472Z 
+2026-01-17T16:25:27.8792308Z Installing collected packages: pip
+2026-01-17T16:25:27.8793214Z Attempting uninstall: pip
+2026-01-17T16:25:27.8800423Z Found existing installation: pip 22.0.4
+2026-01-17T16:25:28.4140194Z Uninstalling pip-22.0.4:
+2026-01-17T16:25:28.4451080Z Successfully uninstalled pip-22.0.4
+2026-01-17T16:25:31.5542100Z Successfully installed pip-25.3
+2026-01-17T16:25:32.3775387Z Create complete file
+2026-01-17T16:25:32.3776983Z 
+2026-01-17T16:25:32.3789303Z 
+2026-01-17T16:25:32.3789538Z 
+2026-01-17T16:25:32.4058274Z Successfully set up CPython (3.9.13)
+2026-01-17T16:25:32.4059462Z ##[endgroup]

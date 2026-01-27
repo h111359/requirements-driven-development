@@ -1,0 +1,149 @@
+{
+  "context": "The prompt requests implementing OR logic for conditional visibility using array values in the 'equals' field. Currently, the Technical Design schema supports conditional visibility with AND logic between rules, but the convention document mentions support for OR logic via array values in 'equals' (e.g., 'equals': ['Value A', 'Value B'] means answer equals 'Value A' OR 'Value B'). However, this feature is not yet implemented in the UI code. We need to clarify the implementation approach and scope.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Should the 'equals' field support both string and array formats for backward compatibility?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Support both string and array - 'equals' can be either a string (single value) or an array of strings (OR logic)",
+          "pros": "Backward compatible with existing technical design files that use string values; Flexible - simple cases use string, complex cases use array; No migration needed for existing data",
+          "cons": "More complex type checking in implementation; Two ways to represent the same thing (single-element array vs string)"
+        },
+        {
+          "id": "B",
+          "label": "Require array only - 'equals' must always be an array, even for single values",
+          "pros": "Simpler implementation - consistent data structure; Clearer semantics - always OR logic; Easier to extend in the future",
+          "cons": "Requires migration of existing technical design files; Less intuitive for simple single-value cases; Breaking change"
+        },
+        {
+          "id": "C",
+          "label": "Keep string for simple cases, use new field 'equalsAny' for array values",
+          "pros": "Very clear intent - 'equals' for exact match, 'equalsAny' for OR logic; No ambiguity in semantics; Backward compatible",
+          "cons": "More complex schema - two fields doing similar things; Requires validation that only one is used per rule"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A provides the best balance between flexibility and backward compatibility. It allows simple cases to remain simple (string value) while enabling complex OR logic (array values) when needed. The implementation complexity is minimal since JavaScript can easily check if a value is an array using Array.isArray(). Most programming languages and JSON schemas support union types (string | array), making this a common pattern.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "How should the OR logic interact with multiselect question answers?",
+      "options": [
+        {
+          "id": "A",
+          "label": "ANY match - If 'equals' is ['A', 'B'] and answer is ['B', 'C'], rule matches because 'B' is in both",
+          "pros": "Consistent with current multiselect behavior (checks if value is present in array); Intuitive - at least one value matches; Most flexible for multiselect questions",
+          "cons": "Complex to understand when combining OR in rule with multiselect in answer"
+        },
+        {
+          "id": "B",
+          "label": "EXACT match - If 'equals' is ['A', 'B'], answer must be exactly ['A', 'B'] (same values, any order)",
+          "pros": "Clear semantics - exact set matching; Useful for validating specific combinations",
+          "cons": "Less flexible; Doesn't work well with the 'show if any of these values' use case; Order independence adds complexity"
+        },
+        {
+          "id": "C",
+          "label": "INTERSECTION match - If 'equals' is ['A', 'B'], answer must contain both 'A' and 'B' (AND logic within the array)",
+          "pros": "Useful for 'requires all of these' scenarios; Clear logical semantics",
+          "cons": "Changes the meaning of OR to AND; Confusing naming - 'equals' array would mean 'contains all'; Not aligned with convention description"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A aligns with the convention's description of OR logic and maintains consistency with the current implementation for multiselect questions. The current code uses 'value.includes(rule.equals)' for multiselect, which checks if the rule value is present in the answer array. Extending this to check if ANY value from an equals array is present in the answer array is the natural evolution. This supports the common use case: 'show this question if the user selected Cloud OR Hybrid in deployment model'.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "Should we update the Technical Design Schema JSON file to reflect this new capability?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes - Add examples and documentation to the schema showing array usage in 'equals'",
+          "pros": "Self-documenting schema; Users can discover the feature; Schema editors can validate correctly; Examples guide proper usage",
+          "cons": "Schema file becomes larger; Need to ensure examples are clear and correct"
+        },
+        {
+          "id": "B",
+          "label": "No - Only update the convention document and code comments",
+          "pros": "Schema file stays minimal and focused on structure; Convention document is the authoritative source; Less duplication",
+          "cons": "Feature might not be discoverable; No validation at schema level; Users might not know about array support"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Updating the schema file with examples is important for discoverability and proper usage. The Technical Design Schema at .rdd/config/technical-design-schema.json serves as both documentation and validation source. Adding examples of array usage in visibleWhen rules will help users understand the feature and ensure schema editors (if implemented) can provide proper validation and autocomplete support. This aligns with the framework's principle of comprehensive documentation.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "Should we add validation to prevent conflicting values in the 'equals' array?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes - Validate that equals array has no duplicates and contains only valid option IDs for the referenced question",
+          "pros": "Prevents errors and confusion; Catches typos and invalid references early; Cleaner data; Better user experience with clear error messages",
+          "cons": "Requires access to schema during validation; More complex validation logic; Might reject legitimate edge cases"
+        },
+        {
+          "id": "B",
+          "label": "Minimal validation - Only check that array is not empty and values are strings",
+          "pros": "Simpler implementation; More permissive for edge cases; Faster validation",
+          "cons": "Allows invalid option IDs; Duplicates waste space and cause confusion; Errors only appear at runtime when evaluating visibility"
+        },
+        {
+          "id": "C",
+          "label": "No validation - Trust the data and handle gracefully at runtime",
+          "pros": "Simplest implementation; Maximum flexibility; No validation overhead",
+          "cons": "Silent failures possible; Harder to debug issues; Poor user experience when errors occur"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Proper validation is crucial for a good user experience, especially in the Technical Design Schema Editor. Since the editor already has access to the full schema and validates other aspects, extending validation to check equals arrays is natural. This prevents common errors like typos in option IDs, duplicate values, and references to non-existent questions. The validation should happen when saving questions in the editor, providing immediate feedback. This aligns with the framework's emphasis on data integrity and user-friendly error handling.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "Should we provide a UI affordance in the Tech Design Schema Editor for creating OR conditions?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes - Add a multi-select or tag input for the 'equals' field in the conditional visibility editor",
+          "pros": "User-friendly - no need to manually edit JSON arrays; Reduces errors; Visual feedback of multiple values; Consistent with modern UI patterns",
+          "cons": "More UI complexity; Needs to support both string (backward compat) and array modes; Additional testing required"
+        },
+        {
+          "id": "B",
+          "label": "Hybrid - Allow manual JSON editing but add helper buttons like 'Add another value' to build arrays",
+          "pros": "Flexible - power users can edit JSON directly; Beginners get helper UI; Gradual learning curve",
+          "cons": "Mixed interaction paradigm might be confusing; Need to sync between JSON view and helper UI"
+        },
+        {
+          "id": "C",
+          "label": "No - Users edit the JSON directly in the conditional visibility section",
+          "pros": "Simpler implementation - no new UI components; Consistent with current JSON editing approach; Maximum flexibility",
+          "cons": "Error-prone - easy to make JSON syntax errors; Not beginner-friendly; Requires understanding of array format"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "A dedicated UI component for OR conditions significantly improves usability. The Technical Design Schema Editor should make it easy to configure conditional visibility without requiring JSON expertise. A multi-select dropdown or tag input (similar to multiselect question options) provides a clear, intuitive way to specify multiple values for OR logic. This aligns with the framework's goal of providing a 'very convenient way to choose answers' (from the original P-001 prompt) and modern UI/UX expectations. The implementation can internally serialize to array or string format based on the number of values selected.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+The value editor in "Conditional Visibility" in "Technical Design Schema Editor" should reflect the type of the corresponding question and represent text value as text field, radio as radio, multiselect as multiselect and so on

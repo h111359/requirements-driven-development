@@ -1,0 +1,1 @@
+In Technical Design page unite the categories "Product scale", "Product type", "Criticality". Update all requirements, docstrigs, scripts, etc. where the old id and labels are present.

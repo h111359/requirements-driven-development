@@ -1,0 +1,1 @@
+In Tech Design page - remove groups accordion representation and flatten questions in the categories. Chane the format of `.rdd/config/technical-design-schema.json`

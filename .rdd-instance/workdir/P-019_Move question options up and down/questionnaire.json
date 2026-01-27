@@ -1,0 +1,143 @@
+{
+  "context": "The prompt requests adding the ability to move categories, questions, and question answer options up and down in the Technical Design Schema Editor. The editor currently supports full CRUD operations but lacks reordering functionality. This questionnaire clarifies implementation approach and user experience details.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "What UI pattern should be used for reordering items?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Up/Down arrow buttons next to each item",
+          "pros": "Simple, explicit, works without drag-and-drop libraries, keyboard accessible, mobile-friendly, easy to implement",
+          "cons": "Slower for moving items long distances (multiple clicks), more visual clutter with many items"
+        },
+        {
+          "id": "B",
+          "label": "Drag-and-drop functionality within the tree view",
+          "pros": "Intuitive modern UX, fast for long-distance moves, familiar to users, visual feedback during drag",
+          "cons": "Requires JavaScript drag-and-drop API or library, harder to implement for keyboard users, may not work well on touch devices"
+        },
+        {
+          "id": "C",
+          "label": "Both drag-and-drop AND up/down arrow buttons",
+          "pros": "Maximum flexibility, supports all user preferences, accessible to all input methods, best user experience",
+          "cons": "Most complex to implement, more code to maintain, higher testing burden, possible UI clutter"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Up/down arrow buttons provide the simplest implementation that works across all devices and input methods. Given the editor is vanilla JavaScript with no external libraries, adding drag-and-drop would introduce significant complexity. Arrow buttons are sufficient for the typical use case where categories/questions don't need frequent long-distance reordering.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "Where should the reorder controls be placed in the tree view?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Inline with each item (always visible)",
+          "pros": "Immediately discoverable, no hover or selection needed, clear affordance",
+          "cons": "Takes up space, increases visual clutter, may crowd the tree view"
+        },
+        {
+          "id": "B",
+          "label": "Show on hover or when item is selected",
+          "pros": "Cleaner UI when not in use, reduces clutter, progressive disclosure pattern",
+          "cons": "Less discoverable, requires hover (not mobile-friendly), may confuse users who don't find the buttons"
+        },
+        {
+          "id": "C",
+          "label": "In a dedicated toolbar when item is selected",
+          "pros": "Separate control area, no tree clutter, can include other item actions, consistent location",
+          "cons": "Extra clicks to find controls, less direct manipulation feel, may be overlooked"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Always-visible inline controls provide the clearest affordance for reordering functionality. Since the tree view already has action buttons (add, delete), adding up/down arrows maintains consistency. The slight visual clutter is acceptable given the editor is a power-user tool for schema management.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "Should there be keyboard shortcuts for reordering?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes - Ctrl+Up/Down or Alt+Up/Down to move selected item",
+          "pros": "Power user efficiency, accessibility for keyboard navigation, faster than clicking buttons, follows common editor conventions",
+          "cons": "Requires additional implementation, need to document shortcuts, may conflict with browser shortcuts"
+        },
+        {
+          "id": "B",
+          "label": "No - Only use mouse/touch controls",
+          "pros": "Simpler implementation, no shortcut conflicts, fewer edge cases to handle",
+          "cons": "Less accessible, slower for power users, misses common UX expectation"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Keyboard shortcuts are a standard feature in editor applications and significantly improve accessibility. Using Alt+Up/Down avoids conflicts with browser scroll shortcuts. The implementation overhead is minimal compared to the usability benefit for users who frequently edit the schema.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "What should happen when trying to move the first item up or last item down?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Disable the button (gray out) when move is not possible",
+          "pros": "Clear visual feedback, prevents invalid actions, common UI pattern",
+          "cons": "Requires dynamic button state management, slightly more complex"
+        },
+        {
+          "id": "B",
+          "label": "Keep buttons enabled but show an error/notification if clicked",
+          "pros": "Simpler to implement, consistent button appearance",
+          "cons": "Poor UX - user has to click to discover it won't work, unnecessary clicks"
+        },
+        {
+          "id": "C",
+          "label": "Wrap around (first item moves to last position, last moves to first)",
+          "pros": "Always enabled, allows cycling through positions, no edge case handling",
+          "cons": "Unexpected behavior, may cause accidental reordering, uncommon pattern"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Disabling buttons when moves are invalid follows standard UI conventions and provides immediate visual feedback. Users expect this behavior from similar applications. The implementation complexity is minimal - just checking array indices and toggling button disabled state.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "Should reordering trigger auto-save or require manual save?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Require manual save - mark schema as modified, user clicks Save",
+          "pros": "Consistent with existing editor behavior, allows batch reordering, user control over saves, matches current save workflow",
+          "cons": "User might forget to save, changes can be lost on reload/close"
+        },
+        {
+          "id": "B",
+          "label": "Auto-save immediately after each reorder action",
+          "pros": "No data loss risk, immediate persistence, modern UX expectation",
+          "cons": "Inconsistent with current editor behavior, harder to batch multiple moves, more server requests, harder to undo mistakes"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The editor currently requires manual save for all changes, providing a consistent workflow where users can make multiple modifications before persisting. Auto-save would be inconsistent and remove the ability to discard changes. The existing 'unsaved changes' warning on reload provides adequate protection against data loss.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

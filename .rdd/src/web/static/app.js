@@ -2630,8 +2630,12 @@ function displayModificationsList(modifications) {
         const completed = mod.completed ? new Date(mod.completed).toLocaleString() : 'N/A';
         
         // Add edit button for in-progress modifications
+        // Store description in data attribute to avoid onclick syntax issues with special characters
         const editButton = mod.status !== 'completed' 
-            ? `<button class="btn btn-sm btn-outline-primary" onclick="editModification('${mod['modification-id']}', \`${escapeHtml(mod.description || '').replace(/`/g, '\`')}\`)">
+            ? `<button class="btn btn-sm btn-outline-primary" 
+                       data-mod-id="${mod['modification-id']}" 
+                       data-mod-desc="${escapeHtml(mod.description || '')}" 
+                       onclick="editModification(this.getAttribute('data-mod-id'), this.getAttribute('data-mod-desc'))">
                    <i class="bi bi-pencil"></i> Edit
                </button>` 
             : '';
@@ -2957,54 +2961,877 @@ async function saveGitEnabled() {
 }
 
 /**
+ * Technical Design Data
+ */
+let techDesignSchema = null;
+let techDesignAnswers = {};
+let techDesignCurrentCategory = null;
+let techDesignPreviousCategory = null; // Track previous category before search
+
+/**
  * Load technical design content
  */
 async function loadTechnicalDesign() {
-    const textarea = document.getElementById('technical-design-content');
+    // Show loading state
+    document.getElementById('tech-design-loading').style.display = 'block';
+    document.getElementById('tech-design-no-category').style.display = 'none';
+    document.getElementById('tech-design-questions').style.display = 'none';
     
     try {
-        const response = await fetch('/api/file/specifications/technical-design.json?token=' + sessionToken);
-        const result = await response.json();
+        // Load schema
+        const schemaResponse = await fetch('/api/technical-design/schema');
+        const schemaResult = await schemaResponse.json();
         
-        if (result.success) {
-            textarea.value = result.content || '';
-        } else {
-            showAlert('danger', 'Failed to load technical design: ' + result.error);
+        if (!schemaResult.success) {
+            showAlert('danger', 'Failed to load technical design schema: ' + schemaResult.error);
+            return;
         }
+        
+        techDesignSchema = schemaResult.schema;
+        
+        // Load answers
+        const answersResponse = await fetch('/api/technical-design/answers');
+        const answersResult = await answersResponse.json();
+        
+        if (answersResult.success) {
+            techDesignAnswers = answersResult.answers || {};
+        }
+        
+        // Render category list
+        renderCategoryList();
+        
+        // Hide loading, show no category message
+        document.getElementById('tech-design-loading').style.display = 'none';
+        document.getElementById('tech-design-no-category').style.display = 'block';
+        
+        // Set up search and filter handlers
+        setupTechnicalDesignFilters();
+        
     } catch (error) {
         showAlert('danger', 'Error loading technical design: ' + error.message);
+        document.getElementById('tech-design-loading').style.display = 'none';
     }
 }
 
 /**
- * Save technical design content
+ * Render category list in sidebar
  */
-async function saveTechnicalDesign() {
-    const content = document.getElementById('technical-design-content').value;
+function renderCategoryList() {
+    const categoryList = document.getElementById('category-list');
+    categoryList.innerHTML = '';
     
+    techDesignSchema.categories.forEach((category, index) => {
+        const item = document.createElement('a');
+        item.href = '#';
+        item.className = 'list-group-item list-group-item-action';
+        item.innerHTML = `<span>${category.label}</span>`;
+        item.onclick = (e) => {
+            e.preventDefault();
+            selectCategory(category.id);
+        };
+        
+        categoryList.appendChild(item);
+    });
+}
+
+/**
+ * Count answered questions in a category
+ */
+function countAnsweredInCategory(category) {
+    let count = 0;
+    category.questions.forEach(question => {
+        if (techDesignAnswers[question.id]) {
+            count++;
+        }
+    });
+    return count;
+}
+
+/**
+ * Count total questions in a category
+ */
+function countQuestionsInCategory(category) {
+    return category.questions.length;
+}
+
+/**
+ * Select a category and render its questions
+ */
+function selectCategory(categoryId) {
+    techDesignCurrentCategory = categoryId;
+    
+    // Update active state in sidebar
+    const items = document.querySelectorAll('#category-list .list-group-item');
+    items.forEach(item => item.classList.remove('active'));
+    
+    const activeIndex = techDesignSchema.categories.findIndex(c => c.id === categoryId);
+    if (activeIndex >= 0) {
+        items[activeIndex].classList.add('active');
+    }
+    
+    // Render questions for this category
+    renderCategoryQuestions(categoryId);
+    
+    // Show questions container
+    document.getElementById('tech-design-no-category').style.display = 'none';
+    document.getElementById('tech-design-questions').style.display = 'block';
+}
+
+/**
+ * Render questions for a category
+ */
+function renderCategoryQuestions(categoryId) {
+    const category = techDesignSchema.categories.find(c => c.id === categoryId);
+    if (!category) return;
+    
+    const accordion = document.getElementById('tech-design-accordion');
+    accordion.innerHTML = '';
+    
+    // Render all questions directly in a flat list
+    const questionsContainer = document.createElement('div');
+    questionsContainer.className = 'questions-list';
+    
+    category.questions.forEach(question => {
+        if (isQuestionVisible(question)) {
+            questionsContainer.appendChild(renderQuestion(question));
+        }
+    });
+    
+    accordion.appendChild(questionsContainer);
+}
+
+/**
+ * Check if a question should be visible based on visibleWhen rules
+ * 
+ * Supports both string and array formats for rule.equals:
+ * - String: exact match (e.g., "equals": "Cloud")
+ * - Array: OR logic - answer must match ANY value (e.g., "equals": ["Cloud", "Hybrid"])
+ * 
+ * For multiselect answers, uses ANY match logic:
+ * - If equals is ["A", "B"] and answer is ["B", "C"], rule matches (B is in both)
+ */
+function isQuestionVisible(question) {
+    if (!question.visibleWhen || question.visibleWhen.length === 0) {
+        return true;
+    }
+    
+    // All rules must be satisfied (AND logic between rules)
+    for (const rule of question.visibleWhen) {
+        const dependentAnswer = techDesignAnswers[rule.questionId];
+        if (!dependentAnswer) {
+            return false;
+        }
+        
+        const value = dependentAnswer.value;
+        
+        // Support both string and array formats for rule.equals
+        const equalsValues = Array.isArray(rule.equals) ? rule.equals : [rule.equals];
+        
+        // Check if answer matches ANY of the equals values (OR logic)
+        let ruleMatches = false;
+        
+        if (Array.isArray(value)) {
+            // Multiselect answer: check if ANY equals value is in the answer array
+            for (const equalsValue of equalsValues) {
+                if (value.includes(equalsValue)) {
+                    ruleMatches = true;
+                    break;
+                }
+            }
+        } else {
+            // Single value answer (radio/text): check if value matches ANY equals value
+            ruleMatches = equalsValues.includes(value);
+        }
+        
+        if (!ruleMatches) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+/**
+ * Render a single question
+ */
+function renderQuestion(question) {
+    const questionDiv = document.createElement('div');
+    questionDiv.className = 'mb-4 p-3 border rounded';
+    questionDiv.setAttribute('data-question-id', question.id);
+    
+    // Question label
+    const label = document.createElement('div');
+    label.className = 'fw-bold mb-2';
+    label.textContent = question.label;
+    questionDiv.appendChild(label);
+    
+    // Help text
+    if (question.help) {
+        const help = document.createElement('div');
+        help.className = 'text-muted small mb-2';
+        help.textContent = question.help;
+        questionDiv.appendChild(help);
+    }
+    
+    // Current answer display
+    const currentAnswer = techDesignAnswers[question.id];
+    if (currentAnswer) {
+        const answerDisplay = document.createElement('div');
+        answerDisplay.className = 'alert alert-success small py-2 mb-2';
+        answerDisplay.innerHTML = `<strong>Current answer:</strong> ${formatAnswerValue(currentAnswer.value)}`;
+        questionDiv.appendChild(answerDisplay);
+    }
+    
+    // Question input based on type
+    if (question.type === 'radio' && question.options) {
+        const optionsDiv = document.createElement('div');
+        
+        // Check if current answer is a custom value (not in options)
+        let hasCustomValue = false;
+        let customValue = '';
+        if (currentAnswer) {
+            const optionIds = question.options.map(opt => opt.id);
+            if (!optionIds.includes(currentAnswer.value)) {
+                hasCustomValue = true;
+                customValue = currentAnswer.value;
+            }
+        }
+        
+        question.options.forEach(option => {
+            const radioDiv = document.createElement('div');
+            radioDiv.className = 'form-check';
+            
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.className = 'form-check-input';
+            input.name = question.id;
+            input.value = option.id;
+            input.id = `${question.id}-${option.id}`;
+            if (currentAnswer && currentAnswer.value === option.id) {
+                input.checked = true;
+            }
+            input.onchange = () => saveQuestionAnswer(question, option.id);
+            
+            const labelEl = document.createElement('label');
+            labelEl.className = 'form-check-label';
+            labelEl.htmlFor = input.id;
+            labelEl.textContent = option.label;
+            
+            radioDiv.appendChild(input);
+            radioDiv.appendChild(labelEl);
+            optionsDiv.appendChild(radioDiv);
+        });
+        
+        // Add "Other" option if allowOther is true
+        if (question.allowOther) {
+            const otherRadioDiv = document.createElement('div');
+            otherRadioDiv.className = 'form-check';
+            
+            const otherInput = document.createElement('input');
+            otherInput.type = 'radio';
+            otherInput.className = 'form-check-input';
+            otherInput.name = question.id;
+            otherInput.value = '__other__';
+            otherInput.id = `${question.id}-other`;
+            if (hasCustomValue) {
+                otherInput.checked = true;
+            }
+            otherInput.onchange = () => {
+                // Show the text input when Other is selected
+                const otherTextInput = document.getElementById(`${question.id}-other-text`);
+                if (otherTextInput) {
+                    otherTextInput.style.display = 'block';
+                    otherTextInput.focus();
+                }
+            };
+            
+            const otherLabel = document.createElement('label');
+            otherLabel.className = 'form-check-label';
+            otherLabel.htmlFor = otherInput.id;
+            otherLabel.textContent = 'Other';
+            
+            otherRadioDiv.appendChild(otherInput);
+            otherRadioDiv.appendChild(otherLabel);
+            optionsDiv.appendChild(otherRadioDiv);
+            
+            // Add text input for Other value
+            const otherTextInput = document.createElement('input');
+            otherTextInput.type = 'text';
+            otherTextInput.className = 'form-control mt-2 ms-4';
+            otherTextInput.id = `${question.id}-other-text`;
+            otherTextInput.placeholder = question.otherPlaceholder || 'Please specify...';
+            otherTextInput.style.display = hasCustomValue ? 'block' : 'none';
+            if (hasCustomValue) {
+                otherTextInput.value = customValue;
+            }
+            otherTextInput.onblur = () => {
+                const value = otherTextInput.value.trim();
+                if (value) {
+                    saveQuestionAnswer(question, value);
+                }
+            };
+            otherTextInput.onkeypress = (e) => {
+                if (e.key === 'Enter') {
+                    const value = otherTextInput.value.trim();
+                    if (value) {
+                        saveQuestionAnswer(question, value);
+                    }
+                }
+            };
+            optionsDiv.appendChild(otherTextInput);
+        }
+        
+        questionDiv.appendChild(optionsDiv);
+    } else if (question.type === 'multiselect' && question.options) {
+        const optionsDiv = document.createElement('div');
+        
+        // Check if current answer has custom values (not in options)
+        let customValues = [];
+        if (currentAnswer && Array.isArray(currentAnswer.value)) {
+            const optionIds = question.options.map(opt => opt.id);
+            customValues = currentAnswer.value.filter(v => !optionIds.includes(v));
+        }
+        
+        question.options.forEach(option => {
+            const checkDiv = document.createElement('div');
+            checkDiv.className = 'form-check';
+            
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.className = 'form-check-input';
+            input.value = option.id;
+            input.id = `${question.id}-${option.id}`;
+            if (currentAnswer && Array.isArray(currentAnswer.value) && currentAnswer.value.includes(option.id)) {
+                input.checked = true;
+            }
+            input.onchange = () => saveMultiselectAnswer(question);
+            
+            const labelEl = document.createElement('label');
+            labelEl.className = 'form-check-label';
+            labelEl.htmlFor = input.id;
+            labelEl.textContent = option.label;
+            
+            checkDiv.appendChild(input);
+            checkDiv.appendChild(labelEl);
+            optionsDiv.appendChild(checkDiv);
+        });
+        
+        // Add "Other" option if allowOther is true
+        if (question.allowOther) {
+            const otherCheckDiv = document.createElement('div');
+            otherCheckDiv.className = 'form-check';
+            
+            const otherCheckbox = document.createElement('input');
+            otherCheckbox.type = 'checkbox';
+            otherCheckbox.className = 'form-check-input';
+            otherCheckbox.value = '__other__';
+            otherCheckbox.id = `${question.id}-other`;
+            if (customValues.length > 0) {
+                otherCheckbox.checked = true;
+            }
+            otherCheckbox.onchange = () => {
+                const otherTextInput = document.getElementById(`${question.id}-other-text`);
+                if (otherTextInput) {
+                    if (otherCheckbox.checked) {
+                        otherTextInput.style.display = 'block';
+                        otherTextInput.focus();
+                    } else {
+                        otherTextInput.style.display = 'none';
+                        otherTextInput.value = '';
+                        // Save without the custom value
+                        saveMultiselectAnswer(question);
+                    }
+                }
+            };
+            
+            const otherLabel = document.createElement('label');
+            otherLabel.className = 'form-check-label';
+            otherLabel.htmlFor = otherCheckbox.id;
+            otherLabel.textContent = 'Other';
+            
+            otherCheckDiv.appendChild(otherCheckbox);
+            otherCheckDiv.appendChild(otherLabel);
+            optionsDiv.appendChild(otherCheckDiv);
+            
+            // Add text input for Other value
+            const otherTextInput = document.createElement('input');
+            otherTextInput.type = 'text';
+            otherTextInput.className = 'form-control mt-2 ms-4';
+            otherTextInput.id = `${question.id}-other-text`;
+            otherTextInput.placeholder = question.otherPlaceholder || 'Please specify...';
+            otherTextInput.style.display = customValues.length > 0 ? 'block' : 'none';
+            if (customValues.length > 0) {
+                otherTextInput.value = customValues.join(', ');
+            }
+            otherTextInput.onblur = () => {
+                saveMultiselectAnswer(question);
+            };
+            otherTextInput.onkeypress = (e) => {
+                if (e.key === 'Enter') {
+                    saveMultiselectAnswer(question);
+                }
+            };
+            optionsDiv.appendChild(otherTextInput);
+        }
+        
+        questionDiv.appendChild(optionsDiv);
+    } else if (question.type === 'text') {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'form-control';
+        input.placeholder = question.placeholder || '';
+        input.value = currentAnswer ? currentAnswer.value : '';
+        input.onblur = () => saveQuestionAnswer(question, input.value);
+        questionDiv.appendChild(input);
+    }
+    
+    // Rationale textarea (only show when answer exists)
+    if (currentAnswer) {
+        const rationaleLabel = document.createElement('label');
+        rationaleLabel.className = 'form-label mt-3 mb-1';
+        rationaleLabel.textContent = 'Rationale (optional)';
+        questionDiv.appendChild(rationaleLabel);
+        
+        const rationaleTextarea = document.createElement('textarea');
+        rationaleTextarea.className = 'form-control';
+        rationaleTextarea.rows = 3;
+        rationaleTextarea.placeholder = 'Explain the reasoning for this answer...';
+        rationaleTextarea.value = currentAnswer.rationale || '';
+        rationaleTextarea.setAttribute('data-question-id', question.id);
+        rationaleTextarea.id = `rationale-${question.id}`;
+        rationaleTextarea.onblur = () => saveQuestionRationale(question);
+        questionDiv.appendChild(rationaleTextarea);
+    }
+    
+    // Clear answer button
+    if (currentAnswer) {
+        const clearBtn = document.createElement('button');
+        clearBtn.className = 'btn btn-sm btn-outline-danger mt-2';
+        clearBtn.innerHTML = '<i class="bi bi-x-circle"></i> Clear Answer';
+        clearBtn.onclick = () => clearQuestionAnswer(question);
+        questionDiv.appendChild(clearBtn);
+    }
+    
+    return questionDiv;
+}
+
+/**
+ * Format answer value for display
+ */
+function formatAnswerValue(value) {
+    if (Array.isArray(value)) {
+        return value.join(', ');
+    }
+    return value;
+}
+
+/**
+ * Save question answer
+ */
+async function saveQuestionAnswer(question, value) {
     try {
-        const response = await fetch('/api/file/save', {
+        // Get rationale if it exists
+        const rationaleTextarea = document.getElementById(`rationale-${question.id}`);
+        const rationale = rationaleTextarea ? rationaleTextarea.value : undefined;
+        
+        const requestBody = {
+            token: sessionToken,
+            questionId: question.id,
+            type: question.type,
+            value: value
+        };
+        
+        // Only include rationale if it has a value
+        if (rationale && rationale.trim() !== '') {
+            requestBody.rationale = rationale;
+        }
+        
+        const response = await fetch('/api/technical-design/answer/set', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Reload answers and re-render
+            await reloadTechnicalDesignAnswers();
+            showAlert('success', 'Answer saved', 2000);
+        } else {
+            showAlert('danger', 'Failed to save answer: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        showAlert('danger', 'Error saving answer: ' + error.message);
+    }
+}
+
+/**
+ * Save question rationale
+ */
+async function saveQuestionRationale(question) {
+    try {
+        const rationaleTextarea = document.getElementById(`rationale-${question.id}`);
+        const rationale = rationaleTextarea ? rationaleTextarea.value : '';
+        
+        // Get current answer
+        const currentAnswer = techDesignAnswers[question.id];
+        if (!currentAnswer) {
+            console.warn('Cannot save rationale without an answer');
+            return;
+        }
+        
+        const requestBody = {
+            token: sessionToken,
+            questionId: question.id,
+            type: question.type,
+            value: currentAnswer.value
+        };
+        
+        // Only include rationale if it has a value
+        if (rationale && rationale.trim() !== '') {
+            requestBody.rationale = rationale;
+        }
+        
+        const response = await fetch('/api/technical-design/answer/set', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Update local cache without full re-render to avoid losing focus
+            techDesignAnswers[question.id] = {
+                ...currentAnswer,
+                rationale: rationale
+            };
+            showAlert('success', 'Rationale saved', 2000);
+        } else {
+            showAlert('danger', 'Failed to save rationale: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        showAlert('danger', 'Error saving rationale: ' + error.message);
+    }
+}
+
+/**
+ * Save multiselect answer
+ */
+async function saveMultiselectAnswer(question) {
+    const checkboxes = document.querySelectorAll(`input[id^="${question.id}-"]:checked`);
+    const values = Array.from(checkboxes)
+        .filter(cb => cb.value !== '__other__')  // Exclude the "Other" checkbox itself
+        .map(cb => cb.value);
+    
+    // Check if "Other" is checked and has a value
+    const otherCheckbox = document.getElementById(`${question.id}-other`);
+    const otherTextInput = document.getElementById(`${question.id}-other-text`);
+    
+    if (otherCheckbox && otherCheckbox.checked && otherTextInput) {
+        const otherValue = otherTextInput.value.trim();
+        if (otherValue) {
+            // Split by comma to allow multiple custom values
+            const otherValues = otherValue.split(',').map(v => v.trim()).filter(v => v);
+            values.push(...otherValues);
+        }
+    }
+    
+    if (values.length === 0) {
+        // No values selected - remove answer
+        await clearQuestionAnswer(question);
+    } else {
+        await saveQuestionAnswer(question, values);
+    }
+}
+
+/**
+ * Clear question answer
+ */
+async function clearQuestionAnswer(question) {
+    try {
+        const response = await fetch('/api/technical-design/answer/remove', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 token: sessionToken,
-                filepath: 'specifications/technical-design.json',
-                content: content
+                questionId: question.id
             })
         });
         
         const result = await response.json();
         
         if (result.success) {
-            showAlert('success', 'Technical design saved successfully');
+            // Reload answers and re-render
+            await reloadTechnicalDesignAnswers();
+            showAlert('success', 'Answer cleared', 2000);
         } else {
-            showAlert('danger', 'Failed to save technical design: ' + result.error);
+            showAlert('danger', 'Failed to clear answer: ' + (result.error || 'Unknown error'));
         }
     } catch (error) {
-        showAlert('danger', 'Error saving technical design: ' + error.message);
+        showAlert('danger', 'Error clearing answer: ' + error.message);
     }
+}
+
+/**
+ * Reload technical design answers and re-render current category
+ */
+async function reloadTechnicalDesignAnswers() {
+    try {
+        const response = await fetch('/api/technical-design/answers');
+        const result = await response.json();
+        
+        if (result.success) {
+            techDesignAnswers = result.answers || {};
+            
+            // Re-render category list to update counters
+            renderCategoryList();
+            
+            // Re-render current category if one is selected
+            if (techDesignCurrentCategory) {
+                renderCategoryQuestions(techDesignCurrentCategory);
+                // Restore active state
+                const activeIndex = techDesignSchema.categories.findIndex(c => c.id === techDesignCurrentCategory);
+                const items = document.querySelectorAll('#category-list .list-group-item');
+                items.forEach(item => item.classList.remove('active'));
+                if (activeIndex >= 0) {
+                    items[activeIndex].classList.add('active');
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error reloading answers:', error);
+    }
+}
+
+/**
+ * Set up search and filter handlers
+ */
+function setupTechnicalDesignFilters() {
+    const searchInput = document.getElementById('tech-design-search');
+    const searchClearBtn = document.getElementById('tech-design-search-clear');
+    
+    searchInput.addEventListener('input', () => {
+        // Show/hide clear button based on input value
+        if (searchInput.value) {
+            searchClearBtn.style.display = 'block';
+        } else {
+            searchClearBtn.style.display = 'none';
+        }
+        applyTechnicalDesignFilters();
+    });
+    
+    searchClearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        searchClearBtn.style.display = 'none';
+        applyTechnicalDesignFilters();
+    });
+}
+
+/**
+ * Apply filters to questions and categories
+ */
+function applyTechnicalDesignFilters() {
+    const searchTerm = document.getElementById('tech-design-search').value.toLowerCase();
+    
+    if (!searchTerm) {
+        // No filters active - restore normal view
+        restoreNormalCategoryView();
+        return;
+    }
+    
+    // Search mode: show cross-category results
+    applySearchFilter(searchTerm);
+}
+
+/**
+ * Restore normal category view when filters are cleared
+ */
+function restoreNormalCategoryView() {
+    // Restore all categories in sidebar
+    renderCategoryList();
+    
+    // Restore previous category selection if exists
+    if (techDesignPreviousCategory) {
+        selectCategory(techDesignPreviousCategory);
+        techDesignPreviousCategory = null;
+    } else if (techDesignCurrentCategory) {
+        // Re-render current category without filters
+        renderCategoryQuestions(techDesignCurrentCategory);
+    } else {
+        // No category was selected, show the no-category message
+        document.getElementById('tech-design-no-category').style.display = 'block';
+        document.getElementById('tech-design-questions').style.display = 'none';
+    }
+}
+
+/**
+ * Apply search filter across all categories
+ */
+function applySearchFilter(searchTerm) {
+    // Save current category before entering search mode
+    if (techDesignCurrentCategory && !techDesignPreviousCategory) {
+        techDesignPreviousCategory = techDesignCurrentCategory;
+    }
+    
+    // Find all matching questions across all categories
+    const matchingResults = [];
+    
+    techDesignSchema.categories.forEach(category => {
+        const categoryMatches = [];
+        
+        category.questions.forEach(question => {
+            if (!isQuestionVisible(question)) {
+                return; // Skip questions that don't meet visibleWhen conditions
+            }
+            
+            // Check search term match
+            const searchableText = [
+                question.label,
+                question.help || '',
+                ...(question.options || []).map(o => o.label)
+            ].join(' ').toLowerCase();
+            
+            if (!searchableText.includes(searchTerm)) {
+                return; // Doesn't match search
+            }
+            
+            categoryMatches.push({ question });
+        });
+        
+        if (categoryMatches.length > 0) {
+            matchingResults.push({ category, matches: categoryMatches });
+        }
+    });
+    
+    // Update category sidebar to show only categories with matches
+    renderFilteredCategoryList(matchingResults);
+    
+    // Display all matching questions in flat list grouped by category
+    renderSearchResults(matchingResults);
+}
+
+/**
+ * Render filtered category list showing only categories with matches
+ */
+function renderFilteredCategoryList(matchingResults) {
+    const categoryList = document.getElementById('category-list');
+    categoryList.innerHTML = '';
+    
+    if (matchingResults.length === 0) {
+        categoryList.innerHTML = '<div class="p-3 text-muted">No matching categories</div>';
+        return;
+    }
+    
+    matchingResults.forEach(({ category, matches }) => {
+        const item = document.createElement('a');
+        item.href = '#';
+        item.className = 'list-group-item list-group-item-action';
+        item.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center">
+                <span>${category.label}</span>
+                <span class="badge bg-primary">${matches.length} match${matches.length !== 1 ? 'es' : ''}</span>
+            </div>
+        `;
+        // Prevent category selection during search mode
+        item.onclick = (e) => {
+            e.preventDefault();
+        };
+        
+        categoryList.appendChild(item);
+    });
+}
+
+/**
+ * Render search results as flat list grouped by category
+ */
+function renderSearchResults(matchingResults) {
+    const accordion = document.getElementById('tech-design-accordion');
+    accordion.innerHTML = '';
+    
+    if (matchingResults.length === 0) {
+        accordion.innerHTML = `
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> No matching questions found. Try a different search term.
+            </div>
+        `;
+        document.getElementById('tech-design-no-category').style.display = 'none';
+        document.getElementById('tech-design-questions').style.display = 'block';
+        return;
+    }
+    
+    // Show results grouped by category
+    matchingResults.forEach(({ category, matches }, categoryIndex) => {
+        const categoryGroupId = `search-category-${categoryIndex}`;
+        
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'accordion-item';
+        
+        const headerDiv = document.createElement('h2');
+        headerDiv.className = 'accordion-header';
+        headerDiv.id = `heading-${categoryGroupId}`;
+        
+        const button = document.createElement('button');
+        button.className = 'accordion-button' + (categoryIndex !== 0 ? ' collapsed' : '');
+        button.type = 'button';
+        button.setAttribute('data-bs-toggle', 'collapse');
+        button.setAttribute('data-bs-target', `#collapse-${categoryGroupId}`);
+        button.innerHTML = `${category.label} <span class="badge bg-primary ms-2">${matches.length} match${matches.length !== 1 ? 'es' : ''}</span>`;
+        
+        headerDiv.appendChild(button);
+        categoryDiv.appendChild(headerDiv);
+        
+        const collapseDiv = document.createElement('div');
+        collapseDiv.id = `collapse-${categoryGroupId}`;
+        collapseDiv.className = 'accordion-collapse collapse' + (categoryIndex === 0 ? ' show' : '');
+        collapseDiv.setAttribute('data-bs-parent', '#tech-design-accordion');
+        
+        const bodyDiv = document.createElement('div');
+        bodyDiv.className = 'accordion-body';
+        
+        // Render all matching questions for this category
+        matches.forEach(({ question }) => {
+            bodyDiv.appendChild(renderQuestion(question));
+        });
+        
+        collapseDiv.appendChild(bodyDiv);
+        categoryDiv.appendChild(collapseDiv);
+        
+        accordion.appendChild(categoryDiv);
+    });
+    
+    document.getElementById('tech-design-no-category').style.display = 'none';
+    document.getElementById('tech-design-questions').style.display = 'block';
+}
+
+/**
+ * Find a question by ID across all categories
+ */
+function findQuestionById(questionId) {
+    for (const category of techDesignSchema.categories) {
+        for (const question of category.questions) {
+            if (question.id === questionId) {
+                return question;
+            }
+        }
+    }
+    return null;
+}
+
+/**
+ * Save technical design content (legacy - kept for compatibility)
+ */
+async function saveTechnicalDesign() {
+    // This function is replaced by the new dynamic UI
+    // Kept for backwards compatibility but shows a message
+    showAlert('info', 'Technical Design now uses a dynamic form. Use the category navigation to answer questions.');
 }
 
 /**
@@ -3150,7 +3977,6 @@ const HELP_CONTENT = {
             title: "Technical Design - Help",
             purpose: "Define and document architectural decisions, technology choices, and design constraints for your project in a structured format.",
             workflows: [
-                "<strong>Set Defaults:</strong> Use 'Set Default Answers' to quickly populate common configuration choices",
                 "<strong>Interactive Form:</strong> Answer configuration questions that adapt based on your previous choices",
                 "<strong>JSON Export:</strong> Technical design is stored as JSON for programmatic access during implementation"
             ],

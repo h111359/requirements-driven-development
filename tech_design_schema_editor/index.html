@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Design Schema Editor</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">Technical Design Schema Editor</a>
+        <div class="navbar-actions">
+            <button class="btn btn-secondary btn-sm" id="btnValidate" title="Validate Schema">✓ Validate</button>
+            <button class="btn btn-secondary btn-sm" id="btnBackup" title="Create Backup">📦 Backup</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Categories & Questions</h2>
+                <input 
+                    type="text" 
+                    class="sidebar-search" 
+                    id="searchInput" 
+                    placeholder="Search questions..."
+                >
+                <div class="sidebar-actions">
+                    <button class="btn btn-primary btn-sm" id="btnAddCategory">+ Category</button>
+                    <button class="btn btn-outline-primary btn-sm" id="btnExpandAll">Expand All</button>
+                </div>
+            </div>
+            <div class="tree" id="treeContainer">
+                <!-- Tree will be rendered here by JavaScript -->
+            </div>
+        </aside>
+
+        <!-- Editor Panel -->
+        <main class="editor-panel">
+            <div class="editor-container">
+                <div id="editorContent">
+                    <!-- Welcome Screen -->
+                    <div class="empty-state" id="welcomeScreen">
+                        <div class="empty-state-icon">📝</div>
+                        <h2 class="empty-state-title">Technical Design Schema Editor</h2>
+                        <p class="empty-state-text">
+                            Select a category or question from the sidebar to edit, or create a new one.
+                        </p>
+                        <p class="text-muted">
+                            This editor manages the schema file used by the RDD Framework's Technical Design page.
+                        </p>
+                    </div>
+
+                    <!-- Category Editor (hidden by default) -->
+                    <div id="categoryEditor" class="d-none">
+                        <div class="editor-header">
+                            <h1 class="editor-title" id="categoryEditorTitle">Edit Category</h1>
+                            <p class="editor-subtitle">Category configuration and metadata</p>
+                        </div>
+
+                        <form id="categoryForm">
+                            <div class="form-group">
+                                <label class="form-label form-label-required" for="categoryId">Category ID</label>
+                                <input type="text" class="form-control" id="categoryId" required 
+                                    placeholder="e.g., Product, Architecture, Security">
+                                <div class="form-text">Unique identifier for this category (use PascalCase)</div>
+                                <div class="invalid-feedback" id="categoryIdError"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label form-label-required" for="categoryLabel">Label</label>
+                                <input type="text" class="form-control" id="categoryLabel" required 
+                                    placeholder="e.g., Product Definition">
+                                <div class="form-text">Display name shown in the UI</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="categoryDescription">Description</label>
+                                <textarea class="form-control" id="categoryDescription" rows="3" 
+                                    placeholder="Brief description of this category..."></textarea>
+                                <div class="form-text">Optional description explaining the purpose of this category</div>
+                            </div>
+
+                            <div class="editor-actions">
+                                <button type="button" class="btn btn-success" id="btnAddQuestion">+ Add Question</button>
+                                <button type="button" class="btn btn-danger" id="btnDeleteCategory">🗑️ Delete Category</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Question Editor (hidden by default) -->
+                    <div id="questionEditor" class="d-none">
+                        <div class="editor-header">
+                            <h1 class="editor-title" id="questionEditorTitle">Edit Question</h1>
+                            <p class="editor-subtitle" id="questionEditorSubtitle">Question configuration</p>
+                        </div>
+
+                        <form id="questionForm">
+                            <div class="form-group">
+                                <label class="form-label form-label-required" for="questionId">Question ID</label>
+                                <input type="text" class="form-control" id="questionId" required 
+                                    placeholder="e.g., Product_PrimaryProductCategory">
+                                <div class="form-text">Unique identifier (use CategoryName_QuestionName format)</div>
+                                <div class="invalid-feedback" id="questionIdError"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label form-label-required" for="questionLabel">Label</label>
+                                <input type="text" class="form-control" id="questionLabel" required 
+                                    placeholder="e.g., What is the primary product category?">
+                                <div class="form-text">Question text shown to users</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label form-label-required" for="questionType">Question Type</label>
+                                <select class="form-control" id="questionType" required>
+                                    <option value="">-- Select Type --</option>
+                                    <option value="radio">Radio (single choice)</option>
+                                    <option value="multiselect">Multiselect (multiple choices)</option>
+                                    <option value="dropdown">Dropdown (single choice)</option>
+                                    <option value="text">Text (short answer)</option>
+                                    <option value="textarea">Textarea (long answer)</option>
+                                    <option value="number">Number</option>
+                                    <option value="checkbox">Checkbox (yes/no)</option>
+                                </select>
+                                <div class="form-text">How users will answer this question</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="questionHelp">Help Text</label>
+                                <textarea class="form-control" id="questionHelp" rows="2" 
+                                    placeholder="Additional context or instructions for this question..."></textarea>
+                                <div class="form-text">Optional help text shown below the question</div>
+                            </div>
+
+                            <div class="form-group" id="optionsGroup" style="display: none;">
+                                <label class="form-label">Answer Options</label>
+                                <div id="optionsList" class="options-list">
+                                    <!-- Options will be rendered here -->
+                                </div>
+                                <div class="mt-1">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" id="btnAddOption">+ Add Option</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="allowOtherGroup" style="display: none;">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="questionAllowOther">
+                                    <label class="form-label mb-0" for="questionAllowOther">Allow "Other" option with custom text</label>
+                                </div>
+                                <input type="text" class="form-control mt-1" id="questionOtherPlaceholder" 
+                                    placeholder='Placeholder for "Other" field (optional)'>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="form-group-header">
+                                    <label class="form-label">Conditional Visibility (visibleWhen)</label>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="btnToggleVisibleWhenMode" title="Toggle between builder and advanced mode">
+                                        🔧 Mode
+                                    </button>
+                                </div>
+                                
+                                <!-- Condition Builder (default view) -->
+                                <div id="conditionBuilderContainer" class="condition-builder">
+                                    <div class="condition-builder-header">
+                                        <span class="condition-count">Conditions: <span id="conditionCount">0</span></span>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" id="btnAddCondition">+ Add Condition</button>
+                                    </div>
+                                    <div id="conditionRowsContainer" class="condition-rows">
+                                        <!-- Condition rows will be rendered here -->
+                                    </div>
+                                    <div class="form-text">
+                                        All conditions must be true (AND logic) for the question to be visible.
+                                    </div>
+                                </div>
+
+                                <!-- Legacy Expression (advanced mode) -->
+                                <div id="legacyVisibleWhenContainer" class="d-none">
+                                    <div class="alert alert-warning" id="legacyWarning" style="display: none;">
+                                        <strong>Legacy Format Detected:</strong> This question uses a string-based JavaScript expression. 
+                                        <button type="button" class="btn btn-sm btn-outline-warning" id="btnConvertLegacy">Convert to Builder</button>
+                                    </div>
+                                    <textarea class="form-control font-monospace" id="questionVisibleWhen" rows="3" 
+                                        placeholder='e.g., answers["OtherQuestion_ID"] === "SomeValue"'></textarea>
+                                    <div class="form-text">
+                                        JavaScript expression that determines when this question is visible.
+                                        Use <code>answers["QuestionID"]</code> to reference other answers.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="editor-actions">
+                                <button type="button" class="btn btn-danger" id="btnDeleteQuestion">🗑️ Delete Question</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-message" id="statusMessage">Ready</div>
+        <div class="status-info">
+            <span id="statusCategories">Categories: 0</span>
+            <span id="statusQuestions">Questions: 0</span>
+            <span id="statusModified">●</span>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/static/app.js"></script>
+</body>
+</html>

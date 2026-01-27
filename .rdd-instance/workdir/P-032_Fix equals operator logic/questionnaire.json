@@ -1,0 +1,125 @@
+{
+  "context": "The prompt requests simplifying the Conditional Visibility UI in the Technical Design Schema Editor by removing the operator selector, since only the 'equals' operator is actually implemented in the runtime logic. The code currently displays multiple operator options (equals, notEquals, contains, etc.) but only 'equals' works, which misleads users.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "Should the operator field be completely removed from the UI and the data model, or should it be preserved in the data model (always set to 'equals') while being hidden from the UI?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Remove operator field completely from both UI and data model - always assume 'equals' implicitly",
+          "pros": "Simplest approach, cleanest data structure, removes unused code, makes the data model match the actual runtime behavior perfectly, reduces maintenance complexity",
+          "cons": "Future addition of other operators would require migration of existing visibleWhen data, breaks backward compatibility if any external tools depend on the operator field"
+        },
+        {
+          "id": "B",
+          "label": "Keep operator field in data model (always set to 'equals'), but hide the selector from the UI",
+          "pros": "Maintains data structure compatibility, easier to add other operators in the future without migration, preserves existing data format, allows gradual implementation of other operators",
+          "cons": "Slightly more complex code with unused fields, data redundancy since operator is always the same value"
+        },
+        {
+          "id": "C",
+          "label": "Show a read-only text display 'Operator: Equals' instead of removing it completely",
+          "pros": "Makes the current limitation transparent to users, maintains UI consistency if other operators are planned, provides clear documentation of how conditions work",
+          "cons": "Takes up UI space with information that doesn't change, might clutter the interface unnecessarily"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Option B provides the best balance between simplifying the user experience now while maintaining flexibility for future enhancements. The data model remains consistent and future-proof, making it easier to implement additional operators later without requiring data migration. This approach also minimizes the risk of breaking changes while immediately addressing the user's concern about misleading UI.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "What should happen to the getOperatorsForQuestion() function that currently returns different operators based on question type?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Remove the function entirely since operators won't be displayed",
+          "pros": "Simplifies codebase, removes unused code, reduces maintenance burden, clearer code organization",
+          "cons": "Requires more work if other operators are implemented later, removes potential documentation of intended operator support"
+        },
+        {
+          "id": "B",
+          "label": "Keep the function but simplify it to always return only 'equals'",
+          "pros": "Preserves the function structure for future enhancements, minimal code changes, keeps the abstraction layer intact",
+          "cons": "Maintains code that is currently not needed, slight redundancy in the codebase"
+        },
+        {
+          "id": "C",
+          "label": "Comment out the operator variations but keep the function and its logic for future reference",
+          "pros": "Documents the intended operator support for different question types, provides a roadmap for future implementation, preserves design intent",
+          "cons": "Code clutter with commented-out sections, might be confusing to future developers"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Since the UI will no longer display operator selection, the function becomes unused code. Removing it completely makes the codebase cleaner and more maintainable. If operators are needed in the future, they can be re-implemented based on actual requirements rather than theoretical needs. The current implementation in the function can be preserved in git history if needed for reference.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "How should the condition row layout be adjusted after removing the operator field?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Remove the operator field container and let the remaining fields expand to fill the space",
+          "pros": "More space for other fields, cleaner UI, simpler layout, better use of horizontal space for question and value selectors",
+          "cons": "May require CSS adjustments, layout might need rebalancing"
+        },
+        {
+          "id": "B",
+          "label": "Keep the same layout structure but hide/remove only the operator field element",
+          "pros": "Minimal CSS changes, consistent spacing maintained, easier to revert if needed",
+          "cons": "May leave awkward gaps in the UI, less efficient use of screen space"
+        },
+        {
+          "id": "C",
+          "label": "Redesign the condition row with a streamlined two-column layout (question | value)",
+          "pros": "Opportunity to improve overall UX, modern and clean design, optimal use of space",
+          "cons": "More significant UI changes required, higher risk of introducing visual bugs, requires more testing"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A provides a good balance between simplifying the UI and maintaining existing layout patterns. By removing the operator field and allowing remaining fields to naturally fill the space, the interface becomes cleaner without requiring a complete redesign. This approach is low-risk and achieves the goal of simplification effectively.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "Should comments be added to the code explaining why only 'equals' operator is supported?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Yes, add clear comments explaining the current limitation and why other operators are not yet implemented",
+          "pros": "Provides context for future developers, explains design decisions, prevents confusion about missing functionality, documents known limitations",
+          "cons": "Adds extra code lines, might become outdated if requirements change"
+        },
+        {
+          "id": "B",
+          "label": "No, the code should be self-explanatory without comments about limitations",
+          "pros": "Cleaner code without unnecessary comments, forces code to be truly self-documenting, reduces maintenance of comments",
+          "cons": "Future developers might wonder why other operators aren't supported, less historical context available"
+        },
+        {
+          "id": "C",
+          "label": "Add comments only in the visibleWhen runtime evaluation code, not in the UI code",
+          "pros": "Documents the limitation where it matters most (runtime), keeps UI code clean, balanced approach",
+          "cons": "Incomplete documentation across the codebase, developers might miss the runtime comments when working on UI"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Adding clear comments helps maintain code quality and provides essential context for future development. Since the limitation is intentional (only 'equals' is implemented in runtime), documenting this decision prevents confusion and helps future developers understand why the UI was simplified. Good documentation is especially important when removing functionality that might appear to be missing.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    }
+  ]
+}

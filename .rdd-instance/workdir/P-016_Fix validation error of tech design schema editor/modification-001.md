@@ -1,0 +1,1 @@
+Currently the value of equals is expected to be array only. It could be a string as well. Modify

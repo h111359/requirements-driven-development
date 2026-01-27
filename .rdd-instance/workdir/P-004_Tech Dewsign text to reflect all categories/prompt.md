@@ -1,0 +1,1 @@
+In Technical Design page, when text search is fulfilled, it should filter the categories and the questions in the categories, not only the current category

@@ -1,0 +1,215 @@
+{
+  "context": "The Technical Design Schema Editor needs to replace its plain textarea input for conditional visibility (visibleWhen) with a more user-friendly visual rule builder. This questionnaire clarifies the specific UI/UX approach, data format, and backward compatibility strategy to ensure the implementation aligns with user needs and existing schema compatibility.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "How should the condition builder UI handle multiple operators?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Support four basic operators: equals, not equals, contains, not contains",
+          "pros": "Simple to implement, covers majority of use cases based on schema analysis, easy for users to understand, minimal validation complexity",
+          "cons": "Limited flexibility for advanced conditions like greater than/less than comparisons, cannot handle numeric range checks"
+        },
+        {
+          "id": "B",
+          "label": "Support extended operators including: equals, not equals, contains, not contains, greater than, less than, starts with, ends with",
+          "pros": "More powerful condition expressions, supports numeric comparisons, better for text field partial matching, more future-proof",
+          "cons": "More complex UI with longer dropdown lists, increased validation logic, may confuse users with too many choices"
+        },
+        {
+          "id": "C",
+          "label": "Dynamic operators based on question type (e.g., equals/not equals for radio, contains/not contains for multiselect, comparison operators for numbers)",
+          "pros": "Context-aware UI only shows relevant operators, reduces cognitive load, prevents invalid operator/type combinations, best user experience",
+          "cons": "Most complex to implement, requires additional logic to map question types to valid operators, more test coverage needed"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Dynamic operators based on question type provides the best user experience by showing only relevant options for each question type. This prevents confusion and invalid configurations while still supporting all necessary use cases. The additional implementation complexity is justified by the improved usability.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "What should be the Category and Question selection UX pattern?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Two-step cascading dropdowns: First select Category, then Question dropdown filters to show only questions from selected category",
+          "pros": "Reduces cognitive load by breaking selection into steps, smaller question lists are easier to scan, follows familiar pattern from e-commerce sites",
+          "cons": "Requires two clicks/selections instead of one, adds extra step to workflow"
+        },
+        {
+          "id": "B",
+          "label": "Single searchable dropdown showing all questions formatted as 'Category: Question Label (QuestionID)' with filtering",
+          "pros": "Faster for power users who know what they want, single action to select, search functionality finds questions quickly",
+          "cons": "Very long dropdown list (potentially hundreds of questions), harder to browse/discover, may require scrolling through many options"
+        },
+        {
+          "id": "C",
+          "label": "Category selector (dropdown/pills) at top level, then autocomplete text input for questions that filters as user types",
+          "pros": "Combines filtering and free-text search, modern UX pattern, handles large question sets well, flexible for different user preferences",
+          "cons": "More complex to implement, requires debounced search functionality, may be unfamiliar to some users"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Two-step cascading dropdowns align with the prompt requirement for 'select first the Category and based on their selection - select the question from a reduced list'. This approach is explicitly requested in the requirements and provides a clear, structured way to navigate the potentially large number of questions in the schema.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "How should the system handle backward compatibility with existing string-based visibleWhen expressions?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Read-only display with manual migration: Show legacy string expressions in a disabled textarea with a warning banner. Users must manually recreate conditions using the builder.",
+          "pros": "Simplest implementation, no risk of conversion errors, forces users to review and validate logic during migration",
+          "cons": "More manual work for users with many conditional questions, potential for user frustration, slower adoption"
+        },
+        {
+          "id": "B",
+          "label": "Automatic conversion with fallback: Attempt to parse common expression patterns and convert to structured format automatically. If parsing fails, fall back to read-only display with warning.",
+          "pros": "Better user experience for simple cases, reduces manual work for common patterns, gradual migration path",
+          "cons": "Complex parsing logic required, risk of incorrect conversions, may give false confidence in automated conversion"
+        },
+        {
+          "id": "C",
+          "label": "Dual mode support: Keep legacy textarea available as an 'Advanced Mode' toggle. Allow users to switch between builder and text mode. Validate both formats but prefer structured format.",
+          "pros": "Maximum flexibility for users, supports complex edge cases not covered by builder, preserves power user workflows",
+          "cons": "Maintains complexity of supporting both formats indefinitely, may discourage builder adoption, more test coverage needed"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "The prompt explicitly requests automatic conversion with a 'Convert to Builder' button for legacy expressions. Option B provides the best migration path by attempting automatic conversion for common patterns while falling back to manual recreation for complex cases. This balances user convenience with implementation safety.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "What validation should be performed on condition values?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Basic validation only: Check that referenced question IDs exist in the schema and warn if not found",
+          "pros": "Simple to implement, minimal performance impact, catches most critical errors (broken references)",
+          "cons": "Doesn't catch invalid option values, allows conditions that will never be true, users may create broken rules"
+        },
+        {
+          "id": "B",
+          "label": "Full validation: Check question ID exists AND verify value matches an available option (for radio/dropdown/multiselect). Show inline warnings for invalid values.",
+          "pros": "Catches all common configuration errors, prevents impossible conditions, better user experience with clear error messages",
+          "cons": "More complex validation logic, must handle different question types differently, may show warnings for valid free-text values"
+        },
+        {
+          "id": "C",
+          "label": "Strict validation with prevention: Block saving conditions with invalid question IDs or values. Disable value dropdown until valid question is selected. Mark invalid conditions in red.",
+          "pros": "Guarantees all saved conditions are valid, impossible to create broken configurations, most robust approach",
+          "cons": "May be too restrictive during editing workflow, could frustrate users if they can't save partial work, requires complex state management"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "The prompt explicitly requires validation with warnings for invalid question IDs and values that don't match options. Option B implements exactly what's specified: validate both question references and values, show warnings with 'clear messages', and 'highlight validation errors in red'. This provides strong validation without blocking the user workflow.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "Should the condition builder include a visual preview of when the question will be visible?",
+      "options": [
+        {
+          "id": "A",
+          "label": "No preview - builder only shows the condition configuration interface",
+          "pros": "Simpler implementation, no additional UI components needed, user focuses on building rules rather than testing",
+          "cons": "Users cannot verify conditions work correctly without saving and testing in actual form, harder to debug complex visibility rules"
+        },
+        {
+          "id": "B",
+          "label": "Text description preview: Show human-readable summary below builder (e.g., 'This question will be visible when Product Type equals Mobile AND Features contains AI/ML')",
+          "pros": "Easy to implement, helps users understand what they configured, no interactive components needed, good for documentation",
+          "cons": "Cannot test actual behavior, user must imagine how conditions work, doesn't show whether conditions are currently met"
+        },
+        {
+          "id": "C",
+          "label": "Live preview panel: Show whether conditions are currently satisfied based on current answer state, with color coding (green=visible, gray=hidden)",
+          "pros": "Users can test conditions immediately without saving, instant feedback on rule correctness, best debugging experience",
+          "cons": "Requires real-time evaluation engine, more complex state management, performance impact if many conditions to check"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "A text description preview provides good value with reasonable implementation effort. While the prompt doesn't explicitly require a preview feature, the analysis suggests showing a 'visual representation' in the demo examples. Option B balances usability with implementation complexity, helping users understand their conditions without the overhead of a full evaluation engine.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q6",
+      "question-text": "How should circular dependency detection work?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Simple direct cycle check: Prevent Question A from referencing Question B if Question B already references Question A",
+          "pros": "Easy to implement, catches most obvious circular dependencies, low performance overhead",
+          "cons": "Doesn't detect indirect cycles (A→B→C→A), may miss complex dependency chains"
+        },
+        {
+          "id": "B",
+          "label": "Full graph traversal: Build complete dependency graph and detect any cycles (direct or indirect) using depth-first search",
+          "pros": "Catches all circular dependencies regardless of chain length, mathematically correct, prevents all infinite loops",
+          "cons": "More complex algorithm, higher performance cost for large schemas, may be overkill for typical use cases"
+        },
+        {
+          "id": "C",
+          "label": "Lazy validation: Only check for circular dependencies when schema is saved, not during editing. Show error message if cycles detected.",
+          "pros": "No performance impact during editing, simpler UI state management, allows temporary invalid states during construction",
+          "cons": "User may build complex conditions before discovering circular dependency error, late feedback is less user-friendly"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "The prompt explicitly requires preventing circular references with the example 'Question A depends on Question B which depends on Question A'. While this example shows a simple cycle, using full graph traversal ensures all types of circular dependencies are caught, not just direct ones. This is the most robust solution and aligns with preventing all forms of circular references.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q7",
+      "question-text": "What should happen when a question referenced in visibleWhen conditions is deleted from the schema?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Leave orphaned references: Keep the condition in place but show validation warning on dependent questions",
+          "pros": "Preserves user intent, allows temporary broken state during schema reorganization, user can fix manually",
+          "cons": "Schema contains broken references, questions may unexpectedly become always-visible or always-hidden"
+        },
+        {
+          "id": "B",
+          "label": "Auto-remove broken conditions: Automatically delete visibleWhen conditions that reference non-existent questions",
+          "pros": "Schema stays clean, no broken references, questions revert to default always-visible state",
+          "cons": "Data loss, user may not realize conditions were removed, difficult to undo if deletion was accidental"
+        },
+        {
+          "id": "C",
+          "label": "Prevent deletion: When user tries to delete a question, check if it's referenced by any visibleWhen conditions. Show warning and list dependent questions. Require user to either remove conditions first or force delete.",
+          "pros": "User is always aware of impact, prevents accidental breakage, maintains referential integrity, best for data safety",
+          "cons": "More complex deletion flow, may slow down bulk schema edits, requires dependency tracking"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Preventing deletion with clear warnings provides the best user experience by making dependencies visible and giving users control over how to proceed. This approach maintains data integrity while preventing accidental loss of important conditional logic. It aligns with the validation requirement to 'warn if referenced question doesn't exist' by proactively preventing such situations.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    }
+  ]
+}

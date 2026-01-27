@@ -1,0 +1,245 @@
+{
+  "context": "The prompt requires implementing a Technical Design page with a new schema format, migration from legacy format, Web UI rendering, and Python-based write operations. Multiple architectural and implementation choices exist that will significantly impact the solution's maintainability, user experience, and extensibility.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "What should be the primary schema structure approach for technical-design-schema.json?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Flat questionnaire model (all questions in single array with category/group metadata)",
+          "pros": "Simpler to parse and validate; easier to search across all questions; straightforward JSON structure; minimal nesting; easier to add/remove questions dynamically",
+          "cons": "Category/group relationships less explicit; requires filtering logic to organize UI; duplication of category/group metadata across questions"
+        },
+        {
+          "id": "B",
+          "label": "Hierarchical nested model (sections > groups > questions)",
+          "pros": "Natural representation of UI structure; category/group organization is explicit; matches legacy schema pattern; easier to render accordion navigation; clear parent-child relationships",
+          "cons": "More complex JSON structure; deeper nesting makes validation more involved; harder to search across all questions; more complex update logic"
+        },
+        {
+          "id": "C",
+          "label": "Hybrid model (question library + organization metadata)",
+          "pros": "Separates data from organization; questions reusable across multiple views; flexible reorganization without touching question definitions; easier versioning of questions vs structure",
+          "cons": "More complex overall schema; two-file approach or complex single file; indirection between organization and questions; potentially confusing for contributors"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "The hierarchical nested model aligns with the legacy schema structure (33 sections with groups and questions), makes the UI rendering logic straightforward (sidebar for categories, accordions for groups), and provides an intuitive mental model for contributors. The prompt specifically mentions 'categories/sections and groups' suggesting a nested approach is expected.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "How should conditional visibility rules (visibleWhen) be implemented in the schema?",
+      "options": [
+        {
+          "id": "A",
+          "label": "JSONPath-based expressions for complex conditions",
+          "pros": "Very flexible; supports complex boolean logic; industry-standard query language; can reference any answer value; extensible for future needs",
+          "cons": "Requires JSONPath library; steeper learning curve; more complex validation; potential performance overhead; harder to debug"
+        },
+        {
+          "id": "B",
+          "label": "Simple rule objects with questionId and expected value(s)",
+          "pros": "Easy to understand and write; simple validation; matches legacy schema pattern; fast evaluation; no external dependencies; clear error messages",
+          "cons": "Limited to simple equality checks; complex conditions require multiple rules; may need AND/OR logic extension later; less flexible"
+        },
+        {
+          "id": "C",
+          "label": "JavaScript-like expression strings evaluated at runtime",
+          "pros": "Maximum flexibility; familiar syntax for developers; supports any logical expression; compact representation",
+          "cons": "Security risk if not sandboxed properly; eval-based approach is fragile; hard to validate statically; debugging is difficult; performance unpredictable"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Simple rule objects match the existing legacy schema pattern (visibleWhen with questionId and equals), require no external dependencies, are easy to validate, and align with the framework's Python-only approach. The legacy schema uses this pattern successfully, suggesting it's sufficient for the use case. Can be extended with AND/OR combinators if needed later.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "What should be the Web UI technical stack for the Technical Design page?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Pure HTML/CSS/JavaScript (no framework)",
+          "pros": "No build step; minimal dependencies; lightweight; easy to understand; fast initial load; matches if other RDD Web UI pages use vanilla JS",
+          "cons": "More boilerplate code; manual DOM manipulation; harder to maintain complex state; no reactivity; more testing effort"
+        },
+        {
+          "id": "B",
+          "label": "Lightweight framework (Vue.js, Alpine.js, or Svelte)",
+          "pros": "Reactive data binding simplifies UI updates; component-based architecture; better state management; cleaner code; easier conditional rendering",
+          "cons": "Introduces build step; external dependency; learning curve for contributors; larger bundle size; requires tooling setup"
+        },
+        {
+          "id": "C",
+          "label": "Match existing Web UI technology stack",
+          "pros": "Consistency across all Web UI pages; reuse existing components and patterns; no additional dependencies; team already familiar with it",
+          "cons": "Depends on what's currently used (unknown without inspection); may inherit limitations of existing choice"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "Consistency with the existing Web UI is critical for maintainability and user experience. The prompt mentions 'locate existing Web UI patterns for specifications pages' suggesting the UI already exists. Matching the current stack ensures a unified codebase, reusable components, and familiar patterns for developers. Implementation step 1 explicitly requires inspecting existing Web UI patterns.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "How should the Python action scripts communicate with the Web UI?",
+      "options": [
+        {
+          "id": "A",
+          "label": "RESTful API endpoints served by Python backend",
+          "pros": "Standard web architecture; clear separation of concerns; supports concurrent requests; can add authentication later; testable independently",
+          "cons": "More complex setup; requires web framework (Flask/FastAPI); need to manage server lifecycle; CORS considerations"
+        },
+        {
+          "id": "B",
+          "label": "Direct subprocess calls from JavaScript with stdout/stderr parsing",
+          "pros": "Simple integration; no web framework needed; matches existing requirement scripts pattern; minimal backend code",
+          "cons": "Slower execution; limited error handling; harder to provide real-time feedback; subprocess overhead; output parsing fragile"
+        },
+        {
+          "id": "C",
+          "label": "Match the existing Web UI to Python communication pattern",
+          "pros": "Consistency with current architecture; reuse existing infrastructure; no new patterns to learn; already proven to work",
+          "cons": "Inherits any limitations of current approach; depends on what's currently implemented"
+        }
+      ],
+      "recommended-option": "C",
+      "recommendation-rationale": "The existing Web UI already handles requirements management and other operations that call Python scripts. The prompt states 'locate how UI calls Python actions today (pattern for requirements is the reference)' indicating a pattern already exists and should be followed. Consistency ensures the Technical Design page integrates seamlessly with the existing infrastructure.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "C"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "Where should the automatic migration logic be triggered?",
+      "options": [
+        {
+          "id": "A",
+          "label": "On Web UI startup (check all specs including technical-design.json)",
+          "pros": "Runs automatically; user doesn't need to remember; migration happens before any operations; consistent with startup checks pattern",
+          "cons": "Slows down Web UI startup; runs even if Tech Design page never accessed; all users trigger it"
+        },
+        {
+          "id": "B",
+          "label": "On Technical Design page load (lazy migration)",
+          "pros": "Migration only when needed; faster overall Web UI startup; targeted execution; user sees migration progress on relevant page",
+          "cons": "First load of Tech Design page slower; user may be surprised by migration during page load; need clear UI feedback"
+        },
+        {
+          "id": "C",
+          "label": "Manual migration button shown when format mismatch detected",
+          "pros": "User has control; explicit action; can be deferred; clear migration log available; no surprise operations",
+          "cons": "User must remember to migrate; risk of using old format; requires detection logic + UI to show button; extra user step"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Lazy migration on Technical Design page load balances automatic migration with performance. The prompt states 'on UI open of the Technical Design page' as one option, and Technical Design is optional, so migration should only run when actually needed. This avoids slowing down Web UI startup for users who never use Technical Design, while still providing automatic migration when the feature is accessed.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q6",
+      "question-text": "How should the stored answers in technical-design.json be indexed?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Array of answer objects (append-only, search by questionId)",
+          "pros": "Simple append operations; preserves answer history if needed; straightforward iteration; easy to merge in git",
+          "cons": "Lookup requires linear search or building index; potential duplicates if not careful; larger file size"
+        },
+        {
+          "id": "B",
+          "label": "Object/map keyed by questionId (direct lookup)",
+          "pros": "O(1) lookup by questionId; prevents duplicates naturally; smaller file; upsert is trivial; clean git diffs",
+          "cons": "Order not preserved; must convert keys to iterate; JSON object semantics (key ordering may vary)"
+        },
+        {
+          "id": "C",
+          "label": "Hierarchical structure matching schema (category > group > question > answer)",
+          "pros": "Mirrors schema organization; answers grouped logically; easier to understand structure; navigation-friendly",
+          "cons": "Complex updates; need to create empty categories/groups; upsert logic more involved; harder to search across all answers"
+        }
+      ],
+      "recommended-option": "B",
+      "recommendation-rationale": "Object/map keyed by questionId provides the best balance for 'only answered items' storage with 'incremental updates' and 'upsert semantics' as specified in the prompt. Direct lookup makes Python scripts simple and fast, prevents duplicates automatically, and produces clean git diffs. The prompt explicitly states 'upsert semantics' which is trivial with a keyed object but complex with arrays.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "B"
+      }
+    },
+    {
+      "id": "Q7",
+      "question-text": "Should the Technical Design page include a 'completion percentage' indicator despite the prompt saying 'no completion % indicator'?",
+      "options": [
+        {
+          "id": "A",
+          "label": "No completion percentage indicator (follow prompt exactly)",
+          "pros": "Follows explicit requirement; avoids pressure to complete all questions; reinforces that Tech Design is optional; simpler UI",
+          "cons": "User has no sense of progress; harder to know what's left; may miss unanswered questions"
+        },
+        {
+          "id": "B",
+          "label": "Show answered/unanswered count (not percentage)",
+          "pros": "Provides progress information without completion pressure; aligns with filter 'by answered/unanswered'; factual not prescriptive",
+          "cons": "May be interpreted as completion indicator; could still create pressure to answer everything"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "The prompt explicitly states 'no completion % indicator' under the Web UI requirements. This is an intentional design decision to reinforce that Technical Design is optional and partial completion is acceptable. While showing counts might seem helpful, it contradicts the explicit requirement. The filter 'by answered/unanswered' is sufficient for navigation without implying completion is required.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q8",
+      "question-text": "How should the navigation sidebar handle the 33 categories from the legacy schema?",
+      "options": [
+        {
+          "id": "A",
+          "label": "All categories visible in sidebar (scrollable list)",
+          "pros": "All options always visible; no hidden items; direct access to any category; simple implementation",
+          "cons": "Very long sidebar (33 items); lots of scrolling; harder to find specific category; cluttered UI"
+        },
+        {
+          "id": "B",
+          "label": "Collapsible category groups in sidebar (e.g., collapse subcategories)",
+          "pros": "Reduces visual clutter; organize related categories together; progressive disclosure; cleaner initial view",
+          "cons": "Extra click to access subcategories; need to decide grouping logic; more complex sidebar code; may hide relevant content"
+        },
+        {
+          "id": "C",
+          "label": "Search-first approach with category list below search (filtered by search)",
+          "pros": "Search prioritized as prompt requires; category list filtered by search results; efficient for finding specific topics",
+          "cons": "Categories hidden until search used; requires learning search-first workflow; may confuse users expecting traditional navigation"
+        },
+        {
+          "id": "D",
+          "label": "Scrollable list with sticky search at top + jump-to-letter shortcuts",
+          "pros": "All categories accessible; search always available; keyboard shortcuts for efficiency; familiar pattern",
+          "cons": "Still requires scrolling; jump shortcuts only help if categories alphabetically organized; medium complexity"
+        }
+      ],
+      "recommended-option": "D",
+      "recommendation-rationale": "With 33 categories, a simple scrollable list becomes unwieldy. A sticky search at the top (as required by the prompt) combined with jump-to-letter shortcuts provides the best balance of accessibility and efficiency. The sidebar can remain simple while search handles the finding, and the list provides visual overview. This matches common UI patterns and doesn't require complex grouping decisions.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "D"
+      }
+    }
+  ]
+}

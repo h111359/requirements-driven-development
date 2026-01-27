@@ -1,0 +1,1 @@
+In "Technical Design Schema Editor" when Category is selected and the list of questions is populated, the elements of the container go outside "conditionBuilderContainer". The elements should stay in the container - either reorder them or wrap - choose the best UX experience

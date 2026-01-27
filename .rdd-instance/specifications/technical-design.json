@@ -1,0 +1,81 @@
+{
+  "Infra_DeploymentModel": {
+    "questionId": "Infra_DeploymentModel",
+    "type": "multiselect",
+    "value": [
+      "Personal machine"
+    ],
+    "answeredAt": "2026-01-26T06:45:58.545227+00:00"
+  },
+  "Product_PrimaryProductCategory": {
+    "questionId": "Product_PrimaryProductCategory",
+    "type": "multiselect",
+    "value": [
+      "External customer-facing application",
+      "Developer platform / internal tooling"
+    ],
+    "answeredAt": "2026-01-26T06:46:26.491354+00:00"
+  },
+  "Compute_Model": {
+    "questionId": "Compute_Model",
+    "type": "multiselect",
+    "value": [
+      "Local machine"
+    ],
+    "answeredAt": "2026-01-26T06:46:46.531797+00:00"
+  },
+  "Frontend_FrameworkType": {
+    "questionId": "Frontend_FrameworkType",
+    "type": "multiselect",
+    "value": [
+      "Static HTML/JS (no framework)"
+    ],
+    "answeredAt": "2026-01-26T06:46:56.537758+00:00"
+  },
+  "Frontend_AppType": {
+    "questionId": "Frontend_AppType",
+    "type": "radio",
+    "value": "SSR – Server Side Rendering",
+    "answeredAt": "2026-01-26T06:47:07.289776+00:00"
+  },
+  "Backend_RuntimeFrameworks": {
+    "questionId": "Backend_RuntimeFrameworks",
+    "type": "multiselect",
+    "value": [
+      "Python"
+    ],
+    "answeredAt": "2026-01-26T06:47:11.196611+00:00"
+  },
+  "Backend_ArchitectureStyle": {
+    "questionId": "Backend_ArchitectureStyle",
+    "type": "radio",
+    "value": "Monolithic application",
+    "answeredAt": "2026-01-26T06:47:19.383261+00:00"
+  },
+  "PA_DataVolumeCategory": {
+    "questionId": "PA_DataVolumeCategory",
+    "type": "radio",
+    "value": "< 100 GB",
+    "answeredAt": "2026-01-26T06:47:29.880407+00:00"
+  },
+  "SEC_AuthProviders": {
+    "questionId": "SEC_AuthProviders",
+    "type": "multiselect",
+    "value": [
+      "No authentication"
+    ],
+    "answeredAt": "2026-01-26T06:48:00.951934+00:00"
+  },
+  "SEC_DataEncryptionAtRest": {
+    "questionId": "SEC_DataEncryptionAtRest",
+    "type": "radio",
+    "value": "Not encrypted at rest",
+    "answeredAt": "2026-01-26T06:50:31.483251+00:00"
+  },
+  "SEC_EncryptionInTransit": {
+    "questionId": "SEC_EncryptionInTransit",
+    "type": "radio",
+    "value": "No encryption in transit ",
+    "answeredAt": "2026-01-26T06:50:33.361126+00:00"
+  }
+}

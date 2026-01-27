@@ -1,0 +1,1 @@
+In Technical Design page - merge in "Data & Analytics" the categories "Expanded Data", "Data Visualization", "Data Lifecycle & Retention"
