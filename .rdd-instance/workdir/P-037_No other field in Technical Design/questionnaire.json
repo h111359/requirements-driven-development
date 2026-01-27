@@ -1,0 +1,155 @@
+{
+  "context": "The Technical Design page in the Web UI has questions with 'allowOther: true' in the schema, but the rendering code in app.js does not display a text input field for users to enter custom 'Other' values. This questionnaire clarifies the implementation approach for adding this missing functionality.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question-text": "For questions with allowOther=true and type='multiselect', how should the 'Other' field integrate with the predefined checkboxes?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Add a dedicated checkbox labeled 'Other' at the bottom of the options list, which when checked, reveals a text input field below it for custom text entry",
+          "pros": "Clear separation between predefined and custom options, follows common UX patterns, easy to implement, user explicitly opts-in to 'Other'",
+          "cons": "Requires two interactions (checkbox + text input), adds visual complexity"
+        },
+        {
+          "id": "B",
+          "label": "Always show a text input field below all checkboxes with placeholder text from otherPlaceholder, regardless of whether user checked any predefined options",
+          "pros": "Simpler UI logic, immediately visible, single interaction to add custom value",
+          "cons": "Takes up screen space even when not needed, less clear that it's an 'Other' option, may confuse users about its purpose"
+        },
+        {
+          "id": "C",
+          "label": "Add a button labeled '+ Add Other' below the checkboxes, which when clicked, dynamically inserts a text input field for custom entry",
+          "pros": "Clean UI when not in use, flexible (could add multiple custom entries), modern pattern",
+          "cons": "More complex implementation, less discoverable than other options"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A provides the best balance of usability and clarity. The checkbox + text input pattern is a well-established UX convention that users immediately recognize. It makes the 'Other' option explicit and doesn't clutter the interface when not needed. This approach also aligns with the schema's design where allowOther is a boolean opt-in feature.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q2",
+      "question-text": "For questions with allowOther=true and type='radio', how should the 'Other' option be presented?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Add a radio button labeled 'Other' at the bottom of the options list, which when selected, reveals a text input field inline below it",
+          "pros": "Consistent with standard radio button UX patterns, follows same pattern as multiselect approach, clear mutual exclusivity with predefined options",
+          "cons": "Requires user to select the radio before typing, adding one extra step"
+        },
+        {
+          "id": "B",
+          "label": "Add a radio button labeled 'Other' with an always-visible text input field next to it that becomes enabled only when the 'Other' radio is selected",
+          "pros": "Text field location is fixed and predictable, visually shows the connection between radio and text input",
+          "cons": "Disabled text input may appear as UI clutter, graying out may reduce discoverability"
+        },
+        {
+          "id": "C",
+          "label": "Always show a separate text input field below all radios, and treat any text entry as an implicit 'Other' selection (auto-deselecting predefined radios)",
+          "pros": "Simplest user interaction, no need for explicit 'Other' option",
+          "cons": "Breaks radio button mental model, unclear mutual exclusivity, confusing state management"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A maintains the integrity of radio button behavior (mutual exclusivity) while providing a clear path for custom input. The reveal-on-select pattern is well-understood and keeps the interface clean. It's also consistent with recommendation Q1-A for multiselect questions, providing a unified UX across question types.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q3",
+      "question-text": "How should the custom 'Other' value be stored in technical-design.json when saved?",
+      "options": [
+        {
+          "id": "A",
+          "label": "For multiselect: append the custom text value to the value array alongside predefined option IDs. For radio: store the custom text as the value string.",
+          "pros": "Simple storage model, consistent with existing answer format, works with current validation and display logic, no schema changes needed",
+          "cons": "Custom text values are indistinguishable from option IDs in the stored data, could cause issues if an option ID happens to match custom text"
+        },
+        {
+          "id": "B",
+          "label": "Add a new field 'customValue' or 'otherValue' to the answer object to store custom text separately from predefined option selections",
+          "pros": "Clear separation between predefined and custom values, prevents ID collision issues, easier to validate and process differently",
+          "cons": "Requires schema convention update, changes answer object structure, needs updates to read/write scripts and UI rendering logic"
+        },
+        {
+          "id": "C",
+          "label": "Prefix custom values with a special marker like '__custom__:' when storing in the value field to distinguish them from option IDs",
+          "pros": "Maintains single value field, enables programmatic detection of custom vs predefined, backward compatible",
+          "cons": "Introduces magic string convention, could break if user input contains the marker, requires special handling in all read paths"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A is the simplest and most aligned with the current storage convention. The technical-design.json already stores values as strings or arrays, and custom text values can be treated the same way as option IDs. Since option IDs are typically PascalCase or hyphenated (e.g., 'Public cloud'), and custom 'Other' text will be freeform (e.g., 'Custom CMS platform'), collision is unlikely in practice. This approach requires minimal changes to existing code.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q4",
+      "question-text": "When displaying a saved answer that includes a custom 'Other' value, how should the UI render it?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Check if the saved value matches any option ID from the schema. If not, assume it's a custom value and check the 'Other' checkbox/radio, then populate the 'Other' text input field with that value.",
+          "pros": "Works automatically with storage approach Q3-A, no metadata needed, handles migration of existing custom values gracefully",
+          "cons": "Relies on inference rather than explicit flag, could misinterpret a value if schema changes (option removed)"
+        },
+        {
+          "id": "B",
+          "label": "Store a boolean flag like 'isCustom' alongside each value in the answer to explicitly mark custom vs predefined values",
+          "pros": "Explicit and unambiguous, no guessing required, future-proof against schema changes",
+          "cons": "Requires answer format changes, complicates storage structure, needs migration of existing answers"
+        },
+        {
+          "id": "C",
+          "label": "Display all saved values in a readonly summary at the top, and require users to re-enter custom values if they want to edit (don't pre-populate)",
+          "pros": "Simplest implementation, avoids the detection problem entirely",
+          "cons": "Poor user experience, loses data on edit, forces rework"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A aligns with the simplest storage model (Q3-A) and provides the best user experience without requiring schema changes. By checking saved values against current schema options, the UI can intelligently determine which are custom. This approach is resilient and works well with the existing codebase structure, requiring only logic changes in the renderQuestion function.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    },
+    {
+      "id": "Q5",
+      "question-text": "Should the otherPlaceholder from the schema be used, and if so, how?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Use otherPlaceholder as the placeholder attribute for the 'Other' text input field to provide helpful examples to users",
+          "pros": "Makes use of existing schema field, provides context and examples, improves UX with guidance",
+          "cons": "None significant"
+        },
+        {
+          "id": "B",
+          "label": "Use otherPlaceholder as a label shown above the 'Other' text input instead of as a placeholder",
+          "pros": "Label is always visible even when user starts typing, may be more accessible",
+          "cons": "Takes more space, placeholder is standard pattern for this use case"
+        },
+        {
+          "id": "C",
+          "label": "Ignore otherPlaceholder and use a generic placeholder like 'Enter custom value' for all 'Other' fields",
+          "pros": "Simpler implementation, consistent across all questions",
+          "cons": "Wastes schema data, loses helpful contextual examples defined in schema"
+        }
+      ],
+      "recommended-option": "A",
+      "recommendation-rationale": "Option A makes the best use of the existing schema design. The otherPlaceholder field was specifically added to the schema for this purpose - to provide helpful hints like 'Other product category (free text), e.g. CMS, document management, RPA center of excellence'. Using it as a placeholder attribute is the standard HTML pattern and provides maximum value to users.",
+      "user-selection": {
+        "type": "predefined",
+        "value": "A"
+      }
+    }
+  ]
+}

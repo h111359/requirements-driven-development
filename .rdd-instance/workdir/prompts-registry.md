@@ -886,3 +886,7 @@ Read `.rdd-instance/workdir/P-034_Release automation/release_automation_analysis
 - Prompts should be executed in sequence by GitHub Copilot agent
 - The build script should take the new version from the manifest file `.rdd/config/manifest.json` where the new version number is supposed to be set by the user manually
 %%ENDPROMPT
+
+%%PROMPT P-037 "No other field in Technical Design"
+Other field is not present for the questions it is turned on in Technical Design. Troubleshoot and fix the error.
+%%ENDPROMPT

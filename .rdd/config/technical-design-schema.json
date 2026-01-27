@@ -8,6 +8,12 @@
       "description": "Core product attributes that shape architectural decisions",
       "questions": [
         {
+          "id": "Product_GeneralDescription",
+          "label": "General Description",
+          "type": "text",
+          "help": ""
+        },
+        {
           "id": "Product_PrimaryProductCategory",
           "label": "Product aspects",
           "type": "multiselect",
@@ -117,7 +123,8 @@
               "id": "Modernization / replacement",
               "label": "Modernization / replacement"
             }
-          ]
+          ],
+          "allowOther": true
         },
         {
           "id": "Product_OverallScaleCategory",
@@ -141,7 +148,8 @@
               "id": "External customer-facing product",
               "label": "External customer-facing product"
             }
-          ]
+          ],
+          "allowOther": true
         }
       ]
     },
@@ -202,7 +210,7 @@
               "label": "GCP"
             }
           ],
-          "allowOther": false,
+          "allowOther": true,
           "visibleWhen": [
             {
               "questionId": "Infra_DeploymentModel",
@@ -966,10 +974,11 @@
               "label": "Double encryption"
             },
             {
-              "id": "Not encrypted",
-              "label": "Not encrypted"
+              "id": "Not encrypted at rest",
+              "label": "Not encrypted at rest"
             }
-          ]
+          ],
+          "allowOther": true
         },
         {
           "id": "SEC_EncryptionInTransit",
@@ -988,8 +997,13 @@
             {
               "id": "TLS 1.3 enforced",
               "label": "TLS 1.3 enforced"
+            },
+            {
+              "id": "No encryption in transit ",
+              "label": "No encryption in transit "
             }
-          ]
+          ],
+          "allowOther": true
         }
       ]
     },
@@ -1016,7 +1030,8 @@
               "id": "On-prem Git server",
               "label": "On-prem Git server"
             }
-          ]
+          ],
+          "allowOther": true
         },
         {
           "id": "DP_AutomationTools",

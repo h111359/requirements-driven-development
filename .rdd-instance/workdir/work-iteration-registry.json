@@ -1,7 +1,7 @@
 {
     "iteration-id": "ITR-20260117-120324",
     "iteration-name": "Creation of technical design",
-    "prompt-id-sequence-next-value": 37,
+    "prompt-id-sequence-next-value": 38,
     "prompts": [
         {
             "prompt-id": "P-001",
@@ -410,6 +410,17 @@
         {
             "prompt-id": "P-036",
             "prompt-title": "Create release prompts",
+            "state": "completed",
+            "questionnaire-generated": true,
+            "questionnaire-answered": true,
+            "plan-generated": false,
+            "implementation-completed": true,
+            "execution-mode": "no-action",
+            "executed": true
+        },
+        {
+            "prompt-id": "P-037",
+            "prompt-title": "No other field in Technical Design",
             "state": "completed",
             "questionnaire-generated": true,
             "questionnaire-answered": true,

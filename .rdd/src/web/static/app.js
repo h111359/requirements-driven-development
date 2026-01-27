@@ -3185,6 +3185,18 @@ function renderQuestion(question) {
     // Question input based on type
     if (question.type === 'radio' && question.options) {
         const optionsDiv = document.createElement('div');
+        
+        // Check if current answer is a custom value (not in options)
+        let hasCustomValue = false;
+        let customValue = '';
+        if (currentAnswer) {
+            const optionIds = question.options.map(opt => opt.id);
+            if (!optionIds.includes(currentAnswer.value)) {
+                hasCustomValue = true;
+                customValue = currentAnswer.value;
+            }
+        }
+        
         question.options.forEach(option => {
             const radioDiv = document.createElement('div');
             radioDiv.className = 'form-check';
@@ -3209,9 +3221,77 @@ function renderQuestion(question) {
             radioDiv.appendChild(labelEl);
             optionsDiv.appendChild(radioDiv);
         });
+        
+        // Add "Other" option if allowOther is true
+        if (question.allowOther) {
+            const otherRadioDiv = document.createElement('div');
+            otherRadioDiv.className = 'form-check';
+            
+            const otherInput = document.createElement('input');
+            otherInput.type = 'radio';
+            otherInput.className = 'form-check-input';
+            otherInput.name = question.id;
+            otherInput.value = '__other__';
+            otherInput.id = `${question.id}-other`;
+            if (hasCustomValue) {
+                otherInput.checked = true;
+            }
+            otherInput.onchange = () => {
+                // Show the text input when Other is selected
+                const otherTextInput = document.getElementById(`${question.id}-other-text`);
+                if (otherTextInput) {
+                    otherTextInput.style.display = 'block';
+                    otherTextInput.focus();
+                }
+            };
+            
+            const otherLabel = document.createElement('label');
+            otherLabel.className = 'form-check-label';
+            otherLabel.htmlFor = otherInput.id;
+            otherLabel.textContent = 'Other';
+            
+            otherRadioDiv.appendChild(otherInput);
+            otherRadioDiv.appendChild(otherLabel);
+            optionsDiv.appendChild(otherRadioDiv);
+            
+            // Add text input for Other value
+            const otherTextInput = document.createElement('input');
+            otherTextInput.type = 'text';
+            otherTextInput.className = 'form-control mt-2 ms-4';
+            otherTextInput.id = `${question.id}-other-text`;
+            otherTextInput.placeholder = question.otherPlaceholder || 'Please specify...';
+            otherTextInput.style.display = hasCustomValue ? 'block' : 'none';
+            if (hasCustomValue) {
+                otherTextInput.value = customValue;
+            }
+            otherTextInput.onblur = () => {
+                const value = otherTextInput.value.trim();
+                if (value) {
+                    saveQuestionAnswer(question, value);
+                }
+            };
+            otherTextInput.onkeypress = (e) => {
+                if (e.key === 'Enter') {
+                    const value = otherTextInput.value.trim();
+                    if (value) {
+                        saveQuestionAnswer(question, value);
+                    }
+                }
+            };
+            optionsDiv.appendChild(otherTextInput);
+        }
+        
         questionDiv.appendChild(optionsDiv);
     } else if (question.type === 'multiselect' && question.options) {
         const optionsDiv = document.createElement('div');
+        
+        // Check if current answer has custom values (not in options)
+        let customValues = [];
+        if (currentAnswer && Array.isArray(currentAnswer.value)) {
+            const optionIds = question.options.map(opt => opt.id);
+            customValues = currentAnswer.value.filter(v => !optionIds.includes(v));
+        }
+        
         question.options.forEach(option => {
             const checkDiv = document.createElement('div');
             checkDiv.className = 'form-check';
@@ -3235,6 +3315,65 @@ function renderQuestion(question) {
             checkDiv.appendChild(labelEl);
             optionsDiv.appendChild(checkDiv);
         });
+        
+        // Add "Other" option if allowOther is true
+        if (question.allowOther) {
+            const otherCheckDiv = document.createElement('div');
+            otherCheckDiv.className = 'form-check';
+            
+            const otherCheckbox = document.createElement('input');
+            otherCheckbox.type = 'checkbox';
+            otherCheckbox.className = 'form-check-input';
+            otherCheckbox.value = '__other__';
+            otherCheckbox.id = `${question.id}-other`;
+            if (customValues.length > 0) {
+                otherCheckbox.checked = true;
+            }
+            otherCheckbox.onchange = () => {
+                const otherTextInput = document.getElementById(`${question.id}-other-text`);
+                if (otherTextInput) {
+                    if (otherCheckbox.checked) {
+                        otherTextInput.style.display = 'block';
+                        otherTextInput.focus();
+                    } else {
+                        otherTextInput.style.display = 'none';
+                        otherTextInput.value = '';
+                        // Save without the custom value
+                        saveMultiselectAnswer(question);
+                    }
+                }
+            };
+            
+            const otherLabel = document.createElement('label');
+            otherLabel.className = 'form-check-label';
+            otherLabel.htmlFor = otherCheckbox.id;
+            otherLabel.textContent = 'Other';
+            
+            otherCheckDiv.appendChild(otherCheckbox);
+            otherCheckDiv.appendChild(otherLabel);
+            optionsDiv.appendChild(otherCheckDiv);
+            
+            // Add text input for Other value
+            const otherTextInput = document.createElement('input');
+            otherTextInput.type = 'text';
+            otherTextInput.className = 'form-control mt-2 ms-4';
+            otherTextInput.id = `${question.id}-other-text`;
+            otherTextInput.placeholder = question.otherPlaceholder || 'Please specify...';
+            otherTextInput.style.display = customValues.length > 0 ? 'block' : 'none';
+            if (customValues.length > 0) {
+                otherTextInput.value = customValues.join(', ');
+            }
+            otherTextInput.onblur = () => {
+                saveMultiselectAnswer(question);
+            };
+            otherTextInput.onkeypress = (e) => {
+                if (e.key === 'Enter') {
+                    saveMultiselectAnswer(question);
+                }
+            };
+            optionsDiv.appendChild(otherTextInput);
+        }
+        
         questionDiv.appendChild(optionsDiv);
     } else if (question.type === 'text') {
         const input = document.createElement('input');
@@ -3386,7 +3525,22 @@ async function saveQuestionRationale(question) {
  */
 async function saveMultiselectAnswer(question) {
     const checkboxes = document.querySelectorAll(`input[id^="${question.id}-"]:checked`);
-    const values = Array.from(checkboxes).map(cb => cb.value);
+    const values = Array.from(checkboxes)
+        .filter(cb => cb.value !== '__other__')  // Exclude the "Other" checkbox itself
+        .map(cb => cb.value);
+    
+    // Check if "Other" is checked and has a value
+    const otherCheckbox = document.getElementById(`${question.id}-other`);
+    const otherTextInput = document.getElementById(`${question.id}-other-text`);
+    
+    if (otherCheckbox && otherCheckbox.checked && otherTextInput) {
+        const otherValue = otherTextInput.value.trim();
+        if (otherValue) {
+            // Split by comma to allow multiple custom values
+            const otherValues = otherValue.split(',').map(v => v.trim()).filter(v => v);
+            values.push(...otherValues);
+        }
+    }
     
     if (values.length === 0) {
         // No values selected - remove answer
