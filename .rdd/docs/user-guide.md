@@ -225,4 +225,9 @@ You'll mostly interact with files in `.rdd-instance` through the Web Interface.
 - Complete the main prompt implementation first
 - Ensure the prompt shows "Implementation Completed"
 
+**How do I assign GitHub Issue #1 to Copilot?**
+- Open the issue in GitHub (for example: issue #1)
+- In the right sidebar, click **Assignees**
+- Select **Copilot** as the assignee
+- If Copilot is not listed, ask a repository admin to enable Copilot coding agent access for the repository/org and verify you have permission to assign issues
 
