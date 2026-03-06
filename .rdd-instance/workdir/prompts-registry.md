@@ -890,3 +890,7 @@ Read `.rdd-instance/workdir/P-034_Release automation/release_automation_analysis
 %%PROMPT P-037 "No other field in Technical Design"
 Other field is not present for the questions it is turned on in Technical Design. Troubleshoot and fix the error.
 %%ENDPROMPT
+
+%%PROMPT P-038 "Test Prompt"
+TBD
+%%ENDPROMPT
